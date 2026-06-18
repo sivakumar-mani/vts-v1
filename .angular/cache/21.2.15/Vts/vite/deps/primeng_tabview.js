@@ -9,12 +9,12 @@ import {
   TooltipModule
 } from "./chunk-U7OTOHMO.js";
 import {
-  TimesIcon
-} from "./chunk-EKRNUWYO.js";
-import {
   Ripple,
   RippleModule
 } from "./chunk-C3SRA4Z4.js";
+import {
+  TimesIcon
+} from "./chunk-EKRNUWYO.js";
 import "./chunk-E5SLSWPV.js";
 import {
   DomHandler

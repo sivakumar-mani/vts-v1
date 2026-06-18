@@ -3,15 +3,15 @@ import {
 } from "./chunk-JK57W2WF.js";
 import "./chunk-IB4SLSAQ.js";
 import "./chunk-N4DOILP3.js";
+import "./chunk-SLKWJJ6A.js";
 import {
   BidiModule
 } from "./chunk-ILEVSUJ3.js";
-import "./chunk-SLKWJJ6A.js";
+import "./chunk-Y6BXVQXT.js";
 import {
   NgTemplateOutlet
 } from "./chunk-SMKKFHGX.js";
 import "./chunk-HX53TNYB.js";
-import "./chunk-Y6BXVQXT.js";
 import {
   ChangeDetectionStrategy,
   Component,
