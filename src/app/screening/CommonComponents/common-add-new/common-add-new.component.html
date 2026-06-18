@@ -1,0 +1,48 @@
+<mat-dialog-content>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div fxFlex="100%" class="text-center">
+      <h3 class="m-0">{{ headerText }}</h3>
+    </div>
+  </div>
+  @if (userData.applicationId !== 3) {
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <div fxFlex="100%" class="text-center">
+        <h6 class="m-0">{{ bodyText }} </h6>
+      </div>
+    </div>
+  }
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%" [formGroup]="insutionFormGroup">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>{{labelText}}</mat-label>
+        <input type="text" matInput [placeholder]="labelText" autocomplete="off" maxlength="200" role="presentation" formControlName="name" />
+      </mat-form-field>
+    </div>
+
+  </div>
+
+  @if (screeningService.enableNAFlag && (action == common.EMPLOYER ||action == common.INSTITUTION )) {
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-checkbox formControlName="addressNA" [checked]=false (change)="setNotProvidedAddress($event)">Address Detail Not Provided</mat-checkbox>
+      </div>
+    </div>
+  }
+  <br>
+    @if (addressNAFlag==false) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <app-address [addressList]="address1" [addressformgrp]="insutionFormGroup"></app-address>
+        </div>
+      </div>
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="saveNewName()">
+      Save
+    </button>
+    <button mat-stroked-button [mat-dialog-close]="true" (click)="dialog.closeAll()">
+      Cancel
+    </button>
+
+  </mat-dialog-actions>

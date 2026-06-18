@@ -1,0 +1,443 @@
+<app-breadcrumb [routePath]="routePath" [btnBack]="master.searchList?.length > 0" (eventBack)="backform()">
+</app-breadcrumb>
+<form autocomplete="off" [formGroup]="searchForm">
+  <div fxLayout="row" class="advSearch">
+    <div class="advSearch-forms">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="200px">
+              <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]="caseRefNoControl">
+              </app-auto-complete>
+            </div>
+            <div fxFlex="200px">
+              <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]="clientControl">
+              </app-auto-complete>
+            </div>
+            <div fxFlex="200px">
+              <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]="candidateControl">
+              </app-auto-complete>
+            </div>
+            <div fxFlex="200px">
+              <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]="componentControl">
+              </app-auto-complete>
+            </div>
+            <div fxFlex="200px">
+              <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]="statusControl">
+              </app-auto-complete>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="100%" class="advSearch-btn">
+      <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px"><a (click)="resetFilterSort()">
+      Reset</a></div>
+    </div>
+  </div>
+</form>
+@if (master.searchList?.length > 0) {
+  <div fxLayout="row" fxLayoutGap="20px" class="srchPad">
+    <div fxFlex="100%">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <h1 class="header-title">Checks</h1>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            @if (searchValueArr?.length > 0) {
+              <div fxFlex="100%">
+                <b class="text-sm mr-10 text-semi-bold text-dull">Search results for:</b>
+                @for (s of searchValueArr; track s; let in = $index) {
+                  <span class="tag">{{s?.value}}
+                    <a class="close" (click)="removeSearchValue(s?.propertyName,in)">×</a>
+                  </span>
+                }
+              </div>
+            }
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+            fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid" class="sortrow">
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+              fxLayoutAlign="end center" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+              <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="90%" fxFlex.sm="100" fxFlex.xs="100%"
+                fxLayoutAlign="end center" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+                <ul class="pl-0">
+                  <li>
+                    <span class="text-dull"> Showing {{ itemPerPage * page - itemPerPage + 1 }} - {{ count }} of </span>
+                    <b>{{ master.searchList?.length }}</b> Record(s)
+                  </li>
+                  |
+                  <li>
+                    <a (click)="showall()">Show All</a>
+                  </li>
+                  |
+                  <li>
+                    <b>Sort By:</b>
+                    <a [ngClass]="column === 'candidateFirstName' ? 'active' : ''"
+                    (click)="sortBy('candidateFirstName')">Candidate Name</a>
+                  <i [ngClass]="{
+                      'icon-sort': column != 'candidateFirstName',
+                      'icon-sort-asc': column == 'candidateFirstName' && !isDesc,
+                      'icon-sort-desc': column == 'candidateFirstName' && isDesc
+                    }" aria-hidden="true">
+                    </i>
+                    <a [ngClass]="column === 'clientRefNo' ? 'active' : ''" (click)="sortBy('clientRefNo')">Client Ref
+                    No</a>
+                  <i [ngClass]="{
+                      'icon-sort': column != 'clientRefNo',
+                      'icon-sort-asc': column == 'clientRefNo' && !isDesc,
+                      'icon-sort-desc': column == 'clientRefNo' && isDesc
+                    }" aria-hidden="true">
+                    </i><a [ngClass]="column === 'caseStatus' ? 'active' : ''" (click)="sortBy('caseStatus')">Case
+                  Status</a>
+                  <i [ngClass]="{
+                      'icon-sort': column != 'caseStatus',
+                      'icon-sort-asc': column == 'caseStatus' && !isDesc,
+                      'icon-sort-desc': column == 'caseStatus' && isDesc
+                    }" aria-hidden="true">
+                  </i>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            @for (
+              search of (master.searchList
+              | search
+              : [
+              { key: 'clientName', value: searchForm?.get('clientName')?.value },
+              { key: 'clientRefNo', value: searchForm?.get('clientRefNo')?.value },
+              { key: 'componentName', value: searchForm?.get('componentName')?.value },
+              { key: 'candidateFirstName', value: searchForm?.get('candidateName')?.value },
+              { key: 'caseStatus', value: searchForm?.get('caseStatus')?.value }
+              ]
+              | sort: { property: column, direction: direction }
+              | paginate: { itemsPerPage: itemPerPage, currentPage: page }); track
+              search; let i = $index; let count = $count) {
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="cloumn"
+                fxLayoutGap="20px" class="listrow">
+                @if (search?.subCheckFlag === true) {
+                  <div matTooltip="Sub Check" matTooltipClass="accent-tooltip"
+                  class="SubCheck"></div>
+                }
+                <div fxFlex="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid"
+                    [class]="getcount(count)">
+                    <div fxFlex="15%" (click)="common.VE === true ? openVerify(search) : ''">
+                      <mat-card-header>
+                        <div mat-card-avatar ngClass="avatar avatarBg{{ (i % 6) + 1 }} cursor-pointer"
+                          (click)="openVerify(search)">
+                          {{ search?.candidateFirstName?.slice(0, 1) }}{{ search?.candidateLastName?.slice(0, 1) }}
+                        </div>
+                        <mat-card-title class="cname cursor-pointer" style="color:#116fbf;" (click)="openVerify(search)">
+                          {{ search?.candidateFirstName }}
+                        </mat-card-title>
+                        <mat-card-subtitle class="mb-10 cdesg">{{ search?.manualFileSubmissionFlag === true ?
+                        search?.clientScreeningId : search?.verificationId }}</mat-card-subtitle>
+                      </mat-card-header>
+                    </div>
+                    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+                      <p>
+                        <label>Client Name:</label> <em>{{ search?.clientName }}</em>
+                      </p>
+                      <p>
+                        <label>Site Name:</label> <em>{{ search?.siteName ? search?.siteName : 'N/A' }}</em>
+                      </p>
+                      <p>
+                        <label>Applicant Id:</label> <span> {{ search?.applicantId ? search?.applicantId : 'N/A' }}
+                      </span>
+                    </p>
+                    <p>
+                      <label>Case Status:</label> <em>{{ search?.caseStatus ? search?.caseStatus : 'N/A' }}</em>
+                    </p>
+                    <!-- commented by Naveen -->
+                    <!-- <p *ngIf="search?.componentStatus === 'Work In Progress'">
+                    <label>QC Status:</label> <em>{{ 'Not Sent To Qc'}}</em>
+                  </p>
+                  <p *ngIf="search?.componentStatus !== 'Work In Progress'">
+                    <label>QC Status:</label> <em>{{ search?.qcStatus ? search?.qcStatus : 'N/A' }}</em>
+                  </p>-->
+                  <!-- VTS2 - 2023 - INT - 0135 - WorkFlow changes based on check box - added by Naveen -->
+                  @if (search?.componentStatus === 'Work In Progress') {
+                    <p>
+                      <label>IQC Status:</label> <em>{{ 'Not Sent To Qc'}}</em>
+                    </p>
+                  }
+                  @if (search?.componentStatus !== 'Work In Progress') {
+                    <p>
+                      <label>IQC Status:</label> <em>{{ search?.iqcStatus ? search?.iqcStatus : 'N/A' }}</em>
+                    </p>
+                  }
+                  @if (search?.componentStatus === 'Work In Progress') {
+                    <p>
+                      <label>FQC Status:</label> <em>{{ 'Not Sent To Qc'}}</em>
+                    </p>
+                  }
+                  @if (search?.componentStatus !== 'Work In Progress') {
+                    <p>
+                      <label>FQC Status:</label> <em>{{ search?.fqcStatus ? search?.fqcStatus : 'N/A' }}</em>
+                    </p>
+                  }
+                  <!-- //Added by megala SRS - (sprint -22)VTS2-2024-CRT-0195 -->
+                  <p>
+                    <label>CAM Approval Status:</label> <em>{{ search?.camApprovalStatus ? search?.camApprovalStatus :
+                  'N/A' }}</em>
+                </p>
+              </div>
+              <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <p>
+                  <label>{{search?.manualFileSubmissionFlag === true ? 'Transaction Id:' : 'Client Ref
+                  No.:'}}</label>
+                  <em>{{search?.clientRefNo}}</em>
+                </p>
+                @if (search?.workFlow === 'CRTCam' && search?.reAssignFlag!=true && search?.workFlow != 'CAMApproval') {
+                  <p>
+                    <label>{{ 'VE' }} Owner:</label> <em>{{ search?.ownerFirstName }} </em>
+                  </p>
+                }
+                @if (((search?.workFlow !== 'CRTCam' && search?.reAssignFlag!=true && search?.workFlow != 'CAMApproval'))) {
+                  <p>
+                    <label>{{ search?.workFlow ? search?.workFlow : 'Screening'}} Owner:</label> <em>{{
+                  search?.ownerFirstName }} </em>
+                </p>
+              }
+              @if (((search?.workFlow !== 'CRTCam' && search?.reAssignFlag!=true && search?.workFlow == 'CAMApproval'))) {
+                <p>
+                  <label>{{'Screening'}} Owner:</label> <em>{{
+                search?.ownerFirstName }} </em>
+              </p>
+            }
+            @if (search?.workFlow !== 'CRTCam' && search?.reAssignFlag==true && search?.workFlow != 'CAMApproval') {
+              <p>
+                <label>{{ search?.workFlow ? search?.workFlow : 'Screening'}} Owner:</label>
+                <em>{{ search?.orginalScreeningOwnerName }} </em>
+              </p>
+            }
+            @if (search?.workFlow !== 'CRTCam' && search?.reAssignFlag==true ) {
+              <p>
+                <label>Reassign Owner:</label> <em>{{ search?.reAssignScreeningOwnerName}} </em>
+              </p>
+            }
+            <p>
+              <label>Case Initiation Date</label>
+              <em>{{search?.requestDate ? (common.getTimezoneOffset(search?.requestDate, false) | date:
+              "dd/MMM/yyyy") : "N/A" }}</em>
+            </p>
+            <p>
+              <label>Submission Owner:</label> <em>{{ search?.submissionOwnerFName }} </em>
+            </p>
+            @if (userData.applicationId === 1) {
+              <p>
+                <label>{{'DE Submitted By:'}}</label>
+                <em>{{search?.deSubmittedFirstName ? search?.deSubmittedFirstName : 'N/A'}}</em>
+              </p>
+            }
+            @if (userData.applicationId === 1) {
+              <p>
+                <label>{{'DE Pre-QC Submitted By:'}}</label>
+                <em>{{search?.dePreQCSubmittedFirstName ? search?.dePreQCSubmittedFirstName : 'N/A'}}</em>
+              </p>
+            }
+            @if (search?.qcRejectedFirstName) {
+              <p>
+                <label>QC Rejected By:</label>
+                <em>{{search?.qcRejectedFirstName}} {{search?.qcRejectedMiddleName}}
+                {{search?.qcRejectedLastName}}</em>
+              </p>
+            }
+            @if (search?.cancelFlag === true) {
+              <p>
+                <label>Cancelled By</label>
+                <em>{{search?.cancelledUserFirstName}}</em>
+              </p>
+            }
+          </div>
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+            <p>
+              <label>Vendor Name:</label> <em>{{ search?.vendorName ? search?.vendorName : 'N/A' }}</em>
+            </p>
+            <p>
+              <label>Scope Owner:</label> <em>{{ search?.scopeOwnerFName ? search?.scopeOwnerFName : 'N/A' }}
+            </em>
+          </p>
+          <p>
+            <label>Component Status:</label> <em>{{ search?.componentStatus ? search?.componentStatus : 'N/A'
+          }}</em>
+        </p>
+        <p>
+          <label>Work Flow:</label> <em>{{ search?.workFlow ? search?.workFlow : 'N/A' }}</em>
+        </p>
+        <p>
+          <!-- //Added by Megala - for VTS2-2023-DEV-0141 -->
+          <label>Component Name:</label>
+          <span class="cn-chip">
+            <span> {{ search?.componentName ? search?.componentName:'N/A' }} </span></span>
+          </p>
+          <p>
+            <label>Verification Closed Date:</label>
+            <em>{{search?.submittedDate ? (common.getTimezoneOffset(search?.submittedDate, false) | date:
+            "dd/MMM/yyyy") : "N/A" }}</em>
+          </p>
+          <!-- //Added by Megala -for VTS2-2023-DEV-0141 (Comment History Added In Global Search)  -->
+          <p>
+            <label>Comments History:</label>
+            <span>
+              <a (click)="openDialog(false,search?.screeningCompId,search?.screeningId,search?.clientRefNo)"><i
+              class="icon-file-text"></i> View </a>
+            </span>
+          </p>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+        fxLayout.xs="column" fxLayoutGap="0px grid">
+        <div fxFlex="100%">
+          <p>
+            <!-- Global search functionality entity not showing appropriately | Showstopper -->
+            <label>Functional Entity:</label>
+            @if (search?.componentName != null && search?.componentName.includes('Address')) {
+              <em><span
+                [ngStyle]="search?.researchResultName === 'Suspicious' && search?.manualFileSubmissionFlag!=true ? {'color':'red'} : {}">
+              {{ (search?.functionalEntity != null) ? search?.functionalEntity: 'N/A' }}</span>
+            </em>
+          }
+          @if (search?.componentName != null && !search?.componentName.includes('Address')) {
+            <em><span
+              [ngStyle]="search?.researchResultName === 'Suspicious' && search?.manualFileSubmissionFlag!=true ? {'color':'red'} : {}">
+            {{(search?.functionalEntity != null) ? search?.functionalEntity : 'N/A'}}</span>
+          </em>
+        }
+        <ng-template #NA>{{search?.functionalEntity ? search?.functionalEntity : 'N/A'}}</ng-template>
+        <!-- <em>{{ search?.functionalEntity ? search?.functionalEntity : "N/A" }}</em> -->
+      </p>
+    </div>
+  </div>
+</div>
+</div>
+}
+@if (master.searchList?.length > 0) {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+    fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutAlign.sm="start start"
+    fxLayoutAlign.xs="start start" class="cus-paginator mb-15">
+    <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"
+      fxLayoutAlign="end end" fxLayoutAlign.md="start start" fxLayoutAlign.sm="start start"
+      fxLayoutAlign.xs="start start" class="tex t-right dev-paginator">
+      <pagination-controls (pageChange)="getPage($event)"></pagination-controls>
+    </div>
+    <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"
+      fxLayoutAlign="end end" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+      <span class="gotopagbg ml-2">Go to Page
+        <span class="input-num">
+          <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly preventDragdrop
+            preventCutCopyPaste autocomplete="off" [NumberOnly]="false" />
+        </span>
+      </span>
+      <span class="gotopagbg ml-2">Items / page
+        <span class="input-num">
+          <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4" appNumberOnly preventDragdrop
+            preventCutCopyPaste autocomplete="off" [NumberOnly]="false" (blur)="preventInfinite()" />
+        </span>
+      </span>
+    </div>
+  </div>
+}
+</div>
+</div>
+</mat-card-content>
+</mat-card>
+</div>
+</div>
+}
+<!-- //Added by Megala - for VTS2-2023-DEV-0141 (Comment History Added In Global Search) -->
+<ng-template #history>
+  <h1 mat-dialog-title>History</h1>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <h3 class="sub-header mt-0 border-none">Received Component details</h3>
+
+        @for (hist of historyFlag === true ? compHistoryList : compHistoryCommentList; track hist; let j = $index) {
+          <div class="history-view"
+            >
+            <div class="dt"> <span matTooltipClass="accent-tooltip"><b>{{
+              historyFlag
+            === true? hist?.compName : hist?.comments}}</b></span> |
+            @if (historyFlag === true) {
+              <span matTooltip="Received - Individual Approved Date & Time"
+                matTooltipClass="accent-tooltip"> Received Date & Time -
+                {{this.common.getTimezoneOffset(hist?.receivedDate, false) | date : 'dd/MM/yyyy hh:mm a'}} |
+                Approved Date & Time - {{this.common.getTimezoneOffset(hist?.approvedDate, false) | date :
+              'dd/MM/yyyy hh:mm a'}}</span>
+            }
+          </div>
+          @if (hist?.qcOwnerFname) {
+            <div class="uname">
+              <div matTooltip="Qc Approved By" matTooltipClass="accent-tooltip" class="user avatarBg{{(j%6)+1}}">
+                {{ hist?.qcOwnerFname?.slice(0, 1)}}{{ hist?.qcOwnerLname?.slice(0, 1)}}
+              </div>
+              Updated By - {{hist?.qcOwnerFname}} {{hist?.qcOwnerMname ? hist?.qcOwnerMname : ''}}
+              {{hist?.qcOwnerLname ? hist?.qcOwnerLname :''}}
+            </div>
+          }
+          @if (hist?.enteredBy && historyFlag !== true) {
+            <div class="uname">
+              <div matTooltip="Qc Approved By" matTooltipClass="accent-tooltip" class="user avatarBg{{(j%6)+1}}">
+              {{ hist?.enteredBy?.slice(0, 1)}}{{ hist?.enteredBy?.slice(0, 1)}}</div>
+              Updated By - {{hist?.enteredBy}}
+            </div>
+          }
+          @if (historyFlag !== true) {
+            <p> Status Date - {{hist?.statusDate?
+              (common.getTimezoneOffset(hist?.statusDate, false) |date : 'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}
+            </p>
+          }
+          @if (!hist?.qcOwnerFname && historyFlag === true) {
+            <p> Remarks - {{hist?.remark}}</p>
+          }
+          @if (historyFlag === true) {
+            <p> Screening Owner - {{hist?.screeningOwnerFname}}
+              {{hist?.screeningOwnerMname ? hist?.screeningOwnerMname : ''}} {{hist?.screeningOwnerLname ?
+            hist?.screeningOwnerLname : ''}} </p>
+          }
+        </div>
+      }
+    </div>
+  </div>
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      @if (rejectedHistoryList?.length>0) {
+        <h3 class="sub-header mb-5 border-none">Rejected Component details
+        </h3>
+      }
+
+      @for (hist of rejectedHistoryList; track hist; let j = $index) {
+        <div class="history-view">
+          <div class="dt"> <span matTooltipClass="accent-tooltip">{{hist?.compName}}</span> | <span
+          matTooltip="Rejected Date & Time" matTooltipClass="accent-tooltip">Rejected Date & Time -
+          {{hist?.rejectDate ? (common.getTimezoneOffset(hist?.rejectDate, false) | date : 'dd/MM/yyyy
+        hh:mm a') : 'N/A'}}</span> </div>
+        <div class="uname">
+          <div matTooltip="Rejected By" matTooltipClass="accent-tooltip" class="user avatarBg{{(j%6)+1}}">
+          {{ hist?.qcOwnerFname?.slice(0, 1)}}{{ hist?.qcOwnerLname?.slice(0, 1)}}</div>
+          Rejected By - {{hist?.qcOwnerFname}} {{hist?.qcOwnerMname ? hist?.qcOwnerMname : ''}}
+          {{hist?.qcOwnerLname ? hist?.qcOwnerLname :''}}
+        </div>
+        <p>Reason For Rejection - {{hist?.remark}}</p>
+        <p>Cleared status - {{hist?.rejectClearedDate ? 'Yes' : 'No'}} , Cleared Date & Time-
+          {{hist?.rejectClearedDate ? (common.getTimezoneOffset(hist?.rejectClearedDate, false) | date :
+        'dd/MM/yyyy hh:mm a') : 'N/A'}} </p>
+      </div>
+    }
+  </div>
+</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+  <button mat-flat-button color="warn" (click)="dialogRef.close();">Close</button>
+</mat-dialog-actions>
+</ng-template>

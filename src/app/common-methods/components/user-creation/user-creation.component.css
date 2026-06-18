@@ -1,0 +1,168 @@
+.listcard {
+    padding: 16px !important;
+  }
+  .avatar a {
+    color: #fff;
+  }
+  .searchbg {
+    border: none medium;
+    box-shadow: none;
+  }
+  .searchbg .mat-expansion-panel-body {
+    padding: 0;
+  }
+  .home-stickers {
+    background: #eaf0ff;
+    border-top: 1px solid #cddae5;
+    border-bottom: 1px solid #cddae5;
+    padding: 12px 25px 15px;
+    margin-left: -25px;
+    margin-right: -25px;
+  }
+  .sticker-header {
+    font-size: 16px;
+    font-weight: 300;
+    color: #353535;
+    margin-bottom: 10px;
+    cursor: default;
+  }
+  .sticker-header span strong {
+    padding-left: 05px;
+    font-weight: 600;
+    color: #ff6839;
+  }
+  .stick-area {
+    width: 100%;
+    float: left;
+  }
+  .stick-area .stick-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #353535;
+  }
+  .stick-area .mat-icon {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 60px;
+  }
+  .stick-area .mat-icon i {
+    font-size: 32px;
+  }
+  .stick-area .stick-name {
+    padding-left: 15px !important;
+    float: left;
+    margin-top: 5px;
+  }
+  .stick-area .stick-name p {
+    margin: 0px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #8A8B8D;
+    line-height: normal;
+    text-transform: uppercase;
+    cursor: default;
+  }
+  .stick-area .stick-name p a {
+    color: #0072ff;
+    text-decoration: none;
+    font-size: 20px;
+  }
+  .stick-area .stick-name p a:hover {
+    color: #ff6839;
+  }
+  .stick-area .stick-circle {
+    float: left;
+  }
+  .stick-area .pending {
+    background: #fbe6e6;
+  }
+  .stick-area .pending .mat-icon i {
+    color: #E53935;
+  }
+  .stick-area .priority {
+    background: #f4ebdc;
+  }
+  .stick-area .priority .mat-icon i {
+    color: #f7b43f;
+  }
+  .stick-area .hpriority {
+    background: #e4e0f8;
+  }
+  .stick-area .hpriority .mat-icon i {
+    color: #8a5cf8;
+  }
+  .stick-area .pendinglist {
+    background: #f3dce8;
+  }
+  .stick-area .pendinglist .mat-icon i {
+    color: #f7548b;
+  }
+  .stick-area .cmtdcases {
+    background: #ccf4dd;
+  }
+  .stick-area .cmtdcases .mat-icon i {
+    color: #08BA53;
+  }
+  .PView-box.search-Criteria {
+    width: 620px;
+  }
+  .perfscrol-searchWH {
+    width: 100%;
+    height: calc(100vh - 100px);
+    padding-right: 20px;
+  }
+  /*Owner Vendor List Starts*/
+  .ownven-list {
+    padding: 8px 10px;
+    position: relative;
+    cursor: pointer;
+  }
+  .ownven-list:hover, .ownven-list.active {
+    background: #daeeff;
+  }
+  .ownven-list .user {
+    text-transform: uppercase;
+    border-radius: 50%;
+    text-align: center;
+    color:
+      #fff;
+    cursor: pointer;
+    font-size: 11px;
+    width: 30px;
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    font-weight: 400;
+  }
+  .ownven-list .pos {
+    color: #fff;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    border: 2px solid #fff;
+    position: absolute;
+    left: 34px;
+    text-shadow: none;
+    bottom: 7px;
+    font-size: 6px;
+    line-height: 12px;
+    text-align: center;
+  }
+  .ownven-list .pos.act {
+    background: #08BA53;
+  }
+  .ownven-list .pos.inact {
+    background: #acacae;
+  }
+  .ownven-list .ovname {
+    font-size: 14px;
+    display: inline-block;
+    margin-left: 15px;
+    font-weight: 500;
+  }
+  .inproges{
+    padding: 11px 0px 0px 0px;
+  }

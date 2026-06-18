@@ -1,0 +1,40 @@
+<div [formGroup]="multiText?.selectFormGroup">
+  @for (item of getFormGroup(); track item; let i = $index) {
+    <div [formArrayName]="multiText?.formArrayName">
+      <div [formGroupName]="i">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>{{multiText.placeholder}}</mat-label>
+              <input matInput type="text" [formControlName]="multiText.frmCtrlName"
+                placeholder="{{multiText.placeholder}}" autocomplete="off" role="presentation" />
+              <div matSuffix fxLayout="row">
+                @if ((i === rowCount-1)) {
+                  <button mat-icon-button color="primary" matTooltip="Add"
+                    matTooltipClass="accent-tooltip" (click)="addItem(i, true)">
+                    <mat-icon class="btn-inputIcon"><i class="icon-plus-circle"></i></mat-icon>
+                  </button>
+                }
+                @if (i!=rowCount + 1 && rowCount !== 1) {
+                  <button mat-icon-button color="primary" matTooltip="Remove"
+                    matTooltipClass="accent-tooltip" (click)="removeControl(i)">
+                    <mat-icon class="btn-inputIcon"><i class="icon-x-circle"></i></mat-icon>
+                  </button>
+                }
+              </div>
+              @if (!!item?.get(multiText.frmCtrlName).errors?.required) {
+                <mat-error>
+                {{multiText.placeholder}} is required</mat-error>
+              }
+              @if (!!item?.get(multiText.frmCtrlName).errors?.alreadyExist) {
+                <mat-error>
+                {{multiText.placeholder}} exist, Please try another one</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

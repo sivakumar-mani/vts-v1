@@ -1,0 +1,1301 @@
+﻿<app-breadcrumb [btnBack]="btnBack" (eventBack)="backToTable()" [btnApprove]="btnApprove"
+    (eventApprove)="approveOrOverlap();isReject = false" (eventReject)="rejectForm();isReject = true"
+    [btnReject]="btnReject"
+    [routePath]="qcDetails.finalQcFlag === true ? 'Quality Check / Final Qc Approval' : 'Quality Check / Individual Qc Approval'">
+</app-breadcrumb>
+<div fxLayout="row" *ngIf="!(verification.isFinalReport === true && verification.reportType === 'preview')">
+    <div fxFlex="100%">
+        <mat-card>
+            <mat-card-header>
+                <div fxFlex="100%">
+                    <mat-card-title>
+                        <div fxLayout="row">
+                            <div fxFlex="100%">
+                                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                                    fxLayout.xs="column" fxLayoutGap="10px grid">
+                                    <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                        fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                                        fxLayoutAlign.xs="start center">
+                                        <h1 class="header-title">{{qcDetails.finalQcFlag === true ? 'Final' :
+                                            'Individual'}} QC Approval </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-title>
+                </div>
+            </mat-card-header>
+            <mat-card-content>
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                    fxLayout.xs="column" fxLayoutGap="0px grid">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <div class="client-details">
+                            <div class="client-avatar" fxHide.sm fxHide.xs>
+                                <i class="icon-referencecheck"></i>
+                            </div>
+                            <div class="client-data">
+                                <h3 matTooltip="Client details" matTooltipClass="accent-tooltip"></h3>
+                                <span>
+                                    <h3 matTooltip="Client Name" matTooltipClass="accent-tooltip">
+                                        {{qcDetails.clientName ?
+                                        qcDetails.clientName : 'N/A'}} </h3>
+                                </span>
+                                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                                    fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid"
+                                    fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%">
+                                        <p>
+                                            <label>Reference No.:</label>
+                                            <span>{{qcDetails?.clientRefNo ? qcDetails?.clientRefNo : 'N/A'}}</span>
+                                        </p>
+                                    </div>
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%">
+                                        <p>
+                                            <label>Candidate Name:</label>
+                                            <span>{{(qcDetails?.firstName ? qcDetails?.firstName : '') + ' ' }}
+                                                {{(qcDetails?.middleName ? qcDetails?.middleName : '') + ' ' }}
+                                                {{(qcDetails?.lastName ? qcDetails?.lastName : '') + ' '}}</span>
+                                        </p>
+                                    </div>
+                                    <!-- <div *ngIf="qcDetails.finalQcFlag" fxFlex="33.33%" fxFlex.lg="33.33%"
+                                        fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%"><span (click)='previewReportDownload()'><a
+                                                routerLinkActive="active-link">FQC Preview Report</a></span></div>
+                                    <div *ngIf="!qcDetails.finalQcFlag" fxFlex="33.33%" fxFlex.lg="33.33%"
+                                        fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%"><span (click)='previewReportDownload()'><a
+                                                routerLinkActive="active-link">IQC Preview Report</a></span></div> -->
+
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%">
+                                        <p>
+                                            <label>Site Name:</label>
+                                            <span>{{qcDetails?.siteName ? qcDetails?.siteName : 'N/A'}}</span>
+                                        </p>
+                                    </div>
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%">
+                                        <p>
+                                            <label>QC Status:</label>
+                                            <span>{{qcDetails?.rejectFlag? "Rejected" : qcDetails?.approvedFlag?
+                                                "Approved": "Received" }}</span>
+                                        </p>
+                                    </div>
+
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%" *ngIf="qcDetails.finalQcFlag">
+                                        <p>
+                                            <label>FQC Detailed&nbsp;Report:</label>
+                                            <span [ngClass]="{'d-none': verification.showsnp !== true }">
+                                                <div class='dot-loading'>
+                                                    <span class='dot dot-1'></span>
+                                                    <span class='dot dot-2'></span>
+                                                    <span class='dot dot-3'></span>
+                                                    <span class='dot dot-4'></span>
+                                                </div>
+                                            </span>
+                                            <span
+                                                *ngIf="qcDetails.finalQcFlag && verification.pdfvalue?.document &&verification.showsnp !== true"
+                                                (click)='common.downloadDocument(0,verification.pdfvalue.document,verification.pdfvalue?.fileName)'>
+                                                <a routerLinkActive="active-link"> <i *ngIf='verification.pdfvalue'
+                                                        class="icon-file-text"></i>
+                                                    <span matTooltipClass="accent-tooltip"
+                                                        matTooltip="{{verification.pdfvalue?.fileName}}">
+                                                        {{verification.pdfvalue?.fileName}}</span> </a>
+                                            </span>
+
+                                        </p>
+                                    </div>
+                                    <!-- <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%"  *ngIf="!qcDetails.finalQcFlag && this.qcDetails.componentName.includes('CV Validation')">
+                                    <p>
+                                      <label>Detailed&nbsp;Report:</label>
+                                      <span> <a routerLinkActive="active-link"
+                                                (click)="common.downloadDocument(indQCDetailedDoc.docId,indQCDetailedDoc.document,indQCDetailedDoc?.fileName)"> <i class="icon-file-text"></i>
+                                                 <span matTooltipClass="accent-tooltip" matTooltip="{{indQCDetailedDoc?.fileName}}"> {{indQCDetailedDoc?.fileName}}</span> </a> </span> </p>
+                                  </div> -->
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%" *ngIf="!qcDetails.finalQcFlag">
+                                        <p>
+                                            <label>IQC Detailed&nbsp;Report:</label>
+                                            <span [ngClass]="{'d-none':  verification.showsnp !== true }">
+                                                <div class='dot-loading'>
+                                                    <span class='dot dot-1'></span>
+                                                    <span class='dot dot-2'></span>
+                                                    <span class='dot dot-3'></span>
+                                                    <span class='dot dot-4'></span>
+                                                </div>
+                                            </span>
+                                            <span *ngIf="!qcDetails.finalQcFlag && verification.pdfvalue?.document"> <a
+                                                    routerLinkActive="active-link"
+                                                    (click)="common.downloadDocument(0,verification.pdfvalue.document,verification.pdfvalue?.fileName)">
+                                                    <i *ngIf='verification.pdfvalue' class="icon-file-text"></i>
+                                                    <span matTooltipClass="accent-tooltip"
+                                                        matTooltip="{{verification.pdfvalue?.fileName}}">
+                                                        {{verification.pdfvalue?.fileName}}</span> </a>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%">
+                                        <p>
+                                            <label>QC Received Date:</label>
+                                            <span>{{qcDetails?.receivedDate ? (qcDetails?.receivedDate | date :
+                                                'dd/MM/yyyy') : 'N/A'}}</span>
+                                        </p>
+                                    </div>
+                                    <!-- </div>
+            <div fxLayout="row" fxLayoutGap="20px"> -->
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%" *ngIf="qcDetails.finalQcFlag === false">
+                                        <p>
+                                            <label>Verification Id:</label>
+                                            <span>{{qcDetails?.verificationId ? qcDetails.verificationId :
+                                                'N/A'}}</span>
+                                        </p>
+                                    </div>
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%" *ngIf="qcDetails.finalQcFlag === false">
+                                        <p>
+                                            <label>Component Name:</label>
+                                            <span>{{qcDetails?.componentName ? qcDetails?.componentName : 'N/A'}}</span>
+                                            <!-- <span *ngIf="qcDetails?.subCompName"> -{{qcDetails?.subCompName ? qcDetails?.subCompName : 'N/A'}}</span> -->
+                                        </p>
+                                    </div>
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%">
+                                        <p>
+                                            <label>Comments History:</label>
+                                            <span>
+                                                <a (click)="openDialog(false)"><i class="icon-file-text"></i> View </a>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%" *ngIf="qcDetails.finalQcFlag === false">
+                                        <p>
+                                            <label>Screening Status:</label>
+                                            <span>{{qcDetails?.screeningStatus}}</span>
+
+                                        </p>
+                                        <!-- <span style="color: red;"
+                                            *ngIf="qcDetails?.screeningStatus.includes('Fake')">Please note !,This
+                                            Employer Name (
+                                            {{functioanlEntity}} ) is closed as Suspicious Employer</span> -->
+                                    </div>
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                        fxFlex.xs="100%">
+                                        <p>
+                                            <label>Doc Path:</label>
+                                            <span>{{qcDetails?.urlName ? qcDetails?.urlName : 'N/A'}}</span>
+                                        </p>
+                                    </div>
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%">
+                                        <div fxLayout="row">
+                                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%"
+                                                fxFlex.xs="100%" *ngIf="qcDetails.finalQcFlag === false">
+                                                <app-insuff-history [screeningCompId]="qcDetails?.screeningCompId"
+                                                    [isInsuffScreen]="false"></app-insuff-history>
+                                            </div>
+                                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%"
+                                                fxFlex.xs="100%">
+                                                <app-additionalfee-history [finalQcFlag]="qcDetails.finalQcFlag"
+                                                    [screeningCompId]="qcDetails?.screeningCompId"
+                                                    [screeningId]="qcDetails?.screeningId"
+                                                    [isHistoryScreen]="false"></app-additionalfee-history>
+                                            </div>
+                                        </div>
+                                        <div fxLayout="row">
+                                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%"
+                                                fxFlex.xs="100%"
+                                                *ngIf="qcDetails.finalQcFlag === false && (qcDetails?.compId === common.EMPLOYMENT_HRId || this.qcDetails?.compId === common.EDUCATIONId)">
+                                                <p>
+                                                    <app-emp-closed-cases [screeningCompId]="qcDetails?.screeningCompId"
+                                                        [isQc]="true" [empInsId]="empinsIDs"
+                                                        [clientCatID]="clientCategoryId" [empEduFlag]="empEduFlag"
+                                                        [name]="functioanlEntity"> </app-emp-closed-cases>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div [fxFlex]="qcDetails?.componentName?.toLowerCase() === common?.EMPLOYMENT_HR.toLowerCase() ? 33.33 : 63.33"
+                                        [fxFlex.lg]="qcDetails?.componentName?.toLowerCase() === common?.EMPLOYMENT_HR.toLowerCase() ? 33.33 : 63.33"
+                                        [fxFlex.md]="qcDetails?.componentName?.toLowerCase() === common?.EMPLOYMENT_HR.toLowerCase() ? 33.33 : 63.33"
+                                        fxFlex.sm="50%" fxFlex.xs="100%" *ngIf="qcDetails.finalQcFlag === false">
+                                        <p>
+                                            <label>Functional Entity:</label>
+                                            <span>{{functioanlEntity ? functioanlEntity : 'N/A'}}</span>
+                                        </p>
+                                    </div>
+
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                        fxFlex.xs="100%"
+                                        *ngIf="qcDetails.finalQcFlag === true && qcDetails.ctsFlag === true">
+                                        <p>
+                                            <label>Employee Id:</label>
+                                            <span>{{qcDetails?.componentCustomFields[0]?.fieldValue ?
+                                                qcDetails?.componentCustomFields[0].fieldValue : 'N/A'}}</span>
+                                        </p>
+                                    </div>
+                                    <!-- <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                        fxFlex.xs="100%"
+                                        *ngIf="qcDetails.finalQcFlag === false && qcDetails?.componentName?.toLowerCase() === common?.EMPLOYMENT_HR.toLowerCase()">
+                                        <p>
+                                            <app-emp-closed-cases [screeningCompId]="qcDetails?.screeningCompId"
+                                                [isQc]="true" [empInsId]="qcDetails?.employerId"
+                                                [name]="functioanlEntity"> </app-emp-closed-cases>
+                                        </p>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="empedup"
+                    *ngIf="!qcDetails.finalQcFlag && responseDatam && responseDatam[0].component[0].educationApplicantDet && responseDatam[0].component[0].educationApplicantDet.fakeAndUnderReview">
+                    Please note !,This
+                    Education Name (
+                    {{functioanlEntity}} ) is {{responseDatam[0].component[0].educationApplicantDet.forResearchStatus
+                    === 'Suspicious' ? 'closed as Suspicious Institution' : 'in under For Research'}}</p>
+
+                <p class="empedup" *ngIf="!qcDetails.finalQcFlag && responseDatam && findEmpList
+                     && findEmpList.fakeAndUnderReview
+                     || (findcurrentEmpList && findcurrentEmpList.fakeAndUnderReview)
+                     ||(findPreviousEmpList && findPreviousEmpList.fakeAndUnderReview)">
+                    Please note !,This
+                    Employment Name (
+                    {{functioanlEntity}} ) is {{isSuspicious? 'closed as Suspicious Employer' : 'in under For
+                    Research'}}</p>
+                <div>
+                    <form [formGroup]="qcApproveForm" id="ngForm" autocomplete="off" appScrollToError>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                            <div fxFlex="100%">
+                                <div fxLayout="row"
+                                    *ngIf="(qcDetails.finalQcFlag === false && addFeeList?.length > 0) || qcDetails.finalQcFlag === true">
+                                    <div fxFlex="100%">
+                                        <h3 class="sub-header mt-0">{{qcDetails.finalQcFlag === true ? 'Components &
+                                            Functional Entities' : ((this.qcDetails.iqcByPassFlag === true ? 'Override '
+                                            : '') + 'Fees Requested In Operation Team')}}</h3>
+                                    </div>
+                                </div>
+                                <div fxLayout="row" class="client-data cr">
+                                    <div fxFlex="100%" *ngIf="qcDetails.finalQcFlag === true">
+                                        <div class="tag" *ngFor="let comp of compHistoryList; let last=last;"><b>
+                                                {{common.getCompNameByIndex(comp?.compName, comp.compIndex,
+                                                m?.compMaxNo, m?.subCompMaxNo)}} </b> <span
+                                                *ngIf="comp?.functionalEntity"> - </span>{{comp?.functionalEntity}}
+                                        </div>
+                                    </div>
+                                    <div fxFlex="100%" *ngIf="qcDetails.finalQcFlag === false">
+                                        <div *ngFor="let comp of addFeeList; let i=index;">&nbsp;&#9679;&nbsp;
+                                            {{comp?.comments}} - Requested By : {{comp?.enteredBy}} <br /> </div>
+                                    </div>
+                                </div>
+                                <div fxLayout="row" *ngIf="compNameList?.length === 0">
+                                    <div fxFlex="100%">
+                                        <h3 class="sub-header mt-0">Documents</h3>
+                                    </div>
+                                </div>
+                                <div fxLayout="row" *ngIf="compNameList?.length === 0">
+                                    <div fxFlex="100%" class="mb-15">
+                                        <div class="no-record"><span>No Records Found</span></div>
+                                    </div>
+                                </div>
+                                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                                    fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="50px grid"
+                                    *ngIf="compNameList?.length > 0">
+                                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                        *ngFor="let comp of compNameList">
+                                        <div fxLayout="row">
+                                            <div fxFlex="100%">
+                                                <h3 class="sub-header mt-0">{{comp.compName}} Documents</h3>
+                                            </div>
+                                        </div>
+                                        <div fxLayout="row">
+                                            <div fxFlex="100%" class="tbl-doc mb-0">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="35%">Document Type</th>
+                                                            <th>Document Name</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let doc of comp.Document">
+                                                            <td><i [ngClass]="doc?.fileName?.toLowerCase()?.includes('.pdf') ? 'icon-pdfline' : doc?.fileName?.toLowerCase()?.includes('.doc') ? 'icon-docline' :
+                           doc?.fileName?.toLowerCase()?.includes('.xl') ? 'icon-excelline' : doc?.fileName?.toLowerCase()?.includes('.txt') ? 'icon-file-text' :
+                           (doc?.fileName?.toLowerCase()?.includes('.png') || doc?.fileName?.toLowerCase()?.includes('.jpg') || doc?.fileName?.toLowerCase()?.includes('.gif') ||
+                           doc?.fileName?.toLowerCase()?.includes('.jpeg')) ? 'icon-pictures' : 'icon-document'"></i>
+                                                                {{doc.docTypeName}}
+                                                            </td>
+                                                            <td><a *ngIf="doc?.fileName" routerLinkActive="active-link"
+                                                                    (click)="doc.docTypeName === common.FOR_RE ? preview('DownloadSupportingDocument', doc?.docId, doc?.fileName,doc) : doc.isFRDocument !== null && doc.isFRDocument === true ? preview('downloadFrConDocument', doc?.screeningDocId, doc?.fileName,doc) : preview('downloadScreeningDocument', doc?.screeningDocId, doc?.fileName,doc)">{{doc.fileName}}</a>
+                                                                <span *ngIf="!doc?.fileName">N/A</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="50px">
+                            <div fxFlex="50%" *ngIf="isReject===false" class="mt-20">
+                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                    <mat-label>Approval Comments</mat-label>
+                                    <textarea #Count maxlength="1000" formControlName='remarks' (mouseleave)="leave(i)"
+                                        matInput placeholder="Approval Comments"></textarea>
+                                    <mat-hint class="f-13"> ({{Count?.value?.length}} /1000 max) </mat-hint>
+                                    <!-- <mat-error *ngIf="!!qcApproveForm?.get('remarks')?.errors?.required">Approval Comments is required
+                  </mat-error> -->
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="50%"></div>
+                        </div>
+                    </form>
+                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                        fxLayout.xs="column" fxLayoutGap="0px grid" class="mt-20"
+                        *ngIf="isReject===true && qcDetails.finalQcFlag === false">
+                        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                <mat-label>Error Type</mat-label>
+                                <mat-select [formControl]="errorType" placeholder="Select Error Type">
+                                    <mat-option>Select Error Type</mat-option>
+                                    <mat-option *ngFor="let error of errorTypeList; let i = index"
+                                        [value]="error.lookUpId"> {{ error.lookUpName }}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="!errorType.value">Error Type is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                        fxLayout.xs="column" fxLayoutGap="0px grid"
+                        *ngIf="isReject===true && qcDetails.finalQcFlag === false">
+                        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                <mat-label>Reject Comments</mat-label>
+                                <textarea #msg maxlength="1000" [formControl]="comment" required matInput
+                                    placeholder="Reject Comments"></textarea>
+                                <mat-error>Reject Comments is Required</mat-error>
+                                <mat-hint class="f-13"> ({{msg.value.length}} /1000 max) </mat-hint>
+                                <!-- <mat-error *ngIf="!comment.value">Reject Comments is required</mat-error> -->
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="20px grid" class="pt-15" *ngIf="isReject===true && qcDetails.finalQcFlag === true">
+                    <div fxFlex="100%">
+                        <p-table #dt [columns]="cols" [value]="compHistoryList" [(selection)]="selectedCompList"
+                            [scrollable]="true" [paginator]="true" [rows]="5" [resizableColumns]="true"
+                            [reorderableColumns]="true" columnResizeMode="expand">
+
+                            <!-- ================= COLGROUP ================= -->
+                            <ng-template pTemplate="colgroup" let-colgroupCols>
+                                <colgroup>
+                                    <col style="width:150px" />
+                                    <col *ngFor="let col of colgroupCols" />
+                                </colgroup>
+                            </ng-template>
+
+                            <!-- ================= HEADER ================= -->
+                            <ng-template pTemplate="header" let-headerCols>
+                                <tr>
+
+                                    <th pReorderableColumn pResizableColumn matTooltip="Select All"
+                                        matTooltipClass="accent-tooltip">
+                                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                        <p-header>Select All</p-header>
+                                    </th>
+
+                                    <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn
+                                        pResizableColumn pSortableColumn="{{ col.field }}" matTooltip="{{ col.header }}"
+                                        matTooltipClass="accent-tooltip">
+
+                                        <div class="thname">{{ col.header }}</div>
+
+                                        <!-- ✅ FIX: use field instead of pSortableColumn -->
+                                        <p-sortIcon [field]="col.field" matTooltip="Sorting"
+                                            matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
+                                            ariaLabelDesc="Activate to sort in descending order"
+                                            ariaLabelAsc="Activate to sort in ascending order">
+                                        </p-sortIcon>
+
+                                    </th>
+
+                                </tr>
+                            </ng-template>
+
+                            <!-- ================= BODY ================= -->
+                            <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+
+                                <tr>
+
+                                    <td>
+                                        <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                                    </td>
+
+                                    <td *ngFor="let col of bodyCols" [ngSwitch]="col.field">
+
+                                        <div *ngSwitchCase="'verificationId'">
+                                            {{ rowData?.verificationId }}
+                                        </div>
+
+                                        <div *ngSwitchCase="'compName'">
+                                            {{ rowData?.compName }}
+                                            {{
+                                            rowData?.compName?.toLowerCase() === common.CRIMINAL_DATABASE.toLowerCase()
+                                            ? ' - ' + rowData?.functionalEntity
+                                            : ''
+                                            }}
+                                        </div>
+
+                                        <div *ngSwitchCase="'remark'">
+
+                                            <a *ngIf="!rowData?.remark" (click)="submitForm(rowData, index)">
+                                                Add Remarks
+                                            </a>
+
+                                            <a *ngIf="rowData?.remark"
+                                                (click)="remark.setValue(rowData?.remark); submitForm(rowData, index)">
+                                                {{ rowData?.remark }}
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+                                </tr>
+
+                            </ng-template>
+
+                        </p-table>
+                        <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                            fxLayoutGap.xs="20px grid" [ngClass]="{'empty-record': compHistoryList?.length == 0}">
+                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                fxLayoutAlign="start center"> Showing {{ dt.totalRecords
+                                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                                    <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
+                                        dt.totalRecords }} record(s) </div>
+                                        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%"
+                                            fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.md="end center"
+                                            fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                                            <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                            dt.onPageChange({
+                              first: dt.first - dt.rows,
+                              rows: dt.rows
+                            });
+                            navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                          "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go
+                                                to Page<span class="input-num">
+                                                    <input type="number" min="1" #pageNo [formControl]="page"
+                                                        [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                                                        [NumberOnly]="false"
+                                                        (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                                                </span></span> <span class="mr-2" fxHide.xs> of
+                                                {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
+                                                [ngClass]="dt.rows + dt.first >= dt.totalRecords? 'page-btn disabled': 'page-btn'"
+                                                (click)="dt.onPageChange({first: dt.first + dt.rows, rows: dt.rows });
+                            navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                          "><i class="icon-control-end ml-5"></i></a>
+                                        </div>
+                            </div>
+                        </div>
+                    </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+<mat-drawer-container class="PView">
+    <mat-drawer #drawer mode="side" position="end">
+        <div class="PView-box">
+            <h4 class="sub-header">Client Information</h4>
+            <div class="side-scroll" style="overflow:auto">
+                <div fxLayout="row">
+                    <div fxFlex="100%" class="hints">
+                        <h6 class="hints">Client Name</h6>
+                        <ul>
+                            <li>{{qcDetails?.clientName ? qcDetails?.clientName : 'N/A'}}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div fxLayout="row">
+                    <div fxFlex="100%" class="hints">
+                        <h6 class="hints">Client Instructions</h6>
+                        <ul *ngFor="let ins of clientPolicy;let ind = index;">
+                            <li *ngIf="!ins?.componentId">
+                                {{ins?.lookUpName}} - <span innerHTML={{ins?.instruction}}></span></li>
+                            <li *ngIf="ins?.componentId && qcDetails?.componentName === ins?.rptType">
+                                {{ins?.lookUpName}} - <span innerHTML={{ins.instruction}}></span></li>
+                        </ul>
+                        <ul *ngIf="!(clientPolicy?.length > 0)">
+                            <li>N/A</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-drawer>
+    <div class="example-sidenav-content">
+        <button type="button" mat-stroked-button (click)="drawer.toggle()" class="PViewBtn">
+            <label>Instructions</label>
+            <!-- <i class="material-icons material-icons-outlined">more_horiz</i>  -->
+        </button>
+    </div>
+</mat-drawer-container>
+<ng-template #confirmation>
+    <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
+        (click)="dialogRef.close();remark.setValue('');"> <i class="material-icons">clear</i> </button>
+    <h1 mat-dialog-title>Add Remarks</h1>
+    <mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Error Type</mat-label>
+                    <mat-select [formControl]="errorType" placeholder="Select Error Type" required>
+                        <mat-option>Select Error Type</mat-option>
+                        <mat-option *ngFor="let error of errorTypeList; let i = index" [value]="error.lookUpId"> {{
+                            error.lookUpName }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="!errorType.value">Error Type is required</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <!-- Request to increase character limit | FQC | Live environment -->
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Remarks</mat-label>
+                    <textarea #msgCount maxlength="1000" [formControl]="remark" required matInput
+                        placeholder="Remarks"></textarea>
+                    <mat-error>Remarks is Required</mat-error>
+                    <mat-hint class="f-13"> ({{msgCount.value.length}} /1000 max) </mat-hint>
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="addRemarks()">Add</button>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #history>
+    <h1 mat-dialog-title>History</h1>
+    <mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <h3 class="sub-header mt-0 border-none">Received Component details</h3>
+                <!-- <h1 class="sub-header">Received Component details</h1> -->
+                <!-- <p-table #dt [columns]="colsHistory" [value]="compHistoryList" [(selection)]="selectedCompList"
+          [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="5" [resizableColumns]="true"
+          [reorderableColumns]="true" columnResizeMode="expand">
+          <ng-template pTemplate="header" let-cols>
+            <tr>
+              <th *ngFor="let col of cols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn
+                matTooltipClass="accent-tooltip" matTooltip="{{col.header}}"> <span>
+                  <div class="thname"> {{col.header}} </div>
+                </span> </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-cols="columns">
+            <tr>
+              <td *ngFor="let col of cols" [ngSwitch]='col.field'>
+                <div *ngSwitchCase="'verificationId'" matTooltip="{{rowData?.verificationId}}"
+                  matTooltipClass="accent-tooltip"> {{rowData?.verificationId}}</div>
+                <div *ngSwitchCase="'compName'" matTooltip="{{rowData?.compName}}" matTooltipClass="accent-tooltip">
+                  {{rowData?.compName}}</div>
+                <div *ngSwitchCase="'receivedDate'" matTooltip="{{rowData?.receivedDate | date : 'dd/MM/yyyy hh:mm a'}}"
+                  matTooltipClass="accent-tooltip">
+                  {{rowData?.receivedDate ? (rowData?.receivedDate | date : 'dd/MM/yyyy hh:mm a') : 'N/A'}}</div>
+                <div *ngSwitchCase="'approvedDate'" matTooltip="{{rowData?.approvedDate | date : 'dd/MM/yyyy hh:mm a'}}"
+                  matTooltipClass="accent-tooltip">
+                  {{rowData?.approvedDate ? (rowData?.approvedDate | date : 'dd/MM/yyyy hh:mm a') : 'N/A'}}</div>
+                <div *ngSwitchCase="'screeningOwnerFname'" matTooltip="{{rowData?.screeningOwnerFname}} {{rowData?.screeningOwnerMname ? rowData?.screeningOwnerMname : ''}}
+            {{rowData?.screeningOwnerLname ? rowData?.screeningOwnerLname : ''}}" matTooltipClass="accent-tooltip">
+                  {{rowData?.screeningOwnerFname}} {{rowData?.screeningOwnerMname ? rowData?.screeningOwnerMname : ''}}
+                  {{rowData?.screeningOwnerLname ? rowData?.screeningOwnerLname : ''}}</div>
+                <div *ngSwitchCase="'qcOwnerFname'" matTooltip="{{rowData?.qcOwnerFname}} {{rowData?.qcOwnerMname ? rowData?.qcOwnerMname : ''}}
+            {{rowData?.qcOwnerLname ? rowData?.qcOwnerLname :''}}" matTooltipClass="accent-tooltip">
+                  {{rowData?.qcOwnerFname}} {{rowData?.qcOwnerMname ? rowData?.qcOwnerMname : ''}}
+                  {{rowData?.qcOwnerLname ? rowData?.qcOwnerLname :''}}</div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table> -->
+                <div class="history-view"
+                    *ngFor="let hist of historyFlag === true ? compHistoryList : compHistoryCommentList;let j = index">
+                    <div class="dt"> <span matTooltip="Component Name" matTooltipClass="accent-tooltip"><b>{{
+                                historyFlag
+                                === true? hist?.compName : hist?.comments}}</b></span> |
+                        <span *ngIf="historyFlag === true" matTooltip="Received - Individual Approved Date & Time"
+                            matTooltipClass="accent-tooltip"> Received Date & Time -
+                            {{this.common.getTimezoneOffset(hist?.receivedDate, false) | date : 'dd/MM/yyyy hh:mm a'}} |
+                            Approved Date & Time - {{this.common.getTimezoneOffset(hist?.approvedDate, false) | date :
+                            'dd/MM/yyyy hh:mm a'}}</span>
+                    </div>
+                    <div class="uname" *ngIf="hist?.qcOwnerFname">
+                        <div matTooltip="Qc Approved By" matTooltipClass="accent-tooltip"
+                            class="user avatarBg{{(j%6)+1}}">
+                            <!-- {{hist?.qcOwnerFname.charAt(0).toUpperCase()}}{hist?.qcOwnerFname.charAt(0)?hist?.qcOwnerLname.charAt(0).toUpperCase():''}} -->
+                            {{ hist?.qcOwnerFname?.slice(0, 1)}}{{ hist?.qcOwnerLname?.slice(0, 1)}}
+                        </div>
+                        Updated By - {{hist?.qcOwnerFname}} {{hist?.qcOwnerMname ? hist?.qcOwnerMname : ''}}
+                        {{hist?.qcOwnerLname ? hist?.qcOwnerLname :''}}
+                    </div>
+                    <div class="uname" *ngIf="hist?.enteredBy && historyFlag !== true">
+                        <div matTooltip="Qc Approved By" matTooltipClass="accent-tooltip"
+                            class="user avatarBg{{(j%6)+1}}">
+                            {{ hist?.enteredBy?.slice(0, 1)}}{{ hist?.enteredBy?.slice(0, 1)}}</div>
+                        Updated By - {{hist?.enteredBy}}
+                    </div>
+                    <p *ngIf="historyFlag !== true"> Status Date - {{hist?.statusDate?
+                        (common.getTimezoneOffset(hist?.statusDate, false) |date : 'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}
+                    </p>
+                    <p *ngIf="!hist?.qcOwnerFname && historyFlag === true"> Remarks - {{hist?.remark}}</p>
+                    <p *ngIf="historyFlag === true"> Screening Owner - {{hist?.screeningOwnerFname}}
+                        {{hist?.screeningOwnerMname ? hist?.screeningOwnerMname : ''}} {{hist?.screeningOwnerLname ?
+                        hist?.screeningOwnerLname : ''}} </p>
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <h3 *ngIf="rejectedHistoryList?.length>0" class="sub-header mb-5 border-none">Rejected Component details
+                </h3>
+                <!-- <h1 class="sub-header" *ngIf="rejectedHistoryList?.length>0">Rejected Component details</h1> -->
+                <!-- <p-table *ngIf="rejectedHistoryList?.length>0" #dt [columns]="colsRejectedHistory" [value]="rejectedHistoryList"
+          [(selection)]="selectedCompList" [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="5"
+          [resizableColumns]="true" [reorderableColumns]="true" columnResizeMode="expand">
+          <ng-template pTemplate="header" let-cols>
+            <tr>
+              <th *ngFor="let col of cols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn
+                matTooltipClass="accent-tooltip" matTooltip="{{col.header}}"> <span>
+                  <div class="thname"> {{col.header}} </div>
+                </span> </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-cols="columns">
+            <tr>
+              <td *ngFor="let col of cols" [ngSwitch]='col.field'>
+                <div *ngSwitchCase="'verificationId'" matTooltip="{{rowData?.verificationId}}"
+                  matTooltipClass="accent-tooltip"> {{rowData?.verificationId}}</div>
+                <div *ngSwitchCase="'compName'" matTooltip="{{rowData?.compName}}" matTooltipClass="accent-tooltip">
+                  {{rowData?.compName}}</div>
+                <div *ngSwitchCase="'rejectDate'" matTooltip="{{rowData?.rejectDate | date : 'dd/MM/yyyy hh:mm a'}}"
+                  matTooltipClass="accent-tooltip">
+                  {{rowData?.rejectDate ? (rowData?.rejectDate | date : 'dd/MM/yyyy hh:mm a') : 'N/A'}}</div>
+                <div *ngSwitchCase="'remark'" matTooltip="{{rowData?.remark}}" matTooltipClass="accent-tooltip">
+                  {{rowData?.remark}}</div>
+                <div *ngSwitchCase="'rejectClearedStatus'" matTooltip="{{rowData?.rejectClearedDate ? 'Yes' : 'No'}}"
+                  matTooltipClass="accent-tooltip"> {{rowData?.rejectClearedDate ? 'Yes' : 'No'}}</div>
+                <div *ngSwitchCase="'rejectDate'"
+                  matTooltip="{{rowData?.rejectDate | date : 'dd/MM/yyyy hh:mm a'}}"
+                  matTooltipClass="accent-tooltip">
+                  {{rowData?.rejectDate ? (rowData?.rejectDate | date : 'dd/MM/yyyy hh:mm a') : 'N/A'}}
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table> -->
+                <div class="history-view" *ngFor="let hist of rejectedHistoryList;let j = index">
+                    <div class="dt"> <span matTooltip="Component Name"
+                            matTooltipClass="accent-tooltip">{{hist?.compName}}</span> | <span
+                            matTooltip="Rejected Date & Time" matTooltipClass="accent-tooltip">Rejected Date & Time -
+                            {{hist?.rejectDate ? (common.getTimezoneOffset(hist?.rejectDate, false) | date : 'dd/MM/yyyy
+                            hh:mm a') : 'N/A'}}</span> </div>
+                    <!-- <div class="uname">Rejected By - {{hist?.qcOwnerFname}}{{hist?.qcOwnerMname ? hist?.qcOwnerMname : ''}}{{hist?.qcOwnerLname ? hist?.qcOwnerLname :''}}</div> -->
+                    <div class="uname">
+                        <div matTooltip="Rejected By" matTooltipClass="accent-tooltip" class="user avatarBg{{(j%6)+1}}">
+                            {{ hist?.qcOwnerFname?.slice(0, 1)}}{{ hist?.qcOwnerLname?.slice(0, 1)}}</div>
+                        Rejected By - {{hist?.qcOwnerFname}} {{hist?.qcOwnerMname ? hist?.qcOwnerMname : ''}}
+                        {{hist?.qcOwnerLname ? hist?.qcOwnerLname :''}}
+                    </div>
+                    <p>Reason For Rejection - {{hist?.remark}}</p>
+                    <p>Cleared status - {{hist?.rejectClearedDate ? 'Yes' : 'No'}} , Cleared Date & Time-
+                        {{hist?.rejectClearedDate ? (common.getTimezoneOffset(hist?.rejectClearedDate, false) | date :
+                        'dd/MM/yyyy hh:mm a') : 'N/A'}} </p>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="dialogRef.close();">Close</button>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #FQC>
+    <h1 mat-dialog-title>Final Quality Check</h1>
+    <mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <p>
+                    <label>Reference No.:</label>
+                    <span class="text-bold">{{qcDetails?.clientRefNo ? qcDetails?.clientRefNo : 'N/A'}}</span>
+                </p>
+            </div>
+        </div>
+        <div fxLayout="row">
+            <div fxFlex="30%">
+                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Select Package</mat-label>
+                    <mat-select [formControl]="packageflag" placeholder="Select Package Name">
+                        <mat-option>Select Package</mat-option>
+                        <mat-option [value]=1>Diamond Package</mat-option>
+                        <mat-option [value]=2>Gold Package</mat-option>
+                        <mat-option [value]=3>Platinum Package</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row">
+            <div fxFlex="50%" *ngIf="packageflag.value">
+                <fieldset>
+                    <legend>Package Components:</legend>
+                    <mat-chip-grid>
+                        <mat-chip-row>Education</mat-chip-row>
+                        <mat-chip-row>Pan Card</mat-chip-row>
+                        <mat-chip-row>Passport</mat-chip-row>
+                    </mat-chip-grid>
+                </fieldset>
+            </div>
+        </div>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <h1 class="sub-header" *ngIf="compHistoryList?.length>0">Component details</h1>
+                <p-table *ngIf="compHistoryList?.length > 0" #dt [columns]="colsFQC" [value]="compHistoryList"
+                    [(selection)]="selectedCompList" [scrollable]="true" [paginator]="true" [rows]="5"
+                    [resizableColumns]="true" [reorderableColumns]="true" columnResizeMode="expand">
+
+                    <!-- HEADER -->
+                    <ng-template pTemplate="header" let-headerCols>
+                        <tr>
+                            <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn
+                                pResizableColumn matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
+
+                                <div class="thname">{{ col.header }}</div>
+
+                            </th>
+                        </tr>
+                    </ng-template>
+
+                    <!-- BODY -->
+                    <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+
+                        <tr>
+                            <td *ngFor="let col of bodyCols" [ngSwitch]="col.field">
+
+                                <div *ngSwitchCase="'verificationId'">
+                                    {{ rowData?.verificationId }}
+                                </div>
+
+                                <div *ngSwitchCase="'receivedDate'">
+                                    {{ rowData?.receivedDate
+                                    ? (rowData.receivedDate | date:'dd/MM/yyyy hh:mm a')
+                                    : 'N/A' }}
+                                </div>
+
+                                <div *ngSwitchCase="'compName'">
+                                    {{ rowData?.compName }}
+                                </div>
+
+                                <div *ngSwitchCase="'Package'">N/A</div>
+
+                                <div *ngSwitchCase="'Country'">India</div>
+
+                                <div *ngSwitchCase="'QCApproval'">
+                                    <mat-checkbox [checked]="true" disabled></mat-checkbox>
+                                </div>
+
+                                <div *ngSwitchCase="'Allot'">
+                                    <mat-checkbox [checked]="rowData?.Allot"></mat-checkbox>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                    </ng-template>
+
+                </p-table>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="dialogRef.close()">Generate Response</button>
+        <button mat-flat-button color="warn" (click)="dialogRef.close()">Close</button>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #alertPopUp>
+    <h1 mat-dialog-title>Alert
+        <div fxLayout="row" class="scrollCls">
+            <div fxFlex="100%">
+                <div fxLayout="row">
+                    <div fxFlex="100%">
+                        <h3 class="text-semi-bold mt-10 line-height">
+                            DOJ is greater than Closed date, please select the new closed date below and click Update
+                            else, click Cancel to close this alert.</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h1>
+    <mat-dialog-content class="scrollCls">
+        <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="100%">
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Closed Date</mat-label>
+                        <input matInput [(ngModel)]="UpdateClosedDate" required readonly [matDatepicker]="dateTime1"
+                            placeholder="Closed Date" matTooltipClass="accent-tooltip">
+                        <mat-hint class="f-13">DD/MMM/YYYY.</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="dateTime1"></mat-datepicker-toggle>
+                        <mat-datepicker #dateTime1></mat-datepicker>
+                        <mat-error>Closed Date is required </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+        <button mat-stroked-button (click)="dialogCloseAlert()">Cancel</button>
+        <button mat-flat-button color="warn" [disabled]="!UpdateClosedDate" (click)="submitCloseDate()">
+            Update
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+
+<ng-template #pdfReportTitle>
+    <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
+        (click)="dialogPdfTilte();"> <i class="material-icons">clear</i> </button>
+    <h1 mat-dialog-title>Report Title</h1>
+    <mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Select Report Type</mat-label>
+                    <mat-select [(ngModel)]="ReportTitle" required placeholder="Select Report Type">
+                        <mat-option>Select Report Type</mat-option>
+                        <mat-option *ngFor="let report of ReportTypeList; let i = index" [value]="report.lookUpId"> {{
+                            report.lookUpDesc }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="!ReportTitle">Report Type is required</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+        <button mat-stroked-button (click)="dialogPdfTilte()">Cancel</button>
+        <button mat-flat-button color="warn" [disabled]="!ReportTitle" (click)="submitReportTitle()">Okay</button>
+    </mat-dialog-actions>
+</ng-template>
+
+
+
+<ng-template #choosePackage>
+    <h1 mat-dialog-title>Choose Package Details - Client Ref No : {{qcDetails?.clientRefNo}}</h1>
+    <mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <h3 class="sub-header mt-0 border-none">Screening Details</h3>
+                <p-table #dt [columns]="colsPackChoose" [value]="packageInvoiceList?.screeningDetail"
+                    [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true" columnResizeMode="expand">
+
+                    <!-- COLGROUP -->
+                    <ng-template pTemplate="colgroup" let-colgroupCols>
+                        <colgroup>
+                            <col *ngFor="let col of colgroupCols" style="width:130px" />
+                        </colgroup>
+                    </ng-template>
+
+                    <!-- HEADER -->
+                    <ng-template pTemplate="header" let-headerCols>
+                        <tr>
+                            <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn
+                                pResizableColumn matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
+
+                                <div class="thname">{{ col.header }}</div>
+
+                                <p-sortIcon [pSortableColumn]="col.field" matTooltip="Sorting"
+                                    matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
+                                    ariaLabelDesc="Activate to sort in descending order"
+                                    ariaLabelAsc="Activate to sort in ascending order">
+                                </p-sortIcon>
+
+                            </th>
+                        </tr>
+                    </ng-template>
+
+                    <!-- BODY -->
+                    <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+
+                        <tr>
+                            <td *ngFor="let col of bodyCols" [ngSwitch]="col.field">
+
+                                <div *ngSwitchCase="'screeningCompId'">
+                                    {{
+                                    qcDetails.manualFileSubmission !== true
+                                    ? packageInvoiceList?.acheckRef + rowData?.screeningCompId
+                                    : qcDetails.clientScreeningId
+                                    }}
+                                </div>
+
+                                <div *ngSwitchCase="'receivedDate'">
+                                    {{ rowData?.receivedDate ? (rowData.receivedDate | date:'dd/MM/yyyy') : 'N/A' }}
+                                </div>
+
+                                <div *ngSwitchCase="'compName'">{{ rowData?.compName }}</div>
+
+                                <div *ngSwitchCase="'rptType'">{{ rowData?.rptType }}</div>
+
+                                <div *ngSwitchCase="'sourceCountry'">
+                                    {{ rowData?.sourceCountry || 'N/A' }}
+                                </div>
+
+                                <div *ngSwitchCase="'qcApproveFlag'">
+                                    <p-tableCheckbox [value]="rowData.qcApproveFlag" disabled></p-tableCheckbox>
+                                </div>
+
+                                <div *ngSwitchCase="'allotFlag'">
+                                    <p-tableCheckbox [value]="rowData.allotFlag"></p-tableCheckbox>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <h3 class="sub-header mb-5 border-none">Choose Package</h3><br />
+                <mat-form-field appearance="outline">
+                    <mat-label>Select Package</mat-label>
+                    <mat-select [formControl]="packageIdCtrl" placeholder="Select Package" required>
+                        <mat-option>Select Package</mat-option>
+                        <mat-option [value]="0">Individual</mat-option>
+                        <mat-option *ngFor="let packList of packageInvoiceList.packageList"
+                            [value]="packList.packageId">
+                            {{ packList.packageName }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="packageIdCtrl?.errors?.required">Package is required</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row" *ngIf="packageIdCtrl?.value">
+            <div fxFlex="100%">
+                <h3 class="sub-header mb-5 border-none">Package Details</h3>
+                <fieldset>
+                    <legend>Package Components:</legend>
+                    <mat-chip-grid>
+                        <mat-chip-row *ngFor="let comp of getCompList(); let i = index" >
+                            <span *ngIf="comp.subComponent.length === 0"> {{ comp.componentName }} -
+                                {{comp.noOfComp}}</span>
+                            <span *ngIf="comp.subComponent.length > 0"> {{ comp.componentName }} -
+                                <span *ngFor="let sub of comp.subComponent; let j = index;let last = last;">
+                                    {{sub.subComponentName}} - {{sub.noOfComp}}
+                                </span></span>
+                        </mat-chip-row>
+                    </mat-chip-grid>
+                </fieldset>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="generateReport();">Generate Report</button>
+        <button mat-stroked-button (click)="dialogRef.close();">Close</button>
+    </mat-dialog-actions>
+</ng-template>
+
+<!-- hidden=true -->
+<span *ngIf='verification.isFinalReport'
+    [ngClass]="{'d-none': verification.isFinalReport && verification.reportType ==='download'}">
+    <app-response-document *ngIf="pdfType === '1' && qcDetails.clientCategoryId !== 4"></app-response-document>
+    <app-techm-response-document
+        *ngIf="pdfType === '1' && qcDetails.clientCategoryId === 4"></app-techm-response-document>
+    <app-generate-pdf *ngIf="pdfType === '2'"></app-generate-pdf>
+</span>
+<!-- <preview> -->
+<ng-template #pdfDialog>
+    <div class=" confirm-pop">
+        <button mat-icon-button class="closed" [mat-dialog-close]="true">
+            <mat-icon class="close-icon" color="warn">close</mat-icon>
+        </button>
+        <h1 mat-dialog-title>Pdf Viewer</h1>
+        <br>
+        <mat-dialog-content>
+            <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="100%">
+                    <pdf-viewer [src]="url" [render-text]="true" [original-size]="true" [show-borders]="true"
+                        [zoom]="zoomval" [zoom-scale]="'page-height'" [rotation]="rvalue" [fit-to-page]="true">
+                    </pdf-viewer>
+                </div>
+            </div>
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+            <button mat-icon-button matTooltip="Download Pdf" (click)="pdftool('download')"
+                matTooltipClass="accent-tooltip">
+                <mat-icon>cloud_download</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Rotate right" (click)="pdftool('right')"
+                matTooltipClass="accent-tooltip">
+                <mat-icon>rotate_right</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Rotate left" (click)="pdftool('left')" matTooltipClass="accent-tooltip">
+                <mat-icon>rotate_left</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Zoom In" (click)="pdftool('zoomin')" matTooltipClass="accent-tooltip">
+                <mat-icon>zoom_in</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Zoom Out" (click)="pdftool('zoomout')" matTooltipClass="accent-tooltip">
+                <mat-icon>zoom_out</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Reset" (click)="pdftool('reset')" matTooltipClass="accent-tooltip">
+                <mat-icon>settings_backup_restore</mat-icon>
+            </button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>
+
+
+
+<ng-template #imgprDialog>
+    <div class="confirm-pop">
+        <button mat-icon-button class="closed" [mat-dialog-close]="true">
+            <mat-icon class="close-icon" color="warn">close</mat-icon>
+        </button>
+        <h1 mat-dialog-title>Image Viewer</h1>
+        <br>
+        <mat-dialog-content>
+            <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="100%">
+
+                    <img id="imgpre" [@rotatedState]='state' [src]='imageSource'>
+
+                </div>
+            </div>
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+            <button mat-icon-button matTooltip="Download Image" (click)="pdftool('download')"
+                matTooltipClass="accent-tooltip">
+                <mat-icon>cloud_download</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Rotate Left" (click)="rotateimg('left')"
+                matTooltipClass="accent-tooltip">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Rotate Right" (click)="rotateimg('right')"
+                matTooltipClass="accent-tooltip">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Rotate Up" (click)="rotateimg('up')" matTooltipClass="accent-tooltip">
+                <mat-icon>arrow_upward</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Rotate Down" (click)="rotateimg('down')"
+                matTooltipClass="accent-tooltip">
+                <mat-icon>arrow_downward</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Zoom In" (click)="zoomin()" matTooltipClass="accent-tooltip">
+                <mat-icon>zoom_in</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Zoom Out" (click)="zoomout()" matTooltipClass="accent-tooltip">
+                <mat-icon>zoom_out</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Reset" (click)="rotateimg('reset')" matTooltipClass="accent-tooltip">
+                <mat-icon>settings_backup_restore</mat-icon>
+            </button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>
+<ng-template #OverLabPopUp>
+    <mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <div fxLayout="row">
+                    <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                            src="assets/images/alert-warning.gif"></div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <div fxFlex="100%" class="text-center">
+                        <h3 class="m-0">{{ Message}} </h3>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="dialog.closeAll();DomainPopupalert();">Okay</button>
+
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #domainPopUp>
+    <mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <div fxLayout="row">
+                    <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                            src="assets/images/alert-warning.gif"></div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <div fxFlex="100%" class="text-center" *ngIf="qcDetails.finalQcFlag">
+                        <h3 class="m-0"> Domain Disconnect found basis Period of Employment,
+                            as the
+                        </h3>
+                    </div>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="center center" *ngFor="let datevalue of getdatelist">
+                    <div fxFlex="100%" class="text-center" *ngIf="qcDetails.finalQcFlag && datevalue.
+                    questionId ==4">
+                        <h3 class="m-0">
+                            <p style="white-space: pre-wrap">
+                                Domain creation date
+                                {{ datevalue.domaincreatedDate
+                                ? (common.getTimezoneOffset(datevalue.domaincreatedDate, false)
+                                |
+                                date:
+                                "dd-MMM-yyyy")
+                                : "Not Provided"
+                                }}
+                                is greater than Employment starting date
+                                {{ datevalue.empFromDate
+                                ? (common.getTimezoneOffset(datevalue.empFromDate, false)
+                                |
+                                date:
+                                "dd-MMM-yyyy")
+                                : "Not Provided"
+                                }}.
+                            </p>
+                        </h3>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center" *ngIf="!qcDetails.finalQcFlag">
+                    <div fxFlex="100%" class="text-center">
+                        <h3 class="m-0">
+                            {{ Message }}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="dialog.closeAll();openApprove()">Okay</button>
+
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #changeColorCode>
+    <mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <div fxLayout="row">
+                    <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                            src="assets/images/alert-warning.gif"></div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <div fxFlex="100%" class="text-center">
+                        <h3 class="m-0"> This case has a stop check would you like to change the overall color code?.
+                        </h3>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+        <button mat-stroked-button (click)="dialogColorCodeChange()">Cancel</button>
+        <button mat-flat-button color="warn" (click)="submitColorCode()">Okay</button>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #DateAlertPopUp1>
+    <mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <div fxLayout="row">
+                    <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                            src="assets/images/alert-warning.gif"></div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <div fxFlex="100%" class="text-center">
+                        <h3 class="m-0">{{ headerText}} </h3>
+                        <!-- <p class="text-sm">{{ finalAlertMessage }}</p> -->
+                        <ul *ngFor="let message of messages">
+                            <li style="text-align: left;" *ngIf="message != ''">
+                                <p class="text-sm">
+                                    <span>{{ message.split('-')[0] }}</span>
+                                    <!-- <span *ngIf="message.split('-').length > 1"><strong>{{ message.split('-')[1] }}</strong></span> -->
+                                    <span *ngIf="message.includes('-')">
+                                        <strong>{{ message.substring(message.indexOf('-') + 1) }}</strong>
+                                    </span>
+                                </p>
+                            </li>
+                        </ul>
+                        <!-- <ul *ngFor="let item of messageName1;let i = index">
+                            <li style="text-align: left;"><strong>{{item}}</strong></li>
+                        </ul> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="dialog.closeAll();"> Okay </button>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #RedColorcodeChangePopUp>
+    <mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <div fxLayout="row">
+                    <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15">
+                        <img src="assets/images/alert-warning.gif">
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <div fxFlex="100%" class="text-center">
+                        <h3 class="m-0">Confirmation!</h3>
+                        <p class="text-sm">This case has Red check. Would you like to change the color code?</p>
+                    </div>
+                </div>
+                <div *ngIf="redCompData && redCompData.length">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Verification ID</th>
+                                <th>Color Code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let rowData of redCompData; let i = index">
+                                <td>{{ rowData.verificationId }}</td>
+                                <td>
+                                    <div>
+                                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                            <mat-label>Color Code</mat-label>
+                                            <mat-select placeholder="Select Color Code" [(ngModel)]="selectedColor[i]"
+                                                name="colorCode">
+                                                <mat-option>Select Color Code</mat-option>
+                                                <mat-option *ngFor="let color of twoColorSatus"
+                                                    [value]="color.lookUpId">{{ color.lookUpName }}</mat-option>
+                                            </mat-select>
+                                            <!-- <mat-error *ngIf="!selectedColor[i]">Color Code is required</mat-error> -->
+                                        </mat-form-field>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="UpdatecolorCodeChange(selectedColor, redCompData);">Okay</button>
+        <button mat-stroked-button (click)="onCancelClick();">Cancel</button>
+    </mat-dialog-actions>
+</ng-template>

@@ -1,0 +1,445 @@
+<app-breadcrumb [routePath]="'Quality Check / Quality Check Transaction'" [btnBack]="true"
+  (eventBack)="backToDashboard()"  [btnExportDisabled]="!screenAuth?.exportFlag" (eventExcelExport)="exportToExcel()" [btnExcelExport]="qualityCheckList?.length > 0" >
+</app-breadcrumb>
+<div fxLayout="row" class="advSearch">
+  <div class="advSearch-forms" [formGroup]="qcSearchForm">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          @if (((this.userData.teamLeadFlag === true || this.userData.subTeamLeadFlag === true) && !(this.commonService.qcOrFqcFlag === null)) || (isCamLogin())) {
+            <div fxFlex="170px"
+              >
+              <!-- <mat-label class="lbl">Choose</mat-label> -->
+              <mat-radio-group fxLayoutGap="20px" [formControl]="assignControl" (change)="selectTab($event.value)">
+                <mat-radio-button value="Not Assigned">Not Assigned</mat-radio-button>
+                <mat-radio-button value="Assigned">Assigned</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          }
+          <div fxFlex="170px">
+            <!-- <app-auto-complete [selectProperties]='candidateControl' (propValueEvent)="getPropertyValue($event)">
+          </app-auto-complete> -->
+          <mat-form-field appearance="outline" fxFlex="100%">
+            <mat-label>Candidate Name</mat-label>
+            <input matInput placeholder="Candidate Name" formControlName="candidateName" type="text" size="50" />
+          </mat-form-field>
+        </div>
+        <div fxFlex="170px">
+          <!-- <app-auto-complete [selectProperties]='caseRefNoControl' (propValueEvent)="getPropertyValue($event)">
+        </app-auto-complete> -->
+        <mat-form-field appearance="outline" fxFlex="100%">
+          <mat-label>Client Ref Number</mat-label>
+          <input matInput placeholder="Client Ref Number" formControlName="clientRefNo" type="text" size="50" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="170px">
+        <!-- <app-auto-complete [selectProperties]='clientNameControl' (propValueEvent)="getPropertyValue($event)">
+      </app-auto-complete> -->
+      <mat-form-field appearance="outline" fxFlex="100%">
+        <mat-label>Client Name</mat-label>
+        <input matInput placeholder="Client Name" formControlName="clientName" type="text" size="50" />
+      </mat-form-field>
+    </div>
+    <div fxFlex="170px">
+      <!-- <app-auto-complete [selectProperties]='userControl' (propValueEvent)="getPropertyValue($event)">
+    </app-auto-complete> -->
+    <mat-form-field appearance="outline" fxFlex="100%">
+      <mat-label>QC Person Name</mat-label>
+      <input matInput placeholder="QC Person Name" formControlName="ownerName" type="text" size="50" />
+    </mat-form-field>
+  </div>
+</div>
+</div>
+</div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <span><a (click)="search()">Search</a>
+    <span> &nbsp;&nbsp; | </span></span>
+    <a (click)="reset()">Reset</a>
+    <a (click)='SearchCriFilter = !SearchCriFilter'>{{ SearchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+    class="icon-chevron-{{ SearchCriFilter?'up':'down' }}"></i></a>
+  </div>
+</div>
+@if (SearchCriFilter) {
+  <div fxLayout="row" class="advSearchshow">
+    <div class="advSearch-forms" [formGroup]="qcSearchForm">
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            @if (qcOrFqc?.value === 'QC') {
+              <div fxFlex="170px" fxLayoutGap="10px">
+                <!-- <app-auto-complete [selectProperties]='verificationControl' (propValueEvent)="getPropertyValue($event)">
+              </app-auto-complete> -->
+              <mat-form-field appearance="outline" fxFlex="100%">
+                <mat-label>Verification ID</mat-label>
+                <input matInput placeholder="Verification ID" formControlName="verificationId" type="text" size="50" />
+              </mat-form-field>
+            </div>
+          }
+          @if (qcOrFqc?.value === 'QC') {
+            <div fxFlex="170px">
+              <!-- <app-auto-complete [selectProperties]='componentControl' (propValueEvent)="getPropertyValue($event)">
+            </app-auto-complete> -->
+            <mat-form-field appearance="outline" fxFlex="100%">
+              <mat-label>Component Name</mat-label>
+              <input matInput placeholder="Component Name" formControlName="compName" type="text" size="50" />
+            </mat-form-field>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+</div>
+</div>
+}
+</div>
+<div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">Quality Check Transaction</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <!-- <div fxLayout="row" *ngIf="searchValueArr.length > 0">
+            <div fxFlex="100%">
+              <b class="text-sm mr-10 text-semi-bold text-dull">Search results for:</b>
+              <span *ngFor="let s of searchValueArr;let ind = index"><span class="tag" *ngIf="s?.value">{{s?.value}}
+                <a class="close" (click)="removeSearchValue(s?.propertyName,ind)">×</a></span></span>
+              </div>
+            </div> -->
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="10px grid" class="sortrow">
+              @if (!(isCamLogin())) {
+                <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="100%" fxFlex.xs="100%" class="mt-5"
+                  >
+                  @if (((this.userData.teamLeadFlag === true || this.userData.subTeamName === 'SeniorExecutiveQC') || userData.subTeamLeadFlag === true) && qualityCheckList?.length > 0) {
+                    <mat-checkbox
+                    [formControl]="selectall" (change)="selectAll($event)">Select All</mat-checkbox>
+                  }
+                </div>
+              }
+              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="end center">
+                <ul>
+                  <li><span class="text-dull"> Showing
+                    {{(qualityCheckList?.length > 0 ?
+                    ((userData.pageSize*userData.page)-userData.pageSize+1): 0)}} -
+                    {{((userData.pageSize*userData.page)>=(shieveTotalCount))?(shieveTotalCount):(userData.pageSize*userData.page)}}
+                    of </span> <b> {{shieveTotalCount}} record(s)</b></li>
+                    |
+                    <li>
+                      <a (click)="shieveShowall()">Show All</a>
+                    </li>
+                    |
+                    <li><b>Sort By:</b> <a [ngClass]="column==='firstName'?'active':''"
+                    (click)="sortBy('firstName')">Candidate
+                  Name</a>
+                    <i [ngClass]="{'icon-sort': column != 'firstName', 
+                                           'icon-sort-asc': (column == 'firstName' && !isDesc), 
+                                           'icon-sort-desc': (column == 'firstName' && isDesc) }" aria-hidden="true">
+                  </i>
+                  <a [ngClass]="column==='verificationId'?'active':''" (click)="sortBy('verificationId')">Verification
+                  ID</a>
+                    <i [ngClass]="{'icon-sort': column != 'verificationId', 
+                                            'icon-sort-asc': (column == 'verificationId' && !isDesc), 
+                                            'icon-sort-desc': (column == 'verificationId' && isDesc) }"
+                  aria-hidden="true"> </i>
+                </li>
+              </ul>
+              <!-- Vignesh M - 25/10/2023 - Need to remove re-assign feature | QC department | Live environment -->
+              @if ((((this.userData.teamLeadFlag === true) || userData.subTeamLeadFlag === true) && assignControl.value && qualityCheckList?.length > 0) && !(isCamLogin())) {
+                <button mat-flat-button color="warn"
+                  (click)="opendialog()">{{assignControl.value==='Not Assigned' ? 'Assign' :
+                assignControl.value==='Assigned' ? 'Re-Assign' : ''}}</button>
+              }
+              <!-- <button mat-flat-button color="warn" *ngIf="assignControl.value==='Assigned'"
+            (click)="opendialog()">Re-Assign</button> -->
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+            @for (empj of qualityCheckList
+              | sort: {property: column, direction: direction}
+              | paginate: { itemsPerPage: shievePageSize, currentPage: shievePageNo, totalItems: shieveTotalCount }; track empj; let c = $count; let j = $index) {
+              <div fxLayout="row" [class]="getFilterLen(c)">
+                @if (empj?.finalQcFlag !== true && empj?.subCheckFlag === true) {
+                  <div matTooltip="Sub Check"
+                  matTooltipClass="accent-tooltip" class="SubCheck"></div>
+                }
+                <div fxFlex="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid">
+                    @if ((this.userData.teamLeadFlag === true || this.userData.subTeamName === 'SeniorExecutiveQC') || userData.subTeamLeadFlag === true) {
+                      <div fxFlex="2%" fxFlex.lg="2%" fxFlex.md="5%" fxFlex.sm="7%" fxFlex.xs="100%"
+                        >
+                        <mat-checkbox [disabled]="(isCamLogin())" class="Xverifi-checkbox"
+                        [checked]="empj?.assignedOwner" (change)="assignOwner($event, empj)"></mat-checkbox>
+                        <i class="icon-status csatus Normal d-block mt-5"
+                          matTooltip="{{empj?.priorityLookupName ? empj?.priorityLookupName : 'N/A'}}"
+                          matTooltipClass="accent-tooltip"
+                          [ngClass]="(empj?.priorityLookupName?.toLowerCase() === commonService.NORMAL.toLowerCase() || empj?.priorityLookupName?.toLowerCase() === commonService.NORMAL_CASE.toLowerCase()) ? 'icon-status csatus Normal' :
+                          (empj?.priorityLookupName?.toLowerCase() === commonService.HIGH.toLowerCase() || empj?.priorityLookupName?.toLowerCase() === commonService.PILOT_CASE.toLowerCase()) ? 'icon-status csatus High' :
+                          (empj?.priorityLookupName?.toLowerCase() === commonService.DELTA.toLowerCase() || empj?.priorityLookupName?.toLowerCase() === commonService.PRIORITY_CASE.toLowerCase()) ? 'icon-status csatus Delta' :
+                          (empj?.priorityLookupName?.toLowerCase() === commonService.MEDIUM.toLowerCase() || empj?.priorityLookupName?.toLowerCase() === commonService.RUSH_CASE.toLowerCase()) ? 'icon-status csatus Medium' :
+                          (empj?.priorityLookupName?.toLowerCase() === commonService.VERIZON.toLowerCase() || empj?.priorityLookupName?.toLowerCase() === commonService.SENIOR_PROFILE.toLowerCase()) ? 'icon-status csatus Verizon' : 'icon-status csatus Delta'"></i>
+                      </div>
+                    }
+                    @if (!isCamLogin()) {
+                      <div fxFlex="18%" fxFlex.lg="18%" fxFlex.md="20%" fxFlex.sm="25%" fxFlex.xs="100%"
+                        >
+                        <a>
+                          <mat-card-header>
+                            <div mat-card-avatar class="avatar avatarBg{{(j%6)+1}} cursor-pointer"
+                              (click)="selectQc(empj)">
+                            </div>
+                            <mat-card-title class="cname cursor-pointer" (click)="selectQc(empj)">
+                              {{empj?.firstName}} {{empj?.middleName}}
+                            {{empj?.lastName}}</mat-card-title>
+                            <mat-card-subtitle class="cdesg cursor-pointer" (click)="selectQc(empj)">
+                              {{empj?.verificationId}}
+                            </mat-card-subtitle>
+                            <mat-card-subtitle class="mb-0 inproges"> <i class="icon-tatpending dc-ico"></i>
+                            <span class="dc-dn">{{empj?.inProgressDays}}</span><span
+                            class="dc-sub">days<br>Over</span>
+                          </mat-card-subtitle>
+                        </mat-card-header>
+                      </a>
+                    </div>
+                  }
+                  @if (isCamLogin()) {
+                    <div fxFlex="18%" fxFlex.lg="18%" fxFlex.md="20%" fxFlex.sm="25%" fxFlex.xs="100%"
+                      >
+                      <mat-card-header>
+                        <div mat-card-avatar class="avatar avatarBg{{(j%6)+1}}">
+                          {{ empj?.firstName?.slice(0, 1)}}{{ empj?.lastName?.slice(0, 1)}}
+                        </div>
+                        <mat-card-title class="cname">
+                          {{empj?.firstName}} {{empj?.middleName}}
+                        {{empj?.lastName}}</mat-card-title>
+                        <mat-card-subtitle class="cdesg">
+                          {{empj?.verificationId}}
+                        </mat-card-subtitle>
+                        <mat-card-subtitle class="mb-0 inproges"> <i class="icon-tatpending dc-ico"></i>
+                        <span class="dc-dn">{{empj?.inProgressDays}}</span><span class="dc-sub">days<br>Over</span>
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </div>
+                }
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="29%" fxFlex.sm="33%" fxFlex.xs="100%">
+                  <p>
+                    <label>Client Name:</label>
+                    <em>{{empj?.clientName}}</em>
+                  </p>
+                  <p>
+                    <label>{{empj?.iqcByPassFlag === true ? 'Transaction Id:' : 'Client Ref No.:'}}</label>
+                    <em>{{empj?.clientRefNo}}</em>
+                  </p>
+                  <p>
+                    <label>Work Flow:</label>
+                    <em>{{empj?.workFlow ? empj?.workFlow : (empj?.finalQcFlag === true ? 'FQC' : 'N/A')}}</em>
+                  </p>
+                  <p>
+                    <label>Tat Days:</label>
+                    <em>{{empj?.tatDays ? empj?.tatDays : 'N/A'}}</em>
+                  </p>
+                </div>
+                <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="35%" fxFlex.xs="100%">
+                  @if ((this.userData.teamLeadFlag === true || this.userData.subTeamName === 'SeniorExecutiveQC') || userData.subTeamLeadFlag === true) {
+                    <p
+                      >
+                      <label>QC Owner:</label>
+                      <em>{{empj?.ownerName ? empj?.ownerName : 'N/A'}}</em>
+                    </p>
+                  }
+                  <p>
+                    <label>Status:</label>
+                    <em>{{empj?.rejectFlag ? 'Rejected' : empj?.approvedFlag ? 'Approved' : 'Received'}}</em>
+                  </p>
+                  <p>
+                    <label>Site Name:</label>
+                    <em>{{empj?.siteName ? empj?.siteName : 'N/A'}}</em>
+                  </p>
+                  <p>
+                    <label>Tat Status:</label>
+                    <em>{{empj?.tatStatus ? empj?.tatStatus : 'N/A'}}</em>
+                  </p>
+                </div>
+                <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="24%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <p>
+                    <label>Submitted Date & Time:</label>
+                    <em>{{empj?.receivedDate ? (commonService.getTimezoneOffset(empj?.receivedDate, false) | date
+                    : 'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}</em>
+                  </p>
+                  <p>
+                    <label>Submitted By:</label>
+                    <em>{{empj?.submittedBy ? empj?.submittedBy : 'N/A'}}</em>
+                  </p>
+                  @if (empj?.finalQcFlag === false) {
+                    <p>
+                      <label>Component Name:</label>
+                      <em class="cn-chip">{{empj?.componentName ? empj?.componentName : 'N/A'}}
+                        <!-- <span *ngIf="empj?.subCompName"> -{{empj?.subCompName ? empj?.subCompName : 'N/A'}}</span> -->
+                      </em>
+                    </p>
+                  }
+                  @if (empj?.finalQcFlag === false) {
+                    <p>
+                      <label>Color Code:</label>
+                      <span>
+                        @switch (empj?.colourCode ? empj?.colourCode : 'N/A') {
+                          @case ('Red') {
+                            <em> <span class="ccode" style="background-color:red;"> </span>
+                          {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+                        }
+                        @case ('Green') {
+                          <em> <span class="ccode" style="background-color:#08BA53;"> </span>
+                        {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+                      }
+                      @case ('Yellow') {
+                        <em> <span class="ccode" style="background-color:#FFBF00;"> </span>
+                      {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+                    }
+                    @case ('Orange') {
+                      <em> <span class="ccode" style="background-color:orange;"> </span>
+                    {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+                  }
+                  @case ('Magenta') {
+                    <em> <span class="ccode" style="background-color:magenta;">
+                    </span>
+                  {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+                }
+                @case ('Positive') {
+                  <em> <span class="ccode" style="background-color: #008000;">
+                  </span>
+                {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+              }
+              @case ('Negative') {
+                <em> <span class="ccode" style="background-color: #ff0000;">
+                </span>
+              {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+            }
+            @case ('Positive-Review') {
+              <em> <span class="ccode"
+                style="background-color: #ff6600;">
+              </span>
+            {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+          }
+          @case ('Negative-Please Review') {
+            <em> <span class="ccode"
+              style="background-color:#ffff00;">
+            </span>
+          {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+        }
+        @case ('Stop') {
+          <em> <span class="ccode" style="background-color:#121212;"> </span>
+        {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+      }
+      @case ('N/A') {
+        <em>
+        {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+      }
+    }
+  </span>
+  <!-- <em>{{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em> -->
+</p>
+}
+</div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+  fxLayout.xs="column" fxLayoutGap="0px grid">
+  <div fxFlex="100%">
+    @if (empj?.finalQcFlag === false) {
+      <p>
+        <label>Functional Entity:</label>
+        <em>{{empj?.functionalEntity ? empj?.functionalEntity : 'N/A'}}</em>
+      </p>
+    }
+  </div>
+</div>
+</div>
+</div>
+}
+</div>
+</div>
+@if (shieveTotalCount > 10) {
+  <div fxLayout="row">
+    <div class="cus-paginator">
+      <div fxFlex="100%" fxLayoutAlign="end center" > <span>
+        <pagination-controls class="cus-paginator"
+        (pageChange)="shievePagination($event)"></pagination-controls>
+      </span> <span fxHide.xs class="gotopagbg ml-2">Go to Page<span class="input-num">
+      <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4" appNumberOnly (blur)="OnPageChange()"
+        preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+    </span></span> <span fxHide.xs class="gotopagbg ml-2">Items / page<span class="input-num">
+    <input type="number" [(ngModel)]="shievePageSize" min="1" maxlength="4" appNumberOnly
+      preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false"
+      (blur)="preventInfinite()">
+  </span> </span>
+</div>
+</div>
+</div>
+}
+</div>
+</div>
+</mat-card-content>
+</mat-card>
+</div>
+</div>
+<ng-template #assignPopUp>
+  <h1 mat-dialog-title>Screening Owner
+    <div fxLayout="row" class="scrollCls">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <p class="text-sm text-dull text-ilatic mt-10 line-height">
+              Assign the below Screening Owner to following Verification Reference no.:
+              <span class="text-bold">{{screeningOwner?.value?.name}}</span>
+            </p>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <mat-form-field fxFlex="100%" appearance="outline" autocomplete="off" class="scr-own">
+              <mat-label></mat-label>
+              <mat-icon matPrefix>search</mat-icon>
+              <input matInput placeholder="Find someone" [formControl]="filterOwnerName" type="text" pInputText
+                size="50">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </h1>
+  <mat-dialog-content class="scrollCls">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        @for (owner of owner | search:
+          [{key:'name',value:filterOwnerName?.value}]; track owner; let i = $index) {
+          <div class="ownven-list" id="ownerDiv" (click)="assignScrnOwner(owner,i)">
+            <div class="user avatarBg{{(i%6) +1}}">
+              {{(owner.name.split(' ').length - 1) > 0 ? owner.name.split(' ')[0].charAt(0).toUpperCase() +
+              owner.name.split(' ')[1].charAt(0).toUpperCase() : owner.name.charAt(0).toUpperCase()}}
+            </div>
+            <span [ngClass]="owner.lastLoginFlag === true? 'pos act' : 'pos inact'"><i
+            [ngClass]="owner.lastLoginFlag === true ? 'icon-approv': 'icon-reject'"></i></span>
+            <div class="ovname">{{ owner.name }}</div>
+          </div>
+        }
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+    <button mat-stroked-button (click)="dialogClose()">No</button>
+    <button mat-flat-button color="warn" (click)="submitOwner(screeningOwner.value)">
+      Submit
+    </button>
+  </mat-dialog-actions>
+</ng-template>

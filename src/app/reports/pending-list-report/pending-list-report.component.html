@@ -1,0 +1,100 @@
+<app-breadcrumb [btnReset]="true" [routePath]="routePath"></app-breadcrumb>
+<!-- <mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            <h1 class="header-title">Pending List Report</h1>
+        </mat-card-title>
+    </mat-card-header>
+</mat-card> -->
+<div fxLayout="row">
+    <!-- <div class="advSearch-forms">
+        <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="100%">
+                <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="130px"> -->
+    <mat-radio-group fxLayoutGap="20px">
+        <mat-radio-button value="All Columns">All Columns</mat-radio-button>
+        <mat-radio-button value="Selected Columns">Selected Columns</mat-radio-button>
+    </mat-radio-group>
+    <!-- </div>
+                    <div fxFlex="180px">
+                        <app-auto-complete> </app-auto-complete>
+                    </div>
+                    <div fxFlex="180px">
+                        <app-auto-complete> </app-auto-complete>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</div>
+<mat-card>
+    <mat-card-title>
+        <h1 class="header-title">Pending List Report</h1>
+    </mat-card-title>
+    <mat-card-content>
+        <p-table [resizableColumns]="true" [reorderableColumns]="true" [value]="pendingStatusValue" [scrollable]="true"
+            scrollHeight="350px">
+            <ng-template pTemplate="header">
+                <tr>
+                    <!-- <p-sortIcon ariaLabel="Activate to sort"
+            ariaLabelDesc="Activate to sort in descending order"
+            matTooltip="Sorting" matTooltipClass="accent-tooltip"
+            ariaLabelAsc="Activate to sort in ascending order"> </p-sortIcon> -->
+            <th pSortableColumn="Pending Status">Pending Status <p-sortIcon field="Pending Status"></p-sortIcon></th>
+            <th pSortableColumn="No Of Cases">No Of Cases <p-sortIcon field="No Of Cases"></p-sortIcon></th>
+            <th pSortableColumn="Export">Export <p-sortIcon field="Export"></p-sortIcon></th>
+                    
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data>
+                <tr>
+                    <td>Approval</td>
+                    <td>{{data.approval}}</td>
+                    <td>
+                        <button mat-icon-button class="iconbtn" matTooltipClass="accent-tooltip" matTooltip="Export"
+                            (click)="getExport(38)"><i class="icon-excel csatus Normal"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Contact Details</td>
+                    <td>{{data.contactDetails}}</td>
+                    <td>
+                        <button mat-icon-button class="iconbtn" matTooltipClass="accent-tooltip" matTooltip="Export"><i
+                                class="icon-excel csatus Normal" (click)="getExport(39)"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fee Approval</td>
+                    <td>{{data.feeApproval}}</td>
+                    <td>
+                        <button mat-icon-button class="iconbtn" matTooltipClass="accent-tooltip" matTooltip="Export"><i
+                                class="icon-excel csatus Normal" (click)="getExport(40)"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Query</td>
+                    <td>{{data.query}}</td>
+                    <td>
+                        <button mat-icon-button class="iconbtn" matTooltipClass="accent-tooltip" matTooltip="Export"><i
+                                class="icon-excel csatus Normal" (click)="getExport(41)"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Supp Doc/Info</td>
+                    <td>{{data.suppDocInfo}}</td>
+                    <td>
+                        <button mat-icon-button class="iconbtn" matTooltipClass="accent-tooltip" matTooltip="Export"><i
+                                class="icon-excel csatus Normal" (click)="getExport(44)"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>All Items</td>
+                    <td>{{data.allItem}}</td>
+
+                </tr>
+            </ng-template>
+
+        </p-table>
+    </mat-card-content>
+</mat-card>

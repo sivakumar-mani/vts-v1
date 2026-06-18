@@ -1,0 +1,267 @@
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <h3 class="sub-header">Criminal Database
+      <span fxFlex></span>
+      @if (closedFlag === false) {
+        <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="end center" class="mb-10">
+          <!-- [disabled]="formGroup.get('verificationResponseDocument.receivedResponseDocument').value.document.length > 0" -->
+          <button mat-icon-button class="in-btn mb-10" matTooltip="Save" (click)="saveRecordCheckDetails()"
+            matTooltipClass="accent-tooltip"> <i class="icon-save"></i></button>
+            <!-- <button mat-icon-button class="in-btn mb-10" matTooltip="Generate Annexure"
+            (click)="generateAnnexure()" matTooltipClass="accent-tooltip"> <i class="icon-check-circle"></i></button> -->
+            <!-- [disabled]="generateFlag" -->
+            <!-- <button mat-icon-button class="in-btn mb-10" matTooltip="Delete Annexure"
+            (click)="deleteAnnexure()" matTooltipClass="accent-tooltip"> <i class="icon-delete"></i></button> -->
+            <!-- [disabled]="!generateFlag" -->
+          </div>
+        }
+      </h3>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+    fxLayoutGap="20px grid">
+    <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroup]="annexureForm">
+      <mat-form-field appearance="outline" fxFlex="100%" autoComplete="off">
+        <mat-label>Online DB Category</mat-label>
+        <mat-select placeholder="Online DB Category"
+          (selectionChange)="getRecordCategoryList(annexureForm?.get('recordCheckId')?.value)"
+          formControlName="recordCheckId" required>
+          <mat-option>Select Online DB Category</mat-option>
+          @for (rec of recordCheckList; track rec) {
+            <mat-option [value]="rec.recordCheckId"> {{rec.recordCheckName}}
+            </mat-option>
+          }
+        </mat-select>
+        @if (annexureForm?.get('recordCheckId')?.errors?.required) {
+          <mat-error> Online DB category is
+          required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+      [formGroup]="annexureForm">
+      <!-- <mat-form-field appearance="outline" fxFlex="100%" autoComplete="off">
+      <mat-label>Online Database</mat-label>
+      <mat-select placeholder="Online Database" formControlName="recordCheckCategoryId" required>
+        <mat-option>---- Select Online Database ---- </mat-option>
+        <mat-option *ngFor="let recCat of recordCategoryList" [value]="recCat.recordCheckCategoryId">
+        {{recCat.recordCheckCategoryName}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="annexureForm?.get('recordCheckCategoryId')?.errors?.required">
+      Online database is required </mat-error>
+    </mat-form-field> -->
+
+    <p-multiSelect fxFlex="100%" [options]="recordCategoryList" formControlName="recordCheckCategory"
+      optionLabel="recordCheckCategoryName" filterPlaceHolder="Select Online Database"
+      selectedItemsLabel="{0} Online Database selected" [style]="{XminWidth: '250px', width:'100%'}"
+      defaultLabel="Select Online Database" [showHeader]="true" [(ngModel)]="recordCategoryList">
+    </p-multiSelect>
+  </div>
+  <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+    [formGroup]="annexureForm">
+    <mat-form-field appearance="outline" fxFlex="100%" autoComplete="off">
+      <mat-label>Status</mat-label>
+      <mat-select placeholder="Status" formControlName="statusLookupId" required>
+        <mat-option>---- Select Status ---- </mat-option>
+        @for (s of statusList; track s) {
+          <mat-option [value]="s.lookUpId"> {{s.lookUpName}}</mat-option>
+        }
+      </mat-select>
+      @if (annexureForm?.get('statusLookupId')?.errors?.required) {
+        <mat-error>
+        Status is required </mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div [formGroup]="annexureForm" fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
+
+    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+      <mat-label>Remarks</mat-label>
+      <textarea matInput #remarks maxlength="250" placeholder="Remarks" formControlName="remarks"></textarea>
+      <mat-hint>({{ remarks.value.length }}/250) Max</mat-hint>
+      @if (!!annexureForm?.get('remarks')?.errors?.required) {
+        <mat-error> Remarks is required
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <!-- <div [formGroup]="annexureForm" fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div ffxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="file-container">
+      <div class="file-upload">
+        <i class="material-icons">cloud_upload</i>
+        <span>Browse here...</span>
+        <input type="file" (change)="uploaphoto($event)" accept="image/x-png,image/gif,image/jpeg">
+      </div>
+      <div class="file-names">
+        <div class="file-upload-files"><a (click)="downloadFile(fileName)">{{fileName}}</a>
+        <button type="button" (click)="removeImage('photoname')" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div> -->
+
+<div fxFlex="16%">
+  <mat-label>&nbsp;</mat-label>
+  <div class="adrem text-left" fxLayoutGap="8px"
+    >
+    <!-- *ngIf="formGroup.get('verificationResponseDocument.receivedResponseDocument').value.document.length === 0" -->
+    <button form="ngForm" mat-button color="primary" matTooltip={{tooltip}} matTooltipClass="accent-tooltip"
+      (click)="addAnnexure()">
+      <i class="icon-plus-circle"></i> </button>
+      <button mat-button color="warn" matTooltip="Reset" matTooltipClass="accent-tooltip" (click)="resetAnnexure()">
+        <i class="icon-x-circle"></i> </button>
+      </div>
+    </div>
+  </div>
+  <!-- annexure table -->
+  <div fxLayout="row" fxLayoutGap="20px">
+    <div fxFlex="100%">
+      <mat-card>
+        <mat-card-content>
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+
+              <p-table
+                #dt
+                [columns]="displayedColumns"
+                [value]="annexureCategoryList"
+                [scrollable]="true"
+                scrollHeight=""
+                columnResizeMode="expand"
+                [resizableColumns]="true"
+                [reorderableColumns]="true"
+                [paginator]="true"
+                [rows]="10">
+
+                <!-- ================= COLGROUP ================= -->
+                <ng-template pTemplate="colgroup" let-colGroupCols>
+                  <colgroup>
+                  @for (col of colGroupCols; track col) {
+                    <col
+        [style.width]="
+          col.field === 'action'
+            ? '80px'
+            : col.field !== 'recordCheckCategoryName'
+              ? '200px'
+              : '450px'
+        " />
+                  }
+                </colgroup>
+              </ng-template>
+
+              <!-- ================= HEADER ================= -->
+              <ng-template pTemplate="header" let-headerCols>
+                <tr>
+                  @for (col of headerCols; track col) {
+                    <th
+                      [pSortableColumn]="col.field"
+                      pReorderableColumn
+                      [ngClass]="{ 'text-center action': col.field === 'Actions' }">
+                      @if (col.field === 'action'
+                        && formGroup.get('verificationResponseDocument.receivedResponseDocument').value.document.length === 0) {
+                        <div class="thname"
+                          >
+                          Action
+                        </div>
+                      }
+                      @if (col.field !== 'action') {
+                        <div class="thname">
+                          {{ col.header }}
+                        </div>
+                      }
+                      @if (col.field !== 'action') {
+                        <p-sortIcon
+                          [field]="col.field"
+                          ariaLabel="Activate to sort"
+                          ariaLabelDesc="Activate to sort in descending order"
+                          ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                      }
+                    </th>
+                  }
+                </tr>
+              </ng-template>
+
+              <!-- ================= BODY ================= -->
+              <ng-template
+                pTemplate="body"
+                let-rowData
+                let-index="rowIndex"
+                let-bodyCols="columns">
+
+                <tr>
+                  @for (col of bodyCols; track col) {
+                    <td>
+                      <span>
+                        {{ rowData[col.field] }}
+                      </span>
+                      @if (col.field === 'action') {
+                        <div
+                          fxLayout="row"
+                          class="desg-icon">
+                          <div fxFlex="100%" fxLayoutGap="10px">
+                            <mat-icon>
+                              <i
+                                class="material-icons-outlined"
+                                matTooltipClass="accent-tooltip"
+                                matTooltip="Edit"
+                                (click)="editRecordCategory(rowData, index)">
+                                edit
+                              </i>
+                            </mat-icon>
+                            <mat-icon>
+                              <i
+                                class="material-icons-outlined"
+                                matTooltipClass="accent-tooltip"
+                                matTooltip="Delete"
+                                (click)="removeRecordCategory(index, rowData)">
+                                delete
+                              </i>
+                            </mat-icon>
+                          </div>
+                        </div>
+                      }
+                    </td>
+                  }
+                </tr>
+              </ng-template>
+
+            </p-table>
+            <!-- <div class="cus-paginator" [ngClass]="{'empty-record': annexureCategoryList?.length == 0}"
+            fxLayout="row wrap" fxLayoutGap="10px grid">
+
+            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+              fxLayoutAlign="start center"> Showing {{ dt.totalRecords
+              < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+            <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of  {{ dt.totalRecords }} record(s) </div>
+            <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+              fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+              fxLayoutAlign.xs="start center"> <a
+                                    [ngClass]="dt.first===0?'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                                    navigateNxtPrevPage(dt.first + dt.rows,dt.rows)"> <i
+            class="icon-arrowleftthin mr-5"></i>Previous</a> <span
+            class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+            <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" min="1"
+              appNumberOnly [NumberOnly]="false"
+              (keyup.enter)="navigatePage(pageNo.value,dt.rows)" />
+          </span></span> <span class="mr-2" fxHide.xs>Of
+        {{ getTotalPages(dt.totalRecords,dt.rows) }}</span> <a
+        [ngClass]="(dt.rows + dt.first)>=dt.totalRecords?'page-btn disabled': 'page-btn'"
+                                    (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                                        navigateNxtPrevPage(dt.first + dt.rows,dt.rows)">Next<i
+      class="icon-arrowrightthin ml-5"></i></a> </div>
+    </div> -->
+
+  </div>
+</div>
+</mat-card-content>
+</mat-card>
+</div>
+</div>

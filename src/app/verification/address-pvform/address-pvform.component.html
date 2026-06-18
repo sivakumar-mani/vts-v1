@@ -1,0 +1,97 @@
+<app-breadcrumb [btnBack]="btnBack" [btnSend]="btnSend" [btnDownLoad]="btnDownLoad" (eventBack)="closeForm()">
+</app-breadcrumb>
+
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+              fxLayout.xs="column" fxLayoutGap="20px">
+              <div fxFlex="100%">
+                <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                  fxLayoutAlign.xs="start center">
+                  <h1 class="header-title">Address Pv Form</h1>
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+          fxLayoutGap="0px grid">
+          <div fxFlex="100%">
+            <form [formGroup]='pvForm' autocomplete="off" role="presentation">
+
+              <!-- Vendor | To Mail | Cc Mail -->
+              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+                fxLayoutGap.xs="0px grid">
+
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                  fxFlex.xs="100%">
+                  <app-auto-complete [selectProperties]='vendorNameControls'>
+                  </app-auto-complete>
+                </div>
+
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                  fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%">
+                    <mat-label>To mail</mat-label>
+                    <input matInput placeholder="To Mail" formControlName="toMail" />
+                  </mat-form-field>
+                </div>
+
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                  fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%">
+                    <mat-label>Cc mail</mat-label>
+                    <input matInput placeholder="Cc Mail" formControlName="ccMail" />
+                  </mat-form-field>
+                </div>
+
+              </div>
+
+              <!-- Editor -->
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="20px">
+                <div fxFlex="100%" class="ckeditor">
+
+                  @if (editorReady) {
+                    <!--
+                    formControlName நீக்கி ngModel standalone use பண்றோம்.
+                    இது writeValue / nativeElement crash-ஐ completely தவிர்க்கும்.
+                    onEditorChange() → pvForm.htmlTemplateBody sync ஆகும்.
+                    -->
+                    <angular-editor
+                      [ngModel]="htmlTemplateBody"
+                      (ngModelChange)="onEditorChange($event)"
+                      [ngModelOptions]="{standalone: true}"
+                      [config]="editorConfig"
+                      [placeholder]="'Enter text here...'">
+                    </angular-editor>
+                  } @else {
+                                        <div style="display:flex; align-items:center; padding:16px;
+                                                    border:1px dashed #ccc; border-radius:4px;
+                                                    min-height:60px; color:#888;">
+                      <mat-spinner diameter="24" style="margin-right:12px;">
+                      </mat-spinner>
+                      Loading editor...
+                    </div>
+                  }
+
+
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

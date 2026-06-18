@@ -1,0 +1,106 @@
+.select-test-viewport {
+    height: 192px;
+    width: 200px;
+    border: 1px solid black;
+}
+
+.note {
+    width: 482% !important;
+    text-align: left;
+}
+
+.autocomplete-test-viewport {
+    height: 200px;
+    border: 1px solid black;
+}
+
+.autocomplete-item {
+    height: 50px;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.in-box {
+    text-align: right;
+    ;
+    margin-bottom: 20px;
+}
+
+.in-status {
+    font-size: 13px;
+    color: #8A8B8D;
+    padding-right: 12px;
+}
+
+.in-status em {
+    font-style: normal;
+    color: #353537;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.in-link {
+    font-size: 13px;
+}
+
+.in-link i {
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.remark-icon {
+    padding-left: 123px;
+}
+
+.btn_inside_com {
+    border-radius: 6px !important;
+    padding: 5px 18px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+    font-weight: 500;
+    line-height: 22px;
+    font-size: 1em;
+    border: 1px solid #ededed;
+    width: inherit !important;
+    height: inherit !important;
+}
+
+.btn_inside_com:hover {
+    background-color: #0073B1 !important;
+    color: #fff !important;
+    border-color: #0073B1 !important;
+}
+/* Dropdown style */
+mat-autocomplete .dropdown_listarea
+{
+    display: block;
+    width:100%;
+    float:left;
+}
+mat-autocomplete .dropdown_listarea mat-option
+{
+
+}
+::ng-deep mat-autocomplete .dropdown_listarea mat-option:hover {
+    background: #adacac33;
+}
+::ng-deep mat-autocomplete .dropdown_listarea mat-option .inst {
+    color: #0073B1;
+}
+::ng-deep mat-autocomplete .dropdown_listarea mat-option.split_line {
+    color: #A4A4A4;
+    padding:0 8px;
+}
+::ng-deep mat-autocomplete .dropdown_listarea mat-option.locat {
+    color: #383838;
+    padding-left:10px;
+}
+::ng-deep mat-autocomplete .dropdown_listarea mat-option.locat i {
+    color: #A4A4A4;
+    padding-right:5px;
+}
+::ng-deep mat-autocomplete .dropdown_listarea mat-option .locat 
+{
+    padding:0 5px;
+}

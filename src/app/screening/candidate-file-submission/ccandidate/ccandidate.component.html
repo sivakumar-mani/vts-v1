@@ -1,0 +1,456 @@
+<div fxLayout="row" fxLayout="row" fxLayout="row" fxLayout="row" fxLayout.xs="column" [formGroup]="mainForm">
+  <div fxFlex="100%">
+
+
+  </div>
+</div>
+
+<div fxLayout="row" fxLayout="row" fxLayout="row" fxLayout="row" fxLayout.xs="column" [formGroup]="mainForm">
+  <div fxFlex="100%">
+    <form appScrollToError [formGroup]="mainForm" id="ngForm" autocomplete="off" (keydown.enter)="$event.preventDefault()">
+      <mat-card-content>
+        @if (screeningService.caseFlagType === common.NEWCASE || manualFilesubmissionRE) {
+          <div fxLayout="row wrap" formGroupName="screening" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <app-auto-complete [selectProperties]='clientControls' (selectionChange)="getCandidateList(mainForm.get('screening').get('clientId').value);setSiteVlue()">
+              </app-auto-complete>
+            </div>
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <app-auto-complete [selectProperties]='siteControls' (selectionChange)="setSiteName(mainForm.get('screening').get('siteName').value)"> </app-auto-complete>
+            </div>
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <app-auto-complete [selectProperties]='componentControls' (selectionChange)="compSelectionChange($event)">
+              </app-auto-complete>
+            </div>
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Sub-Component</mat-label>
+                <mat-select formControlName="subcompId" placeholder="Select Sub-Component" required (selectionChange)="selectSubcomponent($event)">
+                  @for (subcomp of subCompList; track subcomp; let i = $index) {
+                    <mat-option [value]="subcomp.subCompId">
+                    {{ subcomp.subCompName }}</mat-option>
+                  }
+                </mat-select>
+                @if (!!mainForm?.get('screening.subcompId')?.errors?.required) {
+                  <mat-error>
+                    Sub Component is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+        }
+
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" [formGroupName]="formgroupName">
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            @if (screeningService.caseFlagType === common.NEWCASE || manualFilesubmissionRE) {
+              <mat-form-field appearance="outline" fxFlex="97.5%">
+                <mat-label>Candidate First Name</mat-label>
+                <input required matInput #Instn placeholder="Candidate First Name" formControlName="candidateId" maxlength="100" (click)="Instn.select()" [matAutocomplete]="auto" (focus)="setCandidateItems(Instn.value)" (keyup)="setNames('FirstName');candidateNameBind();candikeyUpFunction($event,Instn.value)"
+                  autocomplete="off" role="presentation" (input)="setCandidateItems(Instn.value);setNames('FirstName');candidateNameBind()" (blur)="changeCandidate(mainForm?.get(formgroupName)?.get('candidateId').value);" />
+                <div matSuffix fxLayout="row">
+                </div>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCandidateFn" (optionSelected)="candidateSelect($event.option.value);setNames('FirstName');candidateNameBind()">
+                  <cdk-virtual-scroll-viewport class="autocomplete-test-viewport" itemSize="50" minBufferPx="500" maxBufferPx="750">
+                    <table class="autocomp" cellpadding="0" cellspacing="1">
+                      @if (filterCandidateList.length>0) {
+                        <thead>
+                          <tr class="autocomp-disable">
+                            <th> Name | Transaction Id </th>
+                          </tr>
+                        </thead>
+                      }
+                      <tbody>
+                        <tr class="autocomp-record" *cdkVirtualFor="let option of filterCandidateList" (click)="setInstnName(option.candidateId)">
+                          <mat-option [value]="option.candidateId">
+                            <td><span [innerHTML]="option.firstName+' '+option.middleName+' '+option.lastName+' | '+ option.refNo  | highlight:Instn.value">
+                            </span></td>
+                          </mat-option>
+                        </tr>
+                        <!-- <tr *ngIf="filterInstnList.length===0">
+                        <mat-option value="">
+                          <td colspan="4">
+                            <a (click)="openAddNewMasterData()">Add New Institution</a>
+                          </td>
+                        </mat-option>
+                      </tr> -->
+                    </tbody>
+                  </table>
+                </cdk-virtual-scroll-viewport>
+              </mat-autocomplete>
+              <mat-hint>({{ Instn.value.length }}/100 Max)</mat-hint>
+              @if (!!mainForm?.get(formgroupName)?.get('candidateId')?.errors?.required) {
+                <mat-error>
+                  Candidate first name is required
+                </mat-error>
+              }
+            </mat-form-field>
+          }
+          @if (screeningService.caseFlagType !== common.NEWCASE && !manualFilesubmissionRE) {
+            <mat-form-field appearance="outline" fxFlex="100%">
+              <mat-label>Candidate First Name</mat-label>
+              <input matInput placeholder="Candidate First Name" formControlName="firstName" (keyup)="setNames('FirstName')" required minlength="3" maxlength="120" />
+              @if (!!mainForm.get(formgroupName+'.firstName')?.errors?.required) {
+                <mat-error> Candidate first name is required. </mat-error>
+              }
+              @if (!!mainForm.get(formgroupName+'.firstName')?.errors?.minlength) {
+                <mat-error> Candidate first name should contain atleast 3 characters. </mat-error>
+              }
+            </mat-form-field>
+          }
+        </div>
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Middle Name</mat-label>
+            <input type="text" placeholder="Enter Middle Name" (keyup)="setNames('MiddleName');candidateNameBind();" matInput formControlName="middleName" maxlength="120" />
+          </mat-form-field>
+        </div>
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Last Name</mat-label>
+            <input matInput type="text" mat-autofocus="true" (keyup)="setNames('LastName');candidateNameBind()" placeholder="Last Name" formControlName="lastName" maxlength="120" />
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- <div [formGroupName]="formgroupName" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+      fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+      fxLayoutGap.xs="0px grid" *ngIf="userData.applicationId !== 3">
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Report Source First Name</mat-label>
+          <input matInput #name placeholder="Candidate First Name" formControlName="aliasFirstName" required
+            maxlength="120" minlength="2" />
+          <mat-error *ngIf="mainForm.get(formgroupName + '.aliasFirstName')?.errors?.required"> Report source first
+          name is required </mat-error>
+          <mat-error *ngIf="!!mainForm.get(formgroupName+'.aliasFirstName')?.errors?.minlength"> Report source first
+          name should contain atleast 2 characters. </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Middle Name</mat-label>
+          <input matInput type="text" mat-autofocus="true" placeholder="Middle Name"
+            formControlName="aliasMiddleName" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Last Name</mat-label>
+          <input matInput type="text" mat-autofocus="true" placeholder="Last Name" formControlName="aliasLastName"
+            maxlength="120" />
+        </mat-form-field>
+      </div>
+    </div> -->
+    <div [formGroupName]="formgroupName" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Date of Birth</mat-label>
+          <input #ref matInput placeholder="Date of birth" autocomplete="off" [max]="common?.maxDob" role="presentation" formControlName="dob" (dateInput)="screeningService.dob = ref.value" (input)="upperCase(ref.value,'dob')" [max]="maxDate" [required]="userData?.applicationId === 3"
+            (focus)="picker.open()" (click)="picker.open()" />
+          <input matInput hidden [max]="common?.maxDob" (dateChange)="handleDateChange($event,'dob')" [matDatepicker]="picker">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-hint class="f-13">(E.g. Enter date as (01/JAN/2021 or 01/01/2021),01st January 2021 should be typed as 01/JAN/2021.
+          </mat-hint>
+          @if (!!mainForm?.get(formgroupName + '.dob')?.errors?.date?.invalidPattern) {
+            <mat-error>
+            Date Of Birth is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 ),01st January 2021 should be typed as 01/JAN/2021. </mat-error>
+          }
+          @if (!!mainForm.get(formgroupName + '.dob')?.errors?.required) {
+            <mat-error> Date of Birth is required
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Father Name</mat-label>
+          <input matInput type="text" mat-autofocus="true" placeholder="Father Name" formControlName="fatherName" maxlength="100" [required]="userData?.applicationId === 3" />
+          @if (!!mainForm.get(formgroupName + '.fatherName')?.errors?.required) {
+            <mat-error> Father name is required
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>UAN Number</mat-label>
+          <input formControlName="uan" #uanValue autocomplete="off" role="presentation" maxlength="12" minlength="12" type="text" matInput placeholder="UAN Number" appNumberOnly [PhoneNumber]="false" (keyup)="uanValue.value = uanValue.value.toUpperCase()">
+          <mat-hint class="f-13">[UAN must be 12 digits]<br /></mat-hint>
+          @if (!!mainForm?.get(formgroupName)?.get('uan')?.errors?.minlength) {
+            <mat-error>
+            UAN Number should contain 12 Digit</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+    </div>
+    <div [formGroupName]="formgroupName" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <div fxFlex="20%">
+          @if (phoneCodeList.length >0) {
+            <mat-form-field appearance="outline" fxFlex="100%">
+              <mat-label>Code</mat-label>
+              <input matInput placeholder="+000" formControlName="countryId" #code maxlength="100" (click)="code.select()" [matAutocomplete]="auto1" (focus)="setCodeItems(code.value)" (keyup)="codekeyUpFunction($event,code.value)" (input)="setCodeItems(code.value)"
+                maxlength="100" />
+              <mat-autocomplete #auto1="matAutocomplete" [panelWidth]="250" [displayWith]="displayCodeFn">
+                @for (code of filterCodeList; track code) {
+                  <mat-option [value]="code.countryId">
+                    <span [innerHTML]="code.country| highlight: code.value">
+                    </span>
+                  </mat-option>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+          }
+          <!-- <app-auto-complete [selectProperties]='phoneCodeControls'
+        > </app-auto-complete> -->
+      </div>&nbsp;&nbsp;
+
+      <mat-form-field appearance="outline" fxFlex="80%">
+        <mat-label> Mobile Number</mat-label>
+        <mat-icon matSuffix><i class="material-icons material-icons-outlined">phone_iphone</i></mat-icon>
+        <input matInput type="tel" formControlName="phoneNo" placeholder="Mobile Number" appNumberOnly [PhoneNumber]="false" autocomplete="off" role="presentation" minlength="10" maxlength="14" [required]="userData?.applicationId === 3" />
+        @if (!!mainForm.get(formgroupName + '.phoneNo')?.errors?.minlength) {
+          <mat-error> Enter atleast 10 numbers
+          </mat-error>
+        }
+        @if (!!mainForm.get(formgroupName + '.phoneNo')?.errors?.required) {
+          <mat-error> Mobile Number is required
+          </mat-error>
+        }
+        @if (!!mainForm.get(formgroupName + '.phoneNo')?.errors?.pattern) {
+          <mat-error> Enter valid Mobile numbers
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <div fxFlex="20%">
+        @if (phoneCodeList.length >0) {
+          <mat-form-field appearance="outline" fxFlex="100%">
+            <mat-label>Code</mat-label>
+            <input matInput placeholder="+000" formControlName="alternativeCountryId" #code maxlength="100" (click)="code.select()" [matAutocomplete]="auto2" (focus)="setCodeItems(code.value)" (keyup)="codekeyUpFunction($event,code.value)" (input)="setCodeItems(code.value)"
+              maxlength="100" />
+            <mat-autocomplete #auto2="matAutocomplete" [panelWidth]="250" [displayWith]="displayCodeFn">
+              @for (code of filterCodeList; track code) {
+                <mat-option [value]="code.countryId">
+                  <span [innerHTML]="code.country| highlight: code.value">
+                  </span>
+                </mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        }
+        <!-- <app-auto-complete [selectProperties]='phoneCodeControls'
+      > </app-auto-complete> -->
+    </div>&nbsp;&nbsp;
+    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+      <mat-label>Alternate Mobile Number</mat-label>
+      <mat-icon matSuffix><i class="material-icons material-icons-outlined">phone_iphone</i></mat-icon>
+      <input matInput type="tel" formControlName="alternativeContactNo" placeholder="Alternate Mobile Number" appNumberOnly [PhoneNumber]="false" autocomplete="off" role="presentation" minlength="10" maxlength="14" />
+      @if (!!mainForm.get(formgroupName + '.alternativeContactNo')?.errors?.minlength) {
+        <mat-error> Enter atleast 10 numbers
+        </mat-error>
+      }
+      @if (!!mainForm.get(formgroupName + '.alternativeContactNo')?.errors?.pattern) {
+        <mat-error> Enter valid Mobile numbers
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+      <mat-label>Email ID</mat-label>
+      <input matInput placeholder="Email ID" type="email" formControlName="email" autocomplete="off" role="presentation" maxlength="120" [required]="userData?.applicationId === 3">
+      <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+      @if (!!mainForm.get(formgroupName + '.email')?.errors?.required) {
+        <mat-error> Email id is required. </mat-error>
+      }
+      @if (!!mainForm.get(formgroupName + '.email')?.errors?.pattern ||
+        !!mainForm.get(formgroupName + '.email')?.errors?.email) {
+        <mat-error> Please enter valid email. </mat-error>
+      }
+      @if (!!mainForm.get(formgroupName + '.email')?.errors?.incorrect) {
+        <mat-error> Email id already exist. </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+
+</div>
+<div [formGroupName]="formgroupName" fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid">
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+      <mat-label>Marital Status</mat-label>
+      <mat-select formControlName="maritalStatusLookupId" placeholder="Marital Status" (selectionChange)="maritalStatusList($event.value)">
+        @for (Marital of maritalStatus; track Marital) {
+          <mat-option [value]="Marital.lookUpId"> {{ Marital.lookUpName }} </mat-option>
+        }
+      </mat-select>
+      <!-- <mat-error *ngIf="!maritalStatus?.invalid">maritalStatus is required</mat-error> -->
+    </mat-form-field>
+  </div>
+  @if ((mainForm?.get(formgroupName)?.get('maritalStatusLookupId').value) === common.MARRIED || (mainForm?.get(formgroupName)?.get('maritalStatusLookupId').value) === common.DIVORCED || (mainForm?.get(formgroupName)?.get('maritalStatusLookupId').value) === common.SEPERATED) {
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Spouse Name</mat-label>
+        <input formControlName="spouseName" #spouseValue autocomplete="off" role="presentation" type="text" matInput placeholder="Spouse Name">
+      </mat-form-field>
+    </div>
+  }
+  @if (userData.applicationId ===3 || mainForm?.get(formgroupName)?.get('bestVisitAddress').value !== null) {
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Best time to Visit the Address</mat-label>
+        <input formControlName="bestVisitAddress" #bestVisitAddress autocomplete="off" role="presentation" type="text" matInput placeholder="Best time to Visit the Address">
+      </mat-form-field>
+    </div>
+  }
+</div>
+<div [formGroupName]="formgroupName" fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid">
+  @if (!mainForm.get('candidate.companySiteVisitFlag').value) {
+    <div fxFlex="66.66%" fxFlex.lg="66.66%" fxFlex.md="66.66%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-label class="lbl">Gender</mat-label>
+      <mat-radio-group formControlName="genderLookupId" aria-label="Select an option" fxLayoutGap="20px">
+        @for (gender of genderDetails; track gender) {
+          <mat-radio-button [value]="gender.lookUpId" fxLayoutGap="20px">
+            {{gender.lookUpName}}
+          </mat-radio-button>
+        }
+      </mat-radio-group>
+      @if (mainForm?.get(formgroupName)?.get('genderLookupId')?.errors?.required &&
+        mainForm?.get(formgroupName)?.get('genderLookupId')?.touched) {
+        <mat-error>
+          Gender is required
+        </mat-error>
+      }
+    </div>
+  }
+</div>
+<!-- <div [formGroupName]="formgroupName" fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+fxLayoutGap="20px grid">
+<div *ngIf="userData.applicationId === 3 && mainForm.get('panCompFlag').value" fxFlex="33.33%" fxFlex.lg="33.33%"
+  fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%" class="mb-20">
+  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+    <mat-label>PAN Number</mat-label>
+    <input #panValue formControlName="pan" autocomplete="off" role="presentation" maxlength="13" type="text" matInput
+      placeholder="PAN Number" required
+      (keyup)="panValue.value = panValue.value.toUpperCase()">
+    <mat-hint class="f-13">(First five characters are letters (A-Z), next 4 numerics (0-9), last character
+      letter (A-Z),
+      Eg:SUBAL0225S.
+    </mat-hint>
+    <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('pan')?.errors?.required">
+      PAN Number is required.
+    </mat-error>
+    <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('pan')?.errors?.panvalidate?.invalidPattern">
+      PAN Number is invalid. (First five characters are letters (A-Z), next 4 numerics (0-9), last character letter (A-Z),
+      Eg:SUBAL0225S.
+    </mat-error>
+  </mat-form-field>
+</div>
+</div> -->
+
+<br>
+  @if (screeningService.caseFlagType === common.NEWCASE || manualFilesubmissionRE) {
+    <div fxLayout="row wrap" formGroupName="screening" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid">
+      <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label><span matPrefix> {{alreadyEx}}</span>&nbsp; Transaction ID </mat-label>
+          <!-- <span matPrefix *ngIf="screeningService.caseFlagType === common.NEWCASE"> {{alreadyEx}}</span> -->
+          <input matInput class='p-edit' placeholder="Transaction ID" [type]='common.clientRefNoPrefix ? "number" : "text"' formControlName="clientRefNo" appNumberOnly [PhoneNumber]="false" maxlength="50" #refnum [required]="screeningService.caseFlagType === common.NEWCASE || manualFilesubmissionRE?true: false"
+            (blur)="isExist(); checkRefNum(refnum.value)" />
+          @if (!!mainForm?.get('screening.clientRefNo')?.errors?.required) {
+            <mat-error> Transaction ID is required. </mat-error>
+          }
+          @if (!!mainForm?.get('screening.clientRefNo')?.errors?.exist) {
+            <mat-error> Transaction ID already exist.
+            </mat-error>
+          }
+          @if (!!mainForm?.get('screening.clientRefNo')?.errors?.pattern && common.clientRefNoPrefix) {
+            <mat-error>
+              Transaction ID not allowed 0.
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Requested Date &amp; Time</mat-label>
+          <input matInput formControlName="caseInititationDate" required [owlDateTimeTrigger]="dateTime" [owlDateTime]="dateTime" placeholder="Requested Date & Time">
+          <mat-datepicker-toggle matSuffix [owlDateTimeTrigger]="dateTime"></mat-datepicker-toggle>
+          <owl-date-time [pickerMode]="'popup'" #dateTime></owl-date-time>
+          <mat-error>Requested Date & Time is required </mat-error>
+        </mat-form-field>
+      </div>
+      @if (screeningService.caseFlagType === common.NEWCASE || manualFilesubmissionRE) {
+        <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Case Priority</mat-label>
+            <mat-select formControlName="casePeriorityId" placeholder="Select Case Priority" required>
+              @for (casePriority of casePriorities; track casePriority; let i = $index) {
+                <mat-option [value]="casePriority.lookUpId">
+                {{ casePriority.lookUpName }}</mat-option>
+              }
+            </mat-select>
+            @if (!!mainForm?.get('screening.casePeriorityId')?.errors?.required) {
+              <mat-error>
+                Case priority is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      }
+    </div>
+  }
+  @if (screeningService.caseFlagType !== common.NEWCASE) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+      <div fxFlex="100%">
+        @if (userData.applicationId !== 2) {
+          <div class="alert alert-info" role="alert">
+            <h4>Remarks: </h4>
+            @if (mainForm.get(formgroupName + '.remarks')?.value !=='') {
+              <span>
+              {{mainForm.get(formgroupName + '.remarks')?.value}}</span>
+              } @if (mainForm.get(formgroupName + '.remarks')?.value === '') {
+              <span> N/A</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+  @if (userData.applicationId === 3) {
+    <div fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxflex="100%">
+        <h3 class="sub-header">Current Address Details</h3>
+      </div>
+    </div>
+  }
+  @if (userData.applicationId === 3) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <div>
+          <app-address [addressList]="address" [addressformgrp]="mainForm.get(formgroupName)"> </app-address>
+        </div>
+      </div>
+    </div>
+  }
+
+</mat-card-content>
+</form>
+</div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+    @if (screeningService.caseFlagType !== common.NEWCASE && userData.applicationId !==3) {
+      <app-screening-documents [header]="docHeader" [mainForm]="mainForm" [formgroupName]="'document'" [doctType]="doctType" [dupScreeningDoc]="screeningDocument" [showDocType]="userData.applicationId===1">
+      </app-screening-documents>
+    }
+  </div>
+</div>
+<!-- {{mainForm?.get('screening').value|json}} -->
+<!-- <ng-signature-pad doneButtonText="Show Image" format="base64" (done)="showImage($event)"></ng-signature-pad>
+
+<img [src]="signatureImage" /> -->

@@ -1,0 +1,195 @@
+<app-breadcrumb [btnBack]="breadcrumbFlags.btnBack" [btnExcelExport]="btnExcelExport"
+(eventExcelExport)="exportAsExcelFile()" [routePath]="routePath"></app-breadcrumb>
+
+<div fxLayout="row" class="advSearch">
+  <div class="advSearch-forms">
+    <form [formGroup]="countFormGroup">
+      <div fxLayout="row" fxLayoutGap="0px">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="12px">
+            <div fxFlex="130px">
+              <mat-radio-group fxLayoutGap="10px" formControlName="flowType" (change)="changeType($event.value)">
+                <mat-radio-button [value]="false">Inflow</mat-radio-button>
+                <mat-radio-button [value]="true">Outflow</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div fxFlex="130px">
+              <mat-radio-group fxLayoutGap="10px" formControlName='caseFlag' (change)="changeType($event.value)">
+                <mat-radio-button [value]="false">Component Wise</mat-radio-button>
+                <mat-radio-button [value]="true">Case Wise</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div fxFlex="130px" fxLayoutGap="10px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>From Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date" formControlName="fromDate"
+                  required readonly [max]="maxDate" autocomplete="off" (focus)="sampledatePicker.open()"
+                  (click)="sampledatePicker.open()" />
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker></mat-datepicker>
+                @if (countFormGroup.controls.fromDate?.errors?.required) {
+                  <mat-error>From Date is required </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex="130px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>To Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker1" placeholder="To Date" formControlName="toDate"
+                  required readonly [max]="maxDate" autocomplete="off" (focus)="sampledatePicker1.open()"
+                  (click)="sampledatePicker1.open()" />
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker1></mat-datepicker>
+                @if (countFormGroup.controls.toDate?.errors?.required) {
+                  <mat-error>To Date is required</mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex="150px">
+              <p-multiSelect fxFlex="100%" [options]="clientlist" formControlName="clientids" optionLabel="clientName"
+                filterPlaceHolder="Select Client name" selectedItemsLabel="{0} Client name selected"
+                [style]="{XminWidth: '270px', width:'100%'}" defaultLabel="Select Client name"
+                (propValueEvent)="GetComponetDetails($event)" [showHeader]="true" resetFilterOnHide=true>
+              </p-multiSelect>
+              <!-- <app-auto-complete [selectProperties]='clientControl' (selectionChange)="GetComponetDetails($event)"> </app-auto-complete> -->
+            </div>
+            <div fxFlex="150px">
+              <app-auto-complete [selectProperties]='componentControl'> </app-auto-complete>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div fxFlex="100%" class="advSearch-btn">
+    <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <a (click)="searchValue()">Search</a>
+      <span>|</span>
+      <a (click)="resetFunc()">Reset</a>
+    </div>
+  </div>
+</div>
+<div fxLayout="row" class="srchPad" fxLayoutGap="20px" fxlayout.lg="row" fxlayout.md="row" fxLayout.sm="column"
+  fxlayout.xs="column">
+  <mat-card style="width: 100%;">
+    <div fxLayout="row">
+      <mat-card-header fxFlex="100%">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+            fxLayoutGap="10px">
+            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+              fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+              <mat-card-title>
+                <h1 class="header-title">Statistics Count</h1>
+              </mat-card-title>
+            </div>
+            <span fxFlex></span>
+          </div>
+        </div>
+      </mat-card-header>
+    </div>
+    <mat-card-content>
+      <div fxLayout="row">
+        <div fxFlex="8%">
+        </div>
+        @if (compCountList?.length > 0) {
+          <div fxFlex="40%">
+            <h3 class="header-title">{{headerText1}}</h3>
+          </div>
+        }
+        <div fxFlex="4%"></div>
+        @if (compStatusList?.length > 0) {
+          <div fxFlex="40%">
+            <h3 class="header-title">{{headerText}}</h3>
+          </div>
+        }
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="8%"></div>
+        <br />
+        @if (compCountList?.length > 0) {
+          <div fxFlex="40%">
+            <p-table #dt [columns]="displayColumns" [value]="compCountList" selectionMode="single" [scrollable]="true"
+              scrollHeight="" [paginator]="true" [rows]="10" [resizableColumns]="true" [reorderableColumns]="true">
+              <!-- ================= COLGROUP ================= -->
+              <ng-template pTemplate="colgroup" let-colGroupCols>
+                <colgroup>
+                @for (col of colGroupCols; track col) {
+                  <col style="width:170px" />
+                }
+              </colgroup>
+            </ng-template>
+            <!-- ================= HEADER ================= -->
+            <ng-template pTemplate="header" let-headerCols>
+              <tr>
+                @for (col of headerCols; track col) {
+                  <th pReorderableColumn pResizableColumn>
+                    <span [pSortableColumn]="col.field">
+                      <div class="thname" matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
+                        {{ col.header }}
+                      </div>
+                    </span>
+                  </th>
+                }
+              </tr>
+            </ng-template>
+            <!-- ================= BODY ================= -->
+            <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+              <tr [pSelectableRow]="rowData">
+                @for (col of bodyCols; track col) {
+                  <td matTooltipClass="accent-tooltip">
+                    {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                  </td>
+                }
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      }
+      <div fxFlex="4%"></div>
+
+      @if (compStatusList?.length > 0) {
+        <div fxFlex="40%">
+          <p-table #dt1 [columns]="displayStausColumns" [value]="compStatusList" selectionMode="single"
+            [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="10" [resizableColumns]="true"
+            [reorderableColumns]="true">
+            <!-- ================= COLGROUP ================= -->
+            <ng-template pTemplate="colgroup" let-colGroupCols>
+              <colgroup>
+              @for (col of colGroupCols; track col) {
+                <col style="width:170px" />
+              }
+            </colgroup>
+          </ng-template>
+          <!-- ================= HEADER ================= -->
+          <ng-template pTemplate="header" let-headerCols>
+            <tr>
+              @for (col of headerCols; track col) {
+                <th pReorderableColumn pResizableColumn>
+                  <span [pSortableColumn]="col.field">
+                    <div class="thname" matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
+                      {{ col.header }}
+                    </div>
+                  </span>
+                </th>
+              }
+            </tr>
+          </ng-template>
+          <!-- ================= BODY ================= -->
+          <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+            <tr [pSelectableRow]="rowData">
+              @for (col of bodyCols; track col) {
+                <td matTooltipClass="accent-tooltip">
+                  {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                </td>
+              }
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    }
+    <div fxFlex="8%"></div>
+  </div>
+</mat-card-content>
+</mat-card>
+</div>

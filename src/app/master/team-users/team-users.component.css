@@ -1,0 +1,23 @@
+.teamList {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5px;
+}
+.teamAvatar {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+    margin-right: 10px;
+    line-height: 23px;
+    height: 24px;
+    width: 24px;
+    text-transform: uppercase;
+    background: #9fb6c7;
+    border-radius: 50%;
+}
+.teamName {
+    font-size: 90%;
+    font-weight: 500;
+    margin: 0;
+}

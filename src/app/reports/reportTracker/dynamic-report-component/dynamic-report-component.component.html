@@ -1,0 +1,520 @@
+﻿<app-breadcrumb [btnResetTbl]="false" [btnExcelExport]="(outputDataReportList?.length > 0)" [routePath]="routePath"
+  (eventExcelExport)="exportExcel()" [btnExportDisabled]="!screenAuth.exportFlag" (eventReset)="resetForm()">
+  <!-- (eventResetTbl)="resetTable()" -->
+  <button mat-flat-button (click)="exportExcel()" class="filetypeicon">
+    <i class="icon-excel csatus Normal"></i> <span>Excel</span>
+  </button>
+</app-breadcrumb>
+<div fxLayout="row" class="advSearch" [formGroup]="dynamicReportForm" autocomplete="off">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          @if (isClientCntrl) {
+            <div class="search_select_custom" fxFlex="200px">
+              <p-multiSelect fxFlex="100%" [options]="clientList" formControlName="clientids"
+                optionLabel="clientName" filterPlaceHolder="Select Client name"
+                selectedItemsLabel="{0} Client name selected" [style]="{XminWidth: '270px', width:'100%'}"
+                defaultLabel="Select Client name" resetFilterOnHide=true required>
+              </p-multiSelect>
+            </div>
+          }
+          @if (isApplicantIdCntrl) {
+            <div fxFlex="400px">
+              <mat-form-field fxFlex="100%">
+                <input required placeholder="Applicant Id" autocomplete="off" [formControl]="applicantId"
+                  role="presentation" matInput [type]="'text'">
+                @if (applicantId?.errors?.required) {
+                  <mat-error>Applicant Id is required</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          @if (isClientRefListCntrl) {
+            <div fxFlex="400px">
+              <mat-form-field fxFlex="100%">
+                <mat-chip-grid #chipList aria-label="Client Ref Number">
+                  @for (refNo of clientRefNoList; track refNo) {
+                    <mat-chip-row [removable]="true"
+                      (removed)="removeRefNo(refNo)">{{refNo}}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip-row>
+                  }
+                  <input placeholder="Client Ref Number..." autocomplete="off" role="presentation"
+                    matInput [matChipInputFor]="chipList" [matChipInputAddOnBlur]="true"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [type]="'text'"
+                    (matChipInputTokenEnd)="addRefNo($event.input, $event.value)">
+                </mat-chip-grid>
+              </mat-form-field>
+            </div>
+          }
+          @if (isRepType) {
+            <div fxFlex="200px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>Select Report Type</mat-label>
+                <mat-select [formControl]="repType" placeholder="Select Report Type">
+                  @for (type of repTypeList; track type) {
+                    <mat-option [value]="type">
+                    {{type.lookUpName}} </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          }
+          @if (isStatusCntrl && getScreeningStatus()) {
+            <div fxFlex="200px">
+              <app-auto-complete (propValueEvent)="getPropertyValue($event)" (change)="clearDate()"
+                [selectProperties]='statusControl'>
+              </app-auto-complete>
+            </div>
+          }
+          <!-- Remove (dateChange)="fdate()for MIS Report Todate Auto binded Issue by megala 16-02-2024" -->
+          @if (isFrmDateCntrl &&  !getScreeningStatus()) {
+            <div fxFlex="200px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>From Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker" [max]="maxDate" placeholder="From Date"
+                  formControlName="fromDate" (focus)="sampledatePicker.open()"
+                  (click)="sampledatePicker.open()" (dateChange)="checkPeriod()" />
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          }
+          @if (isToDateCntrl && !getScreeningStatus()) {
+            <div fxFlex="200px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>To Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker1" [min]="mindate" [max]="maxDate"
+                  placeholder="To Date" formControlName="toDate" (focus)="sampledatePicker1.open()"
+                  (click)="sampledatePicker1.open();"  (dateChange)="checkPeriod()" />
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker1></mat-datepicker>
+              </mat-form-field>
+            </div>
+          }
+          <!-- Remove (dateChange)="fdate()for MIS Report Todate Auto binded Issue by megala 16-02-2024" -->
+          @if (isFrmDateCntrl && getdateFlag() && getScreeningStatus()) {
+            <div fxFlex="200px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>From Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker" (dateChange)="fdate();checkPeriod()" [max]="maxDate"
+                  placeholder="From Date" formControlName="fromDate" (focus)="sampledatePicker.open()"
+                  (click)="sampledatePicker.open()" [required]="getdateFlag()" />
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          }
+          @if (isToDateCntrl && getdateFlag() && getScreeningStatus()) {
+            <div fxFlex="200px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>To Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker1" (dateChange)="tdate();checkPeriod()" [min]="mindate"
+                  [max]="maxDate" placeholder="To Date" formControlName="toDate"
+                  (focus)="sampledatePicker1.open()" (click)="sampledatePicker1.open();"
+                  [required]="getdateFlag()" />
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker1></mat-datepicker>
+              </mat-form-field>
+            </div>
+          }
+          <!-- Added by Megala- only for Completed Status -->
+          @if (isCompCntrl && !getdateFlag()) {
+            <div fxFlex="200px">
+              <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                [selectProperties]='componentControl'>
+              </app-auto-complete>
+            </div>
+          }
+
+          @if (isFrmDateMonthAndYearCntrl) {
+            <div fxFlex="200px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>From Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date"
+                  formControlName="fromDate" />
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker startView="multi-year"
+                (monthSelected)="setMonthAndYearFrom($event, sampledatePicker)"></mat-datepicker>
+              </mat-form-field>
+            </div>
+          }
+          @if (isToDateMonthAndYearCntrl) {
+            <div fxFlex="200px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>To Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker1"  placeholder="To Date"
+                  formControlName="toDate" />
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"  ></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker1 startView="multi-year"
+                (monthSelected)="setMonthAndYearTo($event, sampledatePicker1)"></mat-datepicker>
+              </mat-form-field>
+            </div>
+          }
+          @if (this.reportHeaderName === 'QC Rejected History List') {
+            <div fxFlex="100px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>Reject Type</mat-label>
+                <!-- <mat-select placeholder="Reject Type" required>
+                <mat-option [value]="'IQC'"> IQC </mat-option>
+                <mat-option [value]="'FQC'"> FQC </mat-option>
+              </mat-select> -->
+              <mat-select [formControl]="repType" placeholder="Select Report Type" required>
+                @for (type of rejectTypeList; track type) {
+                  <mat-option [value]="type">
+                  {{type.lookUpName}} </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        }
+        <!-- Added 120 Days Required Functionality By Megala  18-01-2024 -->
+        @if (isFrmDateCntrl && isToDateCntrl && getdFlag()) {
+          <div fxFlex="100px">
+            <mat-label class="lbl">
+              120 day
+              <!-- {{menuData.screenName === 'Pre-QC & DA Case Completion MIS' ? '30 Days' : '120 Days'}} -->
+            </mat-label>
+            <mat-checkbox (change)='monthlyChange($event.checked)' formControlName="monthly">
+            </mat-checkbox>
+          </div>
+        }
+        <!-- <div fxFlex="100px" *ngIf="getdateFlag()">
+        <mat-label class="lbl">
+          120 days
+        </mat-label>
+        <mat-checkbox (change)='monthlyChange($event.checked)' formControlName="monthly">
+        </mat-checkbox>
+      </div> -->
+    </div>
+  </div>
+</div>
+</div>
+
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+    @if (isRepType) {
+      <a (click)="saveIFReport()">Save/Search IF Report</a>
+      }@if (isRepType) {
+      <span>|</span>
+    }
+    <!-- <a [ngClass]="ComponentValue === 0 ?'page-btn disabled':''" (click)="RefreshReportDetails()"
+    matTooltip="Update Report">
+    <mat-icon>refresh</mat-icon></a> -->
+    @if (isShowSearch) {
+      <a (click)="submitSearchValue(true)">Search</a>
+    }
+    @if (isShowSearch) {
+      <span>|</span>
+    }
+    <a (click)="resetForm(); submitSearchValue(false)"> Reset</a>@if (isShowMore && (isStatusCntrl || isCompCntrl || isVendorIdCntrl || isVeriCtrl)) {
+    <span
+    >|</span>
+  }
+  @if (isShowMore && (isStatusCntrl || isCompCntrl || isVendorIdCntrl || isVeriCtrl)) {
+    <a (click)='searchCriFilter = !searchCriFilter'
+      >
+      {{ searchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+    class="icon-chevron-{{ searchCriFilter?'up':'down' }}"></i></a>
+  }
+</div>
+</div>
+@if (searchCriFilter) {
+  <div fxLayout="row" class="advSearchshow">
+    <div class="advSearch-forms">
+      <div fxLayout="row" fxLayoutGap="20px grid">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            @if (isStatusCntrl && !getScreeningStatus()) {
+              <div fxFlex="200px">
+                <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                  [selectProperties]='statusControl'>
+                </app-auto-complete>
+              </div>
+            }
+            @if (isCompCntrl && getdateFlag()) {
+              <div fxFlex="200px">
+                <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                  [selectProperties]='componentControl'>
+                </app-auto-complete>
+              </div>
+            }
+            @if (isVeriCtrl) {
+              <div fxFlex="200px">
+                <!-- <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                [selectProperties]='verifyIdControl'>
+              </app-auto-complete> -->
+              <!-- <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+              [selectProperties]='verifyIdControl'>
+            </app-auto-complete> -->
+            <mat-form-field fxFlex="100%">
+              <mat-label>Verfication Id</mat-label>
+              <input matInput placeholder="Verfication Id" type="text" size="50"
+                (propValueEvent)="getPropertyValue($event)" formControlName="verificationId">
+            </mat-form-field>
+          </div>
+        }
+        @if (isVendorIdCntrl) {
+          <div fxFlex="200px">
+            <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+              [selectProperties]='vendorControl'>
+            </app-auto-complete>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+</div>
+</div>
+}
+</div>
+<div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                  fxLayout.xs="column" fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="80%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                    fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">{{reportHeaderName}}</h1>
+
+                  </div>
+                  @if (isRefreshIcon) {
+                    <div>
+                      <span fxFlex fxLayoutAlign="end center">
+                        <a (click)="RefreshReportDetails()"
+                          matTooltip="Update Report"><mat-icon>refresh</mat-icon></a>
+                        </span>
+                        <span style="font-size: medium;padding-top: 4px;">{{this.modifiedDate }}</span>
+                      </div>
+                    }
+                    <!-- <div *ngIf="outputDataReportList.length > 0" fxFlex="30%" fxFlex.lg="30%"
+                    fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                    fxLayoutAlign="end center" fxLayoutAlign.sm="end center"
+                    fxLayoutAlign.xs="start center">
+                    <div class="tbl-commonsearch">
+                      <mat-form-field fxFlex="100%">
+                        <mat-label></mat-label>
+                        <mat-icon matPrefix>search</mat-icon>
+                        <input #global matInput size="50" placeholder="Search..."
+                          autocomplete="off"
+                          (input)="dtHistory.filterGlobal($event.target.value, 'contains')" />
+                      </mat-form-field>
+                    </div>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              @if (screenName1 == 'Closure Report') {
+                <div fxFlex="50%">
+                  <label>Note: This report works based in the FQC approved date</label>
+                </div>
+              }
+              @if (screenName1 == 'Closure Report') {
+                <div fxFlex="50%" fxLayoutAlign="end end">
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%" style="margin-top: -25px;">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix>search</mat-icon>
+                      <input #global matInput matTooltip="Search here"
+                        matTooltipClass="accent-tooltip" matTooltipPosition="above"
+                        matTooltipClass="my-custom-tooltip" placeholder="Search here" type="text"
+                        pInputText size="50" (blur)="globalSearch(global.value, true)"
+                        [(ngModel)]="searchValue">
+                    </mat-form-field>
+                  </div>
+                </div>
+              }
+              <div fxFlex="100%">
+                <p-table #dtHistory [columns]="displayColumns" [value]="outputDataReportList"
+                  [resizableColumns]="true" [totalRecords]="totalpages" [reorderableColumns]="true"
+                  [scrollable]="true" scrollHeight="" [lazy]="true" [paginator]="true"
+                  [rows]="Hitemperpage" (onLazyLoad)="LoadHistory($event)" [scrollable]="true">
+                  <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                    @for (col of columns; track col) {
+                      <col style="width:200px" />
+                    }
+                  </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    @for (col of columns; track col) {
+                      <th [pSortableColumn]="col.field"
+                        pReorderableColumn pResizableColumn>
+                        <div class="thname" style="text-align:center;"
+                          matTooltip="{{col.header.toUpperCase()}}"
+                        matTooltipClass="accent-tooltip"> {{col.header}} </div>
+                        <p-sortIcon [field]="col.field" matTooltip="Sorting"
+                          matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
+                          ariaLabelDesc="Activate to sort in descending order"
+                        ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                      </th>
+                    }
+                  </tr>
+                </ng-template>
+                <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns"
+                  *ngIf="reportModuleName != 'Monthly Cumulative Final Report Completed' && reportModuleName !='Monthly cumulative Cases and checks created'">
+                  <tr>
+                    @for (col of columns; track col) {
+                      <td style="width:200px;white-space: unset;">
+                        <!-- <span
+                        *ngIf="col?.field !== 'componentDetail' && col?.field !== 'insuffComments' && col?.field !== 'componentName'">
+                        {{rowData[col.field] ? (col.header.includes('Date') ?
+                        (rowData[col.field] | date: "dd/MM/yyyy hh:mm:ss a") : col?.field === 'dateOfBirth' ?
+                        (rowData[col.field] | date: "dd/MM/yyyy") :
+                      rowData[col.field]) : 'N/A'}}</span> -->
+                      @if ((col?.field !== 'componentDetail' && col?.field !== 'insuffComments' && col?.field !== 'componentName')&& reportModuleName !== 'Monthly Cumulative Final Report Completed' && reportModuleName !=='Monthly cumulative Cases and checks created') {
+                        <span
+                          >
+                          {{rowData[col.field] ? (col.header.includes('Date') && col?.field
+                          !== 'confirmationReceivedDate' &&
+                          col?.field !== 'caseInitiationDate' && col?.field !== 'componentInitiationDate' &&col?.field !== 'caseDueDate' &&col?.field
+                          !== 'insuffRaisedDate'&& col?.field
+                          !== 'insuffClearDate'
+                          && col?.field !== 'compInitiationDate'?
+                          (common?.getTimezoneOffset
+                          (rowData[col.field], false) | date: 'dd/MM/yyyy hh:mm:ss a') :
+                          col?.field === 'dateOfBirth' || col?.field ===
+                          'insuffRaisedDate'||col?.field === 'insuffClearDate'||
+                          col?.field === 'confirmationReceivedDate' ||
+                          col?.field === 'caseInitiationDate' ||col?.field === 'componentInitiationDate' ||col?.field === 'caseDueDate' || col?.field ===
+                          'compInitiationDate' ?
+                          (rowData[col.field] | date: "dd/MM/yyyy") :
+                          rowData[col.field]) : 'N/A'}}
+                        </span>
+                      }
+                      @if ((col?.field === 'insuffComments' || col?.field === 'componentDetail' || (col?.field === 'componentName' && reportModuleName === 'Client Closure Report MIS'))&& reportModuleName !== 'Monthly Cumulative Final Report Completed'&& reportModuleName !=='Monthly cumulative Cases and checks created' ) {
+                        <span
+                          >
+                          @for (com of rowData[col?.field]; track com; let i = $index) {
+                            <span>
+                            {{com}}<br /></span>
+                            }@if (!(rowData[col?.field]?.length > 0)) {
+                            <span
+                            >N/A</span>
+                          }</span>
+                        }
+                        @if (col?.field === 'componentName' && reportModuleName !== 'Client Closure Report MIS'&& reportModuleName !== 'Monthly Cumulative Final Report Completed' && reportModuleName !=='Monthly cumulative Cases and checks created') {
+                          <span
+                            >{{rowData[col.field]
+                          ? rowData[col.field] : 'N/A'}}</span>
+                        }
+                      </td>
+                    }
+                  </tr>
+                </ng-template>
+                <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns"
+                  *ngIf="reportModuleName == 'Monthly Cumulative Final Report Completed' || reportModuleName =='Monthly cumulative Cases and checks created'">
+                  <tr>
+                    @for (col of columns; track col) {
+                      <td style="width:200px;text-align: center;">
+                        <span style="text-align:center;">
+                          {{rowData[col.field]}}
+                        </span>
+                        @if ((col?.field === 'insuffComments' || col?.field === 'componentDetail' || (col?.field === 'componentName' && reportModuleName === 'Client Closure Report MIS'))&& reportModuleName !== 'Monthly Cumulative Final Report Completed'&& reportModuleName !=='Monthly cumulative Cases and checks created' ) {
+                          <span
+                            >
+                            @for (com of rowData[col?.field]; track com; let i = $index) {
+                              <span>
+                              {{com}}<br /></span>
+                              }@if (!(rowData[col?.field]?.length > 0)) {
+                              <span
+                              >N/A</span>
+                            }</span>
+                          }
+                        </td>
+                      }
+                    </tr>
+                  </ng-template>
+                  @if (outputDataReportList.length == 0; as columns) {
+                    <ng-template pTemplate="emptymessage" let-columns
+                      >
+                      <tr>
+                        <td [attr.colspan]="columns.length">
+                          <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row"
+                            fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                            <div fxFlex="100%" class="pt-15">
+                              <div class="no-record text-center">
+                                <span>No Record Found</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  }
+                </p-table>
+                @if (outputDataReportList.length > 0 && totalpages > 10) {
+                  <div
+                    [ngClass]="{'empty-record': outputDataReportList?.length === 0}"
+                    class="cus-paginator" fxLayout="row wrap" fxLayoutGap="10px grid">
+                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutAlign="start center"> Showing {{ dtHistory.totalRecords
+                      < 1 ? 0 : dtHistory.first + 1 }} - {{ dtHistory.totalRecords> 0 ? dtHistory.rows
+                      + dtHistory.first
+                      <=dtHistory.totalRecords ? dtHistory.rows + dtHistory.first :
+                      dtHistory.totalRecords : 0 }} of {{ dtHistory.totalRecords }} record(s)
+                      &nbsp;<a (click)="showallH()">{{ isShowAll != true ? '| Show All' :
+                    ''}}</a>
+                  </div>
+                  <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                  @if (outputDataReportList.length > 0 && isShowAll != true) {
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutAlign="end center" fxLayoutAlign.md="end center"
+                      fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center"
+                      >
+                      <a [ngClass]="dtHistory?.first === 0 ? 'page-btn disabled' : 'page-btn'"
+                                            (click)="
+                            dtHistory?.onPageChange({
+                              first: dtHistory?.first - dtHistory?.rows,
+                              rows: dtHistory?.rows
+                            });
+                            navigateNxtPrevPage(dtHistory?.first + dtHistory?.rows, dtHistory?.rows)
+                          "> <i class="icon-control-start mr-5"></i> </a> <span class="gotopagbg mr-2 ml-2"
+                        fxHide.xs>Go to Page<span class="input-num">
+                        <input type="number" min="1" #pageNo [(ngModel)]="currentPage"
+                          maxlength="5" appNumberOnly [NumberOnly]="false"
+                          (keyup.enter)="navigatePage(pageNo.value, dtHistory?.rows)" />
+                      </span></span> <span class="mr-2" fxHide.xs> of
+                    {{ getTotalPages(dtHistory?.totalRecords, dtHistory?.rows) }}</span>
+                                        <a [ngClass]="
+                            dtHistory?.rows + dtHistory?.first >= dtHistory?.totalRecords
+                              ? 'page-btn disabled'
+                              : 'page-btn'
+                          " (click)="
+                            dtHistory?.onPageChange({
+                              first: dtHistory?.first + dtHistory?.rows,
+                              rows: dtHistory?.rows
+                            });
+                            navigateNxtPrevPage(dtHistory?.first + dtHistory?.rows, dtHistory?.rows)
+                          "><i class="icon-control-end ml-5"></i></a>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+</div>

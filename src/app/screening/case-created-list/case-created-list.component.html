@@ -1,0 +1,1857 @@
+<!-- <div fxLayout="row" class="b-crumb">
+  <div>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/.">Dashboard</a></li>
+      <li class="breadcrumb-item active">All Components</li>
+    </ol>
+  </div>
+  <div fxFlex="100%" class="b-crumb-toolbar">
+    <div class="btnTool" fxLayoutGap="10px"> </div>
+  </div>
+</div> -->
+<app-breadcrumb [routePath]="routePath" [btnBack]="true" (eventExcelExport)="exportAsExcelFile()"
+    [btnExcelExport]="true" [btnAdd]="false" (eventAdd)="addNewCase()" (eventBack)="back()"> </app-breadcrumb>
+<div fxLayout="row" class="advSearch"
+    *ngIf="screeningService.caseFlagType !== common.QCREJECT && 
+screeningService.caseFlagType !== common.FRREJECT && screeningService.caseFlagType !== common.VEREJECT && screeningService.caseFlagType !== common.REOPEN
+&& screeningService.caseFlagType !== common.NOTAPPLICABLE && screeningService.caseFlagType !== common.CLOSED &&
+(screeningService.caseFlagType !== common.SUBMISSION_HISTORY) && (screeningService.caseFlagType !== common.VE_HISTORY) && (screeningService.caseFlagType !== common.BT_POPUP) && screeningService.caseFlagType !== common.NT_POPUP && screeningService.caseFlagType !== common.WT_POPUP && screeningService.caseFlagType !== common.CT_POPUP">
+<form autocomplete="off" *ngIf="screeningService.caseFlag !== true && screeningService.caseFlagType !== common.PREQCCASE">
+    <div class="advSearch-forms">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
+            fxLayoutGap="0px">
+            <div fxFlex="100%">
+                <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="200px">
+                        <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                            [selectProperties]='caseRefNoControl'>
+                        </app-auto-complete>
+                    </div>
+                    <div fxFlex="200px">
+                        <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                            [selectProperties]='clientControl'>
+                        </app-auto-complete>
+                    </div>
+                    <div fxFlex="200px">
+                        <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                            [selectProperties]='candidateControl'>
+                        </app-auto-complete>
+                    </div>
+                    <div fxFlex="200px">
+                        <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                            [selectProperties]='ownerControl'>
+                        </app-auto-complete>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+    <div fxFlex="100%" class="advSearch-btn">
+        <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <!-- <a href="">Search</a> <span>|</span> -->
+            <a (click)="resetFilterSort('reset')">Reset</a>
+             <span>|</span> <a (click)='SearchCriFilter = !SearchCriFilter'>
+                {{ SearchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+                    class="icon-chevron-{{ SearchCriFilter?'up':'down' }}"></i></a>
+        </div>
+    </div>
+    
+    
+    
+    <div fxLayout="row" class="advSearchshow" *ngIf="SearchCriFilter">
+     <div class="advSearch-forms">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
+            fxLayoutGap="0px" *ngIf="SearchCriFilter">
+            <div fxFlex="100%">
+                <div fxLayout="row" fxLayoutGap="20px">                       
+                    <div fxFlex="200px" >
+                        <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                            [selectProperties]='screeningControl'>
+                        </app-auto-complete>
+                    </div>
+                    <div fxFlex="200px" *ngIf="screeningService.caseFlag">
+                        <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                            [selectProperties]='priorityControl'>
+                        </app-auto-complete>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div fxFlex="100%" class="advSearch-btn">
+        <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+    </div>
+   </div>
+    
+</form>
+    <!-- // Added By Megala -->
+    <div fxLayout="row" class="advSearch" [formGroup]="qcSearchForm" autocomplete="off" *ngIf="screeningService.caseFlag === true || screeningService.caseFlagType === common.PREQCCASE || screeningService.caseFlagType === common.DASUBCHECK">
+        <div class="advSearch-forms">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
+                fxLayoutGap="0px">
+                <div fxFlex="100%">
+                    <div fxLayout="row" fxLayoutGap="20px">
+                        <div fxFlex="175px">
+                            <mat-form-field fxFlex="100%">
+                                <mat-label>Client Ref No</mat-label>
+                                <input matInput formControlName="clientRefNo" placeholder="Search here..." type="text"
+                                    size="50" autocomplete="off" />
+                                <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="175px">
+                            <mat-form-field fxFlex="100%">
+                                <mat-label>Client Name</mat-label>
+                                <input matInput formControlName="clientName" placeholder="Search here..." type="text"
+                                    size="50" autocomplete="off" />
+                                <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="175px">
+                            <mat-form-field fxFlex="100%">
+                                <mat-label>Candidate Name</mat-label>
+                                <input matInput formControlName="candidateName" placeholder="Search here..." type="text"
+                                    size="50" autocomplete="off" />
+                                <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="175px">
+                            <mat-form-field fxFlex="100%">
+                                <mat-label>Screening Owner Name</mat-label>
+                                <input matInput formControlName="ownerName" placeholder="Search here..." type="text"
+                                    size="50" autocomplete="off" />
+                                <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                            </mat-form-field>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div fxFlex="100%" class="advSearch-btn">
+            <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+                <a (click)="searchCase()">Search</a> <span>|</span>
+                <a (click)="resetFilterSort('reset')">Reset</a>
+                <span>|</span> <a (click)='SearchCriFilter = !SearchCriFilter'>
+                    {{ SearchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+                        class="icon-chevron-{{ SearchCriFilter?'up':'down' }}"></i></a>
+            </div>
+        </div>
+
+
+
+        <div fxLayout="row" class="advSearchshow" *ngIf="SearchCriFilter">
+            <div class="advSearch-forms">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
+                    fxLayoutGap="0px" *ngIf="SearchCriFilter">
+                    <div fxFlex="100%">
+                        <div fxLayout="row" fxLayoutGap="20px">
+                            <div fxFlex="175px">
+                                <mat-form-field fxFlex="100%">
+                                    <mat-label>Screening Id</mat-label>
+                                    <input matInput formControlName="appScreeningID" placeholder="Search here..."
+                                        type="text" size="50" autocomplete="off" />
+                                    <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="175px">
+                                <mat-form-field fxFlex="100%">
+                                    <mat-label>Screening Priority</mat-label>
+                                    <input matInput formControlName="priorityLookupName" placeholder="Search here..."
+                                        type="text" size="50" autocomplete="off" />
+                                    <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div fxFlex="100%" class="advSearch-btn">
+                <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div fxLayout="row" class="srchPad"
+    *ngIf="screeningService.caseFlagType !== common.QCREJECT && screeningService.caseFlagType !== common.REOPEN
+&& screeningService.caseFlagType !== common.FRREJECT && screeningService.caseFlagType !== common.VEREJECT && screeningService.caseFlagType !== common.NOTAPPLICABLE && 
+screeningService.caseFlagType !== common.CLOSED && (screeningService.caseFlagType !== common.SUBMISSION_HISTORY) && (screeningService.caseFlagType !== common.VE_HISTORY) && (screeningService.caseFlagType !== common.BT_POPUP) && (screeningService.caseFlagType !== common.NT_POPUP) && (screeningService.caseFlagType !== common.WT_POPUP)  && (screeningService.caseFlagType !== common.CT_POPUP)">
+    <div fxFlex="100%">
+        <mat-card>
+            <mat-card-header>
+                <div fxFlex="100%">
+                    <mat-card-title>
+                        <div fxLayout="row">
+                            <div fxFlex="100%">
+                                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                                    fxLayout.xs="column" fxLayoutGap="10px grid">
+                                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                                        fxFlex.xs="100%" fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                                        fxLayoutAlign.xs="start center">
+                                        <h1 class="header-title">Case Submission List</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-title>
+                </div>
+            </mat-card-header>
+            <mat-tab-group
+                *ngIf="userData.applicationId === 1 && (screeningService.caseFlag === true || screeningService.caseFlagType === common.DASUBCHECK || screeningService.caseFlagType === common.PREQCCASE ) && ownerflag !== true && screeningService.caseFlagType !== common.SUBMISSION_HISTORY"
+                (selectedTabChange)="filterAssignedCase($event.index);">
+                <mat-tab *ngFor="let res of menubar;let ind = index" label="{{res.menuName}}">
+                    <mat-card-content>
+                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                            fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                            fxLayoutGap.xs="0px grid" class="sortrow">
+                            <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="10%" fxFlex.xs="100%"
+                                class="mt-5" *ngIf="ownerflag !== true && caseSubmissionList?.length>0">
+                                <!-- //Added By Megala 08/01/2024 for Request for adding select all feature | Live environment  -->
+                                <mat-checkbox [formControl]="selectall" (change)="selectAll($event)">Select All
+                                </mat-checkbox>
+                            </div> <span fxFlex></span>
+                            <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                                fxLayoutAlign.xs="start start">
+                                <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="90%" fxFlex.sm="92%" fxFlex.xs="100%"
+                                    fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                                    fxLayoutAlign.xs="start start">
+                                    <ul class="pl-0">
+                                        <!-- <li> <span class="text-dull"> Showing
+                                                {{(itemPerPage[tabIndex]*page[tabIndex])-itemPerPage[tabIndex]+1}} -
+                                                {{count}}
+                                                 {{(itemPerPage[tabIndex]*page[tabIndex])>=caseSubmissionList?.length?(caseSubmissionList?.length):itemPerPage[tabIndex]*page[tabIndex]}} 
+                                                of
+                                            </span> <b>{{caseSubmissionList?.length}}</b> Record(s)</li> -->
+                                        <li>
+                                            <span class="text-dull"> Showing
+                                                {{(caseSubmissionList?.length > 0 ?
+                                                ((assignDE.pageSize*assignDE.page)-assignDE.pageSize+1): 0)}} -
+                                                {{((assignDE.pageSize*assignDE.page)>=(shieveTotalCount))?(shieveTotalCount):(assignDE.pageSize*assignDE.page)}}
+                                                of </span> <b> {{shieveTotalCount}}
+                                                record(s)</b>
+                                        </li>
+                                        |
+                                        <li>
+                                            <a (click)="shieveShowall()">Show All</a>
+                                        </li>|
+                                        <li><b>Sort By:</b> <a [ngClass]="column==='candidateFullName'?'active':''"
+                                                (click)="sortBy('candidateFullName')">Candidate
+                                                Name</a> <i
+                                                [ngClass]="{'icon-sort': column != 'candidateFullName', 
+                                                          'icon-sort-asc': (column == 'candidateFullName' && !isDesc), 
+                                                          'icon-sort-desc': (column == 'candidateFullName' && isDesc) }"
+                                                aria-hidden="true"> </i> <a
+                                                [ngClass]="column==='clientReferenceNo'?'active':''"
+                                                (click)="sortBy('clientReferenceNo')">Case
+                                                Ref No</a> <i
+                                                [ngClass]="{'icon-sort': column != 'clientReferenceNo', 
+                                                                  'icon-sort-asc': (column == 'clientReferenceNo' && !isDesc), 
+                                                                  'icon-sort-desc': (column == 'clientReferenceNo' && isDesc) }"
+                                                aria-hidden="true"> </i></li>
+                                    </ul>
+                                </div>
+                                <div fxFlex="9%" fxFlex.lg="9%" fxFlex.md="9%" fxFlex.sm="18%" fxFlex.xs="100%"
+                                    fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                                    fxLayoutAlign.xs="start start" *ngIf="ownerflag !== true">
+                                    <button mat-flat-button *ngIf="assignflag !== true" color="warn"
+                                        (click)="opendialog()">Assign</button>
+                                    <button mat-flat-button *ngIf="assignflag === true" color="warn"
+                                        (click)="opendialog()">Re-Assign</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div fxLayout="row">
+                            <div fxFlex="100%">
+                                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                                    fxLayout.sm="column wrap" fxLayout.xs="column" fxLayoutGap="0px grid"
+                                    fxLayoutGap.xs="20px grid" class="listrow" *ngFor="let case of caseSubmissionList 
+                                    
+              | sort: {property: column, direction: direction}
+              | paginate: { itemsPerPage: shievePageSize, currentPage: shievePageNo, totalItems: shieveTotalCount };let c= count;
+              let j=index">
+                                    <div ngClass.sm="mb-15" fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="65%"
+                                        fxFlex.xs="100%" [class]="getcount(count)">
+                                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+                                            fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+                                            fxLayoutGap.sm="0px grid" fxLayoutGap.xs="20px grid">
+                                            <div fxFlex="3%" fxFlex.lg="3%" fxFlex.md="3%" fxFlex.sm="6%"
+                                                fxFlex.xs="100%" *ngIf="ownerflag !== true">
+                                                <mat-checkbox [checked]="case.assignFlag"
+                                                    (change)="assignScope($event.checked,i, case)">
+                                                </mat-checkbox>
+                                            </div>
+                                            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="28%"
+                                                fxFlex.xs="100%">
+                                                <a (click)="openFileSubmission(case)">
+                                                    <mat-card-header>
+                                                        <div mat-card-avatar
+                                                            class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                                                            {{ case?.candidateFirstName?.slice(0, 1)}}{{
+                                                            case?.candidateLastName?.slice(0, 1)}} </div>
+                                                        <mat-card-title class="cname" matTooltipClass="accent-tooltip"
+                                                            matTooltip="{{case?.candidateFirstName}} {{case?.candidateMiddleName}} {{case?.candidateLastName}}">
+                                                            {{ case?.candidateFirstName }} {{ case?.candidateMiddleName
+                                                            }} {{ case?.candidateLastName }} </mat-card-title>
+                                                        <mat-card-subtitle class="mb-10 cdesg">{{ case.clientReferenceNo
+                                                            }}
+                                                        </mat-card-subtitle>
+                                                        <!-- <mat-card-subtitle *ngIf="assignDE.caseStatus === 'Assigned'" class="mb-0 cstat">Status: <em>{{status}}</em>
+                            </mat-card-subtitle>
+                            <mat-card-subtitle *ngIf="assignDE.caseStatus === 'NotAssigned'" class="mb-0 cstat">Status:
+                              <em>{{status}}</em></mat-card-subtitle> -->
+                                                    </mat-card-header>
+                                                </a>
+                                            </div>
+                                            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="33%"
+                                                fxFlex.xs="100%">
+                                                <p>
+                                                    <label>Client Name:</label>
+                                                    <em>{{ case.clientName }}</em>
+                                                </p>
+                                                <p>
+                                                    <label>{{ case.applicantIdLabel ? case.applicantIdLabel : "Applicant
+                                                        Id" }}:</label>
+                                                    <em>{{ case.applicantId ? case.applicantId : "N/A" }}</em>
+                                                </p>
+                                                <p>
+                                                    <label>Owner Name:</label>
+                                                    <em>{{ (case.screeningOwnerFName ? case.screeningOwnerFName :
+                                                        'N/A')}}</em>
+                                                </p>
+                                                <p *ngIf="case.manualFileSubmissionFlag">
+                                                    <label>Screening ID:</label>
+                                                    <em>{{ case.clientScreeningId ? case.clientScreeningId: "N/A"
+                                                        }}</em>
+                                                </p>
+                                            </div>
+                                            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="33%"
+                                                fxFlex.xs="100%" class="mr-15">
+                                                <p *ngIf="screeningService.caseFlag === true">
+                                                    <label>Assigned By: <em>{{ case.deAssignedBy ? case.deAssignedBy:
+                                                            'N/A' }}</em></label>
+                                                </p>
+                                                <p
+                                                    *ngIf="screeningService.caseFlagType === common.PREQCCASE||screeningService.caseFlagType === common.DASUBCHECK || screeningService.caseFlagType === common.PREQCREJECT">
+                                                    <label>PreQC Owner:</label>
+                                                    <em>{{ case.preQCScreenOwnerName ? case.preQCScreenOwnerName : 'N/A'
+                                                        }}</em>
+                                                </p>
+                                                <p>
+                                                    <label>Doc&nbsp;Path: <em>{{ case.urlName ? case.urlName: 'N/A'
+                                                            }}</em></label>
+                                                </p>
+                                                <p>
+                                                    <label>Charge Code: <em>{{case?.chargeCode ? case?.chargeCode :
+                                                            'N/A'}}</em></label>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="35%" fxFlex.xs="100%">
+                                        <p>
+                                            <label>Received Date & Time:</label>
+                                            <em>{{
+                                                common.getTimezoneOffset(case.caseReceivedDate) | date: "dd/MM/yyyy
+                                                hh:mm:ss a"
+                                                }}</em>
+                                        </p>
+                                        <p>
+                                            <label>Initiation Date:</label>
+                                            <em>{{
+                                                common.getTimezoneOffset(case.caseInititationDate) | date: "dd/MMM/yyyy"
+                                                }}</em>
+                                        </p>
+                                        <p *ngIf="case.priorityLookupId ==0">
+                                            <label>Package:</label>
+                                            <em>{{ case.packageName? case.packageName: "N/A" }}</em>
+                                        </p>
+                                        <p *ngIf="case.priorityLookupId >0">
+                                            <label>Screening Priority:</label>
+                                            <em>{{ case.priorityLookupName? case.priorityLookupName: "N/A" }}</em>
+                                        </p>
+
+                                    </div>
+                                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+                                        fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid">
+                                        <div fxFlex="100%">
+                                            <p *ngIf="case?.packageComponent?.length > 0">
+                                                <label>Package Components:</label>
+                                                <span [ngClass]="!component.subComponent.length ? 'cn-chip' : ''"
+                                                    *ngFor="let component of case.packageComponent">
+                                                    <span
+                                                        [ngStyle]="component?.subCheckFlag === true ? {'color':'#9f04c5'} : {'color':'#58595C'}">
+                                                        <span *ngIf="!component.subComponent.length">{{
+                                                            component.componentName }}
+                                                            {{ component.noOfComp ? (' - ' + component.noOfComp) : ''
+                                                            }}</span>
+                                                        <span class="cn-chip"
+                                                            *ngFor="let sub of component?.subComponent; let j = index;let last = last;">
+                                                            <span
+                                                                [ngStyle]="component?.subCheckFlag === true ? {'color':'#9f04c5'} : {'color':'#58595C'}">
+                                                                {{ component.componentName }}
+                                                                {{ sub.subComponentName ? (' - ' + sub.subComponentName)
+                                                                : '' }}
+                                                                {{ sub.noOfComp ? (' - ' + sub.noOfComp) : '' }}
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span
+                                                    *ngIf="case.packageComponent?.length === 0 || !case.packageComponent?.length">--</span>
+                                            </p>
+                                            <p *ngIf="case?.caseComponent?.length > 0">
+                                                <label>Additional Components:</label>
+                                                <span [ngClass]="!component.caseSubComponent ? 'cn-chip' : ''"
+                                                    *ngFor="let component of case.caseComponent">
+                                                    <span
+                                                        [ngStyle]="component?.subCheckFlag === true ? {'color':'#9f04c5'} : {'color':'#58595C'}">
+                                                        <span *ngIf="!component.caseSubComponent">{{ component.compName
+                                                            }}
+                                                            {{ component.noOfComponent ? (' - ' +
+                                                            component.noOfComponent) : '' }}</span>
+                                                        <span class="cn-chip"
+                                                            *ngFor="let sub of component?.caseSubComponent; let j = index;let last = last;">
+                                                            <span
+                                                                [ngStyle]="component?.subCheckFlag === true ? {'color':'#9f04c5'} : {'color':'#58595C'}">
+                                                                {{ component.compName }} {{ sub.subCompName ? (' - ' +
+                                                                sub.subCompName) : '' }}
+                                                                {{ sub.noOfComponent ? (' - ' + sub.noOfComponent) : ''
+                                                                }}</span>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span
+                                                    *ngIf="case.caseComponent?.length === 0 || !case.caseComponent?.length">--</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div fxLayout="row">
+                            <div class="cus-paginator" *ngIf="caseSubmissionList?.length>0">
+                                <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                                        <pagination-controls class="cus-paginator" (pageChange)="getPage($event, ind)">
+                                        </pagination-controls>
+                                    </span> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Items / page<span
+                                            class="input-num">
+                                            <input type="number" [(ngModel)]="itemPerPage[ind]" min="1" maxlength="4"
+                                                appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                                [NumberOnly]="false">
+                                        </span></span> <span fxHide.xs class="gotopagbg mr-2 ml-2">Go to Page5<span
+                                            class="input-num" fxHide.xs>
+                                            <input type="number" [(ngModel)]="page[ind]" min="1" maxlength="4"
+                                                appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                                [NumberOnly]="false">
+                                        </span></span> <span fxHide.xs class="mr-2">Of {{ getTotalPage(ind) }}</span>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!-- //Added By Megala -06/05/2024 -->
+                        <div *ngIf="caseSubmissionList?.length >0" fxLayout="row wrap" fxLayout.lg="row"
+                            fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+                            fxLayoutGap.sm="20px grid" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"
+                            class="cus-paginator">
+
+                            <div fxFlex="76%" fxFlex.lg="76%" fxFlex.md="54%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                fxLayoutAlign="end end" fxLayoutAlign.md="start start" fxLayoutAlign.sm="start start"
+                                fxLayoutAlign.xs="start start" class="tex t-right dev-paginator">
+                                <pagination-controls (pageChange)="shievePagination($event)"></pagination-controls>
+                            </div>
+                            <div fxHide.xs fxFlex="24%" fxFlex.lg="24%" fxFlex.md="46%" fxFlex.sm="100%"
+                                fxFlex.xs="100%" fxLayoutAlign="end end" fxLayoutAlign.sm="start start"
+                                fxLayoutAlign.xs="start start">
+                                <span class="gotopagbg ml-2">Go to Page
+                                    <span class="input-num" *ngIf="screeningService.caseFlag === true">
+                                        <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4"
+                                            appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                            [NumberOnly]="false" (blur)="getAssignedCaseDetails(Assigned)">
+                                    </span>
+                                    <span class="input-num" *ngIf="screeningService.caseFlagType === common.DASUBCHECK">
+                                        <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4"
+                                            appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                            [NumberOnly]="false" (blur)="getDASubcheckDetails(Assigned)">
+                                    </span>
+                                    <span class="input-num" *ngIf="screeningService.caseFlagType === common.PREQCCASE && screeningService.caseFlag !== true && screeningService.caseFlagType !== common.DASUBCHEC">
+                                        <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4"
+                                            appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                            [NumberOnly]="false" (blur)="getPreQcCaseDetails(Assigned)">
+                                    </span>
+                                </span>
+
+                                <span class=" gotopagbg ml-2">Items / page
+                                        <span class="input-num">
+                                            <input type="number" [(ngModel)]="shievePageSize" min="1" maxlength="4"
+                                                appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                                [NumberOnly]="false">
+                                        </span>
+                                    </span>
+
+                            </div>
+
+                        </div>
+                        <!-- //Ended By Megala -06/05/2024 -->
+                        <!-- <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]"
+              [showFirstLastButtons]="true" [length]="totalSize" [pageIndex]="currentPage"
+              (page)="pageEvent = handlePage($event)"> </mat-paginator> -->
+                    </mat-card-content>
+                </mat-tab>
+            </mat-tab-group>
+            <mat-tab-group
+                *ngIf="userData.applicationId === 1 && screeningService.caseFlag !== true  && screeningService.caseFlagType !== common.DASUBCHECK && screeningService.caseFlagType !== common.PREQCCASE && ownerflag !== true && screeningService.caseFlagType !== common.SUBMISSION_HISTORY"
+                (selectedTabChange)="filterAssignedCase($event.index);">
+                <mat-tab *ngFor="let res of menubar;let ind = index" label="{{res.menuName}}">
+                    <mat-card-content>
+                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                            fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                            fxLayoutGap.xs="0px grid" class="sortrow">
+                            <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="10%" fxFlex.xs="100%"
+                                class="mt-5" *ngIf="ownerflag !== true && caseSubmissionList?.length>0">
+                                <!-- //Added By Megala 08/01/2024 for Request for adding select all feature | Live environment  -->
+                                <mat-checkbox [formControl]="selectall" (change)="selectAll($event)">Select All
+                                </mat-checkbox>
+                            </div> <span fxFlex></span>
+                            <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                                fxLayoutAlign.xs="start start">
+                                <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="90%" fxFlex.sm="92%" fxFlex.xs="100%"
+                                    fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                                    fxLayoutAlign.xs="start start">
+                                    <ul class="pl-0">
+                                        <li> <span class="text-dull"> Showing
+                                                {{(itemPerPage[tabIndex]*page[tabIndex])-itemPerPage[tabIndex]+1}} -
+                                                {{count}}
+                                                <!-- {{(itemPerPage[tabIndex]*page[tabIndex])>=caseSubmissionList?.length?(caseSubmissionList?.length):itemPerPage[tabIndex]*page[tabIndex]}} -->
+                                                of
+                                            </span> <b>{{caseSubmissionList?.length}}</b> Record(s)</li>
+                                        |
+                                        <li>
+                                            <a (click)="showall(ind)">Show All</a>
+                                        </li>|
+                                        <li><b>Sort By:</b> <a [ngClass]="column==='candidateFullName'?'active':''"
+                                                (click)="sortBy('candidateFullName')">Candidate
+                                                Name</a> <i
+                                                [ngClass]="{'icon-sort': column != 'candidateFullName', 
+                                                          'icon-sort-asc': (column == 'candidateFullName' && !isDesc), 
+                                                          'icon-sort-desc': (column == 'candidateFullName' && isDesc) }"
+                                                aria-hidden="true"> </i> <a
+                                                [ngClass]="column==='clientReferenceNo'?'active':''"
+                                                (click)="sortBy('clientReferenceNo')">Case
+                                                Ref No</a> <i
+                                                [ngClass]="{'icon-sort': column != 'clientReferenceNo', 
+                                                                  'icon-sort-asc': (column == 'clientReferenceNo' && !isDesc), 
+                                                                  'icon-sort-desc': (column == 'clientReferenceNo' && isDesc) }"
+                                                aria-hidden="true"> </i></li>
+                                    </ul>
+                                </div>
+                                <div fxFlex="9%" fxFlex.lg="9%" fxFlex.md="9%" fxFlex.sm="18%" fxFlex.xs="100%"
+                                    fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                                    fxLayoutAlign.xs="start start" *ngIf="ownerflag !== true">
+                                    <button mat-flat-button *ngIf="assignflag !== true" color="warn"
+                                        (click)="opendialog()">Assign</button>
+                                    <button mat-flat-button *ngIf="assignflag === true" color="warn"
+                                        (click)="opendialog()">Re-Assign</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div fxLayout="row">
+                            <div fxFlex="100%">
+                                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                                    fxLayout.sm="column wrap" fxLayout.xs="column" fxLayoutGap="0px grid"
+                                    fxLayoutGap.xs="20px grid" class="listrow" *ngFor="let case of caseSubmissionList | 
+                search: [{key:'clientName', value: qcSearchForm?.get('clientName')?.value},
+                {key:'clientReferenceNo', value: qcSearchForm?.get('clientRefNo')?.value},
+                {key:'candidateFullName', value: qcSearchForm?.get('candidateName')?.value},
+                 {key:'ownerName', value: qcSearchForm?.get('ownerName')?.value},
+				 {key:'appScreeningID', value: qcSearchForm?.get('appScreeningID')?.value},
+                 {key:'priorityLookupName', value: qcSearchForm?.get('priorityLookupName')?.value}] 
+              | sort: {property: column, direction: direction}
+              | paginate: { itemsPerPage: itemPerPage[tabIndex], currentPage: page[tabIndex] };
+                let i=index; let count = count">
+                                    <div ngClass.sm="mb-15" fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="65%"
+                                        fxFlex.xs="100%" [class]="getcount(count)">
+                                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+                                            fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+                                            fxLayoutGap.sm="0px grid" fxLayoutGap.xs="20px grid">
+                                            <div fxFlex="3%" fxFlex.lg="3%" fxFlex.md="3%" fxFlex.sm="6%"
+                                                fxFlex.xs="100%" *ngIf="ownerflag !== true">
+                                                <mat-checkbox [checked]="case.assignFlag"
+                                                    (change)="assignScope($event.checked,i, case)">
+                                                </mat-checkbox>
+                                            </div>
+                                            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="28%"
+                                                fxFlex.xs="100%">
+                                                <a (click)="openFileSubmission(case)">
+                                                    <mat-card-header>
+                                                        <div mat-card-avatar
+                                                            class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                                                            {{ case?.candidateFirstName?.slice(0, 1)}}{{
+                                                            case?.candidateLastName?.slice(0, 1)}} </div>
+                                                        <mat-card-title class="cname" matTooltipClass="accent-tooltip"
+                                                            matTooltip="{{case?.candidateFirstName}} {{case?.candidateMiddleName}} {{case?.candidateLastName}}">
+                                                            {{ case?.candidateFirstName }} {{ case?.candidateMiddleName
+                                                            }} {{ case?.candidateLastName }} </mat-card-title>
+                                                        <mat-card-subtitle class="mb-10 cdesg">{{ case.clientReferenceNo
+                                                            }}
+                                                        </mat-card-subtitle>
+                                                        <!-- <mat-card-subtitle *ngIf="assignDE.caseStatus === 'Assigned'" class="mb-0 cstat">Status: <em>{{status}}</em>
+                            </mat-card-subtitle>
+                            <mat-card-subtitle *ngIf="assignDE.caseStatus === 'NotAssigned'" class="mb-0 cstat">Status:
+                              <em>{{status}}</em></mat-card-subtitle> -->
+                                                    </mat-card-header>
+                                                </a>
+                                            </div>
+                                            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="33%"
+                                                fxFlex.xs="100%">
+                                                <p>
+                                                    <label>Client Name:</label>
+                                                    <em>{{ case.clientName }}</em>
+                                                </p>
+                                                <p>
+                                                    <label>{{ case.applicantIdLabel ? case.applicantIdLabel : "Applicant
+                                                        Id" }}:</label>
+                                                    <em>{{ case.applicantId ? case.applicantId : "N/A" }}</em>
+                                                </p>
+                                                <p>
+                                                    <label>Owner Name:</label>
+                                                    <em>{{ (case.screeningOwnerFName ? case.screeningOwnerFName :
+                                                        'N/A')}}</em>
+                                                </p>
+                                                <p *ngIf="case.manualFileSubmissionFlag">
+                                                    <label>Screening ID:</label>
+                                                    <em>{{ case.clientScreeningId ? case.clientScreeningId: "N/A"
+                                                        }}</em>
+                                                </p>
+                                            </div>
+                                            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="33%"
+                                                fxFlex.xs="100%" class="mr-15">
+                                                <p *ngIf="screeningService.caseFlag === true">
+                                                    <label>Assigned By: <em>{{ case.deAssignedBy ? case.deAssignedBy:
+                                                            'N/A' }}</em></label>
+                                                </p>
+                                                <p
+                                                    *ngIf="screeningService.caseFlagType === common.PREQCCASE||screeningService.caseFlagType === common.DASUBCHECK || screeningService.caseFlagType === common.PREQCREJECT">
+                                                    <label>PreQC Owner:</label>
+                                                    <em>{{ case.preQCScreenOwnerName ? case.preQCScreenOwnerName : 'N/A'
+                                                        }}</em>
+                                                </p>
+                                                <p>
+                                                    <label>Doc&nbsp;Path: <em>{{ case.urlName ? case.urlName: 'N/A'
+                                                            }}</em></label>
+                                                </p>
+                                                <p>
+                                                    <label>Charge Code: <em>{{case?.chargeCode ? case?.chargeCode :
+                                                            'N/A'}}</em></label>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="35%" fxFlex.xs="100%">
+                                        <p>
+                                            <label>Received Date & Time:</label>
+                                            <em>{{
+                                                common.getTimezoneOffset(case.caseReceivedDate) | date: "dd/MM/yyyy
+                                                hh:mm:ss a"
+                                                }}</em>
+                                        </p>
+                                        <p>
+                                            <label>Initiation Date:</label>
+                                            <em>{{
+                                                common.getTimezoneOffset(case.caseInititationDate) | date: "dd/MMM/yyyy"
+                                                }}</em>
+                                        </p>
+                                        <p *ngIf="case.priorityLookupId ==0">
+                                            <label>Package:</label>
+                                            <em>{{ case.packageName? case.packageName: "N/A" }}</em>
+                                        </p>
+                                        <p *ngIf="case.priorityLookupId >0">
+                                            <label>Screening Priority:</label>
+                                            <em>{{ case.priorityLookupName? case.priorityLookupName: "N/A" }}</em>
+                                        </p>
+
+                                    </div>
+                                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+                                        fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid">
+                                        <div fxFlex="100%">
+                                            <p *ngIf="case?.packageComponent?.length > 0">
+                                                <label>Package Components:</label>
+                                                <span [ngClass]="!component.subComponent.length ? 'cn-chip' : ''"
+                                                    *ngFor="let component of case.packageComponent">
+                                                    <span
+                                                        [ngStyle]="component?.subCheckFlag === true ? {'color':'#9f04c5'} : {'color':'#58595C'}">
+                                                        <span *ngIf="!component.subComponent.length">{{
+                                                            component.componentName }}
+                                                            {{ component.noOfComp ? (' - ' + component.noOfComp) : ''
+                                                            }}</span>
+                                                        <span class="cn-chip"
+                                                            *ngFor="let sub of component?.subComponent; let j = index;let last = last;">
+                                                            <span
+                                                                [ngStyle]="component?.subCheckFlag === true ? {'color':'#9f04c5'} : {'color':'#58595C'}">
+                                                                {{ component.componentName }}
+                                                                {{ sub.subComponentName ? (' - ' + sub.subComponentName)
+                                                                : '' }}
+                                                                {{ sub.noOfComp ? (' - ' + sub.noOfComp) : '' }}
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span
+                                                    *ngIf="case.packageComponent?.length === 0 || !case.packageComponent?.length">--</span>
+                                            </p>
+                                            <p *ngIf="case?.caseComponent?.length > 0">
+                                                <label>Additional Components:</label>
+                                                <span [ngClass]="!component.caseSubComponent ? 'cn-chip' : ''"
+                                                    *ngFor="let component of case.caseComponent">
+                                                    <span
+                                                        [ngStyle]="component?.subCheckFlag === true ? {'color':'#9f04c5'} : {'color':'#58595C'}">
+                                                        <span *ngIf="!component.caseSubComponent">{{ component.compName
+                                                            }}
+                                                            {{ component.noOfComponent ? (' - ' +
+                                                            component.noOfComponent) : '' }}
+                                                            {{ component.currencyName ? (' - ' + component.currencyName)
+                                                            : '' }}</span>
+                                                        <span class="cn-chip"
+                                                            *ngFor="let sub of component?.caseSubComponent; let j = index;let last = last;">
+                                                            <span
+                                                                [ngStyle]="component?.subCheckFlag === true ? {'color':'#9f04c5'} : {'color':'#58595C'}">
+                                                                {{ component.compName }} {{ sub.subCompName ? (' - ' +
+                                                                sub.subCompName) : '' }}
+                                                                {{ sub.noOfComponent ? (' - ' + sub.noOfComponent) : ''
+                                                                }}
+                                                                {{ sub.currencyName ? (' - ' + sub.currencyName) : ''
+                                                                }}</span>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span
+                                                    *ngIf="case.caseComponent?.length === 0 || !case.caseComponent?.length">--</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div fxLayout="row">
+                            <div class="cus-paginator" *ngIf="caseSubmissionList?.length>0">
+                                <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                                        <pagination-controls class="cus-paginator" (pageChange)="getPage($event, ind)">
+                                        </pagination-controls>
+                                    </span> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Items / page<span
+                                            class="input-num">
+                                            <input type="number" [(ngModel)]="itemPerPage[ind]" min="1" maxlength="4"
+                                                appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                                [NumberOnly]="false">
+                                        </span></span> <span fxHide.xs class="gotopagbg mr-2 ml-2">Go to Page<span
+                                            class="input-num" fxHide.xs>
+                                            <input type="number" [(ngModel)]="page[ind]" min="1" maxlength="4"
+                                                appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                                [NumberOnly]="false">
+                                        </span></span> <span fxHide.xs class="mr-2">Of {{ getTotalPage(ind) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]"
+              [showFirstLastButtons]="true" [length]="totalSize" [pageIndex]="currentPage"
+              (page)="pageEvent = handlePage($event)"> </mat-paginator> -->
+                    </mat-card-content>
+                </mat-tab>
+            </mat-tab-group>
+            <mat-card-content *ngIf="userData.applicationId === 2">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid"
+                    class="sortrow">
+                    <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="10%" fxFlex.xs="100%" class="mt-5"
+                        *ngIf="ownerflag !== true ">
+                        <mat-checkbox [formControl]="selectall" [checked]="checkflag"
+                            (change)="assignallScope($event.checked)">
+                            Select All</mat-checkbox>
+                    </div>
+                    <span fxFlex></span>
+                    <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+                        fxLayoutAlign="end center" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+                        <ul class="pl-0">
+                            <li> <span class="text-dull"> Showing
+                                    {{(itemPerPage[0]*page[0])-itemPerPage[0]+1}} - {{count}} of </span>
+                                <b>{{caseSubmissionList?.length}}</b> Record(s)
+                            </li>
+                            |
+                            <li>
+                                <a (click)="showall(ind)">Show All</a>
+                            </li>|
+                            <li><b>Sort By:</b> <a [ngClass]="column==='candidateFullName'?'active':''"
+                                    (click)="sortBy('candidateFullName')">Candidate
+                                    Name</a> <i
+                                    [ngClass]="{'icon-sort': column != 'candidateFullName', 
+                                                                'icon-sort-asc': (column == 'candidateFullName' && !isDesc), 
+                                                                'icon-sort-desc': (column == 'candidateFullName' && isDesc) }"
+                                    aria-hidden="true"> </i> <a [ngClass]="column==='clientReferenceNo'?'active':''"
+                                    (click)="sortBy('clientReferenceNo')">Case
+                                    Ref No</a> <i
+                                    [ngClass]="{'icon-sort': column != 'clientReferenceNo', 
+                                                                        'icon-sort-asc': (column == 'clientReferenceNo' && !isDesc), 
+                                                                        'icon-sort-desc': (column == 'clientReferenceNo' && isDesc) }"
+                                    aria-hidden="true"> </i></li>
+                        </ul>
+                    </div>
+                </div>
+                <div fxLayout="row">
+                    <div fxFlex="100%">
+                        <div fxLayout="row" fxLayoutGap="20px" #casedt class="listrow" *ngFor="let case of caseSubmissionList |
+              search: [{key:'clientName', value: qcSearchForm?.get('clientName')?.value},
+              {key:'clientReferenceNo', value: qcSearchForm?.get('clientRefNo')?.value},
+               {key:'candidateFullName', value: qcSearchForm?.get('candidateName')?.value},
+                 {key:'priorityLookupName', value: qcSearchForm?.get('priorityLookupName')?.value}] 
+            | sort: {property: column, direction: direction}
+            | paginate: { itemsPerPage: itemPerPage[tabIndex], currentPage: page[tabIndex] };
+              let i=index; let count = count">
+                            <div fxFlex="62%">
+                                <div fxLayout="row" fxLayoutGap="20px">
+                                    <div fxFlex="25%">
+                                        <a (click)="openFileSubmission(case)">
+                                            <mat-card-header>
+                                                <div mat-card-avatar class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                                                    {{ case.candidateFirstName.slice(0, 1)}}{{
+                                                    case.candidateLastName.slice(0, 1)}} </div>
+                                                <mat-card-title class="cname" matTooltipClass="accent-tooltip"
+                                                    matTooltip="{{case?.candidateFirstName}} {{case?.candidateMiddleName}} {{case?.candidateLastName}}">
+                                                    {{ case.candidateFirstName }} {{ case.candidateLastName }} {{
+                                                    case.candidateMiddleName }} </mat-card-title>
+                                                <mat-card-subtitle class="mb-0 cdesg">{{ case.clientReferenceNo }}
+                                                </mat-card-subtitle>
+                                            </mat-card-header>
+                                        </a>
+                                    </div>
+                                    <div fxFlex="30%">
+                                        <p>
+                                            <label>Client&nbsp;Name:</label>
+                                            <em>{{ case.clientName }}</em>
+                                        </p>
+                                        <p>
+                                            <label>{{ case.applicantIdLabel ? case.applicantIdLabel : "Applicant Id"
+                                                }}:</label>
+                                            <em>{{ case.applicantId ? case.applicantId : "N/A" }}</em>
+                                        </p>
+                                        <p>
+                                            <label>Owner Name:</label>
+                                            <em>{{ case.screenOwnerName ? case.screenOwnerName : 'N/A' }}</em>
+                                        </p>
+                                        <p>
+                                            <label>PreQC Owner Name:</label>
+                                            <em>{{ case.preQCScreenOwnerName ? case.preQCScreenOwnerName : 'N/A' }}</em>
+                                        </p>
+                                    </div>
+                                    <div fxFlex="45%" class="mr-15">
+                                        <p>
+                                            <label>Received:</label>
+                                            <em>{{
+                                                common.getTimezoneOffset(case.caseReceivedDate, false) | date:
+                                                "dd/MM/yyyy hh:mm:ss a"
+                                                }}</em>
+                                        </p>
+                                        <p>
+                                            <label>Initiation:</label>
+                                            <em>{{
+                                                common.getTimezoneOffset(case.caseInititationDate, false) | date:
+                                                "dd/MMM/yyyy"
+                                                }}</em>
+                                        </p>
+                                        <p>
+                                            <label>Doc&nbsp;Path: <em>{{ case.urlName ? case.urlName: 'N/A'
+                                                    }}</em></label>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div fxFlex="38%">
+                                <p>
+                                    <label>Package&nbsp;Name:</label>
+                                    <em>{{ case.packageName? case.packageName: "N/A" }}</em>
+                                </p>
+                                <p>
+                                    <label>Package Component:</label>
+                                    <span class="cn-chip" *ngFor="
+                            let component of case.packageComponent;
+                            let i = index"> <span><span *ngIf="!component.subComponent.length">{{
+                                                component.componentName ? component.componentName : "N/A"
+                                                }}-{{ component.noOfComp }}</span> <span *ngIf="component.subComponent">
+                                                <span *ngFor="let sub of component.subComponent; let j = index">
+                                                    {{sub.subComponentName}} -
+                                                    {{sub.noOfComp}}<span *ngIf="j >= 0">,</span> </span>
+                                            </span>
+                                        </span>
+                                    </span>
+                                </p>
+                                <p>
+                                    <label>Additional Component:</label>
+                                    <span class="cn-chip" *ngFor="
+                              let comp of case.caseComponent;
+                              let i = index"> <span><span *ngIf="!comp.caseSubComponent">{{
+                                                comp.compName ? comp.compName : "N/A"
+                                                }}-{{ comp.noOfComponent }}</span> <span *ngIf="comp.caseSubComponent">
+                                                <span *ngFor="let sub of comp.caseSubComponent; let j = index">
+                                                    {{sub.subCompName}} -
+                                                    {{sub.noOfComponent}}<span *ngIf="j >= 0">,</span> </span>
+                                            </span>
+                                        </span>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div fxLayout="row">
+                    <div class="cus-paginator" *ngIf="caseSubmissionList?.length>0">
+                        <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                                <pagination-controls class="cus-paginator" (pageChange)="getPage($event, 0)">
+                                </pagination-controls>
+                            </span> <span class="gotopagbg mr-2 ml-2">Items / page<span class="input-num">
+                                    <input type="number" [(ngModel)]="itemPerPage[0]" min="1" maxlength="4"
+                                        appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                        [NumberOnly]="false">
+                                </span></span> <span class="gotopagbg mr-2 ml-2">Go to Page<span class="input-num">
+                                    <input type="number" [(ngModel)]="page[0]" min="1" maxlength="4" appNumberOnly
+                                        preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+                                </span></span> <span class="mr-2">Of {{ getTotalPage(0) }}</span> </div>
+                    </div>
+                </div>
+            </mat-card-content>
+            <!-- //Added By Megala - 07/05/2024 -->
+            <mat-card-content *ngIf="ownerflag === true && userData.applicationId !== 2">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid"
+                    class="sortrow">
+                    <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="10%" fxFlex.xs="100%" class="mt-5"
+                        *ngIf="ownerflag !== true">
+                        <mat-checkbox [formControl]="selectall" [checked]="checkflag"
+                            (change)="assignallScope($event.checked)">
+                            Select All</mat-checkbox>
+                    </div>
+                    <span fxFlex></span>
+                    <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+                        fxLayoutAlign="end center" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+                        <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+                            fxLayoutAlign="end center" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+                            <ul>
+                                <li>
+                                    <span class="text-dull"> Showing
+                                        {{(caseSubmissionList?.length > 0 ?
+                                        ((assignDE.pageSize*assignDE.page)-assignDE.pageSize+1): 0)}} -
+                                        {{((assignDE.pageSize*assignDE.page)>=(shieveTotalCount))?(shieveTotalCount):(assignDE.pageSize*assignDE.page)}}
+                                        of </span> <b> {{shieveTotalCount}}
+                                        record(s)</b>
+                                </li>
+                                |
+                                <li><b>Sort By:</b> <a [ngClass]="column==='candidateFullName'?'active':''"
+                                        (click)="sortBy('candidateFullName')">Candidate
+                                        Name</a> <i
+                                        [ngClass]="{'icon-sort': column != 'candidateFullName', 
+                                                                      'icon-sort-asc': (column == 'candidateFullName' && !isDesc), 
+                                                                      'icon-sort-desc': (column == 'candidateFullName' && isDesc) }"
+                                        aria-hidden="true"> </i> <a [ngClass]="column==='clientReferenceNo'?'active':''"
+                                        (click)="sortBy('clientReferenceNo')">Case
+                                        Ref No</a> <i
+                                        [ngClass]="{'icon-sort': column != 'clientReferenceNo', 
+                                                                              'icon-sort-asc': (column == 'clientReferenceNo' && !isDesc), 
+                                                                              'icon-sort-desc': (column == 'clientReferenceNo' && isDesc) }"
+                                        aria-hidden="true"> </i></li>
+                            </ul>
+                        </div>
+                        <div fxFlex="9%" fxFlex.lg="9%" fxFlex.md="9%" fxFlex.sm="18%" fxFlex.xs="100%"
+                            fxLayoutAlign="end center" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+                            <div *ngIf="ownerflag !== true">
+                                <button mat-flat-button *ngIf="assignflag !== true" color="warn"
+                                    (click)="opendialog()">Assign</button>
+                                <button mat-flat-button *ngIf="assignflag === true" color="warn"
+                                    (click)="opendialog()">Re-Assign</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div fxLayout="row">
+                    <div fxFlex="100%">
+                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                            fxLayout.xs="column" fxLayoutGap="0px grid" class="listrow" *ngFor="let case of caseSubmissionList 
+              | sort: {property: column, direction: direction}
+              | paginate: { itemsPerPage: shievePageSize, currentPage: shievePageNo, totalItems: shieveTotalCount };
+                let i=index; let count = count">
+                            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="65%" fxFlex.xs="100%"
+                                [class]="getcount(count)">
+                                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid"
+                                    fxLayoutGap.xs="20px grid">
+                                    <div fxFlex="4%" fxFlex.lg="4%" fxFlex.md="4%" fxFlex.sm="9%" fxFlex.xs="100%"
+                                        *ngIf="ownerflag !== true">
+                                        <mat-checkbox [checked]="case.assignFlag"
+                                            (change)="assignScope($event.checked,i, case)">
+                                        </mat-checkbox>
+                                    </div>
+                                    <div fxFlex="26%" fxFlex.lg="26%" fxFlex.md="26%" fxFlex.sm="26%" fxFlex.xs="100%">
+                                        <a (click)="openFileSubmission(case)">
+                                            <mat-card-header>
+
+                                                <div mat-card-avatar class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                                                    {{ case?.candidateFirstName?.slice(0, 1)}}{{
+                                                    case?.candidateLastName?.slice(0, 1)}} </div>
+
+                                                <mat-card-title class="cname" matTooltipClass="accent-tooltip"
+                                                    matTooltip="{{case?.candidateFirstName}} {{case?.candidateMiddleName}} {{case?.candidateLastName}}">
+                                                    {{ case?.candidateFirstName }} {{ case?.candidateMiddleName }} {{
+                                                    case?.candidateLastName }} </mat-card-title>
+                                                <mat-card-subtitle class="mb-10 cdesg">{{ case.clientReferenceNo }}
+                                                </mat-card-subtitle>
+                                            </mat-card-header>
+                                        </a>
+                                    </div>
+                                    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="35%" fxFlex.xs="100%">
+                                        <p>
+                                            <label>Client Name:</label>
+                                            <em>{{ case.clientName }}</em>
+                                        </p>
+                                        <p>
+                                            <label>{{ case.applicantIdLabel ? case.applicantIdLabel : "Applicant Id"
+                                                }}:</label>
+                                            <em>{{ case.applicantId ? case.applicantId : "N/A" }}</em>
+                                        </p>
+                                        <p>
+                                            <label>Owner Name:</label>
+                                            <em>{{ (case.screeningOwnerFName ? case.screeningOwnerFName : 'N/A')}}</em>
+                                            <!-- + ' ' +
+                        (case.screeningOwnerLName !== null ? case.screeningOwnerLName: '') -->
+                                        </p>
+                                    </div>
+                                    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="35%" fxFlex.xs="100%"
+                                        class="mr-15">
+                                        <p
+                                            *ngIf="screeningService.caseFlagType === common.DASUBCHECK ||screeningService.caseFlagType === common.PREQCCASE || screeningService.caseFlagType === common.PREQCREJECT">
+                                            <label>PreQC Owner:</label>
+                                            <em>{{ case.preQCScreenOwnerName ? case.preQCScreenOwnerName : 'N/A' }}</em>
+                                        </p>
+                                        <p *ngIf="screeningService.caseFlag === true">
+                                            <label>Assigned By: <em>{{ case.deAssignedBy ? case.deAssignedBy: 'N/A'
+                                                    }}</em></label>
+                                        </p>
+                                        <p>
+                                            <label>Doc&nbsp;Path: <em>{{ case.urlName ? case.urlName: 'N/A'
+                                                    }}</em></label>
+                                        </p>
+                                        <p>
+                                            <label>Charge Code: <em>{{case?.chargeCode ? case?.chargeCode :
+                                                    'N/A'}}</em></label>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="35%" fxFlex.xs="100%">
+                                <p>
+                                    <label>Received Date & Time:</label>
+                                    <em>{{
+                                        common.getTimezoneOffset(case.caseReceivedDate, false) | date: "dd/MM/yyyy
+                                        hh:mm:ss a"
+                                        }}</em>
+                                </p>
+                                <p>
+                                    <label>Initiation Date:</label>
+                                    <em>{{
+                                        common.getTimezoneOffset(case.caseInititationDate, false) | date: "dd/MMM/yyyy"
+                                        }}</em>
+                                </p>
+                                <p *ngIf="case.priorityLookupId ==0">
+                                    <label>Package:</label>
+                                    <em>{{ case.packageName? case.packageName: "N/A" }}</em>
+                                </p>
+                                <p *ngIf="case.priorityLookupId >0">
+                                    <label>Screening Priority:</label>
+                                    <em>{{ case.priorityLookupName? case.priorityLookupName: "N/A" }}</em>
+                                </p>
+                                <p *ngIf="case.priorityLookupId >0">
+                                    <label>Screening ID:</label>
+                                    <em>{{ case.appScreeningID? case.appScreeningID: "N/A" }}</em>
+                                </p>
+
+                            </div>
+                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                                fxLayout.xs="column" fxLayoutGap="0px grid">
+                                <div fxFlex="100%">
+                                    <p *ngIf="case?.packageComponent?.length > 0">
+                                        <label>Package Components:</label>
+                                        <span class="cn-chip" *ngFor="
+                            let component of case.packageComponent;
+                            let i = index"> <span><span *ngIf="!component.subComponent.length">{{
+                                                    component.componentName ? component.componentName : "N/A"
+                                                    }}-{{ component.noOfComp }}</span> <span
+                                                    *ngIf="component.subComponent.length > 0">
+                                                    {{ component.componentName }} - <span
+                                                        *ngFor="let sub of component.subComponent; let j = index; let last = last;">
+                                                        {{sub.subComponentName}} - {{sub.noOfComp}}<span
+                                                            *ngIf="j >= 0 && !last">,</span> </span>
+                                                </span>
+                                            </span>
+                                        </span> <span
+                                            *ngIf="case.packageComponent?.length === 0 || !case.packageComponent?.length">--</span>
+                                    </p>
+                                    <p *ngIf="case?.caseComponent?.length > 0">
+                                        <label>Additional Components:</label>
+                                        <span class="cn-chip" *ngFor="
+                              let comp of case.caseComponent;
+                              let i = index"> <span><span *ngIf="!comp.caseSubComponent">{{
+                                                    comp.compName ? comp.compName : "N/A"
+                                                    }}-{{ comp.noOfComponent }}</span> <span
+                                                    *ngIf="comp.caseSubComponent"> {{ comp.compName }} -
+                                                    <span
+                                                        *ngFor="let sub of comp.caseSubComponent; let j = index;let last = last;">
+                                                        {{sub.subCompName}}
+                                                        - {{sub.noOfComponent}}<span *ngIf="j >= 0 && !last">,</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </span> <span
+                                            *ngIf="case.caseComponent?.length === 0 || !case.caseComponent?.length">--</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div fxLayout="row">
+                    <!-- <div class="cus-paginator" *ngIf="caseSubmissionList?.length>0">
+                        <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                                <pagination-controls class="cus-paginator" (pageChange)="getPage($event, 0)">
+                                </pagination-controls>
+                            </span> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Items / page<span class="input-num">
+                                    <input type="number" [(ngModel)]="itemPerPage[0]" min="1" maxlength="4"
+                                        appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                        [NumberOnly]="false">
+                                </span></span> <span fxHide.xs class="gotopagbg mr-2 ml-2">Go to Page<span
+                                    class="input-num" fxHide.xs>
+                                    <input type="number" [(ngModel)]="page[0]" min="1" maxlength="4" appNumberOnly
+                                        preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+                                </span></span> <span fxHide.xs class="mr-2">Of {{ getTotalPage(0) }}</span> </div>
+                    </div> -->
+                    <!-- //Added By Megala -07/05/2024 -->
+                    <div *ngIf="caseSubmissionList?.length >0" fxLayout="row wrap" fxLayout.lg="row"
+                        fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+                        fxLayoutGap.sm="20px grid" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"
+                        class="cus-paginator">
+
+                        <div fxFlex="76%" fxFlex.lg="76%" fxFlex.md="54%" fxFlex.sm="100%" fxFlex.xs="100%"
+                            fxLayoutAlign="end end" fxLayoutAlign.md="start start" fxLayoutAlign.sm="start start"
+                            fxLayoutAlign.xs="start start" class="tex t-right dev-paginator">
+                            <pagination-controls (pageChange)="shievePagination($event)"></pagination-controls>
+                        </div>
+                        <div fxHide.xs fxFlex="24%" fxFlex.lg="24%" fxFlex.md="46%" fxFlex.sm="100%" fxFlex.xs="100%"
+                            fxLayoutAlign="end end" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+                            <span class="gotopagbg ml-2">Go to Page
+                                <span class="input-num">
+                                    <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4" appNumberOnly
+                                        preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false"
+                                        (blur)="getAssignedCaseDetails(Assigned)">
+                                </span>
+                            </span>
+                            <span class=" gotopagbg ml-2">Items / page
+                                <span class="input-num">
+                                    <input type="number" [(ngModel)]="shievePageSize" min="1" maxlength="4"
+                                        appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                        [NumberOnly]="false">
+                                </span>
+                            </span>
+
+                        </div>
+
+                    </div>
+                    <!-- //Ended By Megala -07/05/2024 -->
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+<div fxLayout="row"
+    *ngIf="screeningService.caseFlagType === common.QCREJECT|| screeningService.caseFlagType === common.FRREJECT  || screeningService.caseFlagType === common.VEREJECT ||
+screeningService.caseFlagType === common.NOTAPPLICABLE || screeningService.caseFlagType === common.REOPEN ||
+screeningService.caseFlagType === common.CLOSED && (screeningService.caseFlagType !== common.SUBMISSION_HISTORY)
+&& (screeningService.caseFlagType !== common.VE_HISTORY) && (screeningService.caseFlagType !== common.BT_POPUP) && (screeningService.caseFlagType !== common.NT_POPUP) && (screeningService.caseFlagType !== common.WT_POPUP) && (screeningService.caseFlagType !== common.CT_POPUP)">
+    <div fxFlex="100%">
+        <div fxLayout="row" class="advSearch">
+            <div class="advSearch-forms">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
+                    fxLayoutGap="0px">
+                    <div fxFlex="100%">
+                        <form autocomplete="off" [formGroup]="caseSearchForm">
+                            <div fxLayout="row" fxLayoutGap="20px">
+
+                                <div fxFlex="190px">
+                                    <mat-form-field fxFlex="100%">
+                                        <mat-label>Client Ref No </mat-label>
+                                        <input matInput placeholder="Client Ref No." formControlName="caseRefNo"
+                                            type="text" size="50" />
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex="200px">
+                                    <mat-form-field fxFlex="100%">
+                                        <mat-label>Client Name </mat-label>
+                                        <input matInput placeholder="Client Name" formControlName="clientName"
+                                            type="text" size="50" />
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex="190px">
+                                    <mat-form-field fxFlex="100%">
+                                        <mat-label>Component Name </mat-label>
+                                        <input matInput placeholder="Component Name" formControlName="compName"
+                                            type="text" size="50" />
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex="190px">
+                                    <mat-form-field fxFlex="100%"
+                                        *ngIf="screeningService.caseFlagType === common.QCREJECT || screeningService.caseFlagType === common.VEREJECT">
+                                        <mat-label>Screening Id </mat-label>
+                                        <input matInput placeholder="Screening Id " formControlName="screeningId"
+                                            type="text" size="50" />
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex="200px" *ngIf="screeningService.caseFlagType === common.QCREJECT">
+                                    <mat-form-field fxFlex="100%">
+                                        <mat-label>Status </mat-label>
+                                        <input matInput placeholder="Status" formControlName="statusName" type="text"
+                                            size="50" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </form>
+                        <!--<div fxLayout="row" fxLayoutGap="20px">
+                             <div fxFlex="200px">
+                                <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='caseRefNoControl'>
+                                </app-auto-complete>
+                            </div>
+                            <div fxFlex="200px">
+                                <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='clientControl'>
+                                </app-auto-complete>
+                            </div>
+                            <div fxFlex="180px">
+                                <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='componentControl'>
+                                </app-auto-complete>
+                            </div>
+                            <div fxFlex="180px" *ngIf="screeningService.caseFlagType === common.QCREJECT">
+                                <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='statusControl'>
+                                </app-auto-complete>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div fxFlex="100%" class="advSearch-btn">
+                <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <span><a (click)="search()">Search</a>
+                        <span> &nbsp;&nbsp; | </span></span>
+                    <a (click)="reset()">Reset</a>
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row" class="srchPad">
+            <div fxFlex="100%">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>
+                            <h1 class="header-title"> <span *ngIf="screeningService.caseFlagType === common.QCREJECT">
+                                    QC Rejected
+                                    Transaction</span> <span
+                                    *ngIf="screeningService.caseFlagType === common.NOTAPPLICABLE "> Cancelled
+                                    List</span>
+                                <span *ngIf="screeningService.caseFlagType === common.CLOSED "> Closed List</span>
+                                <span *ngIf="screeningService.caseFlagType === common.REOPEN "> Re-Open Checks </span>
+                                <span *ngIf="screeningService.caseFlagType === common.VEREJECT
+"> Verification Rejected
+                                    Transaction</span>
+                                <span *ngIf="screeningService.caseFlagType === common.FRREJECT "> For Research Rejected
+                                    Transaction</span>
+                            </h1>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                            <div fxFlex="100%">
+                                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                                    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                                    fxLayoutGap.xs="0px grid" class="sortrow">
+                                    <!-- <div fxFlex="100%" fxLayoutAlign="end center">
+                                        <ul>
+                                            <li><span class="text-dull"> Showing
+                                                    {{(itemPerPage[0]*page[0])-itemPerPage[0]+1}} -
+                                                    {{(itemPerPage[0]*page[0])>=caseSubmissionList?.length?(caseSubmissionList?.length):itemPerPage[0]*page[0]}}
+                                                    of </span> <b>{{caseSubmissionList?.length}} record(s)| &nbsp;<a
+                                                        (click)="showall()">Show
+                                                        All</a></b></li>
+                                            |
+                                            <li><b>Sort By:</b> <a [ngClass]="column==='firstName'?'active':''" (click)="sortBy('firstName')">Candidate
+                                                    Name</a> <i [ngClass]="{'icon-sort': column != 'firstName', 
+                                           'icon-sort-asc': (column == 'firstName' && !isDesc), 
+                                           'icon-sort-desc': (column == 'firstName' && isDesc) }" aria-hidden="true">
+                                                </i> </li>
+                                        </ul>
+                                    </div> -->
+                                    <div fxFlex="100%" fxLayoutAlign="end center">
+                                        <ul>
+                                            <li><span class="text-dull"> Showing
+                                                    {{(caseSubmissionList?.length > 0 ?
+                                                    ((shievePageSize*shievePageNo)-shievePageSize+1): 0)}} -
+                                                    {{((shievePageSize*shievePageNo)>=(shieveTotalCount))?(shieveTotalCount):(shievePageSize*shievePageNo)}}
+                                                    of </span> <b> {{shieveTotalCount}}record(s)</b></li>
+                                            |
+                                            <li>
+                                                <a (click)="shieveShowall()">Show All</a>
+                                            </li>|
+
+                                            <li><b>Sort By:</b> <a [ngClass]="column==='firstName'?'active':''"
+                                                    (click)="sortBy('firstName')">Candidate
+                                                    Name</a> <i [ngClass]="{'icon-sort': column != 'firstName', 
+                                           'icon-sort-asc': (column == 'firstName' && !isDesc), 
+                                           'icon-sort-desc': (column == 'firstName' && isDesc) }" aria-hidden="true">
+                                                </i> </li>
+                                        </ul>
+                                    </div>
+                                    <div fxFlex="9%" fxFlex.lg="9%" fxFlex.md="9%" fxFlex.sm="18%" fxFlex.xs="100%"
+                                        fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                                        fxLayoutAlign.xs="start start"
+                                        *ngIf="ownerflag !== true && (screeningService.caseFlagType === common.VEREJECT||screeningService.caseFlagType === common.FRREJECT || screeningService.caseFlagType === common.QCREJECT)">
+                                        <button mat-flat-button *ngIf="assignflag !== true" color="warn"
+                                            (click)="opendialog()">Assign</button>
+                                        <button mat-flat-button *ngIf="assignflag === true" color="warn"
+                                            (click)="opendialog()">Re-Assign</button>
+                                    </div>
+                                    <!-- VTS2-2023-DE-0129 Added by Megala -->
+                                    <div fxFlex="9%" fxFlex.lg="9%" fxFlex.md="9%" fxFlex.sm="18%" fxFlex.xs="100%"
+                                        fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                                        fxLayoutAlign.xs="start start"
+                                        *ngIf="ownerflag !== true && (screeningService.caseFlagType === common.REOPEN)">                                       
+                                        <button mat-flat-button color="warn"
+                                            (click)="opendialog()">Re-Assign</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- search: [{key:'clientReferenceNo', value: qcSearchForm?.get('clientRefNo')?.value},
+                        {key:'compName', value: qcSearchForm?.get('compName')?.value},
+                        {key:'clientName', value: qcSearchForm?.get('clientName')?.value},
+                        {key:'caseStatus', value: qcSearchForm?.get('statusName')?.value}]   
+                        
+                      |  -->
+                                <div fxLayout="row">
+                                    <div fxFlex="100%">
+                                        <div fxLayout="row" [class]="getFilterLen(j)" *ngFor="let empj of caseSubmissionList| 
+                        sort: {property: column, direction: direction}
+                      | paginate: { itemsPerPage: shievePageSize, currentPage: shievePageNo, totalItems: shieveTotalCount };let c= count;
+                      let j=index">
+                                            <div fxFlex="100%">
+                                                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                                                    fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="10px grid"
+                                                    fxLayoutGap.sm="0px grid" fxLayoutGap.xs="15px grid">
+                                                    <div fxFlex="3%" fxFlex.lg="3%" fxFlex.md="3%" fxFlex.sm="6%"
+                                                        fxFlex.xs="100%"
+                                                        *ngIf="ownerflag !== true &&( screeningService.caseFlagType === common.REOPEN || screeningService.caseFlagType === common.VEREJECT || screeningService.caseFlagType === common.FRREJECT || screeningService.caseFlagType === common.QCREJECT)">
+                                                        <mat-checkbox [checked]="empj?.assignFlag"
+                                                            (change)="assignScope($event.checked,i, empj)">
+                                                        </mat-checkbox>
+                                                    </div>
+                                                    <div fxFlex="16%" fxFlex.lg="16%" fxFlex.md="16%" fxFlex.sm="16%"
+                                                        fxFlex.xs="100%">
+                                                        <!-- <a> -->
+                                                        <mat-card-header>
+                                                            <div mat-card-avatar
+                                                                class="avatar avatarBg{{(j%6)+1}} cursor-pointer"
+                                                                (click)="selectQc(empj)">
+                                                                {{empj?.firstName?.charAt(0).toUpperCase()}}
+                                                                {{empj?.firstName?.charAt(0)?empj?.lastName?.charAt(0).toUpperCase():''}}
+                                                            </div>
+                                                            <mat-card-title class="cname cursor-pointer"
+                                                                (click)="selectQc(empj)">
+                                                                {{empj?.firstName}} {{empj?.middleName}}
+                                                                {{empj?.lastName}}
+                                                            </mat-card-title>
+                                                            <mat-card-subtitle class="mb-0 cdesg"
+                                                                (click)="selectQc(empj)">
+                                                                {{empj.clientReferenceNo ? empj.clientReferenceNo :
+                                                                'N/A'}} </mat-card-subtitle>
+                                                        </mat-card-header>
+                                                        <!-- </a>  -->
+                                                        <p *ngIf="screeningService.caseFlagType === common.FRREJECT">
+                                                            <label>Functional Entity:</label>
+                                                            <em>{{empj.functionalEntity ? empj.functionalEntity :
+                                                                'N/A'}}</em>
+                                                        </p>
+                                                    </div>
+                                                    <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="28%"
+                                                        fxFlex.xs="100%">
+                                                        <p *ngIf="empj.manualFileSubmissionFlag == true">
+                                                            <label>Verification Id:</label>
+                                                            <em>{{empj.clientScreeningId ? empj.clientScreeningId :
+                                                                'N/A'}}</em>
+                                                            <!-- ACG <em>{{empj.screeningCompId ? empj.screeningCompId : 'N/A'}}</em> -->
+                                                        </p>
+                                                        <p *ngIf="empj.manualFileSubmissionFlag != true">
+                                                            <label>Verification Id:</label>
+                                                            <em>{{empj.verificationId ? empj.verificationId :
+                                                                'N/A'}}</em>
+                                                            <!-- ACG <em>{{empj.screeningCompId ? empj.screeningCompId : 'N/A'}}</em> -->
+                                                        </p>
+                                                        <p>
+                                                            <label>Client Name:</label>
+                                                            <em>{{empj.clientName}}</em>
+                                                        </p>
+                                                        <p>
+                                                            <label>Site Name:</label>
+                                                            <em>{{empj.siteName ? empj.siteName : 'N/A'}}</em>
+                                                        </p>
+                                                    </div>
+                                                    <div fxFlex="26%" fxFlex.lg="26%" fxFlex.md="26%" fxFlex.sm="26%"
+                                                        fxFlex.xs="100%">
+                                                        <p>
+                                                            <label>Received Date:</label>
+                                                            <em>{{empj.caseReceivedDate ?
+                                                                (common.getTimezoneOffset(empj.caseReceivedDate, false)
+                                                                |
+                                                                date : 'dd/MM/yyyy') : 'N/A'}}</em>
+                                                        </p>
+                                                        <p *ngIf="empj.ctsFlag">
+                                                            <label>Remarks:</label>
+                                                            <em>{{empj.remarks ? empj.remarks : 'N/A'}}</em>
+                                                        </p>
+                                                         <!-- VTS2-2023-DE-0129 Added by Megala -->
+                                                         <p
+                                                         *ngIf="screeningService.caseFlagType === common.QCREJECT ||(screeningService.caseFlagType === common.REOPEN && userData.deptName !== 'DE Pre-QC department' &&userData.subTeamName !== 'CTS DE Pre-Qc Team')|| screeningService.caseFlagType === common.VEREJECT|| screeningService.caseFlagType === common.FRREJECT">
+                                                            <label>DE Owner Name:</label>
+                                                            <em>{{empj.deOwnerName ? empj.deOwnerName : 'N/A'}}</em>
+                                                        </p>
+                                                        <p
+                                                        *ngIf="(screeningService.caseFlagType === common.REOPEN && userData.deptName === 'DE Pre-QC department') ||
+                                                        (screeningService.caseFlagType === common.REOPEN && userData.subTeamName === 'CTS DE Pre-Qc Team')">
+                                                        <label>PreQC Owner Name:</label>
+                                                        <em>{{empj.preQCScreenOwnerName ? empj.preQCScreenOwnerName
+                                                            : 'N/A'}}</em>
+                                                    </p>
+                                                        <p
+                                                            *ngIf="screeningService.caseFlagType === common.QCREJECT || screeningService.caseFlagType === common.VEREJECT || screeningService.caseFlagType === common.FRREJECT">
+                                                            <label>Screening Owner:</label>
+                                                            <em>{{empj.ownerName ? empj.ownerName : 'N/A'}}</em>
+                                                        </p>
+                                                        <p
+                                                            *ngIf="empj.manualFileSubmissionFlag &&(screeningService.caseFlagType === common.QCREJECT || screeningService.caseFlagType === common.VEREJECT )">
+                                                            <label>Screening ID:</label>
+                                                            <em>{{empj.clientScreeningId ? empj.clientScreeningId :
+                                                                'N/A'}}</em>
+                                                        </p>
+                                                    </div>
+                                                    <div fxFlex="26%" fxFlex.lg="26%" fxFlex.md="26%" fxFlex.sm="26%"
+                                                        fxFlex.xs="100%">
+                                                        <p
+                                                            *ngIf="screeningService.caseFlagType === common.QCREJECT || screeningService.caseFlagType === common.VEREJECT || screeningService.caseFlagType === common.FRREJECT">
+                                                            <label>PreQC Owner Name:</label>
+                                                            <em>{{empj.preQCScreenOwnerName ? empj.preQCScreenOwnerName
+                                                                : 'N/A'}}</em>
+                                                        </p>
+                                                        <p *ngIf="screeningService.caseFlagType === common.QCREJECT">
+                                                            <label>Rejected Date & Time:</label>
+                                                            <em>{{empj.rejectDate ?
+                                                                (common.getTimezoneOffset(empj.rejectDate, false) |
+                                                                date : 'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}</em>
+                                                        </p>
+                                                        <p
+                                                            *ngIf="screeningService.caseFlagType === common.QCREJECT || screeningService.caseFlagType === common.VEREJECT ||  screeningService.caseFlagType === common.FRREJECT">
+                                                            <label>Case Status:</label>
+                                                            <em>{{empj.caseStatus ? empj.caseStatus : 'N/A'}}</em>
+                                                        </p>
+                                                        <p>
+                                                            <label>Component Name:</label>
+                                                            <em> <span class="cn-chip">{{empj.compName ? empj.compName :
+                                                                    'N/A'}}
+                                                                    {{ empj?.subCompName ? (' - ' + empj?.subCompName) :
+                                                                    '' }}{{empj.compIndex ? empj.compIndex : ''}}
+                                                                </span></em>
+                                                        </p>
+
+                                                    </div>
+                                                    <div fxFlex="4%" fxFlex.lg="4%" fxFlex.md="4%" fxFlex.sm="4%"
+                                                        fxFlex.xs="100%"
+                                                        *ngIf="screeningService.caseFlagType === common.NOTAPPLICABLE && isCam() || this.screeningService.caseFlagType === this.common.CLOSED">
+                                                        <button mat-icon-button class="in-btn" matTooltip="Re-Open"
+                                                            matTooltipClass="accent-tooltip"
+                                                            (click)="openReOpen(empj?.screeningCompId)">
+                                                            <i
+                                                                class="material-icons material-icons-outlined">menu_open</i>
+                                                        </button>
+                                                        <!-- <mat-icon> <i matTooltip='Reopen' matTooltipClass="accent-tooltip" (click)="openReOpen()"
+                             class="material-icons material-icons-outlined">menu_open</i> </mat-icon> -->
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div fxLayout="row" *ngIf="shieveTotalCount > 10  ">
+                                    <div class="cus-paginator">
+                                        <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                                                <pagination-controls class="cus-paginator"
+                                                    (pageChange)="shievePagination($event)"></pagination-controls>
+                                            </span> <span fxHide.xs class="gotopagbg ml-2">Go to Page<span
+                                                    class="input-num">
+                                                    <input type="number" [(ngModel)]="shievePageNo" min="1"
+                                                        maxlength="4" (blur)="OnPageChange()" appNumberOnly
+                                                        preventDragdrop preventCutCopyPaste autocomplete="off"
+                                                        [NumberOnly]="false">
+                                                </span></span> <span fxHide.xs class="gotopagbg ml-2">Items / page<span
+                                                    class="input-num">
+                                                    <input type="number" [(ngModel)]="shievePageSize" min="1"
+                                                        maxlength="4" appNumberOnly preventDragdrop preventCutCopyPaste
+                                                        autocomplete="off" [NumberOnly]="false"
+                                                        (blur)="preventInfinite()">
+                                                </span> </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- </form> -->
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
+<div fxLayout="row"
+    *ngIf="userData.applicationId === 1 && (screeningService.caseFlagType === common.SUBMISSION_HISTORY ||
+screeningService.caseFlagType === common.VE_HISTORY || screeningService.caseFlagType === common.BT_POPUP || screeningService.caseFlagType === common.NT_POPUP || screeningService.caseFlagType === common.WT_POPUP  || screeningService.caseFlagType === common.CT_POPUP)">
+ <div fxFlex="100%">
+<!-- Added for VTS2-2024-ADD-0229 by Madasamy - START -->
+<div fxLayout="row" class="advSearch" [formGroup]="closeCheckForm" autocomplete="off" *ngIf="screeningService.caseFlagType === common.VE_HISTORY">
+    <div class="advSearch-forms">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
+            fxLayoutGap="0px">
+            <div fxFlex="100%">
+                    <div fxLayout="row" fxLayoutGap="20px">
+                        <!-- <div fxFlex="175px">
+                            <app-auto-complete [selectProperties]='clientChkControl'>
+                            </app-auto-complete>
+                        </div> -->
+                         <div fxFlex="175px">
+                          <p-multiSelect fxFlex="100%" [options]="clientList" formControlName="clientName" optionLabel="name" filterPlaceHolder="Select Components" selectedItemsLabel="{0} Client selected" [style]="{XminWidth: '100px', width:'100%'}" defaultLabel="Select Client Name"
+                                (propValueEvent)="getPropertyValue($event)" [showHeader]="true" resetFilterOnHide=true>
+                            </p-multiSelect>
+                            
+                    </div>
+                        <div fxFlex="175px">
+                            <mat-form-field fxFlex="100%">
+                                <mat-label>From Date</mat-label>
+                                <input matInput [matDatepicker]="fromdatePicker" [max]="maxDate" placeholder="From Date"
+                                    formControlName="submittedFromDate" (focus)="fromdatePicker.open()"
+                                    (click)="fromdatePicker.open()" (dateChange)="checkPeriod()" />
+                                <mat-datepicker-toggle matSuffix [for]="fromdatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromdatePicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="175px">
+                            <mat-form-field fxFlex="100%">
+                                <mat-label>To Date</mat-label>
+                                <input matInput [matDatepicker]="todatePicker" [max]="maxDate" placeholder="To Date"
+                                    formControlName="submittedToDate" (focus)="todatePicker.open()"
+                                    (click)="todatePicker.open()" (dateChange)="checkPeriod()" />
+                                <mat-datepicker-toggle matSuffix [for]="todatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #todatePicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                         <div fxFlex="175px">
+                            <mat-form-field fxFlex="100%">
+                                <mat-label>Client Ref No</mat-label>
+                                <input matInput formControlName="clientRefNo" placeholder="Client Ref No" type="text" size="50" autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div fxFlex="100%" class="advSearch-btn">
+        <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <a (click)="searchCloseChk()">Search</a> <span>|</span>
+            <a (click)="resetClsChkForm()">Reset</a>
+            <span>|</span> <a (click)='SearchCriFilter = !SearchCriFilter'>
+                {{ SearchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+                    class="icon-chevron-{{ SearchCriFilter?'up':'down' }}"></i></a>
+        </div>
+    </div>
+    <div fxLayout="row" class="advSearchshow" *ngIf="SearchCriFilter">
+        <div class="advSearch-forms">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
+                fxLayoutGap="0px" *ngIf="SearchCriFilter">
+                <div fxFlex="100%" >
+                    <div fxLayout="row" fxLayoutGap="20px"  >                       
+                        <div fxFlex="175px">
+                            <app-auto-complete [selectProperties]='ownerChkControl'>
+                            </app-auto-complete>
+                        </div>
+                        <div fxFlex="175px" style="padding-top: 0.8px;">
+                            <mat-form-field fxFlex="100%" style="top:8px">
+                                <mat-label>Verification ID</mat-label>
+                                <input matInput formControlName="verificationId" placeholder="Verification ID" type="text"
+                                    size="50" autocomplete="off"  />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div fxFlex="100%" class="advSearch-btn">
+            <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+        </div>
+    </div>
+</div>
+<!-- Added for VTS2-2024-ADD-0229 by Madasamy - END -->
+        <mat-card>
+            <div fxLayout="row">
+                <mat-card-header fxFlex="100%">
+                    <div fxFlex="100%">
+                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                            fxLayoutGap="10px">
+                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                                fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                                fxLayoutAlign.xs="start center">
+                                <mat-card-title>
+                                    <h1 class="header-title">
+                                        {{screeningService?.caseFlagType === common.SUBMISSION_HISTORY ?
+                                        (this.screeningService.flagType === true ? 'Case Submission History' : 'Pre-Qc
+                                        Submission History') : screeningService?.caseFlagType === common.VE_HISTORY ?
+                                        'Closed Checks' : screeningService?.caseFlagType
+                                        === common.BT_POPUP ? 'BT Details' : screeningService?.caseFlagType ===
+                                        common.WT_POPUP ? 'WT Details': screeningService?.caseFlagType ===
+                                        common.NT_POPUP ? 'NT Details' : screeningService?.caseFlagType ===
+                                        common.CT_POPUP ? 'CT Details' :''}}</h1>
+ </mat-card-title>
+                            </div> <span fxFlex></span>
+                            <!-- <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                                fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                                <div class="tbl-commonsearch">
+                                    <mat-form-field fxFlex="100%">
+                                        <mat-label></mat-label>
+                                        <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                                        <input #global matInput placeholder="Search Client Ref No or VerificationId"
+                                            type="text" pInputText size="50"
+                                            title="Search Client Ref No or VerificationId" autocomplete="off"
+                                            (blur)="dtHistory?.filterGlobal($event?.target?.value, 'contains')" />
+                                    </mat-form-field>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </mat-card-header>
+            </div>
+            <mat-card-content>
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                    <div fxFlex="100%">
+                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                               <p-table #dtHistory [totalRecords]="totalpages" [columns]="historycolumns"
+    [value]="historyList" [lazy]="true" (onLazyLoad)="LoadHistory($event)"
+    [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true"
+    scrollHeight="" [paginator]="true" [rows]="Hitemperpage">
+
+    <!-- COLGROUP FIX -->
+    <ng-template pTemplate="colgroup" let-colGroupCols>
+        <colgroup>
+            <col *ngFor="let col of colGroupCols" style="width: 200px" />
+        </colgroup>
+    </ng-template>
+
+    <!-- HEADER FIX -->
+    <ng-template pTemplate="header" let-headerCols let-rowdata>
+        <tr>
+            <th *ngFor="let col of headerCols" [ngSwitch]="col.field"
+                pReorderableColumn pResizableColumn>
+                <span>
+                    <div class="thname">{{ col.header }}</div>
+                    <p-sortIcon [pSortableColumn]="col.field" [field]="col.field"
+                        ariaLabel="Activate to sort"
+                        ariaLabelDesc="Activate to sort in descending order"
+                        matTooltip="Sorting"
+                        matTooltipClass="accent-tooltip"
+                        ariaLabelAsc="Activate to sort in ascending order">
+                    </p-sortIcon>
+                </span>
+            </th>
+        </tr>
+    </ng-template>
+
+    <!-- BODY FIX -->
+    <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+        <tr>
+            <td *ngFor="let col of bodyCols">
+                <span *ngIf="col.field === 'inProgressDays'">{{ rowData?.inProgressDays }}</span>
+                <span *ngIf="col.field === 'tatDays'">{{ rowData?.tatDays }}</span>
+
+                <span *ngIf="col.field === 'componentName'">
+                    {{ rowData['subCompName'] ? rowData['componentName'] + ' - ' + rowData['subCompName'] : rowData['componentName'] }}
+                </span>
+
+                <div *ngIf="screeningService.caseFlagType === common.VE_HISTORY && col.field === 'verificationId'">
+                    <a (click)="moveToVerificationCheck(rowData.screeningCompId)">
+                        {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                    </a>
+                </div>
+
+                <span *ngIf="col.field === 'submittedDate'">
+                    {{ rowData[col.field]
+                        ? (common.getTimezoneOffset(rowData[col.field], false) | date: "dd/MM/yyyy hh:mm:ss a")
+                        : "N/A" }}
+                </span>
+
+                <span *ngIf="col.field === 'requestDate' || col.field === 'componentDueDate'">
+                    {{ rowData[col.field]
+                        ? (common.getTimezoneOffset(rowData[col.field], false) | date: "dd/MMM/yyyy")
+                        : "N/A" }}
+                </span>
+
+                <span *ngIf="col.field !== 'componentName'
+                    && col.field !== 'verificationId'
+                    && col.field !== 'requestDate'
+                    && col.field !== 'submittedDate'
+                    && col.field !== 'componentDueDate'
+                    && col.field !== 'tatDays'
+                    && col.field !== 'inProgressDays'">
+
+                    {{ rowData[col.field] ? rowData[col.field] : "N/A" }}
+                </span>
+
+                <span *ngIf="(screeningService.caseFlagType === common.SUBMISSION_HISTORY 
+                             || screeningService.caseFlagType === common.WT_POPUP 
+                             || screeningService.caseFlagType === common.NT_POPUP 
+                             || screeningService.caseFlagType === common.BT_POPUP
+                             || screeningService.caseFlagType === common.CT_POPUP)
+                             && col.field ==='verificationId'">
+
+                    {{ rowData[col.field] ? rowData[col.field] : "N/A" }}
+                </span>
+            </td>
+        </tr>
+    </ng-template>
+
+</p-table>
+                                <div [ngClass]="{'empty-record': historyList?.length === 0}" class="cus-paginator"
+                                    fxLayout="row wrap" fxLayoutGap="10px grid">
+
+                                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                        fxLayoutAlign="start center"> Showing {{ dtHistory.totalRecords
+                                        < 1 ? 0 : dtHistory.first + 1 }} - {{ dtHistory.totalRecords> 0 ? dtHistory.rows
+                                            + dtHistory.first
+                                            <=dtHistory.totalRecords ? dtHistory.rows + dtHistory.first :
+                                                dtHistory.totalRecords : 0 }} of {{ dtHistory.totalRecords }} record(s)
+                                                |&nbsp;<a (click)="showallH()">Show All</a>
+                                    </div>
+                                    <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                        fxLayoutAlign="end center" fxLayoutAlign.md="end center"
+                                        fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                                        <a [ngClass]="dtHistory?.first === 0 ? 'page-btn disabled' : 'page-btn'"
+                                            (click)="
+                            dtHistory?.onPageChange({
+                              first: dtHistory?.first - dtHistory?.rows,
+                              rows: dtHistory?.rows
+                            });
+                            navigateNxtPrevPage(dtHistory?.first + dtHistory?.rows, dtHistory?.rows)
+                          "> <i class="icon-control-start mr-5"></i> </a> <span class="gotopagbg mr-2 ml-2"
+                                            fxHide.xs>Go to Page<span class="input-num">
+                                                <input type="number" min="1" #pageNo [(ngModel)]="currentPage1"
+                                                    maxlength="5" appNumberOnly [NumberOnly]="false"
+                                                    (keyup.enter)="navigatePage(pageNo.value, dtHistory?.rows)" />
+                                            </span></span> <span class="mr-2" fxHide.xs> of
+                                            {{ getTotalPages(dtHistory?.totalRecords, dtHistory?.rows) }}</span>
+                                        <a [ngClass]="
+                            dtHistory?.rows + dtHistory?.first >= dtHistory?.totalRecords
+                              ? 'page-btn disabled'
+                              : 'page-btn'
+                          " (click)="
+                            dtHistory?.onPageChange({
+                              first: dtHistory?.first + dtHistory?.rows,
+                              rows: dtHistory?.rows
+                            });
+                            navigateNxtPrevPage(dtHistory?.first + dtHistory?.rows, dtHistory?.rows)
+                          "><i class="icon-control-end ml-5"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+<ng-template #assignPopUp>
+    <h1 mat-dialog-title>Screening Owner
+        <div fxLayout="row" class="scrollCls">
+            <div fxFlex="100%">
+                <div fxLayout="row">
+                    <div fxFlex="100%">
+                        <p class="text-sm text-dull text-ilatic mt-10 line-height"> Assign the below Screening Owner to
+                            following Verification Reference no.: <span class="text-bold"> {{
+                                screeningOwnerId?.value?.screeningOwnerFName}}
+                            </span> </p>
+                    </div>
+                </div>
+                <div fxLayout="row">
+                    <div fxFlex="100%">
+                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always" autocomplete="off" class="scr-own">
+                            <mat-label></mat-label>
+                            <mat-icon matPrefix>search</mat-icon>
+                            <input matInput placeholder="Find someone" [formControl]="filterOwnerName" type="text"
+                                pInputText size="50">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h1>
+    <mat-dialog-content class="scrollCls">
+        <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="100%">
+                <div class="ownven-list" id="ownerDiv" *ngFor="let owner of screeningOwnerList | search:
+            [{key:'screeningOwnerFName' ,value:filterOwnerName?.value}]; let i = index"
+                    (click)="assignScrnOwner(owner,i)">
+                    <div class="user avatarBg{{(i%6) +1}}">
+                        {{ owner.screeningOwnerFName.slice(0,1)}}{{ owner?.screeningOwnerLName?.slice(0,1)}} </div>
+                    <span [ngClass]="owner.lastLoginFlag === true? 'pos act' : 'pos inact'"><i
+                            [ngClass]="owner.lastLoginFlag === true ? 'icon-approv': 'icon-reject'"></i></span>
+                    <div class="ovname"> {{(owner.screeningOwnerFName !== null? owner.screeningOwnerFName: '') + ' ' +
+                        (owner.screeningOwnerMName !== null ? owner.screeningOwnerMName: ' ') + ' ' +
+                        (owner.screeningOwnerLName !== null ? owner.screeningOwnerLName: '')}}</div>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <!-- <h1 mat-dialog-title>Assign Owner</h1>
+  <mat-dialog-content>
+    <p class="text-sm text-dull text-ilatic"> Assign the below Owners to following Case Reference no.: <span
+        class="text-bold">{{screeningOwnerId.value?.screeningOwnerName}}</span> </p>
+    <form autocomplete="off" id="ngForm">
+      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+        <mat-label></mat-label>
+        <mat-select [formControl]="screeningOwnerId" placeholder="Select Owner">
+          <mat-option>Select Owner</mat-option>
+          <mat-option *ngFor="let owner of screeningOwnerList" [value]="owner">    {{(owner.screeningOwnerFName !== null? owner.screeningOwnerFName: '') + ' ' + (owner.screeningOwnerMName !== null ? owner.screeningOwnerMName: ' ')
+              + ' ' + (owner.screeningOwnerLName !== null ? owner.screeningOwnerLName: '')}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="screeningOwnerId.errors">Owner is required</mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content> -->
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+        <button mat-stroked-button (click)="dialogClose()">No</button>
+        <button mat-flat-button color="warn" (click)="assignOwner()"> Submit </button>
+    </mat-dialog-actions>
+</ng-template>

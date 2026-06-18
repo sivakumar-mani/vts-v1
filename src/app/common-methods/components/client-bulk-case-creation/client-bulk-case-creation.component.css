@@ -1,0 +1,103 @@
+﻿/* Container for the upload button */
+.upload-trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 8px;
+  color: #1976d2;
+  font-weight: 500;
+  font-size: 12px;
+}
+.preview-content {
+  overflow: hidden;
+  padding: 0 !important;
+  min-height: 500px;
+}
+
+.dialog-header {
+  padding: 10px 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+/* Individual file rows */
+.file-row {
+  background: #f5f5f5;
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-bottom: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.file-name {
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+/* Make buttons smaller to fit in the table row */
+.file-actions .mat-mdc-icon-button,
+.file-actions .mat-mdc-icon-button {
+  width: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+}
+
+.file-actions .mat-icon {
+  font-size: 18px;
+}
+
+.remove-btn:hover {
+  color: #f44336; /* Red on hover */
+}
+.date-cell-input {
+  height: 28px;
+  border: none;
+  border-bottom: 1px solid rgba(0,0,0,0.42);
+  background: transparent;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+}
+.date-cell-input:focus {
+  border-bottom: 2px solid #3f51b5;
+}
+::ng-deep .mat-mdc-form-field-invalid .mat-mdc-form-field-outline {
+  color: #dc3545 !important;
+}
+::ng-deep .mat-mdc-form-field.mat-mdc-form-field-invalid .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field.mat-mdc-form-field-invalid .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field.mat-mdc-form-field-invalid .mdc-notched-outline__trailing {
+  border-color: #dc3545 !important;
+}
+
+::ng-deep .mat-mdc-form-field-invalid .mat-mdc-form-field-label {
+  color: #dc3545 !important;
+}
+::ng-deep .mat-mdc-form-field.mat-mdc-form-field-invalid .mdc-floating-label {
+  color: #dc3545 !important;
+}
+
+.invalid-field {
+  caret-color: #dc3545 !important;
+  background-color: #fff8f8 !important;
+}
+td,
+th {
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+td mat-form-field,
+td div mat-form-field {
+  width: 100% !important;
+}.row-error {
+  color: #e53935;
+  font-size: 11px;
+  margin-top: -10px;
+  padding-left: 2px;
+}

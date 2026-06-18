@@ -1,0 +1,582 @@
+﻿::ng-deep body {
+    background-color: #FBFBFB !important;
+    position: relative;
+}
+
+.registration_larea {
+    width: 100%;
+    float: left;
+    position: relative;
+}
+
+.registration_larea .register_left {
+    width: 30%;
+    float: left;
+}
+
+.register_left .content_here {
+    width: 100%;
+    height: 100vh;
+    float: left;
+    position: relative;
+    z-index: 10;
+}
+
+.register_left .content_here .inside_bg {
+    width: 40%;
+    position: fixed;
+    background-color: #0E4872;
+    background-image: url('../../assets/images/krya-tech-bg.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+
+.register_left .content_here .inside_bg .acheck_logo {
+    width: 100%;
+    position: absolute;
+    top: 15px;
+    left: 0;
+    /* padding:15px; */
+}
+
+.register_left .content_here .inside_bg .acheck_logo img {
+    width: 161px;
+    top: 0px;
+    left: 33%;
+    position: relative; 
+}
+
+.register_left .content_here .inside_bg .acheck_logo svg {
+    width: 55%;
+    display: block;
+    margin: 0 auto;
+}
+
+.register_left .content_here .inside_bg .bg_content {
+    widows: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: #fff;
+}
+
+.register_left .content_here .inside_bg .bg_content .inside_content {
+    padding: 0 3em 2.5em 3em;
+    text-align: center;
+}
+
+.register_left .content_here .inside_bg .bg_content .inside_content h2 {
+    margin-bottom: 0;
+}
+
+.register_left .content_here .inside_bg .bg_content .inside_content p {
+    margin-top: 0;
+}
+
+.register_left .content_here .inside_bg .bg_content .contact_info {
+    width: 100%;
+    float: left;
+    padding: 15px;
+}
+
+.contact_info .call_text {
+    color: #B1CAFF;
+    font-size: 11px;
+    margin: 0;
+    text-align: center;
+}
+
+.contact_info p {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.contact_info p>a {
+    color: #fff;
+}
+
+.contact_info p>a span img {
+    width: 14px;
+    height: 14px;
+}
+
+
+/* Right Side */
+
+.registration_larea .register_right {
+    padding: 0 5.8rem;
+    position: relative;
+    padding-top: 10px;
+}
+
+.help_link {
+    text-align: right;
+    position: absolute;
+    top: 20px;
+    right: 40px;
+}
+
+.help_link>a {
+    color: #353537;
+}
+
+.help_link>a span {
+    color: #0E4872;
+    font-size: 18px;
+    margin-right: 8px;
+}
+
+.register_right .page_title {
+    color: #484848;
+    margin: 0;
+    font-weight: 300;
+    padding-top: 3.5em;
+}
+
+.register_right .page_des {
+    color: #0E4872;
+    margin-top: 0px;
+}
+
+.register_right .page_title,
+.register_right .page_des {
+    text-align: center;
+}
+
+.copyright_sec {
+    width: 100%;
+    float: left;
+    padding: 15px;
+}
+
+.copyright_sec p {
+    margin: 0;
+    text-align: center;
+    font-size: 10px;
+    color: #97989d;
+    font-weight: 300;
+}
+
+.clearfix {
+    clear: both;
+}
+
+/*::ng-deep .login_card .mat-mdc-form-field-appearance-outline .mat-mdc-form-field-outline {
+    background-color: #fff;
+    -webkit-transition-duration: 0.25s;
+    transition-duration: 0.25s;
+}
+
+::ng-deep .login_card .mat-mdc-form-field-appearance-outline .mat-mdc-text-field-wrapper {
+    margin: 1.25em 0 0 !important;
+}
+
+::ng-deep .login_card .mat-mdc-form-field-label-wrapper {
+    top: -28.888px !important;
+    left: -10px !important;
+}
+
+::ng-deep .login_card .mat-mdc-form-field-appearance-outline.mat-mdc-form-field-can-float .mat-input-server:focus+.mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label,
+.login_card .mat-mdc-form-field-appearance-outline.mat-mdc-form-field-can-float.mat-mdc-form-field-should-float .mat-mdc-form-field-label {
+    color: #58595C !important;
+}
+
+::ng-deep .login_card .mat-mdc-form-field-appearance-outline.mat-mdc-form-field-can-float.mat-mdc-form-field-should-float .mat-mdc-form-field-outline-gap {
+    border: none !important;
+    display: none !important;
+}
+
+::ng-deep .login_card .mat-mdc-form-field-label {
+    color: #484848 !important;
+}
+*/
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #F5F5F5;
+}
+
+
+/* General Scrollbar Style */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #ebebeb;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background-color: rgb(142, 143, 148);
+}
+
+::ng-deep .custom_hstepper .mat-horizontal-stepper-header-container {
+    width: 60%;
+    margin: 15px auto 30px;
+    /* margin-bottom: 15px; */
+}
+
+::ng-deep .custom_hstepper .theme_btn1 {
+    background-color: #0E4872;
+    color: #fff;
+}
+
+::ng-deep .custom_hstepper .mat-horizontal-stepper-header-container {
+    background: #fff;
+    border: none;
+}
+
+::ng-deep .custom_hstepper .mat-step-header {
+    border: 1px solid #9BAAB3;
+    border-radius: 12px;
+    margin: 0 20px;
+    width: 100px;
+    height: 50px;
+    position: relative;
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+::ng-deep .custom_hstepper .mat-step-header span {
+    color: #0E4872;
+    font-size: 20px;
+    padding-right: 5px;
+}
+
+::ng-deep .custom_hstepper .mat-stepper-horizontal-line {
+    display: none;
+}
+
+::ng-deep .mat-step-header.cdk-keyboard-focused,
+::ng-deep .mat-step-header.cdk-program-focused,
+::ng-deep .mat-step-header:hover {
+    background-color: #E9F2FF !important;
+}
+
+::ng-deep .mat-horizontal-stepper-header .mat-step-icon {
+    display: none;
+}
+
+::ng-deep .mat-step-header .mat-step-label.mat-step-label-active {
+    color: #0E4872;
+    width: 100%;
+}
+
+::ng-deep .mat-mdc-checkbox-checked:not(.mat-mdc-checkbox-disabled).mat-accent .mat-ripple-element,
+.mat-mdc-checkbox:active:not(.mat-mdc-checkbox-disabled).mat-accent .mat-ripple-element {
+    background: #0e4872;
+}
+
+::ng-deep .mat-mdc-checkbox-checked.mat-accent .mat-mdc-checkbox-ripple .mat-ripple-element {
+    opacity: 0.03 !important;
+    background-color: #0e4872 !important;
+}
+
+::ng-deep .mat-mdc-checkbox-checked.mat-accent .mat-mdc-checkbox-background,
+.mat-mdc-checkbox-indeterminate.mat-accent .mat-mdc-checkbox-background {
+    background-color: #0e4872;
+}
+::ng-deep .mat-mdc-checkbox.mat-accent .mdc-checkbox__background {
+    background-color: #0e4872 !important;
+    border-color: #0e4872 !important;
+}
+
+::ng-deep .mat-mdc-button.mat-accent[disabled],
+.mat-mdc-button.mat-primary[disabled],
+.mat-mdc-button.mat-warn[disabled],
+.mat-mdc-button[disabled][disabled],
+.mat-mdc-icon-button.mat-accent[disabled],
+.mat-mdc-icon-button.mat-primary[disabled],
+.mat-mdc-icon-button.mat-warn[disabled],
+.mat-mdc-icon-button[disabled][disabled],
+.mat-mdc-outlined-button.mat-accent[disabled],
+.mat-mdc-outlined-button.mat-primary[disabled],
+.mat-mdc-outlined-button.mat-warn[disabled],
+.mat-mdc-outlined-button[disabled][disabled] {
+    color: #fff;
+    background: #0e487294;
+}
+
+.theme_btn2 {
+    background-color: #0073B1;
+    color: #ffff;
+}
+
+.signup_btn_group {
+    text-align: right;
+    margin-top: 15px;
+}
+
+.signup_btn_group button {
+    padding: 3px 24px;
+}
+
+.signup_btn_group button:nth-child(2) {
+    margin-left: 8px;
+}
+
+::ng-deep .mat-mdc-button.mat-primary,
+.mat-mdc-icon-button.mat-primary,
+.mat-mdc-outlined-button.mat-primary {
+    background-color: #0e4872;
+    color: #fff;
+}
+/* Angular 15 MDC equivalents */
+::ng-deep .mat-mdc-button.mat-primary,
+::ng-deep .mat-mdc-icon-button.mat-primary,
+::ng-deep .mat-mdc-outlined-button.mat-primary {
+    color: #0e4872 !important;
+}
+
+::ng-deep .basic_input_area .mat-mdc-text-field-wrapper {
+    padding-bottom: 0;
+}
+::ng-deep .basic_input_area .mat-mdc-text-field-wrapper {
+    padding-bottom: 0;
+}
+::ng-deep .basic_input_area .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+}
+
+/* Remove extra space between login form fields */
+::ng-deep .login_card .mat-mdc-form-field .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+::ng-deep .login_card .mat-mdc-form-field-bottom-align::before {
+    display: none !important;
+}
+::ng-deep .login_card mat-form-field {
+    margin-bottom: 4px !important;
+}
+/* Login form field input background — light tint like old design */
+::ng-deep .login_card .mdc-text-field--outlined .mat-mdc-form-field-infix,
+::ng-deep .login_card .mdc-text-field input {
+    background-color: transparent;
+}
+::ng-deep .login_card .mat-mdc-text-field-wrapper {
+    background-color: rgba(14, 72, 114, 0.03) !important;
+}
+
+::ng-deep .mat-fab.mat-primary,
+ ::ng-deep .mat-mdc-unelevated-button.mat-primary,
+ ::ng-deep .mat-mini-fab.mat-primary,
+ ::ng-deep .mat-mdc-raised-button.mat-primary {
+    background-color: #0e4872;
+}
+/* Angular 15 MDC: Sign In button must be dark navy */
+::ng-deep .mat-mdc-unelevated-button.mat-primary,
+::ng-deep .mat-mdc-raised-button.mat-primary,
+::ng-deep .mat-mdc-fab.mat-primary,
+::ng-deep .mat-mdc-mini-fab.mat-primary {
+    background-color: #0e4872 !important;
+    --mdc-filled-button-container-color: #0e4872 !important;
+    --mdc-fab-container-color: #0e4872 !important;
+    color: #fff !important;
+}
+::ng-deep .mat-mdc-unelevated-button[disabled][disabled],
+::ng-deep .mat-mdc-raised-button[disabled][disabled] {
+    background-color: #0e487294 !important;
+    --mdc-filled-button-disabled-container-color: #0e487294 !important;
+    color: #fff !important;
+}
+
+.AlignC {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+::ng-deep .login_card {
+    border-color: linear-gradient(90deg, #29B2FC -60.12%, #004C80 100%) !important;
+}
+
+.login_title {
+    width: 70%;
+    margin: 0 auto;
+    background: linear-gradient(90deg, #29B2FC -60.12%, #004C80 100%);
+    padding: 10px 15px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+}
+
+.logName {
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.login_card {
+    position: relative;
+}
+
+::ng-deep .captch-btn .mat-mdc-icon-button i,
+ ::ng-deep .captch-btn a i {
+    color: #0e4872;
+}
+
+::ng-deep .captcha-img,
+ ::ng-deep .captch-btn {
+    padding-top: 14px;
+}
+
+
+/* Custom Responsive */
+
+@media only screen and (max-width: 991px) {
+    .registration_larea .register_left {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .login_card {
+        margin-top: 15px;
+    }
+    .help_link {
+        z-index: 10;
+        top: 4.3em;
+    }
+     ::ng-deep .mat-horizontal-content-container {
+        padding: 0 !important;
+    }
+     ::ng-deep .custom_hstepper .mat-step-header {
+        margin: 0 12px !important;
+    }
+     ::ng-deep .custom_hstepper .mat-horizontal-stepper-header-container {
+        width: 100%;
+    }
+    .register_right {
+        padding: 0 2rem 2rem 2rem !important;
+    }
+    .contact_info p>a span {
+        display: block;
+    }
+    .contact_info {
+        padding-bottom: 15px;
+    }
+}
+
+@media only screen and (max-width: 915px) {
+    .call_text,
+    .contact_info p>a {
+        color: #58595C !important;
+    }
+    .contact_info p>a span {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        line-height: 38px;
+        color: #fff;
+        display: block;
+        margin: 0 auto;
+        background-color: #004C80;
+        margin-bottom: 10px;
+    }
+    .contact_info p>a span img {
+        position: relative;
+    }
+    #mobile_sec {
+        color: #58595C !important;
+        width: 100%;
+        float: left;
+    }
+    .signup_btn_group {
+        text-align: center !important;
+    }
+}
+
+.copyright_sec p {
+    margin: 0;
+    text-align: center;
+}
+
+::ng-deep .mat-mdc-dialog-title,
+::ng-deep .mat-mdc-dialog-title {
+    color: #004C80 !important;
+}
+
+::ng-deep .mat-mdc-dialog-actions,
+::ng-deep .mat-mdc-dialog-actions {
+    background: #FBFBFB !important;
+}
+
+::ng-deep .mat-fab.mat-accent,
+ ::ng-deep .mat-mdc-unelevated-button.mat-accent,
+ ::ng-deep .mat-mini-fab.mat-accent,
+ ::ng-deep .mat-mdc-raised-button.mat-accent {
+    background-color: #004C80;
+}
+/* Angular 15 MDC accent buttons */
+::ng-deep .mat-mdc-unelevated-button.mat-accent,
+::ng-deep .mat-mdc-raised-button.mat-accent,
+::ng-deep .mat-mdc-fab.mat-accent,
+::ng-deep .mat-mdc-mini-fab.mat-accent {
+    background-color: #004C80 !important;
+    --mdc-filled-button-container-color: #004C80 !important;
+    color: #fff !important;
+}
+
+
+/* ::ng-deep .mat-mdc-dialog-content
+{
+    max-height: 75vh !important;
+} */
+
+.mat-mdc-dialog-content .AlignC {
+    background-color: #004C80;
+    color: #fff;
+    padding: 10px;
+}
+
+.mat-mdc-dialog-content .AlignC .text-sm {
+    width: 100%;
+    margin: 0;
+}
+
+.mat-mdc-dialog-content .AlignC .text-sm span {
+    color: #FAA613;
+    font-size: 18px;
+    font-weight: 900;
+    display: block;
+}
+
+@media only screen and (max-width: 380px) {
+     ::ng-deep .custom_hstepper .mat-step-header {
+        margin: 0 5px;
+    }
+     ::ng-deep .signup_btn_group .theme_btn1 {
+        padding: 3px 63px !important;
+    }
+}
+
+@media only screen and (min-width: 991px) {
+    .copyright_sec {
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+    }
+    /* ::ng-deep .mat-mdc-checkbox-layout {
+        padding-top: 15px;
+    } */
+    .login_card {
+        margin-top: 5em;
+    }
+}

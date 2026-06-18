@@ -1,0 +1,29 @@
+ul.icons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.icons li {
+  display: inline-block;
+  text-align: center;
+  margin: 0 14px 15px 0;
+  width: 60px;
+}
+.icons li i {
+  font-size: 24px;
+  cursor: pointer;
+}
+.icons li p {
+  color: #9b9b9d;
+  margin: 0;
+  padding: 0;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+}
+ul.icons i:hover {
+  color: #0e4872;
+  cursor: pointer;
+}

@@ -1,0 +1,460 @@
+<app-breadcrumb [routePath]="routePath" [btnAddUpload]="btnAddUpload" [btnBack]="true && !this.searchPage"
+  [btnExportDisabled]="!screenAuth?.exportFlag" [btnExcelExport]="verificationList?.length > 0"
+  (eventBack)="closeSearch()" (eventReAssign)="openOrginalOwerdialog()" (eventAddUpload)="showBulk()"
+  (eventExcelExport)="downloadExcel()" [btnAddUploadDisabled]="!screenAuth.addFlag">
+</app-breadcrumb>
+
+<div>
+  <div fxLayout="row" class="advSearch">
+    <div class="advSearch-forms">
+      <form autocomplete="off" [formGroup]="VerificationSearchForm">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="200px">
+
+                <mat-form-field fxFlex="100%">
+                  <mat-label>Call Back Date</mat-label>
+                  <input matInput [matDatepicker]="sampledatePicker" formControlName='callBackDate'
+                    placeholder="Call Back Date" (focus)="sampledatePicker.open()"
+                    (dateChange)="checkPeriod()"  />
+                  <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #sampledatePicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div fxFlex="170px">
+                <app-auto-complete [selectProperties]='clientRefControl'>
+                </app-auto-complete>
+              </div>
+              <div fxFlex="170px">
+                <app-auto-complete [selectProperties]='clientControl'>
+                </app-auto-complete>
+              </div>
+              <div fxFlex="170px">
+                <app-auto-complete [selectProperties]='verificationControl'>
+                </app-auto-complete>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div fxFlex="100%" class="advSearch-btn">
+      <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+        <a (click)="search()">Search</a><span>|</span>
+        <a (click)="resetFilterSort()"> Reset</a>
+        <span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="padding-top: 80px;" class="content-area">
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <h1 class="header-title"> Employer Follow-Up Email
+            </h1>
+          </mat-card-title>
+          @if (verificationList?.length > 0) {
+            <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="90%"
+              fxFlex.sm="100%" fxFlex.xs="100%" fxLayout="column" fxLayoutAlign="end end">
+              <button style="padding-right: 100px;" mat-icon-button (click)="onIconClick()"
+                class="up-arrow-button">
+                <mat-icon class="up-arrow-icon">arrow_upward</mat-icon>
+              </button>
+              <span (click)="onIconClick()" class="follow-up-text">INITIATE FOLLOW-UP EMAIL</span>
+            </div>
+          }
+
+
+        </mat-card-header>
+        <mat-card-content>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="100%">
+              @if (verificationList?.length > 0) {
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"
+                  fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                  fxLayoutGap.xs="0px grid" class="sortrow">
+                  <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="10%" fxFlex.xs="100%"
+                    class="mt-5">
+                    <mat-checkbox [formControl]="selectall" (change)="selectAll($event)">Select All
+                    </mat-checkbox>
+                  </div>
+                  <span fxFlex></span>
+                  <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="90%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                    fxLayoutAlign.xs="start start">
+                    <div fxFlex="88%" fxFlex.lg="88%" fxFlex.md="88%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                      fxLayoutAlign.xs="start start">
+                      <ul class="pl-0">
+                        <li>
+                          <span class="text-dull"> Showing {{(itemPerPage*page)-itemPerPage+1}} -
+                            {{(itemPerPage*page) >= verificationList.length ?(verificationList?.length):(filterLength*page)}}
+                          of </span> <b> {{verificationList?.length}}
+                        record(s)</b>
+                      </li>
+                      <li>
+                        <span>|</span>
+                      </li>
+                      <li>
+                        <b>Sort By:</b>
+                        <a (click)="sortAll('candidateName',sortFlag)">Candidate Name</a>
+                                                <i [ngClass]="{'icon-sort': column != 'candidateName',
+                                                  'icon-sort-asc': (column == 'candidateName' && !isDesc),
+                                                  'icon-sort-desc': (column == 'candidateName' && isDesc) }"
+                        aria-hidden="true"> </i>
+                        <a (click)="sortAll('callBackDate',sortFlag)">Call Back Date</a>
+                                                <i [ngClass]="{'icon-sort': column != 'callBackDate',
+                                                      'icon-sort-asc': (column == 'callBackDate' && !isDesc),
+                                                      'icon-sort-desc': (column == 'callBackDate' && isDesc) }"
+                        aria-hidden="true"> </i>
+                        <!-- <a (click)="sortAll('tatdays',sortFlag)">TAT</a>
+                                                <i [ngClass]="{'icon-sort': column != 'tatdays',
+                                                  'icon-sort-asc': (column == 'tatdays' && !isDesc),
+                                                  'icon-sort-desc': (column == 'tatdays' && isDesc) }"
+                        aria-hidden="true"> </i> -->
+                        <a (click)="sortAll('verId',sortFlag)">Verification Id</a>
+                                                <i [ngClass]="{'icon-sort': column != 'verId',
+                                                  'icon-sort-asc': (column == 'verId' && !isDesc),
+                                                  'icon-sort-desc': (column == 'verId' && isDesc) }"
+                        aria-hidden="true"> </i>
+                        <!-- <a [ngClass]="column==='callbackDate'?'active':''"
+                        (click)="sortBy('callbackDate')"
+                      >CallBack Date</a>
+                                                    <i [ngClass]="{'icon-sort': column != 'callbackDate',
+                                                  'icon-sort-asc': (column == 'callbackDate' && !isDesc),
+                                                  'icon-sort-desc': (column == 'callbackDate' && isDesc) }"
+                      aria-hidden="true"> </i>
+                      <a [ngClass]="column==='tatStatus'?'active':''"
+                                                    (click)="sortBy('tatStatus')">TAT</a> <i [ngClass]="{'icon-sort': column != 'tatStatus',
+                                                  'icon-sort-asc': (column == 'tatStatus' && !isDesc),
+                                                  'icon-sort-desc': (column == 'tatStatus' && isDesc) }"
+                    aria-hidden="true"> </i>
+                    <a
+                      [ngClass]="column==='verificationId'?'active':''"
+                      (click)="sortBy('verificationId')">Verification
+                                                    ID</a> <i [ngClass]="{'icon-sort': column != 'verificationId',
+                                                  'icon-sort-asc': (column == 'verificationId' && !isDesc),
+                                                  'icon-sort-desc': (column == 'verificationId' && isDesc) }"
+                  aria-hidden="true"> </i> -->
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      }
+      <!-- Add Pagination by Megala-->
+      @for (empj of verificationList
+        | paginate: { itemsPerPage: itemPerPage, currentPage: page }; track empj; let c = $count; let j = $index) {
+        <div fxLayout="row" class="listrow" [class]="getFilterLen(c)">
+          <!-- <div *ngIf="empj?.subCheckFlag === true" matTooltip="Sub Check"
+        matTooltipClass="accent-tooltip" class="SubCheck"></div> -->
+        <div fxFlex="100%">
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+            fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+            fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+            <div fxFlex="3%" fxFlex.lg="3%" fxFlex.md="4%" fxFlex.sm="10%" fxFlex.xs="100%">
+              <mat-checkbox class="Xverifi-checkbox"
+                [checked]="empj.dummyFlags === null ? false : empj.dummyFlags "
+                (change)="selectcheckBox($event, empj)">
+              </mat-checkbox>
+              <i matTooltip="{{empj?.priorityLookupName ? empj?.priorityLookupName : 'N/A'}}"
+                matTooltipClass="accent-tooltip"
+                                                [ngClass]="empj?.priorityLookupName?.toLowerCase() === commonService.NORMAL.toLowerCase() ? 'icon-status csatus Normal' :
+                        empj?.priorityLookupName?.toLowerCase() === commonService.HIGH.toLowerCase() ? 'icon-status csatus High' :
+                        empj?.priorityLookupName?.toLowerCase() === commonService.DELTA.toLowerCase() ? 'icon-status csatus Delta' :
+                        empj?.priorityLookupName?.toLowerCase() === commonService.MEDIUM.toLowerCase() ? 'icon-status csatus Medium' :
+                        empj?.priorityLookupName?.toLowerCase() === commonService.VERIZON.toLowerCase() ? 'icon-status csatus Verizon' : 'icon-status csatus Delta'"></i>
+            </div>
+            <div fxFlex="16%" fxFlex.lg="18%" fxFlex.md="19%" fxFlex.sm="40%"
+              fxFlex.xs="100%">
+              <a>
+                <mat-card-header>
+                  <div mat-card-avatar
+                    class="avatar avatarBg{{(j%6)+1}} ">
+                    {{ empj?.candidateFirstName?.slice(0, 1)}}{{
+                    empj?.candidateLastName?.slice(0, 1)}}
+                  </div>
+                  <!-- <mat-card-title class="cname  cursor-pointer"
+                  matTooltip="{{empj?.candidateFirstName}} {{empj?.candidateMiddleName}} {{empj?.candidateLastName}}"
+                  [routerLink]="['/dashboard/verification/verificationDetail']"
+                  matTooltipClass="accent-tooltip"
+                  (click)="selectVerification(empj.screeningCompId);commonService.funcEntity = empj.functionalEntity"> -->
+                  <mat-card-subtitle class="cdesg">
+                    {{ empj?.candidateFirstName }} {{ empj?.candidateMiddleName }}
+                  {{ empj?.candidateLastName }}</mat-card-subtitle>
+                  <!-- <mat-card-subtitle class="cdesg mb-5 cursor-pointer"
+                  [routerLink]="['/dashboard/verification/verificationDetail']"
+                  (click)="selectVerification(empj?.screeningCompId);commonService.funcEntity = empj.functionalEntity"> -->
+                  <mat-card-subtitle class="cdesg mb-5 ">
+                    {{empj?.manualFileSubmissionFlag === true ?
+                    empj?.clientScreeningId : empj?.verificationId}}
+                  </mat-card-subtitle>
+                  <mat-card-subtitle class="mb-0 inproges"> <i
+                  class="icon-tatpending dc-ico"></i>
+                  <span class="dc-dn">{{empj?.inProgressDays}}</span><span
+                  class="dc-sub">days<br>Over</span>
+                </mat-card-subtitle>
+                <mat-card-subtitle class="mb-0 inproges">
+                  @if (empj?.tatStatus==='BT') {
+                    <span
+                    class="red">{{empj?.tatStatus}}</span>
+                  }
+                  @if (empj?.tatStatus=='WT') {
+                    <span>{{empj?.tatStatus}}</span>
+                  }
+                </mat-card-subtitle>
+              </mat-card-header>
+            </a>
+          </div>
+          <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Client:</label>
+              <em>{{empj?.clientName}}</em>
+            </p>
+            <p>
+              <label>Site Name:</label>
+              <em>{{empj?.siteName ? empj?.siteName : 'N/A'}}</em>
+            </p>
+            <p>
+              <label>Case Staus:</label>
+              <em>{{empj?.caseStatus ? empj?.caseStatus : 'N/A'}}</em>
+            </p>
+            @if (userData.applicationId === 1 && !empj?.callbackDate) {
+              <p>
+                <label>IQC Status:</label>
+                <em>{{empj?.iqcStatus ? empj?.iqcStatus : 'N/A'}}</em>
+              </p>
+            }
+            @if (userData.applicationId === 1 && !empj?.callbackDate) {
+              <p>
+                <label>FQC Status:</label>
+                <em>{{empj?.fqcStatus ? empj?.fqcStatus : 'N/A'}}</em>
+              </p>
+            }
+          </div>
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="25%" fxFlex.sm="50%"
+            fxFlex.xs="100%">
+            <p>
+              <label>{{empj?.manualFileSubmissionFlag === true ? 'Transaction Id:' :
+              'Client Ref No.:'}}</label>
+              <em>{{empj?.clientRefNo}}</em>
+            </p>
+            @if (userData.applicationId === 1&&commonService.reassigned!=true) {
+              <p>
+                <label>Screening Owner:</label>
+                <em>{{empj?.screeningOwnerName ? empj?.screeningOwnerName : 'N/A'}}</em>
+              </p>
+            }
+            @if (userData.applicationId === 1&&commonService.reassigned==true) {
+              <p>
+                <label>Screening Owner:</label>
+                <em>{{empj?.orginalScreeningOwnerName ? empj?.orginalScreeningOwnerName
+                : 'N/A'}}</em>
+              </p>
+            }
+            @if (commonService.reassigned) {
+              <p>
+                <label>Reassigned Owner:</label>
+                <em>{{empj?.reAssignScreeningOwnerName ?
+                empj?.reAssignScreeningOwnerName : 'N/A'}}</em>
+              </p>
+            }
+            @if (userData.applicationId === 1 && empj?.componentStatus === commonService.FOR_RE&&empj?.manualFileSubmissionFlag != true) {
+              <p
+                >
+                <label>ForResearch Owner:</label>
+                <em>{{empj?.frOwnerFN ? empj?.frOwnerFN : 'N/A'}}</em>
+              </p>
+            }
+            <p>
+              <label>Case Initiation Date:</label>
+              <!-- | date : 'dd/MM/yyyy hh:mm:ss a' -->
+              <em>{{empj?.requestDate ? (empj?.requestDate | date : 'dd/MMM/yyyy') :
+              'N/A'}}</em>
+            </p>
+            @if (userData.applicationId === 1) {
+              <p>
+                <label>{{empj?.qcStatus === 'Rejected' ? 'QC By:' : 'DE Submitted
+                By'}}</label>
+                <em>{{empj?.qcStatus === 'Rejected' ? empj?.fqcByFN : empj?.createdName
+                }}</em>
+              </p>
+            }
+          </div>
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="27%" fxFlex.sm="50%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Vendor:</label>
+              <em>{{empj?.vendorName ? empj?.vendorName : 'N/A'}}</em>
+            </p>
+            <p>
+              <label>Call Back Date:</label>
+              <em>{{empj?.callbackDate ?
+                (commonService.getTimezoneOffset(empj?.callbackDate,
+              false) | date : 'dd/MM/yyyy') : 'N/A'}}</em>
+            </p>
+            <p>
+              <p>
+                <label>Component Status:</label>
+                <em>{{empj?.componentStatus ? empj?.componentStatus : 'N/A'}}</em>
+              </p>
+              <p>
+                <label>Component:</label>
+                <em class="cn-chip">{{empj?.componentName}}
+                </em>
+              </p>
+            </div>
+          </div>
+          <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+          fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid">
+          <div fxFlex="100%">
+            <p
+              *ngIf="empj?.componentName.includes('Employment (HR)') || empj?.componentName.includes('Education') || empj?.componentName.includes('SSN Trace') ;else logg">
+              <label>Functional Entity:</label>
+              <em
+                *ngIf="empj?.functionalEntity !== null && empj?.functionalEntity !== 'Fresher';else NA"><span
+                [ngStyle]="empj?.researchResultName === 'Suspicious' && empj?.manualFileSubmissionFlag!=true ? {'color':'red'} : {}">
+              {{empj?.functionalEntity.split(',')[0]}}</span>
+            </em>
+            <ng-template #NA>{{empj?.functionalEntity && empj?.functionalEntity ===
+            'Fresher'? empj?.functionalEntity : 'N/A'}}</ng-template>
+          </p>
+          <ng-template #logg>
+            <p> <label>Functional Entity:</label>
+            <em>{{empj?.functionalEntity ? empj?.functionalEntity : 'N/A'}}</em>
+          </p>
+        </ng-template>
+      </div>
+    </div> -->
+  </div>
+</div>
+}
+
+@if (verificationList.length == 0) {
+  <div>
+    <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row"
+      fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+      <div fxFlex="100%" class="pt-15">
+        <div class="no-record text-center">
+          <span>No Record Found</span>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+@if (verificationList.length !== 0) {
+  <div  fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"
+    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutAlign.sm="start start"
+    fxLayoutAlign.xs="start start" class="cus-paginator">
+    <div fxFlex="76%" fxFlex.lg="76%" fxFlex.md="54%" fxFlex.sm="100%" fxFlex.xs="100%"
+      fxLayoutAlign="end end" fxLayoutAlign.md="start start" fxLayoutAlign.sm="start start"
+      fxLayoutAlign.xs="start start" class="tex t-right dev-paginator">
+      <pagination-controls (pageChange)="getPage($event)"></pagination-controls>
+    </div>
+    <div fxHide.xs fxFlex="24%" fxFlex.lg="24%" fxFlex.md="46%" fxFlex.sm="100%" fxFlex.xs="100%"
+      fxLayoutAlign="end end" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+      <span class="gotopagbg ml-2">Go to Page
+        <span class="input-num">
+          <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly preventDragdrop
+            preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+        </span>
+      </span>
+      <span class="gotopagbg ml-2">Items / page
+        <span class="input-num">
+          <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4" appNumberOnly preventDragdrop
+            preventCutCopyPaste autocomplete="off" [NumberOnly]="false" (blur)="preventInfinite()">
+        </span>
+      </span>
+    </div>
+  </div>
+}
+
+
+
+<!-- <div *ngIf="verificationList.length >0" fxLayout="row wrap" fxLayout.lg="row"
+fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+fxLayoutGap.sm="20px grid" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"
+class="cus-paginator">
+
+<div fxFlex="76%" fxFlex.lg="76%" fxFlex.md="54%" fxFlex.sm="100%" fxFlex.xs="100%"
+  fxLayoutAlign="end end" fxLayoutAlign.md="start start"
+  fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"
+  class="tex t-right dev-paginator">
+  <pagination-controls (pageChange)="shievePagination($event)"></pagination-controls>
+</div>
+<div fxHide.xs fxFlex="24%" fxFlex.lg="24%" fxFlex.md="46%" fxFlex.sm="100%"
+  fxFlex.xs="100%" fxLayoutAlign="end end" fxLayoutAlign.sm="start start"
+  fxLayoutAlign.xs="start start">
+  <span class="gotopagbg ml-2">Go to Page
+    <span class="input-num">
+      <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4"
+        appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+        [NumberOnly]="false" (blur)="getVerificationSearchDetails()">
+    </span>
+  </span>
+  <span class="gotopagbg ml-2">Items / page
+    <span class="input-num">
+      <input type="number" [(ngModel)]="shievePageSize" min="1" maxlength="4"
+        appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+        [NumberOnly]="false" (blur)="Velimit()">
+    </span>
+  </span>
+</div>
+
+</div> -->
+</div>
+</div>
+</mat-card-content>
+</mat-card>
+</div>
+</div>
+</div>
+
+<ng-template #EmployerFollowPopUp>
+  <!-- <mat-dialog-content>
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      <div style="padding-bottom: 10px;" fxLayout="row" fxLayoutAlign="start start">
+        <h3>Alert</h3>
+      </div>
+      <div style="padding-bottom: 5px;" fxLayout="row" fxLayoutAlign="start start">
+        <div fxFlex="100%">
+          <h2 style="font-weight: bold;"> Select the Next call back date</h2>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</mat-dialog-content> -->
+
+<h2 style="font-weight: bold;">Alert</h2>
+<h3 style="font-weight: bold;"> Select the Next call back date</h3>
+<mat-dialog-actions fxLayoutAlign="start start">
+  <form [formGroup]="commentsFollowUpForm" autocomplete="off">
+
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label style="font-weight: bold;">Next call back date</mat-label>
+        <input matInput [min]="minDate" formControlName="callBack" placeholder="DD/MM/YYYY, HH:MM AM"
+          [owlDateTimeTrigger]="callback" [owlDateTime]="callback" required>
+        <mat-datepicker-toggle [owlDateTimeTrigger]="callback" matSuffix></mat-datepicker-toggle>
+        <owl-date-time [pickerMode]="'popup'" #callback></owl-date-time>
+        <mat-hint>DD/MM/YYYY, HH:MM AM</mat-hint>
+      </mat-form-field>
+    </div>
+
+  </form>
+
+</mat-dialog-actions>
+<mat-dialog-actions fxLayoutAlign="end center">
+  <button mat-flat-button class="cancel-button" (click)="dialogClose()">Cancel</button>&nbsp;
+  <button mat-flat-button class="cancel-button" color="warn" (click)="updateCallbackDate()">Update </button>
+</mat-dialog-actions>
+</ng-template>

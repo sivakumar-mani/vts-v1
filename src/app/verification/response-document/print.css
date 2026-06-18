@@ -1,0 +1,163 @@
+@media print {
+
+    body {
+        background: #fff;
+    line-height: 1.5em;
+    color: #121212;
+    font-family: "Roboto", Calibri, "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    
+    /*
+padding: 20px;
+width: 100%;
+    margin: 20px auto;*/       
+    }
+    thead {
+        display: table-header-group;
+    }
+    tfoot {
+        display: table-footer-group;
+    }
+    button {
+        display: none;
+    }
+    @page {
+        size: A4;
+        margin: 10px 10mm;   
+    } 
+    table{
+          page-break-inside: avoid; 
+    }
+    html {
+        zoom: 80%;
+    }
+    .page {
+        page-break-after: always;
+    }
+    .ReportHeader {
+        border: 1px solid #bcbdbe;
+        background: #dedede;
+        text-align: center; 
+        margin-bottom: 30px;
+    }
+    .ReportHeader h1 {
+        margin: 0px;
+        font-weight: 500;
+        font-size: 20px;
+        text-transform: uppercase;
+        line-height: 20px;
+        padding: 20px;
+    }
+    .ReportHeader h1 b {
+        font-weight: 700;
+        font-size: 34px;
+        letter-spacing: 0.8px;
+    }
+    /* h1{
+        font-weight: 500;
+        font-size: 20px;
+        padding: 20px 0 30px 0;
+        text-align: center;
+    }
+    h3{
+        font-weight: 700;
+        font-size: 16px;
+        text-align: center;
+        margin: 20px;
+    } */
+    .FrmtdTable {
+        width: 100%;
+        border: 1px solid #bcbdbe;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+    .FrmtdTable th {
+        border: 1px solid #bcbdbe;
+        padding: 8px 10px;
+        background: #dedede;
+        font-size: 14px;
+        font-weight: 500;
+        vertical-align: top;
+        text-align: left;
+        line-height: 1.5em;
+    }
+    .FrmtdTable th.Tname {
+        background: #cdcece none repeat scroll 0 0;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    .FrmtdTable th.Sname {
+        background: #efefef none repeat scroll 0 0; 
+        font-weight: 600;
+    }
+    .FrmtdTable td {
+        border: 1px solid #bcbdbe;
+        padding: 8px 12px;
+        font-weight: normal;
+        font-size: 14px;
+        text-align: left;
+    }
+    .colorGreen {
+        color: #08BA53;
+        text-transform: uppercase;
+        font-weight: 600 !important;
+    }
+    .colorYellow {
+        color: #f9be00;
+         text-transform: uppercase;
+        font-weight: 600 !important;
+    }
+    .BgRed {
+        background: #d50000;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 50px;
+        height: 16px;
+        float: left;
+        margin-right: 5px;
+        width: 16px;
+    }
+    .BgYellow {
+        background: #f9be00;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 50px;
+        height: 16px;
+        float: left;
+        margin-right: 5px;
+        width: 16px;
+    }
+    .BgOrange {
+        background: #ff8c00;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 50px;
+        height: 16px;
+        float: left;
+        margin-right: 5px;
+        width: 16px;
+    }
+    .BgGreen {
+        background: #08BA53;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 50px;
+        height: 16px;
+        float: left;
+        margin-right: 5px;
+        width: 16px;
+    }
+    .BoxLGrey {
+        border: 1px solid #bcbdbe;
+        background: #efefef;
+        font-size: 12px;
+        margin-bottom: 30px;
+        padding: 13px 10px 10px 10px;
+    }
+    .cert{ 
+        margin: 0 auto;
+        text-align: center;
+    }
+    .cert img{
+        width: 70%;
+    }
+    
+}
+
+ 

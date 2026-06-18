@@ -1,0 +1,28 @@
+﻿.session-out .mat-mdc-dialog-content,
+.session-out .mat-mdc-dialog-content {
+  font-size: 13px;
+  text-align: center;
+}
+  .session-out .timerbg {
+    background: #4a7ffe;
+  }
+  .session-out img {
+    width: 125px;
+    position: relative;
+    left: 14px;
+    padding-top: 5px;
+  }
+  .ooops {
+    color: #fdfdfd;
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: -1px;
+    margin: 0;
+    padding: 0 0 15px 0;
+  }
+  .ooops .small {
+    display: inherit;
+    font-weight: 400;
+    font-size: 12px;
+    letter-spacing: 0;
+  }

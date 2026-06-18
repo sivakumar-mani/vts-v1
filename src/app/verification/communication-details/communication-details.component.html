@@ -1,0 +1,225 @@
+<form [formGroup]="communicationDetailForm" autocomplete="off">
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <!-- <h3 class="sub-header">Communication Details -->
+      <span fxFlex></span>
+      <button mat-icon-button class="in-btn mb-10" matTooltip="Save" (click)="savecommunicationDetails()"
+        matTooltipClass="accent-tooltip"> <i class="icon-save"></i></button>
+      <!-- </h3> -->
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+    fxLayoutGap="20px grid">
+    <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Communication Mode</mat-label>
+        <mat-select placeholder="Payment Mode"
+          (selectionChange)="getFormGroupName(communicationDetailForm?.get('commnModeLookupId')?.value)"
+          formControlName="commnModeLookupId" required>
+          <mat-option>Select Communication mode</mat-option>
+          @for (pay of communicationModeList; track pay) {
+            <mat-option [value]="pay.lookUpId"> {{pay.lookUpName}}</mat-option>
+          }
+        </mat-select>
+        @if (communicationDetailForm?.get('commnModeLookupId')?.errors?.required) {
+          <mat-error> Communication mode is
+          required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <!-- POSTAL-->
+    @if (formName==='postalForm') {
+      <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="postalForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Postal Status</mat-label>
+          <mat-select placeholder="Postal Status" formControlName="commnStatusLookupId" required>
+            <mat-option>---- Select Postal Status ---- </mat-option>
+            @for (ps of postalStatusList; track ps) {
+              <mat-option [value]="ps.lookUpId"> {{ps.lookUpName}}</mat-option>
+            }
+          </mat-select>
+          @if (communicationDetailForm?.get('postalForm.commnStatusLookupId')?.errors?.required) {
+            <mat-error> Postal
+            status is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+    @if (formName==='postalForm') {
+      <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="postalForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Post Status Date</mat-label>
+          <input matInput required formControlName="commnStatusDate" [matDatepicker]="picker"
+            placeholder="Post Status Date" maxlength="10" preventDragdrop preventCutCopyPaste appNumberOnly
+            [NumberOnlyWithslash]="false" autocomplete="off" role="presentation" [max]="maxDate"
+            (focus)="picker.open()" (click)="picker.open()">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (communicationDetailForm?.get('postalForm.commnStatusDate')?.errors?.required) {
+            <mat-error> Post status
+            date is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+    <!-- EMAIL -->
+    @if (formName==='emailForm') {
+      <div fxFlex="44%" fxFlex.lg="44%" fxFlex.md="44%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="emailForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Email ID</mat-label>
+          <input email="true" matInput type="email" formControlName="emailId" placeholder="Email ID" autocomplete="off"
+            role="presentation" maxlength="60" />
+          <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+          @if (communicationDetailForm?.get('emailForm.emailId')?.errors?.pattern) {
+            <mat-error> Email id is invalid
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+    @if (formName==='emailForm') {
+      <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="emailForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Email Sent Date</mat-label>
+          <input matInput required formControlName="commnStatusDate" [matDatepicker]="picker1" preventDragdrop
+            preventCutCopyPaste appNumberOnly [NumberOnlyWithslash]="false" maxlength="10" placeholder="Email Sent Date"
+            autocomplete="off" role="presentation" [max]="maxDate" (focus)="picker1.open()" (click)="picker1.open()">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+          @if (communicationDetailForm?.get('emailForm.commnStatusDate')?.errors?.required) {
+            <mat-error> Email sent date
+            is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+    <!-- FAX -->
+    @if (formName==='faxForm') {
+      <div fxFlex="44%" fxFlex.lg="44%" fxFlex.md="44%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="faxForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Fax Number</mat-label>
+          <input matInput formControlName="commnRef" placeholder="Fax Number" maxlength="60">
+          <mat-icon matSuffix><i class="icon-printer"></i></mat-icon>
+          @if (communicationDetailForm?.get('faxForm.commnRef')?.errors?.required) {
+            <mat-error> Fax Number is required
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+    @if (formName==='faxForm') {
+      <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="faxForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Fax Sent Date</mat-label>
+          <input matInput required formControlName="commnStatusDate" [matDatepicker]="picker3" preventDragdrop
+            preventCutCopyPaste appNumberOnly [NumberOnlyWithslash]="false" maxlength="10" placeholder="Fax Sent Date"
+            autocomplete="off" role="presentation" [max]="maxDate" (focus)="picker3.open()" (click)="picker3.open()">
+          <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+          <mat-datepicker #picker3></mat-datepicker>
+          @if (communicationDetailForm?.get('faxForm.commnStatusDate')?.errors?.required) {
+            <mat-error> Fax sent date date
+            is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+  </div>
+  <!-- POSTAL-->
+  @if (formName==='postalForm') {
+    <div formGroupName="postalForm">
+      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+        fxLayoutGap="20px grid">
+        <div fxFlex="34%" fxFlex.lg="34%" fxFlex.md="34%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Post Ref No</mat-label>
+            <input matInput formControlName="commnRef" placeholder="Post Ref No" maxlength="60">
+          </mat-form-field>
+        </div>
+        <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Postal Charges</mat-label>
+            <input matInput required formControlName="commnCharges" placeholder="Postal Charges" maxlength="5"
+              preventDragdrop preventCutCopyPaste appNumberOnly [NumberOnlyWithDot]="false">
+            <mat-icon matSuffix><i class="icon-inrrupeesb"></i></mat-icon>
+            @if (communicationDetailForm?.get('postalForm.commnCharges')?.errors?.required) {
+              <mat-error> Postal charges
+              amount is required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  }
+  <!-- EMAIL -->
+  @if (formName==='emailForm') {
+    <div formGroupName="emailForm">
+      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+        fxLayoutGap="20px grid">
+        <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Email Status</mat-label>
+            <mat-select placeholder="Email Status" formControlName="commnStatusLookupId" required>
+              <mat-option>---- Select Email Status ---- </mat-option>
+              @for (ps of emailStatusList; track ps) {
+                <mat-option [value]="ps.lookUpId"> {{ps.lookUpName}}</mat-option>
+              }
+            </mat-select>
+            @if (communicationDetailForm?.get('emailForm.commnStatusLookupId')?.errors?.required) {
+              <mat-error> Email
+              status is required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- FAX -->
+  @if (formName==='faxForm') {
+    <div formGroupName="faxForm">
+      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+        fxLayoutGap="20px grid">
+        <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Fax Status</mat-label>
+            <mat-select placeholder="Fax Status" formControlName="commnStatusLookupId" required>
+              <mat-option>---- Select Fax Status ---- </mat-option>
+              @for (ps of faxStatusList; track ps) {
+                <mat-option [value]="ps.lookUpId"> {{ps.lookUpName}}</mat-option>
+              }
+            </mat-select>
+            @if (communicationDetailForm?.get('faxForm.commnStatusLookupId')?.errors?.required) {
+              <mat-error> Fax status
+              is required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>No. of Pages</mat-label>
+            <input matInput required formControlName="commnDuration" placeholder="No Of Pages"
+              (keyup)="calculateCallCost($event)" maxlength="5" appNumberOnly [NumberOnly]="true">
+            @if (communicationDetailForm?.get('faxForm.commnDuration')?.errors?.required) {
+              <mat-error> No. of pages is
+              required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Total Call Cost (₹)</mat-label>
+            <input matInput formControlName="commnCharges" placeholder="Total Call Cost (₹)" readonly maxlength="6"
+              preventDragdrop preventCutCopyPaste appNumberOnly [NumberOnlyWithDot]="false">
+            <mat-icon matSuffix><i class="icon-inrrupeesb"></i></mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  }
+</form>

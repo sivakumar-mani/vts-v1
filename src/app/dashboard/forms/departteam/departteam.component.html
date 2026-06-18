@@ -1,0 +1,1050 @@
+﻿<div fxLayout="row" class="b-crumb">
+  <div>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/dashboard/home">Dashboard</a></li>
+      <li class="breadcrumb-item active">All Components</li>
+    </ol>
+  </div>
+  <div fxFlex="100%" class="b-crumb-toolbar">
+    <div class="btnTool" fxLayoutGap="10px">
+      <button mat-icon-button matTooltip="Add" matTooltipClass="accent-tooltip"> <i class="icon-plus"></i> Add </button>
+      <button mat-icon-button matTooltip="Save" matTooltipClass="accent-tooltip"> <i class="icon-save"></i>Save </button>
+      <button mat-icon-button matTooltip="Edit" matTooltipClass="accent-tooltip"> <i
+      class="icon-new-message"></i>Edit</button>
+    </div>
+  </div>
+</div>
+<div  fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%" >
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                  fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="80%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">Department Team</h1>
+                  </div>
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="20%" fxFlex.xs="100%" fxHide.xs
+                    fxLayoutAlign="end center" fxLayoutAlign.sm="end center" fxLayoutAlign.xs="start center">
+                    <div class="tbl-commonsearch">
+                      <button mat-flat-button color="accent" (click)="openDialog()">Create Sub Team</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="40px"  fxLayoutGap.sm="40px"  fxLayoutGap.xs="40px">
+          <div fxFlex="55%" fxFlex.lg="55%" fxFlex.md="55%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Department Name</mat-label>
+                  <input matInput placeholder="Department Name" required>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <p class="text-sm text-ilatic mt-0">Add a Team for the above Selected: <strong>Department Name </strong> </p>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Team Name</mat-label>
+                      <input matInput placeholder="Department Name" required>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Client</mat-label>
+                      <mat-chip-grid #chipList aria-label="MultiChip selection">
+                        @for (fruit of fruits; track fruit) {
+                          <mat-chip-row [removable]="removable"
+                            (removed)="remove(fruit)"> {{fruit.name}}
+                            @if (removable) {
+                              <mat-icon matChipRemove>cancel</mat-icon>
+                            }
+                          </mat-chip-row>
+                        }
+                        <input placeholder="Select Multi Chips..." [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="add($event)">
+                        </mat-chip-grid>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Team Description</mat-label>
+                        <textarea matInput placeholder="Department Name" rows="2"></textarea>
+                        <mat-hint>(0 /200 max)</mat-hint>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-label class="lbl">Active</mat-label>
+                      <mat-checkbox>Yes</mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Team Role</mat-label>
+                    <input matInput placeholder="Department Name" required>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <!-- <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Test</mat-label>
+                  <mat-chip-grid #chipList aria-label="MultiChip selection">
+                    <mat-chip-row *ngFor="let fruit of fruits" [selectable]="selectable"  [removable]="removable" (removed)="remove(fruit)">
+                      {{fruit.name}}
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="Select Multi Chips..." [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+                  </mat-chip-grid>
+                </mat-form-field> -->
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <h3 class="sub-header">Team Owner &amp; Members</h3>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Team Owner</mat-label>
+                  <mat-chip-grid #chipList aria-label="MultiChip selection">
+                    @for (fruit of fruits; track fruit) {
+                      <mat-chip-row [removable]="removable"
+                        (removed)="remove(fruit)"> {{fruit.name}}
+                        @if (removable) {
+                          <mat-icon matChipRemove>cancel</mat-icon>
+                        }
+                      </mat-chip-row>
+                    }
+                    <input placeholder="Select Multi Chips..." [matChipInputFor]="chipList"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                      (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-grid>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Team Owner Role</mat-label>
+                    <mat-chip-grid #chipList aria-label="MultiChip selection">
+                      @for (fruit of fruits; track fruit) {
+                        <mat-chip-row [removable]="removable"
+                          (removed)="remove(fruit)"> {{fruit.name}}
+                          @if (removable) {
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                          }
+                        </mat-chip-row>
+                      }
+                      <input placeholder="Select Multi Chips..." [matChipInputFor]="chipList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                        (matChipInputTokenEnd)="add($event)">
+                      </mat-chip-grid>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Team Members</mat-label>
+                      <mat-chip-grid #chipList aria-label="MultiChip selection">
+                        @for (fruit of fruits; track fruit) {
+                          <mat-chip-row [removable]="removable"
+                            (removed)="remove(fruit)"> {{fruit.name}}
+                            @if (removable) {
+                              <mat-icon matChipRemove>cancel</mat-icon>
+                            }
+                          </mat-chip-row>
+                        }
+                        <input placeholder="Select Multi Chips..." [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="add($event)">
+                        </mat-chip-grid>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"> </div>
+                  </div>
+                </div>
+                <div fxFlex="45%" fxFlex.lg="45%" fxFlex.md="45%" fxFlex.sm="100%"  fxFlex.xs="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                        fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <h1 class="header-title">Sub Team</h1>
+                        </div>
+                      </div>
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <div class="subteam">
+                            <div fxLayout="row" fxLayoutGap="0px">
+                              <div fxFlex="100%"> <span class="isactive">Active</span> <span fxFlex></span>
+                              <div class="more">
+                                <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action"
+                                  matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                  <mat-menu #menu="matMenu">
+                                    <button mat-menu-item>
+                                      <mat-icon>settings_applications</mat-icon>
+                                      <span>Manage Team</span> </button>
+                                      <button mat-menu-item>
+                                        <mat-icon>voicemail</mat-icon>
+                                        <span>Add Member</span> </button>
+                                        <button mat-menu-item>
+                                          <mat-icon>notifications_off</mat-icon>
+                                          <span>Leave the Team</span> </button>
+                                          <button mat-menu-item>
+                                            <mat-icon>notifications_off</mat-icon>
+                                            <span>Edit Team</span> </button>
+                                            <button mat-menu-item>
+                                              <mat-icon>delete_outline</mat-icon>
+                                              <span>Delete Team</span> </button>
+                                            </mat-menu>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div fxLayout="row" fxLayoutGap="10px">
+                                        <div fxFlex="100%">
+                                          <div fxLayout="row" fxLayoutGap="10px">
+                                            <div fxFlex="100%">
+                                              <h2>Data Entry</h2>
+                                              <p class="mb-5">This button will expand into a email subscription field,
+                                              it will be a great CTA on sites where you have limited</p>
+                                            </div>
+                                          </div>
+                                          <div fxLayout="row" fxLayoutGap="10px" class="mb-5">
+                                            <div fxFlex="100%" class="subteam-data">
+                                              <p>
+                                                <label>Client:</label>
+                                                <span>Krya Screening Private Limited, Data Matrix, Dssi solution</span></p>
+                                                <p>
+                                                  <label>Role:</label>
+                                                  <span>Team Lead</span></p>
+                                                </div>
+                                              </div>
+                                              <div fxLayout="row" class="mb-10">
+                                                <div fxFlex="100%">
+                                                  <p class="mb-5">2 Sub Team Owner</p>
+                                                  <span class="ubadge avatarBg1">GK</span> <span class="ubadge avatarBg2">MS</span> </div>
+                                                </div>
+                                                <div fxLayout="row" class="mt-5">
+                                                  <div fxFlex="100%">
+                                                    <p class="mb-5">8 Sub Team Users</p>
+                                                    <span class="ubadge avatarBg1">TC</span> <span class="ubadge avatarBg2">DK</span> <span
+                                                    class="ubadge avatarBg3">GK</span> <span class="ubadge avatarBg4">KT</span> <span
+                                                    class="ubadge avatarBg5">PV</span> <span class="ubadge avatarBg6">DA</span> </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                            <div class="subteam">
+                                              <div fxLayout="row" fxLayoutGap="0px">
+                                                <div fxFlex="100%"> <span class="isactive">Active</span> <span fxFlex></span>
+                                                <div class="more">
+                                                  <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action"
+                                                    matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                    <mat-menu #menu="matMenu">
+                                                      <button mat-menu-item>
+                                                        <mat-icon>settings_applications</mat-icon>
+                                                        <span>Manage Team</span> </button>
+                                                        <button mat-menu-item>
+                                                          <mat-icon>voicemail</mat-icon>
+                                                          <span>Add Member</span> </button>
+                                                          <button mat-menu-item>
+                                                            <mat-icon>notifications_off</mat-icon>
+                                                            <span>Leave the Team</span> </button>
+                                                            <button mat-menu-item>
+                                                              <mat-icon>notifications_off</mat-icon>
+                                                              <span>Edit Team</span> </button>
+                                                              <button mat-menu-item>
+                                                                <mat-icon>delete_outline</mat-icon>
+                                                                <span>Delete Team</span> </button>
+                                                              </mat-menu>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div fxLayout="row" fxLayoutGap="10px">
+                                                          <div fxFlex="100%">
+                                                            <div fxLayout="row" fxLayoutGap="10px">
+                                                              <div fxFlex="100%">
+                                                                <h2>Scope Creation</h2>
+                                                                <p class="mb-5">Collection of hand-picked free HTML and CSS button code examples.
+                                                                Update of June 2018 collection. 38 new items. </p>
+                                                              </div>
+                                                            </div>
+                                                            <div fxLayout="row" fxLayoutGap="10px" class="mb-5">
+                                                              <div fxFlex="100%" class="subteam-data">
+                                                                <p>
+                                                                  <label>Client:</label>
+                                                                  <span>Krya Screening Private Limited, Data Matrix, Dssi solution</span></p>
+                                                                  <p>
+                                                                    <label>Role:</label>
+                                                                    <span>Team Lead</span></p>
+                                                                  </div>
+                                                                </div>
+                                                                <div fxLayout="row" class="mb-10">
+                                                                  <div fxFlex="100%">
+                                                                    <p class="mb-5">2 Sub Team Owner</p>
+                                                                    <span class="ubadge avatarBg1">PK</span> <span class="ubadge avatarBg6">NG</span> </div>
+                                                                  </div>
+                                                                  <div fxLayout="row" class="mt-5">
+                                                                    <div fxFlex="100%">
+                                                                      <p class="mb-5">8 Sub Team Users</p>
+                                                                      <span class="ubadge avatarBg6">ZA</span> <span class="ubadge avatarBg1">MS</span> <span
+                                                                      class="ubadge avatarBg2">EZ</span> <span class="ubadge avatarBg3">MA</span> <span
+                                                                      class="ubadge avatarBg4">PD</span> <span class="ubadge avatarBg5">AA</span> </div>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </mat-card-content>
+                                              </mat-card>
+                                            </div>
+                                          </div>
+
+                                          <!-- Department Details  -->
+                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px">
+                                            <div fxFlex="100%" class="dt-viewBg">
+                                              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px" fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
+                                                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%" class="border-right">
+                                                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                                                    <div fxFlex="100%">
+                                                      <h4>Team</h4>
+                                                    </div>
+                                                  </div>
+                                                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                                                    <div fxFlex="100%" >
+                                                      <div class="dt-list-scrollbar" style="overflow:auto">
+                                                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                          <div fxFlex="100%" class="dt-list active">
+                                                            <div class="more">
+                                                              <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                              <mat-menu #menu="matMenu">
+                                                                <button mat-menu-item>
+                                                                  <mat-icon>settings_applications</mat-icon>
+                                                                  <span>Manage Team</span> </button>
+                                                                  <button mat-menu-item>
+                                                                    <mat-icon>voicemail</mat-icon>
+                                                                    <span>Add Member</span> </button>
+                                                                    <button mat-menu-item>
+                                                                      <mat-icon>notifications_off</mat-icon>
+                                                                      <span>Leave the Team</span> </button>
+                                                                      <button mat-menu-item>
+                                                                        <mat-icon>notifications_off</mat-icon>
+                                                                        <span>Edit Team</span> </button>
+                                                                        <button mat-menu-item>
+                                                                          <mat-icon>delete_outline</mat-icon>
+                                                                          <span>Delete Team</span> </button>
+                                                                        </mat-menu>
+                                                                      </div>
+                                                                      <div class="team-details">
+                                                                        <div class="teamAvtar avatarBg1"> <i class="icon-team"></i> </div>
+                                                                        <div class="teamL-Detail">
+                                                                          <h5>CRT Team</h5>
+                                                                          <p>Manage personal groups you own and...</p>
+                                                                        </div>
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+                                                                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                    <div fxFlex="100%" class="dt-list">
+                                                                      <div class="more">
+                                                                        <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                                        <mat-menu #menu="matMenu">
+                                                                          <button mat-menu-item>
+                                                                            <mat-icon>settings_applications</mat-icon>
+                                                                            <span>Manage Team</span> </button>
+                                                                            <button mat-menu-item>
+                                                                              <mat-icon>voicemail</mat-icon>
+                                                                              <span>Add Member</span> </button>
+                                                                              <button mat-menu-item>
+                                                                                <mat-icon>notifications_off</mat-icon>
+                                                                                <span>Leave the Team</span> </button>
+                                                                                <button mat-menu-item>
+                                                                                  <mat-icon>notifications_off</mat-icon>
+                                                                                  <span>Edit Team</span> </button>
+                                                                                  <button mat-menu-item>
+                                                                                    <mat-icon>delete_outline</mat-icon>
+                                                                                    <span>Delete Team</span> </button>
+                                                                                  </mat-menu>
+                                                                                </div>
+                                                                                <div class="team-details">
+                                                                                  <div class="teamAvtar avatarBg2"> <i class="icon-team"></i> </div>
+                                                                                  <div class="teamL-Detail">
+                                                                                    <h5>Address Team</h5>
+                                                                                    <p>Manage personal groups you own and...</p>
+                                                                                  </div>
+                                                                                </div>
+                                                                              </div>
+                                                                            </div>
+                                                                            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                              <div fxFlex="100%" class="dt-list">
+                                                                                <div class="more">
+                                                                                  <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                                                  <mat-menu #menu="matMenu">
+                                                                                    <button mat-menu-item>
+                                                                                      <mat-icon>settings_applications</mat-icon>
+                                                                                      <span>Manage Team</span> </button>
+                                                                                      <button mat-menu-item>
+                                                                                        <mat-icon>voicemail</mat-icon>
+                                                                                        <span>Add Member</span> </button>
+                                                                                        <button mat-menu-item>
+                                                                                          <mat-icon>notifications_off</mat-icon>
+                                                                                          <span>Leave the Team</span> </button>
+                                                                                          <button mat-menu-item>
+                                                                                            <mat-icon>notifications_off</mat-icon>
+                                                                                            <span>Edit Team</span> </button>
+                                                                                            <button mat-menu-item>
+                                                                                              <mat-icon>delete_outline</mat-icon>
+                                                                                              <span>Delete Team</span> </button>
+                                                                                            </mat-menu>
+                                                                                          </div>
+                                                                                          <div class="team-details">
+                                                                                            <div class="teamAvtar avatarBg3"> <i class="icon-team"></i> </div>
+                                                                                            <div class="teamL-Detail">
+                                                                                              <h5>Education Team</h5>
+                                                                                              <p>Manage personal groups you own and...</p>
+                                                                                            </div>
+                                                                                          </div>
+                                                                                        </div>
+                                                                                      </div>
+                                                                                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                                        <div fxFlex="100%" class="dt-list">
+                                                                                          <div class="more">
+                                                                                            <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                                                            <mat-menu #menu="matMenu">
+                                                                                              <button mat-menu-item>
+                                                                                                <mat-icon>settings_applications</mat-icon>
+                                                                                                <span>Manage Team</span> </button>
+                                                                                                <button mat-menu-item>
+                                                                                                  <mat-icon>voicemail</mat-icon>
+                                                                                                  <span>Add Member</span> </button>
+                                                                                                  <button mat-menu-item>
+                                                                                                    <mat-icon>notifications_off</mat-icon>
+                                                                                                    <span>Leave the Team</span> </button>
+                                                                                                    <button mat-menu-item>
+                                                                                                      <mat-icon>notifications_off</mat-icon>
+                                                                                                      <span>Edit Team</span> </button>
+                                                                                                      <button mat-menu-item>
+                                                                                                        <mat-icon>delete_outline</mat-icon>
+                                                                                                        <span>Delete Team</span> </button>
+                                                                                                      </mat-menu>
+                                                                                                    </div>
+                                                                                                    <div class="team-details">
+                                                                                                      <div class="teamAvtar avatarBg4"> <i class="icon-team"></i> </div>
+                                                                                                      <div class="teamL-Detail">
+                                                                                                        <h5>Employment Team</h5>
+                                                                                                        <p>Manage personal groups you own and...</p>
+                                                                                                      </div>
+                                                                                                    </div>
+                                                                                                  </div>
+                                                                                                </div>
+                                                                                                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                                                  <div fxFlex="100%" class="dt-list">
+                                                                                                    <div class="more">
+                                                                                                      <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                                                                      <mat-menu #menu="matMenu">
+                                                                                                        <button mat-menu-item>
+                                                                                                          <mat-icon>settings_applications</mat-icon>
+                                                                                                          <span>Manage Team</span> </button>
+                                                                                                          <button mat-menu-item>
+                                                                                                            <mat-icon>voicemail</mat-icon>
+                                                                                                            <span>Add Member</span> </button>
+                                                                                                            <button mat-menu-item>
+                                                                                                              <mat-icon>notifications_off</mat-icon>
+                                                                                                              <span>Leave the Team</span> </button>
+                                                                                                              <button mat-menu-item>
+                                                                                                                <mat-icon>notifications_off</mat-icon>
+                                                                                                                <span>Edit Team</span> </button>
+                                                                                                                <button mat-menu-item>
+                                                                                                                  <mat-icon>delete_outline</mat-icon>
+                                                                                                                  <span>Delete Team</span> </button>
+                                                                                                                </mat-menu>
+                                                                                                              </div>
+                                                                                                              <div class="team-details">
+                                                                                                                <div class="teamAvtar avatarBg5"> <i class="icon-team"></i> </div>
+                                                                                                                <div class="teamL-Detail">
+                                                                                                                  <h5>Data Entry Team</h5>
+                                                                                                                  <p>Manage personal groups you own and...</p>
+                                                                                                                </div>
+                                                                                                              </div>
+                                                                                                            </div>
+                                                                                                          </div>
+                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                                                            <div fxFlex="100%" class="dt-list">
+                                                                                                              <div class="more">
+                                                                                                                <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                                                                                <mat-menu #menu="matMenu">
+                                                                                                                  <button mat-menu-item>
+                                                                                                                    <mat-icon>settings_applications</mat-icon>
+                                                                                                                    <span>Manage Team</span> </button>
+                                                                                                                    <button mat-menu-item>
+                                                                                                                      <mat-icon>voicemail</mat-icon>
+                                                                                                                      <span>Add Member</span> </button>
+                                                                                                                      <button mat-menu-item>
+                                                                                                                        <mat-icon>notifications_off</mat-icon>
+                                                                                                                        <span>Leave the Team</span> </button>
+                                                                                                                        <button mat-menu-item>
+                                                                                                                          <mat-icon>notifications_off</mat-icon>
+                                                                                                                          <span>Edit Team</span> </button>
+                                                                                                                          <button mat-menu-item>
+                                                                                                                            <mat-icon>delete_outline</mat-icon>
+                                                                                                                            <span>Delete Team</span> </button>
+                                                                                                                          </mat-menu>
+                                                                                                                        </div>
+                                                                                                                        <div class="team-details">
+                                                                                                                          <div class="teamAvtar avatarBg1"> <i class="icon-team"></i> </div>
+                                                                                                                          <div class="teamL-Detail">
+                                                                                                                            <h5>Sales Team </h5>
+                                                                                                                            <p>Manage personal groups you own and...</p>
+                                                                                                                          </div>
+                                                                                                                        </div>
+                                                                                                                      </div>
+                                                                                                                    </div>
+                                                                                                                    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                                                                      <div fxFlex="100%" class="dt-list">
+                                                                                                                        <div class="more">
+                                                                                                                          <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                                                                                          <mat-menu #menu="matMenu">
+                                                                                                                            <button mat-menu-item>
+                                                                                                                              <mat-icon>settings_applications</mat-icon>
+                                                                                                                              <span>Manage Team</span> </button>
+                                                                                                                              <button mat-menu-item>
+                                                                                                                                <mat-icon>voicemail</mat-icon>
+                                                                                                                                <span>Add Member</span> </button>
+                                                                                                                                <button mat-menu-item>
+                                                                                                                                  <mat-icon>notifications_off</mat-icon>
+                                                                                                                                  <span>Leave the Team</span> </button>
+                                                                                                                                  <button mat-menu-item>
+                                                                                                                                    <mat-icon>notifications_off</mat-icon>
+                                                                                                                                    <span>Edit Team</span> </button>
+                                                                                                                                    <button mat-menu-item>
+                                                                                                                                      <mat-icon>delete_outline</mat-icon>
+                                                                                                                                      <span>Delete Team</span> </button>
+                                                                                                                                    </mat-menu>
+                                                                                                                                  </div>
+                                                                                                                                  <div class="team-details">
+                                                                                                                                    <div class="teamAvtar avatarBg1"> <i class="icon-team"></i> </div>
+                                                                                                                                    <div class="teamL-Detail">
+                                                                                                                                      <h5>Address 1 Team</h5>
+                                                                                                                                      <p>Manage personal groups you own and...</p>
+                                                                                                                                    </div>
+                                                                                                                                  </div>
+                                                                                                                                </div>
+                                                                                                                              </div>
+                                                                                                                              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                                                                                <div fxFlex="100%" class="dt-list">
+                                                                                                                                  <div class="more">
+                                                                                                                                    <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                                                                                                    <mat-menu #menu="matMenu">
+                                                                                                                                      <button mat-menu-item>
+                                                                                                                                        <mat-icon>settings_applications</mat-icon>
+                                                                                                                                        <span>Manage Team</span> </button>
+                                                                                                                                        <button mat-menu-item>
+                                                                                                                                          <mat-icon>voicemail</mat-icon>
+                                                                                                                                          <span>Add Member</span> </button>
+                                                                                                                                          <button mat-menu-item>
+                                                                                                                                            <mat-icon>notifications_off</mat-icon>
+                                                                                                                                            <span>Leave the Team</span> </button>
+                                                                                                                                            <button mat-menu-item>
+                                                                                                                                              <mat-icon>notifications_off</mat-icon>
+                                                                                                                                              <span>Edit Team</span> </button>
+                                                                                                                                              <button mat-menu-item>
+                                                                                                                                                <mat-icon>delete_outline</mat-icon>
+                                                                                                                                                <span>Delete Team</span> </button>
+                                                                                                                                              </mat-menu>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="team-details">
+                                                                                                                                              <div class="teamAvtar avatarBg2"> <i class="icon-team"></i> </div>
+                                                                                                                                              <div class="teamL-Detail">
+                                                                                                                                                <h5>Education 1 Team</h5>
+                                                                                                                                                <p>Manage personal groups you own and...</p>
+                                                                                                                                              </div>
+                                                                                                                                            </div>
+                                                                                                                                          </div>
+                                                                                                                                        </div>
+                                                                                                                                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                                                                                          <div fxFlex="100%" class="dt-list">
+                                                                                                                                            <div class="more">
+                                                                                                                                              <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                                                                                                              <mat-menu #menu="matMenu">
+                                                                                                                                                <button mat-menu-item>
+                                                                                                                                                  <mat-icon>settings_applications</mat-icon>
+                                                                                                                                                  <span>Manage Team</span> </button>
+                                                                                                                                                  <button mat-menu-item>
+                                                                                                                                                    <mat-icon>voicemail</mat-icon>
+                                                                                                                                                    <span>Add Member</span> </button>
+                                                                                                                                                    <button mat-menu-item>
+                                                                                                                                                      <mat-icon>notifications_off</mat-icon>
+                                                                                                                                                      <span>Leave the Team</span> </button>
+                                                                                                                                                      <button mat-menu-item>
+                                                                                                                                                        <mat-icon>notifications_off</mat-icon>
+                                                                                                                                                        <span>Edit Team</span> </button>
+                                                                                                                                                        <button mat-menu-item>
+                                                                                                                                                          <mat-icon>delete_outline</mat-icon>
+                                                                                                                                                          <span>Delete Team</span> </button>
+                                                                                                                                                        </mat-menu>
+                                                                                                                                                      </div>
+                                                                                                                                                      <div class="team-details">
+                                                                                                                                                        <div class="teamAvtar avatarBg3"> <i class="icon-team"></i> </div>
+                                                                                                                                                        <div class="teamL-Detail">
+                                                                                                                                                          <h5>Employment 1 Team</h5>
+                                                                                                                                                          <p>Manage personal groups you own and...</p>
+                                                                                                                                                        </div>
+                                                                                                                                                      </div>
+                                                                                                                                                    </div>
+                                                                                                                                                  </div>
+                                                                                                                                                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                                                                                                    <div fxFlex="100%" class="dt-list">
+                                                                                                                                                      <div class="more">
+                                                                                                                                                        <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                                                                                                                        <mat-menu #menu="matMenu">
+                                                                                                                                                          <button mat-menu-item>
+                                                                                                                                                            <mat-icon>settings_applications</mat-icon>
+                                                                                                                                                            <span>Manage Team</span> </button>
+                                                                                                                                                            <button mat-menu-item>
+                                                                                                                                                              <mat-icon>voicemail</mat-icon>
+                                                                                                                                                              <span>Add Member</span> </button>
+                                                                                                                                                              <button mat-menu-item>
+                                                                                                                                                                <mat-icon>notifications_off</mat-icon>
+                                                                                                                                                                <span>Leave the Team</span> </button>
+                                                                                                                                                                <button mat-menu-item>
+                                                                                                                                                                  <mat-icon>notifications_off</mat-icon>
+                                                                                                                                                                  <span>Edit Team</span> </button>
+                                                                                                                                                                  <button mat-menu-item>
+                                                                                                                                                                    <mat-icon>delete_outline</mat-icon>
+                                                                                                                                                                    <span>Delete Team</span> </button>
+                                                                                                                                                                  </mat-menu>
+                                                                                                                                                                </div>
+                                                                                                                                                                <div class="team-details">
+                                                                                                                                                                  <div class="teamAvtar avatarBg4"> <i class="icon-team"></i> </div>
+                                                                                                                                                                  <div class="teamL-Detail">
+                                                                                                                                                                    <h5>Sales Ext Team</h5>
+                                                                                                                                                                    <p>Manage personal groups you own and...</p>
+                                                                                                                                                                  </div>
+                                                                                                                                                                </div>
+                                                                                                                                                              </div>
+                                                                                                                                                            </div>
+                                                                                                                                                            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                                                                                                              <div fxFlex="100%" class="dt-list">
+                                                                                                                                                                <div class="more">
+                                                                                                                                                                  <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                                                                                                                                  <mat-menu #menu="matMenu">
+                                                                                                                                                                    <button mat-menu-item>
+                                                                                                                                                                      <mat-icon>settings_applications</mat-icon>
+                                                                                                                                                                      <span>Manage Team</span> </button>
+                                                                                                                                                                      <button mat-menu-item>
+                                                                                                                                                                        <mat-icon>voicemail</mat-icon>
+                                                                                                                                                                        <span>Add Member</span> </button>
+                                                                                                                                                                        <button mat-menu-item>
+                                                                                                                                                                          <mat-icon>notifications_off</mat-icon>
+                                                                                                                                                                          <span>Leave the Team</span> </button>
+                                                                                                                                                                          <button mat-menu-item>
+                                                                                                                                                                            <mat-icon>notifications_off</mat-icon>
+                                                                                                                                                                            <span>Edit Team</span> </button>
+                                                                                                                                                                            <button mat-menu-item>
+                                                                                                                                                                              <mat-icon>delete_outline</mat-icon>
+                                                                                                                                                                              <span>Delete Team</span> </button>
+                                                                                                                                                                            </mat-menu>
+                                                                                                                                                                          </div>
+                                                                                                                                                                          <div class="team-details">
+                                                                                                                                                                            <div class="teamAvtar avatarBg5"> <i class="icon-team"></i> </div>
+                                                                                                                                                                            <div class="teamL-Detail">
+                                                                                                                                                                              <h5>CPP 1, 2, 3 Team</h5>
+                                                                                                                                                                              <p>Manage personal groups you own and...</p>
+                                                                                                                                                                            </div>
+                                                                                                                                                                          </div>
+                                                                                                                                                                        </div>
+                                                                                                                                                                      </div>
+                                                                                                                                                                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                                                                                                                        <div fxFlex="100%" class="dt-list">
+                                                                                                                                                                          <div class="more">
+                                                                                                                                                                            <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action" matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                                                                                                                                                            <mat-menu #menu="matMenu">
+                                                                                                                                                                              <button mat-menu-item>
+                                                                                                                                                                                <mat-icon>settings_applications</mat-icon>
+                                                                                                                                                                                <span>Manage Team</span> </button>
+                                                                                                                                                                                <button mat-menu-item>
+                                                                                                                                                                                  <mat-icon>voicemail</mat-icon>
+                                                                                                                                                                                  <span>Add Member</span> </button>
+                                                                                                                                                                                  <button mat-menu-item>
+                                                                                                                                                                                    <mat-icon>notifications_off</mat-icon>
+                                                                                                                                                                                    <span>Leave the Team</span> </button>
+                                                                                                                                                                                    <button mat-menu-item>
+                                                                                                                                                                                      <mat-icon>notifications_off</mat-icon>
+                                                                                                                                                                                      <span>Edit Team</span> </button>
+                                                                                                                                                                                      <button mat-menu-item>
+                                                                                                                                                                                        <mat-icon>delete_outline</mat-icon>
+                                                                                                                                                                                        <span>Delete Team</span> </button>
+                                                                                                                                                                                      </mat-menu>
+                                                                                                                                                                                    </div>
+                                                                                                                                                                                    <div class="team-details">
+                                                                                                                                                                                      <div class="teamAvtar avatarBg2"> <i class="icon-team"></i> </div>
+                                                                                                                                                                                      <div class="teamL-Detail">
+                                                                                                                                                                                        <h5>Verification Team </h5>
+                                                                                                                                                                                        <p>Manage personal groups you own and...</p>
+                                                                                                                                                                                      </div>
+                                                                                                                                                                                    </div>
+                                                                                                                                                                                  </div>
+                                                                                                                                                                                </div>
+                                                                                                                                                                              </div>
+                                                                                                                                                                            </div>
+                                                                                                                                                                          </div>
+                                                                                                                                                                        </div>
+                                                                                                                                                                        <div  fxFlex="75%" fxFlex.lg="75%" fxFlex.md="75%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                                                                                                                          <div  fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+                                                                                                                                                                            <div fxFlex="100%" class="team-view">
+                                                                                                                                                                              <div class="team-details">
+                                                                                                                                                                                <div class="teamAvtar avatarBg3"> <i class="icon-team"></i> </div>
+                                                                                                                                                                                <div class="teamL-Detail">
+                                                                                                                                                                                  <h5>Sales Team </h5>
+                                                                                                                                                                                  <p>Manage personal groups you own and belong to. Groups are private spaces where users
+                                                                                                                                                                                  can share updates, documents and messages with other group members.</p>
+                                                                                                                                                                                </div>
+                                                                                                                                                                              </div>
+                                                                                                                                                                            </div>
+                                                                                                                                                                          </div>
+                                                                                                                                                                          <div  fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" class="teamdata-view" >
+                                                                                                                                                                            <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                                                                                                                              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                                                                                                                                                <div fxFlex="100%">
+                                                                                                                                                                                  <h3 class="sub-header border-none">Team Details</h3>
+                                                                                                                                                                                </div>
+                                                                                                                                                                              </div>
+                                                                                                                                                                              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" class="d-view">
+                                                                                                                                                                                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%" class="pb-0">
+                                                                                                                                                                                  <p>
+                                                                                                                                                                                    <label>Team Name:</label>
+                                                                                                                                                                                    <span>CRT Team</span></p>
+                                                                                                                                                                                    <p>
+                                                                                                                                                                                      <label>Client:</label>
+                                                                                                                                                                                      <span>Krya Screening Private Limited DSSI Solutions</span></p>
+                                                                                                                                                                                      <p>
+                                                                                                                                                                                        <label>Status:</label>
+                                                                                                                                                                                        <span>Active</span></p>
+                                                                                                                                                                                        <p>
+                                                                                                                                                                                          <label>Team Member:</label>
+                                                                                                                                                                                          <span>
+                                                                                                                                                                                            <div class="uname">
+                                                                                                                                                                                              <div class="user avatarBg2">TM</div>
+                                                                                                                                                                                            Manohar T</div>
+                                                                                                                                                                                            <div class="uname">
+                                                                                                                                                                                              <div class="user avatarBg3">MR</div>
+                                                                                                                                                                                            G.Ram</div>
+                                                                                                                                                                                          </span>
+                                                                                                                                                                                        </p>
+                                                                                                                                                                                      </div>
+                                                                                                                                                                                      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%" class="pb-0">
+                                                                                                                                                                                        <p>
+                                                                                                                                                                                          <label>Department Name:</label>
+                                                                                                                                                                                          <span>TechM Department</span></p>
+                                                                                                                                                                                          <p>
+                                                                                                                                                                                            <label>Role:</label>
+                                                                                                                                                                                            <span>Krya Screening Private Limited
+                                                                                                                                                                                            DSSI Solutions</span></p>
+                                                                                                                                                                                            <p>
+                                                                                                                                                                                              <label>Team Owner:</label>
+                                                                                                                                                                                              <span>
+                                                                                                                                                                                                <div class="uname">
+                                                                                                                                                                                                  <div class="user avatarBg4">RG</div>
+                                                                                                                                                                                                Rohit G</div>
+                                                                                                                                                                                                <div class="uname">
+                                                                                                                                                                                                  <div class="user avatarBg5">JK</div>
+                                                                                                                                                                                                Jai Kumar</div>
+                                                                                                                                                                                              </span>
+                                                                                                                                                                                            </p>
+                                                                                                                                                                                          </div>
+                                                                                                                                                                                          <div fxFlex="100%">
+                                                                                                                                                                                            <p class="whitespace-preline">
+                                                                                                                                                                                              <label>Description:</label>
+                                                                                                                                                                                              <span fxFlex="100%" class="tbl-result"> Manage personal groups you own and belong to. Groups are private spaces where users can share updates, documents and messages with other group members.Manage personal groups you own and belong to. Groups are private spaces where users can share updates, documents and messages with other group members. </span> </p>
+                                                                                                                                                                                            </div>
+                                                                                                                                                                                          </div>
+                                                                                                                                                                                        </div>
+                                                                                                                                                                                        <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%" class="border-left pl-20">
+                                                                                                                                                                                          <div fxLayout="row">
+                                                                                                                                                                                            <div fxFlex="60%">
+                                                                                                                                                                                              <h3 class="sub-header border-none">Sub Team Details</h3>
+                                                                                                                                                                                            </div>
+                                                                                                                                                                                          </div>
+                                                                                                                                                                                          <div fxLayout="row" fxLayoutGap="20px">
+                                                                                                                                                                                            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                                                                                                                                              <mat-card-content>
+                                                                                                                                                                                                <mat-accordion class="db-accordion subteam-accordion">
+                                                                                                                                                                                                  <mat-expansion-panel [expanded]="true">
+                                                                                                                                                                                                    <mat-expansion-panel-header>
+                                                                                                                                                                                                      <div fxLayout="row" fxLayoutGap="20px" fxFlex="100%">
+                                                                                                                                                                                                        <div fxFlex="100%">
+                                                                                                                                                                                                          <mat-panel-title> Data Entry</mat-panel-title>
+                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                    </mat-expansion-panel-header>
+                                                                                                                                                                                                    <mat-card class="db-listdetails">
+                                                                                                                                                                                                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px" >
+                                                                                                                                                                                                        <div fxFlex="100%">
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Team Name:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">CRT Team</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Department Name:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">TechM Department</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Client:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">Krya Screening Private Limited, Data Matrix, Dssi solution India Pvt Ltd.,</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Role:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">Managing Director For Acheck Assistant Manager For CRT</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Status:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">Active</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Team Owner:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">
+                                                                                                                                                                                                              <div class="uname mt-0 mb-10">
+                                                                                                                                                                                                                <div class="user avatarBg4">RG</div>
+                                                                                                                                                                                                              Rohit G</div>
+                                                                                                                                                                                                              <div class="uname">
+                                                                                                                                                                                                                <div class="user avatarBg5">JK</div>
+                                                                                                                                                                                                              Jai Kumar</div>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Team Member:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">
+                                                                                                                                                                                                              <div class="uname mt-0 mb-10">
+                                                                                                                                                                                                                <div class="user avatarBg2">TM</div>
+                                                                                                                                                                                                              Manohar T</div>
+                                                                                                                                                                                                              <div class="uname">
+                                                                                                                                                                                                                <div class="user avatarBg3">MR</div>
+                                                                                                                                                                                                              G.Ram</div>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Description:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">Manage personal groups you own and belong to. Groups are private spaces where users can share updates, documents and messages with other group members.</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                    </mat-card>
+                                                                                                                                                                                                  </mat-expansion-panel>
+                                                                                                                                                                                                  <mat-expansion-panel>
+                                                                                                                                                                                                    <mat-expansion-panel-header>
+                                                                                                                                                                                                      <div fxLayout="row" fxLayoutGap="20px" fxFlex="100%">
+                                                                                                                                                                                                        <div fxFlex="100%">
+                                                                                                                                                                                                          <mat-panel-title>Scope Creation Team</mat-panel-title>
+                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                    </mat-expansion-panel-header>
+                                                                                                                                                                                                    <mat-card class="db-listdetails">
+                                                                                                                                                                                                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px" >
+                                                                                                                                                                                                        <div fxFlex="100%">
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Team Name:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">CRT Team</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Department Name:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">TechM Department</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Client:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">Krya Screening Private Limited, Data Matrix, Dssi solution India Pvt Ltd.,</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Role:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">Managing Director For Acheck Assistant Manager For CRT</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Status:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">Active</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Team Owner:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">
+                                                                                                                                                                                                              <div class="uname mt-0 mb-10">
+                                                                                                                                                                                                                <div class="user avatarBg4">RG</div>
+                                                                                                                                                                                                              Rohit G</div>
+                                                                                                                                                                                                              <div class="uname">
+                                                                                                                                                                                                                <div class="user avatarBg5">JK</div>
+                                                                                                                                                                                                              Jai Kumar</div>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Team Member:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">
+                                                                                                                                                                                                              <div class="uname mt-0 mb-10">
+                                                                                                                                                                                                                <div class="user avatarBg2">TM</div>
+                                                                                                                                                                                                              Manohar T</div>
+                                                                                                                                                                                                              <div class="uname">
+                                                                                                                                                                                                                <div class="user avatarBg3">MR</div>
+                                                                                                                                                                                                              G.Ram</div>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Description:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%" class="tbl-result">Manage personal groups you own and belong to. Groups are private spaces where users can share updates, documents and messages with other group members.</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                    </mat-card>
+                                                                                                                                                                                                  </mat-expansion-panel>
+                                                                                                                                                                                                  <mat-expansion-panel>
+                                                                                                                                                                                                    <mat-expansion-panel-header>
+                                                                                                                                                                                                      <div fxLayout="row" fxLayoutGap="20px" fxFlex="100%">
+                                                                                                                                                                                                        <div fxFlex="100%">
+                                                                                                                                                                                                          <mat-panel-title>Others</mat-panel-title>
+                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                    </mat-expansion-panel-header>
+                                                                                                                                                                                                    <mat-card class="db-listdetails">
+                                                                                                                                                                                                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px" >
+                                                                                                                                                                                                        <div fxFlex="100%">
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Team Name:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-result">CRT Team</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Department Name:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-result">TechM Department</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Client:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-result">Krya Screening Private Limited, Data Matrix, Dssi solution India Pvt Ltd.,</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Role:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-result">Managing Director For Acheck Assistant Manager For CRT</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Status:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-result">Active</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Team Owner:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-result">Data Matrix, Dssi solution India Pvt Ltd.,</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Team Owner:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-result">Data Matrix, Dssi solution India Pvt Ltd.,</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Team Member:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-result">ABC Pvt Ltd., Ionnex Solution, Avin Technologies</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                                                                                                                                                                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-lblname">
+                                                                                                                                                                                                              <label>Description:</label>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="tbl-result">Manage personal groups you own and belong to. Groups are private spaces where users can share updates, documents and messages with other group members.</div>
+                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                    </mat-card>
+                                                                                                                                                                                                  </mat-expansion-panel>
+                                                                                                                                                                                                </mat-accordion>
+                                                                                                                                                                                              </mat-card-content>
+                                                                                                                                                                                            </div>
+                                                                                                                                                                                          </div>
+                                                                                                                                                                                        </div>
+                                                                                                                                                                                      </div>
+                                                                                                                                                                                    </div>
+                                                                                                                                                                                  </div>
+                                                                                                                                                                                </div>
+                                                                                                                                                                              </div>

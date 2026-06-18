@@ -1,0 +1,538 @@
+﻿<div class="content {{storedTheme}}" role="main">
+  <!-- <h1 style="font-size: 52px;"><i class="icon-Credit-overseas"></i></h1> -->
+  <mat-card #drawer class="drawer-height">
+    <div fxFlex="70px">
+      <div class="n-logo" [routerLink]="userData.applicationId!==3?'/dashboard/home':null">
+        <!-- <i class="icon-k-letter"></i></div> -->
+        <i class="icon-K-transparent"></i></div>
+        <!-- <div *ngIf="logoList?.clientLogos?.length > 0" class="n-logo" routerLink="/dashboard/home" >
+        <img src="{{ verification.getCommonFileLogo(logoList?.clientLogos, common.KRYA_LOGO, '') }}" alt="Krya Screening Private Limited Logo" height="45" />
+      </div> -->
+      <div class="side-icon-menu">
+        <mat-list role="list" class="menu-icon"> @for (menuVal of authorizedmenuHeadingList; track menuVal; let i = $index) {
+          <span
+            >
+            @if (i <= 4) {
+              <mat-list-item role="listitem" (click)="opendDrawer(menuVal.moduleId)"
+                [ngClass]="{ 'active-sidenav': +currentOpenId == menuVal.moduleId }">
+                <mat-icon matTooltip="{{ menuVal.menu }}" matTooltipClass="accent-tooltip"> <i
+                [ngClass]="getIcons(menuVal.menu)"></i></mat-icon>
+                <div class="menu-name">{{ menuVal.menu }}</div>
+              </mat-list-item>
+            }
+          </span>
+        } </mat-list>
+      </div>
+      @if (authorizedmenuHeadingList.length > 5) {
+        <button [matMenuTriggerFor]="moreMenu" mat-icon-button
+          aria-label="button with a vertical three dot icon">
+          <mat-icon>more_horiz</mat-icon>
+          <div class="menu-name">More</div>
+        </button>
+      }
+      <!-- <button mat-icon-button aria-label="button with a vertical three dot icon"
+      routerLink="/dashboard/liveCapture">
+      <mat-icon>more_horiz</mat-icon>
+      <div class="menu-name">LiveCapture</div>
+    </button> -->
+    <div class="u-bg">
+      <button mat-icon-button matTooltip="Logout" matTooltipClass="accent-tooltip"
+        (click)="openLogoutDialog()"> <i class="icon-log-out"></i> </button>
+      </div>
+    </div>
+  </mat-card>
+  <mat-sidenav-container>
+    <mat-sidenav [opened]="true" class="menuContainer" #secDrawer mode="side">
+      <div class="logo-lett" [routerLink]="userData.applicationId!==3?'/dashboard/home':null">
+        <div class="big">Krya Screening Private Limited</div>
+        <!-- <div class="small">Screening Made Smart</div> -->
+      </div>
+      <div class="sub-menuitems">
+        <!-- Left Side Menu with Icon Ex. Dashboard , Config, Client etc... Start -->
+        @for (menuVal of authorizedmenuHeadingList; track menuVal; let i = $index) {
+          <div>
+            @if (+currentOpenId === menuVal.moduleId) {
+              <div class="menu-header">{{ menuVal.menu }}</div>
+            }
+          </div>
+        }
+        <!-- Left Side Menu with Icon Ex. Dashboard , Config, Client etc... End -->
+        <div class="perfectscrol-wdthheigh" style="overflow:auto">
+          @for (menuVal of authorizedmenuList; track menuVal; let i = $index) {
+            <mat-list role="list">
+              <!-- sing menu Start -->
+              @if (
+                (menuVal.subModuleId === 0 && !isPageLoad) ||
+                (isPageLoad && menuVal?.moduleId === currentOpenId && menuVal?.subModuleId === 0)
+                ) {
+                <a [routerLink]="menuVal.routingUrl" routerLinkActive="active" class="atag-link"
+                  (click)="selectId = menuVal.screenId; setScreenDetails(menuVal); secDrawer.open()">
+                  <mat-list-item (click)="newId = 0"
+                    [ngClass]="{ 'menu-sel': selectId === menuVal.screenId && menuVal?.subModuleId === 0 }"
+                  class="menus" role="listitem"> {{ menuVal.screenName }} </mat-list-item>
+                </a>
+              }
+              <!-- sing menu start End -->
+              <!-- left side menu  Dropdown Start -->
+              @if (
+                (menuVal?.subModuleId > 0 && !isPageLoad) ||
+                (isPageLoad && menuVal.moduleId === currentOpenId && menuVal?.subModuleId > 0)
+                ) {
+                <mat-accordion [displayMode]="displayMode" [multi]="multi" class="SideNav sidenav-menu">
+                  <mat-expansion-panel [expanded]="+newId === +menuVal?.subModuleId">
+                    <!-- left side menu header name in (User, Location, Mail config) Dropdown  Start setId(menuVal?.subModuleId) openAcc(menuVal.subModuleId);-->
+                    <mat-expansion-panel-header (click)="newId = menuVal.subModuleId">
+                      <mat-panel-title class="pagename-icon"> {{ menuVal.subModuleName }}
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <!-- left side menu header inside (User, Location, Mail config) Dropdown  End -->
+                    @for (menuValChild1 of menuVal?.children; track menuValChild1) {
+                      <span class="menu-Childlist">
+                        <!-- left side menu header name in (User, Location, Mail config) Dropdown child list  End -->
+                        @if (!menuValChild1?.children) {
+                          <a [routerLink]="menuValChild1.routingUrl" routerLinkActive="active"
+                            class="atag-link m enu-Childlist"
+                            (click)="selectId = menuValChild1.screenId; secDrawer.open(); setScreenDetails(menuValChild1)"
+                            >
+                            <!-- (click)='setId(menuValChild1?.subModuleId)' --- -->
+                                        <mat-list-item [ngClass]="{
+                      'menu-sel': +selectId === +menuValChild1?.screenId
+                    }" class="menus" role="listitem"> {{ menuValChild1.screenName }} </mat-list-item>
+                          </a>
+                        }
+                        <!-- left side menu header inside (User, Location, Mail config) Dropdown child list  End -->
+                        @if (menuValChild1?.children) {
+                          <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                              <mat-panel-title
+                                (click)="router.navigate([menuValChild1.routingUrl]); setScreenDetails(menuValChild1)">
+                              {{ menuValChild1.screenName }} </mat-panel-title>
+                            </mat-expansion-panel-header>
+                          </mat-expansion-panel>
+                        }
+                      </span>
+                    }
+                  </mat-expansion-panel>
+                </mat-accordion>
+              }
+            </mat-list>
+          }
+        </div>
+      </div>
+      <footer> <strong>Verification Tracking System.</strong> Copyright © Krya Screening Private Limited. All rights reserved. <a
+    routerLink="/privacy" target="_blank">Privacy Policies</a> </footer>
+  </mat-sidenav>
+  <mat-sidenav-content class="sidenav-width">
+    <!-- top header position -->
+    <mat-toolbar class="header-bg">
+      <button mat-icon-button class="toggle-btn" (click)="secDrawer.toggle()" matTooltip="Toggle"
+        matTooltipClass="accent-tooltip"> <i class="icon-menu"></i> </button>
+        <!-- <div *ngIf="logoList?.clientLogos?.length > 0" class="n-logo" routerLink="/dashboard/home"> <img src="{{ verification.getCommonFileLogo(logoList?.clientLogos, common.KRYA_LOGO, '') }}"
+      alt="Krya Screening Private Limited Logo" height="45" /> </div> -->
+      <div class="appname">
+        {{userData.applicationId === 3? logoList?.screening?.clientName :'Verification Tracking System'}}
+      </div>
+      <span fxFlex></span>
+      <div class="toolbar-icons" fxLayoutAlign="end stretch" fxLayoutGap="20px">
+        @if (userData.applicationId === 1) {
+          <button mat-icon-button matTooltip="Choose Department"
+            matTooltipClass="accent-tooltip" (click)="openChooseDept()"> <i class="icon-double-tick"></i>
+          </button>
+        }
+
+        <!-- <button *ngIf="userData.applicationId !== 3" mat-icon-button matTooltip="Advanced Search"
+        matTooltipClass="accent-tooltip" (click)="openAdvanceSearch()"> <i class="icon-search1"></i>
+      </button> -->
+      @if (((userData.applicationId !== 3) && (userData?.team == 'CRT-Domestic' || userData?.team == 'Admin Team' || userData?.team == 'CRT-Tech M'
+        || userData?.team == 'CRT-Tech M' || userData?.team == 'CRT-International' || userData?.team == 'Approval Manager Team' || userData?.team == 'A-Check' || userData?.team == 'CTS-CRTTeam'))) {
+        <button mat-icon-button matTooltip="Advance Search" matTooltipClass="accent-tooltip"
+          (click)="openAdvanceSearch()" class="lens-icon-button">
+          <mat-icon>search</mat-icon>
+        </button>
+      }
+
+      @if (userData.applicationId !== 3) {
+        <button mat-icon-button matTooltip="Search"
+          matTooltipClass="accent-tooltip" (click)="openCommonSearch()"> <i class="icon-search1"></i>
+        </button>
+      }
+      @if (userData.applicationId !== 3 && notificationService.notificationCount == 0) {
+        <button mat-icon-button matTooltip="Notification" matTooltipClass="accent-tooltip"
+          > <i
+        class="icon-bell"></i>
+      </button>
+    }
+    @if (userData.applicationId !== 3 && notificationService.notificationCount > 0) {
+      <button
+        mat-icon-button matTooltip="Notification" matTooltipClass="accent-tooltip"
+        [matBadge]="notificationService.notificationCount > 99 ? '99+' : notificationService.notificationCount"
+        [matMenuTriggerFor]="notification" matBadgeColor="warn" (click)="getNotificationDetails()"> <i
+      class="icon-bell"></i> </button>
+    }
+    @if (userData.applicationId !== 3) {
+      <button mat-icon-button matTooltip="Settings"
+        matTooltipClass="accent-tooltip"> <i class="icon-settings1"> </i> </button>
+      }
+      @if (userData.applicationId !== 3) {
+        <button mat-icon-button matTooltip="Select Theme For Change"
+          matTooltipClass="accent-tooltip" [matMenuTriggerFor]="themechange">
+          <mat-icon>palette</mat-icon>
+          <div class="user-ddl">
+            <mat-menu #themechange="matMenu" Position="after">
+              <ul class="usrset1">
+                <li matTooltip="Black Color">
+                  <mat-radio-button [ngClass]="(storedTheme ==='theme-black') ? 'active' : '' "
+                  (click)="setTheme('theme-black')"> </mat-radio-button>
+                  Black Color<span fxFlex></span> <i class="theme-options"><i
+                id="theme-black"></i></i>
+              </li>
+              <li matTooltip="Blue Color">
+                <mat-radio-button [ngClass]="(storedTheme ==='theme-blue') ? 'active' : '' "
+                (click)="setTheme('theme-blue')"> </mat-radio-button>
+                Blue Color<span fxFlex></span> <i class="theme-options"><i
+              id="theme-blue"></i></i>
+            </li>
+            <li matTooltip="Orange Color">
+              <mat-radio-button [ngClass]="(storedTheme ==='theme-orange') ? 'active' : '' "
+              (click)="setTheme('theme-orange')"> </mat-radio-button>
+              Orange Color<span fxFlex></span> <i class="theme-options"><i
+            id="theme-orange"></i></i>
+          </li>
+          <li matTooltip="Purple Color">
+            <mat-radio-button [ngClass]="(storedTheme ==='theme-purple') ? 'active' : '' "
+            (click)="setTheme('theme-purple')"> </mat-radio-button>
+            Purple Color<span fxFlex></span> <i class="theme-options"><i
+          id="theme-purple"></i></i>
+        </li>
+        <li matTooltip="Default Color">
+          <mat-radio-button [ngClass]="(storedTheme ==='theme-default') ? 'active' : '' "
+          (click)="setTheme('theme-default')" checked> </mat-radio-button>
+          Default Color<span fxFlex></span> <i class="theme-options"><i
+        id="theme-default"></i></i>
+      </li>
+    </ul>
+  </mat-menu>
+</div>
+</button>
+}
+<div [matMenuTriggerFor]="userprofile" class="user">{{ userName }}</div>
+<div class="user-ddl">
+  <mat-menu class="user_profiledrop" #userprofile="matMenu" Position="before">
+    <div fxFlex="100" class="profile_bg">
+      <div class="profile_img_bx">
+        <div class="inside">
+          <h2>{{ userName }}</h2>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="column" class="profile_name">
+      @if (userData.applicationId !== 3) {
+        <h3 class="name">{{ Cldata[0]?.firstName }} {{
+        Cldata[0]?.middleName }} {{ Cldata[0]?.lastName }}</h3>
+      }
+      @if (userData.applicationId === 3) {
+        <h4>{{ candidateName }}</h4>
+      }
+      @if (userData.applicationId == 2) {
+        <span><small>{{ Cldata[0]?.clientName
+        }}</small><br />
+        <small>{{ userData.emailId }}</small>
+      </span>
+    }
+    @if (userData.applicationId !== 3) {
+      <h4 class="dec">{{ userData.designation }}
+      </h4>
+    }
+    @if (userData.applicationId !== 2) {
+      <span> <small>{{ userData.emailId }}</small><br />
+    </span>
+  }
+  <div fxFlex="100">
+
+
+    @if (userData.teamName) {
+      <div class="designation" class="teamName">
+        <span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+              stroke="#004C80" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+              <path
+                d="M3.59998 9H20.4M3.59998 15H20.4M11.5 3C9.81532 5.69961 8.92218 8.81787 8.92218 12C8.92218 15.1821 9.81532 18.3004 11.5 21M12.5 3C14.1846 5.69961 15.0778 8.81787 15.0778 12C15.0778 15.1821 14.1846 18.3004 12.5 21"
+                stroke="#004C80" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+              </svg>
+            </span> {{ userData?.subTeam ? userData?.subTeam : userData?.team }}
+          </div>
+        }
+        @if (userData.applicationId == 2) {
+          <div class="designation" class="teamName">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                  stroke="#004C80" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                  <path
+                    d="M3.59998 9H20.4M3.59998 15H20.4M11.5 3C9.81532 5.69961 8.92218 8.81787 8.92218 12C8.92218 15.1821 9.81532 18.3004 11.5 21M12.5 3C14.1846 5.69961 15.0778 8.81787 15.0778 12C15.0778 15.1821 14.1846 18.3004 12.5 21"
+                    stroke="#004C80" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  </svg>
+                </span> {{ Cldata[0]?.teamName }}
+              </div>
+            }
+
+
+            <p class="last_seen"><i class="icon-eye-line"></i> &nbsp; {{
+            common.getTimezoneOffset(this.userData.lastLogIn, false) | date: "dd/MM/yyyy
+          hh:mm:ss a " }}</p>
+        </div>
+      </div>
+      <div fxLayout="row" class="user_btns" fxLayout-xs="column" fxFlexAlign="center"
+        fxLayoutGap="10px">
+        <div fxFlex="50">
+          <div fxFlex="100">
+            @if (userData.userName !== 'admin' && userData.applicationId !== 3) {
+              <div> <a
+              class="change_password" (click)="openDialog()">Change Password</a>
+            </div>
+          }
+        </div>
+      </div>
+      <div fxFlex="50">
+        <div fxFlex="100">
+          <div matTooltip="Log Out" matTooltipClass="accent-tooltip"> <a
+          class="user_logout" (click)="openLogoutDialog()">Log Out</a> </div>
+        </div>
+      </div>
+    </div>
+  </mat-menu>
+</div>
+</div>
+<div class="user-ddl">
+  <mat-menu #notification="matMenu" Position="before">
+    <div fxLayout="row">
+      <ul class="subteam usrset notification">
+        <div class="noti-head"> Notification @if (notificationService.notificationCount > 0) {
+          <span
+            >{{
+            notificationService.notificationCount }}
+          unread notifications</span>
+        } </div>
+        <div class="perfectscrol-notification" style="overflow:auto">
+          @for (notify of lstNotificationDetail; track notify; let i = $index) {
+            <li>
+              <a [routerLink]="notify.routingUrl">
+                <div class="list">
+                  <div class="icon"><i
+                  class="icon-acheck icon-bg-circle avatarBg{{ (i % 6) + 1 }}"></i>
+                </div>
+                <div class="notifi-body unread" (click)="selectNotification(notify)">
+                  <div>
+                    <h4
+                      [ngClass]="{ unread: notify.readFlag === false, read: notify.readFlag === true }">
+                      <span>{{ notify.notificationHeader }}</span>
+                    </h4>
+                  </div>
+                                                    <p [ngClass]="{
+                            'notification-text unread': notify.readFlag === false,
+                            'notification-text read': notify.readFlag === true
+                          }"> {{ notify.notificationContent }} </p>
+                </div>
+              </div>
+              <div class="notifi-icons"> <span class="text-muted FloatL"><i
+              class="icon-calendartime"></i>
+              <!-- {{notify.createDate|date:"dd/MM/yy hh:mm"}} -->
+              {{ common.getTimezoneOffset(notify.createDate, false) | date:
+              "dd/MM/yyyy hh:mm:ss a" }}
+            </span> @if (notify.readFlag) {
+<span [ngClass]="{
+                          'FloatL text-muted unread': notify.readFlag === false,
+                          'text-muted': notify.readFlag === true
+                        }"><i class="icon-check-circle"></i> Read </span>
+              } @if (notify.followFlag) {
+              <span
+                class="FloatL text-muted unread"><i
+              class="icon-loop"></i>
+            Follow</span>
+            } @if (notify.archiveFlag) {
+            <span class="FloatL text-muted unread"
+              ><i class="icon-archive"></i>
+            Archive</span>
+          } </div>
+        </a>
+      </li>
+    }
+  </div>
+</ul>
+</div>
+<a routerLink="notification">
+  <div class="notifi-footer">View all notifications</div>
+</a>
+</mat-menu>
+</div>
+</mat-toolbar>
+<mat-menu #moreMenu="matMenu" class="more-menu-box">
+  <div fxLayout="row wrap">
+    <!-- <span > -->
+    @for (menuVal of moreMenuList; track menuVal; let i = $index) {
+      <div fxFlex="50%" class="more-menu"
+        (click)="opendDrawer(menuVal.moduleId)">
+        <div matTooltip="{{ menuVal.menu }}" matTooltipClass="accent-tooltip" class="i-cons"> <i
+        [ngClass]="getIcons(menuVal.menu) + ' more-bcolor' + ((i % 6) + 1)"></i> </div>
+        <span class="names">{{ menuVal.menu }}</span>
+      </div>
+    }
+  <!-- </span> -->
+</div>
+</mat-menu>
+<div class="page-container" role="main">
+  <router-outlet></router-outlet>
+</div>
+</mat-sidenav-content>
+</mat-sidenav-container>
+</div>
+<p-toast position="top-center"></p-toast>
+@if (isShow) {
+  <a (click)="gotoTop()" class="scrollToTop"> <i class="material-icons-outlined">keyboard_arrow_up</i> </a>
+}
+<ng-template #botTemp>
+  <mat-nav-list class="noti"> @for (notify of lstNotificationDetail; track notify) {
+    <span> @if (!notify.readFlag) {
+      <a [routerLink]="notify.routingUrl"
+        routerLinkActive="active" mat-list-item (click)="updateNotification(notify)">
+        <span mat-line class="text-semi-bold">Notification</span> <span mat-line>{{ notify.notificationContent
+      }}</span>
+    </a>
+  }
+</span>
+}
+</mat-nav-list>
+</ng-template>
+<ng-template #logoutAlert>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"><img
+            src="assets/images/alert-warning.gif" />
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">Alert !</h3>
+            <p class="text-sm">Changes you made may not be saved. Do you want to <b>Logout</b> this session
+          ?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+  <button mat-flat-button color="warn" (click)="logout()" name="Yes">Yes, Logout</button>
+  <button mat-stroked-button (click)="dialog.closeAll()" name="No">Stay On</button>
+</mat-dialog-actions>
+</ng-template>
+@if (showNotification) {
+  <div class="win-alert" (mouseover)="notificationMouseOver()"
+    (mouseout)="notificationMouseOut()">
+    <button mat-icon-button type="button" class="close" aria-label="Close" (click)="closeNotification()"> <span
+    aria-hidden="true">&times;</span> </button>
+    <h3>Notification Alert!</h3>
+    <div class="body">
+      <div class="icon"><i class="icon-bell-line"></i></div>
+      <div class="info">
+        <!-- <h6>LOA Approval Pending</h6> -->
+        <p>{{ notificationDetail }}</p>
+      </div>
+    </div>
+  </div>
+}
+<ng-template class="all_srch" #search>
+  <div class="cmn-srch">
+    <h1 mat-dialog-title>Search</h1>
+    <mat-dialog-content>
+      <form [formGroup]="searchFormGroup">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+              <mat-label>Client Ref no/Verification ID/Screening ID</mat-label>
+              <input matInput placeholder="Client Ref no/Verification ID/Screening ID" autocomplete="off"
+                formControlName="refNo" (input)="valueCheck('ref')" />
+                @if (searchFormGroup.controls.refNo?.errors?.required) {
+                  <mat-error> Client Reference Number
+                    is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="50%">
+              <app-auto-complete [selectProperties]="clientControls"
+                (selectionChange)="searchFormGroup.get('refNo').setValue(''); searchList = []">
+              </app-auto-complete>
+            </div>
+            <div fxFlex="50%">
+              <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                <mat-label>Category Type</mat-label>
+                <mat-select formControlName="typeLookupId" placeholder="Select Candidate"
+                  (selectionChange)="selectionChange($event.value)"> @for (type of categoryType; track type) {
+                  <span
+                    >
+                    <mat-option [value]="type.lookUpId"> {{ type.lookUpName }} </mat-option>
+                  </span>
+                } </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                <mat-label>{{ labelType }}</mat-label>
+                <input matInput placeholder="{{ labelType }}" formControlName="name" autocomplete="off"
+                  (input)="valueCheck('candidate')" />
+                  @if (searchFormGroup.controls.name.errors?.required) {
+                    <mat-error> {{ labelType }} is
+                      required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                  <mat-label>Enter Address</mat-label>
+                  <input matInput placeholder="Enter Country/State/City" (input)="valueCheck('address')"
+                    formControlName="address" autocomplete="off" />
+                    @if (searchFormGroup.controls.address.errors?.required) {
+                      <mat-error> address is
+                      required></mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Enter ApplicantId</mat-label>
+                    <input matInput autocomplete="off" placeholder="Enter Applicant Id"
+                      (input)="valueCheck('app')" formControlName="applicantId" />
+                      <!-- <mat-error *ngIf="searchFormGroup.controls.address.errors?.required"> address is required></mat-error> -->
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutGap="8px" fxLayoutAlign="end end">
+                  <button mat-flat-button color="primary" (click)="searchGlobal()">Search</button>
+                  <button mat-flat-button color="warn" (click)="dialog.closeAll()">Cancel</button>
+                </div>
+              </div>
+            </mat-dialog-content>
+          </div>
+        </ng-template>

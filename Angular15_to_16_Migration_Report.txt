@@ -1,0 +1,918 @@
+================================================================================
+         VTS APPLICATION - ANGULAR 15 TO ANGULAR 16 MIGRATION REPORT
+================================================================================
+Framework  : Angular 15  -->  Angular 16
+Build      : Production Build Reference Guide
+Note       : This report covers all changes required for Angular 15 → 16 upgrade
+             for a project using Angular Material, PrimeNG, Kendo UI, ngx-layout
+================================================================================
+
+
+================================================================================
+SECTION 1 : PACKAGE VERSION UPDATES (package.json)
+================================================================================
+
+  ANGULAR CORE PACKAGES
+  ----------------------
+  @angular/animations          : ^15.0.0  -->  ^16.0.0
+  @angular/cdk                 : ^15.0.0  -->  ^16.0.0
+  @angular/common              : ^15.0.0  -->  ^16.0.0
+  @angular/compiler            : ^15.0.0  -->  ^16.0.0
+  @angular/core                : ^15.0.0  -->  ^16.0.0
+  @angular/forms               : ^15.0.0  -->  ^16.0.0
+  @angular/material            : ^15.0.0  -->  ^16.0.0
+  @angular/platform-browser    : ^15.0.0  -->  ^16.0.0
+  @angular/router              : ^15.0.0  -->  ^16.0.0
+  @angular/localize            : ^15.0.0  -->  ^16.0.0
+  @angular/google-maps         : ^15.0.0  -->  ^16.0.0
+
+  ANGULAR DEV PACKAGES
+  ---------------------
+  @angular-devkit/build-angular: ^15.0.0  -->  ^16.0.0
+  @angular-devkit/core         : ^15.0.0  -->  ^16.0.0
+  @angular-devkit/schematics   : ^15.0.0  -->  ^16.0.0
+  @angular/cli                 : ^15.0.0  -->  ^16.0.0
+  @angular/compiler-cli        : ^15.0.0  -->  ^16.0.0
+  @angular/language-service    : ^15.0.0  -->  ^16.0.0
+
+  RUNTIME DEPENDENCY UPDATES
+  ---------------------------
+  zone.js                      : ~0.12.x  -->  ~0.13.x
+  rxjs                         : ~7.5.0   -->  ~7.8.0   (recommended update)
+
+  THIRD-PARTY PACKAGES UPDATED
+  -----------------------------
+  angular-oauth2-oidc          : ^15.0.0  -->  ^16.0.0
+  @danielmoncada/angular-datetime-picker : ^15.0.0  -->  ^16.0.0
+  ngx-spinner                  : ^15.0.0  -->  ^16.0.0
+  ngx-countdown                : ^15.0.0  -->  ^16.0.0
+  @ngbracket/ngx-layout        : ^15.0.0  -->  ^16.0.0
+  primeng                      : ^15.x.x  -->  ^16.x.x
+  primeicons                   : ^6.x.x   -->  ^6.x.x   (check latest)
+
+  KENDO UI PACKAGES UPDATED (^11.x → ^12.x)
+  -------------------------------------------
+  @progress/kendo-angular-buttons       : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-charts        : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-common        : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-dateinputs    : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-dropdowns     : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-excel-export  : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-grid          : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-icons         : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-inputs        : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-intl          : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-label         : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-layout        : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-pdf-export    : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-popup         : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-treeview      : ^11.x  -->  ^12.0.0
+  @progress/kendo-angular-notification  : ^11.x  -->  ^12.0.0
+  @progress/kendo-theme-default         : update to latest compatible version
+
+  NODE.js & TYPESCRIPT REQUIREMENTS
+  -----------------------------------
+  Node.js (minimum)            : 14.20.x  -->  16.14.x (minimum)
+                                             (18.10.x or 20.x recommended)
+  TypeScript                   : ~4.8.x   -->  ~5.0.x or ~5.1.x
+  IMPORTANT: Angular 16 is the FIRST version that supports TypeScript 5.x!
+             TypeScript 4.9.x also supported, but 5.x now officially works.
+
+
+================================================================================
+SECTION 2 : CONFIG FILE CHANGES
+================================================================================
+
+  FILE: tsconfig.json
+  -------------------
+  CHANGE 1: TypeScript version target
+    "target": "ES2022"         (no change needed - keep ES2022)
+
+  CHANGE 2: lib update
+    "lib": ["ES2022", "dom"]   (no change needed)
+
+  CHANGE 3: useDefineForClassFields (keep existing)
+    "useDefineForClassFields": false  (keep - still required)
+
+  CHANGE 4: TypeScript 5.x specific (if upgrading to TS5)
+    ADD if not present: "skipLibCheck": true
+    REASON: TypeScript 5.x is stricter about .d.ts file compatibility
+
+  FILE: angular.json
+  ------------------
+  CHANGE 1: New ESBuild builder (OPTIONAL - Developer Preview in v16)
+    OLD builder: "@angular-devkit/build-angular:browser"
+    NEW builder: "@angular-devkit/build-angular:browser-esbuild"
+    NOTE: Only switch if you want faster builds (experimental in v16)
+          Standard browser builder still works fine.
+
+  CHANGE 2: budgets - no change needed
+
+  CHANGE 3: namedChunks - no change needed
+
+  NOTE: browserTarget is still valid in Angular 16
+        (renamed to buildTarget only in Angular 18)
+
+  FILE: package.json scripts
+  ---------------------------
+  No change needed - same build/serve commands work
+
+
+================================================================================
+SECTION 3 : CRITICAL BREAKING CHANGE - entryComponents REMOVED!
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  `entryComponents` in @NgModule decorator was deprecated since Angular 9 (Ivy).
+  Angular 16 COMPLETELY REMOVES it - it is now a build error!
+
+  ERROR YOU WILL SEE:
+  -------------------
+  error TS2353: Object literal may only specify known properties,
+  and 'entryComponents' does not exist in type 'NgModule'
+
+  FILES AFFECTED:
+  ---------------
+  ALL .module.ts files that have entryComponents array.
+
+  CHANGE NEEDED:
+  --------------
+  REMOVE the entryComponents array entirely from @NgModule decorator.
+
+  OLD (Angular 15 and below):
+  ---------------------------
+  @NgModule({
+    declarations: [...],
+    imports: [...],
+    providers: [...],
+    entryComponents: [
+      CommonDialogComponent,
+      CommonAlertsComponent,
+      ConfirmDialogComponent,
+      ...
+    ],
+    bootstrap: [AppComponent]
+  })
+  export class AppModule {}
+
+  NEW (Angular 16):
+  -----------------
+  @NgModule({
+    declarations: [...],
+    imports: [...],
+    providers: [...],
+    bootstrap: [AppComponent]
+  })
+  export class AppModule {}
+
+  NOTE: Components listed in entryComponents were used for dynamic component
+        loading. In Ivy (Angular 9+), this is automatic - no need to list them.
+        Simply delete the entryComponents array. No other code change needed.
+
+  TYPICAL FILES TO CHECK AND FIX:
+  ---------------------------------
+  - src/app/app.module.ts                              (most likely has it)
+  - src/app/master/master.module.ts
+  - src/app/screening/screening.module.ts
+  - src/app/client-entry/client-entry.module.ts
+  - src/app/verification/verification.module.ts
+  - src/app/case/case.module.ts
+  - src/app/quality-check/quality-check.module.ts
+  - src/app/reports/reports.module.ts
+  - src/app/invoice/invoice.module.ts
+  - src/app/common-methods/common-methods.module.ts
+  + any other feature module with entryComponents
+
+
+================================================================================
+SECTION 4 : BREAKING CHANGE - ComponentFactoryResolver REMOVED
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  `ComponentFactoryResolver` was deprecated in Angular 13.
+  Angular 16 completely removes it - error if used.
+
+  ERROR YOU WILL SEE:
+  -------------------
+  error TS2305: Module '@angular/core' has no exported member 'ComponentFactoryResolver'
+
+  OLD CODE (Angular 15):
+  ----------------------
+  import { ComponentFactoryResolver } from '@angular/core'
+
+  constructor(private resolver: ComponentFactoryResolver,
+              private vcr: ViewContainerRef) {}
+
+  // Create component dynamically:
+  const factory = this.resolver.resolveComponentFactory(MyComponent)
+  const ref = this.vcr.createComponent(factory)
+
+  NEW CODE (Angular 16):
+  ----------------------
+  import { ViewContainerRef } from '@angular/core'
+
+  constructor(private vcr: ViewContainerRef) {}
+
+  // Create component dynamically (direct - no factory needed):
+  const ref = this.vcr.createComponent(MyComponent)
+
+  FILES AFFECTED:
+  ---------------
+  Any TypeScript file that imports or uses ComponentFactoryResolver.
+  Search command: grep -r "ComponentFactoryResolver" src/
+
+  COMMON LOCATIONS:
+  -----------------
+  - src/app/common-methods/services/*.service.ts
+  - src/app/common-methods/components/**/*.component.ts
+  - Any component that opens dialogs or creates dynamic components
+
+
+================================================================================
+SECTION 5 : ROUTE GUARD CHANGES - CanLoad Deprecated
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  `CanLoad` interface (lazy route guard) is DEPRECATED in Angular 16.
+  Replaced by `CanMatch`.
+
+  CanLoad vs CanMatch:
+  --------------------
+  - CanLoad  : Prevents lazy module from loading at all
+  - CanMatch : More powerful - can check route params/data too
+
+  OLD (Angular 15 - CanLoad guard):
+  ----------------------------------
+  import { CanLoad } from '@angular/router'
+
+  @Injectable({ providedIn: 'root' })
+  export class AuthGuard implements CanLoad {
+    canLoad(route: Route, segments: UrlSegment[]): boolean {
+      return this.authService.isLoggedIn()
+    }
+  }
+
+  In routing module:
+  { path: 'master', canLoad: [AuthGuard], loadChildren: ... }
+
+  NEW (Angular 16 - CanMatch):
+  -----------------------------
+  import { CanMatchFn } from '@angular/router'
+
+  export const authGuard: CanMatchFn = (route, segments) => {
+    const authService = inject(AuthService)
+    return authService.isLoggedIn()
+  }
+
+  In routing module:
+  { path: 'master', canMatch: [authGuard], loadChildren: ... }
+
+  NOTE: CanActivate still works normally (no change needed).
+        Only CanLoad is deprecated. CanActivate → no change.
+
+  FILES AFFECTED:
+  ---------------
+  - src/app/auth/can-activate.guard.ts  (check if it uses CanLoad)
+  - src/app/app-routing.module.ts       (canLoad → canMatch if used)
+
+
+================================================================================
+SECTION 6 : ANGULAR MATERIAL 16 CHANGES
+================================================================================
+
+  LEGACY MODULES STATUS IN v16:
+  ------------------------------
+  GOOD NEWS: MatLegacy* modules still available in Angular 16!
+  (They are fully removed only in Angular 17)
+  So if you migrated to Legacy in v15, no immediate change needed.
+
+  MDC COMPONENTS (Default in v16):
+  ----------------------------------
+  If already using MDC components (not Legacy), no breaking changes.
+
+  NEW MATERIAL TOKENS/THEMING SYSTEM:
+  ------------------------------------
+  Angular Material 16 introduces a new CSS custom properties (tokens) system.
+  If you use custom theming via SCSS mixins, some mixin names changed.
+
+  OLD THEMING (Angular 15):
+  --------------------------
+  @use '@angular/material' as mat;
+  @include mat.core();
+  $theme: mat.define-light-theme((...));
+  @include mat.all-component-themes($theme);
+
+  NEW THEMING (Angular 16 - recommended):
+  ----------------------------------------
+  @use '@angular/material' as mat;
+  @include mat.core();
+  $theme: mat.define-theme((
+    color: (theme-type: light, primary: mat.$indigo-palette),
+    typography: (font-family: 'Calibri'),
+  ));
+  html { @include mat.all-component-themes($theme); }
+
+  NOTE: Old theming still works in v16 (no immediate break).
+        New theming system is optional until v17+.
+
+  MATERIAL DIALOG CHANGES:
+  -------------------------
+  MatDialog.open() return type is now stricter with generics.
+  Some TypeScript errors may appear for dialog result types.
+
+  FIX: Add explicit type to dialog open:
+  OLD: this.dialog.open(MyDialogComponent, config)
+  NEW: this.dialog.open<MyDialogComponent, DataType, ResultType>(MyDialogComponent, config)
+
+
+================================================================================
+SECTION 7 : ANGULAR 16 NEW FEATURES (Optional - Not Breaking)
+================================================================================
+
+  1. SIGNALS API (Developer Preview):
+     -----------------------------------
+     New reactive primitive for state management.
+     OPTIONAL - Existing RxJS/Observable pattern still works perfectly.
+
+     Example (new way):
+       import { signal, computed, effect } from '@angular/core'
+       count = signal(0)
+       doubled = computed(() => this.count() * 2)
+       effect(() => console.log(this.count()))
+
+     NOTE: Do NOT use in production yet - Developer Preview in v16.
+           Becomes stable in Angular 17.
+
+  2. REQUIRED INPUTS (New Feature):
+     ----------------------------------
+     @Input can now be marked as required.
+     No change needed for existing code.
+
+     Example (new way):
+       @Input({ required: true }) title!: string
+
+  3. INPUT TRANSFORMS (New Feature):
+     ------------------------------------
+     @Input can now auto-transform values.
+
+     Example (new way):
+       @Input({ transform: booleanAttribute }) disabled = false
+       @Input({ transform: numberAttribute }) count = 0
+
+  4. DESTROYREF (New Service):
+     ----------------------------
+     Replaces ngOnDestroy for cleanup.
+     OPTIONAL - ngOnDestroy still works.
+
+     OLD WAY (still works):
+       private destroy$ = new Subject<void>()
+       ngOnDestroy() { this.destroy$.next(); this.destroy$.complete() }
+       data$.pipe(takeUntil(this.destroy$)).subscribe(...)
+
+     NEW WAY (optional):
+       constructor(private destroyRef: DestroyRef) {}
+       data$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(...)
+
+  5. ROUTER: BIND TO COMPONENT INPUTS (New Feature):
+     --------------------------------------------------
+     Route params/data can now be automatically bound to component @Inputs.
+     OPTIONAL - explicit ActivatedRoute injection still works.
+
+     Enable in app.module.ts:
+       RouterModule.forRoot(routes, { bindToComponentInputs: true })
+
+     Then in component:
+       @Input() id!: string  // auto-bound from route param :id
+
+  6. AFTER RENDER HOOKS (New):
+     ----------------------------
+     afterRender() and afterNextRender() - new lifecycle hooks.
+     OPTIONAL - use for DOM measurement after render.
+
+  7. SSR IMPROVEMENTS:
+     -------------------
+     @angular/ssr package introduced.
+     Better hydration support.
+     OPTIONAL unless using SSR.
+
+
+================================================================================
+SECTION 8 : TYPESCRIPT 5.0 CHANGES (if upgrading TS)
+================================================================================
+
+  TYPESCRIPT 4.9 vs 5.0:
+  ----------------------
+  Angular 16 supports both TypeScript 4.9.x and 5.x.
+  TypeScript 5.0 is recommended for new features.
+
+  KEY TypeScript 5.0 CHANGES:
+  ----------------------------
+
+  1. Decorators (Native TC39 Decorators):
+     TypeScript 5.0 uses the new TC39 decorator proposal by default.
+     Angular still requires legacy decorators.
+
+     KEEP in tsconfig.json:
+       "experimentalDecorators": true
+       "useDefineForClassFields": false
+     (These override the TS5 defaults for Angular compatibility)
+
+  2. 'const' type parameters:
+     function identity<const T>(x: T): T { ... }
+     No impact on existing code.
+
+  3. All enums are union enums:
+     More strict enum type checking.
+     May cause errors if enums are used with string/number comparisons.
+
+  4. --verbatimModuleSyntax:
+     New flag - do not enable (not compatible with Angular).
+
+  COMMON TypeScript 5.0 ERRORS IN ANGULAR:
+  ------------------------------------------
+  ERROR 1: "Argument of type 'x' is not assignable to parameter of type 'y'"
+  FIX    : Add explicit type annotation
+
+  ERROR 2: "Property does not exist on type 'never'"
+  FIX    : Check conditional type narrowing logic
+
+  ERROR 3: Decorator-related type errors
+  FIX    : Ensure experimentalDecorators: true in tsconfig
+
+
+================================================================================
+SECTION 9 : PRIMENG 15 → 16 CHANGES
+================================================================================
+
+  PACKAGE VERSION:
+  ----------------
+  primeng                 : ^15.x.x  -->  ^16.x.x
+
+  PRIMENG 16 KEY CHANGES:
+  -------------------------
+  1. p-table - no major breaking changes
+  2. p-calendar → replaced by p-datepicker (calendar is deprecated!)
+     OLD:  <p-calendar [(ngModel)]="date">
+     NEW:  <p-datepicker [(ngModel)]="date">
+     NOTE: p-calendar still works but shows deprecation warning
+
+  3. p-dropdown → replaced by p-select (dropdown is deprecated!)
+     OLD:  <p-dropdown [options]="items">
+     NEW:  <p-select [options]="items">
+     NOTE: p-dropdown still works but shows deprecation warning
+
+  4. CSS theme files:
+     OLD path: @import "primeng/resources/themes/lara-light-blue/theme.css"
+     NEW path: Same path works OR use new PrimeNG 16 Aura/Lara themes
+
+  5. PrimeNG 16 moves to new design system (Aura) but old Lara still available.
+
+  6. p-chips - STILL AVAILABLE in PrimeNG 16 (removed only in v18!)
+
+  MODULES IN app.module.ts:
+  --------------------------
+  All PrimeNG module imports remain the same.
+  (CalendarModule, DropdownModule, TableModule, etc.)
+  No import path changes needed.
+
+  FILES AFFECTED:
+  ---------------
+  If migrating to new p-datepicker/p-select:
+    - All HTML templates using <p-calendar>  (optional change)
+    - All HTML templates using <p-dropdown>  (optional change)
+  These are warnings only - existing code compiles fine.
+
+
+================================================================================
+SECTION 10 : KENDO v11 → v12 SPECIFIC CHANGES
+================================================================================
+
+  PACKAGE CHANGE:
+  ---------------
+  All @progress/kendo-angular-* : ^11.x  -->  ^12.0.0
+
+  KENDO v12 BREAKING CHANGES:
+  ----------------------------
+  1. Icon rendering changed:
+     @progress/kendo-angular-icons now renders SVG icons by default.
+     OLD:  Font icons (kendo-icon, k-i-*)
+     NEW:  SVG icons
+
+     FIX in app.module.ts / main.ts (if using font icons):
+     import { KENDO_ICONS_SVG } from '@progress/kendo-angular-icons'
+     Set icons globally to font: not needed if using default SVG
+
+  2. Grid: 'kendoGridSelectBy' selector behavior changed
+     If using row selection in Kendo Grid:
+     OLD:  [kendoGridSelectBy]="'id'"
+     NEW:  [kendoGridSelectBy]="myKeySelector"
+     (string shorthand still works in most cases)
+
+  3. DropDownList 'filterable' input:
+     Filtering now uses 'filterChange' event instead of 'filterChange'
+     No change if using valueChange only.
+
+  4. DatePicker: 'disabledDates' type change
+     OLD:  disabledDates: Date[]
+     NEW:  disabledDates: ((date: Date) => boolean) | Date[] | Day[]
+
+  5. Kendo Grid - 'pageChange' event object type updated:
+     OLD:  PageChangeEvent with skip and take
+     NEW:  Same structure but typed more strictly
+
+  6. @progress/kendo-angular-navigation added as separate package:
+     If using Kendo navigation components, add:
+     @progress/kendo-angular-navigation: ^12.0.0
+
+  FILES AFFECTED:
+  ---------------
+  - All HTML templates with kendo-grid that use selection
+  - All HTML templates with kendo-dropdownlist that use filtering
+  - All module files importing KendoIconModule (icon rendering change)
+  - src/app/master/**/*.component.html
+  - src/app/reports/**/*.component.html
+  - src/app/verification/**/*.component.html
+
+
+================================================================================
+SECTION 11 : HTTP CLIENT CHANGES
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  Angular 16 introduces new functional HTTP providers.
+  OLD HttpClientModule still works but new approach is recommended.
+
+  OLD WAY (Angular 15 - still works in v16):
+  -------------------------------------------
+  // app.module.ts
+  import { HttpClientModule } from '@angular/common/http'
+  @NgModule({
+    imports: [ HttpClientModule, ... ]
+  })
+
+  NEW WAY (Angular 16 - optional):
+  ----------------------------------
+  // app.module.ts
+  import { provideHttpClient } from '@angular/common/http'
+  @NgModule({
+    providers: [ provideHttpClient() ]
+  })
+
+  NO ACTION REQUIRED: HttpClientModule still works in Angular 16.
+  Only switch if doing a major refactor.
+
+  HTTP INTERCEPTORS (if using new functional style):
+  ---------------------------------------------------
+  OLD (class-based - still works):
+    @Injectable()
+    export class MyInterceptor implements HttpInterceptor { ... }
+
+  NEW (functional - optional):
+    export const myInterceptor: HttpInterceptorFn = (req, next) => { ... }
+
+  FILES AFFECTED:
+  ---------------
+  - src/app/interceptor.ts  (optional - no need to change if working)
+  - src/app/app.module.ts   (optional - HttpClientModule stays)
+
+
+================================================================================
+SECTION 12 : ROUTER CHANGES IN ANGULAR 16
+================================================================================
+
+  1. withComponentInputBinding() - NEW:
+     ------------------------------------
+     Allows route params to automatically bind to component @Input.
+     OPTIONAL feature.
+
+     Enable in RouterModule:
+       RouterModule.forRoot(routes, { bindToComponentInputs: true })
+
+  2. initialNavigation changes:
+     ----------------------------
+     OLD value (deprecated in v15, removed in v16):
+       'enabled'  -->  error in v16
+     VALID values:
+       'enabledBlocking'  (was 'enabled')
+       'enabledNonBlocking'
+       'disabled'
+
+     FIX: If you have initialNavigation: 'enabled' in RouterModule.forRoot:
+     OLD:  RouterModule.forRoot(routes, { initialNavigation: 'enabled' })
+     NEW:  RouterModule.forRoot(routes, { initialNavigation: 'enabledBlocking' })
+
+  3. Router Guards - Functional style now stable:
+     -----------------------------------------------
+     CanActivateFn, CanDeactivateFn, CanMatchFn all stable (not just preview).
+
+  FILES AFFECTED:
+  ---------------
+  - src/app/app-routing.module.ts       (check initialNavigation value)
+  - src/app/auth/can-activate.guard.ts  (CanLoad → CanMatch if used)
+
+
+================================================================================
+SECTION 13 : ZONE.JS 0.12 → 0.13 CHANGES
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  zone.js 0.13 has some internal changes for Angular 16.
+
+  UPDATE: zone.js to ~0.13.x in package.json
+
+  BREAKING CHANGES IN zone.js 0.13:
+  -----------------------------------
+  - `zone.js/dist/zone-patch-rxjs` import path changed
+    OLD:  import 'zone.js/dist/zone-patch-rxjs'
+    NEW:  import 'zone.js/plugins/zone-patch-rxjs'
+
+  - `zone.js/dist/zone-testing` import path changed
+    OLD:  import 'zone.js/dist/zone-testing'
+    NEW:  import 'zone.js/testing'
+
+  FILES AFFECTED:
+  ---------------
+  - src/polyfills.ts  (if it imports zone.js/dist/* paths)
+  - src/test.ts       (if running unit tests with zone.js testing)
+
+  FIX:
+  -----
+  Check polyfills.ts and test.ts for zone.js/dist/ imports.
+  Update to new paths if present.
+
+
+================================================================================
+SECTION 14 : COMMON ERRORS AND FIXES
+================================================================================
+
+  ERROR 1: "Object literal may only specify known properties,
+            and 'entryComponents' does not exist in type 'NgModule'"
+  ------------------------------------------------------------------
+  CAUSE : entryComponents removed from Angular 16
+  FIX   : Delete entryComponents array from ALL @NgModule decorators
+  FILES : app.module.ts + all feature module .ts files
+
+  ERROR 2: "Module '@angular/core' has no exported member 'ComponentFactoryResolver'"
+  ------------------------------------------------------------------------------------
+  CAUSE : ComponentFactoryResolver removed in Angular 16
+  FIX   : Remove ComponentFactoryResolver, use ViewContainerRef.createComponent() directly
+  FILES : Any .ts file using ComponentFactoryResolver
+
+  ERROR 3: "Argument of type 'enabled' is not assignable to
+            parameter type 'InitialNavigation'"
+  ---------------------------------------------------------
+  CAUSE : 'enabled' value removed from initialNavigation
+  FIX   : Change to 'enabledBlocking'
+  FILES : src/app/app-routing.module.ts
+
+  ERROR 4: "zone.js cannot find module 'zone.js/dist/zone-patch-rxjs'"
+  ---------------------------------------------------------------------
+  CAUSE : zone.js 0.13 changed import paths
+  FIX   : Update import to 'zone.js/plugins/zone-patch-rxjs'
+  FILES : src/polyfills.ts
+
+  ERROR 5: "'CanLoad' is deprecated"
+  ------------------------------------
+  CAUSE : CanLoad deprecated in Angular 16
+  FIX   : Replace with CanMatch
+  FILES : Guard files + routing module
+
+  ERROR 6: "rxjs/operators - operator 'X' not found"
+  ---------------------------------------------------
+  CAUSE : rxjs 7.8 removed some deprecated operator aliases
+  FIX   : Use correct operator name from rxjs/operators
+  FILES : Any .ts file using rxjs operators
+
+  ERROR 7: Type errors in TypeScript 5.0
+  ----------------------------------------
+  CAUSE : TypeScript 5.x stricter type inference
+  FIX   : Add explicit type annotations
+  FILES : Multiple .ts files (check build output)
+
+  ERROR 8: "MatDialog result type error"
+  -----------------------------------------
+  CAUSE : Material 16 stricter dialog generic types
+  FIX   : Add type parameter to dialog.open<T, D, R>()
+  FILES : Files that open Material dialogs
+
+
+================================================================================
+SECTION 15 : MODULE FILES - WHAT CHANGES IN EVERY MODULE
+================================================================================
+
+  FOR EACH FEATURE MODULE (.module.ts), CHECK:
+  ---------------------------------------------
+  1. Remove 'entryComponents: [...]' array if present
+  2. Update Kendo module imports if version-specific APIs changed
+  3. Verify PrimeNG module imports still valid (all same in v16)
+  4. Keep MatLegacy* imports if used (still valid in v16)
+
+  TYPICAL MODULE STRUCTURE CHANGE:
+  ---------------------------------
+  BEFORE (Angular 15):
+  @NgModule({
+    declarations: [MyComponent],
+    imports: [
+      CommonModule,
+      FlexLayoutModule,       // from @ngbracket/ngx-layout
+      MatButtonModule,        // or MatLegacyButtonModule
+      TableModule,            // PrimeNG
+    ],
+    entryComponents: [        // <-- REMOVE THIS IN v16
+      PopupComponent,
+      DialogComponent
+    ]
+  })
+
+  AFTER (Angular 16):
+  @NgModule({
+    declarations: [MyComponent],
+    imports: [
+      CommonModule,
+      FlexLayoutModule,       // no change
+      MatButtonModule,        // no change
+      TableModule,            // no change
+    ]
+    // entryComponents removed
+  })
+
+
+================================================================================
+SECTION 16 : MIGRATION STEPS (Step-by-Step)
+================================================================================
+
+  STEP 1: Backup current project
+  --------------------------------
+  git checkout -b feature/angular-16-upgrade
+
+  STEP 2: Update package.json versions
+  --------------------------------------
+  Update all @angular/* to ^16.0.0
+  Update zone.js to ~0.13.x
+  Update @ngbracket/ngx-layout to ^16.0.0
+  Update Kendo packages to ^12.0.0
+  Update PrimeNG to ^16.0.0
+  Update TypeScript to ~5.0.x (or keep ~4.9.x)
+
+  STEP 3: Run npm install
+  ------------------------
+  npm install --legacy-peer-deps
+
+  STEP 4: Run Angular migration schematics
+  -----------------------------------------
+  npx ng update @angular/core@16 @angular/cli@16
+  npx ng update @angular/material@16
+
+  STEP 5: Fix entryComponents error
+  ------------------------------------
+  Search: grep -r "entryComponents" src/
+  Remove entryComponents array from ALL module files found
+
+  STEP 6: Fix ComponentFactoryResolver (if used)
+  -----------------------------------------------
+  Search: grep -r "ComponentFactoryResolver" src/
+  Update each usage to use ViewContainerRef.createComponent() directly
+
+  STEP 7: Fix initialNavigation (if used)
+  -----------------------------------------
+  Search: grep -r "initialNavigation" src/
+  Change 'enabled' to 'enabledBlocking'
+
+  STEP 8: Fix zone.js imports (if needed)
+  -----------------------------------------
+  Check polyfills.ts and test.ts for zone.js/dist/ imports
+  Update to zone.js/plugins/ if present
+
+  STEP 9: Build and fix TypeScript errors
+  ----------------------------------------
+  npm run build
+  Fix each error shown one by one
+
+  STEP 10: Test production build
+  --------------------------------
+  npm run build:prod
+
+
+================================================================================
+SECTION 17 : FILES THAT WILL DEFINITELY CHANGE
+================================================================================
+
+  ALWAYS CHANGE (Every Angular 15 → 16 project):
+  ------------------------------------------------
+  package.json                              (version bumps)
+  tsconfig.json                             (skipLibCheck, TS5 compat)
+  angular.json                              (minor updates via ng update)
+
+  CHANGE IF entryComponents PRESENT:
+  ------------------------------------
+  src/app/app.module.ts
+  src/app/master/master.module.ts
+  src/app/screening/screening.module.ts
+  src/app/client-entry/client-entry.module.ts
+  src/app/verification/verification.module.ts
+  src/app/case/case.module.ts
+  src/app/quality-check/quality-check.module.ts
+  src/app/reports/reports.module.ts
+  src/app/invoice/invoice.module.ts
+  src/app/common-methods/common-methods.module.ts
+  + all other modules with entryComponents
+
+  CHANGE IF ComponentFactoryResolver USED:
+  ------------------------------------------
+  Any .ts file importing ComponentFactoryResolver
+
+  CHANGE IF CanLoad USED:
+  ------------------------
+  src/app/auth/can-activate.guard.ts
+  src/app/app-routing.module.ts
+
+  CHANGE IF initialNavigation: 'enabled' USED:
+  ----------------------------------------------
+  src/app/app-routing.module.ts
+
+  CHANGE IF zone.js/dist paths used:
+  ------------------------------------
+  src/polyfills.ts
+  src/test.ts
+
+
+================================================================================
+SECTION 18 : WHAT DOES NOT CHANGE (Angular 15 → 16)
+================================================================================
+
+  HTML TEMPLATES     : fxLayout, fxFlex, fxFlex.lg, fxFlex.xs   (no change)
+  HTML TEMPLATES     : *ngIf, *ngFor, *ngSwitch                  (no change)
+  HTML TEMPLATES     : p-table, p-calendar, p-chips (PrimeNG)    (no change)
+  HTML TEMPLATES     : mat-card, mat-icon, mat-form-field        (no change)
+  HTML TEMPLATES     : mat-select, mat-input, mat-checkbox       (no change)
+  HTML TEMPLATES     : [(ngModel)] two-way binding               (no change)
+  HTML TEMPLATES     : kendo-grid columns, templates             (mostly)
+  HTML TEMPLATES     : <router-outlet>                           (no change)
+  TypeScript Files   : Services (HTTP, shared services)          (no change)
+  TypeScript Files   : HTTP Interceptor                          (no change)
+  TypeScript Files   : Models / Interfaces                       (no change)
+  TypeScript Files   : UntypedFormControl / FormGroup            (no change)
+  TypeScript Files   : @ViewChild, @ViewChildren                 (no change)
+  Config Files       : config.json (API runtime config)          (no change)
+  Config Files       : src/assets/**                             (no change)
+  Styles             : styles.css                                (minimal)
+
+
+================================================================================
+SECTION 19 : VERSION COMPARISON TABLE
+================================================================================
+
+  VERSION  | KEY BREAKING CHANGE                          | EFFORT
+  ---------|----------------------------------------------|--------
+  v14→v15  | Angular Material MDC (Mat→MatLegacy)         | HIGH
+           | flex-layout → @ngbracket/ngx-layout           |
+           | Typed Forms (FormControl→UntypedFormControl)  |
+  ---------|----------------------------------------------|--------
+  v15→v16  | entryComponents removed (delete from modules)| MEDIUM
+           | ComponentFactoryResolver removed             |
+           | CanLoad deprecated → CanMatch                |
+           | initialNavigation: 'enabled' removed         |
+           | TypeScript 5.x support added                 |
+  ---------|----------------------------------------------|--------
+  v16→v17  | @if @for @switch new template syntax         | MEDIUM
+           | Deferrable views (@defer)                    |
+           | Signals API becomes stable                   |
+           | MatLegacy* modules REMOVED!                  |
+  ---------|----------------------------------------------|--------
+  v17→v18  | browserTarget → buildTarget                  | LOW-MEDIUM
+           | Stricter HTML parser                         |
+           | ViewChild static: true fix                   |
+           | Two-way binding negated expression fix       |
+
+
+================================================================================
+SUMMARY - ANGULAR 15 → 16 TOTAL CHANGES EXPECTED
+================================================================================
+
+  package.json                    : 1 file   (version upgrades - 30+ packages)
+  tsconfig.json                   : 1 file   (skipLibCheck, TS5 compat)
+  angular.json                    : 1 file   (via ng update schematics)
+  Module files (entryComponents)  : ~10-15 files (remove entryComponents)
+  TypeScript files (factory)      : ~2-5 files (ComponentFactoryResolver fix)
+  Route guard / routing files     : ~2-3 files (CanLoad, initialNavigation)
+  polyfills.ts / test.ts          : ~1-2 files (zone.js path fix)
+  TypeScript errors (TS5)         : ~10-20 files (depends on codebase)
+  -----------------------------------------------------------------------
+  ESTIMATED TOTAL                 : ~30-50 files changed
+
+  COMPARISON vs OTHER VERSIONS:
+  ------------------------------
+  v14→v15 : ~80-100 files  (MDC Material was the biggest)
+  v15→v16 : ~30-50  files  (entryComponents + factory removal)
+  v16→v17 : ~40-60  files  (MatLegacy removal + new template syntax)
+  v17→v18 : ~229    files  (ViewChild static + HTML parser + encoding)
+
+
+================================================================================
+END OF REPORT
+================================================================================

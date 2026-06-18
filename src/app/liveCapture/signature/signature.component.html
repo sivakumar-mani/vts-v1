@@ -1,0 +1,21 @@
+<h2>Capture Signature</h2>
+<div style="text-align: center;margin-top:30px;">
+  <div style="margin-left: 39%;">
+    <canvas #signPadCanvas (touchstart)="startSignPadDrawing($event)" (touchmove)="movedFinger($event)"></canvas>
+  </div>
+  <button class="btn btn-success" color="secondary" (click)="saveSignPad()">Preview Signature</button>
+  <button class="btn btn-danger" (click)="clearSignPad()">Clear</button>
+  <button class="btn btn-warning" (click)="undoSign()">Undo</button>
+  <div>
+    <!-- <span style="font-family: monospace;">Write the signature and click on Save</span> -->
+    @if (signImage && signImage != '') {
+      <div>
+        <img src='{{ signImage }}' />
+        <button (click)="proceed()">Submit Signature</button>
+      </div>
+    }
+  </div>
+</div>
+<div>
+  <button (click)="openDialog()">View All Saved Signatures</button>
+</div>

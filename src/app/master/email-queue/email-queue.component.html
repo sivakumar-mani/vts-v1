@@ -1,0 +1,269 @@
+﻿<app-breadcrumb [btnAdd]="breadcrumbFlags.btnAdd" [btnSave]="breadcrumbFlags.btnSave"
+  [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset" [btnResetTbl]="breadcrumbFlags.btnResetTbl"
+  (eventAdd)="addEmailQueue()" [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag" (eventBack)="closeForm()"
+  (eventSave)="saveEmailQueue()" [toolTip]="breadcrumbFlags.toolTip" (eventReset)="resetForm()"
+  (eventResetTbl)="resettable()"></app-breadcrumb>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="cloumn" fxLayout.xs="cloumn"
+  fxLayoutGap="20px grid">
+  <div fxFlex="100%">
+    <mat-card>
+
+
+
+      <div fxLayout="row">
+        <mat-card-header fxFlex="100%">
+            <div fxFlex="100%">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="10px">
+                      <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%" fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                        <mat-card-title>
+                          <h1 class="header-title">Email Queue</h1>
+                        </mat-card-title>
+                      </div>
+                      <span fxFlex></span>
+                      <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                        <div class="tbl-commonsearch" *ngIf="!showFlag">
+                            <mat-form-field fxFlex="100%">
+                            <mat-label></mat-label>
+                            <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                            <input #global matInput placeholder="Search" type="text" pInputText size="50" autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                            </mat-form-field>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </mat-card-header>
+    </div> 
+ 
+
+ <mat-card-content>
+        <div *ngIf="showFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid">
+          <div fxFlex="100%">
+            <form id="ngForm" autocomplete="off" [formGroup]="EmailQueueForm">              
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Email ID</mat-label>
+                        <input matInput placeholder="Email Id" formControlName="emailAddress" type="email" />
+                        <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+                        <mat-error *ngIf="!!EmailQueueForm?.get('emailAddress')?.errors?.required">Email Id is required
+                        </mat-error>
+                        <mat-error *ngIf="!!EmailQueueForm?.get('emailAddress')?.errors?.pattern">Please enter valid Email
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Password</mat-label>
+                        <input type="password" matInput placeholder="Password" formControlName="password" />
+                        <mat-error *ngIf="EmailQueueForm.get('password').invalid"> Password is required </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Category</mat-label>
+                        <mat-select formControlName="categoryLookupId" placeholder="Select Category">
+                          <mat-option *ngFor="let category of lookUpValue" [value]="category.lookUpId">
+                            {{ category.lookUpName }}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="EmailQueueForm.get('categoryLookupId').invalid"> Category is required </mat-error>
+                      </mat-form-field>
+                    </div>
+
+              </div>
+
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Priority Order</mat-label>
+                            <input matInput placeholder="Priority Order" maxlength="2" appNumberOnly [NumberOnly]="false"
+                              formControlName="priorityOrder" />
+                            <mat-error *ngIf="EmailQueueForm.get('priorityOrder').invalid"> Priority Order is required
+                            </mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-label class="lbl">Is Active</mat-label>
+                      <mat-checkbox formControlName="active">Active</mat-checkbox>
+                  </div> 
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+        <div *ngIf="!showFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+          fxLayout.xs="column" fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+          <p-table
+  #dt
+  [columns]="displayedColumns"
+  [value]="emailQueueList"
+  [scrollable]="true"
+  [resizableColumns]="true"
+  [reorderableColumns]="true"
+  [paginator]="true"
+  [rows]="10"
+  frozenWidth="100px"
+  [frozenColumns]="frozenCols">
+
+  <!-- ================= COLGROUP ================= -->
+  <ng-template pTemplate="colgroup" let-colGroupCols>
+    <colgroup>
+      <col *ngFor="let col of colGroupCols" style="min-width:150px" />
+    </colgroup>
+  </ng-template>
+
+  <!-- ================= HEADER ================= -->
+  <ng-template pTemplate="header" let-headerCols>
+    <tr>
+      <th *ngFor="let col of headerCols"
+          pReorderableColumn
+          [pSortableColumn]="col.field"
+          [ngSwitch]="col.field"
+          [ngClass]="{ 'text-center': col.field === 'Actions' }">
+
+        <div class="thname">{{ col.header }}</div>
+
+        <p-sortIcon
+          *ngIf="col.field !== 'action'"
+          [field]="col.field"
+          ariaLabel="Activate to sort"
+          ariaLabelDesc="Activate to sort in descending order"
+          ariaLabelAsc="Activate to sort in ascending order">
+        </p-sortIcon>
+
+        <!-- SEARCH ICONS -->
+        <span class="ico-fieldsearch">
+          <i *ngSwitchCase="'emailAddress'"
+             class="icon-search2"
+             (click)="emailAddressCtrlTrigger.openMenu()"></i>
+
+          <i *ngSwitchCase="'category'"
+             class="icon-search2"
+             (click)="categoryCtrlTrigger.openMenu()"></i>
+
+          <i *ngSwitchCase="'priorityOrder'"
+             class="icon-search2"
+             (click)="priorityOrderCtrlTrigger.openMenu()"></i>
+        </span>
+
+        <!-- ðŸ”¹ All mat-menu filter blocks are unchanged ðŸ”¹ -->
+
+      </th>
+    </tr>
+
+    <!-- HIDDEN FILTER ROW -->
+    <tr *ngIf="emailQueueList.length > 0" style="display:none">
+      <th *ngFor="let col of headerCols" class="tbl-Column-seacrh">
+        <mat-form-field *ngIf="col.field !== 'Actions' && col.field !== 'active'">
+          <input matInput
+                 placeholder="{{ col.header }}"
+                 autocomplete="off"
+                 (input)="dt.filter($event.target.value,col.field,'contains')" />
+        </mat-form-field>
+      </th>
+      <td class="tbl-Column-seacrh"></td>
+    </tr>
+  </ng-template>
+
+  <!-- ================= BODY ================= -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-index="rowIndex"
+    let-bodyCols="columns">
+
+    <tr>
+      <td *ngFor="let col of bodyCols"
+          [ngSwitch]="col.field"
+          [ngClass]="{ 'desg-bg': col.field === 'action' }"
+          style="width:200px">
+
+        <div *ngSwitchCase="'emailAddress'">{{ rowData.emailAddress }}</div>
+        <div *ngSwitchCase="'category'">{{ rowData.category }}</div>
+        <div *ngSwitchCase="'priorityOrder'">{{ rowData.priorityOrder }}</div>
+
+        <!-- ACTIVE -->
+        <div *ngSwitchCase="'active'" class="tbl-icon">
+          <span *ngIf="rowData.active" class="istrue">
+            <i class="material-icons" matTooltip="Active">thumb_up</i>
+          </span>
+          <span *ngIf="!rowData.active" class="isfalse">
+            <i class="material-icons" matTooltip="In-Active">thumb_down</i>
+          </span>
+        </div>
+
+        <!-- ACTION -->
+        <div *ngIf="col.field === 'action'" fxLayout="row" class="desg-icon">
+          <mat-icon [ngClass]="screenAuth.editFlag===false ? 'page-btn disabled' : ''">
+            <i class="material-icons-outlined"
+               matTooltip="Edit"
+               (click)="editEmailQueue(rowData,'edit')">
+              edit
+            </i>
+          </mat-icon>
+
+          <mat-icon [ngClass]="screenAuth.deleteFlag===false ? 'page-btn disabled' : ''">
+            <i class="material-icons-outlined"
+               matTooltip="Delete"
+               (click)="openDialog(rowData.screeningStatusId)">
+              delete
+            </i>
+          </mat-icon>
+
+          <mat-icon [ngClass]="screenAuth.viewFlag===false ? 'page-btn disabled' : ''">
+            <i class="material-icons-outlined"
+               matTooltip="View"
+               (click)="editEmailQueue(rowData,'view')">
+              visibility
+            </i>
+          </mat-icon>
+        </div>
+
+      </td>
+    </tr>
+
+  </ng-template>
+
+</p-table>
+            <div [ngClass]="{'empty-record': emailQueueList.length == 0}" fxLayout="row wrap" class="cus-paginator"
+              fxLayoutGap="0px grid"  fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="start center"> Showing {{ dt.totalRecords
+                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s)
+              </div>
+              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center"> <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'"
+                  (click)="
+                            dt.onPageChange({
+                            first: dt.first - dt.rows,
+                            rows: dt.rows
+                            });
+                            navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                        "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2"
+                  fxHide.xs>Go to Page<span class="input-num">
+                    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                  </span></span> <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                <a [ngClass]="
+                            dt.rows + dt.first >= dt.totalRecords
+                            ? 'page-btn disabled'
+                            : 'page-btn'
+                        " (click)="
+                            dt.onPageChange({
+                            first: dt.first + dt.rows,
+                            rows: dt.rows
+                            });
+                            navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                        "><i class="icon-control-end ml-5"></i></a> </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

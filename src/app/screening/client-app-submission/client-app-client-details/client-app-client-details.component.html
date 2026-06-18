@@ -1,0 +1,200 @@
+﻿<div fxLayout="row" [formGroup]="mainForm">
+  <div fxFlex="100%">
+    <form [formGroupName]="formgroupName" (keydown.enter)="$event.preventDefault()" autocomplete="off" role="presentation" id="ngForm">
+      @if (screeningService.caseFlagType !== common.NEWCASE) {
+<div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row
+                wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px
+                grid">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div class="client-details">
+              <div class="client-avatar" fxHide.sm fxHide.xs><i class="icon-referencecheck"></i></div>
+              <div class="client-data">
+                <h3 matTooltip="Client Name" matTooltipClass="accent-tooltip">{{ mainForm.get('candidate.clientName').value }} -
+                </h3>
+                <h3 matTooltip="Client Reference No." matTooltipClass="accent-tooltip">({{ mainForm.get('candidate.clientRefNo').value }})
+                </h3>
+                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row
+                                wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="5px grid" fxLayoutGap.sm="0px
+                                grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="45%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <p>
+                      <label>Site Name & No.:</label>
+                      <span> {{
+                        mainForm.get('candidate.siteName').value
+                        ===''
+                        ||
+                        mainForm.get('candidate.siteName').value
+                        === null ?
+                        'N/A':mainForm.get('candidate.siteName').value
+                        }} &
+                        {{
+                        mainForm.get('candidate.siteNo').value
+                        ?
+                        mainForm.get('candidate.siteNo').value:'N/A'}}
+                      </span>
+                    </p>
+                  </div>
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="45%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <p>
+                      <label>Candidate Name:</label>
+                      <span>{{mainForm.get('candidate.firstName').value}}
+                        {{mainForm.get('candidate.middleName').value}}
+                      {{mainForm.get('candidate.lastName').value}}</span>
+                    </p>
+                  </div>
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="45%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <p>
+                      <label>Report Source Name:</label>
+                      <span>{{mainForm.get('candidate.firstName').value}}
+                        {{mainForm.get('candidate.middleName').value}}
+                      {{mainForm.get('candidate.lastName').value}}</span>
+                    </p>
+                  </div>
+                  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <p>
+                      <label>Doc Path:</label>
+                      <span>{{mainForm.get('candidate.urlName').value?
+                      mainForm.get('candidate.urlName').value:'N/A'}}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row
+                wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Received Date &amp; Time</mat-label>
+                        <input matInput formControlName="caseReceivedDate" required [owlDateTimeTrigger]="dateTime" [owlDateTime]="dateTime" placeholder="Received Date
+                            & Time">
+            <mat-datepicker-toggle matSuffix [owlDateTimeTrigger]="dateTime"></mat-datepicker-toggle>
+            <owl-date-time [pickerMode]="'popup'" #dateTime></owl-date-time>
+            <mat-error>Received Date & Time is required </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Added By Megala -->
+        <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" >
+            <mat-label>Case Initiation Date &amp; Time</mat-label>
+                        <input matInput formControlName="caseInititationDate" required [owlDateTimeTrigger]="dateTime1" [owlDateTime]="dateTime1" placeholder="Initiation Date
+                            & Time">
+            <mat-datepicker-toggle matSuffix [owlDateTimeTrigger]="dateTime1"></mat-datepicker-toggle>
+            <owl-date-time [pickerMode]="'popup'" #dateTime1></owl-date-time>
+            <mat-error>Initiation Date & Time is required </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- CMD BY Megala -->
+        <!-- <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label >Case Initiation Date</mat-label>
+                        <input matInput formControlName="caseInititationDate" required (focus)="dateTime1.open()" (click)="dateTime1.open()" [min]="mainForm?.get(formgroupName)?.get('caseReceivedDate').value" [matDatepicker]="dateTime1" placeholder="Case
+                            Initiation Date" [disabled]="isCtsdisable" >
+          <mat-datepicker-toggle matSuffix [for]="dateTime1"></mat-datepicker-toggle>
+          <mat-datepicker #dateTime1></mat-datepicker>
+          <mat-error *ngIf="!!mainForm?.get('screening.caseInititationDate')?.invalid">Case initiation date should be greater than or equal to received date & time
+          </mat-error>
+        </mat-form-field>
+      </div> -->
+      <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>
+            {{mainForm?.get('screening.applicantIdLabel').value===''? 'Applicant Id':mainForm?.get('screening.applicantIdLabel').value}}
+          </mat-label>
+                        <input matInput placeholder="If not provided please
+                            enter it as N/A" formControlName="applicantId" maxlength="50" (blur)="isApplicantidExist()" />
+          @if (!!mainForm?.get('screening.applicantId')?.errors?.required) {
+            <mat-error>
+            Applicant id is required. </mat-error>
+          }
+          @if (!!mainForm?.get('screening.applicantId')?.errors?.exist) {
+            <mat-error>
+              Applicant id already exist.
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+    @if (!!mainForm?.get('screening.caseInititationDate')?.invalid) {
+      <span>
+      </span>
+    }
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row
+                wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Case Status</mat-label>
+          <mat-select placeholder="Select Case Status" formControlName="caseStatusId" required>
+            @for (status of caseStatus; track status) {
+              <mat-option [value]="status.lookUpId">
+                {{status.lookUpName}}
+              </mat-option>
+            }
+          </mat-select>
+          @if (!!mainForm?.get('screening.caseStatusId')?.errors?.required) {
+            <mat-error>
+            Case status is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Case Priority</mat-label>
+                        <mat-select formControlName="casePeriorityId" placeholder="Select
+                            Case Priority" required>
+            @for (casePriority of
+              casePriorities; track $index; let i = $index) {
+              <mat-option [value]="casePriority.lookUpId"> {{ casePriority.lookUpName }}</mat-option>
+            }
+          </mat-select>
+          @if (mainForm.get('screening.casePeriorityId').invalid) {
+            <mat-error>
+              Case priority is required
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      @if (mainForm?.get(formgroupName+'.chargeCodeFlag')?.value
+        ||
+        screeningService.caseFlagType === common.NEWCASE) {
+        <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label> Charge Code </mat-label>
+            <input matInput placeholder="Charge Code" formControlName="chargeCode" maxlength="50" required (blur)="isExist()" />
+            @if (!!mainForm?.get(formgroupName+'.chargeCode')?.errors?.required) {
+              <mat-error>
+              Charge Code is required. </mat-error>
+            }
+            @if (!!mainForm?.get(formgroupName+'.chargeCode')?.errors?.exist) {
+              <mat-error>
+                Charge Code already exist.
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      }
+    </div>
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      @if (enableDOJ) {
+        <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Client Date of Joining</mat-label>
+            <input matInput formControlName="clientDateOfJoining" [owlDateTimeTrigger]="dateTime2" [owlDateTime]="dateTime2" placeholder="Client Date of Joining">
+            <mat-datepicker-toggle matSuffix [owlDateTimeTrigger]="dateTime2"></mat-datepicker-toggle>
+            <owl-date-time [pickerMode]="'popup'" #dateTime2></owl-date-time>
+          </mat-form-field>
+        </div>
+      }
+    </div>
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row
+                wrap" fxLayout.sm="column" fxLayout.xs="column" class="pt-10">
+      <div fxFlex="100%">
+        <app-custom-fields [mainForm]="getformgroup()" [formArrName]="'clientCustomFields'"></app-custom-fields>
+      </div>
+    </div>
+  </form>
+</div>
+</div>

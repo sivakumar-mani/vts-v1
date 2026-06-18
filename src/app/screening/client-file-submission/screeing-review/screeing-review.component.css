@@ -1,0 +1,126 @@
+.vtp-list{
+    border-left: 1px solid rgba(0, 0, 0, 0.075); 
+    padding: 0 0 0 24px;
+}
+.vtp-list p{
+    margin: 0 0 5px 0 !important;
+    font-weight: normal;
+}
+.vtp-list p i{
+    font-size: 18px;
+    padding-right: 15px;
+    color: #727375;
+    vertical-align: sub;
+}
+.vtp-list p span{
+    color: #353537; 
+    font-size: 13px;
+}
+.vtp-list p span a{
+    font-size: 13px;
+}
+.scrn-cmplist{
+    border-bottom: 1px solid #dedede;
+    padding: 15px 0;
+    font-size: 14px;
+}
+.scrn-cmplist p a { 
+color: rgba(0,0,0,.87);
+}
+.scrn-cmplist p i { 
+    padding-right: 5px;
+    color: #8a8b8d;
+    vertical-align: sub;
+}
+.scrn-cmplist .dt {
+    color: #58595C;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+.spacerH{
+    height: 5px;
+}
+
+.scrnBox {
+    padding: 0;
+    width: 100%;
+    background: #fff;
+    font-size: 14px;
+    color: rgba(0,0,0,.87);
+}
+.scrnBox .title {
+    color: #58595c;
+    font-size: 12px;
+    line-height: 34px;
+    margin: 0 0 0 0;
+    font-weight: 500;
+    text-transform: uppercase;
+    background: rgba(60, 99, 146, 0.15);
+    padding: 0 10px;
+}
+.scrnBox .content {
+    width: 100%;
+    display: block;
+    margin-bottom: 16px;
+}
+.scrnBox p {
+    box-sizing: border-box;
+    display: flex;
+    white-space: nowrap;
+    margin: 0 0 3px 0;
+    font-weight: 500;
+    font-size: 90%;
+}
+.scrnBox label {
+    color: #8a8b8d;
+    display: block;
+    margin-right: 10px;
+    font-weight: normal;
+    min-width: 120px;
+}
+.scrnBox p em {
+    font-style: normal;
+    white-space: initial;
+    display: block;
+    font-weight: 700;
+    opacity: .8;
+}
+/*Review Candidate Details Starts*/
+.candidate-details {
+    flex-direction: row;
+    padding: 0 0 15px 0;
+    margin: 0 0 15px 0;
+}
+.candidate-details h2 {
+    font-size: 16px;
+    margin: 5px 0 10px 0;
+    color: #353537;
+}
+.candidate-details h5 {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 10px 0;
+    color: #353537;
+}
+.candidate-data { 
+    padding: 16px 24px;
+    width: 100%;
+    background: #E6F7FF;
+    border: 1px dashed #d1d7e1;
+}
+.candidate-data p {
+    margin: 0 0 0px 0;
+    display: flex;
+    font-weight: 500;
+    color: #58595c;
+    font-size: 13px;
+}
+.candidate-data label {
+    color: #8d8d8d; 
+    font-weight: normal !important;
+    margin-right: 10px;
+    min-width: 83px;
+}
+
+/*Review Candidate Details Ends*/

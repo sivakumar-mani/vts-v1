@@ -1,0 +1,24 @@
+.in-box {
+    margin-bottom: 20px;
+}
+
+.in-status {
+    font-size: 13px;
+    color: #8d8d8d;
+}
+
+.in-status em {
+    font-style: normal;
+    color: #353537;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.in-link {
+    font-size: 13px;
+}
+
+.in-link i {
+    font-size: 14px;
+    margin-right: 5px;
+}

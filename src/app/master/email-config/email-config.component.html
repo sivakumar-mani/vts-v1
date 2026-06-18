@@ -1,0 +1,312 @@
+﻿<app-breadcrumb [btnAdd]="breadcrumbFlag.btnAdd" [btnSave]="breadcrumbFlag.btnSave"
+  [btnSaveDisabled]="breadcrumbFlag.btnSaveDisabled" [btnBack]="breadcrumbFlag.btnBack"
+  [btnReset]="breadcrumbFlag.btnReset" [btnResetTbl]="breadcrumbFlag.btnResetTbl" (eventAdd)="openForm();"
+  [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag" (eventBack)="closeForm()" (eventReset)="resetForm()"
+  (eventSave)="saveEmailConfig()" [toolTip]="breadcrumbFlag.toolTip" (eventResetTbl)="resetTable()"></app-breadcrumb>
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                  fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="80%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">Email Configuration</h1>
+                  </div>
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                    fxLayoutAlign="end center" fxLayoutAlign.sm="end center" fxLayoutAlign.xs="start center">
+                    <div class="tbl-commonsearch" *ngIf="dispalyTable">
+                      <mat-form-field fxFlex="100%">
+                        <mat-icon matPrefix>search</mat-icon>
+                        <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                          (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+
+
+
+
+      <mat-card-content>
+        <div *ngIf="!dispalyTable">
+          <mat-card-content>
+            <div fxLayout="row" [formGroup]="emailConfigForm" autocomplete="off" role="presentation">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Email Group</mat-label>
+                      <input type="text" matInput autocomplete="new-field" placeholder="Select Email Group"
+                        formControlName="emailGroupLookupId" [matAutocomplete]="autoemailGroup" #EmailgrpInput
+                        (focus)="emailGrpItems(EmailgrpInput.value)"
+                        (keyup)="emailGrpKeyupFunction($event, EmailgrpInput.value)"
+                        (input)="emailGrpItems(EmailgrpInput.value)" (click)="EmailgrpInput.select()" />
+                      <mat-error *ngIf="emailConfigForm?.get('emailGroupLookupId')?.errors?.required"> Email Group is
+                        required </mat-error>
+                      <mat-autocomplete #autoemailGroup="matAutocomplete" [displayWith]="displayemailGrpFn"
+                        placeholder="Select Email Group">
+
+                        <mat-option [value]="emailGroup.lookUpId" *ngFor="let emailGroup of emailGroupFilterList"
+                          class="autocom-option autocom-tr">
+                          <span
+                            [innerHTML]="emailGroup.lookUpName | highlight: EmailgrpInput.value">{{emailGroup.lookUpName}}</span>
+                        </mat-option>
+                        <mat-option *ngIf="emailGroupFilterList.length == 0">
+                          <div class="no-record"><span>No Data Found</span></div>
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Email Category</mat-label>
+                      <input type="text" matInput placeholder="Select Email Category" autocomplete="ccncsc"
+                        formControlName="emailCatLookupId" [matAutocomplete]="autoemailCategory" #EmailCatInput
+                        (focus)="emailCategoryItems(EmailCatInput.value)"
+                        (keyup)="emailCategoryKeyupFunction($event, EmailCatInput.value)"
+                        (input)="emailCategoryItems(EmailCatInput.value)" (click)="EmailCatInput.select()"
+                        role="presentation" />
+                      <mat-error *ngIf="emailConfigForm?.get('emailCatLookupId')?.errors?.required"> Email category is
+                        required </mat-error>
+                      <mat-autocomplete #autoemailCategory="matAutocomplete" [displayWith]="displayemailCategoryFun"
+                        placeholder="Select Email Category">
+
+                        <mat-option [value]="emailCategory.lookUpId"
+                          *ngFor="let emailCategory of emailCategoryFilterList" class="autocom-option autocom-tr">
+                          <span [innerHTML]="emailCategory.lookUpName | highlight: EmailCatInput.value"></span>
+                        </mat-option>
+                        <mat-option *ngIf="emailCategoryFilterList.length == 0">
+                          <div class="no-record"><span>No Data Found</span></div>
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Client</mat-label>
+                      <input type="text" autocomplete="new-field" matInput placeholder="Select Email Client"
+                        formControlName="clientId" [matAutocomplete]="autoclient" #clientInput
+                        (focus)="clientItems(clientInput.value)"
+                        (keyup)="clientKeyupFunction($event, clientInput.value)"
+                        (input)="clientItems(clientInput.value)" (click)="clientInput.select()" />
+                      <mat-error *ngIf="emailConfigForm?.get('clientId')?.errors?.required"> Client is
+                        required </mat-error>
+                      <mat-autocomplete #autoclient="matAutocomplete" [displayWith]="displayclientFn"
+                        placeholder="Select Client">
+
+                        <mat-option [value]="country.clientId" *ngFor="let country of clientFilterList"
+                          class="autocom-option autocom-tr">
+                          <span [innerHTML]="country.clientName | highlight: clientInput.value"></span> </mat-option>
+                        <mat-option *ngIf="clientFilterList.length == 0">
+                          <div class="no-record"><span>No Data Found</span></div>
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Email Template</mat-label>
+                      <input type="text" matInput autocomplete="new-field" placeholder="Select Email Template"
+                        formControlName="emailTemplateId" [matAutocomplete]="autotemp" #emailTempInput
+                        (focus)="emailTempItems(emailTempInput.value)"
+                        (keyup)="emailTempKeyupFunction($event, emailTempInput.value)"
+                        (input)="emailTempItems(emailTempInput.value)" (click)="emailTempInput.select()"
+                        role="presentation" />
+                      <mat-error *ngIf="emailConfigForm?.get('emailTemplateId')?.errors?.required"> Country is
+                        required </mat-error>
+                      <mat-autocomplete #autotemp="matAutocomplete" [displayWith]="displayemailTempFun"
+                        placeholder="Select Email Template">
+                        <mat-option [value]="country.emailTemplateId" *ngFor="let country of emailTempFilterList"
+                          class="autocom-option autocom-tr">
+                          <span [innerHTML]="country.emailTempleteName | highlight: emailTempInput.value"></span>
+                        </mat-option>
+                        <mat-option *ngIf="emailTempFilterList.length == 0">
+                          <div class="no-record"><span>No Data Found</span></div>
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    xfxLayoutGap="20px" class="mb-10">
+                    <mat-label class="lbl">Choose</mat-label>
+                    <mat-checkbox name="active" formControlName="active">Active</mat-checkbox>
+                  </div>
+                </div>
+
+
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+
+
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <app-email-dynamic-controls #appEmailDynamic [contactForm]="emailConfigForm"
+                      [contactFilter]="contactFilter" [formArrayNanme]="'emailContactDet'" [commonContact]="emailData"
+                      [emailType]="true" [emailTypeData]="emailtypeList">
+                    </app-email-dynamic-controls>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </div>
+
+        <div fxLayout="row" *ngIf="dispalyTable" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+          fxLayout.xs="column" fxLayoutGap="20px grid">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+
+            <div fxLayout="row">
+              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <p-table #dt [columns]="columns" [value]="emailDetList" [scrollable]="true" scrollHeight=""
+                  [paginator]="true" [rows]="itemperpage" [resizableColumns]="true" [reorderableColumns]="true"
+                  frozenWidth="100px" [frozenColumns]="frozenCols" columnResizeMode="expand">
+
+                  <!-- ===== COLGROUP ===== -->
+                  <ng-template pTemplate="colgroup" let-colGroupCols>
+                    <colgroup>
+                      <col *ngFor="let col of colGroupCols" style="width:200px" />
+                    </colgroup>
+                  </ng-template>
+
+                  <!-- ===== HEADER ===== -->
+                  <ng-template pTemplate="header" let-headerCols>
+                    <tr>
+                      <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn>
+
+                        <div class="thname">{{ col.header }}</div>
+
+                        <span [pSortableColumn]="col.field">
+                          <p-sortIcon *ngIf="col.field !== 'action' && col.field !== 'active'" [field]="col.field"
+                            ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order">
+                          </p-sortIcon>
+                        </span>
+
+                        <!-- ðŸ” search / filter menus remain unchanged -->
+
+                      </th>
+                    </tr>
+                  </ng-template>
+
+                  <!-- ===== BODY ===== -->
+                  <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+
+                    <tr>
+                      <td *ngFor="let col of bodyCols; let i = index" [ngSwitch]="col.field"
+                        [ngClass]="{ 'desg-bg': col.field === 'action' }">
+
+                        <!-- ACTION -->
+                        <div *ngSwitchCase="'action'" fxLayout="row" class="desg-icon">
+                          <div fxFlex="100%" fxLayoutGap="10px">
+
+                            <mat-icon>
+                              <i class="material-icons-outlined" matTooltip="View" matTooltipClass="accent-tooltip"
+                                (click)="viewDetail(rowData.emailConfigId)">
+                                remove_red_eye
+                              </i>
+                            </mat-icon>
+
+                            <mat-icon>
+                              <i class="material-icons-outlined" matTooltip="Edit" matTooltipClass="accent-tooltip"
+                                [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''"
+                                (click)="editEmailDet(rowData.emailConfigId)">
+                                edit
+                              </i>
+                            </mat-icon>
+
+                            <mat-icon>
+                              <i class="material-icons-outlined" matTooltip="Delete" matTooltipClass="accent-tooltip"
+                                [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''"
+                                (click)="openDialog(rowData,'Delete')">
+                                delete
+                              </i>
+                            </mat-icon>
+
+                          </div>
+                        </div>
+
+                        <div *ngSwitchCase="'emailGroupName'">{{ rowData.emailGroupName }}</div>
+                        <div *ngSwitchCase="'emailCatName'">{{ rowData.emailCatName }}</div>
+                        <div *ngSwitchCase="'clientName'">{{ rowData.clientName }}</div>
+                        <div *ngSwitchCase="'templateName'">{{ rowData.templateName }}</div>
+
+                        <span *ngSwitchCase="'emailContactDet'">
+                          <span *ngFor="let det of rowData.emailContactDet; let j = index">
+                            {{ det.contactData }}
+                            <span *ngIf="j + 1 !== rowData.emailContactDet.length">,</span>
+                          </span>
+                        </span>
+
+                        <!-- ACTIVE -->
+                        <div *ngSwitchCase="'active'" fxLayout="row" class="tbl-icon">
+                          <span *ngIf="rowData.active" class="istrue">
+                            <i matTooltip="Active" class="material-icons">thumb_up</i>
+                          </span>
+                          <span *ngIf="!rowData.active" class="isfalse">
+                            <i matTooltip="In-Active" class="material-icons">thumb_down</i>
+                          </span>
+                        </div>
+
+                      </td>
+                    </tr>
+
+                  </ng-template>
+
+                </p-table>
+              </div>
+            </div>
+
+
+
+            <div [ngClass]="{ 'empty-record': emailDetList.length == 0 }" class="cus-paginator" fxLayout="row"
+              fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="start center">
+                Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0
+                  ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
+                    dt.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a>
+              </div>
+              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center">
+                <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                          dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                          navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                        ">
+                  <i class="icon-control-start mr-5"></i></a>
+                <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                    <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" /> </span></span>
+                <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                <a [ngClass]="
+                          dt.rows + dt.first >= dt.totalRecords
+                            ? 'page-btn disabled'
+                            : 'page-btn'
+                        " (click)="
+                          dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                          navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                        "><i class="icon-control-end ml-5"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

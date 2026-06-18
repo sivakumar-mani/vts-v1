@@ -1,0 +1,824 @@
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <form>
+      <mat-card-content>
+        <div class="scroll">
+          <div class="d-view">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3>Client Details</h3>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <p>
+                  <label>Client Name</label>
+                  <em>{{ formValue?.clientEntry?.clientName }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <p>
+                  <label>Client Has Site</label>
+                  @if (formValue?.clientEntry?.siteCreationFlag === true) {
+                    <em>Yes</em>
+                  }
+                  @if (formValue?.clientEntry?.siteCreationFlag === false) {
+                    <em>No</em>
+                  }
+                </p>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <p>
+                  <label>Do you want required field?</label>
+                  @if (formValue?.clientEntry?.indianClientFlag === true) {
+                    <em>Yes</em>
+                  }
+                  @if (formValue?.clientEntry?.indianClientFlag === false) {
+                    <em>No</em>
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="d-view">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3>Address Details</h3>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <p>
+                  <label>Address Line 1 ( Door No, street Name)</label>
+                  <em>{{ formValue?.clientEntry?.address?.addLine1 }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <p>
+                  <label>Address Line 2</label>
+                  <em>{{ formValue?.clientEntry?.address?.addLine2 ?
+                  formValue?.clientEntry?.address?.addLine2 : '--' }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <p>
+                  <label>Landmark</label>
+                  <em>{{ formValue?.clientEntry?.address?.addLine3 ?
+                  formValue?.clientEntry?.address?.addLine3 : '--' }}</em>
+                </p>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Country</label>
+                  <em>{{ formValue?.clientEntry?.address?.country }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%">
+                <p>
+                  <label>State</label>
+                  <em>{{ formValue?.clientEntry?.address?.state }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%">
+                <p>
+                  <label>District/City</label>
+                  <em>{{ formValue?.clientEntry?.address?.district ?
+                  formValue?.clientEntry?.address?.district : '--' }}</em>
+                </p>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Place/Location/Area</label>
+                  <em>{{ formValue?.clientEntry?.address?.city ? formValue?.clientEntry?.address?.city
+                  : '--' }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Village/Town</label>
+                  <em>{{ formValue?.clientEntry?.address?.place ?
+                  formValue?.clientEntry?.address?.place : '--' }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Zip Code</label>
+                  <em>{{ formValue?.clientEntry?.address?.postalCode ?
+                  formValue?.clientEntry?.address?.postalCode : '--' }}</em>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="d-view">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3>Contact Details</h3>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Contact Person</label>
+                  <em>{{ formValue?.clientEntry?.contactPerson }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Phone Number</label>
+                  <em>{{ formValue?.clientEntry?.clientContact[1]?.lookUpValue ?
+                  formValue?.clientEntry?.clientContact[1]?.lookUpValue : '--' }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Mobile Number</label>
+                  <em>{{getNameById(commonService?.countryList, 'countryId',
+                    'phoneCode',formValue?.clientEntry?.codeId)}}&nbsp;&nbsp;{{
+                  formValue?.clientEntry?.clientContact[0]?.lookUpValue }}</em>
+                </p>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Email Id</label>
+                  <em>{{ formValue?.clientEntry?.clientContact[2]?.lookUpValue }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Website</label>
+                  <em>{{ formValue?.clientEntry?.clientContact[3]?.lookUpValue ? formValue?.clientEntry?.clientContact[3]?.lookUpValue : '--' }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Fax</label>
+                  <em>{{ formValue?.clientEntry?.clientContact[4]?.lookUpValue ? formValue?.clientEntry?.clientContact[4]?.lookUpValue : '--' }}</em>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="d-view">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3>Sales Details</h3>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Sales Person</label>
+                  <em>{{ formValue?.clientEntry?.salesPerson }}</em>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="d-view">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3>Billing Details</h3>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Billing Cycle</label>
+                  <em>{{ getNameById(clientBindData?.billingCycle, 'lookUpId', 'lookUpName',
+                  formValue?.clientEntry?.bcId) }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Billing Rule</label>
+                  <em>{{ getNameById(clientBindData?.billingRule, 'lookUpId', 'lookUpName',
+                  formValue?.clientEntry?.ruleId) }}</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Billing Type</label>
+                  <em>{{ getNameById(clientBindData?.billingType, 'lookUpId', 'lookUpName',
+                  formValue?.clientEntry?.billingTypeId) }}</em>
+                </p>
+              </div>
+            </div>
+            @if (formValue?.clientEntry?.siteCreationFlag === false && formValue?.clientEntry?.indianClientFlag === true) {
+              <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+                <div fxFlex="33.33%">
+                  <p><label>GST NO</label><em class="text-upp">{{ formValue?.clientEntry?.cgstin ?
+                formValue?.clientEntry?.cgstin : '--' }}</em>
+              </p>
+            </div>
+            <div fxFlex="33.33%"></div>
+            <div fxFlex="33.33%"></div>
+          </div>
+        }
+      </div>
+      <div class="d-view">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <h3>Additional Details</h3>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+          <div fxFlex="33.33%">
+            <p>
+              <label>Applicant Id</label>
+              <em>{{ formValue?.clientEntry?.applicantIdColumnName ?
+              formValue?.clientEntry?.applicantIdColumnName :'--' }}</em>
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>Pan Number</label>
+              <em class="text-upp">{{ formValue?.clientEntry?.pan ? formValue?.clientEntry?.pan :
+              '--' }}</em>
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>GST Number</label> <!-- Service Tax Number -->
+              <em>{{ formValue?.clientEntry?.serviceTaxNo ? formValue?.clientEntry?.serviceTaxNo :
+              '--' }}</em>
+            </p>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+          <div fxFlex="33.33%">
+            <p>
+              <label>Ref Number Prefix</label>
+              <em class="text-upp">{{ formValue?.clientEntry?.refNo ?
+              formValue?.clientEntry?.refNo : '--' }}</em>
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>Retention Policy Days</label>
+              <em>{{ formValue?.clientEntry?.dataRetentionPolicyDays ?
+              formValue?.clientEntry?.dataRetentionPolicyDays : '--' }}</em>
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>Final Report</label>
+              <em>{{ getNameById(clientBindData?.finalReportType, 'lookUpId', 'lookUpName',
+              formValue?.clientEntry?.finalReportTypeId) }}</em>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="d-view">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <h3>Client Settings</h3>
+          </div>
+        </div>
+        <!-- Add ClientSetting review by Megala -->
+        <!-- Start -->
+        <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+          @for (client of getClientSettings(); track client; let i = $index) {
+            <div fxFlex="33.33%">
+              <p>
+                <label>{{client?.lookUpName}}</label>
+                @if (client?.isActive === true) {
+                  <em>True</em>
+                }
+                @if (!client?.isActive === true) {
+                  <em>False</em>
+                }
+              </p>
+            </div>
+          }
+        </div>
+        <!-- end -->
+
+
+      </div>
+      <div class="d-view">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <h3>Owner Details</h3>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+          <div fxFlex="33.33%">
+            <p>
+              <label>Client Account Manager</label>
+              <em>{{ getNameById(clientBindData?.accountManager, 'userId', 'firstName',
+              formValue?.clientEntry?.clientAccountManagerId) }}</em>
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>To Email ID</label>
+              <em>{{ formValue?.clientEntry?.ownerContact[0]?.lookUpValue }}</em>
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>CC Email ID</label>
+              <em>{{ formValue?.clientEntry?.ownerContact[1]?.lookUpValue }}</em>
+            </p>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+          <div fxFlex="33.33%">
+            <p>
+              <label>CAM Mobile Number</label>
+              <em>{{ formValue?.clientEntry?.ownerContact[2]?.lookUpValue }}</em>
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>Client TAT</label>
+              <em>{{ formValue?.clientEntry?.tatCount }}</em>
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>CE-Hold TAT</label>
+              <em>{{ formValue?.clientEntry?.ceHoldTAT ? formValue?.clientEntry?.ceHoldTAT : '--' }}</em>
+            </p>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+          <div fxFlex="33.33%">
+            <p>
+              <label>GST Flag</label>
+              @if (formValue?.clientEntry?.serviceTaxFlag === true) {
+                <em>True</em>
+              }
+              @if (!formValue?.clientEntry?.serviceTaxFlag === true) {
+                <em>False</em>
+              }
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>Client on Hold</label>
+              @if (formValue?.clientEntry?.clientStatus === true) {
+                <em>True</em>
+              }
+              @if (!formValue?.clientEntry?.clientStatus === true) {
+                <em>False</em>
+              }
+            </p>
+          </div>
+          <div fxFlex="33.33%"></div>
+        </div>
+      </div>
+      <div class="d-view">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <h3>Client Colour Status and Logo Details</h3>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+          <div fxFlex="25%">
+            <p>
+              <label>Previous Ref Number</label>
+              <em>{{ formValue?.clientEntry?.previousRefNo ?
+              formValue?.clientEntry?.previousRefNo : '--' }}</em>
+            </p>
+          </div>
+          <div fxFlex="25%">
+            <p>
+              <label>Previous Direct App Ref Number</label>
+              <em>{{ formValue?.clientEntry?.previousDirectRefNo ?
+              formValue?.clientEntry?.previousDirectRefNo : '--' }}</em>
+            </p>
+          </div>
+          <div fxFlex="25%">
+            <p>
+              <label>Client Colour Status</label>
+              <em >
+                @for (status of formValue?.clientEntry?.clientColorStatus; track status; let la = $last) {
+                  <span>{{ status.lookUpName }}@if (!la) {
+                    <span>, </span>
+                  }</span>
+                }
+              </em>
+            </p>
+          </div>
+          <div fxFlex="25%">
+            <p>
+              <label>Client Logo</label>
+              @for (logo of formValue?.clientEntry?.clientLogo; track logo) {
+                <em><a
+                  (click)="clientService?.downloadFile(logo?.logoTransId, logo?.document, logo?.fileName)"
+                  routerLinkActive="active-link"><i class="icon-file-text"></i>{{
+                  commonService?.getNameById(clientBindData?.logoType, 'lookUpId',
+                  'lookUpName', logo?.logoLookupId) }}
+                  {{ logo?.isSignature === true ? (' - ' +
+                  commonService?.getNameById(clientBindData?.signatureType, 'lookUpId',
+                  'lookUpName', logo?.signatureLookupId)) : '' }}
+                {{ logo?.fileName ? ( ' : ' + logo?.fileName ) : '' }}</a>
+              </em>
+            }
+            @if (!(formValue?.clientEntry?.clientLogo?.length > 0)) {
+              <span>--</span>
+            }
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="d-view">
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <h3>Component Details</h3>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+        <div fxFlex="100%">
+          <table mat-table [dataSource]="formValue?.componentEntry" style="width: 100%;">
+            <ng-container matColumnDef="ComponentName">
+              <th mat-header-cell *matHeaderCellDef>Component Type</th>
+              <td mat-cell *matCellDef="let element">
+                {{ commonService.getNameById(componentBindData, 'serviceId', 'rptType', element.componentId) }}
+                @if (element.isSubComponent === true) {
+                  <span>-
+                  {{element.subComponentEntry[0].subReportType}}</span>
+                }
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="ComponentDesc">
+              <th mat-header-cell *matHeaderCellDef>Component Desc</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.componentDesc }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="EffectiveDate">
+              <th mat-header-cell *matHeaderCellDef>Effective Date</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.effectiveDate | date: "dd/MMM/yyyy" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Fees">
+              <th mat-header-cell *matHeaderCellDef>Fees</th>
+              <td mat-cell *matCellDef="let element">{{ element.fees }}</td>
+            </ng-container>
+            <ng-container matColumnDef="Currency">
+              <th mat-header-cell *matHeaderCellDef>Currency</th>
+              <td mat-cell *matCellDef="let element">{{ commonService.getNameById(currencyList, 'currencyId', 'currencyShortName', element?.currencyId) }}</td>
+            </ng-container>
+            <ng-container matColumnDef="Tat">
+              <th mat-header-cell *matHeaderCellDef>Tat</th>
+              <td mat-cell *matCellDef="let element">{{ element.tat }}</td>
+            </ng-container>
+            <ng-container matColumnDef="DaCompValidationFlag">
+              <th mat-header-cell *matHeaderCellDef>DA</th>
+              <td mat-cell *matCellDef="let element">{{ element.daCompValidationFlag === true ? 'Yes' : 'No' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="Interim Report">
+              <th mat-header-cell *matHeaderCellDef>Interim Report</th>
+              <td mat-cell *matCellDef="let element">{{ element.interimReportFlag === true ? 'Yes' : 'No' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="Additional period of stay">
+              <th mat-header-cell *matHeaderCellDef>Additional POS</th>
+              <td mat-cell *matCellDef="let element">{{ element.isAdditionalPos === true ? 'Yes' : 'No' }}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="compCols"></tr>
+            <tr mat-row *matRowDef="let row; columns: compCols"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    @if (feeDoc?.length > 0) {
+      <div class="d-view">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <h3>Client Fee</h3>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+          <div fxFlex="100%">
+            <table mat-table [dataSource]="feeDoc" style="width: 100%">
+              <ng-container matColumnDef="ComponentType">
+                <th mat-header-cell *matHeaderCellDef>Component Type</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ commonService.getNameById(componentBindData, 'serviceId', 'rptType', element.componentId) }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="ComponentDesc">
+                <th mat-header-cell *matHeaderCellDef>Component Desc</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.componentDesc }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="FileName">
+                <th mat-header-cell *matHeaderCellDef>File Name</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.fileName }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="MSP">
+                <th mat-header-cell *matHeaderCellDef>Msp</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.msp }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="NRP">
+                <th mat-header-cell *matHeaderCellDef>Nrp</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.nrp }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="REQUESTEDAMOUNT">
+                <th mat-header-cell *matHeaderCellDef>Requested Amount</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.fees }}
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="compFeeCols"></tr>
+              <tr mat-row *matRowDef="let row; columns: compFeeCols"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+    @if (tatDoc?.length > 0) {
+      <div class="d-view">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <h3>Client TAT</h3>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+          <div fxFlex="100%">
+            <table mat-table [dataSource]="tatDoc" style="width: 100%">
+              <ng-container matColumnDef="ComponentType">
+                <th mat-header-cell *matHeaderCellDef>Component Type</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ commonService.getNameById(componentBindData, 'serviceId', 'rptType', element.componentId) }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="ComponentDesc">
+                <th mat-header-cell *matHeaderCellDef>Component Desc</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.componentDesc }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="FileName">
+                <th mat-header-cell *matHeaderCellDef>File Name</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.fileName }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="TAT">
+                <th mat-header-cell *matHeaderCellDef>TAT</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.originalTAT }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="REQUESTEDTAT">
+                <th mat-header-cell *matHeaderCellDef>Requested TAT</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.tat }}
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="compTatCols"></tr>
+              <tr mat-row *matRowDef="let row; columns: compTatCols"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+    <div class="d-view">
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <h3>Client Agreement</h3>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+        <div fxFlex="33.33%">
+          <p>
+            <label>Agreement Availability</label>
+            @if (formValue?.clientAgreement?.agreementAvailabilityFlag === true) {
+              <em>Yes</em>
+            }
+            @if (formValue?.clientAgreement?.agreementAvailabilityFlag === false) {
+              <em>No</em>
+            }
+          </p>
+        </div>
+        <div fxFlex="33.33%">
+          @if (formValue?.clientAgreement?.agreementAvailabilityFlag == false) {
+            <p>
+              <label>Reason for non availability</label>
+              <em>{{ formValue?.clientAgreement?.reasonofNonAvailability }}</em>
+            </p>
+          }
+          @if (formValue?.clientAgreement?.agreementAvailabilityFlag == true) {
+            <p>
+              <label>Type Of Agreement</label>
+              <em>{{ getNameById(agreementBindData?.typeOfAgreement, 'lookUpId', 'lookUpName',
+              formValue?.clientAgreement?.typeOfAgreement) }}</em>
+            </p>
+          }
+        </div>
+        <div fxFlex="33.33%">
+          @if (formValue?.clientAgreement?.agreementAvailabilityFlag == false) {
+            <p>
+              <label>Document</label>
+              @for (document of formValue?.clientAgreementDocument; track document) {
+                <em><a
+                  (click)="clientService.downloadFile(document,document?.fileName,document?.agreementDocId)"
+                  routerLinkActive="active-link"><i
+                class="icon-file-text"></i>{{document?.fileName}}</a>
+              </em>
+              }@if (!(formValue?.clientAgreementDocument?.length > 0)) {
+              <span>--</span>
+            }
+          </p>
+        }
+        @if (formValue?.clientAgreement?.agreementAvailabilityFlag == true) {
+          <p>
+            <label>Date Of Agreement</label>
+            <em>{{
+              formValue?.clientAgreement?.dateOfAgreement | date: "dd/MM/yyyy"
+            }}</em>
+          </p>
+        }
+      </div>
+    </div>
+    @if (formValue?.clientAgreement?.agreementAvailabilityFlag == true) {
+      <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+        <div fxFlex="33.33%">
+          @if (formValue?.clientAgreement?.agreementAvailabilityFlag == true) {
+            <p>
+              <label>Validity</label>
+              <em>{{ formValue?.clientAgreement?.validity }}</em>
+            </p>
+          }
+        </div>
+        <div fxFlex="33.33%">
+          @if (formValue?.clientAgreement?.agreementAvailabilityFlag == true) {
+            <p>
+              <label>Auto Renewal</label>
+              @if (formValue?.clientAgreement?.autoRenewal === true) {
+                <em>True</em>
+              }
+              @if (formValue?.clientAgreement?.autoRenewal === false) {
+                <em>False</em>
+              }
+            </p>
+          }
+        </div>
+        <div fxFlex="33.33%">
+          @if (formValue?.clientAgreement?.agreementAvailabilityFlag == true) {
+            <p>
+              <label>Date of Expiry</label>
+              <em>{{
+                formValue?.clientAgreement?.dateOfExpiry | date: "dd/MM/yyyy"
+              }}</em>
+            </p>
+          }
+        </div>
+      </div>
+    }
+    @if (formValue?.clientAgreement?.agreementAvailabilityFlag == true) {
+      <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+        <div fxFlex="33.33%">
+          @if (formValue?.clientAgreement?.agreementAvailabilityFlag == true) {
+            <p>
+              <label>Document</label>
+              @for (document of formValue?.clientAgreementDocument; track document) {
+                <em><a
+                  (click)="clientService.downloadFile(document,document?.fileName,document?.agreementDocId)"
+                  routerLinkActive="active-link"><i
+                class="icon-file-text"></i>{{document?.fileName}}</a></em>
+              }
+              @if (!(formValue?.clientAgreementDocument?.length > 0)) {
+                <span>--</span>
+              }
+            </p>
+          }
+        </div>
+        <div fxFlex="33.33%">
+          @if (formValue?.clientAgreement?.agreementAvailability == true) {
+            <p>
+              <label>Reminder for Renewal </label>
+              <em>{{ getNameById(agreementBindData?.reminderforRenewal, 'lookUpId', 'lookUpName',
+              formValue?.clientAgreement?.reminder) }}</em>
+            </p>
+          }
+        </div>
+        <div fxFlex="33.33%">
+          @if (formValue?.clientAgreement?.autoRenewel===true) {
+            <p>
+              <label>Auto Renewal Peroid</label>
+              <em>{{ formValue?.clientAgreement?.autoRenewalPeriod }}</em>
+            </p>
+          }
+        </div>
+      </div>
+    }
+  </div>
+  @if (formValue?.clientInstruction?.length > 0) {
+    <div class="d-view">
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <h3>Client Instructions</h3>
+        </div>
+      </div>
+      <table mat-table [dataSource]="formValue?.clientInstruction" style="width: 100%">
+        <ng-container matColumnDef="InstructionType">
+          <th mat-header-cell *matHeaderCellDef>Instruction Type</th>
+          <td mat-cell *matCellDef="let element">
+            {{ getNameById(instructionBindData?.instructionType, 'lookUpId', 'lookUpName', element?.instructionTypeId) }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Component">
+          <th mat-header-cell *matHeaderCellDef>Component</th>
+          <td mat-cell *matCellDef="let element">
+            {{ getNameById(instructionBindData?.component, 'serviceId', 'rptType', element?.componentId) }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Instruction">
+          <th mat-header-cell *matHeaderCellDef>Instruction</th>
+          <td class="edit-tblreview" mat-cell *matCellDef="let element; let i = index;" matTooltipClass="accent-tooltip">
+            <span innerHtml={{element.instructionDescsplice}}></span>&nbsp;&nbsp;
+            @if (element?.instructioncount!=1) {
+              <a class="table-Diglink" (click)="instructionShowHide(element, i)">
+              {{element.showmore}}</a>
+            }
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="instructionColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: instructionColumns"></tr>
+      </table>
+    </div>
+  }
+</div>
+@if (formValue?.clientEntry?.siteCreationFlag === false && formValue?.clientEmailConfig?.length > 0) {
+  <div class="d-view">
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <h3>Client Email</h3>
+      </div>
+    </div>
+    <table mat-table [dataSource]="formValue?.clientEmailConfig" multiTemplateDataRows style="width: 100%">
+      <ng-container matColumnDef="Category">
+        <th mat-header-cell *matHeaderCellDef>Category</th>
+        <td mat-cell *matCellDef="let element">
+          {{ getNameById(mailBindData?.emailCategoryType, 'lookUpId', 'lookUpName', element?.categoryLookupId) }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Report">
+        <th mat-header-cell *matHeaderCellDef>Report</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.reportName ? element.reportName : '--' }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="SendType">
+        <th mat-header-cell *matHeaderCellDef>Send Type</th>
+        <td mat-cell *matCellDef="let element">
+          {{ getNameById(mailBindData?.sendType, 'lookUpId', 'lookUpName', element?.sendTypeLookupId) }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="SendEmail">
+        <th mat-header-cell *matHeaderCellDef>Send Email</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.mailNotification === true ? 'True' : 'False' }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="mailColumns?.length">
+          <div class="example-element-detail">
+            <div fxLayout="row">
+              <div fxFlex="39%">
+                <label style="font-weight: 500">Dest.Type</label>
+                @for (ele of element.commonEmailDet; track ele; let i = $index) {
+                  <p>
+                    <em>{{i+1}}) {{ele.destName}}</em>
+                  </p>
+                }
+              </div>
+              <div fxFlex="38%">
+                <label style="font-weight: 500">Contact Data</label>
+                @for (ele of element.commonEmailDet; track ele) {
+                  <p>
+                    <em>{{ele.contactData}}</em>
+                  </p>
+                }
+              </div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="mailColumns"></tr>
+      <tr mat-row *matRowDef="let element; columns: mailColumns;" class="example-element-row" [class.example-expanded-row]="expandedElement === element" (click)="expandedElement = expandedElement === element ? null : element">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+    </table>
+  </div>
+}
+</mat-card-content>
+</form>
+</div>
+</div>

@@ -1,0 +1,190 @@
+<form [formGroup]="mainForm" autocomplete="off" role="presentation">
+  <app-common-base-info [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'"
+    [compBaseDetails]="compBaseDetails" (emitNotappChange)="notApplicable($event)"
+    [showNotApplicable]="showNotApplicable">
+  </app-common-base-info>
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="40%" [formGroupName]="formgroupName">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Reported Name</mat-label>
+        <input required matInput #empsup placeholder="Reported Name" formControlName="professionalName"
+          maxlength="100" (click)="empsup.select()" autocomplete="off" role="presentation" maxlength="120" />
+        <mat-hint>({{ empsup.value.length }}/100 Max)</mat-hint>
+        @if (!!mainForm?.get(formgroupName)?.get('professionalName')?.errors?.required) {
+          <mat-error>
+            Reported name is required
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+  <div [formGroupName]="formgroupName" fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+    fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+    fxLayoutGap.xs="0px grid">
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+      formGroupName="supervisorContactNo">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Supervisor Contact Number</mat-label>
+        <input required matInput placeholder="Supervisor Contact Number" minlength="10" appNumberOnly
+          [PhoneNumber]="false" maxlength="15" formControlName="contactData" />
+        @if (!!mainForm?.get(formgroupName)?.get('supervisorContactNo.contactData')?.errors?.required) {
+          <mat-error
+            >
+            Supervisor Contact Number is required
+          </mat-error>
+        }
+        @if (!!mainForm?.get(formgroupName)?.get('supervisorContactNo.contactData')?.errors?.minlength) {
+          <mat-error
+            >
+          Enter atleast 10 numbers </mat-error>
+        }
+        @if (!!mainForm?.get(formgroupName)?.get('supervisorContactNo.contactData')?.errors?.pattern) {
+          <mat-error
+            >
+          Supervisor contact number is invalid </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <div formGroupName="supervisorEmail">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Supervisor Email</mat-label>
+          <input required matInput placeholder="Supervisor Email" maxlength="60"
+            formControlName="contactData" />
+          @if (!!mainForm?.get(formgroupName)?.get('supervisorEmail.contactData')?.errors?.required) {
+            <mat-error
+              >
+              Supervisor email is required
+            </mat-error>
+          }
+          @if (!!mainForm?.get(formgroupName + '.supervisorEmail.contactData')?.errors?.pattern ||
+            !!mainForm?.get(formgroupName + '.supervisorEmail.contactData')?.errors?.email) {
+            <mat-error>
+              Supervisor email is invalid
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Supervisor Desgination</mat-label>
+        <input required matInput placeholder="Supervisor Desgination" maxlength="60"
+          formControlName="supervisorDesignation" />
+        @if (!!mainForm?.get(formgroupName)?.get('supervisorDesignation')?.errors?.required) {
+          <mat-error>
+            Supervisor desgination is required
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+  <div [formGroupName]="formgroupName" fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+    fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+    fxLayoutGap.xs="0px grid">
+
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Supervisor Company Name</mat-label>
+        <input matInput placeholder="Supervisor Company Name" maxlength="60"
+          formControlName="supervisorCompanyName" />
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <app-auto-complete [selectProperties]='countryControls' (selectionChange)="setCountryName($event)">
+      </app-auto-complete>
+    </div>
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>City</mat-label>
+        <input matInput placeholder="City" maxlength="60" formControlName="city" />
+      </mat-form-field>
+    </div>
+  </div>
+  @if ((mainForm?.get('miscQuestion')?.value?.length ===0 || !mainForm?.get('miscQuestion')) && userData.applicationId !== 3) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+      >
+      <a class="text-sm mb-15" (click)="createMisc()"
+        [ngClass]="!!mainForm?.get(formgroupName+'.professionalName').disabled?'page-btn disabled':''">
+        <i class="icon-plus-circle"></i>
+      Click here to add miscellaneous question</a>
+    </div>
+  }
+  @if (mainForm?.get('miscQuestion') && userData.applicationId !== 3) {
+    <div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <app-ques-ans [mainForm]="mainForm" [formArrName]="'miscQuestion'"
+          [miscType]="'textarea'"></app-ques-ans>
+        </div>
+      </div>
+    </div>
+  }
+  <div fxLayout="row" fxLayoutGap="20px" class="mb-10">
+    <div fxFlex="100%">
+      <app-custom-fields [mainForm]="mainForm" [formArrName]="'componentCustomFields'"></app-custom-fields>
+    </div>
+  </div>
+
+  @if (!fileBtn) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
+      <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
+        [formGroupName]="'screeningComponentInfo'">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Remarks</mat-label>
+          <textarea #remark formControlName="remark" maxlength="1000" matInput placeholder="Remarks"> </textarea>
+          <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
+        </mat-form-field>
+      </div>
+      @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length) {
+        <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
+          [formGroupName]="'screeningComponentInfo'"
+          >
+          <mat-label class="lbl">Choose</mat-label>
+          <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise Insufficiency</mat-checkbox>
+        </div>
+      }
+    </div>
+  }
+
+  @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+      >
+      <div fxFlex="100%">
+        <div class="alert alert-info" role="alert">
+          <h4>Insufficiency Clearance Remarks: </h4>
+          @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+            <span
+              >
+              {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+            }
+          </div>
+        </div>
+      </div>
+    }
+    @if (showInSuff) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <app-common-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm"
+            [compBaseDetails]="mainForm.get('screeningComponentInfo').value"
+            [formgroupName]="'screeningInsufficiency'">
+          </app-common-raise-insufficiency>
+        </div>
+      </div>
+    }
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <app-client-app-document-upload [fileBtn]="fileBtn" [mainForm]="mainForm"
+          [formgroupName]="'screeningComponentInfo'" [dupScreeningDoc]="screeningComponent.componentDocument"
+          [validationFlag]="false">
+        </app-client-app-document-upload>
+      </div>
+    </div>
+  </form>
+  <!--{{filterEmpsupList|json}}-->

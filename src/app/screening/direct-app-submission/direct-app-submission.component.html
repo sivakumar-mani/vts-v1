@@ -1,0 +1,1962 @@
+﻿<app-breadcrumb [btnSave]="breadcrumbFlags.btnSave" [btnReset]="false" [price]="price" [btnDelete]="getPaymentFlag()" [btnSaveDisabled]="breadcrumbFlags.btnSaveDisabled" [routePath]="routePath" [btnBack]="breadcrumbFlags.btnBack" (eventSave)="savecase()"
+  [toolTip]="buttonvalue()" [btnPreviewInvoice]="getPaymentFlag()" [btnApprove]="false" [btnReject]="false" (eventApprove)="savecase()" (eventReset)="resetForm()" (eventPreviewInvoice)="previewInvoice()" (eventBack)="backToList()" (eventReject)="rejectPreQC()"
+(eventDelete)="openDialogDeleteOrder()"> </app-breadcrumb>
+<p-toast position="top-center"></p-toast>
+@if (showGrid) {
+  <div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <h1 class="header-title">Client File Submission</h1>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Candidate Name</mat-label>
+                  <input matInput placeholder="Candidate Name">
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Reference No. / Verification Id
+                  </mat-label>
+                                <input matInput placeholder="Reference No. /
+                                    Verification Id">
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%" fxLayoutAlign="end start" style="margin-top: 8px;">
+                <button mat-flat-button color="primary" (click)="getSearchComponents()">Search</button>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+}
+@if (!showGrid) {
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      <mat-card>
+        <div fxLayout="row" fxFlex="100%" fxLayoutGap="0px" [formGroup]="candidateSubmission">
+          <div fxFlex="80%" fxFlex.lg="80%" fxFlex.md="75%" fxFlex.sm="70%" fxFlex.xs="100%">
+                    <div fxLayout="row wrap" fxFlex="100%" fxLayoutGap="25px
+                        grid" fxLayoutGap.sm="25px grid" fxLayoutGap.xs="0px
+                        grid">
+              <div fxFlex="100%">
+                @if (step1 === 0) {
+                  <div>
+                    <div fxLayout='row'>
+                      <div fxFlex="100%">
+                        <mat-card-header>
+                          <mat-card-title>
+                            <h1 class="header-title"> <span class="StprH">Step
+                            {{step1+1}}:</span>Candidate
+                          </h1>
+                        </mat-card-title>
+                      </mat-card-header>
+                    </div>
+                  </div>
+                  @if (manualFilesubmissionRE !==
+                    undefined) {
+                    <app-direct-app-candidate-details [mainForm]="candidateSubmission" [formgroupName]="'candidate'" [compAddress]="compAddress" [screeningDocument]="screeningDocument" [manualFilesubmissionRE]="manualFilesubmissionRE" (componentChange)="clientChangeEmit($event)">
+                    </app-direct-app-candidate-details>
+                  }
+                </div>
+              }
+              @if (step1 === 1) {
+                <div>
+                  <div fxLayout='row'>
+                    <div fxFlex="100%">
+                      <mat-card-header>
+                        <mat-card-title>
+                          <h1 class="header-title"> <span class="StprH">Step
+                          {{step1+1}}:</span>Component Name
+                        </h1>
+                      </mat-card-title>
+                    </mat-card-header>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <ul class="inst">
+                      <li><span class="foo white"></span> If TAB color remains in White, then the components are incomplete or not filled.
+                    </li>
+                    <li><span class="foo orange"></span>If TAB color changes to Orange, it indicates that your are entering or filling the details.</li>
+                    <li><span class="foo green"></span>If TAB color changes to Green, then the component is completed and filled.
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <app-direct-app-screening-component #ScreeningComponents [Paymentflag]="paymenFlag" [cusAddress]="Address" [compBaseDetails]="compBaseDetails" (emitgetComp)="getScreeningCompDetails($event)" (emitAddnewComp)="getScreeningFormGroup($event)" [mainForm]="candidateSubmission"
+              [formgroupName]="'screeningComponent'" (emitgetGapComp)="getGapReason($event)" (emitSubmitComp)="saveScreeningComp($event)" (emitRejectcomp)="rejecrComp($event)" (emitCompId)="getCompId($event)" (emitAddNewCV)="addNewCV($event)"
+              [tabIndex]="tabIndex" (emitLastComp)="getLastId($event)">
+            </app-direct-app-screening-component>
+          </div>
+        }
+        @if (step1 === 2) {
+          <div>
+            <div fxLayout='row'>
+              <div fxFlex="100%">
+                <mat-card-header>
+                  <mat-card-title>
+                    <h1 class="header-title"> <span class="StprH">Step
+                    {{step1+1}}:</span>LOA Document
+                  </h1>
+                </mat-card-title>
+              </mat-card-header>
+            </div>
+          </div>
+          <app-direct-app-loa-document [mainForm]="candidateSubmission" [formgroupName]="'candidate'" [screeningDocument]="screeningDocument">
+          </app-direct-app-loa-document>
+        </div>
+      }
+      @if (step1 === 3) {
+        <div>
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <mat-card-header>
+                <mat-card-title>
+                  <h1 class="header-title"> <span class="StprH">Step
+                  {{step1+1}}:</span>Review
+                </h1>
+              </mat-card-title>
+            </mat-card-header>
+          </div>
+        </div>
+        <app-direct-app-screening-review [screeningDetails]="screeningDetails" [inviteflag]=true> </app-direct-app-screening-review>
+      </div>
+    }
+    <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end"> @if (applicationId === 3) {
+      <span>
+        @if (step1 !== 0) {
+          <button mat-flat-button color="primary"
+          (click)='goToStepcan(step1-1,"",true)'>Previous</button>
+        }
+      </span>
+      } @if (step1 ===0) {
+      <span>
+        @if (step1 ===0) {
+          <button mat-flat-button color="primary"
+            (click)='saveCanSubmission(step1+1)'>Save
+          & Next Tab</button>
+        }
+      </span>
+    }
+    @if (step1 ===1) {
+      <span>
+        <button mat-flat-button color="primary" (click)="goToStepCom('nxt')">Save
+          & Next
+        Tab</button>
+      </span>
+    }
+    @if (step1 ===2) {
+      <span>
+        <button mat-flat-button color="primary" (click)="saveLoaDocument();">Save
+          & Next
+        Tab</button>
+      </span>
+    }
+    <span>
+      @if (step1==3) {
+        <button mat-flat-button color="accent" [disabled]="breadcrumbFlags.btnSaveDisabled" (click)='savecase()'>{{buttonvalue()}}
+        </button>
+      }
+    </span>
+  </mat-card-actions>
+  @if ((step1
+    ===2)||(step1 === 1 && applicationId === 3)) {
+    <mat-hint fxLayoutAlign="end end"><b>Note:</b> Fill the component Tab and then click Save & Next </mat-hint>
+  }
+</div>
+</div>
+</div>
+<div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="25%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs>
+  <div class="step">
+    <div fxLayout='row'>
+      @if (applicationId === 3) {
+        <div fxFlex="100%">
+          <div class="list"> <a (click)="goToStepcan(0,'',false);getCandidateDetail();saveCurrentTab(0);">Candidate<i
+            class="icon-client" fxHide.sm fxHide.xs>
+          </i></a> </div>
+          @if (stepHiddenFlag) {
+            <div class="list"> <a (click)="saveCurrentTab(1);goToStepcan(1,'',false);">Component
+              Name<i class="icon-componententry" fxHide.sm fxHide.xs> </i></a>
+            </div>
+          }
+          @if (userData.applicationId===3) {
+            <div class="list"> <a (click)="goToStepcan(2,'next',false);saveCurrentTab(2);">LOA
+              Document<i class="icon-componententry" fxHide.sm fxHide.xs>
+            </i></a> </div>
+          }
+          <div class="list"> <a (click)="saveCurrentTab(3);">Review<i class="icon-book-open"
+          fxHide.sm fxHide.xs> </i></a>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+</div>
+</div>
+</mat-card>
+</div>
+</div>
+}
+
+<!------- Right Side Area Start ----->
+
+@if (!showGrid) {
+  <mat-drawer-container class="PView">
+    <mat-drawer #drawer mode="side" position="end">
+      <div>
+        @if (step1 !== 1) {
+          <div>
+            <div class="PView-box">
+              <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+              <h6 class="sub-header">General Instructions</h6>
+              <div class="side-scroll" style="overflow:auto">
+                <div fxLayout="row">
+                  <div fxFlex="100%" class="hints">
+                                <p> <b><i>Welcome <span style="color:#0e4872
+                                                !important;">{{userData.firstName}}
+                    </span> ,</i> </b> </p>
+                    <ul>
+                      <li>On behalf of the company you are applying with, we &#64; KRYA SCREENING PRIVATE LIMITED request you to provide the following information for a background screening.</li>
+                      <li>To complete the online application, Fill-in required fields in each step and click "Next" button to navigate to next step. </li>
+                      <li>On reaching the final step click "Submit" button to complete the online Application.
+                      </li>
+                      <li>Once you click "Save & Submit", you will not be able to edit or delete any information </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+        @if (step1 === 1) {
+          <div>
+            <div>
+              @switch (componentName.toUpperCase()) {
+                @case (common.EDUCATION) {
+                  <div>
+                    <div class="PView-box">
+                      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+                      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+                      <div class="side-scroll" style="overflow:auto">
+                        <div fxLayout="row">
+                          <div fxFlex="100%" class="hints">
+                            <h6 class="hints">General Mandatory List</h6>
+                            <ul>
+                              <li>Degree Certificate and Final Year Mark Sheet or Provisional Certificate and Final year marksheet or Consolidated Mark Sheet. </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div fxLayout="row">
+                          <div fxFlex="100%" class="hints">
+                            <h6 class="hints">General Instructions</h6>
+                            <ul>
+                              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+                              <li>Provide relevant Education qualification details in the tab.
+                              </li>
+                            </ul>
+                            <h6 class="hints">Education Details</h6>
+                            <ul>
+                              <li><strong>University/Board Name:</strong> Enter your university/board name.
+                            </li>
+                            <li><strong>Institute/College Name:</strong> Enter full name of College/Institute.
+                          </li>
+                          <li><strong>Registration/Roll
+                          Number:</strong> Please enter the registration/roll number of your educational qualification.
+                        </li>
+                        <li><strong>Course Start Date:</strong> Please fill the course start date. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) Not Provided
+                      </li>
+                      <li><strong>Course Completion:</strong> Please fill the date of your degree completion with any of the below format. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) Not
+                    Provided </li>
+                    <li><strong>Certification Issued:
+                    </strong> Please fill the date that, when the certificate has been issued with any of the below format. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) Not Provided
+                  </li>
+                  <li><strong>Miscellaneous:</strong> You can provide any additional information under Miscellaneous Type and its value under Miscellaneous Value.
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="100%" class="hints">
+              <h6 class="hints">Component Instructions</h6>
+              <span [innerHTML]="compSplRemarks">
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  @case (common.EMPLOYMENT_HR) {
+    <div>
+      <div class="PView-box">
+        <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+        <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+        <div class="side-scroll" style="overflow:auto">
+          <div fxLayout="row">
+            <div fxFlex="100%" class="hints">
+              <h6 class="hints">General Mandatory List</h6>
+              <ul>
+                <li>Employee code and Experience Certificate or Employee code and Service Letter or Employee code and Relieving Letter. </li>
+              </ul>
+            </div>
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="100%" class="hints">
+              <h6 class="hints">General Instructions</h6>
+              <ul>
+                <li>* Denotes mandatory fields,it cannot be left blank.</li>
+                <li>Provide relevant Education qualification details in the tab.
+                </li>
+                <li><strong>Employment Details:
+                </strong></li>
+                <li><strong>Employer:</strong> Enter full name of employer.
+              </li>
+              <li><strong>From Date:</strong> Enter your joining date of the existing employer with any of the below format. a) DD/MMM/YYYY eg. (01/JAN/2015) b) MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015)
+            </li>
+            <li><strong>To Date:</strong> Enter your relieving date of the existing employer with any of the below format. a) DD/MMM/YYYY eg. (01/JAN/2015) b) MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE
+          </li>
+          <li><strong>Miscellaneous:</strong> You can provide any additional information under Miscellaneous Type and its value under Miscellaneous Value.
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div fxLayout="row">
+    <div fxFlex="100%" class="hints">
+      <h6 class="hints">Component Instructions</h6>
+      <span [innerHTML]="compSplRemarks">
+      </span>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+}
+<!-- //employment supervisor -->
+@case (common.EMPLOYMENT_SUPERVISOR) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your Employment Supervisor details in the tab.</li>
+              <li><strong>Employment Supervisor
+              Details:</strong></li>
+              <li><strong>Supervisor Name:</strong> Enter your supervisor name.</li>
+              <li><strong>Supervisor Email:</strong> Enter your supervisor email.</li>
+              <li><strong>Supervisor Desgination:</strong> Enter your supervisor desgination.
+            </li>
+            <li><strong>Supervisor Contact
+            Number:</strong> Enter supervisor contact Number.</li>
+            <li><strong>Country:</strong> Select the country.</li>
+            <li><strong>City:</strong> Enter your city.</li>
+            <li><strong>Miscellaneous:</strong> You can provide any additional information under Miscellaneous Type and its value under Miscellaneous Value.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%" class="hints">
+        <h6 class="hints">Component Instructions</h6>
+        <span [innerHTML]="compSplRemarks">
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+}
+<!-- //reference check -->
+@case (common.REFERENCE_CHECK) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Contact Person Name and Contact Details.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your Reference Check details in the tab.</li>
+              <li><strong>Reference Check Details:</strong></li>
+              <li><strong>Professional Name:</strong> Enter your Professional Name.</li>
+              <li><strong>Reference Check Country:</strong> Select the country of Reference check.
+            </li>
+            <li><strong>Reference Check City:</strong> Enter your City.
+          </li>
+          <li><strong>Reference Phone No.:</strong> Enter Phone No.</li>
+          <li><strong>Miscellaneous:</strong> You can provide any additional information under Miscellaneous Type and its value under Miscellaneous Value.
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div fxLayout="row">
+    <div fxFlex="100%" class="hints">
+      <h6 class="hints">Component Instructions</h6>
+      <span [innerHTML]="compSplRemarks">
+      </span>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+}
+<!-- //criminal check PCC1 -->
+@case (common.CRIMINAL_CHECK_PCC1) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your criminal check (PCC1) you have worked in the tabs.
+              </li>
+              <li><strong>Criminal Check (PCC1)
+              Details:</strong></li>
+              <li><strong>Address Type Check:</strong> Select your address type check from the provided list.
+            </li>
+            <li><strong>Address:</strong> Enter the address of the person to check for criminal check (PCC1).
+          </li>
+          <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+          <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%" class="hints">
+        <h6 class="hints">Component Instructions</h6>
+        <span [innerHTML]="compSplRemarks">
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+}
+<!-- //criminal check PCC2 -->
+@case (common.CRIMINAL_CHECK_PCC2) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your criminal check (PCC2) you have worked in the tabs.
+              </li>
+              <li><strong>Criminal Check (PCC2)
+              Details:</strong></li>
+              <li><strong>Address Type Check:</strong> Select your address type check from the provided list.
+            </li>
+            <li><strong>Address:</strong> Enter the address of the person to check for criminal check (PCC2).
+          </li>
+          <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+          <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%" class="hints">
+        <h6 class="hints">Component Instructions</h6>
+        <span [innerHTML]="compSplRemarks">
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+}
+<!-- //criminal check PCC3 -->
+@case (common.CRIMINAL_CHECK_PCC3) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your criminal check (PCC3) you have worked in the tabs.
+              </li>
+              <li><strong>Criminal Check (PCC3)
+              Details:</strong></li>
+              <li><strong>Address Type:</strong> Select the Address Type.
+            </li>
+            <li><strong>Address:</strong> Enter the address of the person to check for criminal check (PCC3).</li>
+            <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+            <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+          </ul>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%" class="hints">
+          <h6 class="hints">Component Instructions</h6>
+          <span [innerHTML]="compSplRemarks">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+<!-- //criminal check PCC3E -->
+@case (common.CRIMINAL_CHECK_PCC3E) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your criminal check (PCC3E) you have worked in the tabs.
+              </li>
+              <li><strong>Criminal Check (PCC3E)
+              Details:</strong></li>
+              <li><strong>Address Type:</strong> Select the Address Type.
+            </li>
+            <li><strong>Address:</strong> Enter the address of the person to check for criminal check (PCC3E).
+          </li>
+          <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+          <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%" class="hints">
+        <h6 class="hints">Component Instructions</h6>
+        <span [innerHTML]="compSplRemarks">
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+}
+<!-- //criminal court record -->
+@case (common.CRIMINAL_COURT_RECORD) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your criminal (court record) details you have completed in the tabs.
+              </li>
+              <li><strong>Criminal(Court Record):</strong></li>
+              <li><strong>Address Type Check:</strong> Select your address type check from the provided list.
+            </li>
+            <li><strong>Address:</strong> Enter the address of the person to check for criminal(court record).
+          </li>
+          <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+          <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%" class="hints">
+        <h6 class="hints">Component Instructions</h6>
+        <span [innerHTML]="compSplRemarks">
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+}
+<!-- //criminal database -->
+@case (common.CRIMINAL_DATABASE) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your Criminal Database details you have worked in the tab.
+              </li>
+              <li><strong>Criminal Database
+              Details:</strong></li>
+              <li><strong>Address Type:</strong> Select your address type from the provided list.</li>
+              <li><strong>Address:</strong> Enter the address.</li>
+              <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+              <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- //online crc -->
+@case (common.ONLINE_CRC) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your online crc details you have completed in the tab.</li>
+              <li><strong>ONLINE CRC</strong></li>
+              <li><strong>Address Type Check:</strong> Select your address type check from the provided list.
+            </li>
+            <li><strong>Address:</strong> Enter the address of the person to check for online crc.</li>
+            <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+            <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+          </ul>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%" class="hints">
+          <h6 class="hints">Component Instructions</h6>
+          <span [innerHTML]="compSplRemarks">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+<!-- //online crc internal -->
+@case (common.ONLINE_CRC_INTERNAL) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your online crc(internal) details you have completed in the tab.
+              </li>
+              <li><strong>ONLINE CRC(Internal)</strong></li>
+              <li><strong>Address Type Check:</strong> Select your address type check from the provided list.
+            </li>
+            <li><strong>Address:</strong> Enter the address of the person to check for online crc(internal).
+          </li>
+          <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+          <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%" class="hints">
+        <h6 class="hints">Component Instructions</h6>
+        <span [innerHTML]="compSplRemarks">
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+}
+<!-- //emergency contact verification -->
+@case (common.EMERGENCY_CONTACT_VERIFICATION) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Emergency Contact Verification Details</h6>
+            <ul>
+              <li><strong>Contact Person Name:</strong> Enter Contact Person Name.</li>
+              <li><strong>Contact Number:</strong> Enter Contact Number</li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- //company site visit -->
+@case (common.COMPANY_SITE_VISIT) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Contact Person Name and Contact Details.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide relevant employment Company details in the tab.
+              </li>
+              <li><strong>Company Details</strong></li>
+              <li><strong>Company Name:</strong> Enter the Company Name.</li>
+              <li><strong>Company Address:</strong> Enter the Address of Company.
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%" class="hints">
+          <h6 class="hints">Component Instructions</h6>
+          <span [innerHTML]="compSplRemarks">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+<!-- //Address -->
+@case (common.ADDRESS) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li><strong>Address Details:</strong></li>
+              <li><strong>Address:</strong> Fill the address.</li>
+              <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+              <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+@case (common.DRUG_TEST) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your drug test details in the tab.</li>
+              <li><strong>Drug Test Details:</strong></li>
+              <li><strong>Kit Type:</strong> Select your kit type from the provided list.
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%" class="hints">
+          <h6 class="hints">Component Instructions</h6>
+          <span [innerHTML]="compSplRemarks">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+@case (common.JUDIS_COURT_RECORD) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li><strong>Address Details:</strong></li>
+              <li><strong>Address:</strong> Fill the address.</li>
+              <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+              <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+@case (common.PAN_INDIA_ONLINE_COURT_RECORD_VERIFICATION) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li><strong>Address Details:</strong></li>
+              <li><strong>Address:</strong> Fill the address.</li>
+              <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+              <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+@case (common.CRIMINAL_FELONY_MISDEMEANOR_5_YEARS) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+@case (common.CRIMINAL_FEDERAL_NATIONWIDE_5_YEARS) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- //DIRECTORSHIP -->
+@case (common.DIRECTORSHIP) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your directorship details in the tab.</li>
+              <li><strong>Directorship Details:</strong></li>
+              <li><strong>Name of the
+              Organisation:</strong> Enter the Organisation Name.
+            </li>
+            <li><strong>Identification Number:</strong> Enter the Identification number in the below format. Numeric values between (0-9), Eg:123456789101.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%" class="hints">
+        <h6 class="hints">Component Instructions</h6>
+        <span [innerHTML]="compSplRemarks">
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+}
+<!-- //EMPLOYEMENT_UAN -->
+@case (common.EMPLOYMENT_UAN) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your employment uan details in the tab.</li>
+              <li><strong>Employment Uan Details:</strong></li>
+              <li><strong>Uan Number:</strong> Enter the UAN number.
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%" class="hints">
+          <h6 class="hints">Component Instructions</h6>
+          <span [innerHTML]="compSplRemarks">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+<!-- //REFERENCE_SELF_EMPLOYED -->
+@case (common.REFERENCE_SELF_EMPLOYED) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your Reference Self Employed details in the tab.
+              </li>
+              <li><strong>Reference Self Employed
+              Details:</strong></li>
+              <li><strong>Reported Name:</strong> Enter your reported name.
+            </li>
+            <li><strong>Supervisor Email:</strong> Enter your supervisor email.</li>
+            <li><strong>Supervisor Desgination:</strong> Enter your supervisor desgination.
+          </li>
+          <li><strong>Supervisor Contact
+          Number:</strong> Enter supervisor contact number.</li>
+          <li><strong>Country:</strong> Select the country.</li>
+          <li><strong>City:</strong> Enter your city.</li>
+          <li><strong>Miscellaneous:</strong> You can provide any additional information under Miscellaneous Type and its value under Miscellaneous Value.
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div fxLayout="row">
+    <div fxFlex="100%" class="hints">
+      <h6 class="hints">Component Instructions</h6>
+      <span [innerHTML]="compSplRemarks">
+      </span>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+}
+<!-- // PAN CARD -->
+@case (common.PAN_CARD) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your pan card details in the tab.</li>
+              <li><strong>Pan Card Details:</strong></li>
+              <li><strong>Pan Number:</strong> Enter the Pan number in the below format. First five characters are letters (A-Z), next 4 numerics (0-9), last character letter (A-Z), Eg:SUBAL0225S. </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- //CREDIT VERIFICATION -->
+@case (common.CREDIT_VERIFICATION) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your credit verification details in the tab.</li>
+              <li><strong>Credit Verification
+              Details:</strong></li>
+              <li><strong>Pan Number:</strong> Enter the Pan number in the below format. First five characters are letters (A-Z), next 4 numerics (0-9), last character letter (A-Z), Eg:SUBAL0225S. </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- //NATIONAL_IDENTITY_CHECK -->
+@case (common.NATIONAL_IDENTITY_CHECK) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your national identity check details in the tab.
+              </li>
+              <li><strong>National Identity Check
+              Details:</strong></li>
+              <li><strong>Aadhaar Number:</strong> Enter the Aadhaar number in the below format. Numeric values between (0-9), Eg:123456789101.
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%" class="hints">
+          <h6 class="hints">Component Instructions</h6>
+          <span [innerHTML]="compSplRemarks">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+<!-- //NATIONWIDE_SEX_OFFENDER_5_YEARS -->
+@case (common.NATIONWIDE_SEX_OFFENDER_5_YEARS) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- //EMPHR_EMPSUP -->
+@case (common.EMPHR_EMPSUP) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Employee code and Experience Certificate or Employee code and Service Letter or Employee code and Relieving Letter. </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide relevant Education qualification details in the tab.
+              </li>
+              <li><strong>Employment Details:
+              </strong></li>
+              <li><strong>Employer:</strong> Enter full name of employer.
+            </li>
+            <li><strong>From Date:</strong> Enter your joining date of the existing employer with any of the below format. a) DD/MMM/YYYY eg. (01/JAN/2015) b) MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015)
+          </li>
+          <li><strong>To Date:</strong> Enter your relieving date of the existing employer with any of the below format. a) DD/MMM/YYYY eg. (01/JAN/2015) b) MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE
+        </li>
+        <li><strong>Miscellaneous:</strong> You can provide any additional information under Miscellaneous Type and its value underMiscellaneous Value.
+      </li>
+    </ul>
+  </div>
+</div>
+<div fxLayout="row">
+  <div fxFlex="100%" class="hints">
+    <h6 class="hints">Component Instructions</h6>
+    <span [innerHTML]="compSplRemarks">
+    </span>
+  </div>
+</div>
+</div>
+</div>
+</div>
+}
+<!-- //SSN_TRACE -->
+@case (common.SSN_TRACE) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- //NDOT DRUG SCREEN -->
+@case (common.NDOT_DRUG_SCREEN) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your ndot drug screen details in the tab.</li>
+              <li><strong>NDOT Drug Screen
+              Details:</strong></li>
+              <li><strong>Kit Type:</strong> Select your kit type from the provided list.
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%" class="hints">
+          <h6 class="hints">Component Instructions</h6>
+          <span [innerHTML]="compSplRemarks">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+<!-- //BANK_STATEMENT -->
+@case (common.BANK_STATEMENT) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your bank statement details in the tab.</li>
+              <li><strong>Bank Statement Details:</strong></li>
+              <li><strong>Employer Name:</strong> Enter the employer name. </li>
+              <li><strong>From Date:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) </li>
+              <li><strong>To Date:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) </li>
+              <li><strong>Bank Name:</strong> Enter the bank name. </li>
+              <li><strong>Branch Name:</strong> Enter the branch name.
+            </li>
+            <li><strong>Account Number:</strong> Enter the account number. </li>
+            <li><strong>Statement From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015)
+          </li>
+          <li><strong>Statement To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015)
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div fxLayout="row">
+    <div fxFlex="100%" class="hints">
+      <h6 class="hints">Component Instructions</h6>
+      <span [innerHTML]="compSplRemarks">
+      </span>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+}
+<!-- //GAP_VERIFICATION -->
+@case (common.GAP_VERIFICATION) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your gap verification details in the tab.</li>
+              <li><strong>Gap Verification
+              Details:</strong></li>
+              <li><strong>Gap Type:</strong> Select your gap type from the provided list.
+            </li>
+            <li><strong>Gap From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) </li>
+            <li><strong>Gap To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015)
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%" class="hints">
+        <h6 class="hints">Component Instructions</h6>
+        <span [innerHTML]="compSplRemarks">
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+}
+<!-- //OFAC_SDN -->
+@case (common.OFAC_SDN) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Complete Address(Door No,street name,area,state,country,city,district,place,pincode) with prominent landmark.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your OFAC details you have worked in the tab.
+              </li>
+              <li><strong>OFAC Details:</strong></li>
+              <li><strong>Address Type:</strong> Select your address type from the provided list.</li>
+              <li><strong>Address:</strong> Enter the address.</li>
+              <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+              <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- //CV_VALIDATION -->
+@case (common.CV_VALIDATION) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- //Address-geo -->
+@case (common.ADDRESS_GEO) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>This Digital verification is possible only with smart phones
+              </li>
+              <li>The candidate should provide reachable contact numbers for another address wherever both present and permanent address verification is mandatory.
+              </li>
+              <li>The candidate or his home mates have to perform DAV within stipulated timeline, if not the link will get expired.
+              </li>
+              <li>The link will get expired once the verification is submitted by the candidates/respondents. Kindly confirm whether this process can be followed until the situation get back to normal.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li><strong>Address Details:</strong></li>
+              <li><strong>Address:</strong> Fill the address.</li>
+              <li><strong>Period Of Stay From:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) SINCE BIRTH </li>
+              <li><strong>Period Of Stay To:</strong> Fill the date format from any of the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015) d) TILL DATE </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- //voter id -->
+@case (common.VOTER_ID) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Voter Details</h6>
+            <ul>
+              <li><strong>Voter Id.:</strong> Enter the voter id formats as (First three characters are letters (A-Z),next 7 numerics (0-9).Eg:AAA9999999 Or Eg:AA/00/000/0000000).
+            </li>
+            <li><strong>Voter Name:</strong> Enter the voter name.</li>
+            <li><strong>Gender:</strong> Select Gender.
+          </li>
+          <li><strong>Voter Address Details:</strong> Enter the voter id address.</li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%" class="hints">
+        <h6 class="hints">Component Instructions</h6>
+        <span [innerHTML]="compSplRemarks">
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+}
+<!-- //SOCIAL_MEDIA -->
+@case (common.SOCIAL_MEDIA) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- //passport -->
+@case (common.PASSPORT) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>Clear passport (Front and back copy)
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide your Passport details in the tab.</li>
+              <li><strong>Passport Details</strong></li>
+              <li><strong>Place of Residence:</strong> Enter Residential details.
+            </li>
+            <li><strong>Place of Issue:</strong> Enter Place of Issue.</li>
+            <li><strong>Passport No.:</strong> Enter Passport No. in the below format. The first character is an upper case letter of the English alphabet,followed by 7 numbers.Eg:A1234567
+          </li>
+          <li><strong>Date of Issue:</strong> Enter Date of Issue a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015)
+        </li>
+        <li><strong>Expiry Date:</strong> Enter Date of Expiry.DD/MM/YYYY eg. (01/01/2015)
+      </li>
+      <li><strong>Address:</strong> Enter the address.</li>
+    </ul>
+  </div>
+</div>
+<div fxLayout="row">
+  <div fxFlex="100%" class="hints">
+    <h6 class="hints">Component Instructions</h6>
+    <span [innerHTML]="compSplRemarks">
+    </span>
+  </div>
+</div>
+</div>
+</div>
+</div>
+}
+<!-- //license -->
+@case (common.LICENSE) {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Mandatory List</h6>
+            <ul>
+              <li>License</li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">General Instructions</h6>
+            <ul>
+              <li>* Denotes mandatory fields,it cannot be left blank.</li>
+              <li>Provide relevant License details you have worked in the tab.</li>
+              <li><strong>License Details:</strong></li>
+              <li><strong>Issuing Authority:</strong> Enter issuing authority.
+            </li>
+            <li><strong>Address:</strong> Enter address.
+          </li>
+          <li><strong>License No.:</strong> Enter license no.</li>
+          <li><strong>Registration No.:</strong> Enter registration no.
+        </li>
+        <li><strong>Scope Of Area:</strong> Enter scope of area.</li>
+        <li><strong>License Valid From:</strong> Fill License Valid From from the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015)
+      </li>
+      <li><strong>License Valid To:</strong> Fill License Valid To from the below formats. a) DD/MMM/YYYY eg. (01/JAN/2015) b)MMM/YYYY eg. (JAN/2015) c) DD/MM/YYYY eg. (01/01/2015)
+    </li>
+  </ul>
+</div>
+</div>
+<div fxLayout="row">
+  <div fxFlex="100%" class="hints">
+    <h6 class="hints">Component Instructions</h6>
+    <span [innerHTML]="compSplRemarks">
+    </span>
+  </div>
+</div>
+</div>
+</div>
+</div>
+}
+@default {
+  <div>
+    <div class="PView-box">
+      <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+      <h6 class="sub-header">{{componentName.toUpperCase()}}</h6>
+      <div class="side-scroll" style="overflow:auto">
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints"> </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="hints">
+            <h6 class="hints">Component Instructions</h6>
+            <span [innerHTML]="compSplRemarks">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+}
+</div>
+<!-- <div class="side-scroll" style="overflow:auto"> -->
+<!-- </div> -->
+</div>
+}
+</div>
+</mat-drawer>
+<!-- Instruction button right -->
+<div class="example-sidenav-content">
+  <button type="button" mat-stroked-button (click)="drawerToggle()" class="PViewBtn">
+    <div class="btninside">
+      <span>
+        <i class="icon-arrowright"></i>
+      </span>
+    </div>
+    <label>Instructions</label>
+  </button>
+</div>
+</mat-drawer-container>
+}
+
+
+
+
+
+
+
+
+
+
+
+<ng-template #viewInvoice>
+  <h1 mat-dialog-title>Invoice Details</h1>
+  <mat-dialog-content>
+    <div fxLayout="row" class="pt-15">
+      <div fxFlex="100%">
+        <kendo-pdf-export #pdf [paperSize]="'Letter'" [landscape]="true" [margin]="'0.25in'" [repeatHeaders]="true" [scale]="0.7" [avoidLinks]="true">
+          <kendo-pdf-export-margin [top]="'0.625in'" [bottom]="'0.5in'" [right]="'0.25in'" [left]="'0.25in'">
+          </kendo-pdf-export-margin>
+          <ng-template kendoPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+            <div class="page-footer-right">Page {{ pageNum }} of {{ totalPages }}
+            </div>
+          </ng-template>
+          <app-generate-invoice></app-generate-invoice>
+        </kendo-pdf-export>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="pdf?.saveAs('view
+            invoice')">
+    Download Invoice </button>
+    <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose()"> Close </button>
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #cancelOrder>
+  <h1 mat-dialog-title>Delete Order</h1>
+  <mat-dialog-content>
+    <div fxLayout="row" class="pt-15">
+      <div fxFlex="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Reason</mat-label>
+          <textarea fxFlex="100%" #reason [formControl]="cancelReason" required matInput placeholder="Reason" maxlength="1000">
+          </textarea>
+          <mat-hint class="f-13"> ({{reason?.value?.length}} /1000 max)
+          </mat-hint>
+          @if (cancelReason?.errors?.required) {
+            <mat-error>Reason is required
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="deleteOrder()"> Delete
+    Order</button>
+    <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose();cancelReason.reset()"> No </button>
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #dlgReject>
+  <!-- <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip" (click)="dialog.closeAll()">
+  <i class="material-icons">clear</i>
+</button> -->
+<form>
+  <h1 mat-dialog-title>PreQC Reject</h1>
+  <mat-dialog-content>
+    @if (rejectedCommentsList.length> 0) {
+      <div fxlayout="row">
+        <div fxflex="100%">
+          <h3 class="sub-header">Rejected comments history</h3>
+        </div>
+      </div>
+    }
+    @if (rejectedCommentsList?.length> 0) {
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          @for (rej of
+            rejectedCommentsList; track $index) {
+            <div class="history-view">
+              <div class="dt">{{rej.rejectedDate | date:'dd-MM-yyyy'}}</div>
+              <div class="uname">
+                <div class="user avatarBg1">{{rej.name[0]}}</div>
+                {{rej.name}}
+              </div>
+              <p> {{rej.comments}} </p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+    <div fxLayout="row" class="pt-15">
+      <div fxFlex="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Comments</mat-label>
+          <textarea fxFlex="100%" #rej [formControl]="rejectComments" required matInput placeholder="Comments" maxlength="1000">
+          </textarea>
+          <mat-hint class="f-13"> ({{rej.value.length}} /1000 max)
+          </mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" [disabled]="!rejectComments.valid" (click)="rejectScreeningFileSubmission()">
+    Reject </button>
+    <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose()"> Cancel </button>
+  </mat-dialog-actions>
+</form>
+</ng-template>
+
+<div class="loaclass" style="display: none;">
+  <h4 style="color: white;background-color: black; padding: 7px;">Declaration and Authorization</h4>
+  I hereby authorize Krya Screening Private Limited and its representative to verify information provided in my application for employment and this employee background verification form, and to conduct enquiries as may be necessary, at Krya’s
+  discretion. I authorize all persons who may have information relevant to this enquiry to disclose it to Krya Screening Private Limited or its representative.
+  <br>
+    <br> I signaturec release all persons from liability on account of such disclosure.
+      <br>
+        <br> This authorization and release, in original, faxed, photocopied form or e-mail transmission, shall be valid for this and any future reference. I confirm that the above information is correct to the best of my knowledge.
+          <br>
+            <br>
+              <br>
+
+                <div style="width:60%; height: 25px; float:left; text-align: left;">
+                  <u><i><b> signaturecc </b></i></u>
+                  <br> Signature
+
+                  </div>
+
+    <div style="width:35%; height: 25px; font-size:12px;float:left; text-align:
+        right;">
+                    <b><u>
+
+                      datec
+
+                    </u></b>
+                    <br>Date & Time
+
+                    </div>
+
+                  </div>
+                  <ng-template #synclient>
+                    @if (clientName === 'Synechron Technologies Pvt. Ltd') {
+                      <div class="confirm-pop">
+                        <h1 mat-dialog-title>Disclaimer</h1>
+                        <mat-dialog-content>
+                          <p>I hereby confirm that upon my BGV form submission to the BGV portal:</p>
+                          <p>1.	I have disclosed all my previous employment details for the past 5/7/10 years accurately ( as applicable)</p>
+                          <p>2.	All the information I have provided regarding my education is accurate and complete.</p>
+                          <p>3.	I do not have any ongoing legal proceedings against me.</p>
+                          <p>4.	I do not hold any directorship or have been associated as director with any organization previously .</p>
+                          <p>I understand that providing false or incomplete information may lead to actions as per Synechron guidelines</p>
+                        </mat-dialog-content>
+                        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+            <button (click)="synclose()" color="accent" class="mat-flat-button
+                btn_custom mat-accent"> Ok</button>
+                        </mat-dialog-actions>
+                      </div>
+                    }
+                  </ng-template>
+                  <ng-template #canGeneralIns>
+                    <div class="confirm-pop">
+                      <h1 mat-dialog-title>General Instructions</h1>
+        <mat-dialog-content> <b><i>Welcome <span style="color: #08BA53
+                        !important;">{{userData.firstName}}
+                      </span> ,</i>
+                    </b>
+                    <p>On behalf of the company you are applying with, we &#64;
+                      <b>{{clientName}}</b> request you to provide the following information for a background screening.
+                    </p>
+                    <p>To complete the online application,</p>
+                    <p>Fill-in required fields in each step and click <b>"Next"</b> button to navigate to next step.</p>
+                    <p>If TAB color remains in White, then the components are incomplete or not filled.</p>
+                    <p>If TAB color changes to Orange, it indicates that your are entering or filling the details.</p>
+                    <p>If TAB color changes to Green, then the component is completed and filled.
+                    </p>
+                    <p>On reaching the final step click <b>"Save & Submit"</b> button to complete the online Application.</p>
+                    <p>To begin entering your information for the background screening, please click the <b>"Start"</b> button below.
+                  </p>
+                  <p>Once you click <b>"Save & Submit"</b>, you will not be able to edit or delete any information.</p>
+                </mat-dialog-content>
+                <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+            <button (click)="dialogClose()" color="accent" class="mat-flat-button
+                btn_custom mat-accent"> Start</button>
+                </mat-dialog-actions>
+              </div>
+            </ng-template>
+            @if (verification.isFinalReport) {
+              <span hidden="true">
+                @if (pdfType === '1') {
+                  <app-response-document></app-response-document>
+                }
+                @if (pdfType === '2') {
+                  <app-generate-pdf></app-generate-pdf>
+                }
+              </span>
+            }
+            @if (tipsFlag) {
+              <div class="help-cont">
+                <h4>Access your menu faster</h4>
+                <p>Hover your mouse over the sidebar to show or hide the menu. Tap <span class="higlight"> <i
+                style="font-size: 13px;">INSTRUCTIONS</i> </span> to keep it expanded.
+              </p>
+              <div fxLayoutGap="8px" fxLayoutAlign="center end">
+                <button mat-flat-button color="primary" (click)="tipsFlag=false">Done</button>
+              </div>
+            </div>
+          }
+          @if (tipsFlag) {
+            <div class="help-overlay"></div>
+          }
+          <!-- {{fileSubmission.value | json}}  -->
+
+          <!-- <button (click)="viewScreeningComp.formEnableDisable()">Call child</button> -->
+          <ng-template #downloadData>
+            <h1 mat-dialog-title>Download Preview</h1>
+            <mat-dialog-content>
+              <kendo-pdf-export #pdf [paperSize]="'Letter'" [landscape]="true" [margin]="'0.25in'" [repeatHeaders]="true" [scale]="0.7" [avoidLinks]="true">
+                <kendo-pdf-export-margin [top]="'0.625in'" [bottom]="'0.5in'" [right]="'0.25in'" [left]="'0.25in'">
+                </kendo-pdf-export-margin>
+                @if (downloadflag) {
+                  <div fxLayoutAlign="center center"> <img src="assets/images/krya-Logo.png" height="55px">
+                  </div>
+                }
+                <br>
+                  <ng-template kendoPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages" *ngIf="downloadflag === true">
+                    <div class="page-footer-left">
+                      Generated by {{ userData.userName }} on {{ TodayDate | date: 'dd/MM/yyyy h:mm:ss a' }}
+                    </div>
+                    <div class="page-footer-right">Page {{ pageNum }} of {{ totalPages }}</div>
+                  </ng-template>
+                  <app-direct-app-screening-review [screeningDetails]="screeningDetails" [inviteflag]=true>
+                  </app-direct-app-screening-review>
+                </kendo-pdf-export>
+              </mat-dialog-content>
+              <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+                <button mat-flat-button color="warn" (click)="downloadSupportingDoc();pdf.saveAs(this.pdfname)">Download</button>
+                <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose()"> Cancel</button>
+              </mat-dialog-actions>
+            </ng-template>
+            <ng-template #alertTemplate>
+              <h1 mat-dialog-title>Components Status</h1>
+              <mat-dialog-content>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15">
+                        <img src="assets/images/alert-warning.gif">
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="center center">
+                      <div fxFlex="100%" class="text-center">
+                        <h3 class="m-0">There are pending components and fields to fill. Want to continue to fill. If yes, click "continue" or "Later!</h3>
+                        <p class="text-sm" [innerHTML]="bodyText">
+                          <!-- {{ bodyText }} -->
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-dialog-content>
+              <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+                <button mat-flat-button color="warn" (click)="getSubmissionFile();dialog.closeAll();">Continue</button>
+                <button mat-stroked-button [mat-dialog-close]="true" (click)="backToList()">
+                Later</button>
+              </mat-dialog-actions>
+            </ng-template>

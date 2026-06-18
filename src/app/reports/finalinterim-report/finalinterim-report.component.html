@@ -1,0 +1,650 @@
+<app-breadcrumb [btnReset]="false"
+  [routePath]="'Report / Client Report / ' + (isFinal === true ? 'Final' : isFinal === false ? 'Interim' : 'SR') + ' Report'"
+(eventReset)="resetForm()"></app-breadcrumb>
+<div>
+  <div fxLayout="row" class="advSearch" [formGroup]="finalReportForm" autocomplete="off">
+    <div class="advSearch-forms">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="175px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>Candidate Name</mat-label>
+                <input matInput formControlName="candidateName" placeholder="Search here..." type="text"
+                  size="50" autocomplete="off" />
+                  <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                </mat-form-field>
+              </div>
+              <div fxFlex="175px">
+                <mat-form-field fxFlex="100%">
+                  <mat-label>Client Name</mat-label>
+                  <input matInput formControlName="clientName" placeholder="Search here..." type="text"
+                    size="50" autocomplete="off" />
+                    <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                  </mat-form-field>
+                </div>
+                @if (isFinal === true) {
+                  <div fxFlex="120px">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label>Applicant ID</mat-label>
+                      <input matInput formControlName="applicantId" placeholder="Search here..." type="text"
+                        size="50" autocomplete="off" />
+                        <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                      </mat-form-field>
+                    </div>
+                  }
+                  <div fxFlex="160px">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label>Client Ref Number</mat-label>
+                      <input matInput formControlName="clientRefNo" placeholder="Search here..." type="text"
+                        size="50" autocomplete="off" />
+                        <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div fxFlex="180px">
+                    <p-multi  fxFlex="100%" [options]="components" formControlName="component"
+                      optionLabel="name" filterPlaceHolder="Select Components"
+                      selectedItemsLabel="{0} Components selected"
+                      [style]="{XminWidth: '270px', width:'100%'}" defaultLabel="Select Component"
+                      [showHeader]="true" resetFilterOnHide=true>
+                    </p-multiSelect>
+                  </div> -->
+
+                  @if (isFinal === true) {
+                    <div fxFlex="160px">
+                      <mat-form-field fxFlex="100%">
+                        <mat-label>FR closed By</mat-label>
+                        <input matInput formControlName="fqcClosedUserFName" placeholder="Search here..."
+                          type="text" size="50" autocomplete="off" />
+                          <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                        </mat-form-field>
+                      </div>
+                    }
+                    <!-- <div fxFlex="170px" *ngIf="isFinal === true">
+                    <app-auto-complete [selectProperties]='componentControl'>
+                    </app-auto-complete>
+                  </div> -->
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxFlex="100%" class="advSearch-btn">
+            <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+              <span><a (click)="search()">Search</a>
+              <span> &nbsp;&nbsp; | </span></span>
+              <a (click)="reset()">Reset</a>
+              <span> &nbsp;&nbsp; | </span>
+              <a (click)='SearchCriFilter = !SearchCriFilter'>{{ SearchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+              class="icon-chevron-{{ SearchCriFilter?'up':'down' }}"></i></a>
+            </div>
+          </div>
+          @if (SearchCriFilter) {
+            <div fxLayout="row" class="advSearchshow">
+              <div class="advSearch-forms">
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <div fxFlex="100%">
+                    <div fxLayout="row" fxLayoutGap="20px">
+                      @if (!ctsFlag) {
+                        <div fxFlex="160px">
+                          <mat-form-field fxFlex="100%">
+                            <mat-label>Screening ID</mat-label>
+                            <input matInput formControlName="applicantId" placeholder="Search here..."
+                              type="text" size="50" autocomplete="off" />
+                              <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                            </mat-form-field>
+                          </div>
+                        }
+                        <div fxFlex="130px">
+                          <mat-form-field fxFlex="100%">
+                            <mat-label>From Date</mat-label>
+                            <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date"
+                              (focus)="sampledatePicker.open()" (click)="sampledatePicker.open()"
+                              formControlName="from" />
+                              <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                              <mat-datepicker #sampledatePicker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <div fxFlex="130px">
+                            <mat-form-field fxFlex="100%">
+                              <mat-label>To Date</mat-label>
+                              <input matInput [matDatepicker]="sampledatePicker1" placeholder="To Date"
+                                (focus)="sampledatePicker1.open()" (click)="sampledatePicker1.open()"
+                                formControlName="to" />
+                                <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+                                <mat-datepicker #sampledatePicker1></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxFlex="100%" class="advSearch-btn">
+                      <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+                    </div>
+                  </div>
+                }
+              </div>
+              <div fxLayout="row" class="srchPad">
+                <div fxFlex="100%">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>
+                        <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="90%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayout="column">
+                          @if (finalReportList?.length > 0) {
+                            <h1 class="header-title">{{(isFinal === true ? 'Final/SR' :
+                              isFinal === false ? 'Interim' :
+                              'SR') + ' Report'}}
+                            </h1>
+                          }
+                        </div>
+                      </mat-card-title>
+                      @if (isFinal === true && finalReportForm.value.component > 0) {
+                        <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="90%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayout="column"
+                          fxLayoutAlign="end end" style="padding-top: 0px;">
+                          <button style="padding-right: 115px;" mat-icon-button  class="up-arrow-button" (click)="downloadMultipleReports()">
+                            <mat-icon class="up-arrow-icon">arrow_upward</mat-icon>
+                          </button>
+                          <span class="up-arrow-icon"  style="font-size: small;" (click)="downloadMultipleReports()">DOWNLOAD MULTIPLE REPORTS</span>
+                        </div>
+                      }
+                    </mat-card-header>
+                    <mat-card-content>
+                      @if (finalReportList?.length > 0) {
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <div fxFlex="100%">
+                            @if (searchValueArr.length > 0) {
+                              <div fxLayout="row">
+                                <div fxFlex="100%"> <b class="text-sm mr-10 text-semi-bold text-dull">Search results
+                                for:</b> @for (s of searchValueArr; track s; let in = $index) {
+                                <span class="tag"
+                                  >{{s.value}} <a class="close"
+                                (click)="removeSearchValue(s.propertyName,in)">×</a></span>
+                              } </div>
+                            </div>
+                          }
+                          <div fxLayout="row" class="sortrow">
+                            @if (isFinal === true && finalReportForm.value.component > 0) {
+                              <div fxFlex="20%" fxLayoutAlign="start center" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="10%" fxFlex.xs="100%"
+                                class="mt-5">
+                                <mat-checkbox   [formControl]="selectall" (change)="selectAll($event)">Select All
+                                </mat-checkbox>
+                              </div>
+                            }
+                            <div fxFlex="100%" fxLayoutAlign="end end">
+                              <ul>
+                                <li><span class="text-dull"> Showing
+                                  <!-- {{(finalReportList?.length > 0 ?
+                                  ((userData.pageSize*userData.page)-userData.pageSize+1): 0)}} -
+                                  {{((userData.pageSize*userData.page)>=(shieveTotalCount))?(shieveTotalCount):(userData.pageSize*userData.page)}}
+                                  of </span> <b> {{shieveTotalCount}}record(s)</b></li> -->
+                                  {{(finalReportList?.length > 0 ?
+                                  ((shievePageSize*shievePageNo)-shievePageSize+1): 0)}} -
+                                  {{((shievePageSize*shievePageNo)>=(shieveTotalCount))?(shieveTotalCount):(shievePageSize*shievePageNo)}}
+                                  of
+                                  </span> <b> {{shieveTotalCount}}record(s)</b></li>
+                                  |
+                                  <li>
+                                    <a (click)="shieveShowall()">Show All</a>
+                                  </li>|
+                                  <li><b>Sort By:</b> <a [ngClass]="column==='candidateFullName'?'active':''"
+                                  (click)="sortBy('candidateFullName')">Candidate
+                                                Name</a> <i [ngClass]="{'icon-sort': column != 'candidateFullName', 
+                                                  'icon-sort-asc': (column == 'candidateFullName' && !isDesc), 
+                                                  'icon-sort-desc': (column == 'candidateFullName' && isDesc) }"
+                              aria-hidden="true"> </i> <a
+                              [ngClass]="column==='clientRefNo'?'active':''"
+                                                (click)="sortBy('clientRefNo')">Reference No</a> <i [ngClass]="{'icon-sort': column != 'clientRefNo', 
+                                                    'icon-sort-asc': (column == 'clientRefNo' && !isDesc), 
+                                                    'icon-sort-desc': (column == 'clientRefNo' && isDesc) }"
+                          aria-hidden="true"> </i> </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                      <div fxFlex="100%">
+                        @for (report of finalReportList
+                          | sort: {property: column, direction: direction}
+                          | paginate: { itemsPerPage: shievePageSize, currentPage: shievePageNo, totalItems: shieveTotalCount }; track report; let c = $count; let i = $index) {
+                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                            fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="20px"
+                            fxLayoutGap.xs="20px" class="listrow"
+                            >
+                            @if (isFinal === true && finalReportForm.get('component').value > 0) {
+                              <div fxFlex="3%" fxFlex.lg="3%" fxFlex.md="3%" fxFlex.sm="6%" fxFlex.xs="100%" >
+                                <mat-checkbox [checked]="report.multiSelectFlag" (change)="assignScope($event.checked,i, report, finalReportList)">
+                                </mat-checkbox>
+                              </div>
+                            }
+                            <div fxFlex="14%" fxFlex.lg="14%" fxFlex.md="14%" fxFlex.sm="100%"
+                              fxFlex.xs="100%">
+                              <mat-card-header>
+                                <div mat-card-avatar class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                                  {{ report?.firstName?.slice(0, 1)}}{{ report?.lastName?.slice(0,
+                                1)}} </div>
+                                <mat-card-title class="cname">
+                                  {{report?.firstName + ' ' + report?.middleName + ' ' +
+                                report?.lastName }}</mat-card-title>
+                                <mat-card-subtitle class="cdesg">{{report?.clientRefNo
+                                }}</mat-card-subtitle>
+                                @if (isFinal !== false) {
+                                  <mat-card-subtitle class="cstat mb-0">Color:
+                                    <span>
+                                      @switch (report?.colorCode ? report?.colorCode :'N/A') {
+                                        @case ('Red') {
+                                          <em> <span class="ccode"
+                                          style="background-color:red;"> </span> {{
+                                        report?.colorCode ? report?.colorCode :'N/A' }}</em>
+                                      }
+                                      @case ('Green') {
+                                        <em> <span class="ccode"
+                                        style="background-color:#08BA53;"> </span>
+                                      {{ report?.colorCode ? report?.colorCode :'N/A' }}</em>
+                                    }
+                                    @case ('Yellow') {
+                                      <em> <span class="ccode"
+                                      style="background-color:#FFBF00;"> </span>
+                                    {{ report?.colorCode ? report?.colorCode :'N/A' }}</em>
+                                  }
+                                  @case ('Orange') {
+                                    <em> <span class="ccode"
+                                    style="background-color:orange;"> </span>
+                                  {{ report?.colorCode ? report?.colorCode :'N/A' }}</em>
+                                }
+                                @case ('Magenta') {
+                                  <em> <span class="ccode"
+                                  style="background-color:magenta;"> </span>
+                                {{ report?.colorCode ? report?.colorCode :'N/A' }}</em>
+                              }
+                              @case ('Stop') {
+                                <em> <span class="ccode"
+                                style="background-color:#121212;"> </span>
+                              {{ report?.colorCode ? report?.colorCode :'N/A' }}</em>
+                            }
+                            @case ('Positive') {
+                              <em> <span class="ccode"
+                                style="background-color: #008000;">
+                              </span>
+                            {{ report?.colorCode ? report?.colorCode :'N/A' }}</em>
+                          }
+                          @case ('Negative') {
+                            <em> <span class="ccode"
+                              style="background-color: #ff0000;">
+                            </span>
+                          {{ report?.colorCode ? report?.colorCode :'N/A' }}</em>
+                        }
+                        @case ('Positive-') {
+                          <em> <span class="ccode"
+                            style="background-color: #ff6600;">
+                          </span>
+                          {{ report?.colorCode ? report?.colorCode :'N/A' }}
+                        Review</em>
+                      }
+                      @case ('Negative-') {
+                        <em> <span class="ccode"
+                          style="background-color:#ffff00;">
+                        </span>
+                        {{ report?.colorCode ? report?.colorCode :'N/A' }} Please
+                      Review</em>
+                    }
+                    @case ('N/A') {
+                      <em> {{ report?.colorCode ?
+                      report?.colorCode :'N/A' }}</em>
+                    }
+                  }
+                </span>
+              </mat-card-subtitle>
+            }
+          </mat-card-header>
+        </div>
+        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%"
+          fxFlex.xs="100%">
+          <p>
+            <label>Client Name:</label>
+            <em>{{report?.clientName}}</em>
+          </p>
+          <p>
+            <label>Requested Date & Time:</label>
+            <em>{{report?.requestedDate ?
+              ((common.getTimezoneOffset(report?.requestedDate, false)) | date :
+            'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}</em>
+          </p>
+          <p>
+            <label>Case Created Date & Time:</label>
+            <em>{{report?.caseCreatedDate ?
+              ((common.getTimezoneOffset(report?.caseCreatedDate, false)) | date
+            : 'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}</em>
+          </p>
+          <p>
+            <label>Scope Submitted Date & Time:</label>
+            <em>{{report?.scopeSubmittedDate ?
+              ((common.getTimezoneOffset(report?.scopeSubmittedDate, false))
+            | date : 'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}</em>
+          </p>
+        </div>
+        @if (isFinal === false) {
+          <div fxFlex="44%" fxFlex.lg="44%" fxFlex.md="44%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Component(s):</label>
+              @for (component of report?.compAndSubComp; track component; let la = $last) {
+                <em>
+                  @if (!component.subCompFlag) {
+                    <span><span
+                    class="text-dull">&nbsp;&nbsp;&#9679;&nbsp;&nbsp;</span>{{
+                    component.compName }}
+                    {{ component.noOfComponent ? (' - ' + component.noOfComponent) :
+                    '' }}
+                  </span>
+                }
+                @for (sub of component?.screeningSubComponent; track sub; let last = $last) {
+                  <span
+                    >
+                    <span class="text-dull">&nbsp;&nbsp;&#9679;&nbsp;&nbsp;</span>
+                    {{ component.compName }} {{
+                    sub.subCompName ? (' ( ' + sub.subCompName) + ' ) ' : '' }}
+                    {{ sub.noOfComponent ? (' - ' + sub.noOfComponent) : '' }}
+                  </span>
+                }</em>
+              }
+            </p>
+          </div>
+        }
+        <!-- <div fxFlex="7%" fxFlex.lg="7%" fxFlex.md="7%" fxFlex.sm="100%" fxFlex.xs="100%"
+        *ngIf="isFinal === false">
+        <a (click)="getFinalReportDocument(report)">Print Interim</a>
+      </div> -->
+      @if (isFinal === false) {
+        <div fxFlex="7%" fxFlex.lg="7%" fxFlex.md="7%" fxFlex.sm="100%" fxFlex.xs="100%"
+          >
+          <a (click)="GetModifyInterimReportStatus(report)">Print Interim</a>
+        </div>
+      }
+      @if (isFinal === false && report.interimReportFlag) {
+        <div fxFlex="7%" fxFlex.lg="7%" fxFlex.md="7%" fxFlex.sm="100%" fxFlex.xs="100%"
+          >
+          <a (click)="sendInterimReportMail(report)">Send Mail</a>
+        </div>
+      }
+      @if (isFinal === true) {
+        <div fxFlex="56%" fxFlex.lg="56%" fxFlex.md="56%" fxFlex.sm="100%"
+          fxFlex.xs="100%">
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row wrap"
+            fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px"
+            fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="25%"
+              fxFlex.xs="25%">
+              <p>
+                <label>FR Closed By: </label>
+                <em>{{report?.fqcClosedUserFName ? report?.fqcClosedUserFName :
+                'N/A' }}</em>
+              </p>
+            </div>
+            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%"
+              fxFlex.xs="50%">
+              <p>
+                <label>FR Closed Date & Time: </label>
+                <em>{{report?.closedDate ?
+                  ((common.getTimezoneOffset(report?.closedDate,false)) |
+                  date:
+                'dd/MM/yyyy hh:mm:ss a'): 'N/A' }}</em>
+              </p>
+            </div>
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="25%"
+              fxFlex.xs="25%">
+              <p>
+                <em
+                  [ngClass]="report?.generateReportFlag === false ?'page-btn disabled':''">
+                  <a (click)="getFinalReportDocument(report)">Generate Final
+                  Report</a> </em>
+                </p>
+              </div>
+            </div>
+            @for (rep of report?.srReportDocument; track rep; let last = $last) {
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row wrap"
+                fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px"
+                fxLayoutGap.sm="20px" fxLayoutGap.xs="20px"
+                >
+                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="25%"
+                  fxFlex.xs="25%">
+                  <p>
+                    <label>SR Closed By: </label>
+                    <em>{{rep?.fqcClosedUserFName ? rep?.fqcClosedUserFName : 'N/A'
+                    }}</em>
+                  </p>
+                </div>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%"
+                  fxFlex.xs="50%">
+                  <p>
+                    <label>SR Closed Date & Time: </label>
+                    <em>{{rep?.closedDate ?
+                      ((common.getTimezoneOffset(rep?.closedDate,false)) | date:
+                    'dd/MM/yyyy hh:mm:ss a'): 'N/A' }}</em>
+                  </p>
+                </div>
+                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="25%"
+                  fxFlex.xs="25%">
+                  <p>
+                    <em> <a (click)="getSRReport(report, rep?.reportDocId)">Generate
+                    SR Report</a> </em>
+                  </p>
+                </div>
+              </div>
+            }
+          </div>
+        }
+        <!-- hided this div -->
+        @if (isFinal === true) {
+          <div fxFlex="56%" fxFlex.lg="56%" fxFlex.md="56%" fxFlex.sm="100%"
+            fxFlex.xs="100%" class="d-none">
+            <p>
+              <label>Component(s):</label>
+              @for (comp of report?.compDocument; track comp; let last = $last) {
+                <em> @if (comp?.cancelFlag) {
+                  <s
+                  class="red">{{comp?.compName}}</s>
+                }
+                @if (!comp?.cancelFlag) {
+                  <span>{{comp?.compName}} -
+                  {{comp?.functionalEntity}}</span>
+                }
+                @if (!last) {
+                  <span class="text-dull"
+                  >&nbsp;&nbsp;&#9679;&nbsp;&nbsp;</span>
+                  } @if (last) {
+                  <span
+                  class="text-dull">&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+                }
+              </em>
+              } <em
+              [ngClass]="report?.generateReportFlag === false ?'page-btn disabled':''">
+              <a (click)="getFinalReportDocument(report)">Generate Report</a>
+            </em>
+          </p>
+        </div>
+      }
+      <!-- hided this div -->
+      @if (isFinal === null) {
+        <div fxFlex="56%" fxFlex.lg="56%" fxFlex.md="56%" fxFlex.sm="100%"
+          fxFlex.xs="100%">
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row wrap"
+            fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px"
+            fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
+            @for (rep of report?.srReportDocument; track rep; let last = $last) {
+              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                fxFlex.xs="100%"
+                >
+                <p>
+                  <label>Closed By: </label>
+                  <em>{{rep?.fqcClosedUserFName ? rep?.fqcClosedUserFName : 'N/A'
+                  }}</em>
+                </p>
+                <p>
+                  <label>Closed Date: </label>
+                  <em>{{rep?.closedDate ?
+                    ((common.getTimezoneOffset(rep?.closedDate,false)) | date:
+                  'dd/MM/yyyy'): 'N/A' }}</em>
+                </p>
+                <p>
+                  <em> <a (click)="getSRReport(report, rep?.reportDocId)">Generate
+                  Report</a> </em>
+                </p>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      <div fxFlex="5%" fxFlex.lg="5%" fxFlex.md="5%" fxFlex.sm="100%"
+        fxFlex.xs="100%">
+        <button mat-icon-button class="in-btn"
+          (click)="GetFinalQCHistoryReportDetails(report?.candidateId)"
+          matTooltipClass="accent-tooltip" matTooltip="History"> <i
+        class="icon-report"></i> </button>
+      </div>
+    </div>
+  }
+</div>
+</div>
+@if (shieveTotalCount > 10) {
+  <div fxLayout="row">
+    <div class="cus-paginator">
+      <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+        <pagination-controls class="cus-paginator"
+        (pageChange)="shievePagination($event)"></pagination-controls>
+      </span> <span fxHide.xs class="gotopagbg ml-2">Go to Page<span
+      class="input-num">
+      <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4" (blur)="OnPageChange()"
+        appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+        [NumberOnly]="false">
+      </span></span>
+      <!-- <span *ngIf="!filterFlag" fxHide.xs class="gotopagbg ml-2">Items / page<span
+      class="input-num">
+      <input *ngIf="!filterFlag" type="number" [(ngModel)]="shievePageSize" min="1" maxlength="4"
+        appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+        [NumberOnly]="false" (blur)="preventInfinite()"> -->
+        <span fxHide.xs class="gotopagbg ml-2">Items / page<span
+          class="input-num">
+          <input type="number" [(ngModel)]="shievePageSize" min="1" maxlength="4"
+            appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+            [NumberOnly]="false" (blur)="preventInfinite()">
+          </span> </span>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+</div>
+}
+</mat-card-content>
+</mat-card>
+</div>
+</div>
+@if (verification.isFinalReport) {
+  <span hidden=true>
+    @if (pdfType === '1' && clientCategory !== 4) {
+      <app-response-document></app-response-document>
+    }
+    @if (pdfType === '1' && clientCategory === 4) {
+      <app-techm-response-document></app-techm-response-document>
+    }
+    @if (pdfType === '2') {
+      <app-generate-pdf></app-generate-pdf>
+    }
+  </span>
+}
+</div>
+
+<!-- VP -->
+<ng-template #history>
+  <h1 mat-dialog-title>Report History
+  </h1>
+  <mat-dialog-content>
+    @if (isFinal === true) {
+      <span>
+        <ng-container *ngTemplateOutlet="body; context: {screenName: common?.screenName}"></ng-container>
+        <ng-container *ngTemplateOutlet="body; context: {screenName: 'SR Report'}"></ng-container>
+      </span>
+    }
+    @if (isFinal === false) {
+      <span>
+        <ng-container *ngTemplateOutlet="body; context: {screenName: common?.screenName}"></ng-container>
+      </span>
+    }
+    @if (isFinal === null) {
+      <span>
+        <ng-container *ngTemplateOutlet="body; context: {screenName: common?.screenName}"></ng-container>
+      </span>
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="dialog?.closeAll();">Close</button>
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #body let-screenName="screenName">
+  <h1 class="header-title">{{screenName}} History</h1>
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      @for (hist of getList(qualityCheckService?.historyReportList, screenName); track hist; let j = $index) {
+        <div class="history-view"
+          >
+          <div class="uname">
+                    <div matTooltip="{{ hist?.candidateFirstName }} {{ hist?.candidateMiddleName ? hist?.candidateMiddleName : '' }}
+            {{ hist?.candidateLastName ? hist?.candidateLastName : '' }}" matTooltipClass="accent-tooltip"
+              class="user avatarBg{{(j%6)+1}}">
+            {{ hist?.candidateFirstName?.slice(0, 1)}}{{ hist?.candidateLastName?.slice(0, 1)}}</div>
+            {{ hist?.candidateFirstName }} {{ hist?.candidateMiddleName ? hist?.candidateMiddleName : '' }} {{
+            hist?.candidateLastName ? hist?.candidateLastName : '' }} - <span
+            matTooltip="Client Reference Number" matTooltipClass="accent-tooltip">{{hist?.clientRefNo}}
+          </span>
+        </div>
+        <div class="dt">Component Name : {{hist?.componentName}}</div>
+        <p>Generated by : {{ hist?.userFirstName }} {{ hist?.userMiddleName ? hist?.userMiddleName : '' }} {{
+          hist?.userLastName ? hist?.userLastName : '' }} | Generated Date & Time :
+          {{common?.getTimezoneOffset(hist?.generatedOn, false) | date :
+        'dd/MM/yyyy hh:mm:ss a'}} </p>
+      </div>
+    }
+  </div>
+</div>
+@if (getList(qualityCheckService?.historyReportList, screenName)?.length === 0) {
+  <div fxLayout="row" fxLayoutGap="0px"
+    >
+    <div fxFlex="100%" class="text-center" fxLayoutAlign="center center">
+      <div class="no-record"><span>No History Found</span></div>
+    </div>
+  </div>
+}
+</ng-template>
+
+<ng-template #modifyInterimReportStatus>
+  <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
+    (click)="dialogInterimReportStatusTilte()"> <i class="material-icons">clear</i> </button>
+    <h1 mat-dialog-title>Modify Report Status Field</h1>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+            <mat-label>Select Modify Report Status Field</mat-label>
+            <mat-select [(ngModel)]="modifyInterimReportStatusTitleID" required
+              placeholder="Modify Report Status Field">
+              <mat-option>Select Modify Report Status Field</mat-option>
+              @for (interimReportStatus of modifyInterimReportStatusList; track interimReportStatus; let i = $index) {
+                <mat-option
+                  [value]="interimReportStatus.lookUpId"> {{
+                interimReportStatus.lookUpName }}</mat-option>
+              }
+            </mat-select>
+            @if (!modifyInterimReportStatusTitleID) {
+              <mat-error>Modify Report Status Field is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-stroked-button (click)="dialogInterimReportStatusTilte()">Cancel</button>
+      <button mat-flat-button color="warn" [disabled]="!modifyInterimReportStatusTitleID"
+      (click)="submitModifyReportStatusTitle()">Okay</button>
+    </mat-dialog-actions>
+  </ng-template>

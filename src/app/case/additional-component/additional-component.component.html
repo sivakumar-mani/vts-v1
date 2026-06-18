@@ -1,0 +1,537 @@
+﻿<form [formGroup]="getValues?.componentFormGroup">
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+    fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" *ngIf="editFlag === false">
+    <div fxFlex="100%">
+      <h3 class="sub-header">Package Details</h3>
+    </div>
+  </div>
+
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+    fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" *ngIf="editFlag === false">
+    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+        <mat-label>Select Package</mat-label>
+        <mat-select formControlName='packageId' placeholder="Select Package Name"
+          (selectionChange)="packageName($event.value)">
+          <mat-option>Select Package</mat-option>
+          <mat-option *ngFor="let pack of getValues?.packList" [value]="pack.packageId"> {{ pack.packageName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <!-- <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+    fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%" *ngIf="editFlag === true && getValues.scopeList &&
+ getValues.scopeList.packageId > 0 ">
+      <fieldset>
+        <legend>Package Components:</legend>
+        <mat-chip-grid>
+          <mat-chip-row *ngFor="let comp of componentListpackid; let i = index" > <span
+              *ngIf="!comp.packageSubComponent"> {{ comp.compName }} - {{ comp.noOfComponent }}</span> <span
+              *ngIf="comp.packageSubComponent"> {{ comp.compName }} - <span
+                *ngFor="let sub of comp.packageSubComponent; let j = index; let last = last"> {{ sub.subComName }} -
+                {{ sub.noOfComponent }}<span *ngIf="j >= 0 && !last">,</span> </span></span> </mat-chip-row>
+        </mat-chip-grid>
+      </fieldset>
+    </div>
+  </div> -->
+  <!-- <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+    fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%">
+      <h3 class="sub-header">Additional Component Details</h3>
+    </div>
+  </div> -->
+  <!-- <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"> -->
+  <!-- <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+  <app-auto-complete [selectProperties]="compControls"></app-auto-complete>
+</div> -->
+  <!-- <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Additional Components</mat-label>
+        <input matInput placeholder="Component" formControlName="compId" [matAutocomplete]="autoComponent" #compInput
+          (focus)="clientItems(compInput.value)" (keyup)="clientKeyupFunction($event, compInput.value)"
+          (input)="clientItems(compInput.value)" (click)="compInput.select()" autocomplete="off" role="presentation" />
+        <mat-autocomplete #autoComponent="matAutocomplete" [displayWith]="displayclientFn"
+          (optionSelected)="componentChange($event.option.value)">
+          <table class="autocomp">
+            <thead>
+              <tr class="autocomp-disable">
+                <th>Components</th>
+              </tr>
+            </thead>
+            <tbody>
+              <mat-option *ngFor="let comp of componentfilterList" [value]="comp.componentId"
+                class="autocom-option autocom-tr">
+                <tr class="autocomp-record">
+                  <td><span [innerHTML]="comp.compName | highlight: compInput.value"></span></td>
+                </tr>
+              </mat-option>
+              <mat-option *ngIf="componentfilterList.length == 0">
+                <tr>
+                  <td>
+                    <div class="no-record"><span>No Data Found</span></div>
+                  </td>
+                </tr>
+              </mat-option>
+            </tbody>
+          </table>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="subflag === true">
+      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+        <mat-label>Sub Components</mat-label>
+        <mat-select formControlName="subCompId" placeholder="Select Sub-Components"
+          (selectionChange)="subChange($event.value)">
+          <table class="autocomp">
+            <thead>
+              <tr class="autocomp-disable">
+                <th>Sub Components</th>
+              </tr>
+            </thead>
+            <tbody>
+              <mat-option *ngFor="let comp of filtersubcomplist" [value]="comp.subCompId"
+                class="autocom-option autocom-tr">
+                <tr class="autocomp-record">
+                  <td><span [innerHTML]="comp.subCompName"></span></td>
+                </tr>
+              </mat-option>
+              <mat-option *ngIf="filtersubcomplist.length == 0">
+                <tr>
+                  <td>
+                    <div class="no-record"><span>No Data Found</span></div>
+                  </td>
+                </tr>
+              </mat-option>
+            </tbody>
+          </table>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxFlex="20%" *ngIf="currencyList.length> 0" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <app-auto-complete [selectProperties]="currencyControls"></app-auto-complete>
+    </div>
+    <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>No. of Components</mat-label>
+        <input #noComp matInput appNumberOnly [NumberOnly]="false" placeholder="No. of Component" autocomplete="off"
+          role="presentation" formControlName="noOfComponent" min="0" maxlength="1" (blur)="checkNoofComp(noComp)"
+          oninput="validity.valid || (value='');" onKeyPress="if(this.value.length==4) return false;" />
+        <mat-error *ngIf="!!getValues.componentFormGroup?.get('noOfComponent')?.errors?.required"> No Of Component is
+          required </mat-error>
+        <mat-error
+          *ngIf="!!getValues.componentFormGroup?.get('noOfComponent')?.errors?.incorrect && countFlag === false;">
+          Please give a No of Component above 0 </mat-error>
+        <mat-error
+          *ngIf="!!getValues.componentFormGroup?.get('noOfComponent')?.errors?.incorrect && countFlag === true"> Maximum
+          No of Count is {{maxnoofcomp}} </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-label fxHide.sm fxHide.xs>&nbsp;</mat-label>
+      <div class="adrem text-left " fxLayoutGap="8px">
+        <button type="button" mat-button color="primary" [matTooltip]='tooltip === true ? "Update":"Add"'
+          matTooltipClass="accent-tooltip" (click)="createControls('Individual')"> <i class="icon-plus-circle"></i>
+        </button>
+        <button type="button" mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+          (click)="removeControl()"> <i class="icon-x-circle"></i> </button>
+      </div>
+    </div> -->
+  <!-- </div> -->
+  <!-- <div fxLayout="row" fxLayoutGap="20px"
+    *ngIf="editFlag === true && getValues.scopeList && getValues.scopeList.caseComponent.length > 0">
+    <div fxFlex="100%">
+      <fieldset>
+        <legend>Additional Components:</legend>
+        <mat-chip-grid>
+          <mat-chip-row *ngFor="let comp of scopelist; let i = index" > <span
+              *ngIf="!comp.caseSubComponent"> {{ comp.compName }} - {{ comp.noOfComponent }}</span> <span
+              *ngIf="comp.caseSubComponent"> {{ comp.compName }} - <span
+                *ngFor="let sub of comp.caseSubComponent; let j = index; let last = last"> {{ sub.subCompName }} -
+                {{ sub.noOfComponent }}<span *ngIf="j >= 0 && !last">,</span> </span></span> </mat-chip-row>
+        </mat-chip-grid>
+      </fieldset>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" class="pt-15">
+    <div fxFlex="100%" *ngIf="getValues.compCommonLists.caseComponent?.length > 0">
+      <p-table #dt [columns]="getValues.type === 'invitation' ? invitecolumns : scopecolumns"
+        [value]="getValues.compCommonLists.caseComponent" [scrollable]="true" scrollHeight="" [paginator]="true"
+        [rows]="10" [resizableColumns]="true" [reorderableColumns]="true">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns" [ngClass]="{ 'text-center': col.field === 'Actions' }"
+              [pSortableColumn]="col.field" pReorderableColumn pResizableColumn>
+              <div class="thname">{{ col.header }}</div>
+              <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+              </p-sortIcon>
+            </th>
+            <th class="action">Action</th>
+          </tr>
+        </ng-template>
+        <ng-template let-rowIndex="rowIndex" pTemplate="body" let-rowData let-columns="columns">
+          <tr>
+            <td *ngFor="let col of columns" matTooltipClass="accent-tooltip"><span>
+                {{ rowData[col.field] ? rowData[col.field] : "N/A" }} </span></td>
+            <td class="action">
+              <div fxLayout="row" class="tbl-icon">
+                <div fxFlex="100%" fxLayoutGap="10px">
+                  <mat-icon [ngClass]="rowData.type === 'Package' ? 'page-btn disabled' : ''"> <i
+                      class="material-icons-outlined" matTooltip="Edit" matTooltipClass="accent-tooltip"
+                      (click)="editDelete(rowData, 'Edit')">edit</i> </mat-icon>
+                  <mat-icon [ngClass]="rowData.type === 'Package' ? 'page-btn disabled' : ''"> <i
+                      class="material-icons-outlined" matTooltip="Delete" matTooltipClass="accent-tooltip"
+                      (click)="editDelete(rowData, 'Delete')">delete</i> </mat-icon>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+      <div fxLayout="row wrap" fxLayout.md="column" class="cus-paginator" fxLayoutGap="0px grid"
+        fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+          fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} -
+          {{
+      dt.totalRecords > 0 ? (dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords) : 0
+      }}
+          of {{ dt.totalRecords }} record(s) </div>
+        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center"
+          fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center"> <a
+            [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+          dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+          navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+        "> <i class="icon-control-start mr-5"></i> </a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span
+              class="input-num">
+              <input type="number" min="1" #pageNo [value]="currentPage" maxlength="5" appNumberOnly
+                [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+            </span></span> <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
+            [ngClass]="dt.rows + dt.first >= dt.totalRecords ? 'page-btn disabled' : 'page-btn'" (click)="
+          dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+          navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+        "> <i class="icon-control-end ml-5"></i></a> </div>
+      </div>
+    </div>
+  </div> -->
+</form>
+<div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+  fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxHide.xs fxLayoutAlign="end end"
+    fxLayoutAlign.sm="end end">
+    <h3 class="sub-header">Components Details</h3>
+  </div>
+  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" fxHide.xs
+    fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+    <div class="tbl-commonsearch">
+      <mat-form-field fxFlex="100%">
+        <mat-label></mat-label>
+        <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+        <input #global matInput size="50" placeholder="Search here..."
+          (input)="dtable.filterGlobal($event.target.value, 'contains')"
+          (keypress)="dtable.reset();dtable.filterGlobal($event.target.value, 'contains');" autocomplete="off"
+          role="presentation" />
+        <button mat-button *ngIf="global.value" matSuffix mat-icon-button aria-label="Clear"
+          (click)="global.value = ''; dtable.filterGlobal($event.target.value, 'contains')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+  fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="100%">
+
+    <form #compfrm="ngForm">
+
+      <p-table class="inv_table" #dtable [columns]="aditionalcompCol" [value]="this.getValues.componentList" dataKey="componentId"  [resizableColumns]="true" 
+        class="tree-tbl" [responsive]="true" expandedRow="true" [expandedRowKeys]="expandrows" [autoLayout]="true" columnResizeMode="expand">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th style="width: 1em"></th>
+            <th *ngFor="let col of columns" [ngSwitch]="col.field" pReorderableColumn pResizableColumn>
+              <span [pSortableColumn]="col.field">
+                <div class="thname"> {{col.header}} </div>
+                <p-sortIcon *ngIf="col.field === 'compName' || col.field === 'price'" [field]="col.field"
+                  ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                  ariaLabelAsc="Activate to sort in ascending order">
+                </p-sortIcon>
+              </span>
+              <span class="ico-fieldsearch">
+                <i *ngSwitchCase="'compName'" class="icon-search2" (click)='compNameCtrlTrigger.openMenu()'></i>
+              </span>
+
+              <span *ngSwitchCase="'compName'">
+                <div matTooltip="Component Name" matTooltipClass="accent-tooltip" #compNameCtrlTrigger="matMenuTrigger"
+                  [matMenuTriggerFor]="compNameCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                  class="txtborder-bot">
+                </div>
+                <mat-menu #compNameCtrl class="pos-top">
+                  <div fxLayout="row">
+                    <div fxFlex="100%" class="p-10 tbl-fillddl">
+                      <mat-form-field (click)="$event.stopPropagation()">
+                        <input type="text" #compNameCtl matInput [matAutocomplete]="autocompName"
+                          placeholder="Component Name" autocomplete="off" role="presentation"
+                          (click)="compNameCtl.select()" [formControl]="compNameControl"
+                          (change)="dt.filter($event.target.value, col.field, 'contains')"
+                          (blur)="dt.filter($event.target.value, col.field, 'contains')"
+                          (focusin)="dt.filter($event.target.value, col.field, 'contains')"
+                          (keyup)="dt.filter($event.target.value, col.field, 'contains')">
+                      </mat-form-field>
+                      <mat-autocomplete #autocompName="matAutocomplete">
+                        <mat-option (onSelectionChange)="compNameCtrlTrigger.closeMenu();"
+                          *ngFor="let option of compNameFilteredOptions | async" [value]="option"> <span
+                            [innerHTML]="option"></span>
+                        </mat-option>
+                      </mat-autocomplete>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                    <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                      <a *ngIf='compNameCtl.value'
+                        (click)="dt.filter('', col.field, 'contains');compNameCtl.value='';compNameControl.setValue('')"
+                        class="text-sm">Reset</a> </div>
+                  </div>
+                </mat-menu>
+              </span>
+
+
+              <!-- {{ col.header }} -->
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-columns="columns" let-index="rowIndex">
+          <!-- <form #compfrm="ngForm"> -->
+          <tr *ngIf="rowData['subCompFlag'] || rowData['packComplist'] ">
+            <td [attr.colspan]="columns.length + 1">
+              <a href="#" [pRowToggler]="rowData"> <i [ngClass]="
+                                expanded
+                                  ? 'icon-chevron-down'
+                                  : 'icon-chevron-right'
+                              "></i>{{rowData['subCompFlag']?rowData['compName']: rowData['packageName']  }} </a></td>
+          </tr>
+          <tr *ngIf="!rowData['subCompFlag'] && !rowData['packComplist']">
+            <td></td>
+            <td *ngFor="let col of columns let cl = index" [ngSwitch]="col.field"
+              [style.width]="col.field ==='sno' ? '10px' : '30px'">
+
+              <span>
+                <span *ngSwitchCase="'ischecked'" [style.width.px]=107>
+                  <mat-checkbox
+                    [checked]="rowData[col.field]"
+                    [disabled]="rowData['disable']"
+                    (change)="rowData[col.field] = $event.checked; rowData['subCheckFlag'] = editFlag ? $event.checked : rowData['subCheckFlag']; checkEvent($event.checked, rowData)"
+                    *ngIf="!rowData['subCompFlag']">
+                  </mat-checkbox>
+                </span>
+
+                <span *ngSwitchCase="'noOfComponent'" fxFlex="65%">
+                    <mat-form-field fxFlex="65%">
+                        <mat-label>{{col.header}}</mat-label>
+                        <mat-select [placeholder]="col.header" name="{{col.field+index}}"  [ngModelOptions]="{standalone: true}" 
+                        [required]="rowData['ischecked']" [disabled]="!rowData['ischecked']" #NoofComp="ngModel" matInput
+                        [(ngModel)]="rowData[col.field]">
+                          <mat-option *ngFor="let noComp of rowData['maxNoOfComp'] && rowData['maxNoOfComp'] === 1 ? [1] : rowData['maxNoOfComp'] === 18 ? [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18] : [1,2,3,4,5,6,7,8,9]" [value]="noComp">
+                            {{noComp}}</mat-option>
+                        </mat-select>
+                        <mat-hint>Max Count - {{rowData.maxNoOfComp?rowData.maxNoOfComp:9}}</mat-hint>
+                        <mat-error *ngIf="NoofComp?.errors?.required || NoofComp.value === 0 || !NoofComp.value">Please enter {{col.header}}</mat-error>
+                      </mat-form-field>
+                  <!-- <mat-form-field>
+                    <mat-label>{{col.header}}</mat-label>
+                    <input maxlength="3" role="presentation" name="{{col.field+index}}" #NoofComp="ngModel" matInput
+                      [required]="rowData['ischecked']" [disabled]="!rowData['ischecked']"
+                      [(ngModel)]="rowData[col.field]" [pattern]="'([1-'+rowData['maxNoOfComp']+']{1})?'" />
+                    <mat-hint>Max no of Component - {{rowData.maxNoOfComp?rowData.maxNoOfComp:9}}</mat-hint>
+                    <mat-error *ngIf="NoofComp?.errors?.pattern">Please enter valid number</mat-error>
+                    <mat-error *ngIf="NoofComp?.errors?.required">Please enter {{col.header}}</mat-error>
+                  </mat-form-field> -->
+                </span>
+                <span *ngSwitchCase="'remarks'" fxFlex="100%" >
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{col.header}}</mat-label>
+                    <textarea  #remarks maxlength="1000" role="presentation" name="{{col.field+index}}" #compRemarks="ngModel"
+                      matInput [disabled]="!rowData['ischecked']" [(ngModel)]="rowData[col.field]"
+                      placeholder={{col.header}} ></textarea>>
+                    <mat-error *ngIf="compRemarks?.errors?.required">Please enter {{col.header}}</mat-error>
+                    <mat-hint class="f-13"> ({{ remarks.value.length }} /1000 max) </mat-hint>
+                  </mat-form-field>
+                </span>
+                <span  fxFlex="65%" *ngIf="getValues.type === 'invitation' && rowData['daCompValidationFlag'] === true;else other">
+                  <mat-form-field fxFlex="65%" *ngSwitchCase="'daCompValidYear'">
+                      <mat-label>{{col.header}}</mat-label>
+                      <mat-select placeholder="No of Years" matInput [ngModelOptions]="{standalone: true}"
+                      [required]="rowData['daCompValidationFlag'] === true ? true : false"  [disabled]="!rowData['ischecked']" #Noofexp="ngModel" (input) ="validatecntrl(NoofComp)"
+                      [(ngModel)]="rowData[col.field]">
+                        <mat-option *ngFor="let no of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="no">
+                          {{no}}</mat-option>
+                      </mat-select>
+                      <mat-hint class="error" *ngIf="rowData['ischecked'] && rowData['daCompValidationFlag'] === true && !Noofexp?.value"> Experience is required </mat-hint>
+                      <!-- <mat-error *ngIf="Noofexp.value === 0 || !Noofexp.value">Please enter valid number</mat-error> -->
+                      <mat-error *ngIf="rowData['daCompValidationFlag'] === true  && Noofexp?.errors?.required && !Noofexp?.value">Please enter {{col.header}}</mat-error>
+                    </mat-form-field>
+              </span>
+             <span> <ng-template #other>{{col.field === 'daCompValidYear' ? 'N/A' : '' }}</ng-template></span>
+                <mat-form-field fxFlex="100%" *ngSwitchCase="'currencyId'">
+                  <mat-label>{{col.header}}</mat-label>
+                  <mat-select [placeholder]="col.header" [(ngModel)]="rowData[col.field]"
+                    [required]="rowData['ischecked']" [disabled]="!rowData['ischecked']" name="{{col.field+index}}"
+                    #currency="ngModel">
+                    <mat-option *ngFor="let exp of currencyList" [value]="exp.currencyId"> {{ exp.countryName }} -
+                      {{ exp.currencyShortName }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="currency?.errors?.required">{{col.header}} required
+                  </mat-error>
+                </mat-form-field>
+                <span *ngSwitchDefault>{{rowData[col.field]}}</span>
+              </span>
+
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template let-ei="rowIndex" pTemplate="rowexpansion" let-subcompRowData let-columns="columns">
+          <tr>
+            <td *ngIf="!subcompRowData['packComplist'] && subcompRowData['subCompFlag']"
+              [attr.colspan]="columns.length + 1">
+              <div class="p-grid p-fluid">
+                <p-table [columns]="subcompCol" [value]="subcompRowData.packageSubComponent" class="inn-table"
+                  [responsive]="true"  [resizableColumns]="true"  columnResizeMode="expand">
+                 
+                  <ng-template pTemplate="header" let-columns style="text-align: center;
+    width: 100%;">
+          <tr>
+            <th *ngFor="let col of columns">
+
+              <span  [style.width]="col.field === 'noOfComponent' ? '70px' : ''">{{ col.header }} </span>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-screenRowData let-columns="columns" let-sindex="rowIndex" >
+          <!-- <form #subcompfrm="ngForm"> -->
+
+          <tr>
+            <td *ngFor="let col of columns; let si = index" [ngSwitch]="col.field" [style.width]="col.field === 'noOfComponent' ? '70px' : ''">
+              <span>
+                <span *ngSwitchCase="'ischecked'" style="text-align: center;" [style.width.px]=57>
+                  <mat-checkbox
+                    [checked]="screenRowData[col.field]"
+                    [disabled]="screenRowData['disable']"
+                    (change)="screenRowData[col.field] = $event.checked; screenRowData['subCheckFlag'] = editFlag ? $event.checked : screenRowData['subCheckFlag']; checkEvent($event.checked, screenRowData)">
+                  </mat-checkbox>
+                </span>
+                <span *ngSwitchCase="'remarks'">
+                  <mat-form-field [style.width.px]=300 appearance="outline" >
+                    <mat-label>{{col.header}}</mat-label>
+                    <textarea #remarks maxlength="1000" role="presentation" name="{{col.field+ei+'s'+sindex}}" #compRemarks="ngModel"
+                      matInput [disabled]="!screenRowData['ischecked']" [(ngModel)]="screenRowData[col.field]" 
+                      placeholder={{col.header}}></textarea>
+                      <mat-hint class="f-13"> ({{ remarks.value.length }} /1000 max) </mat-hint>
+                    <mat-error *ngIf="compRemarks?.errors?.required">Please enter {{col.header}}</mat-error>
+                  </mat-form-field>
+                </span>
+                <mat-form-field fxFlex="65%" *ngSwitchCase="'noOfComponent'">
+                    <mat-label>{{col.header}}</mat-label>
+                    <mat-select placeholder="No of Comp" name="{{col.field+ei+'s'+sindex}}" matInput [ngModelOptions]="{standalone: true}" 
+                    [required]="screenRowData['ischecked']" [disabled]="!screenRowData['ischecked']" #subnoofcomp="ngModel"
+                    [(ngModel)]="screenRowData[col.field]"  [pattern]="'([1-'+(screenRowData['maxNoOfComp']?screenRowData['maxNoOfComp']:9)+']{1})?'">
+                      <mat-option *ngFor="let subcomp of screenRowData['maxNoOfComp'] && screenRowData['maxNoOfComp'] === 1 ? [1]:[1,2,3,4,5,6,7,8,9]" [value]="subcomp">
+                        {{subcomp}}</mat-option>
+                    </mat-select>
+                    <mat-hint>Max Count - {{screenRowData.maxNoOfComp?screenRowData.maxNoOfComp:9}}</mat-hint>
+                    <mat-error *ngIf="subnoofcomp?.errors?.pattern || subnoofcomp.value === 0 || !subnoofcomp.value">Please enter valid number</mat-error>
+                    <mat-error *ngIf="subnoofcomp?.errors?.required || subnoofcomp.value === 0 || !subnoofcomp.value">Please enter {{col.header}}</mat-error>
+                  </mat-form-field>
+                  <span  fxFlex="65%" *ngIf="getValues.type === 'invitation' && screenRowData['daCompValidationFlag'] === true;else other">
+                    <mat-form-field fxFlex="65%" *ngSwitchCase="'daCompValidYear'">
+                        <mat-label>{{col.header}}</mat-label>
+                        <mat-select placeholder="No of Years" matInput [ngModelOptions]="{standalone: true}"
+                        [required]="screenRowData['daCompValidationFlag'] === true ? true : false"  [disabled]="!screenRowData['ischecked']" #Noofsubexp="ngModel"
+                        [(ngModel)]="screenRowData[col.field]">
+                          <mat-option *ngFor="let no of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="no">
+                            {{no}}</mat-option>
+                        </mat-select>
+                        <mat-hint class="error" *ngIf="screenRowData['ischecked'] && screenRowData['daCompValidationFlag'] === true && !Noofsubexp?.value"> Experience is required </mat-hint>
+                        <mat-error *ngIf="screenRowData['daCompValidationFlag'] === true  && Noofsubexp?.errors?.required && !Noofsubexp?.value">Please enter {{col.header}}</mat-error>
+                      </mat-form-field>
+                </span>
+                <span> <ng-template #other>{{col.field === 'daCompValidYear' ? 'N/A' : '' }}</ng-template></span>
+                <!-- <mat-form-field *ngSwitchCase="'noOfComponent'">
+                  <mat-label>{{col.header}}</mat-label>
+                  <input name="{{col.field+ei+'s'+sindex}}" #subnoofcomp="ngModel" maxlength="3" role="presentation"
+                    matInput [required]="screenRowData['ischecked']" [disabled]="!screenRowData['ischecked']"
+                    [(ngModel)]="screenRowData[col.field]"
+                    [pattern]="'([1-'+(screenRowData['maxNoOfComp']?screenRowData['maxNoOfComp']:9)+']{1})?'" />
+                  <mat-hint>Max no of Component - {{screenRowData.maxNoOfComp?screenRowData.maxNoOfComp:9}}</mat-hint>
+                  <mat-error *ngIf="subnoofcomp?.errors?.pattern">Please enter valid number</mat-error>
+                  <mat-error *ngIf="subnoofcomp?.errors?.required">Please enter {{col.header}}</mat-error>
+                </mat-form-field> -->
+              </span>
+              <span>
+                <mat-form-field appearance="outline" fxFlex="100%" *ngSwitchCase="'currencyId'">
+                  <mat-label>{{col.header}}</mat-label>
+                  <mat-select [placeholder]="col.header" [(ngModel)]="screenRowData[col.field]"
+                    [required]="screenRowData['ischecked']" [disabled]="!screenRowData['ischecked']"
+                    name="{{col.field+ei+'s'+sindex}}" #subcurrency="ngModel">
+                    <mat-option *ngFor="let exp of currencyList" [value]="exp.currencyId"> {{ exp.countryName }} -
+                      {{ exp.currencyShortName }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="subcurrency?.errors?.required">col.header required
+                  </mat-error>
+                </mat-form-field>
+              </span>
+              <span *ngSwitchDefault>{{screenRowData[col.field]}}</span>
+            </td>
+          </tr>
+          <!-- </form> -->
+        </ng-template>
+      </p-table>
+
+  </div>
+  </td>
+
+  <td [attr.colspan]="columns.length + 1" *ngIf="subcompRowData['packComplist'] && !subcompRowData['subCompFlag']">
+    <div class="p-grid p-fluid">
+      <p-table [columns]="getValues.type === 'invitation' ? invitecolumns : scopecolumns"
+        [value]="subcompRowData.compList" class="inn-table" [responsive]="true"  [resizableColumns]="true"  columnResizeMode="expand">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns">
+
+              <span>{{ col.header }} </span>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-packRowData let-columns="columns" let-sindex="rowIndex">
+          <tr>
+            <td *ngFor="let col of columns; let si = index" [ngSwitch]="col.field">
+              <span *ngSwitchCase="'type'">Package</span>
+              <span *ngSwitchCase="'componentType'">{{packRowData['compName']}}</span>
+              <span *ngSwitchCase="'subCompName'"><span
+                  *ngFor="let sub of packRowData['packageSubComponent']">{{sub['subCompName']+' ('+sub['noOfComponent']+')'}}</span></span>
+
+
+              <span *ngSwitchDefault>{{packRowData[col.field]}}</span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+    </div>
+  </td>
+
+  </tr>
+  </ng-template>
+  </p-table>
+  </form>
+</div>
+</div>
+<!-- {{dtable.value|json}} -->

@@ -1,0 +1,253 @@
+﻿/* Employment Page Styles */
+.hname {
+  color: #9b9b9d;
+  font-style: italic;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+.hname strong {
+  color: #58595c;
+  font-weight: 500;
+}
+a.compList .subCompList {
+  height: 90px;
+  border: 1px solid #dedede;
+  border-radius: 4px;
+  background: #fff;
+  padding: 8px;
+  line-height: 1.25;
+  text-align: center;
+  color: #58595c;
+  font-size: 12px;
+  position: relative;
+}
+a.compList .subCompList:hover {
+  box-shadow: 1px 1px 20px 4px rgba(1,1,1,.1);
+  z-index: 1;
+}
+a.compList .subCompList .icon {
+  margin: 0 auto 5px auto;
+  height: 36px;
+  width: 36px;
+}
+a.compList .subCompList .icon i {
+  font-size: 36px;
+  color: #ACACAE;
+}
+a.compList .subCompList.active {
+  border: 1px solid #FF8500;
+  color: #FF8500;
+  background: rgba(255, 133, 0, 0.03);
+}
+a.compList .subCompList.active .icon i {
+  color: #FF8500;
+}
+a.compList .subCompList.completed {
+  border: 1px solid #08BA53;
+  color: #08BA53;
+  background: rgba(8, 186, 83, 0.03);
+}
+a.compList .subCompList.completed .icon i {
+  color: #08BA53;
+}
+a.compList .subCompList.reject {
+  border: 1px solid #E53935;
+  color: #E53935;
+  background: rgba(229, 57, 53, 0.03);
+}
+a.compList .subCompList.reject .icon i {
+  color: #E53935;
+}
+a.compList .subCompList.preQc {
+  border: 1px solid #3294f0;
+  color: #3294f0;
+  background: rgba(229, 57, 53, 0.03);
+}
+a.compList .subCompList.preQc .icon i {
+  color: #3294f0;
+}
+.comprecList {
+  position: absolute;
+  right: -7px;
+  top: -7px;
+  background: #fff;
+  border-radius: 100px;
+  border: 1px solid #dedede;
+  width: 23px;
+  height: 23px;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.completed .comprecList {
+  border: 1px solid #08BA53 !important;
+}
+.active .comprecList {
+  border: 1px solid #FF8500;
+}
+.reject .comprecList {
+  border: 1px solid #E53935 !important;
+}
+.preQc .comprecList {
+  border: 1px solid #3294f0 !important;
+}
+.scrn-head {
+  font-size: 15px;
+  margin: 0 0 20px 0;
+}
+.scrn-head i {
+  font-size: 32px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+/* ::ng-deep mat-tab-group.scrn-tab .mat-tab-header{
+    background: rgb(88, 89, 92) !important;
+    border-bottom: 0px solid #fff;
+} */ ::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-active {
+  border-right: 1px solid rgb(255, 255, 255);
+  border-left: 1px solid rgb(255, 255, 255);
+  background: #fff;
+  opacity: 1;
+  color: rgba(0, 0, 0, .87);
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-active {
+  border-right: 1px solid rgb(255, 255, 255);
+  border-left: 1px solid rgb(255, 255, 255);
+  background: #fff;
+  opacity: 1;
+  color: rgba(0, 0, 0, .87);
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab-container {
+  padding: 15px 0 0 15px;
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab-label-container {
+  padding: 15px 0 0 15px;
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab {
+  font-family: "Calibri", Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab {
+  font-family: "Calibri", Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+}
+/*      Current Active Tab      */ ::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-active {
+  border-right: 1px solid rgb(255, 255, 255);
+  border-left: 1px solid rgb(255, 255, 255);
+  background: #fff;
+  opacity: 1;
+  color: rgba(0, 0, 0, .87);
+  margin: 0 3px;
+  /* border-top: 5px solid #08BA53; */
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-active {
+  border-right: 1px solid rgb(255, 255, 255);
+  border-left: 1px solid rgb(255, 255, 255);
+  background: #fff;
+  opacity: 1;
+  color: rgba(0, 0, 0, .87);
+  margin: 0 3px;
+  /* border-top: 5px solid #08BA53; */
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-active .mat-mdc-tab-content {
+  color: #000;
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-active .mdc-tab__text-label {
+  color: #000;
+}
+::ng-deep mat-tab-group.scrn-tab mat-ink-bar.mat-ink-bar.mat-ink-bar-active {
+  background-color: #ff8c00 !important;
+}
+/*   Completed Tab  */ ::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-completed {
+  background: rgb(255, 255, 255);
+  opacity: 1;
+  border-left: 1px solid rgba(255, 255, 255, 0.27);
+  border-right: 1px solid rgba(255, 255, 255, 0.27);
+  border-top: 4px solid #08BA53 !important;
+  margin: 0px 3px;
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-completed {
+  background: rgb(255, 255, 255);
+  opacity: 1;
+  border-left: 1px solid rgba(255, 255, 255, 0.27);
+  border-right: 1px solid rgba(255, 255, 255, 0.27);
+  border-top: 4px solid #08BA53 !important;
+  margin: 0px 3px;
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-completed .mat-mdc-tab-content {
+  color: #08BA53;
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-completed .mdc-tab__text-label {
+  color: #08BA53;
+}
+::ng-deep mat-tab-group.scrn-tab mat-ink-bar.mat-ink-bar.mat-ink-bar-completed {
+  background-color: #08BA53 !important;
+}
+/*   Default Tab     */ ::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-default .mat-mdc-tab-content {
+  color: #c1c1c1;
+  /* background: #08BA53 */
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-default .mdc-tab__text-label {
+  color: #c1c1c1;
+  /* background: #08BA53 */
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-active.mat-mdc-tab-default {
+  background: transparent !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+  border-top: 0px !important;
+}
+::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab.mat-mdc-tab-active.mat-mdc-tab-default {
+  background: transparent !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+  border-top: 0px !important;
+}
+/* BUTTONS */
+.in-box {
+ margin: 20px 0;
+}
+.in-status {
+  font-size: 13px;
+  color: #8A8B8D;
+  padding-right: 12px;
+}
+.in-status em {
+  font-style: normal;
+  color: #353537;
+  font-weight: 500;
+  margin-left: 5px;
+}
+.in-link {
+  font-size: 13px;
+}
+.in-link i {
+  font-size: 14px;
+  margin-right: 5px;
+}
+.remark-icon{
+ padding-left: 123px;
+}
+/* Tabs style Ref style.css file */
+/* 
+
+::ng-deep mat-tab-group.tabalign-left .mat-tab-labels .mat-mdc-tab .mat-mdc-tab-content {
+    text-transform: uppercase !important;
+    color: #58595C;
+    font-weight: normal;
+}
+::ng-deep mat-tab-group.tabalign-left .mat-tab-labels .mat-mdc-tab.mat-mdc-tab-active .mat-mdc-tab-content{ 
+    color: #353537 !important;
+    font-weight: 600;
+} 
+::ng-deep mat-tab-group.tabalign-left .mat-tab-body{
+    padding: 30px 0px;
+}
+::ng-deep mat-tab-group.tabalign-left .mat-tab-body .mat-tab-body-content{
+    overflow: hidden;
+}
+ */

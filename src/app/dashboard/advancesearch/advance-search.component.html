@@ -1,0 +1,295 @@
+<app-breadcrumb [routePath]="routePath" [btnExcelExport]="(advanceSearchList?.length > 0)"
+  [btnValidate]="showValidator === true ? btnValidate : !btnValidate" [btnAddUpload]="btnAddUpload"
+  [btnBack]="true && !this.searchPage" [btnExport]="showValidator === true ? btnExport : !btnExport"
+  (eventExport)="downloadExcel()" (eventExcelExport)="exportExcel()" (eventValidate)="validateUploadFile()"
+  (eventBack)="back()" (eventAddUpload)="showBulk()">
+</app-breadcrumb>
+<div fxLayout="row" class="advSearch" [formGroup]="advanceSearchForm" autocomplete="off">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="250px">
+            <mat-form-field fxFlex="100%">
+              <mat-label>Client Ref Number</mat-label>
+              <input placeholder="Client Ref Number" autocomplete="off" formControlName="refNumber"
+                role="presentation" matInput [type]="'text'">
+              <!-- <mat-error *ngIf="refNumber?.errors?.required">Client Ref Number is required</mat-error> -->
+            </mat-form-field>
+          </div>
+          @if (!showBulkUpload) {
+            <div fxFlex="250px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>Applicant ID</mat-label>
+                <input placeholder="Applicant Id" autocomplete="off" formControlName="applicantId"
+                  (blur)="setmandatoryClient()" role="presentation" matInput [type]="'text'">
+              </mat-form-field>
+            </div>
+          }
+          <!-- <div fxFlex="250px" *ngIf="!showBulkUpload">
+          <mat-form-field fxFlex="100%">
+            <mat-select formControlName="clientids" placeholder="Client Name">
+              <mat-option [value]=null>Select Client Name</mat-option>
+              <mat-option *ngFor="let type of clientList" [value]="type.clientId">
+              {{type.clientName}} </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!!clientids?.invalid"> Client Name is
+            required</mat-error>
+          </mat-form-field>
+        </div> -->
+        @if (!showBulkUpload) {
+          <div fxFlex="250px">
+            <app-auto-complete [selectProperties]='clientControl'>
+            </app-auto-complete>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+    @if (!showBulkUpload) {
+      <a (click)="submitAdvanceSearch(true)">Search</a>
+    }
+    @if (!showBulkUpload) {
+      <span>|</span>
+    }
+    <a (click)="resetForm()"> Reset</a>
+    @if (!showBulkUpload) {
+      <span>|</span>
+    }
+    @if (!showBulkUpload) {
+      <a (click)='searchCriFilter = !searchCriFilter'>
+        {{ searchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+      class="icon-chevron-{{ searchCriFilter?'up':'down' }}"></i></a>
+    }
+  </div>
+</div>
+@if (searchCriFilter && !showBulkUpload) {
+  <div fxLayout="row" class="advSearchshow">
+    <div class="advSearch-forms">
+      <div fxLayout="row" fxLayoutGap="20px grid">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="250px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>Case Creation From Date</mat-label>
+                <input matInput placeholder="From Date" formControlName="caseFromDate" #creationfrm
+                  (input)="upperCaseForCC(creationfrm.value,'caseFromDate', i);"
+                  (dateChange)="setMinDateCC(creationfrm.value)" [matDatepicker]="caseFromDate" />
+                <input matInput (dateChange)="handleDateChangeForCC($event,'caseFromDate', i);">
+                <mat-datepicker-toggle matSuffix [for]="caseFromDate"></mat-datepicker-toggle>
+                <mat-datepicker #caseFromDate
+                (blur)="resetDatePicker('caseFromDate', i)"></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxFlex="250px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>Case Creation To Date</mat-label>
+                <input matInput placeholder="To Date" formControlName="caseToDate" #creationto
+                  (input)="upperCaseForCC(creationto.value,'caseToDate', i);" [min]="minToDateCC"
+                  [matDatepicker]="caseToDate" />
+                <input matInput (dateChange)="handleDateChangeForCC($event,'caseToDate', i);">
+                <mat-datepicker-toggle matSuffix [for]="caseToDate"></mat-datepicker-toggle>
+                <mat-datepicker #caseToDate (blur)="resetDatePicker('caseToDate', i)"></mat-datepicker>
+                @if (!!advanceSearchForm?.get('caseToDate')?.errors?.comparison) {
+                  <mat-error>
+                    Case Creation To Date should be greater than Case Creation From Date
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex="250px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>Final Report Genarated From Date</mat-label>
+                <input matInput placeholder="From Date" formControlName="reportFromDate" #genfrm
+                  (input)="upperCaseForCC(genfrm.value,'reportFromDate', i);"
+                  (dateChange)="setMinDateFRG(genfrm.value)" [matDatepicker]="reportFromDate" />
+                <input matInput (dateChange)="handleDateChangeForFRG($event,'reportFromDate', i);">
+                <mat-datepicker-toggle matSuffix [for]="reportFromDate"></mat-datepicker-toggle>
+                <mat-datepicker #reportFromDate
+                (blur)="resetDatePicker('reportFromDate', i)"></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxFlex="250px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>Final Report Genarated To Date</mat-label>
+                <input matInput placeholder="To Date" formControlName="reportToDate" #gento
+                  (input)="upperCaseForCC(gento.value,'reportToDate', i);"
+                  [matDatepicker]="reportToDate" [min]="minToDateFRG" />
+                <input matInput (dateChange)="handleDateChangeForFRG($event,'reportToDate', i);">
+                <mat-datepicker-toggle matSuffix [for]="reportToDate"></mat-datepicker-toggle>
+                <mat-datepicker #reportToDate
+                (blur)="resetDatePicker('reportToDate', i)"></mat-datepicker>
+                @if (!!advanceSearchForm?.get('reportToDate')?.errors?.comparison) {
+                  <mat-error>
+                    Final Report Genarate To Date should be greater than Final Report Genarate From Date
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="100%" class="advSearch-btn">
+      <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+    </div>
+  </div>
+}
+</div><br><br><br>
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+              fxLayout.xs="column" fxLayoutGap="20px">
+              <div fxFlex="100%">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                  fxLayout.xs="column" fxLayoutGap="20px">
+                  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                    fxFlex.xs="100%" fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                    fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">Advanced Search</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+      <!-- <mat-card-content *ngIf="bulkuploadFlag != true && showBulkUpload != true"> -->
+      <mat-card-content>
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <p-table #dt [columns]="advanceColumns" [value]="advanceSearchList" [scrollable]="true"
+              scrollHeight="" [paginator]="true" [rows]="itemperpage" [totalRecords]="totalpages"
+              [resizableColumns]="true" [reorderableColumns]="true" columnResizeMode="expand"
+              [lazy]="true" (onLazyLoad)="LoadHistory($event)">
+
+              <!-- ================= COLGROUP ================= -->
+              <ng-template pTemplate="colgroup" let-colGroupCols>
+                <colgroup>
+                @for (col of colGroupCols; track col) {
+                  <col style="width:200px" />
+                }
+              </colgroup>
+            </ng-template>
+
+            <!-- ================= HEADER ================= -->
+            <ng-template pTemplate="header" let-headerCols>
+              <tr>
+                @for (col of headerCols; track col) {
+                  <th [pSortableColumn]="col.field">
+                    <span class="thname">
+                      {{ col.header }}
+                    </span>
+                    <!-- sort icon intentionally omitted (unchanged from original) -->
+                  </th>
+                }
+              </tr>
+            </ng-template>
+
+            <!-- ================= BODY ================= -->
+            <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+
+              <tr>
+                @for (col of bodyCols; track col) {
+                  <td>
+                    <span [matTooltip]="rowData[col.field]">
+                      {{ rowData[col.field] }}
+                    </span>
+                  </td>
+                }
+              </tr>
+
+            </ng-template>
+
+          </p-table><br>
+          @if (showBulkUpload == true) {
+            <div>
+              <form [formGroup]="advanceFileFormGroup" autocomplete="off" id="ngForm">
+                <div>
+                  <div fxFlex="30">
+                    <app-auto-complete [selectProperties]='docClientControl'>
+                    </app-auto-complete>
+                  </div>
+                </div>
+                <div>
+                  <mat-label class="mat-hint-upload">
+                    Acceptable file Formats : .xlsx, .xls, .xlsb, .xlsm, .csv
+                  </mat-label>
+                  <div class="file-upload">
+                    <i class="material-icons">cloud_upload</i>
+                    <span>Browse here...</span>
+                    <input required type="file" #fileInput (change)="handleFileSelection($event)"
+                      [multiple]="false" title="Attach Document" accept=".xls,.xlsx,.csv" />
+                  </div>
+                  <!-- Show error if no file is uploaded -->
+                  @if (!uploadFile || uploadFile.length === 0) {
+                    <mat-error>
+                      Document is required
+                    </mat-error>
+                  }
+                  <!-- Show file name and remove button if a file is uploaded -->
+                  @if (uploadFile && uploadFile.length > 0) {
+                    <div class="file-upload-files" cdkDrag>
+                      <a [matTooltip]="uploadFile[0].name" matTooltipClass="accent-tooltip">
+                        {{ uploadFile[0].name }}
+                      </a>
+                      <button type="button" class="close" aria-label="Close"
+                        (click)="removeDocument(fileInput)">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  }
+                </div>
+              </form>
+            </div>
+          }
+          @if (advanceSearchList.length > 0) {
+            <div [ngClass]="advanceSearchList?.length === 0 ? 'empty-record':''" fxLayout="row wrap"
+              class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+              fxLayoutGap.xs="20px grid">
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="start center">
+                Showing {{ dt.totalRecords
+                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
+                dt.totalRecords }} record(s) <!-- |&nbsp;<a (click)="showall()">Show All</a> -->
+              </div>
+              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center">
+                                <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                                                                dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                                                                navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                                                              ">
+                  <i class="icon-control-start mr-5"></i></a>
+                  <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                    <input type="number" #pageNo [(ngModel)]="currentPage" min="1" maxlength="5"
+                      appNumberOnly [NumberOnly]="false"
+                    (keyup.enter)="navigatePage(pageNo.value, dt.rows)" /> </span></span>
+                    <span class="mr-2" fxHide.xs> of {{ getTotalChPages(dt.totalRecords, dt.rows) }}</span>
+                                <a [ngClass]="
+                                                                dt.rows + dt.first >= dt.totalRecords
+                                                                  ? 'page-btn disabled'
+                                                                  : 'page-btn'
+                                                              " (click)="
+                                                                dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                                                                navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                                                              "><i class="icon-control-end ml-5"></i></a>
+                    </div>
+                  </div>
+                  }<br>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>

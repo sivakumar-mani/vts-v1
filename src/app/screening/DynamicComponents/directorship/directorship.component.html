@@ -1,0 +1,109 @@
+<form [formGroup]="mainForm" autocomplete="off" role="presentation">
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%">
+      <app-base-info [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'"
+        [compBaseDetails]="compBaseDetails" (emitNotappChange)="notApplicable($event)"
+        [showNotApplicable]="showNotApplicable">
+      </app-base-info>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" [formGroupName]='formgroupName'
+    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" [formGroupName]='formgroupName'
+    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="34%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Name Of the Organisation</mat-label>
+        <input formControlName="organizationName" autocomplete="off" role="presentation" maxlength="100" type="text"
+          matInput placeholder="Organisation Name" required>
+          @if (!!mainForm?.get(formgroupName)?.get('organizationName')?.errors?.required) {
+            <mat-error>
+              Organisation Name is required
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="34%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Identification Number</mat-label>
+          <input formControlName="identificationNumber" autocomplete="off" role="presentation" type="text" matInput
+            placeholder="Identification Number" appNumberOnly [PhoneNumber]="false" required
+            maxlength="20">
+            <mat-hint class="f-13">Numeric values between (0-9), Eg:123456789101
+            </mat-hint>
+            <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('identificationNumber')?.errors?.minlength">
+          Identification number should contain 12 characters</mat-error> -->
+          @if (!!mainForm?.get(formgroupName)?.get('identificationNumber')?.errors?.required) {
+            <mat-error>
+              Identification number is required
+            </mat-error>
+          }
+          @if (!!mainForm?.get(formgroupName)?.get('identificationNumber')?.errors?.pattern) {
+            <mat-error>
+              Enter valid identification number
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutGap="20px" class="mb-10">
+      <div fxFlex="100%">
+        <app-custom-fields [mainForm]="mainForm" [formArrName]="'componentCustomFields'"></app-custom-fields>
+      </div>
+    </div>
+    @if (!fileBtn) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
+        <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroupName]="'screeningComponentInfo'">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Remarks</mat-label>
+            <textarea #remark formControlName="remark" maxlength="1000" matInput placeholder="Remarks"> </textarea>
+            <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
+          </mat-form-field>
+        </div>
+        @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length) {
+          <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroupName]="'screeningComponentInfo'"
+            >
+            <mat-label class="lbl">Choose</mat-label>
+            <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise Insufficiency</mat-checkbox>
+          </div>
+        }
+      </div>
+    }
+
+    @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+        >
+        <div fxFlex="100%">
+          <div class="alert alert-info" role="alert">
+            <h4>Insufficiency Clearance Remarks: </h4>
+            @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+              <span
+                >
+                {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+              }
+            </div>
+          </div>
+        </div>
+      }
+      @if (showInSuff) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <app-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm"
+              [compBaseDetails]="mainForm.get('screeningComponentInfo').value" [formgroupName]="'screeningInsufficiency'">
+            </app-raise-insufficiency>
+          </div>
+        </div>
+      }
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <app-screening-documents [fileBtn]="fileBtn" [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'"
+          [dupScreeningDoc]="screeningComponent.componentDocument" [validationFlag]="nFlag !== true && userData.applicationId === 3 ? true : false"></app-screening-documents>
+        </div>
+      </div>
+    </form>

@@ -1,0 +1,218 @@
+﻿<mat-card #drawer class="drawer-height">
+  <div fxFlex="70px">
+    <div class="n-logo" routerLink="/dashboard/home"> <i class="icon-acheck"></i> </div>
+    <div class="side-icon-menu">
+      <mat-list role="list" class="menu-icon"> @for (menuVal of authorizedmenuHeadingList; track menuVal; let i = $index) {
+        <span>
+          <mat-list-item role="listitem" (click)="opendDrawer(menuVal.moduleId)"
+            [ngClass]="{ 'active-sidenav': +currentOpenId == menuVal.moduleId }">
+            <mat-icon matTooltip="{{menuVal.menu}}" matTooltipClass="accent-tooltip"> <i
+            [ngClass]="getIcons(menuVal.menu)"></i></mat-icon>
+            <div class="menu-name">{{ menuVal.menu  }}</div>
+          </mat-list-item>
+        </span>
+      } </mat-list>
+    </div>
+    <div class="u-bg">
+      <button mat-icon-button matTooltip="Logout" matTooltipClass="accent-tooltip" (click)="openLogoutDialog()"><i
+      class="icon-log-out"></i> </button>
+    </div>
+  </div>
+</mat-card>
+<mat-sidenav-container>
+  <mat-sidenav [opened]="true" class="menuContainer" #secDrawer mode="side">
+    <div class="logo-lett" routerLink="/dashboard/home">
+      <div class="big">Krya Screening Private Limited</div>
+      <!-- <div class="small">Screening Made Smart</div> -->
+    </div>
+    <div class="sub-menuitems">
+      <!-- Left Side Menu with Icon Ex. Dashboard , Config, Client etc... Start -->
+      @for (menuVal of authorizedmenuHeadingList; track menuVal; let i = $index) {
+        <div>
+          @if (+currentOpenId === menuVal.moduleId) {
+            <div class="menu-header"> {{ menuVal.menu}} </div>
+          }
+        </div>
+      }
+      <!-- Left Side Menu with Icon Ex. Dashboard , Config, Client etc... End -->
+      <div class="perfectscrol-wdthheigh" style="overflow:auto">
+        @for (menuVal of authorizedmenuList; track menuVal; let i = $index) {
+          <mat-list role="list">
+            <!-- sing menu Start -->
+            @if (
+              (menuVal.subModuleId ===0 && !isPageLoad) ||
+              (isPageLoad && menuVal?.moduleId ===  currentOpenId &&menuVal?.subModuleId ===0 )) {
+              <a [routerLink]="menuVal.routingUrl" routerLinkActive="active" class="atag-link"
+                (click)="selectId = menuVal.screenId; setScreenDetails(menuVal); secDrawer.open();">
+                <mat-list-item (click)="newId=0 "
+                  [ngClass]="{ 'menu-sel': selectId === menuVal.screenId && menuVal?.subModuleId ===0 }" class="menus"
+                role="listitem"> {{ menuVal.screenName }} </mat-list-item>
+              </a>
+            }
+            <!-- sing menu start End -->
+            <!-- left side menu  Dropdown Start -->
+            @if ((menuVal?.subModuleId > 0 && !isPageLoad) ||
+              (isPageLoad && menuVal.moduleId ===  currentOpenId && menuVal?.subModuleId > 0)) {
+              <mat-accordion [displayMode]="displayMode" [multi]="multi" class="SideNav sidenav-menu">
+                <mat-expansion-panel [expanded]="+newId === +menuVal?.subModuleId">
+                  <!-- left side menu header name in (User, Location, Mail config) Dropdown  Start setId(menuVal?.subModuleId) openAcc(menuVal.subModuleId);-->
+                  <mat-expansion-panel-header (click)='newId = menuVal.subModuleId;'>
+                    <mat-panel-title class="pagename-icon"> {{menuVal.subModuleName}} </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <!-- left side menu header inside (User, Location, Mail config) Dropdown  End -->
+                  @for (menuValChild1 of menuVal?.children; track menuValChild1) {
+                    <span class="menu-Childlist">
+                      <!-- left side menu header name in (User, Location, Mail config) Dropdown child list  End -->
+                      @if (!menuValChild1?.children) {
+                        <a [routerLink]="menuValChild1.routingUrl" routerLinkActive="active" class="atag-link m enu-Childlist"
+                  (click)="
+                      selectId = menuValChild1.screenId; secDrawer.open();setScreenDetails(menuValChild1)
+                    "> 
+                          <!-- (click)='setId(menuValChild1?.subModuleId)' --- -->
+              <mat-list-item [ngClass]="{
+                        'menu-sel': +selectId === +menuValChild1?.screenId
+                      }" class="menus" role="listitem"> {{ menuValChild1.screenName }} </mat-list-item>
+                        </a>
+                      }
+                      <!-- left side menu header inside (User, Location, Mail config) Dropdown child list  End -->
+                      @if (menuValChild1?.children) {
+                        <mat-expansion-panel>
+                          <mat-expansion-panel-header>
+                            <mat-panel-title
+                            (click)="router.navigate([menuValChild1.routingUrl]);setScreenDetails(menuValChild1)"> {{ menuValChild1.screenName }} </mat-panel-title>
+                          </mat-expansion-panel-header>
+                        </mat-expansion-panel>
+                      }
+                    </span>
+                  } </mat-expansion-panel>
+                </mat-accordion>
+              }
+            </mat-list>
+          }
+        </div>
+      </div>
+      <footer><strong>Verification Tracking System.</strong> Copyright © Krya Screening Private Limited. All rights reserved. <a
+    routerLink="/privacy" target="_blank">Privacy Policies</a></footer>
+  </mat-sidenav>
+  <mat-sidenav-content class="sidenav-width">
+    <!-- top header position -->
+    <mat-toolbar class="header-bg">
+      <button mat-icon-button class="toggle-btn" (click)="secDrawer.toggle()" matTooltip="Toggle"
+        matTooltipClass="accent-tooltip"> <i class="icon-menu"></i></button>
+        <div class="appname">Verification Tracking System</div> <span fxFlex></span>
+        <div class="toolbar-icons" fxLayoutAlign="end stretch" fxLayoutGap="20px">
+          <button mat-icon-button matTooltip="Search" matTooltipClass="accent-tooltip"> <i class="icon-search1"></i> </button>
+          @if (notificationCount==0) {
+            <button mat-icon-button matTooltip="Notification" matTooltipClass="accent-tooltip"
+              [matMenuTriggerFor]="notification"> <i class="icon-bell"></i> </button>
+            }
+            @if (notificationCount>0) {
+              <button mat-icon-button matTooltip="Notification" matTooltipClass="accent-tooltip"
+                [matBadge]="notificationCount" [matMenuTriggerFor]="notification" matBadgeColor="warn"> <i class="icon-bell"></i> </button>
+              }
+              <button mat-icon-button matTooltip="Settings" matTooltipClass="accent-tooltip"> <i class="icon-settings1"></i> </button>
+              <div [matMenuTriggerFor]="userprofile" class="user">{{userName}}</div>
+              <div class="user-ddl">
+                <mat-menu #userprofile="matMenu" Position="before">
+                  <ul class="usrset">
+                    <li class="side-user">
+                      <div class="uicon">{{userName}}</div>
+                      <div class="udetail">
+                        <h4>{{ userData.userName }}</h4>
+                        <small>{{ userData.emailId }}</small> </div>
+                        @if (userData.teamName) {
+                          <div class="teamName"> <i class="icon-team"></i> {{ userData.teamName }} </div>
+                        }
+                      </li>
+                      @if (authService.userdata.userName !== 'systemadmin') {
+                        <li> <i class="icon-key1"></i> <a
+                        (click)="openDialog()">Change
+                      Password</a> </li>
+                    }
+                    <li matTooltip="Settings" matTooltipClass="accent-tooltip"> <i class="icon-log-out"></i> <a
+                  (click)="openLogoutDialog()">Log Out</a> </li>
+                  <li>
+                    <div class="llogin">Last seen on {{ lastLogIn }}</div>
+                  </li>
+                </ul>
+              </mat-menu>
+            </div>
+          </div>
+          <div class="user-ddl">
+            <mat-menu #notification="matMenu" Position="before">
+              <div fxLayout="row">
+                <ul class="subteam usrset notification">
+                  <div class="noti-head"> Notification @if (notificationCount>0) {
+                    <span>{{notificationCount}}
+                    unread notifications</span>
+                  } </div>
+                  <div class="perfectscrol-notification" style="overflow:auto">
+                    @for (notify of lstNotificationDetail; track notify; let i = $index) {
+                      <li> <a [routerLink]="notify.routingUrl">
+                        <div class="list">
+                          <div class="icon"><i class="icon-acheck icon-bg-circle avatarBg{{(i %6)+1}}"></i></div>
+                          <div class="notifi-body unread">
+                            <div>
+                              <h4 [ngClass]="{'unread': notify.readFlag===false, 'read': notify.readFlag===true}"> <span>{{notify.notificationHeader}}</span> </h4>
+                            </div>
+                            <p
+                            [ngClass]="{'notification-text unread': notify.readFlag===false, 'notification-text read': notify.readFlag===true}"> {{notify.notificationContent}}</p>
+                            <div class="notifi-icons"> <span class="text-muted mr-5"><i class="icon-calendartime"></i> {{notify.createDate|date:"dd/MM/yyyy hh:mm"}}</span> @if (notify.readFlag) {
+                            <span
+                              [ngClass]="{'text-muted unread': notify.readFlag===false, 'text-muted': notify.readFlag===true}"
+                              ><i class="icon-check icolorThree"></i> Read </span>
+                              } @if (notify.followFlag) {
+                              <span class="text-muted ml-5 mr-5 unread"><i class="icon-eye"></i> Follow</span>
+                              } @if (notify.archiveFlag) {
+                              <span class="text-muted unread"><i class="icon-layers"></i> Archive</span>
+                            } </div>
+                          </div>
+                        </div>
+                      </a> </li>
+                    }
+                  </div>
+                </ul>
+              </div>
+              <a href="#notification-button">
+                <div class="notifi-footer"> View all notifications </div>
+              </a> </mat-menu>
+            </div>
+          </mat-toolbar>
+          <div class="page-container">
+            <router-outlet></router-outlet>
+          </div>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+      <p-toast position="top-center"></p-toast>
+      @if (isShow) {
+        <a (click)="gotoTop()" class="scrollToTop"> <i class="material-icons-outlined">keyboard_arrow_up</i> </a>
+      }
+      <ng-template #botTemp>
+        <mat-nav-list class="noti"> @for (notify of lstNotificationDetail; track notify) {
+          <span> @if (!notify.readFlag) {
+            <a [routerLink]="notify.routingUrl" routerLinkActive="active" mat-list-item
+              > <span mat-line class="text-semi-bold">Notification</span> <span mat-line>{{notify.notificationContent}}</span> </a>
+            } </span>
+          } </mat-nav-list>
+        </ng-template>
+        <ng-template #logoutAlert>
+          <mat-dialog-content>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row">
+                  <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif"> </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center">
+                  <div fxFlex="100%" class="text-center">
+                    <h3 class="m-0">Alert !</h3>
+                    <p class="text-sm">Changes you made may not be saved. Do you want to <b>Logout</b> this session ? </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-dialog-content>
+          <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+            <button mat-flat-button color="accent" (click)="logout()" name="Yes">Yes</button>
+            <button mat-stroked-button (click)="dialog.closeAll()" name="No">No</button>
+          </mat-dialog-actions>
+        </ng-template>

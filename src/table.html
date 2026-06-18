@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Untitled Document</title>
+<link
+    href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+    rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,400i,500,500i,700,700i,900&display=swap"
+    rel="stylesheet">
+<link href="../src/assets/fonts/icons-font-style.css" rel="stylesheet">
+<style>
+table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, "Georgia", sans-serif;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+table thead th {
+    background-color: #58595C;
+    border: none medium;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 13px 0.857em 12px;
+}
+table thead th i {
+    color: #fff;
+    font-size: 12px !important;
+}
+table tbody tr {
+    border-color: rgba(0, 0, 0, .12);
+    border-width: 0 0 1px 0;
+    border-style: none none solid none;
+}
+table tbody tr:nth-child(even) {
+    background-color: #F8F8F8;
+}
+table tbody tr td {
+    padding: 7px 0.857em 8px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-right: 1px solid rgba(0, 0, 0, .04);
+}
+table tbody tr td:last-child {
+    border-right: none medium;
+}
+table i {
+    font-size: 16px !important;
+    color: rgba(70, 70, 70, 0.75);
+}
+.center {
+    text-align: center;
+    width: 100px;
+}
+.text-right {
+    text-align: right;
+}
+.tdname {
+    width: 85%;
+    float: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.search {
+    float: right;
+    width: 10%;
+    text-align: right;
+}
+.plus-click {
+    background: #ff8c00;
+    width: 15px;
+}
+.plus-bg {
+    background: #fff9e5;
+}
+.action {
+    display: none;
+}
+table tbody tr:hover  {
+   /* background: url(assets/images/action.jpg) no-repeat 148px; */
+    box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+    z-index: 1;
+}
+</style>
+</head>
+
+<body>
+<div style="overflow-x:auto;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+      <tr>
+        <th class="plus-click"><i class="icon-grid"></i></th>
+        <th><span class="tdname">User Name</span><span class="search"><i class="icon-search2"></i></span></th>
+        <th><span class="tdname">First Name</span><span class="search"><i class="icon-search2"></i></span> </th>
+        <th><span class="tdname">Last Name</span><span class="search"><i class="icon-search2"></i></span> </th>
+        <th><span class="tdname">Designation</span><span class="search"><i class="icon-search2"></i></span> </th>
+        <th><span class="tdname">Role Name</span><span class="search"><i class="icon-search2"></i></span> </th>
+        <th><span class="tdname">Client Name</span><span class="search"><i class="icon-search2"></i></span> </th>
+        <th><span class="tdname">Additional Components</span><span class="search"><i class="icon-search2"></i></span> </th>
+        <th class="text-right">Numeric Value</th>
+        <th class="center">Is Active</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="plus-bg"></td>
+        <td><a href="#">disha</a></td>
+        <td>Disha</td>
+        <td>Kumar</td>
+        <td>Software Engineer</td>
+        <td>Module Lead</td>
+        <td>Cognizent</td>
+        <td>Address, Bank Statement</td>
+        <td class="text-right">45</td>
+        <td class="center"><i class="material-icons"> thumb_up </i></td> 
+      </tr>
+      <tr>
+        <td class="plus-bg"></td>
+        <td><a href="#">tanvi</a></td>
+        <td>Tanvi</td>
+        <td>Kumar</td>
+        <td>AeroSpace Engineer</td>
+        <td>Module Lead</td>
+        <td>HAL</td>
+        <td>Address, Bank Statement</td>
+        <td class="text-right">6</td>
+        <td class="center"><i class="material-icons"> thumb_up</i></td>
+      </tr>
+      <tr>
+        <td class="plus-bg"></td>
+        <td><a href="#">mayur</a></td>
+        <td>Mayur</td>
+        <td>Khan</td>
+        <td>System Engineer</td>
+        <td>Module Lead</td>
+        <td>Tech Mahindra</td>
+        <td>Address, Bank Statement</td>
+        <td class="text-right">72</td>
+        <td class="center"><i class="material-icons"> thumb_down</i></td>
+      </tr>
+      <tr>
+        <td class="plus-bg"></td>
+        <td><a href="#">systemadmin</a></td>
+        <td>System</td>
+        <td>Admin</td>
+        <td>Network Engineer</td>
+        <td>Module Lead</td>
+        <td>Ionix media</td>
+        <td>Address, Bank Statement</td>
+        <td class="text-right">6</td>
+        <td class="center"><i class="material-icons"> thumb_up</i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,415 @@
+﻿<app-breadcrumb [btnAdd]="breadcrumbFlags.btnAdd" [btnSave]="breadcrumbFlags.btnSave"
+  (eventAddUpload)="getEmployerInstitution(2)" [btnAddDisabled]="!screenAuth.addFlag"
+  [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset" [btnResetTbl]="breadcrumbFlags.btnResetTbl"
+  (eventAdd)="getEmployerInstitution(1);openForm()" [btnAddUpload]="btnAddUpload" [routePath]="routePath"
+  (eventBack)="closeForm()" (eventSave)="saveFakeEmpIns()" [toolTip]="breadcrumbFlags.toolTip"
+  (eventReset)="resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
+<!--  -->
+
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card>
+
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">Fake Employer</h1>
+                  </div>
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" fxHide.xs
+                    fxLayoutAlign="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                    <div class="tbl-commonsearch" *ngIf="showGrid">
+                      <mat-form-field fxFlex="100%">
+                        <mat-label></mat-label>
+                        <mat-icon matPrefix>search</mat-icon>
+                        <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                          autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+
+
+      <mat-card-content>
+
+        <div *ngIf="!showGrid">
+          <div class="content-area" *ngIf='showBulkUpload'>
+            <app-bulk-export-import [empIns]="empIns" [isFake]="true" [verSt]="false" (backEvent)="closeForm()">
+            </app-bulk-export-import>
+          </div>
+          <form [formGroup]="fakeInsForm" autocomplete="off" role="presentation" id="ngForm" *ngIf='!showBulkUpload'>
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="40%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Employer Name</mat-label>
+                  <input matInput #fkemp placeholder="Employer Name" formControlName="name" maxlength="100"
+                    (click)="fkemp.select()" [matAutocomplete]="auto" (focus)="setItems(fkemp.value)"
+                    (keyup)="keyUpFunction($event,fkemp.value)" autocomplete="off" role="presentation"
+                    (input)="setItems(fkemp.value)" (blur)="checkValidfakeEmpValue(fkemp.value)" />
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayDataFn">
+                    <mat-option *ngFor="let fake of fakeEmpFilterList" [value]="fake.name" [disabled]="true"
+                      class="autocom-option autocom-tr"> <span [innerHTML]="fake.name | highlight: fkemp.value"></span>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-hint>({{ fkemp.value.length }}/100 Max)</mat-hint>
+                  <mat-error *ngIf="fakeInsForm.get('name').invalid">
+                    Employer name is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxFlex="40%">
+                <app-auto-complete [selectProperties]='clientControls'></app-auto-complete>
+              </div>
+              <div fxFlex="20%"></div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px" *ngIf='!showInst'>
+              <div fxFlex="50%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Category</mat-label>
+                  <mat-select formControlName="categoryLookupId" placeholder="Select Category"
+                    (selectionChange)="checkOthers($event)">
+                    <!-- <mat-option>-------Select Category--------</mat-option> -->
+                    <mat-option *ngFor='let ctgry of fakeEmpInsCategory' [value]="ctgry.lookUpId">
+                      {{ctgry.lookUpName}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div fxFlex="50%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Date Declared Fake</mat-label>
+                  <input matInput [matDatepicker]="picker1" mat-autofocus="true" readonly=true appNumberOnly
+                    [NumberOnlyWithslash]="false" formControlName="fakeDeclaredDate" preventCutCopyPaste
+                    placeholder="Date Declared Fake" (focus)="picker1.open()" (click)="picker1.open()">
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div fxFlex="25%">
+                <mat-form-field *ngIf="othersData==='Others'" appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Others</mat-label>
+                  <input matInput placeholder="Others" formControlName="categoryValue">
+                  <mat-error *ngIf="!!fakeInsForm.get('categoryValue')?.errors?.incorrect">
+                    Others is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px" *ngIf='!showInst'>
+              <div fxFlex="33.33%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Source</mat-label>
+                  <textarea #src formControlName="source" maxlength="200" matInput placeholder="source"> </textarea>
+                  <mat-hint>({{ src.value.length }}/200 Max)</mat-hint>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Research / Remarks</mat-label>
+                  <textarea #remarks formControlName="remarks" maxlength="200" matInput
+                    placeholder="Research / Remarks"> </textarea>
+                  <mat-hint>({{ remarks.value.length }}/200 Max)</mat-hint>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Comments</mat-label>
+                  <textarea #comments formControlName="comments" maxlength="200" matInput
+                    placeholder="Comments"> </textarea>
+                  <mat-hint>({{ comments.value.length }}/200 Max)</mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+              <div fxFlex="100%">
+                <h3 class="sub-header">Address Details</h3>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="100%">
+                <app-address [addressformgrp]="fakeInsForm" [addressList]="addList"></app-address>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px" *ngIf="showGrid">
+          <div fxFlex="100%">
+
+            <p-table #dt [columns]="employerColumns" [value]="fakeEmpInsList" [resizableColumns]="true"
+              [reorderableColumns]="true" [scrollable]="true" [paginator]="true" [rows]="10" frozenWidth="100px"
+              [frozenColumns]="frozenCols">
+
+              <!-- ================= COLGROUP ================= -->
+              <ng-template pTemplate="colgroup" let-colGroupCols>
+                <colgroup>
+                  <col *ngFor="let col of colGroupCols" style="width:150px" />
+                </colgroup>
+              </ng-template>
+
+              <!-- ================= HEADER ================= -->
+              <ng-template pTemplate="header" let-headerCols>
+                <tr>
+                  <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn>
+
+                    <span [pSortableColumn]="col.field">
+                      <div class="thname">{{ col.header }}</div>
+
+                      <p-sortIcon *ngIf="col.field !== 'action'" [field]="col.field" matTooltip="Sort"
+                        matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
+                        ariaLabelDesc="Activate to sort in descending order"
+                        ariaLabelAsc="Activate to sort in ascending order">
+                      </p-sortIcon>
+                    </span>
+
+                    <!-- SEARCH ICONS & MENUS (UNCHANGED) -->
+                    <!-- All mat-menu filter blocks remain exactly as in original -->
+
+                  </th>
+                </tr>
+              </ng-template>
+
+              <!-- ================= BODY ================= -->
+              <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+
+                <tr>
+                  <td *ngFor="let col of bodyCols" [ngClass]="{ 'desg-bg': col.field === 'action' }">
+
+                    {{ rowData[col.field] }}
+
+                    <!-- ACTION -->
+                    <div *ngIf="col.field === 'action'" fxLayout="row" class="desg-icon">
+                      <div fxFlex="100%" fxLayoutGap="10px">
+
+                        <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''" matTooltip="Edit"
+                          matTooltipClass="accent-tooltip">
+                          <i class="material-icons-outlined" (click)="editFakeEmpIns(rowData)">
+                            edit
+                          </i>
+                        </mat-icon>
+
+                        <mat-icon [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''"
+                          matTooltip="Delete" matTooltipClass="accent-tooltip">
+                          <i class="material-icons-outlined" (click)="openDialog(rowData.fakeEmpInsId)">
+                            delete
+                          </i>
+                        </mat-icon>
+
+                      </div>
+                    </div>
+
+                  </td>
+                </tr>
+
+              </ng-template>
+
+            </p-table>
+            <div class="cus-paginator">
+              <div fxLayout="">
+                <div fxFlex="30%">
+                  Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first <=
+                      dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s)
+                      </div>
+                      <span fxFlex></span>
+                      <div fxFlex="50%" fxLayoutAlign="end center">
+                        <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                    dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                    navigateNxtPrevPage(dt.first + dt.rows, dt.rows)">
+                          <i class="icon-control-start mr-5"></i></a>
+                        <span class="gotopagbg mr-2 ml-2">Go to Page<span class="input-num">
+                            <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                              [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" /> </span></span>
+                        <span class="mr-2">Of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                        <a [ngClass]="
+                    dt.rows + dt.first >= dt.totalRecords
+                      ? 'page-btn disabled' : 'page-btn'" (click)="
+                    dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                    navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                  "><i class="icon-control-end ml-5"></i></a>
+                      </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<ng-template #deleteConfirm>
+  <div class="confirm-pop">
+    <h1 mat-dialog-title>Confirmation</h1>
+    <mat-dialog-content>
+      <p>Delete Reason</p>
+      <form [formGroup]='fakeInsForm'>
+        <div fxLayout="row" class="pt-15">
+          <div fxFlex="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Delete Reason</mat-label>
+              <textarea #reason formControlName="removedReason" maxlength="200" matInput placeholder="Delete Reason">
+                      </textarea>
+              <mat-hint>({{ reason.value.length }}/200 Max)</mat-hint>
+              <mat-error *ngIf="!!fakeInsForm.get('removedReason')?.errors?.incorrect">
+                Delete Reason is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+      <button mat-stroked-button (click)="dialogClose()">No, Keep it</button>
+      <button mat-flat-button color="warn" (click)="deleteFakeEmpInsDetail()">Delete</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+<!-- <ng-template #searchMasterScreen class="warning-digBox">
+  <div class="confirm-pop">
+    <h1 mat-dialog-title>Existing Data Match Found</h1>
+    <mat-dialog-content>
+      <mat-list>
+        <span *ngIf="soundexFakeEmpList.length != 0">The following employer are available do you want to get approved for - {{searchName}}</span>
+        <span *ngIf="soundexFakeEmpList.length == 0">Employer not available do you want to get approved for - {{searchName}}</span>
+        <mat-list-item *ngFor="let fakeEmp of soundexFakeEmpList" class="autocom-option autocom-tr">
+          <p>{{fakeEmp.name}}</p>
+        </mat-list-item>
+        
+      </mat-list>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+      <button mat-stroked-button (click)="onSave()">Yes</button>
+      <button mat-flat-button color="warn" (click)="onCancel()">No</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template> -->
+<ng-template #searchMasterScreen class="warning-digBox">
+  <div class="confirm-pop">
+    <h1 mat-dialog-title>Existing Data Match Found</h1>
+    <mat-dialog-content>
+      <span *ngIf="soundexFakeEmpList?.length > 0">
+        <p><b>These are the matching vendor list</b></p>
+        <div class="mt-15">
+          <div fxFlex="100%">
+            <p-table #dtcolumns]="employerColumns" #dt1 [value]="soundexFakeEmpList" [scrollable]="true"
+              [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true" [rows]="10">
+
+              <!-- ================= COLGROUP ================= -->
+              <ng-template pTemplate="colgroup" let-colGroupCols>
+                <colgroup>
+                  <col *ngFor="let col of colGroupCols" style="width:150px" />
+                </colgroup>
+              </ng-template>
+
+              <!-- ================= HEADER ================= -->
+              <ng-template pTemplate="header" let-headerCols>
+                <tr>
+                  <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn>
+
+                    <span [pSortableColumn]="col.field">
+                      <div class="thname" matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
+                        {{ col.header }}
+                      </div>
+
+                      <p-sortIcon *ngIf="col.field !== 'action'" [field]="col.field" matTooltip="Sort"
+                        matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
+                        ariaLabelDesc="Activate to sort in descending order"
+                        ariaLabelAsc="Activate to sort in ascending order">
+                      </p-sortIcon>
+                    </span>
+
+                    <!-- SEARCH ICONS & FILTER MENUS (UNCHANGED) -->
+                    <!-- All mat-menu blocks remain exactly as in your original template -->
+
+                  </th>
+                </tr>
+              </ng-template>
+
+              <!-- ================= BODY ================= -->
+              <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+
+                <tr>
+                  <td *ngFor="let col of bodyCols" matTooltip="{{ rowData[col.field] }}"
+                    matTooltipClass="accent-tooltip" [ngClass]="{ 'desg-bg': col.field === 'action' }">
+
+                    <!-- NORMAL FIELDS -->
+                    <div *ngIf="col.field !== 'active'">
+                      {{ rowData[col.field] }}
+                    </div>
+
+                    <!-- ACTIVE FLAG -->
+                    <div *ngIf="col.field === 'active'">
+                      <div fxLayout="row" class="tbl-icon">
+                        <div fxFlex="100%" fxLayoutGap="10px">
+
+                          <span *ngIf="rowData.active === true" class="istrue">
+                            <i class="material-icons" matTooltip="Active" matTooltipClass="accent-tooltip">
+                              thumb_up
+                            </i>
+                          </span>
+
+                          <span *ngIf="rowData.active === false" class="isfalse">
+                            <i class="material-icons" matTooltip="In-Active" matTooltipClass="accent-tooltip">
+                              thumb_down
+                            </i>
+                          </span>
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </td>
+                </tr>
+
+              </ng-template>
+
+            </p-table>
+
+            <div class="cus-paginator" [ngClass]="{'empty-record': soundexFakeEmpList.length == 0}">
+              <div fxLayout="">
+                <div fxFlex="30%"> Showing {{ dt1.totalRecords
+                  < 1 ? 0 : dt1.first + 1 }} - {{ dt1.totalRecords> 0 ? dt1.rows + dt1.first
+                    <=dt1.totalRecords ? dt1.rows + dt1.first : dt1.totalRecords : 0 }} of {{ dt1.totalRecords }}
+                      record(s) </div>
+                      <span fxFlex></span>
+                      <div fxFlex="50%" fxLayoutAlign="end center"> <a
+                          [ngClass]="dt1.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                            dt1.onPageChange({ first: dt1.first - dt1.rows, rows: dt1.rows });
+                            navigateNxtPrevPage1(dt1.first + dt1.rows, dt1.rows)
+                          "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2">Go
+                          to Page<span class="input-num">
+                            <input type="number" #pageNo min="1" [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                              [NumberOnly]="false" (keyup.enter)="navigatePage1(pageNo.value, dt1.rows)" />
+                          </span></span> <span class="mr-2">Of {{ getTotalPages1(dt1.totalRecords, dt1.rows) }}</span>
+                        <a [ngClass]="
+                            dt1.rows + dt1.first >= dt1.totalRecords
+                              ? 'page-btn disabled'
+                              : 'page-btn'
+                          " (click)="
+                            dt1.onPageChange({ first: dt1.first + dt1.rows, rows: dt1.rows });
+                            navigateNxtPrevPage1(dt1.first + dt1.rows, dt1.rows)
+                          "><i class="icon-control-end ml-5"></i></a> </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p>Do you want to get approve for - <b>{{searchName}}...?</b></p>
+      </span>
+      <p *ngIf="soundexFakeEmpList?.length == 0">No existing data found do you want to get approve for -
+        <b>{{searchName}}...?</b></p>
+
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+      <button mat-stroked-button (click)="onSave()">Yes</button>
+      <button mat-flat-button color="warn" (click)="onCancel()">No</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

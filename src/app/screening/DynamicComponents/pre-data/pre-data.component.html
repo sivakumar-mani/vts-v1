@@ -1,0 +1,40 @@
+<mat-dialog-content>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div fxFlex="100%" class="text-center">
+      <h3 class="m-0">{{ headerText }} </h3>
+    </div>
+  </div>
+  <p-table [columns]="predatacolumns" [value]="gridvalue" class="inn-table" [responsive]="true">
+
+    <!-- ===== HEADER ===== -->
+    <ng-template pTemplate="header" let-headerCols>
+      <tr>
+        @for (col of headerCols; track col) {
+          <th>
+            <span>{{ col.header }}</span>
+          </th>
+        }
+      </tr>
+    </ng-template>
+
+    <!-- ===== BODY ===== -->
+    <ng-template pTemplate="body" let-packRowData let-bodyCols="columns" let-sindex="rowIndex">
+
+      <tr>
+        @for (col of bodyCols; track col; let si = $index) {
+          <td (click)="rowselect(packRowData, sindex)">
+            <span>{{ packRowData[col.field] }}</span>
+          </td>
+        }
+      </tr>
+
+    </ng-template>
+
+  </p-table>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+  <button mat-stroked-button [mat-dialog-close]="true" (click)="dialog.closeAll()">
+    Cancel
+  </button>
+
+</mat-dialog-actions>

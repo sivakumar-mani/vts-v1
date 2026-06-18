@@ -1,0 +1,610 @@
+﻿<app-breadcrumb [btnAdd]="breadcrumbFlags.btnAdd" [btnSave]="breadcrumbFlags.btnSave"
+  [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset" [btnResetTbl]="breadcrumbFlags.btnResetTbl"
+  (eventAdd)="add()" [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag" (eventSave)="addInstitute()"
+  (eventBack)="closeForm()" [toolTip]="breadcrumbFlags.toolTip" (eventReset)="resetForm()"
+  (eventResetTbl)="resettable()" [btnAddUpload]="!breadcrumbFlags.btnSave" (eventAddUpload)="this.uploadFlag = true"></app-breadcrumb>
+<mat-card>
+  <div fxLayout="row">
+    <mat-card-header fxFlex="100%">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+          fxLayoutGap="10px">
+          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+            fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+            <mat-card-title>
+              <h1 class="header-title">Institute Creation</h1>
+            </mat-card-title>
+          </div>
+          <span fxFlex></span>
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+            fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+            <div class="tbl-commonsearch" *ngIf="!showFlag && !uploadFlag">
+              <mat-form-field fxFlex="100%">
+                <mat-label></mat-label>
+                <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                <input #global matInput placeholder="Search here..." type="text" pInputText size="50" autocomplete="off"
+                  (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                <button mat-button *ngIf="global.value" matSuffix mat-icon-button aria-label="Clear"
+                  (click)="global.value = '';dt?.filterGlobal($event.target.value, 'contains')">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-header>
+  </div>
+  <mat-card-content>
+    <form *ngIf="showFlag && !uploadFlag" [formGroup]="instituteFormGroup" autocomplete="off">
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column wrap" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <mat-form-field fxFlex="100%" appearance="outline">
+            <mat-label>Institution</mat-label>
+            <input matInput placeholder="Select Institution" formControlName="institutionId"
+              [matAutocomplete]="autocandidate" #institutionInput (input)="institutionItems(institutionInput.value)"
+              (click)="institutionInput.select()" (focus)="institutionItems(institutionInput.value)"
+              (keyup)="institutionKeyupFunction($event, institutionInput.value)" (blur)="checkValidValue()" required />
+            <mat-error *ngIf="instituteFormGroup.get('institutionId')?.errors?.required">
+              Institution is required
+            </mat-error>
+            <mat-error *ngIf="instituteFormGroup?.get('institutionId')?.errors?.incorrect">
+              Institution is not valid. </mat-error>
+            <mat-autocomplete #autocandidate="matAutocomplete" [displayWith]="displayInstitutionFn"
+              (optionSelected)="selectInstitution($event.option.value)" placeholder="Select Institution">
+              <cdk-virtual-scroll-viewport class="autocomplete-test-viewport" itemSize="50" minBufferPx="500"
+                maxBufferPx="750">
+                <table class="autocomp" cellpadding="0" cellspacing="1">
+                  <thead>
+                    <tr class="autocomp-disable">
+                      <th>Institution Name  |  State</th>
+                      <!-- <th>State</th> -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="autocomp-record" *cdkVirtualFor="let option of institutionFilterList">
+                      <mat-option [value]="option?.institutionId">
+                        <td><span [innerHTML]="getName(option) | highlight:institutionInput.value"></span></td>
+                      </mat-option>
+                      <!-- <td><span>{{option?.state ? option?.state : ''}}</span></td> -->
+                    </tr>
+                  </tbody>
+                </table>
+              </cdk-virtual-scroll-viewport>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%">
+            <mat-label>Institute Name</mat-label>
+            <mat-error *ngIf="instituteFormGroup.get('instituteName')?.errors?.required">
+              Institute Name is required
+            </mat-error>
+            <input matInput #Ins placeholder="Institute Name" formControlName="instituteName" maxlength="500"
+              (click)="Ins.select()" [matAutocomplete]="auto" (focus)="instituteItems(Ins.value)"
+              (keyup)="institutekeyUpFunction($event,Ins.value)" autocomplete="off" role="presentation"
+              (input)="instituteItems(Ins.value)" (blur)="checkValidInstitute(Ins.value)" required />
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="instituteDisplayDataFn">
+              <mat-option *ngFor="let ins of instituteFilterList" [value]="ins.instituteId" [disabled]="true"
+                class="autocom-option autocom-tr"> <span [innerHTML]="ins.instituteName | highlight: Ins.value"></span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%">
+            <mat-label>Faculty/Department</mat-label>
+            <input matInput placeholder="Enter Faculty/Department" formControlName="faculty" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <h3 class="sub-header">Address Details</h3>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column wrap" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <app-address [addressList]="address" [addressformgrp]="instituteFormGroup"></app-address>
+        </div>
+      </div>
+    </form>
+    <div fxLayout="row" *ngIf="!showFlag && !uploadFlag">
+      <div fxFlex="100%">
+        <p-table #dt [columns]="displayedColumns" [value]="InstituteList" [resizableColumns]="true"
+          [reorderableColumns]="true" [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="itemperpage"
+          [scrollable]="true" frozenWidth="100px" [frozenColumns]="frozenCols">
+          <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+              <col *ngFor="let col of columns" style="width:150px" />
+            </colgroup>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field" pReorderableColumn
+                pResizableColumn>
+                <span [pSortableColumn]="col.field">
+                  <div class="thname"> {{col.header}} </div>
+                  <p-sortIcon *ngIf="col.field !== 'action'" ariaLabel="Activate to sort"
+                    ariaLabelDesc="Activate to sort in descending order" matTooltip="Sorting"
+                    matTooltipClass="accent-tooltip" ariaLabelAsc="Activate to sort in ascending order">
+                  </p-sortIcon>
+                </span>
+                <span class="ico-fieldsearch">
+                  <i *ngSwitchCase="'institutionName'" class="icon-search2" matTooltip="Search"
+                    matTooltipClass="accent-tooltip" (click)="institutionNameTrigger.openMenu()"></i>
+                  <i *ngSwitchCase="'instituteName'" class="icon-search2" matTooltip="Search"
+                    matTooltipClass="accent-tooltip" (click)="instituteNameTrigger.openMenu()"></i>
+                  <i *ngSwitchCase="'faculty'" class="icon-search2" matTooltip="Search" matTooltipClass="accent-tooltip"
+                    (click)="facultyTrigger.openMenu()"></i>
+                  <i *ngSwitchCase="'address.district'" class="icon-search2" matTooltip="Search" matTooltipClass="accent-tooltip"
+                    (click)="districtTrigger.openMenu()"></i>
+                  <i *ngSwitchCase="'address.state'" class="icon-search2" matTooltip="Search" matTooltipClass="accent-tooltip"
+                    (click)="stateTrigger.openMenu()"></i>
+                  <i *ngSwitchCase="'address.country'" class="icon-search2" matTooltip="Search" matTooltipClass="accent-tooltip"
+                    (click)="countryTrigger.openMenu()"></i>
+                </span>
+                <span *ngSwitchCase="'institutionName'">
+                  <div matTooltip="User name" matTooltipClass="accent-tooltip" #institutionNameTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="institutionNameMenu" fxLayout="row" fxLayoutAlign="space-between center"
+                    class="txtborder-bot"></div>
+                  <mat-menu #institutionNameMenu class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #institutionNameCtrl matInput [matAutocomplete]="autoInstitutionName"
+                            placeholder="Institution Name" autocomplete="off" role="presentation"
+                            (click)="institutionNameCtrl.select()" [formControl]="institutionNameControl" (change)="
+                              dt.filter( $event.target.value,  col.field,'contains')"
+                            (blur)="dt.filter( $event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,  col.field, 'contains')"
+                            (keyup)="  dt.filter( $event.target.value,col.field,'contains') " />
+                        </mat-form-field>
+                        <mat-autocomplete #autoInstitutionName="matAutocomplete">
+                          <mat-option (onSelectionChange)="institutionNameTrigger.closeMenu()" *ngFor="
+                              let option of institutionNameFilteredOptions | async
+                            " [value]="option">
+                            <span [innerHTML]="option"></span>
+                          </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                        <a *ngIf='institutionNameCtrl.value'
+                          (click)="dt.filter('', col.field, 'contains');institutionNameCtrl.value='';institutionNameControl.reset()"
+                          class="text-sm">Reset</a> </div>
+                    </div>
+                  </mat-menu>
+                </span>
+                <span *ngSwitchCase="'instituteName'">
+                  <div matTooltip="User name" matTooltipClass="accent-tooltip" #instituteNameTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="instituteNameMenu" fxLayout="row" fxLayoutAlign="space-between center"
+                    class="txtborder-bot"></div>
+                  <mat-menu #instituteNameMenu class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #instituteNameCtrl matInput [matAutocomplete]="autoInstituteName"
+                            placeholder="Institute Name" autocomplete="off" role="presentation"
+                            (click)="instituteNameCtrl.select()" [formControl]="instituteNameControl"
+                            (change)="dt.filter( $event.target.value,  col.field,'contains')"
+                            (blur)="dt.filter( $event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,  col.field, 'contains')"
+                            (keyup)="  dt.filter( $event.target.value,col.field,'contains') " />
+                        </mat-form-field>
+                        <mat-autocomplete #autoInstituteName="matAutocomplete">
+                          <mat-option (onSelectionChange)="instituteNameTrigger.closeMenu()" *ngFor="
+                              let option of instituteNameFilteredOptions | async
+                            " [value]="option">
+                            <span [innerHTML]="option"></span>
+                          </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                          *ngIf='instituteNameCtrl.value'
+                          (click)="dt.filter('', col.field, 'contains');instituteNameCtrl.value='';instituteNameControl.reset()"
+                          class="text-sm">Reset</a> </div>
+                    </div>
+                  </mat-menu>
+                </span>
+                <span *ngSwitchCase="'faculty'">
+                  <div matTooltip="Faculty" matTooltipClass="accent-tooltip" #facultyTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="facultyMenu" fxLayout="row" fxLayoutAlign="space-between center"
+                    class="txtborder-bot"></div>
+                  <mat-menu #facultyMenu class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #facultyCtrl matInput [matAutocomplete]="autofaculty" placeholder="Faculty"
+                            autocomplete="off" role="presentation" (click)="facultyCtrl.select()"
+                            [formControl]="facultyControl"
+                            (change)="dt.filter( $event.target.value,  col.field,'contains')"
+                            (blur)="dt.filter( $event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,  col.field, 'contains')"
+                            (keyup)="  dt.filter($event.target.value,col.field,'contains') " />
+                        </mat-form-field>
+                        <mat-autocomplete #autofaculty="matAutocomplete">
+                          <mat-option (onSelectionChange)="facultyTrigger.closeMenu()"
+                            *ngFor="let option of facultyFilteredOptions | async" [value]="option">
+                            <span [innerHTML]="option"></span>
+                          </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                        <a *ngIf='facultyCtrl.value'
+                          (click)="dt.filter('', col.field, 'contains');facultyCtrl.value='';facultyControl.reset()"
+                          class="text-sm">Reset</a>
+                      </div>
+                    </div>
+                  </mat-menu>
+                </span>
+                <span *ngSwitchCase="'address.district'">
+                  <div matTooltip="District" matTooltipClass="accent-tooltip"
+                    #districtTrigger="matMenuTrigger" [matMenuTriggerFor]="districtCtrl" fxLayout="row"
+                    fxLayoutAlign="space-between center" class="txtborder-bot">
+                  </div>
+                  <mat-menu #districtCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #districtCtl matInput [matAutocomplete]="autodistrict"
+                            placeholder="District" autocomplete="off" role="presentation"
+                            (click)="districtCtl.select()" [formControl]="districtFormCtrl"
+                            (change)="dt.filter($event.target.value,col.field,'contains')"
+                            (blur)="dt.filter($event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                            (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                        </mat-form-field>
+                        <mat-autocomplete #autodistrict="matAutocomplete">
+                          <mat-option (onSelectionChange)="districtTrigger.closeMenu()"
+                            *ngFor="let option of districtFilteredOptions | async" [value]="option">
+                            <span [innerHTML]="option"></span>
+                          </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                        <a class="text-link">Cancel</a>
+                        <a *ngIf="districtCtl.value"
+                          (click)="dt.filter('', col.field, 'contains');districtFormCtrl.setValue('')"
+                          class="text-link">Reset</a>
+                      </div>
+                    </div>
+                  </mat-menu>
+                </span>
+                <span *ngSwitchCase="'address.state'">
+                  <div matTooltip="State" matTooltipClass="accent-tooltip"
+                    #stateTrigger="matMenuTrigger" [matMenuTriggerFor]="stateCtrl" fxLayout="row"
+                    fxLayoutAlign="space-between center" class="txtborder-bot">
+                  </div>
+                  <mat-menu #stateCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #stateCtl matInput [matAutocomplete]="autostate"
+                            placeholder="State" autocomplete="off" role="presentation"
+                            (click)="stateCtl.select()" [formControl]="stateFormCtrl"
+                            (change)="dt.filter($event.target.value,col.field,'contains')"
+                            (blur)="dt.filter($event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                            (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                        </mat-form-field>
+                        <mat-autocomplete #autostate="matAutocomplete">
+                          <mat-option (onSelectionChange)="stateTrigger.closeMenu()"
+                            *ngFor="let option of stateFilteredOptions | async" [value]="option">
+                            <span [innerHTML]="option"></span>
+                          </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                        <a class="text-link">Cancel</a>
+                        <a *ngIf="stateCtl.value"
+                          (click)="dt.filter('', col.field, 'contains');stateFormCtrl.setValue('')"
+                          class="text-link">Reset</a>
+                      </div>
+                    </div>
+                  </mat-menu>
+                </span>
+                <span *ngSwitchCase="'address.country'">
+                  <div matTooltip="country" matTooltipClass="accent-tooltip"
+                    #countryTrigger="matMenuTrigger" [matMenuTriggerFor]="countryCtrl" fxLayout="row"
+                    fxLayoutAlign="space-between center" class="txtborder-bot">
+                  </div>
+                  <mat-menu #countryCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #countryCtl matInput [matAutocomplete]="autocountry"
+                            placeholder="country" autocomplete="off" role="presentation"
+                            (click)="countryCtl.select()" [formControl]="countryFormCtrl"
+                            (change)="dt.filter($event.target.value,col.field,'contains')"
+                            (blur)="dt.filter($event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                            (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                        </mat-form-field>
+                        <mat-autocomplete #autocountry="matAutocomplete">
+                          <mat-option (onSelectionChange)="countryTrigger.closeMenu()"
+                            *ngFor="let option of countryFilteredOptions | async" [value]="option">
+                            <span [innerHTML]="option"></span>
+                          </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                        <a class="text-link">Cancel</a>
+                        <a *ngIf="countryCtl.value"
+                          (click)="dt.filter('', col.field, 'contains');countryFormCtrl.setValue('')"
+                          class="text-link">Reset</a>
+                      </div>
+                    </div>
+                  </mat-menu>
+                </span>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+              <td *ngFor="let col of columns" [ngSwitch]="col.field" [ngClass]="{'desg-bg':col.field == 'action'}">
+                <span *ngSwitchCase="'institutionName'">{{rowData[col.field] ? rowData[col.field] : 'N/A'}}</span>
+                <span *ngSwitchCase="'instituteName'">{{rowData[col.field] ? rowData[col.field] : 'N/A'}}</span>
+                <span *ngSwitchCase="'faculty'">{{rowData[col.field] ? rowData[col.field] : 'N/A'}}</span>
+                <span *ngSwitchCase="'address.district'">{{rowData?.address?.district ? rowData?.address?.district : 'N/A'}}</span>
+                <span *ngSwitchCase="'address.state'">{{rowData?.address?.state ? rowData?.address?.state : 'N/A'}}</span>
+                <span *ngSwitchCase="'address.country'">{{rowData?.address?.country ? rowData?.address?.country : 'N/A'}}</span>
+                <div *ngSwitchCase="'action'" fxLayout="row" class="desg-icon">
+                  <div fxFlex="100%" fxLayoutGap="10px">
+                    <mat-icon [ngClass]="screenAuth.editFlag===false?'page-btn disabled':''">
+                      <i (click)="editInstitute(rowData,'edit')" matTooltip="Edit" matTooltipClass="accent-tooltip"
+                        class="material-icons-outlined">edit</i>
+                    </mat-icon>
+                    <mat-icon [ngClass]="screenAuth.deleteFlag === false? 'page-btn disabled': ''">
+                      <i (click)="openDialog(rowData.instituteId)" matTooltip="Delete" matTooltipClass="accent-tooltip"
+                        class="material-icons-outlined">delete</i></mat-icon>
+                    <mat-icon [ngClass]="screenAuth.viewFlag===false?'page-btn disabled':''" matTooltip="View"
+                      matTooltipClass="accent-tooltip"><i (click)="editInstitute(rowData,'view')"
+                        class="material-icons-outlined">visibility</i> </mat-icon>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <div [ngClass]="{'empty-record': InstituteList.length == 0}" class="cus-paginator" fxLayout="row wrap"
+          fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+            fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} -
+            {{
+              dt.totalRecords > 0
+              ? dt.rows + dt.first <= dt.totalRecords
+              ? dt.rows + dt.first
+              : dt.totalRecords
+              : 0
+              }}
+            of {{ dt.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a></div>
+          <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center"
+            fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+            <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                  dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                  navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"> <i class="icon-control-start mr-5"></i></a> <span
+              class="gotopagbg mr-2 ml-2" fxHide.xs>Go to
+              Page<span class="input-num">
+                <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                  [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+              </span></span> <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+            <a [ngClass]=" dt.rows + dt.first >= dt.totalRecords? 'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                  navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"> <i class="icon-control-end ml-5"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row" *ngIf="uploadFlag">
+      <app-bulk-export-import [verSt]="false" [instituteFlag]="true" (backEvent)="this.uploadFlag = false;this.getInstitute()">
+      </app-bulk-export-import>
+    </div>
+  </mat-card-content>
+</mat-card>
+<ng-template #searchMasterScreen class="warning-digBox">
+  <div class="confirm-pop">
+    <h1 mat-dialog-title>Existing Data Match Found</h1>
+    <mat-dialog-content>
+      <span *ngIf="soundexInstituteList?.length > 0">
+        <span><b>These are the matching Institute list</b></span>
+        <div class="mt-15">
+          <div fxFlex="100%">
+            <p-table #dt [columns]="displayedColumns" [value]="soundexInstituteList" [scrollable]="true"
+              [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true" [rows]="10">
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col *ngFor="let col of columns" style="width:150px" />
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field"
+                    pReorderableColumn pResizableColumn>
+                    <span [pSortableColumn]="col.field">
+                      <div class="thname" matTooltip="{{col.header}}" matTooltipClass="accent-tooltip"> {{col.header}}
+                      </div>
+                      <p-sortIcon *ngIf="col.field !== 'action'" ariaLabel="Activate to sort"
+                        ariaLabelDesc="Activate to sort in descending order" matTooltip="Sorting"
+                        matTooltipClass="accent-tooltip" ariaLabelAsc="Activate to sort in ascending order">
+                      </p-sortIcon>
+                    </span>
+                    <span class="ico-fieldsearch">
+                      <i *ngSwitchCase="'institutionName'" class="icon-search2" matTooltip="Search"
+                        matTooltipClass="accent-tooltip" (click)="institutionNameTrigger.openMenu()"></i>
+                      <i *ngSwitchCase="'instituteName'" class="icon-search2" matTooltip="Search"
+                        matTooltipClass="accent-tooltip" (click)="instituteNameTrigger.openMenu()"></i>
+                      <i *ngSwitchCase="'faculty'" class="icon-search2" matTooltip="Search"
+                        matTooltipClass="accent-tooltip" (click)="facultyTrigger.openMenu()"></i>
+                    </span>
+                    <span *ngSwitchCase="'institutionName'">
+                      <div matTooltip="User name" matTooltipClass="accent-tooltip"
+                        #institutionNameTrigger="matMenuTrigger" [matMenuTriggerFor]="institutionNameMenu"
+                        fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                      <mat-menu #institutionNameMenu class="pos-top">
+                        <div fxLayout="row">
+                          <div fxFlex="100%" class="p-10 tbl-fillddl">
+                            <mat-form-field (click)="$event.stopPropagation()">
+                              <input type="text" #institutionNameCtrl matInput [matAutocomplete]="autoInstitutionName"
+                                placeholder="Institution Name" autocomplete="off" role="presentation"
+                                (click)="institutionNameCtrl.select()" [formControl]="institutionNameControl" (change)="
+                                    dt.filter( $event.target.value,  col.field,'contains')"
+                                (blur)="dt.filter( $event.target.value,col.field,'contains')"
+                                (focusin)="dt.filter($event.target.value,  col.field, 'contains')"
+                                (keyup)="  dt.filter( $event.target.value,col.field,'contains') " />
+                            </mat-form-field>
+                            <mat-autocomplete #autoInstitutionName="matAutocomplete">
+                              <mat-option (onSelectionChange)="institutionNameTrigger.closeMenu()" *ngFor="
+                                    let option of institutionNameFilteredOptions | async
+                                  " [value]="option">
+                                <span [innerHTML]="option"></span>
+                              </mat-option>
+                            </mat-autocomplete>
+                          </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                            <a *ngIf='institutionNameCtrl.value'
+                              (click)="dt.filter('', col.field, 'contains');institutionNameCtrl.value='';institutionNameControl.reset()"
+                              class="text-sm">Reset</a> </div>
+                        </div>
+                      </mat-menu>
+                    </span>
+                    <span *ngSwitchCase="'instituteName'">
+                      <div matTooltip="User name" matTooltipClass="accent-tooltip"
+                        #instituteNameTrigger="matMenuTrigger" [matMenuTriggerFor]="instituteNameMenu" fxLayout="row"
+                        fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                      <mat-menu #instituteNameMenu class="pos-top">
+                        <div fxLayout="row">
+                          <div fxFlex="100%" class="p-10 tbl-fillddl">
+                            <mat-form-field (click)="$event.stopPropagation()">
+                              <input type="text" #instituteNameCtrl matInput [matAutocomplete]="autoInstituteName"
+                                placeholder="Institute Name" autocomplete="off" role="presentation"
+                                (click)="instituteNameCtrl.select()" [formControl]="instituteNameControl"
+                                (change)="dt.filter( $event.target.value,  col.field,'contains')"
+                                (blur)="dt.filter( $event.target.value,col.field,'contains')"
+                                (focusin)="dt.filter($event.target.value,  col.field, 'contains')"
+                                (keyup)="  dt.filter( $event.target.value,col.field,'contains') " />
+                            </mat-form-field>
+                            <mat-autocomplete #autoInstituteName="matAutocomplete">
+                              <mat-option (onSelectionChange)="instituteNameTrigger.closeMenu()" *ngFor="
+                                    let option of instituteNameFilteredOptions | async
+                                  " [value]="option">
+                                <span [innerHTML]="option"></span>
+                              </mat-option>
+                            </mat-autocomplete>
+                          </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                              *ngIf='instituteNameCtrl.value'
+                              (click)="dt.filter('', col.field, 'contains');instituteNameCtrl.value='';instituteNameControl.reset()"
+                              class="text-sm">Reset</a> </div>
+                        </div>
+                      </mat-menu>
+                    </span>
+                    <span *ngSwitchCase="'faculty'">
+                      <div matTooltip="Faculty" matTooltipClass="accent-tooltip" #facultyTrigger="matMenuTrigger"
+                        [matMenuTriggerFor]="facultyMenu" fxLayout="row" fxLayoutAlign="space-between center"
+                        class="txtborder-bot"></div>
+                      <mat-menu #facultyMenu class="pos-top">
+                        <div fxLayout="row">
+                          <div fxFlex="100%" class="p-10 tbl-fillddl">
+                            <mat-form-field (click)="$event.stopPropagation()">
+                              <input type="text" #facultyCtrl matInput [matAutocomplete]="autofaculty"
+                                placeholder="Faculty" autocomplete="off" role="presentation"
+                                (click)="facultyCtrl.select()" [formControl]="facultyControl"
+                                (change)="dt.filter( $event.target.value,  col.field,'contains')"
+                                (blur)="dt.filter( $event.target.value,col.field,'contains')"
+                                (focusin)="dt.filter($event.target.value,  col.field, 'contains')"
+                                (keyup)="  dt.filter($event.target.value,col.field,'contains') " />
+                            </mat-form-field>
+                            <mat-autocomplete #autofaculty="matAutocomplete">
+                              <mat-option (onSelectionChange)="facultyTrigger.closeMenu()"
+                                *ngFor="let option of facultyFilteredOptions | async" [value]="option">
+                                <span [innerHTML]="option"></span>
+                              </mat-option>
+                            </mat-autocomplete>
+                          </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                            <a *ngIf='facultyCtrl.value'
+                              (click)="dt.filter('', col.field, 'contains');facultyCtrl.value='';facultyControl.reset()"
+                              class="text-sm">Reset</a>
+                          </div>
+                        </div>
+                      </mat-menu>
+                    </span>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                  <td *ngFor="let col of columns" matTooltip="{{rowData[col.field]}}" matTooltipClass="accent-tooltip"
+                    [ngClass]="{'desg-bg':col.field == 'action'}">
+                    <div *ngIf="col.field !== 'active'">{{ rowData[col.field] }}</div>
+                    <div *ngIf="col.field === 'active'">
+                      <div fxLayout="row" class="tbl-icon">
+                        <div fxFlex="100%" fxLayoutGap="10px"> <span *ngIf="rowData.active === true" class="istrue"> <i
+                              class="material-icons" matTooltipClass="accent-tooltip" matTooltip="Active"> thumb_up </i>
+                          </span> <span *ngIf="rowData.active === false" class="isfalse"> <i class="material-icons"
+                              matTooltipClass="accent-tooltip" matTooltip="In-Active"> thumb_down </i> </span> </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <div class="cus-paginator" [ngClass]="{'empty-record': soundexInstituteList.length == 0}">
+              <div fxLayout="">
+                <div fxFlex="30%"> Showing {{ dt.totalRecords
+                  < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                      <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of
+                  {{ dt.totalRecords }} record(s) </div>
+                <span fxFlex></span>
+                <div fxFlex="50%" fxLayoutAlign="end center"> <a
+                    [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                          dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                          navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                        "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2">Go
+                    to Page<span class="input-num">
+                      <input type="number" #pageNo min="1" [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                        [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                    </span></span> <span class="mr-2">Of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
+                    [ngClass]="
+                          dt.rows + dt.first >= dt.totalRecords
+                            ? 'page-btn disabled'
+                            : 'page-btn'
+                        " (click)="
+                          dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                          navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                        "><i class="icon-control-end ml-5"></i></a> </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span>Do you want to get approve for - <b>{{searchName}}...?</b></span>
+      </span>
+      <span *ngIf="soundexInstituteList?.length == 0">No existing data found do you want to get approve for -
+        <b>{{searchName}}...?</b></span>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+      <button mat-stroked-button (click)="onSave()">Yes</button>
+      <button mat-flat-button color="warn" (click)="onCancel()">No</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

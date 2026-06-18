@@ -1,0 +1,151 @@
+.FullBody {
+	width: 100%; 
+    background: #fff 0 0 no-repeat;
+}
+.landBanner {
+	min-height: calc(100vh - 160px);
+	margin-bottom: 15px;
+	margin-top: 60px;
+}
+.HeaderBg {
+	padding-top: 25px;
+    width: 100%;
+    border-bottom: 1px solid #dedede;
+    padding-bottom: 10px;
+}
+.HeaderBg a {
+	color: #353536;
+	font-size: 14px;
+	font-weight: 600;
+	text-align: right;
+	float: right;
+	line-height: 50px;
+}
+.HeaderBg a i {
+	font-size: 18px;
+}
+.HContBody {
+	width: 85%;
+	margin-right: auto;
+	margin-left: auto;
+}
+.ContBody {
+	width: 85%;
+	margin-right: auto;
+	margin-left: auto;
+}
+.PricingHead {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 50px;
+    margin: 0 auto 25px auto;
+    text-align: center;
+}
+
+.SelPrice-icon{
+    float: left;
+    margin-right: 15px;
+    font-size: 36px;
+    color: #ACACAE;
+}
+.ScreenGroup {
+    border: 1px solid #dedede;
+}
+.ScrGrpRow {
+    padding: 20px;
+    position: relative;
+    border-bottom: 1px solid #dedede;
+}
+.ScrSummary {
+    padding: 20px;
+    position: relative;
+    border: 1px solid #dedede;
+}
+    .SpTag{
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 36px;
+        text-align: right;
+        color: #8A8B8D;
+    }
+.titleSm{
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 36px;
+    text-transform: none;
+    margin: 40px auto 20px;
+    text-align: center;
+}
+.ScreenName{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 36px;
+    float: left;
+}
+.ScrSummary h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+}
+.ScrSummary .Hline{
+    justify-content: space-between; 
+}
+.ScrSummary .Hline a{
+    margin-left: 10px;
+    font-size: 12px;
+}
+.ScrSummary .Hline .rate{
+    color: #8A8B8D;
+    font-size: 13px;
+    text-align: right;
+    float: right;
+}
+.ListsBlock {
+    margin-bottom: 20px;
+}
+.ListsBlock p {
+    margin: 5px 0 5px 0;
+    font-size: 13px;
+    display: flex;
+}
+.ListsBlock p:before { 
+    content: "✔";
+    color: #08BA53;
+    margin-right: 10px;
+    font-size: 12px;
+}
+.retail-total{
+    font-size:13px;
+}
+.retail-total p{ margin: 5px 0;}
+.input-num {
+    width: 65px;
+    float: left;
+}
+
+.input-num input[type="number"]{
+height: 30px;
+width: 100%; 
+padding-left: 5px;
+font-size: 12px;
+padding-top: 2px;
+padding-right: 0px;
+text-indent: 2px;
+top: -2px;
+position: relative;
+border: 1px solid #e4e4e4;
+}
+.multi_ico{
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 5px;
+    line-height: 23px;
+}
+footer {
+	font-size: 11px;
+	color: #8A8B8D;
+	text-align: center;
+	padding: 10px 0 15px 0;
+	bottom: 0px;
+	width: 100%;
+}

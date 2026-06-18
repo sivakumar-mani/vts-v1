@@ -1,0 +1,238 @@
+﻿@if (!screeningService.isVerifiactionMode) {
+  <app-breadcrumb [btnExportDisabled] ="!screenAuth?.exportFlag" (eventExcelExport)="exportAsExcelFile()"
+    (eventBack)="back()" [routePath]="'Screening / Insufficiency Fully Cleared'" [toolTip]="toolTip" [btnBack]="true"
+    [btnExcelExport]="true">
+  </app-breadcrumb>
+}
+<div>
+  <div fxLayout="row" class="advSearch">
+    <form [formGroup]="insufficiencyFormGroup" autocomplete="off">
+      <div class="advSearch-forms">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="190px">
+                <app-auto-complete [selectProperties]='clientNameControl'>
+                </app-auto-complete>
+              </div>
+              <div fxFlex="190px">
+                <app-auto-complete [selectProperties]='refNoControl'>
+                </app-auto-complete>
+              </div>
+              <div fxFlex="190px">
+                <app-auto-complete [selectProperties]='verificationIdControl'>
+                </app-auto-complete>
+              </div>
+              <div fxFlex="190px">
+                <app-auto-complete [selectProperties]='candidateNameControl'>
+                </app-auto-complete>
+              </div>
+              <div fxFlex="190px">
+                <app-auto-complete [selectProperties]='levelControls'>
+                </app-auto-complete>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="100%" class="advSearch-btn">
+        <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <span><a (click)="searchInsufficiencyList()">Search</a>
+          <span> &nbsp;&nbsp; | </span></span>
+          <a (click)="clearInsufficiency()">Reset</a>
+        </div>
+
+      </div>
+    </form>
+  </div>
+  <div fxLayout="row" [ngClass]="insuffScreenMode === true ? 'srchPad':''">
+    <div fxFlex="100%">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <h1 class="header-title">Insufficiency Fully Cleared
+            </h1>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="row"
+            fxLayoutGap="0 grid">
+            <div fxFlex="100%">
+              <div fxLayout="row" class="mb-15">
+                <div fxFlex="100%"> @if (searchValueArr?.length> 0) {
+<b class="text-sm mr-10
+                                        text-semi-bold text-dull">
+                  Search results for:</b>
+                  } @for (s of
+                  searchValueArr; track $index; let in = $index) {
+                  <span class="tag">{{s.value}}
+                    <a class="close" (click)="removeSearchValue(s?.propertyName,in)">×</a></span>
+                  }
+                </div>
+              </div>
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="100%">
+                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                    fxLayout.xs="column" class="sortrow">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="70%" fxFlex.sm="100%"
+                      class="sortrow" fxLayoutAlign="end end">
+                      <ul>
+                        <li> <span class="text-dull"> Showing
+                          {{(insuffStatusList?.length > 0 ?
+                          ((shievePageSize*shievePageNo)-shievePageSize+1): 0)}} -
+                          {{((shievePageSize*shievePageNo)>=(shieveTotalCount))?(shieveTotalCount):(shievePageSize*shievePageNo)}}
+                          of </span> <b> {{shieveTotalCount}}record(s)</b>
+                          <!-- {{count > 0 ? ((itemPerPage*page)-itemPerPage+1) : 0}} -
+                          {{(itemPerPage*page)>=insuffStatusList?.length?(insuffStatusList?.length):count}}
+                          of </span> <b>{{insuffStatusList?.length}} record(s)</b> -->
+                        </li>
+                        |
+                        <li>
+                          <a (click)="showall()">Show All</a>
+                        </li>|
+                        <li><b>Sort By:</b> <a [ngClass]="column==='candidateName'?'active':''"
+                        (click)="sortBy('candidateName')">Candidate
+                      Name</a> <i
+                                                        [ngClass]="{'icon-sort': column != 'candidateName', 'icon-sort-asc': (column == 'candidateName' && !isDesc), 
+                                                                                            'icon-sort-desc': (column == 'candidateName' && isDesc) }"
+                    aria-hidden="true"> </i> <a
+                    [ngClass]="column==='clientRefNo'?'active':''"
+                    (click)="sortBy('clientRefNo')">Reference
+                  No</a> <i
+                                                        [ngClass]="{'icon-sort': column != 'clientRefNo',   'icon-sort-asc': (column == 'clientRefNo' && !isDesc), 
+                                                                                              'icon-sort-desc': (column == 'clientRefNo' && isDesc) }"
+                aria-hidden="true"> </i> </li>
+              </ul>
+            </div>
+          </div>
+          @for (view of (insuffStatusList
+            | sort: {property: column, direction: direction}
+            | paginate: { itemsPerPage: shievePageSize, currentPage:shievePageNo,totalItems: shieveTotalCount }); track view; let i = $index; let count = $count) {
+            <div fxLayout="row" class="listrow"
+              >
+              <div fxFlex="100%" [class]="getcount(count)">
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <div fxFlex="24%">
+                    <mat-card-header>
+                      <div mat-card-avatar class="avatar avatarBg{{(i%6)+1}}">
+                        {{ view?.candidateFName?.slice(0, 1)}}{{
+                      view?.candidateLName?.slice(0, 1)}} </div>
+                      <mat-card-title class="cname">{{ view?.candidateFName }} {{
+                        view?.candidateMName }} {{ view?.candidateLName
+                      }}</mat-card-title>
+                      <mat-card-subtitle class="cdesg mb-10">{{view?.clientRefNo}}
+                      </mat-card-subtitle>
+                      <mat-card-subtitle class="cstat mb-0">Verification Id:
+                        @if (view?.manualFileSubmissionFlag !=true) {
+                          <em>{{view?.screeningCompId}}</em>
+                        }
+                        @if (view?.manualFileSubmissionFlag ==true) {
+                          <em>{{view?.clientScreeningId}}</em>
+                        }
+                        <br> Functional Entity:
+                          <em>{{view.functionalEntity ?view.functionalEntity :
+                          'N/A'}}</em>
+                        </mat-card-subtitle>
+                      </mat-card-header>
+                    </div>
+                    <div fxFlex="36%">
+                      <p>
+                        <label>Client Name:</label>
+                        <em>{{view?.clientName}}</em>
+                      </p>
+                      <p>
+                        <label>Component Name:</label>
+                        <em class="cn-chip">{{view?.componentName}}{{view?.subCompName ?
+                          (' - ' +
+                        view?.subCompName) : ''}}</em>
+                      </p>
+                      <p>
+                        <label>Raised Date & Time:</label>
+                        <em>{{(common.getTimezoneOffset(view?.raisedDate)) | date :
+                        'dd/MM/yyyy hh:mm:ssa'}}</em>
+                      </p>
+                      @if (view?.clearedDate) {
+                        <p>
+                          <label>{{view?.insuffStatus}} Date & Time:</label>
+                          <em>{{(common.getTimezoneOffset(view?.clearedDate)) | date :
+                          'dd/MM/yyyy hh:mm:ssa'}}</em>
+                        </p>
+                      }
+                    </div>
+                    <div fxFlex="36%">
+                      <p>
+                        <label> {{view?.insuffStatus}} in {{view?.insuffLevel}} by:
+                          <em>{{view?.insuffRaisedBy}}</em> </label>
+                        </p>
+                        <p>
+                          <label>Required Type:</label>
+                          <em>{{view?.insuffReqType}}</em>
+                        </p>
+                        @if (view?.insuffStatus.toLowerCase() !== common.Submitted.toLowerCase()) {
+                          <p
+                            >
+                            <label>Status:<em>{{view?.screeningStatus}}</em></label>
+                          </p>
+                        }
+                        @if (view?.insuffStatus.toLowerCase() === common.FULLY_CLE.toLowerCase()) {
+                          <p
+                            >
+                            <label>Insuff Days:</label>
+                            <em>{{view?.insuffDays}}</em>
+                          </p>
+                        }
+                      </div>
+                      <div fxFlex="5%" fx>
+                        <app-insuff-history [screeningCompId]="view.screeningCompId"
+                          [isInsuffScreen]="true">
+                        </app-insuff-history>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+              <div fxLayout="row">
+                @if (insuffStatusList?.length>0) {
+                  <div class="cus-paginator">
+                    <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                      <!-- <pagination-controls class="cus-paginator"
+                      (pageChange)="getPage($event)">
+                    </pagination-controls>
+                  </span> <span class="gotopagbg mr-2 ml-2">Items / page<span
+                  class="input-num">
+                  <input type="number" [(ngModel)]="itemPerPage" min="1"
+                    maxlength="4" appNumberOnly preventDragdrop
+                    preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+                </span></span> <span class="gotopagbg mr-2 ml-2">Go to Page<span
+                class="input-num">
+                <input type="number" [(ngModel)]="page" min="1" maxlength="4"
+                  appNumberOnly preventDragdrop preventCutCopyPaste
+                  autocomplete="off" [NumberOnly]="false">
+                </span></span> <span class="mr-2">Of {{ getTotalPage() }}</span> -->
+                <pagination-controls class="cus-paginator"
+                (pageChange)="shievePagination($event)"></pagination-controls>
+              </span> <span fxHide.xs class="gotopagbg ml-2">Go to Page<span
+              class="input-num">
+              <input type="number" [(ngModel)]="shievePageNo" min="1"
+                maxlength="4" appNumberOnly preventDragdrop
+                (blur)="OnPageChange()" preventCutCopyPaste
+                autocomplete=" off" [NumberOnly]="false">
+            </span></span> <span fxHide.xs class="gotopagbg ml-2">Items
+            / page<span class="input-num">
+            <input type="number" [(ngModel)]="shievePageSize" min="1"
+              maxlength="4" appNumberOnly preventDragdrop
+              preventCutCopyPaste autocomplete="off" [NumberOnly]="false"
+              (blur)="preventInfinite()">
+          </span> </span>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+</div>
+</div>
+</div>
+</mat-card-content>
+</mat-card>
+</div>
+</div>

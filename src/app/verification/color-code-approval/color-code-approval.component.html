@@ -1,0 +1,473 @@
+﻿<app-breadcrumb [routePath]="routePath" [btnBulkApproval]="!previewFlag " [btnBulkApprovalDisabled]="previewFlag"
+  (eventBulkApproval)="bulkApproveDialog()" [btnBack]="previewFlag" (eventBack)="closeForm()"
+  [toolTip]="breadcrumbFlags.toolTip" [btnMoveClient]="previewFlag == true && tabIndex === 0" [btnApprove]="previewFlag"
+  [btnReject]="previewFlag" (eventApprove)="approveDialog()" (eventReject)="rejectDialog()"
+  (eventMoveClient)="sentToClientDialog()" [btnReject]="previewFlag">
+</app-breadcrumb>
+<div fxLayout="row" fxLayoutGap="20px">
+  <div fxFlex="100%">
+    <mat-card>
+      <div *ngIf='previewFlag !== true'>
+        <div fxLayout="row">
+          <mat-card-header fxFlex="100%">
+            <div fxFlex="100%">
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                fxLayoutGap="10px">
+                <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                  <mat-card-title>
+                    <h1 class="header-title">Color Code Approval</h1>
+                  </mat-card-title>
+                </div>
+                <span fxFlex></span>
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                  fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                  <div class="tbl-commonsearch" *ngIf="!showFlag">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                        autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-header>
+        </div>
+        <div fxLayout="row">
+          <mat-card-content fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div *ngIf="showFlag">
+              <form [formGroup]="QAFormGroup" autocomplete="off" id="ngForm">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
+                  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="75%" fxFlex.lg="75%" fxFlex.md="75%" fxFlex.sm="75%" fxFlex.xs="75%">
+                    <mat-radio-group [formControl]="qaCheckFlag" aria-label="Select an option" fxLayoutGap="20px"
+                      (change)="getQASubdetail();typeChange($event.value);">
+                      <mat-radio-button [value]="true">Receive From VE</mat-radio-button>
+                      <mat-radio-button [value]="false">Send To Client </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <br />
+              </form>
+            </div>
+            <div *ngIf="!showFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+              fxLayout.xs="column" fxLayoutGap="20px grid">
+              <div fxFlex="100%">
+                <mat-tab-group #tab (selectedTabChange)="qaChange($event.index)">
+                  <mat-tab *ngFor="let res of menubar; let ind = index" label="{{ res.menuName }}">
+                    <div fxFlex="100%">
+                      <p-table #dt [columns]="displayedColumns" [value]="QAList" [scrollable]="true" scrollHeight=""
+                        [paginator]="true" [rows]="itemperpage" [resizableColumns]="true" [reorderableColumns]="true">
+
+                        <!-- ================= HEADER ================= -->
+                        <ng-template pTemplate="header" let-headerCols>
+                          <tr>
+                            <th *ngFor="let col of headerCols" pReorderableColumn pResizableColumn>
+
+                              <div class="thname" matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
+                                {{ col.header }}
+                              </div>
+
+                              <span [pSortableColumn]="col.field">
+                                <p-sortIcon *ngIf="col.field !== 'action' && col.field !== 'select'" [field]="col.field"
+                                  ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                  matTooltip="Sorting" matTooltipClass="accent-tooltip"
+                                  ariaLabelAsc="Activate to sort in ascending order">
+                                </p-sortIcon>
+                              </span>
+
+                              <!-- Select All checkbox (commented) – unchanged -->
+                              <!--
+        <mat-checkbox
+          class="cust_spright"
+          [checked]="this.isAllSelected"
+          (change)="SelectAll($event.checked)">
+        </mat-checkbox>
+        -->
+                            </th>
+                          </tr>
+                        </ng-template>
+
+                        <!-- ================= BODY ================= -->
+                        <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+
+                          <tr [pReorderableRow]="index">
+
+                            <td *ngFor="let col of bodyCols" [ngSwitch]="col.field"
+                              [ngClass]="{ 'desg-bg': col.field === 'select' }">
+
+                              <!-- ===== Normal Fields ===== -->
+                              <div *ngIf="col.field !== 'select' && col.field !== 'action'">
+
+                                <span *ngIf="col.field === 'submittedDate'">
+                                  {{
+                                  rowData[col.field]
+                                  ? (common.getTimezoneOffset(rowData[col.field], false)
+                                  | date : 'dd/MMM/yyyy')
+                                  : 'N/A'
+                                  }}
+                                </span>
+
+                                <span *ngIf="col.field !== 'submittedDate'">
+                                  {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                                </span>
+
+                              </div>
+
+                              <!-- ===== Select Checkbox ===== -->
+                              <div fxLayout="row" *ngSwitchCase="'select'" class="desg-icon">
+                                <div fxFlex="100%" fxLayoutGap="10px">
+                                  <mat-checkbox class="cust_spright" [checked]="this.isAllSelected"
+                                    (change)="assigCase($event.checked, rowData)">
+                                  </mat-checkbox>
+                                </div>
+                              </div>
+
+                              <!-- ===== Action ===== -->
+                              <div fxLayout="row" *ngSwitchCase="'action'" class="desg-icon">
+                                <div fxFlex="100%" fxLayoutGap="10px">
+                                  <button mat-icon-button matTooltip="Pre-View Document" class="in-btn"
+                                    matTooltipClass="accent-tooltip" (click)="getIndividualReprt(
+                rowData.screeningId,
+                rowData.screeningCompId,
+                rowData.clientId,
+                '',
+                rowData.clientCategoryId,
+                rowData)">
+                                    <i class="icon-previewdocument"></i>
+                                  </button>
+                                </div>
+                              </div>
+
+                            </td>
+                          </tr>
+
+                        </ng-template>
+
+                      </p-table>
+                      <div class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                        fxLayoutGap.xs="20px grid" [ngClass]="{ 'empty-record': QAList.length == 0 }">
+                        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                          fxLayoutAlign="start center">
+                          Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0
+                            ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
+                              dt.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a>
+                        </div>
+                        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+
+                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                          fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                          fxLayoutAlign.xs="start center">
+                          <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                            dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                            navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                          ">
+                            <i class="icon-control-start mr-5"></i></a>
+                          <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                              <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                                [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                            </span></span>
+                          <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                          <a [ngClass]="dt.rows + dt.first >= dt.totalRecords ? 'page-btn disabled' : 'page-btn'"
+                            (click)="
+                            dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                            navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                          "><i class="icon-control-end ml-5"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-tab>
+                </mat-tab-group>
+              </div>
+            </div>
+          </mat-card-content>
+        </div>
+      </div>
+      <span *ngIf='previewFlag === true'>
+        <!-- <span > -->
+        <div fxLayout="row">
+          <div fxFlex="80%" class="m-auto">
+            <app-response-document *ngIf="pdfType === '1' && clientCategoryId !== 4"></app-response-document>
+            <app-techm-response-document
+              *ngIf="pdfType === '1' && clientCategoryId === 4"></app-techm-response-document>
+            <app-generate-pdf *ngIf="pdfType === '2'"></app-generate-pdf>
+          </div>
+        </div>
+        <!-- </span> -->
+      </span>
+    </mat-card>
+
+  </div>
+</div>
+<ng-template #mailDialog>
+  <h1 mat-dialog-title><span>Generate E Mail Response </span></h1>
+  <mat-dialog-content>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%" class="text-sm text-dull">
+
+      </div>
+    </div>
+
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%">
+        <div class="mail-list">
+          <button mat-stroked-button [matMenuTriggerFor]="menu1">To...</button>
+          <mat-menu #menu1="matMenu">
+            <button *ngIf='checkIsExist("ToInc")' mat-menu-item>ToMail Not Found to Add</button>
+            <ng-container *ngFor="let mail of SendCaseMailList?.ClientMailId;let i = index">
+              <!-- {{mail | json}} -->
+              <button (click)='mailChange(mail.emailAddress,true)'
+                *ngIf='mail.selected === false && mail.emailType ==="To"' mat-menu-item>{{
+                mail.emailAddress }}</button>
+            </ng-container>
+          </mat-menu>
+          <div class="list-area">
+            <!-- <span class="tag" *ngIf='checkIsExist("ToDec")'>ToMail Not Found </span> -->
+            <ng-container>
+              <mat-form-field appearance="outline" fxFlex="100%" style="width: 100%;">
+                <mat-chip-grid #chipList>
+                  <mat-chip-row *ngIf='checkIsExist("ToDec") && toList.length === 0 ' [removable]="removable">
+                    ToMail Not Found
+                  </mat-chip-row>
+                  <span *ngFor="let mail of SendCaseMailList?.ClientMailId;let i = index">
+                    <mat-chip-row *ngIf='mail?.emailType==="To" && mail?.selected===true' [removable]="removable">
+                      {{ mail.emailAddress }}
+                      <span matChipRemove (click)='mailChange(mail.emailAddress,false)'>×</span>
+                    </mat-chip-row>
+                  </span>
+                  <mat-chip-row *ngFor="let mail of toList; let j = index" [removable]="removable"
+                    (removed)="removeControl( j, 'To')">
+                    {{mail}}
+                    <span matChipRemove *ngIf="removable">×</span>
+                  </mat-chip-row>
+                  <input placeholder="To" matInput autocomplete="off" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                    (matChipInputTokenEnd)="addMail($event, 'To')">
+                </mat-chip-grid>
+                <mat-error *ngIf="addMailCtrl?.errors"> Enter Valid Email </mat-error>
+              </mat-form-field>
+            </ng-container>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%">
+        <div class="mail-list">
+          <button mat-stroked-button [matMenuTriggerFor]="menu">Cc...</button>
+          <mat-menu #menu="matMenu">
+            <button *ngIf='checkIsExist("CCInc")' mat-menu-item>CCMail Not found to Add</button>
+            <ng-container *ngFor="let mail of SendCaseMailList?.ClientMailId;let i = index">
+              <button (click)='mailChange(mail.emailAddress,true)'
+                *ngIf='mail.selected === false && mail.emailType ==="CC"' mat-menu-item>{{
+                mail.emailAddress }}</button>
+            </ng-container>
+          </mat-menu>
+          <div class="list-area">
+
+            <mat-form-field appearance="outline" fxFlex="100%" style="width: 100%;">
+              <mat-chip-grid #chipList1>
+                <mat-chip-row *ngIf='checkIsExist("CCDec") && ccList.length === 0' [removable]="removable">
+                  CCMail Not Found
+                </mat-chip-row>
+                <span *ngFor="let mail of SendCaseMailList?.ClientMailId;let i = index">
+                  <mat-chip-row *ngIf='mail?.emailType ==="CC" && mail?.selected ===  true' [removable]="removable">
+                    {{ mail.emailAddress }}
+                    <span matChipRemove (click)='mailChange(mail.emailAddress,false)'>×</span>
+                  </mat-chip-row>
+                </span>
+                <span>
+                  <mat-chip-row *ngFor="let cc of ccList; let j = index" [removable]="removable"
+                    (removed)="removeControl( j, 'CC')">
+                    {{cc}}
+                    <span matChipRemove *ngIf="removable">×</span>
+                  </mat-chip-row>
+                </span>
+                <input placeholder="CC" matInput autocomplete="off" [matChipInputFor]="chipList1"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="addMail($event, 'CC')">
+              </mat-chip-grid>
+            </mat-form-field>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%">
+        <div class="mail-list">
+          <button mat-stroked-button>Subject</button>
+
+          <div class="list-area">
+
+            <mat-form-field appearance="outline" fxFlex="100%" style="width: 100%;">
+
+              <input placeholder="Subject" matInput [(ngModel)]="SendCaseMailList.Subject" autocomplete="off">
+
+            </mat-form-field>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <mat-label class="lbl pb-5">Upload Attachment documents / Email if any :</mat-label>
+        <div class="file-upload">
+          <i class="material-icons">cloud_upload</i>
+          <span>Browse here...</span>
+          <input type="file" #fileInput multiple (change)='openUploadDoc($event)'>
+        </div>
+        <div class="file-names mt-10">
+          <div class="file-upload-files" matTooltip="{{document?.fileName}}" matTooltipClass="accent-tooltip"
+            *ngFor="let document of SendCaseMailList.mailDocument;let docIndex = index">
+            <a *ngIf="document?.fileName" routerLinkActive="active-link">{{document?.fileName}}</a>
+            <button (click)='SendCaseMailList.mailDocument.splice(docIndex,1);' type="button"
+              style=" top: 3px;right: 11px;line-height: 14px;" class="close" aria-label="Close"> <span
+                aria-hidden="true">&times;</span> </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <div fxFlex="100%" class="ckeditor">
+          <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="SendCaseMailList.EmailTemplate"
+            [config]="editorConfig"></angular-editor>
+        </div>
+      </div>
+    </div>
+    <!-- <div fxLayout="row" class="mb-10">
+          <div fxFlex="100%">
+              <ng-template [ngTemplateOutlet]="pTableTemplate"></ng-template>
+          </div>
+      </div> -->
+  </mat-dialog-content>
+  <mat-dialog-actions *ngIf='isMailIdSave' fxLayoutGap="8px" fxLayoutAlign="end end">
+    <button (click)='sendMail()' mat-flat-button color="primary" matTooltip="Send mail"
+      matTooltipClass="accent-tooltip">Send Mail</button>
+    <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #reject>
+  <form>
+    <h1 mat-dialog-title>Reject Comment</h1>
+    <mat-dialog-content>
+
+      <div fxLayout="row" class="pt-15">
+        <div fxFlex="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Comments</mat-label>
+            <textarea fxFlex="100%" #rej [formControl]="rejectComments" required matInput placeholder="Comments"
+              maxlength="1500">
+                       </textarea>
+            <mat-hint class="f-13"> ({{rej.value.length}} /1500 max) </mat-hint>
+            <mat-error *ngIf="!rejectComments.value">Comments is required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-flat-button color="warn" [disabled]="!rejectComments.valid" (click)="rejectcam()"> Submit </button>
+      <button mat-stroked-button [mat-dialog-close]="true" (click)="dialog.closeAll()"> Cancel </button>
+    </mat-dialog-actions>
+  </form>
+</ng-template>
+
+<ng-template #approveConfirm>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">Confirmation !</h3>
+            <p class="text-sm">Would you like to approve this case ?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="dialog.closeAll()">Cancel</button>
+    <button mat-flat-button color="accent" (click)="approveCase()">Okay</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #bulkApproveConfirm>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">Confirmation !</h3>
+            <p class="text-sm">{{approveContent}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-flat-button color="accent" (click)="bulkapproveCase()">Okay</button>
+    <button mat-flat-button color="warn" (click)="dialog.closeAll()">Cancel</button>
+
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #rejectConfirm>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">Confirmation !</h3>
+            <p class="text-sm">Would you like to reject this case?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="dialog.closeAll()">Cancel</button>
+    <button mat-flat-button color="accent" (click)="openReject()">Okay</button>
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #sentToClientConfirm>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">Confirmation !</h3>
+            <p class="text-sm">Would you like to send this case to client ?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="dialog.closeAll()">Cancel</button>
+    <button mat-flat-button color="accent" (click)="getScreenLetter()">Okay</button>
+  </mat-dialog-actions>
+</ng-template>

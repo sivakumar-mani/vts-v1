@@ -1,0 +1,38 @@
+<div>
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <!-- Position Column -->
+  <ng-container matColumnDef="SNo">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No </th>
+    <td mat-cell *matCellDef="let element, let i = index;"> {{i+1}} </td>
+  </ng-container>
+
+  <!-- Verification ID -->
+  <ng-container matColumnDef="screeningID">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Verification ID </th>
+    <td mat-cell *matCellDef="let element"> {{element.screeningID}}</td>
+  </ng-container>
+
+  <!-- Reference No -->
+  <ng-container matColumnDef="referenceNo">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Reference No</th>
+    <td mat-cell *matCellDef="let element">{{element.referenceNo}} </td>
+  </ng-container>
+
+  <!-- Reference No -->
+  <ng-container matColumnDef="serviceType">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Component Type</th>
+    <td mat-cell *matCellDef="let element">{{element.serviceType}} </td>
+  </ng-container>
+
+  <!-- Functional Entity -->
+  <ng-container matColumnDef="functionalEntity">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Functional Entity</th>
+    <td mat-cell *matCellDef="let element"> {{element.functionalEntity}} </td>
+  </ng-container>  
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<mat-dialog-actions> 
+  <button mat-button mat-raised-button mat-dialog-close color="accent">Cancel</button>
+</mat-dialog-actions>
+</div>

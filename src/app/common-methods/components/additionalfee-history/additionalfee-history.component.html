@@ -1,0 +1,169 @@
+@if (isHistoryScreen) {
+  <button mat-icon-button class="in-btn" matTooltip="History" matTooltipClass="accent-tooltip" (click)="openHistory()"> <i class="icon-eyeline"></i></button>
+}
+@if (!isHistoryScreen) {
+  <a class="text-sm text-cap" matTooltip="Additional Fee History" matTooltipClass="accent-tooltip" (click)="openHistory()">Additional Fee&nbsp;History</a>
+}
+<ng-template #history>
+  <h1 mat-dialog-title>Additional Fee History</h1>
+  <mat-dialog-content>
+    @for (history of historyData; track history; let i = $index) {
+      <div fxLayout="row" fxLayoutGap="0px" class="border-dashed">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <h3 class="text-light m-0 pb-5">Additional Fee History</h3>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="20px" class="lbl-res">
+            <div fxFlex="50%">
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="start start">
+                  <p><label>Component Name:</label>
+                  <em>{{history?.componentName }}</em></p>
+                </div>
+              </div>
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="start start">
+                  <p>
+                    <label>Additional Fee Status:</label>
+                    <em class="green">{{history?.feeStatus === 'Fully Cleared' ? "Approved" : " " }}</em> </p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%" fxLayoutAlign="start start">
+                    <em>Raised Information</em>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%" fxLayoutAlign="start start">
+                    <p>
+                      <label>Country:</label>
+                      <em>{{history?.country}}</em> </p>
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxFlex="100%" fxLayoutAlign="start start">
+                      <p>
+                        <label>Fee Amount:</label>
+                        <em>{{history?.feeAmount}}</em> </p>
+                      </div>
+                    </div>
+                    <div fxLayout="row">
+                      <div fxFlex="100%" fxLayoutAlign="start start">
+                        <p>
+                          <label> Fee Type:</label>
+                          <em>{{history?.feeType}}</em> </p>
+                        </div>
+                      </div>
+                      <div fxLayout="row">
+                        <div fxFlex="100%" fxLayoutAlign="start start">
+                          <p>
+                            <label> Currency Type:</label>
+                            <em>{{history?.currencyType}}</em> </p>
+                          </div>
+                        </div>
+                        <div fxLayout="row">
+                          <div fxFlex="100%" fxLayoutAlign="start start">
+                            <p>
+                              <label> Comments:</label>
+                              <em>{{history?.raisedComments}}</em> </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div fxFlex="50%">
+                          <div fxLayout="row">
+                            <div fxFlex="100%" fxLayoutAlign="end end">
+                              <p>
+                                <label>Raised Date & Time:</label>
+                                <em>{{common.getTimezoneOffset(history?.raisedDate, false) | date : 'dd/MM/yyyy  hh:mm:ss a'}}</em>
+                              </p>
+                            </div>
+                          </div>
+                          <div fxLayout="row">
+                            <div fxFlex="100%" fxLayoutAlign="end end">
+                              <p>
+                                <label>Raised by:</label>
+                                <em>{{history?.raisedBy}}</em>
+                              </p>
+                            </div>
+                          </div>
+                          <br>
+                            <div fxLayout="row">
+                              <div fxFlex="100%" fxLayoutAlign="end end">
+                                <p>
+                                  <label>Approved Date & Time:</label>
+                                  <em>{{common.getTimezoneOffset(history?.clearedDate, false) | date : 'dd/MM/yyyy  hh:mm:ss a'}}</em>
+                                </p>
+                              </div>
+                            </div>
+                            <div fxLayout="row">
+                              <div fxFlex="100%" fxLayoutAlign="end end">
+                                <p>
+                                  <label>Approved by:</label>
+                                  <em>{{history?.approvedBy}}</em>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <br>
+                          <div fxLayout="row" fxLayoutGap="20px" class="lbl-res">
+                            <div fxFlex="50%">
+                              <div fxLayout="row">
+                                <div fxFlex="100%" fxLayoutAlign="start start">
+                                  <em>Approved Information</em>
+                                </div>
+                              </div>
+                              <div fxLayout="row">
+                                <div fxFlex="100%" fxLayoutAlign="start start">
+                                  <p>
+                                    <label>Country:</label>
+                                    <em>{{history?.country}}</em> </p>
+                                  </div>
+                                </div>
+                                <div fxLayout="row">
+                                  <div fxFlex="100%" fxLayoutAlign="start start">
+                                    <p>
+                                      <label>Fee Amount:</label>
+                                      <em>{{history?.feeAmount}}</em> </p>
+                                    </div>
+                                  </div>
+                                  <div fxLayout="row">
+                                    <div fxFlex="100%" fxLayoutAlign="start start">
+                                      <p>
+                                        <label> Fee Type:</label>
+                                        <em>{{history?.feeType}}</em> </p>
+                                      </div>
+                                    </div>
+                                    <div fxLayout="row">
+                                      <div fxFlex="100%" fxLayoutAlign="start start">
+                                        <p>
+                                          <label> Currency Type:</label>
+                                          <em>{{history?.currencyType}}</em> </p>
+                                        </div>
+                                      </div>
+                                      <div fxLayout="row">
+                                        <div fxFlex="100%" fxLayoutAlign="start start">
+                                          <p>
+                                            <label> Comments:</label>
+                                            <em>{{history?.clearedComments}}</em> </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              }
+                              @if (historyData?.length === 0) {
+                                <div fxLayout="row" fxLayoutGap="0px">
+                                  <div fxFlex="100%" class="text-center" fxLayoutAlign="center center">
+                                    <div class="no-record"><span>No History Found</span></div>
+                                  </div>
+                                </div>
+                              }
+                            </mat-dialog-content>
+                            <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end center">
+                              <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+                            </mat-dialog-actions>
+                          </ng-template>

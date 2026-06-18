@@ -1,0 +1,561 @@
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card-header>
+      <mat-card-title fxLayout="row" fxFlex="100%" fxLayoutGap="50px">
+        <h1 class="header-title"> <span class="StprH">Step 1:</span>Candidate Details </h1>
+      </mat-card-title>
+      <span fxFlex></span>
+      @if (!employeeDetailsEdit && closedFlag === false && userData.applicationId !== 2 && userData.subTeamName !== common.COMMONSUBCAMTEAM &&
+        (userData.teamName !== common.COMMONCRTTEAM) && common.VE === false) {
+        <button [ngClass]="screenAuth.editFlag===false?'page-btn disabled':''" (click)='employeeDetailsEdit = true; bindAddress()' mat-icon-button
+          matTooltip="Edit" class="in-btn" matTooltipClass="accent-tooltip"> <i class="icon-new-message"></i></button>
+        }
+        <span fxLayoutGap="10px">
+          @if (employeeDetailsEdit) {
+            <button (click)='updateCandidateDetails()' mat-icon-button matTooltip="Update"
+              class="in-btn" matTooltipClass="accent-tooltip"> <i class="icon-save"></i></button>
+            }
+            @if (employeeDetailsEdit) {
+              <button (click)='resetCandidate()' mat-icon-button matTooltip="Back" class="in-btn"
+                matTooltipClass="accent-tooltip"> <i class="icon-arrowleft"></i></button>
+              }
+            </span>
+          </mat-card-header>
+          <mat-card-content>
+            <!-- {{screeningCandidateDet.value | json}} -->
+            @if (!employeeDetailsEdit) {
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="100%">
+                  <div class="d-view">
+                    <div fxLayout="row">
+                      <div fxFlex="100%">
+                        <h3>Candidate Details </h3>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>First Name</label>
+                          <em>
+                            <span>{{screeningCandidateDet.value['firstName'] ? screeningCandidateDet.value['firstName'] : 'N/A'}}</span>
+                          </em>
+                        </p>
+                      </div>
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>Middle Name</label>
+                          <em>
+                            <span>{{screeningCandidateDet.value['middleName'] ? screeningCandidateDet.value['middleName'] : 'N/A' }}</span>
+                          </em>
+                        </p>
+                      </div>
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>Last Name</label>
+                          <em>
+                            <span>{{screeningCandidateDet.value['lastName'] ? screeningCandidateDet.value['lastName'] : 'N/A'}}</span>
+                          </em>
+                        </p>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>Gender</label>
+                          <em>{{screeningCandidateDet.value['gender'] ? (screeningCandidateDet.value['gender']) : 'N/A'}}</em>
+                        </p>
+                      </div>
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>Date of Birth</label>
+                          <em>{{screeningCandidateDet.value['dob'] ? (common.getTimezoneOffset(screeningCandidateDet.value['dob'], false) | date: "dd-MM-yyyy") : 'N/A'}}</em>
+                        </p>
+                      </div>
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>Father Name</label>
+                          <em>
+                            <span>{{screeningCandidateDet.value['fatherName'] ? screeningCandidateDet.value['fatherName'] : 'N/A'}}</span>
+                          </em>
+                        </p>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>Contact No</label>
+                          <em>{{screeningCandidateDet.value['countryCode'] ? screeningCandidateDet.value['countryCode'] : '' }} - {{screeningCandidateDet.value['phoneNo'] ? screeningCandidateDet.value['phoneNo'] : 'N/A' }}</em>
+                        </p>
+                      </div>
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>Alternative Contact No</label>
+                          <em>{{screeningCandidateDet.value['alternativeContactCode'] ? screeningCandidateDet.value['alternativeContactCode'] : '' }} - {{screeningCandidateDet.value['alternativeContactNo'] ? screeningCandidateDet.value['alternativeContactNo'] : 'N/A' }}</em>
+                        </p>
+                      </div>
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>Marital Status</label>
+                          <em>{{screeningCandidateDet.value['marital'] ? (screeningCandidateDet.value['marital']) : 'N/A'}}</em>
+                        </p>
+                      </div></div>
+                      <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+                        <div fxFlex="33.33%">
+                          <p>
+                            <label>Spouse Name</label>
+                            <em
+                            class="email-elli">{{screeningCandidateDet.value['spouseName'] ? screeningCandidateDet.value['spouseName'] : 'N/A' }}</em>
+                          </p>
+                        </div>
+                        <div fxFlex="33.33%">
+                          <p>
+                            <label>Email Id</label>
+                            <em
+                            class="email-elli">{{screeningCandidateDet.value['email'] ? screeningCandidateDet.value['email'] : 'N/A' }}</em>
+                          </p>
+                        </div>
+                        <div fxFlex="33.33%">
+                          <p>
+                            <label>Address</label>
+                            <em>
+                              {{screeningCandidateDet.value['address'].addLine1 }}
+                              @if (screeningCandidateDet.value['address'].addLine2) {
+                                <span>,</span>
+                              }
+                              {{screeningCandidateDet.value['address'].addLine2 }}
+                              @if ((screeningCandidateDet.value['address'].addLine1 || screeningCandidateDet.value['address'].addLine2)
+                                && screeningCandidateDet.value['address'].addLine3) {
+                                <span>,</span>
+                              }
+                              {{screeningCandidateDet.value['address'].addLine3 }}
+                              @if (screeningCandidateDet.value['address'].addLine1 || screeningCandidateDet.value['address'].addLine2
+                                || screeningCandidateDet.value['address'].addLine3) {
+                                <span>,</span>
+                              }
+                            </em>
+                            <em>
+                              {{screeningCandidateDet.value['address'].city }}
+                              @if (screeningCandidateDet.value['address'].city && screeningCandidateDet.value['address'].place) {
+                                <span>,</span>
+                              }
+                              {{screeningCandidateDet.value['address'].place }}
+                              @if ((screeningCandidateDet.value['address'].city || screeningCandidateDet.value['address'].place)
+                                && screeningCandidateDet.value['address'].district) {
+                                <span>,</span>
+                              }
+                              {{screeningCandidateDet.value['address'].district }}
+                              @if (screeningCandidateDet.value['address'].city || screeningCandidateDet.value['address'].place
+                                || screeningCandidateDet.value['address'].district) {
+                                <span>,</span>
+                              }
+                            </em>
+                            <em>
+                              {{screeningCandidateDet.value['address'].state }}
+                              @if (screeningCandidateDet.value['address'].country) {
+                                <span>,</span>
+                              }
+                              {{screeningCandidateDet.value['address'].country ? screeningCandidateDet.value['address'].country : 'N/A'}}
+                              @if (screeningCandidateDet.value['address'].postalCode) {
+                                <span>-</span>
+                              }
+                              {{screeningCandidateDet.value['address'].postalCode }}
+                            </em>
+                          </p>
+                        </div>
+                        <!-- <div fxFlex="33.33%">
+                        <p>
+                          <label>Address Line2</label>
+                          <em>{{screeningCandidateDet.value['address'].addLine2 ? screeningCandidateDet.value['address'].addLine2 : 'N/A'}}</em>
+                        </p>
+                      </div> -->
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>Uan Number</label>
+                          <em
+                          class="email-elli">{{screeningCandidateDet.value['uan'] ? screeningCandidateDet.value['uan'] : 'N/A' }}</em>
+                        </p>
+                      </div>
+                      @if (directorshipPANMandatory) {
+                        <div fxFlex="33.33%" >
+                          <p>
+                            <label>Pan Number</label>
+                            <em
+                            class="email-elli">{{screeningCandidateDet.value['pan'] ? screeningCandidateDet.value['pan'] : 'N/A' }}</em>
+                          </p>
+                        </div>
+                      }
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>Best time to Visit the Address</label>
+                          <em
+                          class="email-elli">{{screeningCandidateDet.value['bestVisitAddress'] ? screeningCandidateDet.value['bestVisitAddress'] : 'N/A' }}</em>
+                        </p>
+                      </div>
+                      @if (screeningCandidateDet.get('ssnFlag')?.value == true && !directorshipPANMandatory) {
+                        <div fxFlex="33.33%">
+                          <p>
+                            <label>Ssn Number</label>
+                            <em
+                            class="email-elli">{{screeningCandidateDet.value['ssn'] ? screeningCandidateDet.value['ssn'] : 'N/A' }}</em>
+                          </p>
+                        </div>
+                      }
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+                      @if (screeningCandidateDet.get('ssnFlag')?.value == true && directorshipPANMandatory) {
+                        <div fxFlex="33.33%">
+                          <p>
+                            <label>Ssn Number</label>
+                            <em
+                            class="email-elli">{{screeningCandidateDet.value['ssn'] ? screeningCandidateDet.value['ssn'] : 'N/A' }}</em>
+                          </p>
+                        </div>
+                      }
+                    </div>
+                    <!-- <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+                    <div fxFlex="33.33%">
+                      <p>
+                        <label>Landmark</label>
+                        <em>{{screeningCandidateDet.value['address'].addLine3 ? screeningCandidateDet.value['address'].addLine3 : 'N/A'}}</em>
+                      </p>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <p>
+                        <label>Country</label>
+                        <em>{{screeningCandidateDet.value['address'].country ? screeningCandidateDet.value['address'].country : 'N/A'}}</em>
+                      </p>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <p>
+                        <label>State</label>
+                        <em>{{screeningCandidateDet.value['address'].state ? screeningCandidateDet.value['address'].state : 'N/A'}}</em>
+                      </p>
+                    </div>
+                  </div> -->
+                  <!-- <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+                  <div fxFlex="33.33%">
+                    <p>
+                      <label>District</label>
+                      <em>{{screeningCandidateDet.value['address'].district ? screeningCandidateDet.value['address'].district : 'N/A' }}</em>
+                    </p>
+                  </div>
+                  <div fxFlex="33.33%">
+                    <p>
+                      <label>City</label>
+                      <em>{{screeningCandidateDet.value['address'].city ? screeningCandidateDet.value['address'].city : 'N/A'}}</em>
+                    </p>
+                  </div>
+                  <div fxFlex="33.33%">
+                    <p>
+                      <label>Place</label>
+                      <em>{{screeningCandidateDet.value['address'].place ? screeningCandidateDet.value['address'].place : 'N/A'}}</em>
+                    </p>
+                  </div>
+                </div> -->
+                <!-- <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Zip Code</label>
+                    <em>{{screeningCandidateDet.value['address'].postalCode ? screeningCandidateDet.value['address'].postalCode : 'N/A'}}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%"></div>
+                <div fxFlex="33.33%"></div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      }
+      @if (employeeDetailsEdit) {
+        <div>
+          <form [formGroup]="screeningCandidateDet" autocomplete="off" id="ngForm">
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>First Name</mat-label>
+                  <input formControlName="firstName" maxlength="120" type="text" matInput placeholder="First Name">
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Middle Name</mat-label>
+                  <input formControlName="middleName" maxlength="120" type="text" matInput placeholder="Middle Name">
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Last Name</mat-label>
+                  <input formControlName="lastName" maxlength="120" type="text" matInput placeholder="Last Name">
+                </mat-form-field>
+              </div>
+            <!-- </div>
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid"> -->
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Date of Birth</mat-label>
+                  <input formControlName="dob" matInput [matDatepicker]="DOBdatePicker" [max]="common?.maxDob"
+                    placeholder="Date of Birth" (focus)="DOBdatePicker.open()" (click)="DOBdatePicker.open()"/>
+                  <mat-datepicker-toggle matSuffix [for]="DOBdatePicker">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #DOBdatePicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Father Name</mat-label>
+                  <input formControlName="fatherName" maxlength="100" type="text" matInput placeholder="Father Name">
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <div fxFlex="20%">
+                  @if (phoneCodeList.length >0) {
+                    <mat-form-field appearance="outline" fxFlex="100%">
+                      <mat-label>Code</mat-label>
+                      <input matInput placeholder="+000" formControlName="countryId" #code maxlength="100"
+                        (click)="code.select()" [matAutocomplete]="auto2" (focus)="setCodeItems(code.value)"
+                        (keyup)="codekeyUpFunction($event,code.value)" (input)="setCodeItems(code.value)" maxlength="100" />
+                      <mat-autocomplete #auto2="matAutocomplete" [panelWidth]="250" [displayWith]="displayCodeFn">
+                        @for (code of filterCodeList; track code) {
+                          <mat-option [value]="code.countryId">
+                            <span [innerHTML]="code.country| highlight: code.value">
+                            </span>
+                          </mat-option>
+                        }
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  }
+                </div>&nbsp;&nbsp;
+                <mat-form-field appearance="outline" fxFlex="80%">
+                  <mat-label>Contact Number</mat-label>
+                  <input formControlName="phoneNo" appNumberOnly [NumericValue]="false" minlength="10" maxlength="14" matInput
+                    placeholder="Contact Number" />
+                  <mat-icon matSuffix><i class="material-icons-outlined"> phone </i></mat-icon>
+                  @if (!!screeningCandidateDet.get('phoneNo')?.errors?.minlength) {
+                    <mat-error> Enter
+                      Atleast 10 Numbers
+                    </mat-error>
+                  }
+                  @if (!!screeningCandidateDet.get('phoneNo')?.errors?.pattern) {
+                    <mat-error> Enter valid
+                      Contact Numbers
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <div fxFlex="20%">
+                  @if (phoneCodeList.length >0) {
+                    <mat-form-field appearance="outline" fxFlex="100%">
+                      <mat-label>Code</mat-label>
+                      <input matInput placeholder="+000" formControlName="alternativeCountryId" #code maxlength="100"
+                        (click)="code.select()" [matAutocomplete]="auto2" (focus)="setCodeItems(code.value)"
+                        (keyup)="codekeyUpFunction($event,code.value)" (input)="setCodeItems(code.value)" maxlength="100" />
+                      <mat-autocomplete #auto2="matAutocomplete" [panelWidth]="250" [displayWith]="displayCodeFn">
+                        @for (code of filterCodeList; track code) {
+                          <mat-option [value]="code.countryId">
+                            <span [innerHTML]="code.country| highlight: code.value">
+                            </span>
+                          </mat-option>
+                        }
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  }
+                </div>&nbsp;&nbsp;
+                <mat-form-field  appearance="outline" fxFlex="80%">
+                  <mat-label>Alternative Contact No</mat-label>
+                  <input formControlName="alternativeContactNo" appNumberOnly [NumericValue]="false" minlength="10" maxlength="14" matInput
+                    placeholder="Alternate Contact Number" />
+                    <mat-icon matSuffix><i class="material-icons-outlined"> phone </i></mat-icon>
+                    @if (!!screeningCandidateDet.get('alternativeContactNo')?.errors?.minlength) {
+                      <mat-error> Enter
+                        Atleast 10 Numbers
+                      </mat-error>
+                    }
+                    @if (!!screeningCandidateDet.get('alternativeContactNo')?.errors?.pattern) {
+                      <mat-error> Enter valid
+                        Alternative Contact Numbers
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Email ID</mat-label>
+                    <input formControlName="email" maxlength="100" matInput type="email" placeholder="Email ID" />
+                    @if (!!screeningCandidateDet.get( 'email')?.errors?.pattern ||
+                      !!screeningCandidateDet.get('email')?.errors?.email) {
+                      <mat-error> Please enter valid email. </mat-error>
+                    }
+                    <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-label class="lbl">Gender</mat-label>
+                  <mat-radio-group formControlName="genderLookupId" aria-label="Select an option" fxLayoutGap="20px">
+                    @for (gender of genderDetails; track gender) {
+                      <mat-radio-button [value]="gender.lookUpId" fxLayoutGap="20px">
+                        {{gender.lookUpName}}
+                      </mat-radio-button>
+                    }
+                  </mat-radio-group>
+                </div>
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Marital Status</mat-label>
+                    <mat-select formControlName="maritalStatusLookupId" placeholder="Marital Status"  (selectionChange)="maritalStatusList($event.value);setSpouseValue($event.value)">
+                      @for (marital of maritalStatus; track marital) {
+                        <mat-option [value]="marital.lookUpId"> {{ marital.lookUpName }} </mat-option>
+                      }
+                    </mat-select>
+                    <!-- <mat-error *ngIf="!maritalStatus?.invalid">maritalStatus is required</mat-error> -->
+                  </mat-form-field>
+                </div>
+                @if ((screeningCandidateDet.get('maritalStatusLookupId').value) === common.DIVORCED || (screeningCandidateDet.get('maritalStatusLookupId').value) === common.MARRIED || (screeningCandidateDet.get('maritalStatusLookupId').value) === common.SEPERATED) {
+                  <div  fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%"
+                    fxFlex.sm="100%" fxFlex.xs="100%" >
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Spouse Name</mat-label>
+                    <input formControlName="spouseName" #spouseValue autocomplete="off" role="presentation"
+                      type="text" matInput placeholder="Spouse Name">
+                  </mat-form-field>
+                </div>
+              }
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>UAN Number</mat-label>
+                  <input formControlName="uan" #uanValue autocomplete="off" role="presentation" maxlength="12" minlength="12"
+                    type="text" matInput placeholder="UAN Number"  appNumberOnly [PhoneNumber]="false" (keyup)="uanValue.value = uanValue.value.toUpperCase()">
+                  <mat-hint class="f-13">[UAN must be 12 digits]<br/></mat-hint>
+                  @if (!!screeningCandidateDet.get('uan')?.errors?.minlength) {
+                    <mat-error>
+                    UAN Number should contain 12 Digit</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Best time to Visit the Address</mat-label>
+                  <input formControlName="bestVisitAddress" #bestVisitAddress autocomplete="off" role="presentation" maxlength="100"
+                    type="text" matInput placeholder="Best time to Visit the Address">
+                </mat-form-field>
+              </div>
+            </div>
+            <div  fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+              @if (screeningCandidateDet.get('ssnFlag')?.value == true) {
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>SSN Number</mat-label>
+                    <input formControlName="ssn" #bestVisitAddress autocomplete="off" role="presentation" minlength="9" maxlength="9" appNumberOnly [PhoneNumber]="false"
+                      type="text" matInput placeholder="SSN Number">
+                    <mat-hint class="f-13">[SSN must be 9 digits]<br/></mat-hint>
+                    @if (!!screeningCandidateDet.get('ssn')?.errors?.minlength) {
+                      <mat-error>
+                      SSN must be 9 digits</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+            </div>
+            <!-- <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="33.3%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Email ID</mat-label>
+                <input formControlName="email" maxlength="50" matInput type="email" placeholder="Email ID" />
+                <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.3%"></div>
+            <div fxFlex="33.3%"></div>
+          </div> -->
+          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid">
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <app-address [addressList]="address" [addressformgrp]="screeningCandidateDet"></app-address>
+            </div>
+          </div>
+        </form>
+      </div>
+    }
+
+    @if ((userData.applicationId !== 2) && (userData.subTeamName !== common.COMMONSUBCAMTEAM) && (userData.teamName !== common.COMMONCRTTEAM) &&
+      common.VE === false) {
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div class="d-view">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3>Case Details</h3>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Case Priority <span class="text-sm FloatR text-cap"><a
+                  (click)='opendialog()'>Change</a></span></label>
+                  <em>{{verificationCaseDet.value['casePriorityName'] ? verificationCaseDet.value['casePriorityName'] : 'N/A'}}</em>
+                </p>
+                <!-- <mat-form-field *ngIf='caseDetailsEdit' appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Case Priority</mat-label>
+                <mat-select [(ngModel)]="priorityLookup" matNativeControl>
+                  <mat-option *ngFor='let cp of casePriority' value="{{cp}}">{{cp.lookUpName}}</mat-option>
+                </mat-select>
+              </mat-form-field> -->
+            </div>
+            <div fxFlex="33.33%">
+              <p>
+                <label>Applicant ID</label>
+                <em>{{verificationForm.value['applicationId'] ? verificationForm.value['applicationId'] : 'N/A'}}</em>
+                <!-- <em>{{verificationCaseDet.value['applicationId'] ? verificationCaseDet.value['applicationId'] : 'N/A'}}</em> -->
+              </p>
+            </div>
+            <div fxFlex="33.33%">
+              <p>
+                <label>Case Status </label>
+                <em>{{verificationCaseDet.value['caseStatusName'] ? verificationCaseDet.value['caseStatusName'] : 'N/A'}}</em>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</mat-card-content>
+
+
+
+</div>
+</div>
+<ng-template #assignPopUp>
+  <h1 mat-dialog-title>Case Priority</h1>
+  <mat-dialog-content>
+    <p class="text-sm text-dull text-ilatic mt-0">
+      Assign the below Case Priority to following Verification Reference no.:
+      <span class="text-bold">{{casePriorityControl?.value?.lookUpName}}</span>
+    </p>
+    <form autocomplete="off" id="ngForm">
+      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+        <mat-label></mat-label>
+        <mat-select [formControl]="casePriorityControl" placeholder="Select Case Priority">
+          <mat-option>Select Case Priority</mat-option>
+          @for (priority of casePriority; track priority) {
+            <mat-option #id [value]="priority">
+              {{ priority.lookUpName }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (casePriorityControl.errors) {
+          <mat-error>Case Priority is required</mat-error>
+        }
+      </mat-form-field>
+    </form>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+    <button mat-stroked-button (click)="dialogClose()">No</button>
+    <button mat-flat-button color="warn" (click)="updateCaseDetails(casePriorityControl.value)">
+      Submit
+    </button>
+  </mat-dialog-actions>
+</ng-template>

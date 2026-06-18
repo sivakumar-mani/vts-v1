@@ -1,0 +1,43 @@
+<input type="hidden" #selection>
+
+<div class="card-container">
+    <button class="card card-small" (click)="selection.value = 'image'" tabindex="0">
+        <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+        </svg>
+        <span>Live Image</span>
+    </button>
+    <button class="card card-small" (click)="selection.value = 'video'" tabindex="0">
+        <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+        </svg>
+        <span>Live Video</span>
+    </button>
+    <button class="card card-small" (click)="selection.value = 'sign'" tabindex="0">
+        <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+        </svg>
+        <span>Live Signature</span>
+    </button>
+    <button class="card card-small" (click)="selection.value = 'scan'" tabindex="0">
+        <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+        </svg>
+        <span>QR code scanner</span>
+    </button>
+    <button class="card card-small" (click)="selection.value = 'map'" tabindex="0">
+        <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+        </svg>
+        <span>Live Location</span>
+    </button>
+</div>
+
+<!-- Terminal -->
+<!-- <div class="terminal" [ngSwitch]="selection.value">
+    <app-image *ngSwitchDefault></app-image>
+    <app-video *ngSwitchCase="'video'"></app-video>
+    <app-signature *ngSwitchCase="'sign'"></app-signature>
+    <app-scanner *ngSwitchCase="'scan'"></app-scanner>
+    <app-location style="width:100%" *ngSwitchCase="'map'"></app-location>
+</div> -->

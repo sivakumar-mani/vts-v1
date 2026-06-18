@@ -1,0 +1,698 @@
+﻿<div fxLayout="row">
+  <div fxFlex="100%">
+    <form id='ngForm' [formGroup]="agentEntryMasterService.clientEntryForm" autocomplete="off">
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="48%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+              <mat-label>Client Name</mat-label>
+              <input type="text" maxlength="100" formControlName="clientName" #cName matInput placeholder="Client Name"
+                (blur)="checkClientName(cName.value)" autocomplete="off" role="presentation" required>
+                @if (!!agentEntryMasterService.clientEntryForm?.get('clientName')?.errors?.required) {
+                  <mat-error> Client
+                  name is required </mat-error>
+                }
+                @if (!!agentEntryMasterService.clientEntryForm?.get('clientName')?.errors?.incorrect) {
+                  <mat-error> The
+                  Client Name was already exist </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="21%" fxFlex.sm="100%" fxFlex.xs="100%" ngClass.sm="mb-15" ngClass.xs="mb-15">
+              <mat-label class="lbl">Site</mat-label>
+              <mat-checkbox formControlName="siteCreationFlag" [disabled]="agentEntryMasterService.clientid > 0"
+              (change)="checkSite($event)">Client has site</mat-checkbox>
+            </div>
+            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="31%" fxFlex.sm="100%" fxFlex.xs="100%" ngClass.sm="mb-15" ngClass.xs="mb-15">
+              <mat-radio-group formControlName="indianClientFlag" aria-label="Select an option"
+                [disabled]="agentEntryMasterService.clientid > 0" fxLayoutGap="20px"
+                (change)="onTypeChange($event.value);addressValidation(false)"
+                matTooltip="Do you want required field for Applicant Id Column Name,Ref No Prefix,Retension Policy Days" matTooltipClass="accent-tooltip" >
+                <mat-label class="lbl">Do you want required field?</mat-label>
+                <mat-radio-button [value]="true">Yes</mat-radio-button>
+                <mat-radio-button [value]="false">No</mat-radio-button>
+              </mat-radio-group>
+              @if (!!agentEntryMasterService.clientEntryForm?.get('indianClientFlag')?.errors?.required) {
+                <mat-error> Select one</mat-error>
+              }
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+              <h3 class="sub-header">Address Details</h3>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="100%">
+              <app-address #addressComp [addressList]="agentEntryMasterService.address"
+              (eventValidation)="addressValidation(false)" [addressformgrp]="agentEntryMasterService?.clientEntryForm"> </app-address>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+              <h3 class="sub-header">Contact Details</h3>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                <mat-label>Contact Person</mat-label>
+                <input formControlName="contactPerson" maxlength="75" autocomplete="off" role="presentation" matInput
+                  placeholder="Contact Person" required>
+                  @if (!!agentEntryMasterService.clientEntryForm?.get('contactPerson')?.errors?.required) {
+                    <mat-error> Contact person is required </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                  <mat-label>Mobile Number</mat-label>
+                  <input formControlName="mobileNo" autocomplete="off" #mobnum preventDragdrop role="presentation"
+                    type="text" matInput appNumberOnly [NumericValue]="false" maxlength="14" minlength="10"
+                    placeholder="Mobile Number">
+                    <mat-icon matSuffix><i class="material-icons-outlined"> phone_iphone </i></mat-icon>
+                    @if (!!agentEntryMasterService.clientEntryForm?.get('mobileNo')?.errors?.minlength) {
+                      <mat-error> Enter
+                      atleast 10 numbers </mat-error>
+                    }
+                    @if (!!agentEntryMasterService.clientEntryForm?.get('mobileNo')?.errors?.pattern) {
+                      <mat-error> The
+                      Mobile Number is Invalid</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Phone Number</mat-label>
+                    <input formControlName="phoneNumber" type="text" #phnnum preventDragdrop autocomplete="off"
+                      role="presentation" appNumberOnly [NumericValue]="false" maxlength="14" minlength="10" matInput
+                      placeholder="Phone Number" required>
+                      <mat-icon matSuffix><i class="material-icons-outlined"> phone </i></mat-icon>
+                      @if (!!agentEntryMasterService.clientEntryForm?.get('phoneNumber')?.errors?.required) {
+                        <mat-error> Phone
+                        number is required </mat-error>
+                      }
+                      @if (!!agentEntryMasterService.clientEntryForm?.get('phoneNumber')?.errors?.minlength) {
+                        <mat-error> Enter
+                        atleast 10 numbers </mat-error>
+                      }
+                      @if (!!agentEntryMasterService.clientEntryForm?.get('phoneNumber')?.errors?.pattern) {
+                        <mat-error> The
+                        Phone Number is Invalid</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                      <mat-label>Email Id</mat-label>
+                      <input formControlName="emailId" maxlength="50" autocomplete="off" role="presentation" type="email"
+                        matInput placeholder="Email Id" required>
+                        <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+                        @if (!!agentEntryMasterService.clientEntryForm?.get('emailId')?.errors?.required) {
+                          <mat-error> Email id
+                          is required </mat-error>
+                        }
+                        @if (!!agentEntryMasterService.clientEntryForm?.get('emailId')?.errors?.pattern) {
+                          <mat-error> Enter Valid
+                          Email </mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <!-- 10/09/2023 - added by Vignesh M - New Requirement This field has to be created in the client creation page and same has to be shown in the report  -->
+
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="100%">
+                      <h3 class="sub-header">Sales Person Details</h3>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                        <mat-label>Sales Person Detail</mat-label>
+                        <input formControlName="salesPerson" maxlength="75" autocomplete="off" role="presentation" matInput
+                          placeholder="Sales Person" required>
+                          @if (!!agentEntryMasterService.clientEntryForm?.get('SalesPerson')?.errors?.required) {
+                            <mat-error> Sales person is required </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="100%">
+                        <h3 class="sub-header">Billing Details</h3>
+                      </div>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                          <mat-label>Select Billing Cycle</mat-label>
+                          <mat-select formControlName="billingCycle" placeholder="Select Billing Cycle"
+                            (selectionChange)="billingCycle($event.value)" required>
+                            @for (billingCycle of clientMaster?.billingCycle; track billingCycle) {
+                              <mat-option [value]="billingCycle.lookUpId"> {{billingCycle.lookUpName}} </mat-option>
+                            }
+                          </mat-select>
+                          @if (!!agentEntryMasterService.clientEntryForm?.get('billingCycle')?.errors?.required) {
+                            <mat-error> Billing cycle is required </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                          <mat-label>Select Billing Rule</mat-label>
+                          <mat-select formControlName="billingRule" placeholder="Select Billing Rule"
+                            (selectionChange)="billingRule($event.value)" required>
+                            @for (billingRule of clientMaster?.billingRule; track billingRule) {
+                              <mat-option [value]="billingRule.lookUpId"> {{billingRule.lookUpName}} </mat-option>
+                            }
+                          </mat-select>
+                          @if (!!agentEntryMasterService.clientEntryForm?.get('billingRule')?.errors?.required) {
+                            <mat-error> Billing rule is required </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                          <mat-label>Select Billing Type</mat-label>
+                          <mat-select formControlName="billingType" placeholder="Select Billing Type"
+                            (selectionChange)="billingType($event.value)" required>
+                            @for (billingType of clientMaster?.billingType; track billingType) {
+                              <mat-option [value]="billingType.lookUpId"> {{billingType.lookUpName}} </mat-option>
+                            }
+                          </mat-select>
+                          @if (!!agentEntryMasterService.clientEntryForm?.get('billingType')?.errors?.required) {
+                            <mat-error> Billing type is required </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      @if (agentEntryMasterService.clientEntryForm?.get('siteCreationFlag').value === false) {
+                        <div
+                          fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                            <mat-label>GST No</mat-label>
+                            <input class="text-upp" formControlName="gstNumber" autocomplete="off" role="presentation" type="text"
+                              maxlength="15" matInput placeholder="GST No">
+                              @if (!!agentEntryMasterService.clientEntryForm?.get('gstNumber')?.errors?.required) {
+                                <mat-error> GST No
+                                is required </mat-error>
+                              }
+                              @if (!!agentEntryMasterService.clientEntryForm?.get('gstNumber')?.errors?.minlength) {
+                                <mat-error> Enter
+                                atleast 15 characters </mat-error>
+                              }
+                            </mat-form-field>
+                          </div>
+                        }
+                      </div>
+                      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="100%">
+                          <h3 class="sub-header">Additional Details</h3>
+                        </div>
+                      </div>
+                      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+                        fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div><mat-checkbox formControlName="formatFlag" (change)="checkChange($event.checked)">Do you want Reference Number Format?</mat-checkbox></div>
+                      </div><br>
+                      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                            <mat-label>Applicant ID Column Name</mat-label>
+                            <input formControlName="applicantIdColumnName" maxlength="50" type="text" minlength="3" preventDragdrop
+                              preventCutCopyPaste appNumberOnly [patternCheck]="false" autocomplete="off" role="presentation" matInput
+                              placeholder="Applicant ID Column Name" [required]="agentEntryMasterService.clientEntryForm?.get('applicantIdColumnName')?.errors?.required">
+                              @if (!!agentEntryMasterService.clientEntryForm?.get('applicantIdColumnName')?.errors?.required) {
+                                <mat-error
+                                > Applicant ID column name is required </mat-error>
+                              }
+                              @if (!!agentEntryMasterService.clientEntryForm?.get('applicantIdColumnName')?.errors?.minlength) {
+                                <mat-error
+                                > Enter atleast 3 characters </mat-error>
+                              }
+                            </mat-form-field>
+                          </div>
+                          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                              <mat-label>Select Final Report Type</mat-label>
+                              <mat-select formControlName="finalReportType" placeholder="Select Final Report Type"
+                                (selectionChange)="reportType($event.value)" required> @for (finalReportType of clientMaster?.finalReportType; track finalReportType; let i = $index) {
+                                <span>
+                                  <mat-option [value]="finalReportType.lookUpId"> {{finalReportType.lookUpName}} </mat-option>
+                                </span>
+                              } </mat-select>
+                              @if (!!agentEntryMasterService.clientEntryForm?.get('finalReportType')?.errors?.required) {
+                                <mat-error> Final Report Type is required </mat-error>
+                              }
+                            </mat-form-field>
+                          </div>
+                          <!-- <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                            <mat-label>No. of Address for Criminal Check</mat-label>
+                            <input autocomplete="off" role="presentation" preventDragdrop preventCutCopyPaste
+                              formControlName="noOfAddressForCriminalCheck" appNumberOnly [PhoneNumber]="false" maxlength="1"
+                              type="text" matInput placeholder="No. of Address for Criminal Check">
+                              <mat-error
+                *ngIf="!!agentEntryMasterService.clientEntryForm?.get('noOfAddressForCriminalCheck')?.errors?.min ||
+                                           !!agentEntryMasterService.clientEntryForm?.get('noOfAddressForCriminalCheck')?.errors?.max">
+                                (Min
+                              1 - Max 4) </mat-error>
+                            </mat-form-field>
+                          </div> -->
+                          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                              <mat-label>Retention Policy Days</mat-label>
+                              <input formControlName="retentionPolicyDays" type="text" preventDragdrop preventCutCopyPaste
+                                autocomplete="off" role="presentation" appNumberOnly [PhoneNumber]="false" maxlength="3" matInput
+                                placeholder="Retention Policy Days" (blur)="checkValidValue()" [required]="agentEntryMasterService.clientEntryForm?.get('retentionPolicyDays')?.errors?.required">
+                                @if (!!agentEntryMasterService.clientEntryForm?.get('retentionPolicyDays')?.errors?.required) {
+                                  <mat-error
+                                  > Retention Policy Days is required </mat-error>
+                                }
+                                @if (!!agentEntryMasterService.clientEntryForm?.get('retentionPolicyDays')?.errors?.incorrect) {
+                                  <mat-error
+                                  > Retention Policy Days are greater than or equal to 90</mat-error>
+                                }
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                            @if (agentEntryMasterService.clientEntryForm?.get('indianClientFlag').value === true) {
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                >
+                                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                  <mat-label>PAN Number</mat-label>
+                                  <input class="text-upp" formControlName="panNo" autocomplete="off" role="presentation" maxlength="10"
+                                    type="text" matInput placeholder="PAN Number">
+                                    @if (!!agentEntryMasterService.clientEntryForm?.get('panNo')?.errors?.minlength) {
+                                      <mat-error> Enter
+                                      atleast 10 characters</mat-error>
+                                    }
+                                  </mat-form-field>
+                                </div>
+                              }
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                  <mat-label>GST Number</mat-label>  <!-- Service Tax Number -->
+                                  <input class="text-upp" formControlName="serviceTaxNo" type="text" maxlength="15" autocomplete="off"
+                                    role="presentation" matInput placeholder="GST Number">
+                                    @if (!!agentEntryMasterService.clientEntryForm?.get('serviceTaxNo')?.errors?.minlength) {
+                                      <mat-error> Enter atleast 15 characters </mat-error>
+                                    }
+                                  </mat-form-field>
+                                </div>
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                    <mat-label>Ref Number Prefix</mat-label>
+                                    <input class="text-upp" autocomplete="off" inputfocus role="presentation" preventDragdrop
+                                      [required]="agentEntryMasterService.clientEntryForm?.get('refNoPrefix')?.errors?.required"
+                                      preventCutCopyPaste formControlName="refNoPrefix" #cRefNo maxlength="7" appNumberOnly matInput
+                                      [patternText]="false" placeholder="Ref Number Prefix" (blur)="checkClientRefPrefixNo(cRefNo.value)">
+                                      @if (agentEntryMasterService.clientEntryForm?.get('formatFlag').value === true) {
+                                        <mat-hint class="f-13">Eg:XX-XXX-</mat-hint>
+                                      }
+                                      @if (!!agentEntryMasterService.clientEntryForm?.get('refNoPrefix')?.errors?.required) {
+                                        <mat-error> Ref
+                                        Number Prefix is required</mat-error>
+                                      }
+                                      @if (!!agentEntryMasterService.clientEntryForm?.get('refNoPrefix')?.errors?.incorrect) {
+                                        <mat-error> The
+                                        Ref Number Prefix was already exist</mat-error>
+                                      }
+                                      @if (!!agentEntryMasterService.clientEntryForm?.get('refNoPrefix')?.errors?.pattern &&
+                                        agentEntryMasterService.clientEntryForm?.get('formatFlag').value === true) {
+                                        <mat-error>Ref
+                                        Number is invalid Eg:XX-XXX-</mat-error>
+                                      }
+                                    </mat-form-field>
+                                  </div>
+                                  <!-- <div fxFlex="33.33%">
+                                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                    <mat-label>TAT Count</mat-label>
+                                    <input formControlName="tatCount" autocomplete="off" role="presentation" type="text" preventDragdrop preventCutCopyPaste appNumberOnly [PhoneNumber]="false" maxlength="2" matInput placeholder="TAT Count">
+                                    <mat-error *ngIf="!!agentEntryMasterService.clientEntryForm?.get('tatCount')?.errors?.required"> TAT count is required </mat-error>
+                                  <mat-error *ngIf="!!agentEntryMasterService.clientEntryForm?.get('tatCount')?.errors?.min ||
+                                   !!agentEntryMasterService.clientEntryForm?.get('tatCount')?.errors?.max"> (Min 1 - Max 15) </mat-error>
+                                  </mat-form-field>
+                                </div> -->
+                              </div>
+                              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="50px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                <div  ngClass.sm="mb-15" ngClass.xs="mb-15">
+                                  <mat-label class="lbl">Active</mat-label>
+                                  <mat-checkbox formControlName="isActive">Is Active</mat-checkbox>
+                                </div>
+                                <div fxLayoutGap="20px" >
+                                  <mat-label class="lbl">Choose</mat-label>
+                                  <mat-checkbox formControlName="annexureLink">Annexure link</mat-checkbox>
+                                  <mat-checkbox formControlName="invitationOptionToCRT">Invitation</mat-checkbox>
+                                  <mat-checkbox formControlName="refNoManuallyFlag">Assign reference number manually</mat-checkbox>
+                                  <mat-checkbox formControlName="displaySiteNameFlag">Display site name in report</mat-checkbox>
+                                  <mat-checkbox formControlName="chargeCodeFlag">Display Charge code in report</mat-checkbox>
+                                  <mat-checkbox formControlName="paymentFlag">Payment In Verification</mat-checkbox>
+                                  <mat-checkbox formControlName="approvalLimitFlag">Approval For Invitation</mat-checkbox>
+                                  <mat-checkbox formControlName="caseByPassFlag">Case By-Pass</mat-checkbox>
+                                  <mat-checkbox formControlName="caseDatesFlag">Case Creation Date's </mat-checkbox>
+                                  <mat-checkbox formControlName="calendarDaysTATFlag">Calendar Days Tat</mat-checkbox>
+                                  <mat-checkbox formControlName="caseCountryFlag">Case Country</mat-checkbox>
+                                  <mat-checkbox formControlName="caseTypeFlag">Case Type</mat-checkbox>
+                                </div>
+                              </div>
+                              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                                fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" class="mt-10">
+                                <div fxFlex="100%">
+                                  <h3 class="sub-header">Client Colour Status Details</h3>
+                                </div>
+                              </div>
+                              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                <div fxFlex="75%"> <span class="p-float-label">
+                                  <p-multiSelect fxFlex="100%" [options]="clientMaster?.colorStatus" formControlName="clientColorStatus" optionLabel="lookUpName"
+                                    filterPlaceHolder="Select Client Color Status" selectedItemsLabel="{0} Client Color Status selected"
+                                    [style]="{XminWidth: '250px', width:'100%'}" defaultLabel="Select Client Color Status"
+                                    [showHeader]="true">
+                                  </p-multiSelect>
+                                  <label class="lbl-float">Client Color Status</label>
+                                  @if (!!agentEntryMasterService.clientEntryForm?.get('clientColorStatus')?.errors?.required &&
+                                    agentEntryMasterService.clientEntryForm?.get('clientColorStatus')?.touched) {
+                                    <mat-error>
+                                    Client Color Status is required. </mat-error>
+                                  }
+                                </span>
+                              </div>
+                              <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutGap="20px"  ngClass.sm="mb-15" ngClass.xs="mb-15">
+                                <mat-label class="lbl">Contact Remarks</mat-label>
+                                <mat-checkbox formControlName="contactRemarkFlag">Contact Remarks</mat-checkbox>
+                              </div>
+                            </div>
+
+
+
+                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                              fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                              <div fxFlex="100%">
+                                <h3 class="sub-header">Document Details</h3>
+                              </div>
+                            </div>
+                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                              fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                              <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                <div fxLayout="row">
+                                  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                      <mat-label>Select Document Type</mat-label>
+                                      <mat-select placeholder="Document Type" formControlName="docType" (selectionChange)="supDocTypeChange($event)">
+                                        @for (type of clientMaster?.logoType; track type; let i = $index) {
+                                          <mat-option [value]="type.lookUpId">
+                                          {{type.lookUpName}} </mat-option>
+                                        }
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                @if (logoType(this.agentEntryMasterService?.clientEntryForm?.get('docType').value)?.includes('Signature')) {
+                                  <div fxLayout="row">
+                                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                        <mat-label>Select Signature Type</mat-label>
+                                        <mat-select placeholder="Signature Type" formControlName="signatureLookUpId" (selectionChange)="signTypeChange($event)">
+                                          @for (sign of clientMaster?.signatureType; track sign; let i = $index) {
+                                            <mat-option [value]="sign.lookUpId">
+                                            {{sign.lookUpName}} </mat-option>
+                                          }
+                                        </mat-select>
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                }
+                              </div>
+                              <div fxFlex="66.6%" fxFlex.lg="66.6%" fxFlex.md="66.6%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                <div fxFlex="100%" class="file-container">
+                                  <mat-label class="lbl pb-5">Upload Logo Images</mat-label>
+                                  <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                                here...</span>
+                                <input type="file" #fileInput (change)="openLogoDoc($event, this.agentEntryMasterService.clientEntryForm.get('docType').value)" formControlName="supportingDocument"
+                                  accept="image/x-png,image/gif,image/jpeg">
+                                </div>
+                                <!-- <div *ngIf="signatureDrpDwn">
+                                <mat-label class="lbl pb-5">Upload Signature Images</mat-label>
+                                <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                              here...</span>
+                              <input type="file" #fileInput (change)='openUploadDoc($event,"signature")' formControlName="signatureDocument"
+                                accept="image/x-png,image/gif,image/jpeg">
+                              </div>
+                            </div> -->
+                            <div class="file-names mt-10">
+                              @for (document of this.agentEntryMasterService.clientEntryForm.controls.clientLogo.value; track document; let i = $index) {
+                                <div class="file-upload-files">
+                                  <mat-label class="text-semi-bold "> {{(document.isSignature === false ? logoType(document.logoLookupId) : (logoType(document.logoLookupId) + ' - ' + signatureType(document.signatureLookupId))) + '  :  ' }} </mat-label>
+                                  @if (document.fileName) {
+                                    <a (click)="downloadLogoDoc(document)"
+                                    routerLinkActive="active-link">{{document.fileName}}</a>
+                                  }
+                                  <!-- <span *ngIf="!document.fileName"
+                                class="red text-semi-bold">{{document.isReq}}</span> -->
+                                <button type="button" class="close" aria-label="Close" (click)="removeLogoDoc(i)"> <span
+                                aria-hidden="true">&times;</span></button>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+
+
+
+                    <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="100%">
+                      <h3 class="sub-header">Document Details</h3>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxLayout="row">
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Select Document Type</mat-label>
+                            <mat-select placeholder="Select Type" formControlName="docType"
+                              (selectionChange)="reminderChange($event.value,$event)">
+                              <mat-option *ngFor="let typ of imgType;let i=index;" [value]="typ.value" [disabled]="typ.isDisable">
+                              {{typ.value}} </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div fxLayout="row" *ngIf="signatureDrpDwn">
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Signature Type</mat-label>
+                            <mat-select placeholder="Signature Type" formControlName="signatureLookUpId"
+                              (selectionChange)="reminderSignChange($event.value,$event)">
+                              <mat-option *ngFor="let lkp of signatureTypeList;let i=index;" [value]="lkp.lookUpId"
+                              [disabled]="lkp.disabled"> {{lkp.lookUpName}} </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxFlex="66.6%" fxFlex.lg="66.6%" fxFlex.md="66.6%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxFlex="100%" class="file-container">
+                        <div *ngIf="!signatureDrpDwn">
+                          <mat-label class="lbl pb-5">Upload Logo Images</mat-label>
+                          <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                        here...</span>
+                        <input type="file" #fileInput (change)='openUploadDoc($event,"document")' formControlName="supportingDocument"
+                          accept="image/x-png,image/gif,image/jpeg">
+                        </div>
+                      </div>
+                      <div *ngIf="signatureDrpDwn">
+                        <mat-label class="lbl pb-5">Upload Signature Images</mat-label>
+                        <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                      here...</span>
+                      <input type="file" #fileInput (change)='openUploadDoc($event,"signature")' formControlName="signatureDocument"
+                        accept="image/x-png,image/gif,image/jpeg">
+                      </div>
+                    </div>
+                    <div class="file-names mt-10">
+                      <div class="file-upload-files" *ngFor="let document of fileArray;let i=index">
+                        <mat-label class="text-semi-bold "> {{document.fileType+'  :  ' }} </mat-label>
+                        <a *ngIf="document.fileName" (click)="downloadFile(document,document.fileName,document.docId)"
+                        routerLinkActive="active-link">{{document.fileName}}</a> <span *ngIf="!document.fileName"
+                      class="red text-semi-bold">{{document.isReq}}</span>
+                      <button type="button" class="close" aria-label="Close" (click)="removeDocument(i)" [disabled]="isView"> <span
+                      aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div *ngIf="signatureDrpDwnDtl">
+                      <div class="file-upload-files" *ngFor="let document of signatureArray;let i=index">
+                        <mat-label class="text-semi-bold "> {{document.signatureType+'   :  '}} </mat-label>
+                        <a *ngIf="document.fileName" (click)="downloadFile(document,document.fileName,document.signatureDocId)"
+                        routerLinkActive="active-link">{{document.fileName}}</a> <span *ngIf="!document.fileName"
+                      class="red text-semi-bold">{{document.isReq}}</span>
+                      <button type="button" class="close" aria-label="Close" (click)="removeSignDocument(i)" [disabled]="isView">
+                        <span aria-hidden="true">&times;</span></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+
+
+
+
+
+
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" class="mt-10">
+              <div fxFlex="100%">
+                <h3 class="sub-header">Details of Krya Screening Private Limited</h3>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <!-- <div fxFlex="50%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Select DSSI Owner</mat-label>
+                <input matInput placeholder="Select DSSI Owner" formControlName="owner" [matAutocomplete]="autoOwner"
+                  #ownerInput (focus)="ownerItems(ownerInput.value)" (keyup)="ownerKeyupFunction($event,ownerInput.value)"
+                  (input)="ownerItems(ownerInput.value)" (click)="ownerInput.select()" (blur)="checkValidOwner()">
+                  <mat-error *ngIf="agentEntryMasterService.clientEntryForm?.get('owner')?.errors?.incorrect">This is not
+                  a valid value</mat-error>
+                  <mat-autocomplete #autoOwner="matAutocomplete" [displayWith]="displayownerFn" (optionSelected)="selectowner($event.option.value)">
+                    <mat-option>-------Select DSSI Owner-------</mat-option>
+                    <mat-option [value]="owner.userId" *ngFor="let owner of ownerfilterlist " class="autocom-option autocom-tr"> <span [innerHTML]="owner.firstName + ' ' + owner.lastName | highlight: ownerInput.value"> </span> </mat-option>
+                    <mat-option *ngIf="ownerfilterlist?.length==0" class="no-records"> <span>No Record Found</span> </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div> -->
+              <!-- <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+              <mat-label>Select Client Account Manager</mat-label>
+              <mat-select formControlName="clientAccountManager" placeholder="Select Client Account Manager"
+                (selectionChange)="managerChange($event.value)">
+                <mat-option>-------Select Client Account Manager-------</mat-option>
+                <mat-option *ngFor="let accountManager of clientMaster?.accountManager" [value]="accountManager.userId">
+                {{accountManager.firstName + " " +accountManager.lastName}} </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="!!agentEntryMasterService.clientEntryForm?.get('clientAccountManager')?.errors?.required"> Client
+              account manager is required </mat-error>
+            </mat-form-field> -->
+
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <app-auto-complete [selectProperties]="accManagerControls" (selectionChange)="managerChange($event)"> </app-auto-complete>
+            </div>
+
+            <!-- <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Select Client Account Manager</mat-label>
+              <input type="text" matInput placeholder="Select Client Account Manager"
+                formControlName="clientAccountManager" [matAutocomplete]="autoaccmanager" #accInput
+                (focus)="accItems(accInput.value)" (keyup)="accKeyupFunction($event, accInput.value)"
+                (blur)="checkValidacc()" (input)="accItems(accInput.value)" (click)="accInput.select()"
+                autocomplete="off" role="presentation" required />
+                <mat-error
+                  *ngIf="!!agentEntryMasterService.clientEntryForm?.get('clientAccountManager')?.errors?.required"> Client
+                account manager is required</mat-error>
+                <mat-error
+                  *ngIf="!!agentEntryMasterService.clientEntryForm?.get('clientAccountManager')?.errors?.incorrect"> This
+                is not a valid value</mat-error>
+                <mat-autocomplete #autoaccmanager="matAutocomplete" [displayWith]="displayaccFn"
+                  (optionSelected)="selectacc($event.option.value)">
+                  <mat-option [value]="acc.userId" *ngFor="let acc of accmanager" class="autocom-option autocom-tr"> <span
+                  [innerHTML]="acc.firstName + ' ' + acc.lastName | highlight: accInput.value"></span> </mat-option>
+                  <mat-option *ngIf="accmanager.length == 0">
+                    <div class="no-record"><span>No Data Found</span></div>
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div> -->
+
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                <mat-label>TO Email ID</mat-label>
+                <input formControlName="toEmailId" maxlength="50" autocomplete="off" role="presentation" type="email"
+                  matInput placeholder="To Email ID" required>
+                  <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+                  @if (!!agentEntryMasterService.clientEntryForm?.get('toEmailId')?.errors?.required) {
+                    <mat-error> TO Email
+                    ID is required </mat-error>
+                  }
+                  @if (!!agentEntryMasterService.clientEntryForm?.get('toEmailId')?.errors?.pattern) {
+                    <mat-error> Enter
+                    Valid Email ID </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                  <mat-label>CC Email ID</mat-label>
+                  <input formControlName="ccEmailID" maxlength="50" autocomplete="off" role="presentation" type="email"
+                    matInput placeholder="CC Email ID" required>
+                    <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+                    @if (!!agentEntryMasterService.clientEntryForm?.get('ccEmailID')?.errors?.required) {
+                      <mat-error> CC Email
+                      ID is required </mat-error>
+                    }
+                    @if (!!agentEntryMasterService.clientEntryForm?.get('ccEmailID')?.errors?.pattern) {
+                      <mat-error> Enter
+                      Valid Email </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Mobile Number</mat-label>
+                    <input formControlName="accMobile" autocomplete="off" #mobnum preventDragdrop role="presentation"
+                      type="text" matInput appNumberOnly [NumericValue]="false" maxlength="14" minlength="10"
+                      placeholder="Mobile Number">
+                      <mat-icon matSuffix><i class="material-icons-outlined"> phone_iphone </i></mat-icon>
+                      @if (!!agentEntryMasterService.clientEntryForm?.get('accMobile')?.errors?.minlength) {
+                        <mat-error> Enter
+                        atleast 10 numbers </mat-error>
+                      }
+                      @if (!!agentEntryMasterService.clientEntryForm?.get('accMobile')?.errors?.pattern) {
+                        <mat-error> The
+                        Mobile Number is Invalid</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="53%" fxFlex.lg="53%" fxFlex.md="53%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutGap="20px"  ngClass.sm="mb-15" ngClass.xs="mb-15">
+                    <mat-label class="lbl">GST Flag</mat-label>  <!--Service Tax Flag -->
+                    <mat-checkbox formControlName="serviceTaxFlag">GST Flag</mat-checkbox>  <!--Service Tax Flag -->
+                    <mat-checkbox formControlName="clientOnHold">Client on Hold</mat-checkbox>
+                  </div>
+                </div>
+              </mat-card-content>
+              <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+                <button mat-flat-button color="primary" type="button"
+                  (click)='addressValidation(true);indAbdValidation();agentEntryMasterService.clientEntryForm.valid? nextStep.emit() : true;scrollToTop()'>
+                Next</button>
+              </mat-card-actions>
+            </form>
+          </div>
+        </div>

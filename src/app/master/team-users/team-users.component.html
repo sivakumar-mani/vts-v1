@@ -1,0 +1,380 @@
+﻿<app-breadcrumb [btnAdd]="breadcrumbFlags.btnAdd" [btnSave]="breadcrumbFlags.btnSave"
+  [btnSaveDisabled]="breadcrumbFlags.btnSaveDisabled" [btnBack]="breadcrumbFlags.btnBack"
+  [btnReset]="breadcrumbFlags.btnReset" [btnResetTbl]="breadcrumbFlags.btnResetTbl" (eventAdd)="openForm()"
+  [routePath]="routePath" (eventBack)="closeForm()" (eventSave)="saveForm()" [toolTip]="breadcrumbFlags.toolTip"
+  (eventReset)="resetForm()" (eventResetTbl)="resetTable()" [btnAddDisabled]="!screenAuth.addFlag"></app-breadcrumb>
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="80%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">Department Team Users</h1>
+                  </div>
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="20%" fxFlex.xs="100%" fxHide.xs
+                    fxLayoutAlign="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                    <div class="tbl-commonsearch" *ngIf="!showFlag">
+                      <mat-form-field fxFlex="100%">
+                        <mat-label></mat-label>
+                        <mat-icon matPrefix>search</mat-icon>
+                        <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                          (input)="dt?.filterGlobal($event.target.value, 'contains')">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="showFlag">
+          <form [formGroup]="teamUsersFormGroup" autocomplete="off" id="ngForm">
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column wrap" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <app-auto-complete [selectProperties]='teamControls' (selectionChange)="getChangeTeam($event)"> </app-auto-complete>
+                  </div>
+                  
+                  <!-- <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Team Name</mat-label>
+                    <input matInput #teamName formControlName="teamName" placeholder="Team Name" matInput
+                      autocomplete="off" role="presentation">
+                    <mat-error *ngIf="!!teamUsersFormGroup?.get('teamName')?.errors?.required">
+                      Team Name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div> --> 
+                  <!-- <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%">
+                  <app-auto-complete [selectProperties]='deptNameControls' (selectionChange)="getUserLists($event)">
+                  </app-auto-complete>
+                </div> --> 
+                  
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <h3 class="sub-header">Sub Team Head/Owner & Roles</h3>
+                  </div>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column wrap" fxLayout.xs="column"
+                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="100%">
+                  <div fxLayout="row">
+                    <div fxFlex="100%">
+                      <app-auto-complete [selectProperties]='ownerNameControls' (selectionChange)="getownerName1()"> </app-auto-complete>
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxFlex="100%"> <span class="p-float-label">
+                      <p-multiSelect [options]="teamOwnerRole" formControlName="subTeamOwnerRole" optionLabel="roleName"
+                              filterPlaceHolder="Select Role" selectedItemsLabel="{0} Roles selected"
+                              [style]="{XminWidth: '250px', width:'100%'}" defaultLabel="Select Owner Role"> </p-multiSelect>
+                      <!-- <label class="lbl-float">Roles</label> -->
+                      <mat-error *ngIf="!!teamFormGroup?.get('subTeamOwnerRole')?.errors?.required"> Owner Role is required. </mat-error>
+                      <label class="lbl-float">Role</label>
+                      </span> </div>
+                  </div>
+                </div>
+                <!-- <div fxFlex="60%"></div> -->
+                
+                <!-- <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="40%" fxFlex.xs="100%">
+                  <span class="p-float-label">
+                    <p-multiSelect [options]="teamClient" formControlName="subTeamClient" optionLabel="clientName"
+                      filterPlaceHolder="Select Client" selectedItemsLabel="{0} Clients selected"
+                      [style]="{XminWidth: '250px', width:'100%'}" defaultLabel="Select Client"> </p-multiSelect>
+                    <mat-error *ngIf="!!teamFormGroup?.get('subTeamClient')?.errors?.required">
+                      User is required. </mat-error>
+                      <label class="lbl-float">Client</label>
+                  </span>
+                </div> --> 
+                
+              </div>
+
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <h3 class="sub-header">Sub Team Creation</h3>
+                </div>
+              </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Sub Team Name</mat-label>
+                      <input matInput #teamName formControlName="subTeamName" placeholder="Sub Team Name" matInput
+                          autocomplete="off" role="presentation">
+                      <mat-error *ngIf="!!teamUsersFormGroup?.get('subTeamName')?.errors?.required"> Sub Team Name is required </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+           
+                <div fxLayout="row">
+                  <div fxFlex="100%"> <span class="p-float-label">
+                    <p-multiSelect [options]="teamRole" formControlName="subTeamRole" optionLabel="roleName"
+                              filterPlaceHolder="Select Role" selectedItemsLabel="{0} Roles selected"
+                              [style]="{XminWidth: '250px', width:'100%'}" defaultLabel="Select Sub Team Role"> </p-multiSelect>
+                    <!-- <label class="lbl-float">Roles</label> -->
+                    <mat-error *ngIf="!!teamFormGroup?.get('subTeamRole')?.errors?.required"> Sub Team Role is required. </mat-error>
+                    <label class="lbl-float">Role</label>
+                    </span> </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%"> <span class="p-float-label">
+                    <p-multiSelect [options]="teamClient" formControlName="subTeamClient" optionLabel="clientName"
+                              filterPlaceHolder="Select Client" selectedItemsLabel="{0} Clients selected"
+                              [style]="{XminWidth: '250px', width:'100%'}" defaultLabel="Select Client"> </p-multiSelect>
+                    <!-- <label class="lbl-float">Client</label> -->
+                    <mat-error *ngIf="!!teamFormGroup?.get('subTeamClient')?.errors?.required"> Client is required. </mat-error>
+                    <label class="lbl-float">Client</label>
+                    </span> </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Sub Team Description</mat-label>
+                      <textarea matInput #teamName formControlName="subTeamDescription" placeholder="Sub Team Description"
+                            matInput autocomplete="off" role="presentation">
+                      </textarea>
+                      <mat-error *ngIf="!!teamUsersFormGroup?.get('subTeamDescription')?.errors?.required"> Sub Team Description is required </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%" >
+                <div fxLayout="row">
+                  <div fxFlex="50%"  class="d-view">
+                    <p>
+                      <label>Team Lead:</label>
+                      <em *ngFor="let team of teamLead;let in=index">{{team.name}} <span *ngIf="(in+1)!==teamLead.length">,</span></em> </p>
+                    <div class="teamList">
+                      <div class="teamAvatar">AK</div>
+                      <div class="teamName">Name One</div>
+                    </div>
+                    <div class="teamList">
+                      <div class="teamAvatar">AK</div>
+                      <div class="teamName">Name Two</div>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="50%"  class="d-view">
+                    <p>
+                      <label>Team Department:</label>
+                      <em>{{deptName}}</em></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+         
+         
+            
+            <!-- <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3 class="sub-header">Assign Team Owners</h3>
+              </div>
+            </div> --> 
+            <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column wrap" fxLayout.xs="column"
+              fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="40%" fxFlex.xs="100%">
+                <app-auto-complete [selectProperties]='ownerNameControls' (selectionChange)="getownerName1()">
+                </app-auto-complete>
+              </div>
+              <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="40%" fxFlex.xs="100%"> --> 
+            <!-- </div>
+              <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="20%" fxHide.xs></div>
+            </div> -->
+            
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3 class="sub-header">Sub Team Members</h3>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column wrap" fxLayout.xs="column"
+              fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="40%">
+                <div fxLayout="row">
+                  <div fxFlex="100%"> <span class="p-float-label">
+                    <p-multiSelect [options]="teamOwner" formControlName="subTeamMember" optionLabel="name"
+                                filterPlaceHolder="Select User" selectedItemsLabel="{0} Users selected"
+                                [style]="{XminWidth: '250px', width:'100%'}" defaultLabel="Select User"> </p-multiSelect>
+                    <!-- <label class="lbl-float">User</label> -->
+                    <mat-error *ngIf="!!teamUsersFormGroup?.get('subTeamMember')?.errors?.required"> User is required. </mat-error>
+                    </span> </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <mat-label class="lbl">Active</mat-label>
+                    <mat-checkbox formControlName="active">Active</mat-checkbox>
+                  </div>
+                </div>
+              </div>
+              <div fxFlex="60%"></div>
+            </div>
+          </form>
+        </div>
+        <div fxLayout="row" *ngIf="!showFlag">
+          <div fxFlex="100%">
+          <p-table
+  #dt
+  [columns]="displayedColumns"
+  [value]="getTeamLists"
+  [scrollable]="true"
+  scrollHeight=""
+  [paginator]="true"
+  [rows]="10"
+  [resizableColumns]="true"
+  [reorderableColumns]="true"
+  frozenWidth="100px"
+  [frozenColumns]="frozenCols">
+
+  <!-- ===== COLGROUP ===== -->
+  <ng-template pTemplate="colgroup" let-colGroupCols>
+    <colgroup>
+      <col *ngFor="let col of colGroupCols" style="width:200px" />
+    </colgroup>
+  </ng-template>
+
+  <!-- ===== HEADER ===== -->
+  <ng-template pTemplate="header" let-headerCols>
+    <tr>
+      <th *ngFor="let col of headerCols"
+          [ngSwitch]="col.field"
+          pReorderableColumn
+          pResizableColumn>
+
+        <span [pSortableColumn]="col.field">
+          <div
+            matTooltip="{{ col.header }}"
+            matTooltipClass="accent-tooltip"
+            class="thname">
+            {{ col.header }}
+          </div>
+
+          <p-sortIcon
+            *ngIf="col.field !== 'action'"
+            ariaLabel="Activate to sort"
+            ariaLabelDesc="Activate to sort in descending order"
+            matTooltip="Sorting"
+            matTooltipClass="accent-tooltip"
+            ariaLabelAsc="Activate to sort in ascending order">
+          </p-sortIcon>
+        </span>
+
+        <!-- search / filter menus remain unchanged -->
+
+      </th>
+    </tr>
+  </ng-template>
+
+  <!-- ===== BODY ===== -->
+  <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+    <tr>
+      <td *ngFor="let col of bodyCols; let i = index"
+          [ngSwitch]="col.field"
+          [ngClass]="{ 'desg-bg': col.field === 'action' }"
+          matTooltipClass="accent-tooltip"
+          matTooltip="{{ rowData.clientReferenceNo }}">
+
+        <!-- ACTION -->
+        <div *ngSwitchCase="'action'" fxLayout="row" class="desg-icon">
+          <div fxFlex="100%" fxLayoutGap="10px">
+            <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+              <i
+                matTooltip="Edit"
+                matTooltipClass="accent-tooltip"
+                class="material-icons-outlined"
+                (click)="editForm(rowData)">
+                edit
+              </i>
+            </mat-icon>
+
+            <mat-icon [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''">
+              <i
+                matTooltip="Delete"
+                matTooltipClass="accent-tooltip"
+                class="material-icons-outlined"
+                (click)="openDialog(rowData)">
+                delete
+              </i>
+            </mat-icon>
+          </div>
+        </div>
+
+        <!-- DATA -->
+        <div *ngSwitchCase="'teamName'">{{ rowData.teamName }}</div>
+        <div *ngSwitchCase="'subTeamName'">{{ rowData.subTeamName }}</div>
+        <div *ngSwitchCase="'subTeamDescription'">{{ rowData.subTeamDescription }}</div>
+        <div *ngSwitchCase="'deptName'">{{ rowData.deptName }}</div>
+        <div *ngSwitchCase="'lead1Name'">{{ rowData.lead1Name }}</div>
+        <div *ngSwitchCase="'lead2Name'">{{ rowData.lead2Name }}</div>
+
+        <span *ngSwitchCase="'subTeamMember'">
+          <span *ngFor="let m of rowData[col.field]; let idx = index">
+            {{ m.name }}<span *ngIf="idx + 1 !== rowData[col.field].length">,</span>
+          </span>
+        </span>
+
+        <span *ngSwitchCase="'subTeamClient'">
+          <span *ngFor="let c of rowData[col.field]; let idx = index">
+            {{ c.clientName }}<span *ngIf="idx + 1 !== rowData[col.field].length">,</span>
+          </span>
+        </span>
+
+        <span *ngSwitchCase="'subTeamRole'">
+          <span *ngFor="let r of rowData[col.field]; let idx = index">
+            {{ r.roleName }}<span *ngIf="idx + 1 !== rowData[col.field].length">,</span>
+          </span>
+        </span>
+
+        <!-- ACTIVE -->
+        <div *ngSwitchCase="'active'" fxLayout="row" class="tbl-icon">
+          <span *ngIf="rowData.active" class="istrue">
+            <i matTooltip="Active" class="material-icons">thumb_up</i>
+          </span>
+          <span *ngIf="!rowData.active" class="isfalse">
+            <i matTooltip="In-Active" class="material-icons">thumb_down</i>
+          </span>
+        </div>
+
+      </td>
+    </tr>
+  </ng-template>
+
+</p-table>
+            <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid"   fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} -
+                {{
+                dt.totalRecords > 0
+                ? dt.rows + dt.first <= dt.totalRecords
+                ? dt.rows + dt.first
+                : dt.totalRecords
+                : 0
+                }}
+                of {{ dt.totalRecords }} record(s) </div>
+              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center"> <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                        dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                        navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                </span></span> <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a [ngClass]=" dt.rows + dt.first >= dt.totalRecords? 'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                        navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"><i
+                        class="icon-control-end ml-5"></i></a> </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

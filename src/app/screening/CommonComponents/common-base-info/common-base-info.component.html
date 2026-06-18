@@ -1,0 +1,186 @@
+<!-- Dont Delete this comm line for my Ref :  Responsive design completed -->
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" [formGroup]='mainForm'>
+  <div fxFlex="100%">
+    <form [formGroupName]="formgroupName">
+      @if ((screeningService.caseFlagType !== common.NEWCASE && !cancelDisable())) {
+        <div fxLayout="row wrap" fxLayoutGap="10px grid" class="mb-15">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+            @if (showNotApplicable) {
+              <mat-slide-toggle formControlName="notApplicableFlag" (change)="notApplicable($event)">
+              {{header}}</mat-slide-toggle>
+            }
+          </div>
+          @if (mainForm?.get(formgroupName+'.subCheckFlag').value === true) {
+            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxLayoutAlign="end end">
+              <div class="status subcheck"><span>SubCheck</span></div>
+            </div>
+          }
+          @if (mainForm?.get(formgroupName+'.notApplicableFlag').value === true) {
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="50%">
+                <mat-label>{{userData.applicationId===3?'Reason for Not available': 'Cancel Remarks'}}
+                </mat-label>
+                <textarea #remarks1 matInput formControlName="remark" placeholder="Remarks" maxlength="400" rows="2"></textarea>
+                @if (!!mainForm?.get(formgroupName+'.remark')?.errors?.required) {
+                  <mat-error>
+                    {{userData.applicationId===3?'Reason for Not available': 'Cancel Remarks'}} is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+        </div>
+      }
+      @if (userData.applicationId !== 3) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Screening Priority</mat-label>
+              <mat-select placeholder="Screening Priority" formControlName="priorityId" required>
+                @for (priority of baseInfo?.screeningPriority; track priority) {
+                  <mat-option [value]="priority.lookUpId">
+                  {{priority.lookUpName}}</mat-option>
+                }
+              </mat-select>
+              @if (!!mainForm?.get(formgroupName+'.priorityId')?.errors?.required) {
+                <mat-error>Screening Priority is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Status</mat-label>
+              <mat-select placeholder="Status" formControlName="screenStatusId" [disabled]="stflag == true" required>
+                @for (status of screeningStatusList; track status) {
+                  <mat-option [value]="status.statusId">
+                  {{status.screeningStatus}}</mat-option>
+                }
+              </mat-select>
+              @if (!!mainForm?.get(formgroupName+'.screenStatusId')?.errors?.required) {
+                <mat-error>Status is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          @if (userData.applicationId === 1 && screeningService.caseFlagType !== common.NEWCASE && (screeningService.
+            caseFlagType !== common.QCREJECT || (screeningService.caseFlagType === common.QCREJECT && !(screeningService?.
+            caseSubmissionList?.screeningComponent[0]?.component[0]?.screeningComponentInfo?.caseByPassFlag)))) {
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <app-auto-complete [selectProperties]='clientVendorsControl'> </app-auto-complete>
+            </div>
+          }
+          @if (userData.applicationId!==3) {
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <app-auto-complete [selectProperties]='clientCurrencyControl'> </app-auto-complete>
+            </div>
+          }
+          @if ((baseInfo && (screeningService.caseFlagType === common.NEWCASE ) && baseInfo?.veOwner?.length > 0)) {
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <app-auto-complete [selectProperties]='ownerControl'> </app-auto-complete>
+            </div>
+          }
+        </div>
+      }
+      @if (userData.applicationId !== 3) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          @if (screeningService.IqcByPassFlag == true) {
+            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%" >
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Case Type</mat-label>
+                <mat-select placeholder="Case Type" formControlName="caseTypeLookUpId">
+                  @for (type of caseType; track type) {
+                    <mat-option [value]="type.lookUpId">{{type.lookUpName}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          }
+          @if (screeningService.compData.compName === common.REFERENCE_CHECK ||screeningService.IqcByPassFlag == true ) {
+            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Case Country</mat-label>
+                <mat-select placeholder="Case Country" formControlName="countryTypeLookUpId">
+                  @for (country of screeningService.countryList; track country) {
+                    <mat-option [value]="country.countryId">{{country.country}}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          }
+          @if ((common?.manualClientDetails?.clientScreeningIdFlag === true &&
+            (screeningService.caseFlagType === common.NEWCASE || mainForm?.get(formgroupName+'.clientScreeningId').value>0))) {
+            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Screening ID</mat-label>
+                <input #sId matInput [required]="common?.manualClientDetails?.clientScreeningIdFlag === true" formControlName="clientScreeningId" placeholder="Screening ID" maxlength="40" (blur)="checkScreeningId(sId.value)" />
+                @if (!!mainForm?.get(formgroupName+'.clientScreeningId')?.errors?.required) {
+                  <mat-error>
+                  Screening Id is required </mat-error>
+                }
+                @if (!!mainForm?.get(formgroupName+'.clientScreeningId')?.errors?.incorrect) {
+                  <mat-error>Screening Id is already exists
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          @if (screeningService.caseFlagType === common.NEWCASE && screeningService.compData.compName === common.JUDIS_COURT_RECORD) {
+            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Date Type</mat-label>
+                <mat-select formControlName="dateTypeLookupId" placeholder="Select Date Type" required>
+                  @for (date of screeningService.dateTypeList; track date) {
+                    <mat-option [value]="date.lookUpId"> {{ date.lookUpName }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          }
+        </div>
+      }
+      @if (userData.applicationId === 3 && this.screeningService.compData.compName.toUpperCase() === this.common.CV_VALIDATION) {
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+          <div fxFlex="100%">
+            <h3 class="sub-header">Resume/CV</h3>
+          </div>
+        </div>
+      }
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        @if (userData.applicationId !==3 && screeningService.caseFlagType !== common.NEWCASE) {
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Component Initiation Date</mat-label>
+              <input matInput [readonly]="true" formControlName="compInitiationDate" [matDatepicker]="dateTime1" placeholder="Component Initiation Date">
+              <mat-datepicker-toggle matSuffix [for]="dateTime1" [disabled]="true"></mat-datepicker-toggle>
+              <mat-datepicker #dateTime1></mat-datepicker>
+            </mat-form-field>
+          </div>
+        }
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            @if (userData.applicationId !== 3) {
+              <mat-label>Report Source Name</mat-label>
+            }
+            <!-- <mat-label *ngIf="userData.applicationId === 3 && (this.screeningService.compData.compName.toUpperCase() !== this.common.CRIMINAL_DATABASE && this.screeningService.compData.compName.toUpperCase() !== this.common.DRUG_TEST && this.screeningService.compData.compName.toUpperCase() !== this.common.CV_VALIDATION)">Report Source Name</mat-label>
+            <mat-label *ngIf="userData.applicationId === 3 && (this.screeningService.compData.compName.toUpperCase() === this.common.CRIMINAL_DATABASE || this.screeningService.compData.compName.toUpperCase() === this.common.DRUG_TEST)">Full Name
+            </mat-label>
+            <mat-label *ngIf="userData.applicationId === 3 && this.screeningService.compData.compName.toUpperCase() === this.common.CV_VALIDATION">Name of the Applicant</mat-label> -->
+
+            <!-- VTS2-2023-CRT-0124 - Need to change the text "Report source Name" to Candidate name in direct app module for all components, refer the SRS for detailed requirement - By Naveen -->
+            @if (userData.applicationId === 3) {
+              <mat-label> Full Name </mat-label>
+            }
+            @if (userData.applicationId !== 3) {
+              <input matInput formControlName="reportSource" placeholder="Report Source Name" required>
+            }
+            @if (userData.applicationId === 3) {
+              <input matInput formControlName="reportSource" placeholder="Full Name" required>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

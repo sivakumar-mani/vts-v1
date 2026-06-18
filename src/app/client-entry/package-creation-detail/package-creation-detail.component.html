@@ -1,0 +1,637 @@
+﻿<app-breadcrumb [btnSave]="btnSave" [btnBack]="btnBack" [btnReset]="btnReset" [routePath]='routePath'
+  (eventBack)="getpackList()" (eventSave)="packageSave()" [toolTip]="tooTip" (eventReset)="resetForm()">
+</app-breadcrumb>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h1 class="header-title">Package Creation</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form class="page-container" [formGroup]="packagefrmgroup" id="ngForm">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="37%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Select Client Name</mat-label>
+            <input matInput placeholder="Select Client Name" formControlName="clientId"
+              [matAutocomplete]="autoClient" #clientInput (focus)="clientItemsddl(clientInput.value)"
+              autocomplete="off" role="presentation"
+              (keyup)="clientddlKeyupFunction($event,clientInput.value)"
+              (input)="clientItemsddl(clientInput.value)" (click)="clientInput.select()"
+              (blur)="checkValidValue();checVal()" (ngModelChange)="getSiteName($event);" required>
+
+            @if (packagefrmgroup?.get('clientId')?.errors?.required) {
+              <mat-error>
+                Client Name required.
+              </mat-error>
+            }
+
+            @if (packagefrmgroup?.get('clientId')?.errors?.incorrect) {
+              <mat-error>
+                Client Name is not valid
+              </mat-error>
+            }
+            <mat-autocomplete #autoClient="matAutocomplete" [displayWith]="displayClientFn.bind(this)"
+              (optionSelected)="getComponetDetailsByClient()" placeholder="Select Client Name">
+              <!-- <mat-option [value]=" ">-------Select Client Name-------</mat-option> -->
+              @for (client of clientflterlist ; track client) {
+                <mat-option [value]="client.clientId"
+                  class="autocom-option autocom-tr">
+                  <span [innerHTML]="client.clientName | highlight: clientInput.value"></span>
+                </mat-option>
+              }
+
+              @if (clientflterlist.length==0) {
+                <mat-option>
+                  <div class="no-record"><span>No Data Found</span></div>
+                </mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div fxFlex="37%">
+          <span  appearance="outline" class="p-float-label" fxFlex="100%">
+            <p-multiSelect placeholder="Site Name" [options]="siteList" formControlName="siteId"
+              optionLabel="siteName" selectedItemsLabel="{0} site selected" [disabled]="(siteList == null || siteList.length == 0)"
+              [style]="{XminWidth: '300px', width:'100%'}" defaultLabel="Select site"
+              emptyFilterMessage="No data found" [showHeader]="true">
+            </p-multiSelect>
+            <label class="lbl-float">Site Name</label>
+          </span>
+        </div>
+        <div fxFlex="37%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Package Name</mat-label>
+            <input #packName matInput placeholder="Package Name" maxlength="75"
+              formControlName="packageName" autocomplete="off" role="presentation" minlength="3"
+              (blur)="checkPackName(packName.value)" required />
+            @if (packagefrmgroup?.get('packageName')?.errors?.minlength) {
+              <mat-error>
+                Package Name atleast have 3 Characters
+              </mat-error>
+            }
+            @if (packagefrmgroup?.get('packageName')?.errors?.required) {
+              <mat-error>
+                Package Name is required.
+              </mat-error>
+            }
+            @if (packagefrmgroup?.get('packageName')?.errors?.incorrect) {
+              <mat-error>
+                Package Name is Already Exists.
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="13%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Package Price</mat-label>
+            <input matInput appNumberOnly [NumberOnly]="false" placeholder="Package Price"
+              formControlName="fees" autocomplete="off" size="3" role="presentation" min="0"
+              oninput="validity.valid || (value='');" onKeyPress="if(this.value.length==4) return false;"
+              required />
+            <mat-icon matSuffix><i class="icon-banknote"></i></mat-icon>
+            @if (packagefrmgroup?.get('fees')?.errors?.required) {
+              <mat-error>
+                Package Price is required.
+              </mat-error>
+            }
+            <mat-hint>
+              <span>
+                <label> MSP - <span>₹</span>{{discountMsp}}</label>
+              </span>
+            </mat-hint>
+          </mat-form-field>
+        </div>
+        <div fxFlex="13%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>TAT Days</mat-label>
+            <input matInput appNumberOnly [NumberOnly]="false" placeholder="TAT Days"
+              formControlName="tatDays" autocomplete="off" role="presentation" min="0"
+              oninput="validity.valid || (value='');" onKeyPress="if(this.value.length==2) return false;"
+              required />
+            <mat-icon matSuffix></mat-icon>
+            @if (packagefrmgroup?.get('tatDays')?.errors?.required) {
+              <mat-error>
+                TAT Days is required.
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      @for (item of getformgroup().controls; track item; let i = $index) {
+        <div fxLayout="row" formArrayName="packComp">
+          <div [formGroupName]="i" fxFlex="100%">
+            <div fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px">
+              <div fxFlex="37%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Component</mat-label>
+                  <input matInput placeholder="Component" formControlName="componentId"
+                    [matAutocomplete]="autoComponent" #compInput (focus)="clientItems(compInput.value)"
+                    (keyup.enter)="$event.preventDefault()"
+                    (keyup)="clientKeyupFunction($event, compInput.value)"
+                    (input)="clientItems(compInput.value)" (click)="compInput.select()"
+                    autocomplete="off" role="presentation" required />
+                  @if (item.get('componentId')?.errors?.required) {
+                    <mat-error>
+                      Component is required.
+                    </mat-error>
+                  }
+                  @if (item.get('componentId')?.errors?.incorrect) {
+                    <mat-error>
+                      Component Name not valid.
+                    </mat-error>
+                  }
+                  <mat-autocomplete (optionSelected)='getSubComponent($event.option.value,i, "add")'
+                    #autoComponent="matAutocomplete" [displayWith]="displayclientFn">
+                    <table style="width:100%">
+                      <thead>
+                        <tr>
+                          <th>Component</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (comp of componentfilterList; track comp) {
+                          <mat-option [value]="comp.componentId"
+                            class="autocom-option autocom-tr">
+                            <tr>
+                              <td>
+                                <span
+                                [innerHTML]="comp.componentName | highlight: compInput.value"></span>
+                              </td>
+                            </tr>
+                          </mat-option>
+                        }
+                        @if (componentfilterList.length == 0) {
+                          <mat-option>
+                            <tr>
+                              <td>
+                                <div class="no-record"><span>No Record Found</span></div>
+                              </td>
+                            </tr>
+                          </mat-option>
+                        }
+                      </tbody>
+                    </table>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div fxFlex="37%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Sub Component</mat-label>
+                  <input matInput placeholder="Sub Component" formControlName="subComponentId"
+                    [matAutocomplete]="autoSubComponent" #SubCompInput
+                    (focus)="subComponentItems(SubCompInput.value)"
+                    (keyup)="subComponentKeyupFunction($event, SubCompInput.value)"
+                    (input)="subComponentItems(SubCompInput.value)" (click)="SubCompInput.select()"
+                    autocomplete="off" role="presentation" required />
+                  @if (item.get('subComponentId')?.errors?.required) {
+                    <mat-error>
+                      Sub Component is required.
+                    </mat-error>
+                  }
+                  @if (item.get('subComponentId')?.errors?.incorrect) {
+                    <mat-error>
+                      SubComponent Name not valid.
+                    </mat-error>
+                  }
+                  <mat-autocomplete #autoSubComponent="matAutocomplete"
+                    [displayWith]="displaySubComponentFn"
+                    (optionSelected)='getSub($event.option.value, i)'>
+                    <table style="width:100%">
+                      <thead>
+                        <tr>
+                          <th>Sub Component</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (subComp of subComponentfilterlist; track subComp) {
+                          <mat-option [value]="subComp.subComponentId"
+                            class="autocom-option autocom-tr">
+                            <tr>
+                              <td>
+                                <span
+                                [innerHTML]="subComp.subComponentName | highlight: SubCompInput.value"></span>
+                              </td>
+                            </tr>
+                          </mat-option>
+                        }
+                        @if (subComponentfilterlist.length == 0) {
+                          <mat-option>
+                            <tr>
+                              <td>
+                                <div class="no-record"><span>No Record Found</span></div>
+                              </td>
+                            </tr>
+                          </mat-option>
+                        }
+                      </tbody>
+                    </table>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div fxFlex="13%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>No of Components</mat-label>
+                  <input matInput appNumberOnly [NumberOnly]="false" placeholder="No of Components"
+                    autocomplete="off" role="presentation" formControlName="noOfComp" min="1"
+                    maxlength="1" oninput="validity.valid || (value='');"
+                    onKeyPress="if(this.value.length==4) return false;" (blur)="checkNoofComp()"
+                    required />
+                  @if (item.get('noOfComp')?.errors?.required) {
+                    <mat-error>
+                      No of Components is required.
+                    </mat-error>
+                  }
+                  @if (item.get('noOfComp')?.errors?.incorrect) {
+                    <mat-error>
+                      No of Components should not accept 0 or empty
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              @if (yrFlag) {
+                <div fxFlex="13%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>No of Years</mat-label>
+                    <input matInput appNumberOnly [NumberOnly]="false" placeholder="No of Years"
+                      autocomplete="off" role="presentation" formControlName="noofyear" min="1"
+                      maxlength="1" oninput="validity.valid || (value='');"
+                      onKeyPress="if(this.value.length==4) return false;" required />
+                    @if (item.get('noOfyear')?.errors?.required) {
+                      <mat-error>
+                        No of Year is required.
+                      </mat-error>
+                    }
+                    @if (item.get('noOfyear')?.errors?.incorrect) {
+                      <mat-error>
+                        No of Year should not accept 0 or empty
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+              <div fxFlex="13%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>TAT Days</mat-label>
+                  <input matInput appNumberOnly [NumberOnly]="false" placeholder="TAT Days"
+                    formControlName="tatDays" autocomplete="off" role="presentation" min="0"
+                    (blur)="checkTAT($event?.target?.value, item)"
+                    oninput="validity.valid || (value='');"
+                    onKeyPress="if(this.value.length==2) return false;" required />
+                  <mat-icon matSuffix></mat-icon>
+                  @if (item?.get('tatDays')?.errors?.required) {
+                    <mat-error>
+                      TAT Days is required.
+                    </mat-error>
+                  }
+                  @if (item?.get('tatDays')?.errors?.incorrect) {
+                    <mat-error>
+                      please give TAT Days above 0
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div fxFlex="13%">
+                <mat-label>&nbsp;</mat-label>
+                <div class="adrem text-left " fxLayoutGap="8px">
+                  @if (i === frmlenth - 1 && (item.get('componentId').value && item.get('noOfComp').value)) {
+                    <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                      (click)="createControl()"> <i class="icon-plus-circle"></i> </button>
+                    }
+                    @if (i != frmlenth + 1 && frmlenth !== 1 || (item.get('componentId').value && item.get('noOfComp').value)) {
+                      <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                        (click)="clearFormArrayOn()"> <i class="icon-x-circle"></i> </button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+          <div fxLayout="row" fxLayoutGap="20px">
+
+            <div fxFlex="34.33%">
+              @if (authService.packageEffective) {
+                <mat-form-field appearance="outline" fxFlex="100%">
+                  <mat-label>Effective Date</mat-label>
+                  <input formControlName="effectiveDate" matInput [matDatepicker]="picker" autocomplete="off"
+                    required role="presentation" placeholder="DD/MM/YYYY" (focus)="picker.open()"
+                    [max]="getToday()" required />
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  @if (packagefrmgroup?.get('effectiveDate')?.errors?.required) {
+                    <mat-error>
+                      Effective Date required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              }
+            </div>
+            <div fxFlex="50%">
+              @if (authService.packageEffective) {
+                <mat-form-field appearance="outline" fxFlex="100%">
+                  <mat-label>Effective Reason</mat-label>
+                  <textarea #msg maxlength="200" matInput placeholder="Effective Reason"
+                    formControlName="effectiveReason" autocomplete="off" role="presentation"
+                  required></textarea>
+                  <mat-hint>({{msg.value.length}}/200)</mat-hint>
+                  @if (packagefrmgroup?.get('effectiveReason')?.errors?.required) {
+                    <mat-error>
+                      Effective reason required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              }
+            </div>
+            <div fxFlex="13%"></div>
+          </div>
+
+
+          <!-- packagefrmgroup - {{package['packComp'] | json}} -->
+          <ng-template #feesConfirmation>
+            <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
+              (click)="close()">
+              <i class="material-icons">clear</i>
+            </button>
+            <h1 mat-dialog-title>{{ (discountMsp > packagefrmgroup.get('fees').value) &&
+              !(((packagefrmgroup.get('fees').value > discountMsp) && (discountNrp >
+              packagefrmgroup.get('fees').value)) && !(packagefrmgroup.get('fees').value > discountMsp))? 'Entered
+              amount
+              is less than MSP' : 'Entered amount is less than MSP or NRP'}}
+            </h1>
+            <mat-dialog-content>
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <div class="para">
+                    <p> <label>Client Name:</label>
+                    <em>{{
+                      packagefrmgroup.get("clientname").value
+                    }}</em>
+                  </p>
+                  <p>
+                    <label>Package Name:</label>
+                    <em> {{ packagefrmgroup.get("packageName").value }}</em>
+                  </p>
+                  <p>
+                    <label>MSP Rate:</label>
+                    <em>{{ discountMsp }}</em>
+                  </p>
+                  @if ((!(discountMsp > packagefrmgroup.get('fees').value) && (packagefrmgroup.get('fees').value > discountMsp) && (discountNrp > packagefrmgroup.get('fees').value))) {
+                    <p
+                      >
+                      <label>NRP Rate:</label>
+                      <em>{{ discountNrp }}</em>
+                    </p>
+                  }
+                  <p>
+                    <label>Entered Price:</label>
+                    <em>{{
+                      packagefrmgroup.get("fees").value
+                    }}</em>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="row" class="pt-15">
+              <div fxFlex="100%">
+                <mat-radio-group formControlName="packFeeApprovalFlag" aria-label="Select an option"
+                  fxLayoutGap="20px">
+                  <mat-label class="lbl">Do you have a pre-approval email for this Package?</mat-label>
+                  <mat-radio-button [value]="true">Yes</mat-radio-button>&nbsp;
+                  <mat-radio-button [value]="false">No <span class="info-text">(This will send email for
+                  approval)</span>
+                </mat-radio-button>
+              </mat-radio-group>
+              @if (!!packagefrmgroup?.get('packFeeApprovalFlag')?.errors?.required) {
+                <mat-error>
+                  Choose any one
+                </mat-error>
+              }
+            </div>
+          </div>
+          <div fxLayout="row" class="pt-15">
+            <div fxFlex="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Comments</mat-label>
+                <textarea #feeappcmt formControlName="reason" matInput autocomplete="off"
+                  placeholder="Comments" (focus)="feeappcmt.select()" (click)="feeappcmt.select()"
+                  role="presentation" maxlength="1000">
+                </textarea>
+                <mat-hint class="f-13"> ({{feeappcmt.value.length}} /1000 max) </mat-hint>
+                @if (!!packagefrmgroup?.get('reason')?.errors?.required) {
+                  <mat-error>
+                    Comments is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+          @if (packagefrmgroup.get('packFeeApprovalFlag').value === true) {
+            <div class=sep-line>
+              @if (packagefrmgroup.get('packFeeApprovalFlag').value === true) {
+                <div fxLayout="row" fxLayoutGap="20px"
+                  >
+                  <div fxFlex="100%">
+                    <div fxLayout="row">
+                      <div fxFlex="100%">
+                        <h3 class="sub-header">Pre-approval Fees documents</h3>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="20px">
+                      <div fxFlex="70%">
+                        <mat-label class="lbl">Attached Document</mat-label>
+                        <div class="file-upload">
+                          <i class="material-icons">cloud_upload</i>
+                          <span>Browse here...</span>
+                          <input type="file" #fileInput (change)="openUploadDoc($event)"
+                            formControlName="componentFeeDocument" />
+                        </div>
+                        @if (packageFeeDocumentList.length === 0) {
+                          <div class="clear">
+                            @if (!!packagefrmgroup.get('componentFeeDocument')?.errors?.incorrect) {
+                              <mat-error
+                                >
+                              Document is required </mat-error>
+                            }
+                          </div>
+                        }
+                        <div class="file-names mt-10">
+                          @for (document of packageFeeDocumentList; track document; let i = $index) {
+                            <div class="file-upload-files"
+                              >
+                              @if (document.fileName) {
+                                <a routerLinkActive="active-link"
+                                (click)="downloadFile(document,document.fileName)">{{document.fileName}}</a>
+                              }
+                              <button type="button" class="close" aria-label="Close"
+                                (click)="removeDocument(i)"> <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    <div fxLayout="row">
+                      <div fxFlex="100%">
+                      </div>
+                    </div>
+                    <div fxLayout="row">
+                      <div fxFlex="100%">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+          <button mat-flat-button color="warn" [disabled]='disableFlag === false' (click)="saveFee()">
+            Submit
+          </button>
+        </mat-dialog-actions>
+      </ng-template>
+    </form>
+
+    @if (!componentFlag === true) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" class="pt-15">
+        <div fxFlex="100%">
+          <p-table
+            #dt
+            [columns]="columnName"
+            [value]="package['packComp']"
+            [scrollable]="true"
+            scrollHeight=""
+            [paginator]="true"
+            [rows]="10"
+            [resizableColumns]="true"
+            [reorderableColumns]="true">
+            <!-- ===== COLGROUP ===== -->
+            <ng-template pTemplate="colgroup" let-colGroupCols>
+              <colgroup>
+              @for (col of colGroupCols; track col) {
+                <col style="min-width:200px" />
+              }
+            </colgroup>
+          </ng-template>
+          <!-- ===== HEADER ===== -->
+          <ng-template pTemplate="header" let-headerCols>
+            <tr>
+              @for (col of headerCols; track col) {
+                <th
+                  [ngClass]="{ 'text-center': col.field === 'Actions' }"
+                  [pSortableColumn]="col.field"
+                  pReorderableColumn
+                  pResizableColumn>
+                  <div class="thname">{{ col.header }}</div>
+                  <p-sortIcon
+                    [field]="col.field"
+                    ariaLabel="Activate to sort"
+                    ariaLabelDesc="Activate to sort in descending order"
+                    ariaLabelAsc="Activate to sort in ascending order">
+                  </p-sortIcon>
+                </th>
+              }
+              <th class="action">Action</th>
+            </tr>
+          </ng-template>
+          <!-- ===== BODY ===== -->
+          <ng-template
+            pTemplate="body"
+            let-rowData
+            let-rowIndex="rowIndex"
+            let-bodyCols="columns">
+            <tr>
+              @for (col of bodyCols; track col) {
+                <td matTooltipClass="accent-tooltip">
+                  {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                </td>
+              }
+              <td class="action">
+                <div fxLayout="row" class="tbl-icon">
+                  <div fxFlex="100%" fxLayoutGap="10px">
+                    <mat-icon>
+                      <i
+                        class="material-icons-outlined"
+                        matTooltip="Edit"
+                        matTooltipClass="accent-tooltip"
+                        (click)="editCompDetails(rowData, rowIndex)">
+                        edit
+                      </i>
+                    </mat-icon>
+                    <mat-icon>
+                      <i
+                        class="material-icons-outlined"
+                        matTooltip="Delete"
+                        matTooltipClass="accent-tooltip"
+                        (click)="package['packComp'].splice(rowIndex,1); showDelete(rowData)">
+                        delete
+                      </i>
+                    </mat-icon>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <div fxLayout="row" class="cus-paginator">
+          <div fxFlex="30%"> Showing {{ dt.totalRecords
+            < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+            <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }}
+          record(s) </div>
+          <span fxFlex></span>
+          <div fxFlex="50%" fxLayoutAlign="end center">
+            <a [ngClass]="dt.first===0?'page-btn disabled': 'page-btn'"
+                                        (click)="dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                                                                                      navigateNxtPrevPage(dt.first + dt.rows,dt.rows)">
+              <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2">Go
+              to
+              Page<span class="input-num">
+              <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5"
+                appNumberOnly [NumberOnly]="false"
+                (keyup.enter)="navigatePage(pageNo.value,dt.rows)" />
+            </span></span> <span class="mr-2">Of
+          {{ getTotalPages(dt.totalRecords,dt.rows) }}</span>
+          <a [ngClass]="(dt.rows + dt.first)>=dt.totalRecords?'page-btn disabled': 'page-btn'"
+                                        (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                                                                                          navigateNxtPrevPage(dt.first + dt.rows,dt.rows)"><i
+          class="icon-control-end ml-5"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- <div fxLayoutAlign="start start" fxFlex="100%" fxLayoutGap="10px">
+<mat-hint class="adrem siteentry"
+  *ngIf="i === frmlenth - 1 && (item.get('componentId').value && item.get('noOfComp').value)">
+  <span>
+    <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+      (click)="createControl()">
+      <i class="icon-plus-circle"></i>
+    </button>
+  </span>
+</mat-hint>
+<mat-hint class="adrem siteentry" *ngIf="i != frmlenth + 1 && frmlenth !== 1"
+  (click)="removeControl(i)">
+  <span>
+    <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+      (click)="removeControl(i)">
+      <i class="icon-minus-circle"></i>
+    </button>
+  </span>
+</mat-hint>
+
+</div> -->
+<!-- <div fxLayout="row">
+<div fxFlex="66%" class="adrem" fxLayoutGap="8px">
+  <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"> <i
+  class="icon-plus-circle"></i> </button>
+  <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"> <i
+  class="icon-x-circle"></i> </button>
+</div>
+<div fxFlex="34%"></div>
+</div> -->
+</mat-card-content>
+</mat-card>

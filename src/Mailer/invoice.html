@@ -1,0 +1,394 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Invoice</title>
+</head>
+
+<body>
+<div style="background: #fff; line-height: 1.5em; color: #000000; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">
+  <div style="clear: both;min-height: 56px; width: 100%;">
+    <div style="border-radius: 0 0 50px 0; line-height: 55px; height: 55px; background: #0e4872; background: -moz-linear-gradient(left, #0e4872 0%, #015ea1 100%); background: -webkit-gradient(left top, right top, color-stop(0%, #0e4872), color-stop(100%, #015ea1)); background: -webkit-linear-gradient(left, #0e4872 0%, #015ea1 100%); background: -o-linear-gradient(left, #0e4872 0%, #015ea1 100%); background: -ms-linear-gradient(left, #0e4872 0%, #015ea1 100%); background: linear-gradient(to right, #0e4872 0%, #015ea1 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0e4872', endColorstr='#015ea1', GradientType=1 ); float: left; width: 70%;">
+      <div style="background: url(../assets/images/invoice-bg.png) repeat;width: 100%;display: flex;">
+        <div style="color: #fff; width: 50%;  font-size: 12px;  float: left;margin-left: 20px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">CIN: U72900TN2013PTC090420</div>
+        <div style=" text-align: right; width: 50%; margin-right: 20px;">
+          <h1 style="color: #fff; font-size: 24px;margin: 0 25px 0 0;font-weight: 300;padding: 0;text-align: end;line-height: 50px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Invoice</h1>
+        </div>
+      </div>
+    </div>
+    <div style="width: 2%;float: right;text-align: right;"></div>
+    <div style="width: 28%;float: right;text-align: right;"><img src="../assets/images/logo.png" alt="Krya Screening Private Limited Logo" height="50px"></div>
+  </div>
+  <div style="clear: both; width: 100%;">
+    <ul style="font-size: 12px; list-style: none; margin: 5px 0 10px 0; padding: 0;">
+      <li style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">GSTIN: <em style="color: #000000; font-style: normal;font-weight: 600;margin-left: 5px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">33AALCA5225F1ZZ</em></li>
+      <li style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">State: <em style="color: #000000; font-style: normal;font-weight: 600;margin-left: 5px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Tamil Nadu</em></li>
+      <li style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Code: <em style="color: #000000; font-style: normal;font-weight: 600;margin-left: 5px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">33</em></li>
+      <li style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">PAN No.: <em style="color: #000000; font-style: normal;font-weight: 600;margin-left: 5px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">AALCA5225F</em></li>
+      <li style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">(ORIGINAL FOR RECEIPIENT)</li>
+    </ul>
+  </div>
+  
+  <!--
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tbody>
+      <tr>
+        <td width="70%" style="border-radius: 0 0 50px 0; line-height: 55px; height: 55px; background: #0e4872; background: -moz-linear-gradient(left, #0e4872 0%, #015ea1 100%); background: -webkit-gradient(left top, right top, color-stop(0%, #0e4872), color-stop(100%, #015ea1)); background: -webkit-linear-gradient(left, #0e4872 0%, #015ea1 100%); background: -o-linear-gradient(left, #0e4872 0%, #015ea1 100%); background: -ms-linear-gradient(left, #0e4872 0%, #015ea1 100%); background: linear-gradient(to right, #0e4872 0%, #015ea1 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0e4872', endColorstr='#015ea1', GradientType=1 );"><div style="background: url(../assets/images/invoice-bg.png) repeat;width: 100%;display: flex;">
+            <div style="color: #fff; width: 50%;  font-size: 12px;  float: left;margin-left: 20px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">CIN: U72900TN2013PTC090420</div>
+            <div style=" text-align: right; width: 50%; margin-right: 20px;">
+              <h1 style="color: #fff; font-size: 24px;margin: 0 25px 0 0;font-weight: 300;padding: 0;text-align: end;line-height: 50px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Invoice</h1>
+            </div>
+          </div></td>
+        <td width="1%"></td>
+        <td align="right"><img src="../assets/images/logo.png" alt="Krya Screening Private Limited Logo" height="50px"></td>
+      </tr>
+      <tr>
+        <td colspan="3"><ul style="font-size: 12px; list-style: none; margin: 10px 0 25px 0; padding: 0;">
+            <li style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">GSTIN: <em style="color: #000000; font-style: normal;font-weight: 600;margin-left: 5px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">33AALCA5225F1ZZ</em></li>
+            <li style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">State: <em style="color: #000000; font-style: normal;font-weight: 600;margin-left: 5px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Tamil Nadu</em></li>
+            <li style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Code: <em style="color: #000000; font-style: normal;font-weight: 600;margin-left: 5px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">33</em></li>
+            <li style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">PAN No.: <em style="color: #000000; font-style: normal;font-weight: 600;margin-left: 5px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">AALCA5225F</em></li>
+            <li style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">(ORIGINAL FOR RECEIPIENT)</li>
+          </ul></td>
+      </tr>
+    </tbody>
+  </table>
+-->
+  <div style="margin-top: 0px;">
+    <h3 style="font-size: 12px;line-height: 34px;margin: 0 0 0 0;font-weight: 600;text-transform: uppercase;padding: 0 10px;background: #ff8c00;color: #fff;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Additional Details</h3>
+    <div style="border-bottom: 1px solid #d1d1d1; display: flex">
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px 0 0;width: 25%;">
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Invoice Number</label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">FY2017-18/001241</em> </div>
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Invoice Date</label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">20-Aug-2019</em> </div>
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Reverse Charge (Y/N)</label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">No</em> </div>
+      <div style="margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">State &amp; Code</label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Tamil Nadu (33)</em> </div>
+    </div>
+    <div style="border-bottom: 1px solid #d1d1d1; display: flex">
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px 0 0;width: 25%;">
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Transport Mode</label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">N/A</em> </div>
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Vehicle Number</label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">N/A</em> </div>
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Date of Supply</label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">N/A</em> </div>
+      <div style="margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Place of Supply</label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">N/A</em> </div>
+    </div>
+    <!-- <div style="border-bottom: 1px solid #d1d1d1; display: flex">
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px 0 0;width: 25%;">
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">To Date</label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">18-08-2020</em> 
+      </div>
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">  
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">From Date</label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">18-08-2020</em>
+       </div>
+      <div style="margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"> </label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></em> </div>
+      <div style="margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"> </label>
+        <em style="font-style: normal;line-height: 1.25;font-size: 13px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"> </em> </div>
+    </div> -->
+  </div>
+  <div style="display: inline-flex;width: 100%; margin-top: 15px;">
+      <div style="margin: 0 30px 0 0;width: 50%;">
+        <h3 style="font-size: 14px;font-weight: 600;margin: 0;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Bill To</h3>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">Name:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">Monthly</span></p>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">Address:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">26,Dolphine Circle, Chennai, Tamil Nadu - 600 041</span></p>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">GSTIN:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">123456789 RT 0001</span></p>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">Phone No.:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">044 4269 5050</span></p>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">Mobile No.:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">+91 98563 21470</span></p>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">Kind Attn.:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">Aravind Mallick</span></p>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">State &amp; Code:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">Tamil Nadu (33)</span></p>
+      </div>
+      <div style="margin: 0 0 0 30px;width: 50%;">
+        <h3 style="font-size: 14px;font-weight: 600;margin: 0;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Ship To</h3>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">Name:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">Monthly</span></p>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">Address:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">26,Dolphine Circle, Chennai, Tamil Nadu - 600 041</span></p>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">GSTIN:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">123456789 RT 0001</span></p>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">Phone No.:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">044 4269 5050</span></p>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">Mobile No.:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">+91 98563 21470</span></p>
+        <p style=" margin: 0 0 3px 0; display: flex;">
+          <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 86px;">State &amp; Code:</label>
+          <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+      color: #000000; font-size: 13px; font-weight: 600;">Tamil Nadu (33)</span></p>
+      </div>
+  </div>
+  <div style="margin: 25px 0 10px 0;">
+    <p style=" margin: 0 0 5px 0; display: flex;">
+      <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;margin-right: 10px;">To Date:</label>
+      <span style="
+    font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; color: #000000; font-size: 13px; font-weight: 600; margin-right: 30px;">18-08-2020</span>
+      <label style="font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;color: #666666;font-size: 12px;font-weight: normal;margin-right: 10px;">From Date:</label>
+      <span style=" font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;
+    color: #000000; font-size: 13px; font-weight: 600;">18-08-2020</span></p>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="width: 100%; border: 1px solid #6e91aa; border-collapse: collapse;">
+      <tbody>
+        <tr>
+          <th rowspan="2" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Sl.No.</th>
+          <th rowspan="2" align="left" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Product Description</th>
+          <th rowspan="2" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">SAC Code</th>
+          <th rowspan="2" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">UoM</th>
+          <th rowspan="2" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Qty</th>
+          <th rowspan="2" align="right" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Rate</th>
+          <th rowspan="2" align="right" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Amount</th>
+          <th rowspan="2" align="right" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Discount</th>
+          <th rowspan="2" align="right" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Taxable Value</th>
+          <th scope="col" colspan="2" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">CGST</th>
+          <th colspan="2" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">SGST</th>
+          <th colspan="2" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">IGST</th>
+          <th rowspan="2" align="right" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Total</th>
+        </tr>
+        <tr>
+          <th align="right" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Rate</th>
+          <th align="right" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Amount</th>
+          <th align="right" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Rate</th>
+          <th align="right" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Amount</th>
+          <th align="right" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Rate</th>
+          <th align="right" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Amount</th>
+        </tr>
+        <tr>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"><b>Aug'19</b></td>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+        </tr>
+        <tr style="background: #f3f6f8;">
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">1</td>
+          <td align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Package B2</td>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">998598</td>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Month</td>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">2</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">1570.00</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">3140.00</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">3140.00</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">9.00</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">282.60</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">9.00</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">282.60</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">3705.20</td>
+        </tr>
+        <tr>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">2</td>
+          <td align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Individual Costing - EMPHR</td>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">998598</td>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Month</td>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">2</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">1570.00</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">3140.00</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">3140.00</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">9.00</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">282.60</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">9.00</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">282.60</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">3705.20</td>
+        </tr>
+        <tr style="background: #f3f6f8;">
+          <th colspan="4" align="left" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Total</th>
+          <td align="center" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">6</td>
+          <td align="right"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">563001.00</td>
+          <td align="right"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">563001.00</td>
+          <td align="right"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">563001.00</td>
+          <td align="right"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">563001.00</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"></td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">664341.18</td>
+        </tr>
+        <tr>
+          <th colspan="11" align="left" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Total Invoice amount in words</th>
+          <th colspan="4" align="left" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"> Total Amount before Tax</th>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"><strong style="
+">563001.00</strong></td>
+        </tr>
+        <tr style="background: #f3f6f8;">
+          <td colspan="11" rowspan="2" align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Rupees Six Lakh Sixty Four Thousand Three Hundred And Fourty One Only</td>
+          <td colspan="4" align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Add : CGST</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"><strong>50670.00</strong></td>
+        </tr>
+        <tr>
+          <td colspan="4" align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Add : SGST</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"><strong>50670.00</strong></td>
+        </tr>
+        <tr style="background: #f3f6f8;">
+          <th colspan="6" scope="col" align="left" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Bank Details-NEFT/RTGS</th>
+          <th colspan="5" scope="col" align="left" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Cheque / DD</th>
+          <td colspan="4" align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Add : IGST</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"><b>5.00</b></td>
+        </tr>
+        <tr>
+          <td colspan="6" align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"><div style="color: #666666; width: 90px; display: inline-block;">Bank Name:</div>
+            <div style="display: inline-block;">ICICI Bank</div></td>
+          <td colspan="5" rowspan="4" align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"> Payment to be made in favour of<br>
+            <strong>"Krya Screening Private Limited"</strong></td>
+          <td colspan="4" align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Total Tax Amount</td>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">101340.00</td>
+        </tr>
+        <tr style="background: #f3f6f8;">
+          <td colspan="6" align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"><div style="color: #666666; width: 90px; display: inline-block;">Bank A/c No:</div>
+            <div style="display: inline-block;">603305017386</div></td>
+          <th colspan="4" align="left" scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Total Amount after Tax:(R.Off)</th>
+          <td align="right" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"><strong>101340.00</strong></td>
+        </tr>
+        <tr>
+          <td colspan="6" align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"><div style="color: #666666; width: 90px; display: inline-block;">Bank Branch:</div>
+            <div style="display: inline-block;">Besant Nagar, Chennai</div></td>
+          <td colspan="4" rowspan="2" align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">GST on Reverse   Charge</td>
+          <td align="right" rowspan="2" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">No</td>
+        </tr>
+        <tr style="background: #f3f6f8;">
+          <td colspan="6" align="left" style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"><div style="color: #666666; width: 90px; display: inline-block;">Bank IFSC:</div>
+            <div style="display: inline-block;">ICIC0006033</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="color:#666666; margin: 0 0 20px 0;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;text-align: right;"> Certified that the particulars given above are true and correct<br>
+    For <b>M/s. Krya Screening Private Limited</b> </div>
+  <div style="display: flex;margin-top: 30px;">
+    <div style="margin: 0 30px 0 0 ;width: 50%;"> <img src="../assets/images/seal.jpg" alt="Krya Screening Private Limited Seal" height="120px">
+      <p style="font-size: 12px;color: #000000;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"> Seal</p>
+    </div>
+    <div style="margin: 0 0 0 30px;width: 50%; text-align: right;"> <img src="../assets/images/signature.jpg" alt="Authorised signatory" height="120px">
+      <p style="font-size: 12px;color: #000000;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;">Authorised signatory</p>
+    </div>
+  </div>
+  <div style="margin: 50px 0 10px 0;">
+    <h3 style="font-size: 16px; font-weight: 600; margin: 0; text-align: center;">Annexure - 1</h3>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="width: 100%; border: 1px solid #6e91aa; border-collapse: collapse;">
+      <tbody>
+        <tr>
+          <td colspan="11" align="center" valign="top" style="border: 1px solid #6e91aa;color: #666666;padding: 5px;font-size: 13px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"><b>Invoice Period From 01-Aug-2019 to 31-Aug-2019</b></td>
+        </tr>
+        <tr>
+          <th scope="col" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; line-height: initial;">Sl.No.</th>
+          <th align="left" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; line-height: initial;" scope="col">Case Ref. No.</th>
+          <th align="center" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; line-height: initial;" scope="col">PS No.</th>
+          <th align="left" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; line-height: initial;" scope="col">Candidate Name</th>
+          <th align="left" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; line-height: initial;" scope="col">Reference Name</th>
+          <th width="12%" align="center" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; line-height: initial;" scope="col">Components Detail <br>
+            <span style="font-size: 10px; font-weight: 400;">Package[Component :Nos+...] + <br>
+            Indv{Component :Nos+...}</span></th>
+          <th align="left" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; line-height: initial;" scope="col">Report sent on</th>
+          <th width="15%" align="center" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; line-height: initial;" scope="col">Remarks<br>
+            <span style="font-size: 10px; font-weight: 400;">Package Name[Package Fee] + <br>
+            Indv{Component Fee+...} + <br>
+            A.F(Additional Fee+...)</span></th>
+          <th align="right" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; line-height: initial;" scope="col">Rate Per Check (₹)</th>
+          <th align="right" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; line-height: initial;" scope="col">Add. Fee(₹)</th>
+          <th align="right" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif; line-height: initial;" scope="col">Total Amount (₹)</th>
+        </tr>
+        <tr>
+          <td align="center" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">1</td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">AC-AS-200 801</td>
+          <td align="center" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">N/A</td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">Gerald D B</td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;"></td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">REF:1</td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">01-Nov-2019</td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">INDV{890} + A.F(EMPHR-India and
+            Fees in 666 USD 666$)</td>
+          <td valign="top" align="right" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">22</td>
+          <td valign="top" align="right" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">300000</td>
+          <td valign="top" align="right" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">300022.00</td>
+        </tr>
+        <tr>
+          <td align="center" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">2</td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">AC-AS-777 583</td>
+          <td align="center" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">P S N</td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">Eashwar G S</td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;"></td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">Package B2[REF:1] + INDV
+            {EMPHR:1}</td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">20-Aug-2019</td>
+          <td align="left" valign="top" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">INDV{22} + A.F(REF-Country type
+            and Currency is India/Rupee and fee
+            as 222. 222.00₹)</td>
+          <td valign="top" align="right" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">2460</td>
+          <td valign="top" align="right" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">151255</td>
+          <td valign="top" align="right" style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;line-height: initial;">153715.00</td>
+        </tr>
+        <tr>
+          <th colspan="8" align="center" valign="top" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;" scope="col">TOTAL AMOUNT (EXCLUDING SERVICE TAX)</th>
+          <th align="right" valign="top" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;" scope="col">2482</th>
+          <th align="right" valign="top" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;" scope="col">451255</th>
+          <th align="right" valign="top" style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;" scope="col">453737</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top: 30px;border-top: 2px solid #0e4872;text-align: center;font-size: 12px;padding-top: 15px;font-family: Roboto,Arial,Helvetica,Calibri,Clear Sans,Helvetica Neue,sans-serif;"> <b>Page 1 of 1</b> <br>
+    Krya Screening Private Limited II/25, Level III, Dr.VSI Estate, Taramani-Velachery 100 feet Road, Thiruvanmiyur,
+    Chennai-600041.<br>
+    Phone: +91-44-42695050 / 51 / 52 / 53 | Fax: +91-44-24541249 | Email: <a href="mailto:verifications&#64;kryacheck.com" style="color: #0072ff; text-decoration: none;">verifications&#64;kryacheck.com</a> </div>
+</div>
+</body>
+</html>

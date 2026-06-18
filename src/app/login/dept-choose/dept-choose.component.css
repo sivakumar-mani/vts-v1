@@ -1,0 +1,236 @@
+﻿::ng-deep body {
+    background-color: #FBFBFB;
+    position: relative;
+    min-height: 100vh;
+    height: 100%;
+}
+
+.header {
+    height: 89px;
+    background-color: #0A5D96;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+}
+
+.header_container {
+    width: 80%;
+}
+
+.acheck_logo {
+    width: 238px;
+    display: inline-block;
+    position: relative;
+    top: 8px;
+    text-align: center;
+}
+
+.OptSel {
+    padding: 0 10px;
+    width: 100%;
+    float: left;
+}
+
+.content_area {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+h2 {
+    color: #0a5d96;
+}
+
+.ht {
+    text-align: center;
+}
+
+.department {
+    background-color: #ffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+}
+
+.select_btn {
+    width: 21.2222%;
+    background-color: #fff;
+    margin-bottom: 18px;
+    display: block;
+    float: left;
+    height: 63px;
+    margin-right: 0;
+    margin: 10px 25px 10px 25px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+    border-top-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+    position: relative;
+    overflow: hidden;
+}
+
+::ng-deep .select_btn .mat-radio-label .mat-radio-container {
+    top: 5px;
+}
+::ng-deep .select_btn .mat-radio-label .mat-radio-container {
+    top: 5px;
+}
+
+::ng-deep .mat-mdc-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle,
+ ::ng-deep .mat-radio-outer-circle {
+    border-color: #0a5d96;
+}
+
+::ng-deep .mat-mdc-radio-button.mat-accent .mat-radio-inner-circle,
+ ::ng-deep .mat-mdc-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+ ::ng-deep .mat-mdc-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
+ ::ng-deep .mat-mdc-radio-button.mat-accent:active .mat-radio-persistent-ripple {
+    background-color: #007ad9;
+}
+
+::ng-deep .select_btn .mat-radio-label {
+    padding: 5px;
+    line-height: 58px;
+    display: block !important;
+    text-align: left;
+    padding-left: 25px;
+}
+
+/* ── Angular 15 MDC radio button styling for select_btn ── */
+/* Make mdc-form-field fill the full card height */
+::ng-deep .select_btn .mdc-form-field {
+    width: 100%;
+    height: 63px;
+    display: flex !important;
+    align-items: center;
+    padding: 0 !important;
+}
+
+/* Dark blue box on left — matches old design's large indicator */
+::ng-deep .select_btn .mdc-radio {
+    background-color: #0a5d96 !important;
+    width: 55px !important;
+    height: 63px !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    flex-shrink: 0;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+/* White radio circles inside dark box */
+::ng-deep .select_btn .mdc-radio__background {
+    width: 20px !important;
+    height: 20px !important;
+    position: static !important;
+}
+::ng-deep .select_btn .mdc-radio__outer-circle {
+    border-color: #fff !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+::ng-deep .select_btn .mdc-radio__inner-circle {
+    background-color: #fff !important;
+    border-color: #fff !important;
+}
+
+/* Ripple/touch-target should not overflow the box */
+::ng-deep .select_btn .mdc-radio__ripple,
+::ng-deep .select_btn .mat-mdc-radio-touch-target {
+    display: none !important;
+}
+
+/* Label text on the right */
+::ng-deep .select_btn .mdc-label {
+    padding: 5px 5px 5px 12px !important;
+    line-height: 58px !important;
+    flex: 1;
+    cursor: pointer;
+    font-size: 13px;
+    color: #353537;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.copyright_sec {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+}
+
+.clearfix {
+    clear: both !important;
+}
+
+.btns {
+    padding-bottom: 28px;
+}
+
+.select_btn:hover {
+    box-shadow: rgb(41 178 252 / 72%) 0px 2px 4px 0px, rgb(14 30 37 / 32%) 0px 2px 16px 0px;
+}
+
+
+/* Custom Responsive */
+
+@media only screen and (max-width: 480px) {
+    .select_btn {
+        width: 87%;
+    }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+    .select_btn {
+        width: 45%;
+        margin: 10px 15px !important;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .select_btn {
+        width: 29.2222%;
+        margin: 10px 15px !important;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .btns {
+        padding-bottom: 28px;
+    }
+    .OptSel {
+        padding: 0 10px;
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1024px) {
+    .select_btn {
+        width: 29.2222% !important;
+        margin: 10px 15px !important;
+    }
+    .OptSel {
+        padding: 0 10px;
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 1025px) and (max-width: 1368px) {
+    .select_btn {
+        width: 22.2222% !important;
+        margin: 10px 15px !important;
+    }
+    .OptSel {
+        padding: 0 10px;
+        width: 100%;
+        padding-left: 2.5em;
+    }
+}
+
+@media only screen and (min-width: 1369px) {
+    .OptSel {
+        padding: 0 10px;
+        width: 100%;
+        padding-left: 18em;
+    }
+}

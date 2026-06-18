@@ -1,0 +1,211 @@
+/* ::ng-deep .page-container app-duplicate .content-area {
+    margin-top: -51px !important;
+    min-height: calc(100vh - 75px);
+    margin-bottom: 0;
+  } */
+h1.welcome {
+  color: #58595c;
+  font-size: 20px;
+  font-weight: 300;
+  margin: 5px 0 15px 0;
+  line-height: 20px;
+}
+.un-dt {
+  color: #58595c;
+  font-size: 13px;
+  margin-bottom: 15px;
+  letter-spacing: 0;
+}
+.un-dt i {
+  color: #8A8B8D;
+  font-size: 14px;
+  margin-right: 8px;
+}
+.un-dt i:last-child {
+  margin-left: 10px;
+}
+.homeSide {
+  padding: 16px 20px !important;
+}
+/* Dashboard icons Starts */
+.DbBg {
+  background: #fff;
+  border-radius: 4px;
+}
+.DbBg .list {
+  padding: 15px !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.DbBg .list:hover{
+  box-shadow: 1px 1px 20px 4px rgba(1,1,1,.1);
+  z-index: 1;
+}
+.DbBg .list a {
+  width: 100%;
+  cursor: pointer;
+}
+.DbBg .list i {
+  font-size: 50px;
+}
+.DbBg .list .count {
+  color: #353537;
+  font-size: 18px;
+  font-weight: 500;
+  display: block;
+  text-align: center;
+}
+.DbBg .list .name {
+  color: #8a8b8d;
+  font-size: 11px;
+  text-transform: uppercase;
+  display: block;
+  text-align: center;
+  line-height: 1.3;
+}
+.icolorOne {
+  color: #2d98da;
+}
+.icolorTwo {
+  color: #e81123;
+}
+.icolorThree {
+  color: #20bf6b;
+}
+.icolorFour {
+  color: #5867dd;
+}
+.icolorFive {
+  color: #d9b300;
+}
+/* Dashboard icons Ends */
+.BlueGrad {
+  background: #006bd5;
+  background: linear-gradient(135deg, #006bd5 0%, #00c4ff 100%) !important;
+}
+.GreenGrad {
+  background: #00d360;
+  background: linear-gradient(135deg, #00d45f 0%, #00c9b8 100%) !important;
+}
+.PurpleGrad {
+  background: #454cfe;
+  background: linear-gradient(135deg, #454cfe 0%, #7f48fe 100%) !important;
+}
+.RedGrad {
+  background: #fe8700;
+  background: linear-gradient(135deg, #e75200 0%, #ff9800 100%) !important;
+}
+.Gbox {
+  min-height: 132px;
+  border-radius: 4px;
+  color: #fff;
+  padding: 15px;
+  position: relative;
+}
+.Gbox h4 {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 10px 0;
+  padding: 0;
+  line-height: 1;
+}
+.Gbox p {
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+.Gbox .count {
+  background: rgba(255, 255, 255, 0.5);
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0;
+  border-radius: 4px;
+  min-width: 45px;
+  text-align: center;
+  display: inline-block;
+  line-height: 22px;
+}
+.Gbox .more {
+  font-size: 12px;
+  color: #fff;
+  text-align: right;
+  float: right;
+  font-weight: 300;
+}
+.Gbox button {
+  line-height: 27px !important;
+  padding: 0 10px !important;
+}
+.Gbox i {
+  position: absolute;
+  right: 0;
+  font-size: 128px;
+  color: rgba(0, 0, 0, 0.1);
+  bottom: 0;
+}
+.db-accord .mat-expansion-panel-header {
+  padding: 0;
+  height: 62px !important;
+}
+.db-accord .mat-expansion-panel-header:hover {
+  background: rgba(255, 255, 255, 1);
+}
+.db-accord .mat-expansion-panel {
+  box-shadow: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 0;
+}
+.db-accord .mat-expansion-panel-header-title {
+  color: #58595C;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 42px;
+}
+.db-accord .mat-expansion-panel-header-title:hover {
+  color: #007AFF;
+}
+.db-accord .mat-expansion-panel-header-title i {
+  color: #58595c;
+  font-size: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 100px;
+  width: 42px;
+  height: 42px;
+  text-align: center;
+  line-height: 40px;
+  margin-right: 10px;
+}
+.db-accord .mat-expansion-panel-header-title i:hover {
+  background: #007AFF;
+  color: #fff;
+  border: 1px solid #007AFF;
+}
+.db-accord .mat-expansion-panel-body {
+  padding: 0 !important;
+}
+.db-accord .dbody {
+  padding: 0;
+}
+.dbody p {
+  margin: 0;
+  font-size: 13px;
+  color: #58595c;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.15);
+  padding: 6px 8px;
+}
+.dbody p:nth-child(2n) {
+  background: rgba(0, 0, 0, 0.025);
+}
+.dbody p:last-child {
+  border: none medium;
+}
+.dbody p em {
+  text-align: right;
+  float: right;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+}

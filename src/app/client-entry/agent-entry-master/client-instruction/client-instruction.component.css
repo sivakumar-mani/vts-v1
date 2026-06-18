@@ -1,0 +1,7 @@
+::ng-deep p-table.edit-tbl table tr td p, ::ng-deep p-table.edit-tbl table tr td span{
+  margin: 0px !important;  
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  white-space: pre-line !important;
+}

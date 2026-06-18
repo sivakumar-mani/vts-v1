@@ -1,0 +1,135 @@
+<!-- <form [formGroup]="selectProperties?.selectFormGroup">
+<mat-form-field [appearance]="selectProperties.appearance" fxFlex="100%">
+  <mat-label>{{ selectProperties.placeholder }}</mat-label>
+
+  <input
+    matInput
+    #inputVal
+    [placeholder]="selectProperties.placeholder"
+    [formControlName]="selectProperties?.formControlName"
+    [matAutocomplete]="autoCmpt"
+    [required]="selectProperties.required"
+    (focus)="setItems(inputVal.value)"
+    (keyup)="keyUpFunction($event, inputVal.value)"
+    (input)="setItems(inputVal.value)"
+    (blur)="checVal(inputVal.value)"
+    (click)="inputVal.select()"
+    />
+
+  <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+
+  <mat-error
+      *ngIf="
+        selectProperties?.selectFormGroup.controls[selectProperties.formControlName]?.errors?.required &&
+        selectProperties.required
+      "
+    >
+    {{ selectProperties.placeholder }} is required
+  </mat-error>
+
+  <mat-error
+      *ngIf="
+        selectProperties?.selectFormGroup.controls[selectProperties.formControlName]?.errors?.incorrect
+      "
+    >
+    {{ selectProperties.placeholder }} is not valid.
+  </mat-error>
+
+  <mat-autocomplete
+    #autoCmpt="matAutocomplete"
+    [displayWith]="displayDataFn"
+    (optionSelected)="getId($event)"
+    >
+    <div class="custom-scroll-container" (scroll)="onScroll()">
+
+      <mat-option
+        *ngFor="let data of filterList"
+        [value]="data[selectProperties.controlId]"
+        class="autocom-option autocom-tr"
+        >
+
+        <ng-container *ngIf="inputVal.value; else plainText">
+
+          <span>{{ data[selectProperties.controlName] }}</span>
+        </ng-container>
+
+        <ng-template #plainText>
+          <span>{{ data[selectProperties.controlName] }}</span>
+        </ng-template>
+      </mat-option>
+
+      <mat-option *ngIf="filterList.length === 0" [disabled]="true">
+        <div class="no-record"><span>No Data Found</span></div>
+      </mat-option>
+
+    </div>
+  </mat-autocomplete>
+
+</mat-form-field>
+</form> -->
+
+
+
+@if (selectProperties) {
+  <form [formGroup]="selectProperties.selectFormGroup">
+    <mat-form-field [appearance]="appearance" fxFlex="100%">
+      <mat-label>{{ selectProperties.placeholder }}</mat-label>
+      <input
+        matInput
+        #inputVal
+        [placeholder]="selectProperties.placeholder"
+        [formControlName]="selectProperties.formControlName"
+        [matAutocomplete]="autoCmpt"
+        [required]="selectProperties.required"
+        (focus)="setItems(inputVal.value)"
+        (keyup)="keyUpFunction($event, inputVal.value)"
+        (input)="setItems(inputVal.value)"
+        (blur)="checVal(inputVal.value)"
+        (click)="inputVal.select()"
+        />
+      <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+      @if (
+        selectProperties.selectFormGroup.controls[selectProperties.formControlName]?.errors?.required &&
+        selectProperties.required
+        ) {
+        <mat-error
+          >
+          {{ selectProperties.placeholder }} is required
+        </mat-error>
+      }
+      @if (
+        selectProperties.selectFormGroup.controls[selectProperties.formControlName]?.errors?.incorrect
+        ) {
+        <mat-error
+          >
+          {{ selectProperties.placeholder }} is not valid.
+        </mat-error>
+      }
+      <mat-autocomplete
+        #autoCmpt="matAutocomplete"
+        [displayWith]="displayDataFn"
+        (optionSelected)="getId($event)"
+        >
+        <div class="custom-scroll-container" (scroll)="onScroll()">
+          @for (data of filterList; track data) {
+            <mat-option
+              [value]="data[selectProperties.controlId]"
+              class="autocom-option autocom-tr"
+              >
+              @if (inputVal.value) {
+                <span>{{ data[selectProperties.controlName] }}</span>
+              } @else {
+                <span>{{ data[selectProperties.controlName] }}</span>
+              }
+            </mat-option>
+          }
+          @if (filterList.length === 0) {
+            <mat-option [disabled]="true">
+              <div class="no-record"><span>No Data Found</span></div>
+            </mat-option>
+          }
+        </div>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+}

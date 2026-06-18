@@ -1,0 +1,156 @@
+﻿<app-breadcrumb [btnBack]="breadcrumbFlags.btnBack"
+[routePath]="routePath"></app-breadcrumb>
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header class="mat-card-header">
+        <div class="mat-card-header-text">
+          <mat-card-title class="mat-card-title">
+            <h1 class="header-title">Chat</h1>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="dt-viewBg">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+              fxLayoutGap="0px" fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
+              <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="45%" fxFlex.xs="100%" class="border-right">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                  <div fxFlex="100%">
+                    <h4 class="chatHeader">
+                      Chat List
+                      <!-- <span class="chatHeader-right">
+                      <a href="#men"><i class="icon-more-vertical" mat-icon-button [matMenuTriggerFor]="menu"></i></a>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item><span>Group Info</span></button>
+                        <button mat-menu-item><span>Select Messages</span></button>
+                        <button mat-menu-item><span>Clear Messages</span></button>
+                      </mat-menu>
+                    </span> -->
+                  </h4>
+                  <div fxLayout="row" class="chatleft-search">
+                    <div fxFlex="100%">
+                      <span class="">
+                        <i class="icon-search1 ser"></i>
+                      </span>
+                      <input #search class="chatsearchbx" type='text' placeholder="Search CandidateName, RefNo, Status..." (input)="searchValue(search)">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              @for (comm of communicationList; track comm; let i = $index) {
+                <div fxLayout="row" fxLayout.lg="row"  fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                  <div fxFlex="100%">
+                    <div class="chatlist-left" (click)="getRows(i, comm);" style="overflow:auto">
+                      <div fxLayout="row"  fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+                        <div fxFlex="100%" [ngClass]="i === ind ? 'dt-list active' : 'dt-list'">
+                          <div class="team-details">
+                            <div class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                              {{ comm?.candidateName.firstName?.slice(0, 1)}}
+                            {{ comm?.candidateName.lastName?.slice(0, 1)}}</div>
+                            <div class="teamL-Detail">
+                              <h5>{{ comm?.candidateName.firstName }}
+                                {{ comm?.candidateName.lastName }} -
+                                ({{comm.clientRefNo}})<span class="date">{{comm.requestDate  | date : 'dd/MM/yyyy hh:mm a'}}</span></h5>
+                                <p>
+                                  <label>Case Status:</label> {{comm?.componentStatus}}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+              <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="55%" fxFlex.xs="100%" >
+                @for (comm of communicationList; track comm; let j = $index) {
+                  <div fxLayout="row"  fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="20px" class="teamdata-link">
+                    @if (((ind === j))) {
+                      <div fxFlex="100%" class="team-view">
+                        <div class="team-details">
+                          <div class="avatar avatarBg4 mat-card-avatar chat-avatar">{{ comm?.candidateName.firstName?.slice(0, 1)}}
+                          {{ comm?.candidateName.lastName?.slice(0, 1)}} </div>
+                          <div class="teamL-Detail">
+                            <h5>{{ comm?.candidateName.firstName }}
+                              {{ comm?.candidateName.lastName }} - ({{comm.clientRefNo}}) <span class="chatHeader-right">
+                              <a href="#men"><i class="icon-search1"></i></a>
+                              <!-- <a href="#men"><i class="icon-paperclip"></i> </a>
+                              <a><i class="icon-more-vertical" mat-icon-button
+                              [matMenuTriggerFor]="menu"></i></a>
+                              <mat-menu #menu="matMenu">
+                                <button mat-menu-item>
+                                  <span>Group Info</span>
+                                </button>
+                                <button mat-menu-item>
+                                  <span>Select Messages</span>
+                                </button>
+                                <button mat-menu-item>
+                                  <span>Clear Messages</span>
+                                </button>
+                              </mat-menu> -->
+                            </span>
+                          </h5>
+                          <p>
+                            <em class="cn-chip">{{comm?.componentName}}
+                            </em> - Functional Entity : {{comm?.functionalEntity}}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <div>
+                    <div class="chat-right" style="overflow:auto">
+                      <div class="chatBoxBody">
+                        <div class="chatMsg">
+                          @for (chat of comments; track chat) {
+                            <div class="chatBubble">
+                              <span class="timestamp">{{common.getTimezoneOffset(chat?.statusDate, false) | date : 'dd/MM/yyyy hh:mm a'}}</span>
+                              @if (((userData.applicationId === 2 &&  chat.clientInteractionFlag !== true) ||
+                                (userData.applicationId === 1 && chat?.clientInteractionFlag === true))) {
+                                <div class="chatTxt">{{chat?.comments}}</div>
+                              }
+                            </div>
+                          }
+                          @for (chat of comments; track chat) {
+                            <span >@if (((userData.applicationId === 2 &&  chat.clientInteractionFlag === true) ||
+                              (userData.applicationId === 1 && chat?.clientInteractionFlag !== true))) {
+                              <div class="chatBubble Right">
+                                <span class="timestamp">{{common.getTimezoneOffset(chat?.statusDate, false) | date : 'dd/MM/yyyy hh:mm a'}}</span>
+                                <div class="chatTxt">{{chat?.comments}}
+                                </div>
+                              </div>
+                            }</span>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="chatBoxFooter">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <textarea matInput [formControl] = "commentsCtrl" placeholder="Type Message ..."></textarea>
+                      @if (commentsCtrl?.errors?.required) {
+                        <mat-error>Comments is required</mat-error>
+                      }
+                    </mat-form-field>
+                    <button mat-icon-button (click)="sendMessage()">
+                      <i class="material-icons"> send </i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+</div>

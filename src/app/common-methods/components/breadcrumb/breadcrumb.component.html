@@ -1,0 +1,217 @@
+<form appScrollToError>
+  <div>
+    <!-- <div class="b-crumb">
+    <ol class="breadcrumb">
+      <li *ngIf="showRoutePath" class="breadcrumb-item"><a routerLink="/dashboard/home">Dashboard</a></li>
+      <li class="breadcrumb-item active">{{routePath}}</li>
+    </ol>
+  </div> -->
+  @if (showRoutePath) {
+    <div class="b-crumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="userData.applicationId!==3?'/dashboard/home':null">Dashboard</a></li>
+        @for (data of routPath; track data; let la = $last) {
+          <li class="breadcrumb-item" [ngClass]="la ? 'active' : ''">
+            <a>{{ data }}</a>
+          </li>
+        }
+      </ol>
+    </div>
+  }
+  @if (!showRoutePath) {
+    <div class="b-crumbLogo">
+      @if (logoList?.clientLogos?.length > 0) {
+        <div [routerLink]="userData.applicationId!==3?'/dashboard/home':null">
+        <img src="{{ verification.getCommonFileLogo(logoList?.clientLogos, common.KRYA_LOGO, '') }}" alt="Krya Screening Private Limited Logo" height="45" /> </div>
+      }
+    </div>
+  }
+  <div class="b-crumb-toolbar">
+    <div class="btnTool" fxLayoutGap="10px">
+      <!-- tat insuff -->
+      @if (btntatInsuff) {
+        <button mat-icon-button matTooltip="Move Cases To insufficiency" matTooltipClass="accent-tooltip" (click)="TatInsufficiency()">
+          <i class="icon-arrow-up-circle"></i>Move Cases To insufficiency
+        </button>
+      }
+      @if (btnExcelExport) {
+        <button mat-icon-button form="ngForm" matTooltip="Export" [disabled]="btnExportDisabled" (click)="excelExport()" matTooltipClass="accent-tooltip">
+          <i class="icon-excel"></i>Export
+        </button>
+      }
+
+      <!-- EXPORT FILE -->
+      @if (btnExport) {
+        <button mat-icon-button form="ngForm" [disabled]="btnExportDisabled" matTooltip="Export Template" (click)="exportFile()" matTooltipClass="accent-tooltip">
+          <i class="icon-downloadbutton"></i>Export
+        </button>
+      }
+      <!-- Estimation Cost EXPORT FILE -->
+      @if (btnEstExcelExport) {
+        <button mat-icon-button form="ngForm" [disabled]="btnExportDisabled" matTooltip="Estimated Cost" (click)="EstexcelExport()" matTooltipClass="accent-tooltip">
+          <i class="icon-excel"></i>Estimated Cost
+        </button>
+      }
+      <!--  VALIDATE FILE-->
+      @if (btnValidate) {
+        <button mat-icon-button form="ngForm" matTooltip="Validate" matTooltipClass="accent-tooltip" (click)="validateFile()">
+          <i class="icon-validation"></i>Validate
+        </button>
+      }
+      <!-- UPLOAD FILE -->
+      @if (btnUpload) {
+        <button mat-icon-button form="ngForm" matTooltip="Upload" [disabled]="btnUploadDisabled"  (click)="uploadFile()" matTooltipClass="accent-tooltip">
+          <i class="icon-uploadbutton"></i>Upload
+        </button>
+      }
+      <!-- APPROVE-->
+      @if (btnApprove) {
+        <button mat-icon-button form="ngForm" matTooltip="Approve" (click)="approve()" matTooltipClass="accent-tooltip" [disabled]="btnApproveDisabled">
+          <i class="icon-approv"></i>Approve
+        </button>
+      }
+      <!-- REJECT-->
+      @if (btnReject) {
+        <button mat-icon-button matTooltip="Reject" matTooltipClass="accent-tooltip" [disabled]="btnRejectDisabled" (click)="reject()">
+          <i class="icon-reject"></i>Reject
+        </button>
+      }
+      <!-- SEND-->
+      @if (btnSend) {
+        <button mat-icon-button form="ngForm" matTooltip="Send" (click)="send()" matTooltipClass="accent-tooltip" [disabled]="btnSendDisabled">
+          <i class="material-icons">send</i>Send
+        </button>
+      }
+      <!-- REVIEW -->
+      @if (btnReview) {
+        <button mat-icon-button form="ngForm" matTooltip="Review" (click)="review()" matTooltipClass="accent-tooltip" [disabled]="btnApproveDisabled">
+          <i class="icon-book-open"></i>Review
+        </button>
+      }
+      <!--DOWNLOAD FILE -->
+      @if (btnDownLoad) {
+        <button mat-icon-button form="ngForm" matTooltip="Download" (click)="download()" matTooltipClass="accent-tooltip">
+          <i class="icon-downloadbutton"></i>Download
+        </button>
+      }
+      <!--CLOUD ADD UPLOAD FILE -->
+      @if (btnAddUpload) {
+        <button mat-icon-button form="ngForm" matTooltip="Bulk Upload" [disabled]="btnAddUploadDisabled" (click)="addUploadFile()" matTooltipClass="accent-tooltip">
+          <i class="icon-uploadbutton"></i>Upload
+        </button>
+      }
+      <!-- ON HOLD-->
+      @if (btnHold) {
+        <button mat-icon-button matTooltip="On Hold" matTooltipClass="accent-tooltip" (click)="hold()" [disabled]="btnHoldDisabled">
+          <i class="material-icons">pan_tool</i>On Hold
+        </button>
+      }
+      <!--  RESET TABLE-->
+      @if (btnResetTbl) {
+        <button mat-icon-button matTooltip="Reset" matTooltipClass="accent-tooltip" type="button" (click)="resetTbl()">
+          <i class="icon-refreshsb"></i>Reset
+        </button>
+      }
+      <!--  ADD  -->
+      @if (btnAdd) {
+        <button mat-icon-button matTooltip="Add" [disabled]="btnAddDisabled" matTooltipClass="accent-tooltip" (click)="add()">
+          <i class="icon-plus"></i>Add
+        </button>
+      }
+
+      @if (btnBulk) {
+        <button mat-icon-button matTooltip="Bulk Clearance" [disabled]="btnBulkDisabled" matTooltipClass="accent-tooltip" (click)="bulkClearance()">
+          <i class="icon-insufficiencyclearance"></i>Bulk
+        </button>
+      }
+
+      <!--  SAVE FORM-->
+      @if (btnMoveQc && closedFlag === false) {
+        <button mat-icon-button matTooltip="Send To QC" matTooltipClass="accent-tooltip" (click)="moveQc()">
+          <i class="icon-qc"></i>Send To QC
+        </button>
+      }
+      @if (btnMoveClient && closedFlag === false) {
+        <button mat-icon-button matTooltip="Send To Client" matTooltipClass="accent-tooltip" (click)="moveClient()">
+          <i class="icon-qc"></i>Send To Client
+        </button>
+      }
+
+      @if (btnMoveTl && closedFlag === false) {
+        <button mat-icon-button matTooltip="Send To TL" matTooltipClass="accent-tooltip" (click)="moveTl()">
+          <i class="icon-qc"></i>Send To TL
+        </button>
+      }
+      <!-- Added by megala SRS - VTS2-2024-CRT-0195    -->
+      @if (btnCAMApproval && closedFlag === false) {
+        <button mat-icon-button matTooltip="Send To CAM APPROVAL" matTooltipClass="accent-tooltip" (click)="CAMApproval()">
+          <i class="icon-qc"></i>Send To CAM APPROVAL
+        </button>
+      }
+      @if (btnReAssign && closedFlag === false) {
+        <button mat-icon-button matTooltip="Move case to orginal owner" matTooltipClass="accent-tooltip" (click)="ReAssign()">
+          <i class="icon-arrow-up-circle"></i>Move case to orginal owner
+        </button>
+      }
+
+      @if (btnPreview) {
+        <button mat-icon-button matTooltip="Pre-View Document" matTooltipClass="accent-tooltip" (click)="preview()">
+          <i class="icon-previewdocument"></i>Pre-View
+        </button>
+      }
+      @if (price > 0) {
+        <span>
+          &nbsp;&nbsp;<span class="tag"><b>Price: ₹ {{price}}</b></span>&nbsp;&nbsp;
+        </span>
+      }
+      <!-- Preview Invoice -->
+      @if (btnPreviewInvoice) {
+        <button mat-icon-button [disabled]="btnPreviewInvoiceDisabled" matTooltip="Preview Invoice" (click)="previewInvoice()" matTooltipClass="accent-tooltip">
+          <i class="icon-invoice1"></i>Preview
+        </button>
+      }
+      <!-- <button mat-icon-button matTooltip="Preview Invoice" *ngIf="btnPreviewInvoice" matTooltipClass="accent-tooltip"
+      (click)="previewInvoice()">
+      <i class="icon-arrowleft"></i>Preview Invoice
+    </button> -->
+    @if (btnSave && closedFlag === false) {
+      <button type="submit" mat-icon-button matTooltip="{{ toolTip }}" [disabled]="btnSaveDisabled" matTooltipClass="accent-tooltip" (click)="save()">
+        <i class="icon-save"></i>{{ toolTip }}
+      </button>
+    }
+    <!--  SEARCH FORM-->
+    @if (btnSearch) {
+      <button type="button" mat-icon-button matTooltip="Re-Open Search" matTooltipClass="accent-tooltip" (click)="search()">
+        <i class="icon-search1"></i>Search
+      </button>
+    }
+    <!--  RESET FORM-->
+    @if (btnReset) {
+      <button mat-icon-button matTooltip="Reset" matTooltipClass="accent-tooltip" form="ngForm" type="button" (click)="reset()">
+        <i class="icon-refreshsb"></i>Reset
+      </button>
+    }
+    <!-- DELETE -->
+    @if (btnDelete) {
+      <button mat-icon-button matTooltip="Delete" matTooltipClass="accent-tooltip" (click)="delete()">
+        <i class="icon-delete"></i>Delete
+      </button>
+    }
+
+    <!--  BACK TO TABLE-->
+    @if (btnBack) {
+      <button type="button" mat-icon-button matTooltip="Back" matTooltipClass="accent-tooltip" (click)="back()">
+        <i class="icon-arrowleft"></i>Back
+      </button>
+    }
+    <!--  Bulk Approval -->
+    @if (btnBulkApproval) {
+      <button type="button" mat-icon-button matTooltip="Back" [disabled]="btnBulkApprovalDisabled" matTooltipClass="accent-tooltip" (click)="bulkApproval()">
+        <i class="icon-save"></i>Bulk Approval
+      </button>
+    }
+
+  </div>
+</div>
+</div>
+</form>

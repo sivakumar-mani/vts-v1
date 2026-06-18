@@ -1,0 +1,256 @@
+﻿.FullBody {
+  width: 100%;
+  background: #fff 0 0 no-repeat;
+}
+.landBanner {
+  min-height: calc(100vh - 160px);
+  margin-bottom: 15px;
+  margin-top: 60px;
+}
+.HeaderBg {
+  padding-top: 25px;
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+}
+.HeaderBg a {
+  color: #353536;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+  float: right;
+  line-height: 50px;
+}
+.HeaderBg a i {
+  font-size: 18px;
+}
+.HContBody {
+  width: 85%;
+  margin-right: auto;
+  margin-left: auto;
+}
+.ContBody {
+  width: 85%;
+  margin-right: auto;
+  margin-left: auto;
+}
+.PricingHead {
+  font-size: 46px;
+  font-weight: 800;
+  line-height: 50px;
+  margin: 0 auto 25px auto;
+  text-align: center;
+}
+.PriceCont {
+  margin: 0 -12px -24px;
+  width: calc(100% + 24px);
+}
+.PriceBox {
+  padding: 0 12px 20px 12px !important;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+}
+.pricingTier {
+  background-color: #e6f7ff;
+  padding: 40px 24px;
+  margin: 0 0 24px;
+  border-radius: 0;
+  -ms-flex: 1;
+  flex: 1;
+  overflow: hidden;
+  max-width: 100%;
+  position: relative;
+}
+/* .PriceBox:first-child, .PriceBox:last-child {
+    margin-top: 20px; 
+	margin-bottom: 20px;
+} 
+.PriceBox:first-child .pricingTier, .PriceBox:last-child .pricingTier{
+  padding-top: 20px;
+
+} 
+.PriceBox:nth-child(n+1){
+  margin-top: 20px; 
+	margin-bottom: 20px;
+}
+.PriceBox:nth-child(n+1) .pricingTier, .PriceBox:nth-child(n+1) .pricingTier{
+  padding-top: 20px;
+} */
+.PricingTierHeaderBlock-name {
+  color: #0073B1;
+  font-weight: 300;
+  margin: 0;
+  font-size: 26px;
+  line-height: 1;
+}
+.PricingTierHeaderBlock-value-proposition {
+  display: block;
+  font-weight: 800;
+  line-height: 1.2;
+  font-size: 26px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+.PricingTierHeaderBlock-limits {
+  font-size: 16px;
+  font-weight: 500;
+  color: #08BA53;
+  margin: 10px 0 20px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.PricingTierHeaderBlock-price {
+  font-weight: 800;
+  font-size: 42px;
+  line-height: 1;
+}
+.PricingTierHeaderBlock-price span {
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.pricing-tier-toggle-body {
+  min-height: 190px;
+  margin-top: 20px;
+}
+.PricingTierHeaderBlock-fees {
+  font-size: 15px;
+  color: #58595c;
+}
+.ListsBlock {
+  margin-bottom: 40px;
+}
+.ListsBlock p {
+  margin: 5px 0 5px 0;
+  font-size: 13px;
+  display: flex;
+}
+.ListsBlock p:before {
+  content: "✔";
+  color: #08BA53;
+  margin-right: 10px;
+  font-size: 12px;
+}
+.pricing-tier-foot {
+  width: 100%
+}
+.TileBlock:before {
+  background-color: #0073B1;
+  color: #fff;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 36px;
+  content: "MOST POPULAR";
+  display: block;
+  height: 40px;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  left: 0;
+  right: 0;
+}
+.TileBlock .pricing-tier-top-wrap {
+  margin-top: 20px;
+}
+.Price-title {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+  text-transform: none;
+  margin: 40px auto 20px;
+  text-align: center;
+}
+/* Pricing accordion Starts*/
+.PricingAccord.mat-accordion > .mat-expansion-panel {
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+.PricingAccord.mat-accordion .mat-expansion-panel-header-title i {
+  font-size: 24px;
+  padding-right: 10px;
+  line-height: 25px;
+}
+.PricingAccord.mat-accordion .mat-expansion-panel:not([class*=mat-elevation-z]) {
+  box-shadow: 0 3px 1px -3px rgba(0, 0, 0, .2), 0 0px 1px 0 rgba(0, 0, 0, .14), 0 0px 2px 0 rgba(0, 0, 0, .12);
+}
+.PricingAccord.mat-accordion .mat-expansion-panel-header {
+  padding: 0 20px;
+}
+.PricingAccord.mat-accordion .mat-accordion .mat-expansion-panel:not(.mat-expanded), .mat-accordion .mat-expansion-panel:not(.mat-expansion-panel-spacing) {
+  border-radius: 4px;
+}
+::ng-deep .PricingAccord.mat-accordion .mat-accordion .mat-expanded.mat-expansion-panel-spacing {
+  margin: 10px 0px !important;
+}
+.PricingAccord.mat-accordion .mat-expansion-panel-header-title {
+  color: #58595c;
+  font-weight: 700;
+}
+.PricingAccord.mat-accordion .mat-expansion-panel-header-description {
+  margin-right: 20px;
+  font-size: 13px;
+  color: #08BA53;
+  font-weight: 500;
+}
+::ng-deep .PricingAccord.mat-accordion .mat-expansion-panel-body {
+  padding: 0 24px 16px !important
+}
+::ng-deep .PricingAccord.mat-accordion .mat-expansion-panel-body p {
+  line-height: 23px;
+  font-size: 13px;
+}
+.PricingAccord.mat-accordion .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
+  background: transparent !important;
+}
+.PricingAccord.mat-accordion .mat-card.db-listdetails {
+  padding: 0 20px !important;
+  margin: 0px;
+}
+.PricingAccord.mat-accordion .mat-card.db-listdetails .mat-list, .PricingAccord.mat-accordion .db-listdetails .mat-list .mat-mdc-list-item {
+  padding-top: 0px !important;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.80);
+}
+::ng-deep .PricingAccord.mat-accordion .db-listdetails .mat-list .mat-mdc-list-item .mat-mdc-list-item-content {
+  padding: 0px 0px 0px 0px !important;
+}
+::ng-deep .PricingAccord.mat-accordion .db-listdetails .mat-list .mat-mdc-list-item .mdc-list-item__content {
+  padding: 0px 0px 0px 0px !important;
+}
+.PricingHeaderBlock {
+  margin: 10px 0 20px;
+  position: relative;
+}
+.PricingHeaderBlock .PricingHeaderBlock-title {
+  font-weight: 800;
+  display: inline-block;
+  font-size: 16px;
+}
+.PricingHeaderBlock .PricingHeaderBlock-subtitle {
+  line-height: 20px;
+  text-transform: none;
+  margin-left: 48px;
+  display: inline-block;
+  color: #9b9b9d;
+}
+.PricingHeaderBlock .PricingHeaderBlock-subtitle:before {
+  content: "";
+  background: #000;
+  width: 1px;
+  height: 18px;
+  display: block;
+  position: absolute;
+  margin-left: -24px;
+}
+/* Pricing accordion Ends*/
+footer {
+  font-size: 11px;
+  color: #8A8B8D;
+  text-align: center;
+  padding: 10px 0 15px 0;
+  bottom: 0px;
+  width: 100%;
+}

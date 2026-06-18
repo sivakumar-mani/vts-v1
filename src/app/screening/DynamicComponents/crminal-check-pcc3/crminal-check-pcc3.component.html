@@ -1,0 +1,199 @@
+<form [formGroup]="mainForm" autocomplete="off" role="presentation">
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%">
+      <app-base-info [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'"
+        [compBaseDetails]="compBaseDetails" (emitNotappChange)="notApplicable($event)"
+      [showNotApplicable]="showNotApplicable"> </app-base-info>
+    </div>
+  </div>
+  <div [formGroupName]="formgroupName">
+    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+      <div fxFlex="100%">
+        <h3 class="sub-header">Address Details</h3>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Address Type</mat-label>
+          <mat-select placeholder="Address Type" formControlName="addressTypeLookupId" required
+            (selectionChange)="addtypeChange(mainForm?.get(formgroupName+'.addressTypeLookupId').value)">
+            @for (priority of screeningService.addressType; track priority) {
+              <mat-option [value]="priority.lookUpId">
+              {{priority.lookUpName}} </mat-option>
+            }
+          </mat-select>
+          @if (!!mainForm?.get(formgroupName+'.addressTypeLookupId')?.errors?.required) {
+            <mat-error> Address
+            type is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      @if (showaddchecktype) {
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+          >
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Address Check Type</mat-label>
+            <mat-select placeholder="Address Check Type" [required]="showaddchecktype"
+              formControlName="addressTypeCheckLookupId"
+              (selectionChange)="addCheckChange(mainForm?.get(formgroupName+'.addressTypeCheckLookupId').value, true)">
+              @for (priority of screeningService.addressTypeCheck; track priority) {
+                <mat-option
+                  [value]="priority.lookUpId">
+                {{priority.lookUpName}} </mat-option>
+              }
+            </mat-select>
+            @if (!!mainForm?.get(formgroupName+'.addressTypeCheckLookupId')?.errors?.required) {
+              <mat-error>
+              Address check type is required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (sameCurrentadd===true && userData.applicationId ===3 ) {
+        <div fxFlex="20%" fxFlex.lg="20%"
+          fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%" Class="mb-25">
+          <mat-label class="lbl">As Same Address</mat-label>
+          <!-- [disabled]="checkBoxdis!=true " -->
+          <mat-checkbox formControlName="checkPermanentAddress" (change)="chengeAddress($event)">Permanent Address
+            Same As Current Address?
+          </mat-checkbox>
+        </div>
+      }
+    </div>
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <app-address [addressList]="address" [compId]="mainForm?.value?.screeningComponentInfo?.compId"
+        [addressformgrp]="getAddressForm()"></app-address>
+      </div>
+    </div>
+    <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Period of Stay From</mat-label>
+        <span *ngIf="userData.applicationId !==3" matSuffix class="suff-lbtn" [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'" matTooltip="Click here if not available" matTooltipClass="accent-tooltip">
+          <a mat-flat-button (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'periodOfStayFrom')">NA</a></span>
+          <input [required]="userData.applicationId===3" matInput (focus)="naFlag !== true ?PeriodOfStayFrom.open():''" (click)="naFlag !== true ? PeriodOfStayFrom.open():''" placeholder="Period of Stay From" formControlName="periodOfStayFrom" #stayfrm (input)="upperCase(stayfrm.value,'periodOfStayFrom');dateCalc();notProvidevalidation(stayfrm.value)"
+            />
+          <input matInput hidden (dateChange)="handleDateChange($event,'periodOfStayFrom');dateCalc()" [matDatepicker]="PeriodOfStayFrom">
+          <mat-datepicker-toggle [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'" matSuffix [for]="PeriodOfStayFrom"></mat-datepicker-toggle>
+          <mat-datepicker #PeriodOfStayFrom></mat-datepicker>
+          <mat-hint class="f-13" *ngIf="userData.applicationId !==3">(E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022) or SINCE BIRTH or Not Provided),01st January 2021 should be typed as 01/JAN/2021.
+          </mat-hint>
+          <mat-hint class="f-13" *ngIf="userData.applicationId ===3">(E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022) or SINCE BIRTH),01st January 2021 should be typed as 01/JAN/2021.
+          </mat-hint>
+          <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('periodOfStayFrom')?.errors?.date?.invalidPattern"> {{userData.applicationId === 3 ? "(E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or SINCE BIRTH),01st January 2021 should be typed as 01/JAN/2021." : "(E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or
+            2022 or SINCE BIRTH or Not Provided),01st January 2021 should be typed as 01/JAN/2021."}}
+          </mat-error>
+          <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('periodOfStayFrom')?.errors?.incorrect && userData.applicationId === 3">
+          Period of stay from is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or SINCE BIRTH),01st January 2021 should be typed as 01/JAN/2021. </mat-error>
+          <mat-error *ngIf="!!mainForm?.get(formgroupName+'.periodOfStayFrom')?.errors?.required">Period of stay from is required </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Period of Stay To</mat-label>
+          <span *ngIf="userData.applicationId !==3" matSuffix class="suff-lbtn" [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'" matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a mat-flat-button (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'periodOfStayTo')">NA</a></span>
+          <input [required]="userData.applicationId===3" matInput placeholder="Period of Stay To" formControlName="periodOfStayTo" #stayto (focus)="naFlag !== true ? PeriodOfStayTo.open():''" (click)="naFlag !== true ? PeriodOfStayTo.open():''" (input)="upperCase(stayto.value,'periodOfStayTo');touchValidation(stayto.value,'periodOfStayTo');dateCalc();notProvide(stayto.value)"
+            />
+          <input matInput hidden (dateChange)="handleDateChange($event,'periodOfStayTo');dateCalc()" [matDatepicker]="PeriodOfStayTo">
+          <mat-datepicker-toggle [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'" matSuffix [for]="PeriodOfStayTo"></mat-datepicker-toggle>
+          <mat-datepicker #PeriodOfStayTo></mat-datepicker>
+          <mat-hint class="f-13" *ngIf="userData.applicationId !==3">(Eg. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022) or TILL DATE or Not Provided),01st January 2021 should be typed as 01/JAN/2021.
+          </mat-hint>
+          <mat-hint class="f-13" *ngIf="userData.applicationId ===3">(Eg. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022) or TILL DATE ),01st January 2021 should be typed as 01/JAN/2021.
+          </mat-hint>
+          <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('periodOfStayTo')?.errors?.date?.invalidPattern">
+            {{userData.applicationId === 3 ? "(E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or TILL DATE),01st January 2021 should be typed as 01/JAN/2021." : "(E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or TILL DATE or
+            Not Provided),01st January 2021 should be typed as 01/JAN/2021."}}
+          </mat-error>
+          <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('periodOfStayTo')?.errors?.comparison">
+            Period of stay to date should be greater than Period of stay from date
+          </mat-error>
+          <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('periodOfStayTo')?.errors?.incorrect && userData.applicationId === 3">
+          Period of stay to is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or TILL DATE),01st January 2021 should be typed as 01/JAN/2021. </mat-error>
+          <mat-error *ngIf="!!mainForm?.get(formgroupName+'.periodOfStayTo')?.errors?.required">
+          Period of stay to is required </mat-error>
+        </mat-form-field>
+
+      </div>
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="(mainForm?.get(formgroupName+'.periodOfStayFrom').value) &&
+      (mainForm?.get(formgroupName)?.get('periodOfStayTo').value)">
+        <mat-label>Total Duration</mat-label>
+        <br/>
+        <b>{{common?.getDateCaluculationDiff(mainForm?.get(formgroupName+'.periodOfStayFrom').value,
+          mainForm?.get(formgroupName)?.get('periodOfStayTo').value,
+          screeningService?.dob !== null ?
+        screeningService?.dob: '')}}</b>
+      </div>
+    </div> -->
+  </div>
+  <div fxLayout="row" fxLayoutGap="20px" class="mb-10">
+    <div fxFlex="100%">
+      <app-custom-fields [mainForm]="mainForm" [formArrName]="'componentCustomFields'"></app-custom-fields>
+    </div>
+  </div>
+  @if (!fileBtn) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
+      <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
+        [formGroupName]="'screeningComponentInfo'">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Remarks</mat-label>
+          <textarea #remark formControlName="remark" maxlength="1000" matInput placeholder="Remarks"> </textarea>
+          <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
+        </mat-form-field>
+      </div>
+      @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length) {
+        <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
+          [formGroupName]="'screeningComponentInfo'"
+          >
+          <mat-label class="lbl">Choose</mat-label>
+          <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise Insufficiency</mat-checkbox>
+        </div>
+      }
+    </div>
+  }
+
+  @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+      >
+      <div fxFlex="100%">
+        <div class="alert alert-info" role="alert">
+          <h4>Insufficiency Clearance Remarks: </h4>
+          @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+            <span
+              >
+              {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+            }
+          </div>
+        </div>
+      </div>
+    }
+    @if (showInSuff) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <app-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm"
+            [compBaseDetails]="mainForm.get('screeningComponentInfo').value"
+            [formgroupName]="'screeningInsufficiency'">
+          </app-raise-insufficiency>
+        </div>
+      </div>
+    }
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <app-screening-documents [fileBtn]="fileBtn" [mainForm]="mainForm"
+          [formgroupName]="'screeningComponentInfo'" [dupScreeningDoc]="screeningComponent.componentDocument"
+          [validationFlag]="nFlag !== true&&userData.applicationId === 3 ? true : false"
+        [invitationFlag]="screeningService.invitationFlag"></app-screening-documents>
+      </div>
+    </div>
+  </form>
+  <!--
+  {{mainForm.value |json}} -->

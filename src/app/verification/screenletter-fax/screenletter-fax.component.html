@@ -1,0 +1,126 @@
+﻿<app-breadcrumb [btnBack]="btnBack" [routePath]="routePath" (eventBack)="closeForm()"> </app-breadcrumb>
+
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card>
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div
+            fxLayout="row wrap"
+            fxLayout.lg="row wrap"
+            fxLayout.md="row wrap"
+            fxLayout.sm="column"
+            fxLayout.xs="column"
+            class="InData">
+            @if (verification?.tempData?.responseDocument?.componentType === 'companySiteVisit') {
+              <div fxFlex="100%" #comp fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <span><b>Madam/Sir,</b> </span>
+                <p><span>Kind Attn:</span></p>
+                <p><span>Warm Greetings from DSSI...</span></p>
+                <p><span>We are an International-wide Background Investigation Company. We have been
+                authorized to conduct Professional Reference for the below candidate for employement purposes.</span>
+                <p><span><strong>Name of the Candidate: {{verification.tempData.screeningCandidateDet.aliasFirstName + ' ' +
+                verification.tempData.screeningCandidateDet.aliasMiddleName + ' '+  verification.tempData.screeningCandidateDet.aliasLastName}}.</strong></span></p>
+                <p><span>Please fill in the relevant information to the list of the questions as been below:</span></p>
+                <p><strong>1. What do you consider to the applicant's strong points?</strong></p>
+                <p><strong>2. What has the applicant done to show good moral character?</strong></p>
+                <p><strong>3. In what areas do you feel that the applicant can improve?</strong></p>
+                <p><strong>4. What is your general opinion on the individual?</strong></p>
+                <p><strong>5. What is your relationship to the applicant?</strong></p>
+                <p><strong>6. How long have you known the applicant?</strong></p>
+                <p><strong>5. If you had the opportunity to work with the applicant again, would you?</strong></p>
+                <p><strong>5. What is your relationship to the applicant?</strong></p>
+                <p><span>We request you to take up the Professional verification request for the candidate and reply to the above stated queries as soon as possible.</span></p>
+                <p><span>We appreciate you for taking the time to confirm this information by email.</span></p>
+                <p><strong><u>Our official correspondence:-</u></strong> Email: hr-verifications&#64;dssiindia.com & Fax: 91 44 2454 1249.</p>
+                <br/>
+                <span style="float: right;"><p>Awaiting your reply,</p> </span>
+              </div>
+            }
+            @if (verification?.tempData?.responseDocument?.componentType === 'education') {
+              <div fxFlex="100%" #edu fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <div style="line-height: 10px;">
+                  <p><span>DSSI Ref No: {{this.refNum}},</span></p>
+                  <p><span>Date: {{todayDate | date: "dd/MM/yyyy" }}</span></p>
+                  <br/>
+                  <p><span>To,</span></p>
+                  <p><span>{{this.verification?.tempData?.empInsMasterDet?.name}}</span></p>
+                  <p><span>{{this.verification?.tempData?.empInsMasterDet?.address?.place}}.</span></p>
+                </div>
+                <br/>
+                <div>
+                  <span><b>Respected Sir,</b></span>
+                  <p><span><b>Sub: Degree Certificate - Request for Academic verification.</b></span></p>
+                  <p><span>Warm Greetings from DSSI...</span></p>
+                  <p><span>We are a Nationwide Background Investigation Company. We have been authorized to contact
+                    verification of your university student for employment purposes.
+                  </span></p>
+                  <p><span><strong>Name of the Candidate : </strong>{{verification.tempData.screeningCandidateDet.aliasFirstName + ' ' +
+                  verification.tempData.screeningCandidateDet.aliasMiddleName + ' '+  verification.tempData.screeningCandidateDet.aliasLastName}}
+                </span></p>
+                <p><span><strong>Name of the College/School/Center/Institute :  </strong>{{this.verification?.tempData?.empInsMasterDet?.name}}
+              </span></p>
+              <p><span><strong>Degree : </strong> {{this.verification?.tempData?.verificationComponentDet?.component[0]?.compRef?.degree ?
+              this.verification?.tempData?.verificationComponentDet?.component[0]?.compRef?.degree: 'N/A' }}
+            </span></p>
+            <p><span><strong>Course Completion Date : </strong> {{this.verification?.tempData?.verificationComponentDet?.component[0]?.compRef?.courseCompletion ?
+            this.verification?.tempData?.verificationComponentDet?.component[0]?.compRef?.courseCompletion: 'N/A' }}
+          </span></p>
+          <p><span>Please find attached a copy of the student's Degree Certificate enclosed along with this letter . We request you to take up the academic verification of the candidate and reply as soon as possible.
+            We appreciate you taking the time to confirm this information by either responding by Email or Phone or Fax or Registered Post.
+          </span></p>
+          <p><span><b><u>Our contact:- </u>Fax: 91 44 24541249 and Email : hr-verifications&#64;dssiindia.com.</b></span></p>
+          <span style="float: right;"> <p><b>Thanking you,</b></p>
+          <p><b>Yours Sincerely,</b></p> <br/>
+          <p><b>D.JAYAPRAKASH</b></p>
+          <P><b>(MANAGER)</b></P></span>
+        </div>
+      </div>
+    }
+    @if (verification?.tempData?.responseDocument?.componentType === 'employee') {
+      <div fxFlex="100%" #emp fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <div style="line-height: 10px;">
+          <p><span>DSSI Ref No: {{this.refNum}},</span></p>
+          <p><span>Date: {{todayDate | date: "dd/MM/yyyy" }}</span></p>
+          <br/>
+          <p><span>To,</span></p>
+          <p><span>{{this.verification?.tempData?.empInsMasterDet?.name}}</span></p>
+          <p><span>{{this.verification?.tempData?.empInsMasterDet?.address?.place}}.</span></p>
+        </div>
+        <div>
+          <span><b>Respected Sir,</b></span>
+          <p><span><b>Sub: Employer Verification</b></span></p>
+          <p><span>Warm Greetings from DSSI...</span></p>
+          <p><span>We are a Nationwide Background Investigation Company. We have been authorized to conduct verification of your company employee for employment purposes.
+          </span></p>
+          <p><span><strong>Name of the Candidate : </strong>{{verification.tempData.screeningCandidateDet.aliasFirstName + ' ' +
+          verification.tempData.screeningCandidateDet.aliasMiddleName + ' '+  verification.tempData.screeningCandidateDet.aliasLastName}}
+        </span></p>
+        <p><span><strong>Designation : </strong>{{this.verification?.tempData?.empInsMasterDet?.name}}
+      </span></p>
+      <p><span><strong>Employment Duration : </strong> {{(this.verification?.tempData?.verificationComponentDet?.component[0]?.compRef?.fromDate ?
+      this.verification?.tempData?.verificationComponentDet?.component[0]?.compRef?.fromDate: 'N/A')  + ' To ' +   (this.verification?.tempData?.verificationComponentDet?.component[0]?.compRef?.toDate ?
+      this.verification?.tempData?.verificationComponentDet?.component[0]?.compRef?.toDate: 'N/A') }}
+    </span></p>
+    <p><span>Please find attached a copy of the candidate's Experience Certificate enclosed along with this letter . We request you to take up the employer verification of the candidate and reply as soon as possible.</span></p>
+    <p><span>We appreciate you taking the time to confirm this information by either responding by Email or Phone or Fax or Registered Post.</span></p>
+    <span style="float: right;"><p><b>Thanking you,</b></p>
+    <p><b>Yours Sincerely,</b></p> <br/>
+    <p><b>D.JAYAPRAKASH</b></p>
+    <p><b>(MANAGER)</b></p>
+  </span>
+</div>
+</div>
+}
+</div>
+<div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="end end">
+  <button mat-flat-button color="primary" (click) ="getWord('wordFormat')">Print Letter
+  </button>
+  <button mat-flat-button color="warn" (click) ="getWord('myFax')">Fax Letter
+  </button>
+</div>
+</div>
+</div>
+</mat-card>
+</div>
+</div>

@@ -1,0 +1,143 @@
+/* Developer Styles */
+table {
+	width: 100%;
+}
+th.mat-sort-header-sorted {
+	color: black;
+}
+/* Developer Styles Ends */
+
+.sCriteria {
+	background: #577f9d;
+	padding-bottom: 25px;
+}
+.sCriteria-body {
+	background: #fff;
+	padding: 15px;
+	min-height: 140px;
+	width: 98%;
+	margin: 1px auto;
+}
+.searchExpd-link {
+	color: #ff6839;
+	font-weight: 500;
+	font-size: 13px;
+	vertical-align: top;
+}
+.searchExpd-link i {
+	font-size: 18px;
+	top: 6px;
+	position: relative;
+	padding-right: 5px;
+	transform: rotate(45deg);
+}
+.accord-advsearch .mat-expansion-panel:not([class*=mat-elevation-z]) {
+	box-shadow: none;
+}
+::ng-deep .accord-advsearch .mat-expansion-panel .mat-expansion-panel-body {
+ padding: 0px !important;
+}
+/* New Design like Dashboard */
+
+.home-stickers {
+	background: #f5f7fb;
+	min-height: 150px; 
+	padding: 25px;
+    margin-left: -25px;
+	margin-right: -25px; 
+}
+.sticker-header {
+	font-size: 18px;
+	font-weight: 300;
+	color: #353535;
+	margin-bottom: 10px;
+	cursor: default;
+}
+.sticker-header span strong {
+	padding-left: 05px;
+	font-weight: 600;
+	color: #ff6839;
+}
+.stick-area {
+	padding: 05px 0px;
+	width: 100%;
+	margin: 5px 0px 15px 0px;
+	float: left;
+}
+.stick-area .stick-circle {
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	background: #353535;
+}
+.stick-area .mat-icon {
+	width: 100%;
+    height: 100%;
+	text-align: center;
+	line-height: 86px;
+}
+.stick-area .mat-icon i {
+	font-size: 40px; 
+}
+.stick-area .stick-name {
+	padding-left: 15px !important;
+	float: left;
+	line-height: 2.5em;
+}
+.stick-area .stick-name p {
+	margin: 0px;
+	font-size: 13px;
+	font-weight: 500;
+	color: #8A8B8D;
+	text-transform: uppercase;
+	cursor: default;
+}
+.stick-area .stick-name p a {
+	color: #007fbb;
+	text-decoration: none;
+	font-size: 26px;
+}
+.stick-area .stick-name p a:hover {
+	color: #ff6839;
+}
+.stick-area .stick-circle {
+	float: left;
+}
+.stick-area .pending {
+	background: #fbe6e6;
+}
+.stick-area .pending .mat-icon i {
+	color: #E53935;
+}
+.stick-area .priority {
+	background: #f4ebdc;
+}
+.stick-area .priority .mat-icon i {
+	color: #f7b43f;
+}
+.stick-area .hpriority {
+	background: #e4e0f8;
+}
+.stick-area .hpriority .mat-icon i {
+	color: #8a5cf8;
+}
+.stick-area .pendinglist {
+	background: #f3dce8;
+}
+.stick-area .pendinglist .mat-icon i {
+	color: #f7548b;
+}
+.stick-area .cmtdcases {
+	background: #ccf4dd;
+}
+.stick-area .cmtdcases .mat-icon i {
+	color: #08BA53;
+}
+.PView-box.search-Criteria {
+	width: 620px;
+}
+.perfscrol-searchWH {
+	width: 100%;
+	height: calc(100vh - 100px);
+	padding-right: 20px;
+}

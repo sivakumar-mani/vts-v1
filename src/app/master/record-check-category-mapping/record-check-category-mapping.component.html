@@ -1,0 +1,285 @@
+﻿<app-breadcrumb [btnAdd]="breadcrumbFlags.btnAdd" [btnSave]="breadcrumbFlags.btnSave"
+  [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset" [btnResetTbl]="breadcrumbFlags.btnResetTbl"
+  (eventAdd)="addRecordCheckMapping()" [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag"
+  (eventBack)=" closeForm()" (eventSave)="saveRecordCheckMapping()" [toolTip]="breadcrumbFlags.toolTip"
+  (eventReset)=" resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="cloumn" fxLayout.xs="cloumn"
+  fxLayoutGap="20px grid">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                  fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="80%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">Record Check Category Mapping</h1>
+                  </div>
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                    fxLayoutAlign="end center" fxLayoutAlign.sm="end center" fxLayoutAlign.xs="start center">
+                    <div class="tbl-commonsearch" *ngIf="!showFlag">
+                      <mat-form-field fxFlex="100%">
+                        <mat-label></mat-label>
+                        <mat-icon matPrefix>search</mat-icon>
+                        <input #global matInput size="50" placeholder="Search..." autocomplete="off"
+                          (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="showFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+          fxLayout.xs="column" fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+            <form [formGroup]="recordCheckCategoryForm" autocomplete="off" id="ngForm" autocomplete="off">
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
+                fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Client Name</mat-label>
+                    <input matInput placeholder="Client Name" formControlName="clientId"
+                      [matAutocomplete]="autocandidate" #clientInput (focus)="clientItems(clientInput.value)"
+                      (keyup)="clientKeyupFunction($event,clientInput.value)" (input)="clientItems(clientInput.value)"
+                      (click)="clientInput.select()" (blur)="checkValidValue('clientName')">
+                    <mat-autocomplete #autocandidate="matAutocomplete" [displayWith]="displayclientFn"
+                      (optionSelected)="getComponetDetailsByClient('clientName')">
+                      <mat-option [value]="client.clientId" *ngFor="let client of clientflterlist"
+                        class="autocom-option autocom-tr"> <span
+                          [innerHTML]="client.clientName | highlight: clientInput.value"></span> </mat-option>
+                      <mat-option *ngIf="clientflterlist.length==0">
+                        <div class="no-record"><span>No Data Found</span></div>
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="recordCheckCategoryForm?.get('clientId')?.errors?.required"> Client Name is
+                      required. </mat-error>
+                    <mat-error *ngIf="recordCheckCategoryForm?.get('clientId')?.errors?.incorrect"> Client Name is not
+                      valid. </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Recrod Check Name</mat-label>
+                    <input matInput placeholder="Recrod Check Name" formControlName="recordCheckId"
+                      [matAutocomplete]="autoRCheck" #rCheckInput (focus)="recordCheckItems(rCheckInput.value)"
+                      (change)="rCheckKeyupFunction($event,rCheckInput.value)"
+                      (input)="recordCheckItems(rCheckInput.value)" (click)="rCheckInput.select()"
+                      (blur)="checkValidValue('rCheckName')">
+                    <mat-autocomplete #autoRCheck="matAutocomplete" [displayWith]="displayrcheckFn"
+                      (optionSelected)="getComponetDetailsByClient('rCheckName')">
+                      <mat-option [value]="rCheck.recordCheckId" *ngFor="let rCheck of rCheckflterlist"
+                        class="autocom-option autocom-tr"> <span
+                          [innerHTML]="rCheck.recordCheckName | highlight: rCheckInput.value"></span> </mat-option>
+                      <mat-option *ngIf="rCheckflterlist.length==0">
+                        <div class="no-record"><span>No Data Found</span></div>
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="recordCheckCategoryForm?.get('recordCheckId')?.errors?.required"> Recrod Check
+                      Name is required. </mat-error>
+                    <mat-error *ngIf="recordCheckCategoryForm?.get('recordCheckId')?.errors?.incorrect"> Recrod Check
+                      Name is not valid. </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
+                fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Recrod Check Category Name</mat-label>
+                    <input matInput placeholder="Recrod Check Category Name" formControlName="recordCheckCategoryId"
+                      [matAutocomplete]="autoRCheckCgry" #rCheckCgryInput
+                      (focus)="recordCheckCatGryItems(rCheckCgryInput.value)"
+                      (keyup)="rCheckCatGryKeyupFunction($event,rCheckCgryInput.value)"
+                      (input)="recordCheckCatGryItems(rCheckCgryInput.value)" (click)="rCheckCgryInput.select()"
+                      (blur)="checkValidValue('rCheckCtgryName')">
+                    <mat-autocomplete #autoRCheckCgry="matAutocomplete" [displayWith]="displayrcheckCatGryFn"
+                      (optionSelected)="getComponetDetailsByClient('rCheckCtgryName')">
+                      <mat-option [value]="rCheckCgy.recordCheckCategoryId"
+                        *ngFor="let rCheckCgy of rCheckCatgryflterlist" class="autocom-option autocom-tr"> <span
+                          [innerHTML]="rCheckCgy.recordCheckCategoryName | highlight: rCheckCgryInput.value"></span>
+                      </mat-option>
+                      <mat-option *ngIf="rCheckCatgryflterlist.length==0">
+                        <div class="no-record"><span>No Data Found</span></div>
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="recordCheckCategoryForm?.get('recordCheckCategoryId')?.errors?.required"> Recrod
+                      Check Category Name is required. </mat-error>
+                    <mat-error *ngIf="recordCheckCategoryForm?.get('recordCheckCategoryId')?.errors?.incorrect"> Recrod
+                      Check Category Name is not valid. </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-label class="lbl"><strong>This Record Check</strong></mat-label>
+                  <mat-checkbox formControlName="active"> Active</mat-checkbox>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Grid Content -->
+        <div *ngIf="!showFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+          fxLayout.xs="column" fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+            <p-table #dt [columns]="displayColumns" [value]="recordCheckMappingList" [scrollable]="true" scrollHeight=""
+              [rows]="itemperpage" [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true"
+              frozenWidth="100px" [frozenColumns]="frozenCols">
+
+              <!-- ===== COLGROUP ===== -->
+              <ng-template pTemplate="colgroup" let-colGroupCols>
+                <colgroup>
+                  <col *ngFor="let col of colGroupCols" style="min-width:200px" />
+                </colgroup>
+              </ng-template>
+
+              <!-- ===== HEADER ===== -->
+              <ng-template pTemplate="header" let-headerCols>
+                <tr>
+                  <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn>
+
+                    <span [pSortableColumn]="col.field">
+                      <div class="thname">{{ col.header }}</div>
+
+                      <p-sortIcon *ngIf="col.field !== 'action'" ariaLabel="Activate to sort"
+                        ariaLabelDesc="Activate to sort in descending order" matTooltip="Sorting"
+                        matTooltipClass="accent-tooltip" ariaLabelAsc="Activate to sort in ascending order">
+                      </p-sortIcon>
+                    </span>
+
+                    <!-- ðŸ” filter menus remain unchanged -->
+
+                  </th>
+                </tr>
+              </ng-template>
+
+              <!-- ===== BODY ===== -->
+              <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+
+                <tr [pReorderableRow]="index">
+
+                  <td *ngFor="let col of bodyCols" [ngSwitch]="col.field"
+                    [ngClass]="{ 'desg-bg': col.field === 'action' }" style="width:200px">
+
+                    <div *ngSwitchCase="'recordCheckName'">
+                      {{ rowData.recordCheckName }}
+                    </div>
+
+                    <div *ngSwitchCase="'recordCheckCategoryName'">
+                      {{ rowData.recordCheckCategoryName }}
+                    </div>
+
+                    <div *ngSwitchCase="'clientName'">
+                      {{ rowData.clientName }}
+                    </div>
+
+                    <div *ngSwitchCase="'active'" fxLayout="row" class="tbl-icon">
+                      <span *ngIf="rowData.active" class="istrue">
+                        <i matTooltip="Active" class="material-icons">thumb_up</i>
+                      </span>
+                      <span *ngIf="!rowData.active" class="isfalse">
+                        <i matTooltip="In-Active" class="material-icons">thumb_down</i>
+                      </span>
+                    </div>
+
+                    <!-- ACTION -->
+                    <div *ngIf="col.field === 'action'" fxLayout="row" class="desg-icon">
+                      <div fxFlex="100%" fxLayoutGap="10px">
+
+                        <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''" matTooltip="Edit"
+                          matTooltipClass="accent-tooltip">
+                          <i class="material-icons-outlined" (click)="editRecordChkMap(rowData, 'edit')">
+                            edit
+                          </i>
+                        </mat-icon>
+
+                        <mat-icon [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''"
+                          matTooltip="Delete" matTooltipClass="accent-tooltip">
+                          <i class="material-icons-outlined" (click)="openConfirmDialog(rowData)">
+                            delete
+                          </i>
+                        </mat-icon>
+
+                        <mat-icon [ngClass]="screenAuth.viewFlag === false ? 'page-btn disabled' : ''" matTooltip="View"
+                          matTooltipClass="accent-tooltip">
+                          <i class="material-icons-outlined" (click)="editRecordChkMap(rowData, 'view')">
+                            visibility
+                          </i>
+                        </mat-icon>
+
+                      </div>
+                    </div>
+
+                  </td>
+                </tr>
+
+              </ng-template>
+
+            </p-table>
+            <div [ngClass]="recordCheckMappingList.length == 0? 'empty-record':''" fxLayout="row wrap"
+              class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="start center"> Showing {{ dt.totalRecords
+                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                  <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s)
+                    |&nbsp;<a (click)="showall()">Show All</a>
+              </div>
+              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center"> <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'"
+                  (click)="
+                                          dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                                          navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                                        "> <i class="icon-control-start mr-5"></i></a> <span
+                  class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                    <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" min="1" appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                  </span></span> <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                <a [ngClass]="
+                                          dt.rows + dt.first >= dt.totalRecords
+                                            ? 'page-btn disabled'
+                                            : 'page-btn'
+                                        " (click)="
+                                          dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                                          navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                                        "><i class="icon-control-end ml-5"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+
+
+<ng-template #deleteConfirmation>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">Confirmation !</h3>
+            <p class="text-sm">Are you sure you want to <b>delete</b> this record?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-stroked-button (click)="dialogRef.close()">No, Keep it</button>
+    <button mat-flat-button color="warn" (click)="deleteRecordCheckMap()">Yes, Delete it</button>
+  </mat-dialog-actions>
+</ng-template>

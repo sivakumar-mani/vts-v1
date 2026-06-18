@@ -1,0 +1,568 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h1 class="header-title">Professional Reference Creation</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="content-area">
+      <form [formGroup]="professionalSearchFormGroup">
+        <div fxLayout="row">
+          <div fxFlex="60%">
+            <div fxLayout="row" fxLayoutGap="20px" class="hint-pb15">
+              <div fxFlex="70%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Professional Name</mat-label>
+                  <input matInput placeholder="Professional Name" formControlName="name"/>
+                  <mat-hint>Seen in letter &amp; post</mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px" class="hint-pb15">
+              <div fxFlex="100%">
+                <app-phone [contactForm]="professionalSearchFormGroup" [contactPhoneFilter]="contactPhoneFilter"
+                  [commonContact]="phoneData" [formArrayName]="'professionalPhone'"></app-phone>
+              </div>
+            </div>
+            <!-- <div fxLayout="row" fxLayoutGap="20px" class="hint-pb15">
+              <div fxFlex="50%" formArrayName="phoneNumberList"
+                *ngFor="let item of getPhoneNumberControls(); let i = index">
+                <div [formGroupName]="i">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Phone Number</mat-label>
+                    <input matInput placeholder="Phone" formControlName="phone" name="phone" appNumberOnly
+                      minlength="10" maxlength="10" [PhoneNumber]="false" />
+                    <mat-error *ngIf="!professionalSearchFormGroup?.get('phone')?.errors?.minlength">
+                      Enter
+                      atleast 10 numbers </mat-error>
+                    <mat-hint class="adrem">
+                      <span *ngIf="i < 3">
+                        <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                          (click)="addItem()">
+                          <i class="icon-plus-circle"></i>
+                        </button>
+                      </span>
+                      <span *ngIf="i > 0">
+                        <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                          (click)="removeItem(i)">
+                          <i class="icon-minus-circle"></i>
+                        </button>
+                      </span>
+                    </mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div> -->
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="100%">
+                <app-email-multi [contactForm]="professionalSearchFormGroup" [contactFilter]="contactFilter"
+                  [commonContact]="emailData" [formArrayName]="'professionalEmail'"></app-email-multi>
+              </div>
+            </div>
+            <!-- <div fxLayout="row" fxLayoutGap="20px" class="hint-pb15">
+                  <div fxFlex="50%" formArrayName="emailList" *ngFor="let item of getEmailControls(); let i = index">
+                    <div [formGroupName]="i">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Email</mat-label>
+                        <input matInput placeholder="EmailId" formControlName="emailId" name="EmailId" />
+                        <mat-hint class="adrem">
+                          <span *ngIf="i < 3">
+                            <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                              (click)="createEmail()">
+                              <i class="icon-plus-circle"></i>
+                            </button>
+                          </span>
+                          <span *ngIf="i > 1">
+                            <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                              (click)="removeEmailItem(i)">
+                              <i class="icon-minus-circle"></i>
+                            </button>
+                          </span>
+                        </mat-hint>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div> -->
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <div fxLayout="row">
+              <!-- <div fxFlex="100%" class=pb-15>
+                <a mat-flat-button matTooltip="Add" matTooltipClass="accent-tooltip" (click)="contactPersonFlag()">
+                  <i class="btnthover icon-plus-circle"></i>
+                  Add Contact Person
+                </a>
+              </div> -->
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px">
+              <!-- <div fxLayout="row" formArrayName="contactPersonList" -->
+                <!-- *ngFor="let contactPerson of getContactPersonControls(); let i = index"> -->
+                
+                  <!-- <div [formGroupName]="i" fxLayoutGap="20px" class="hint-pb15"> -->
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Contact Person1</mat-label>
+                        <input matInput placeholder="ContactPerson" formControlName="contactPerson1"
+                          name="contactPerson" />
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Designation1</mat-label>
+                        <input matInput placeholder="Designation" formControlName="designation1"
+                          name="contactPersonDesg" />
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Department1</mat-label>
+                        <input matInput placeholder="Department" formControlName="department1"
+                          name="contactPersonDept" />
+                        <!-- <mat-hint class="adrem">
+                          <span *ngIf="i < 1">
+                            <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                              (click)="createContactPerson()">
+                              <i class="icon-plus-circle"></i>
+                            </button>
+                          </span>
+                          <span *ngIf="i > 0">
+                            <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                              (click)="removeCotactItem(i)">
+                              <i class="icon-minus-circle"></i>
+                            </button>
+                          </span>
+                        </mat-hint> -->
+                      </mat-form-field>
+                    </div>
+                  <!-- </div> -->
+               
+              <!-- </div> -->
+            </div>
+            <div>
+              <!-- <div fxLayout="row" formArrayName="contactPersonList" -->
+                <!-- *ngFor="let contactPerson of getContactPersonControls(); let i = index"> -->
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <!-- <div [formGroupName]="i" fxLayoutGap="20px" class="hint-pb15"> -->
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Contact Person2</mat-label>
+                        <input matInput placeholder="ContactPerson" formControlName="contactPerson2"
+                          name="contactPerson" />
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Designation2</mat-label>
+                        <input matInput placeholder="Designation" formControlName="designation2"
+                          name="contactPersonDesg" />
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Department2</mat-label>
+                        <input matInput placeholder="Department" formControlName="department2"
+                          name="contactPersonDept" />
+                        <!-- <mat-hint class="adrem">
+                          <span *ngIf="i < 1">
+                            <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                              (click)="createContactPerson()">
+                              <i class="icon-plus-circle"></i>
+                            </button>
+                          </span>
+                          <span *ngIf="i > 0">
+                            <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                              (click)="removeCotactItem(i)">
+                              <i class="icon-minus-circle"></i>
+                            </button>
+                          </span>
+                        </mat-hint> -->
+                      </mat-form-field>
+                    </div>
+                  <!-- </div> -->
+                </div>
+              <!-- </div> -->
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px">
+
+              <div fxFlex="66.67%" fxLayoutGap="20px">
+                <div fxFlex="50%">
+
+                </div>
+                <div fxFlex="50%">
+
+                </div>
+              </div>
+              <div fxFlex="33.33%">
+
+              </div>
+
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="50%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Additional Info Main</mat-label>
+                  <textarea matInput placeholder="Additional Info Main" formControlName="additionalInformation"
+                    name="additionalInfoMain"></textarea>
+                </mat-form-field>
+              </div>
+              <div fxFlex="50%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Additional Info Sub</mat-label>
+                  <textarea matInput placeholder="Additional Info Sub" formControlName="additionalInformationSub"
+                    name="additionalInfoSub"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+              <div fxFlex="100%">
+                <h3 class="sub-header">Address Details</h3>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="100%">
+                <app-address [addressformgrp]="professionalSearchFormGroup"></app-address>
+              </div>
+            </div>
+            <!-- <div fxLayout="row" fxLayoutGap="20px">
+                  <div fxFlex="32%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Country</mat-label>
+                      <mat-error *ngIf="employerInsutionFormGroup.get('country')?.invalid">This is a required field
+                      </mat-error>
+                      <mat-select matNativeControl formControlName="country" name="country">
+                        <mat-option *ngFor="let country of country" [value]="country.countryId">
+                          {{ country.country }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="68%" formArrayName="addressList"
+                    *ngFor="let addressNo of getAddressControls(); let i = index" class="hint-pb15">
+    
+                    <div [formGroupName]="i">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Address</mat-label>
+                        <input matInput placeholder="House No. / Floor / Building / Colony / Street / Locality"
+                          formControlName="address" name="address" />
+    
+                        <mat-hint class="adrem">
+                          <span *ngIf="i < 2">
+                            <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                              (click)="createAddressItems()">
+                          <i class="icon-plus-circle"></i> 
+                            </button>
+                          </span>
+                          <span *ngIf="i > 0">
+                            <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                              (click)="removeAddressItem(i)">
+                     <i class="icon-minus-circle"></i> 
+                            </button>
+                          </span>
+                        </mat-hint>
+    
+                      </mat-form-field>
+                    </div>
+    
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <div fxFlex="33.33%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>State</mat-label>
+                      <mat-error *ngIf="employerInsutionFormGroup.get('state')?.invalid">This is a required field
+                      </mat-error>
+                      <mat-select matNativeControl formControlName="state" name="state">
+                        <mat-option *ngFor="let state of state" [value]="state.stateName">
+                          {{ state.stateName }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>City</mat-label>
+                      <input matInput placeholder="City" formControlName="city" name="city" />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Pin Code</mat-label>
+                      <input matInput placeholder="Pincode" formControlName="pinCode" name="pinCode" />
+                    </mat-form-field>
+                  </div>
+                </div> -->
+
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- <div class="content-area">
+      <form [formGroup]="professionalSearchFormGroup">
+        <div fxLayout="row">
+          <div fxFlex="60%">
+            <div fxLayout="row">
+              <div fxFlex="70%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Professional Name</mat-label>
+                  <input matInput placeholder="Professional Name" formControlName="professionalName"
+                    name="professionalName" [(ngModel)]="professionalReference.contactPerson" />
+                  <mat-hint>Seen in letter &amp; post</mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px" class="pt-15">
+              <div fxFlex="50%" *ngFor="let phone of professionalReference?.phoneNumberList; let i = index">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Phone Number</mat-label>
+                  <input matInput placeholder="Phone1" formControlName="phone1{{ phone.rowCountNo }}" name="phone1"
+                    [(ngModel)]="phone.phone" preventCutCopyPaste autocomplete="off" role="presentation" appNumberOnly
+                    [PhoneNumber]="false" maxlength="10" minlength="10" />
+                  <mat-error *ngIf="!!professionalSearchFormGroup?.get('phone1'+ phone.rowCountNo)?.errors?.minlength">
+                    Enter
+                    atleast 10 numbers </mat-error>
+                  <mat-hint class="adrem">
+                    <span *ngIf="professionalReference?.phoneNumberList?.length < 4 ">
+                      <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                        (click)="addPhoneNumber()">
+                        <i class="icon-plus-circle"></i>
+                      </button>
+                    </span>
+                    <span *ngIf="professionalReference?.phoneNumberList?.length > 1">
+                      <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                        (click)="removeControls(i, phone.rowCountNo, 1)">
+                        <i class="icon-minus-circle"></i>
+                      </button>
+                    </span>
+                  </mat-hint>
+
+                </mat-form-field>
+              </div>
+            </div>
+
+
+            <div fxLayout="row" fxLayoutGap="20px" class="pt-15">
+
+              <div fxFlex="50%" *ngFor="let email of professionalReference?.emailList; let i = index">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Email</mat-label>
+                  <input matInput placeholder="EmailId1" formControlName="emailId1{{ email.rowCount }}" name="EmailId1"
+                    [(ngModel)]="email.emailId" />
+                  <mat-hint class="adrem">
+                    <span *ngIf="professionalReference?.emailList?.length < 4">
+                      <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                        (click)="addEmail()">
+                        <i class="icon-plus-circle"></i>
+                      </button>
+                    </span>
+                    <span *ngIf="professionalReference?.emailList?.length > 1">
+                      <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                        (click)="removeControls(i, email.rowCount, 2)">
+                        <i class="icon-minus-circle"></i>
+                      </button>
+                    </span>
+                  </mat-hint>
+                  <mat-error *ngIf="!!professionalSearchFormGroup.get('emailId1'+email.rowCount)?.errors?.pattern">
+                    Enter Valid
+                    Email </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+        <div fxLayout="row" class="pt-15">
+          <div fxFlex="80%">
+
+            <div fxLayout="row">
+              <div fxFlex="100%" class=pb-15>
+                <a mat-flat-button matTooltip="Add" matTooltipClass="accent-tooltip" (click)="contactPersonFlag()">
+                  <i class="btnthover icon-plus-circle"></i>
+                  Add Contact Person
+                </a>
+              </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="20px"
+              *ngFor="let contactPerson of professionalReference?.contactPersonList; let i = index">
+              <div fxFlex="33.33%" class="hint-pb15">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Contact Person</mat-label>
+                  <input matInput placeholder="ContactPerson1" formControlName="contactPerson1{{ contactPerson.rowNo }}"
+                    name="contactPerson1" [(ngModel)]="contactPerson.contactPerson" />
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Designation</mat-label>
+                  <input matInput placeholder="Designation1" formControlName="contactPerson1Desg{{
+                      contactPerson.rowNo
+                    }}" name="designation1" [(ngModel)]="contactPerson.contactPersonDesg" />
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Department</mat-label>
+                  <input matInput placeholder="Department1" formControlName="contactPerson1Dept{{
+                      contactPerson.rowNo
+                    }}" name="department1" [(ngModel)]="contactPerson.contactPersonDept" />
+                  <mat-hint class="adrem">
+                    <span *ngIf="
+                        professionalReference?.contactPersonList?.length < 2
+                      ">
+                      <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                        (click)="addContactPerson()">
+                        <i class="icon-plus-circle"></i>
+                      </button>
+                    </span>
+                    <span *ngIf="
+                        professionalReference?.contactPersonList?.length > 1
+                      ">
+                      <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                        (click)="removeControls(i, contactPerson.rowNo, 3)">
+                        <i class="icon-minus-circle"></i>
+                      </button>
+                    </span>
+                  </mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="32%" class=hint-pb15>
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Country</mat-label>
+                  <input type="text" matInput placeholder="Select Country" formControlName="country"
+                    [(ngModel)]="professionalReference.countryId" [matAutocomplete]="autocandidate" #countryInput
+                    (focus)="countryItems(countryInput.value)"
+                    (keyup)="countryKeyupFunction($event, countryInput.value)" (blur)="checkValidValues()"
+                    (input)="countryItems(countryInput.value)" (click)="countryInput.select()" autocomplete="off"
+                    role="presentation" />
+                  <mat-error *ngIf="professionalSearchFormGroup.get('country')?.errors?.required">This is a
+                    required
+                    field</mat-error>
+                  <mat-error *ngIf="professionalSearchFormGroup.get('country')?.errors?.incorrect">This is not
+                    a valid value</mat-error>
+                  <mat-autocomplete #autocandidate="matAutocomplete" [displayWith]="displayclientFn"
+                    (optionSelected)="selectcontry($event.option.value)">
+                    <mat-option>-------Select Country-------</mat-option>
+                    <mat-option [value]="country.countryId" *ngFor="let country of contryfilterlist"
+                      class="autocom-option autocom-tr"> <span
+                        [innerHTML]="country.countryName | highlight: countryInput.value"></span> </mat-option>
+                    <mat-option *ngIf="contryfilterlist.length == 0" class="no-records"> -- No data Found --
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div fxFlex="68%" *ngFor="let addressNo of professionalReference?.addressList; let i = index">
+
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Address</mat-label>
+                  <input matInput placeholder="House No. / Floor / Building / Colony / Street / Locality"
+                    formControlName="address1{{ addressNo.rowCountAddress }}" name="address1"
+                    [(ngModel)]="addressNo.address">
+
+                  <mat-hint class="adrem">
+                    <span *ngIf="professionalReference?.addressList?.length < 3">
+                      <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                        (click)="addAddress()">
+                        <i class="icon-plus-circle"></i>
+                      </button>
+                    </span>
+                    <span *ngIf="professionalReference?.addressList?.length > 1">
+                      <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip" (click)="
+                            removeControls(i, addressNo.rowCountAddress, 4)
+                          ">
+                        <i class="icon-minus-circle"></i>
+                      </button>
+                    </span>
+                  </mat-hint>
+                </mat-form-field>
+
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="33.33%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>State</mat-label>
+                  <input type="text" matInput placeholder=" Select State" formControlName="state"
+                    [(ngModel)]="professionalReference.stateId" [matAutocomplete]="autocandidate1" #stateInput
+                    (focus)="stateItems(stateInput.value)" (keyup)="sateKeyupFunction($event, stateInput.value)"
+                    (input)="stateItems(stateInput.value)" (click)="stateInput.select()" autocomplete="off"
+                    role="presentation" (blur)="checkValidState()" />
+                  <mat-error *ngIf="professionalSearchFormGroup.get?.errors?.required"> State is
+                    required
+                  </mat-error>
+                  <mat-error *ngIf="professionalSearchFormGroup.get('state')?.errors?.incorrect">This is not
+                    a valid value</mat-error>
+                  <mat-autocomplete #autocandidate1="matAutocomplete" [displayWith]="displaysateFn"
+                    (optionSelected)="selectState($event.option.value)">
+                    <mat-option>-------Select State-------</mat-option>
+                    <mat-option [value]="state.stateId" *ngFor="let state of satefilterlist"
+                      class="autocom-option autocom-tr"> <span
+                        [innerHTML]="state.stateName | highlight: stateInput.value"></span> </mat-option>
+                    <mat-option *ngIf="satefilterlist.length == 0" class="no-records"> -- No data Found --
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>City</mat-label>
+                  <input matInput placeholder="City" formControlName="city" name="city"
+                    [(ngModel)]="professionalReference.city" />
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Pin Code</mat-label>
+                  <input matInput placeholder="Pincode" formControlName="pinCode" name="pinCode" preventCutCopyPaste
+                    autocomplete="off" role="presentation" appNumberOnly [PhoneNumber]="false" minlength="6"
+                    maxlength="6" [(ngModel)]="professionalReference.pincode" />
+                  <mat-error *ngIf="!!professionalSearchFormGroup?.get('pinCode')?.errors?.minlength"> Enter
+                    atleast 6 characters </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="50%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Additional Info Main</mat-label>
+                  <textarea matInput placeholder="Additional Info Main" formControlName="additionalInfoMain"
+                    name="additionalInfoMain" [(ngModel)]="professionalReference.addInformation"></textarea>
+                </mat-form-field>
+              </div>
+              <div fxFlex="50%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Additional Info Sub</mat-label>
+                  <textarea matInput placeholder="Additional Info Sub" formControlName="additionalInfoSub"
+                    name="additionalInfoSub" [(ngModel)]="professionalReference.addInformationSub"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </form>
+    </div> -->
+
+    <div fxLayout="row">
+      <div fxFlex="80%" fxLayoutGap="8px" fxLayoutAlign="end center">
+        <button mat-flat-button color="primary" (click)="addUpdateProfessionalReference()">
+          <div>{{ professionalReferenceEditFlag ? "Update" : "Save" }}</div>
+        </button>
+        <!-- <button mat-flat-button color="accent" (click)="resetFunction()">
+          <div>Reset</div>
+        </button> -->
+        <div>
+          <p-toast position="top-center" key="success" class="success-alert">
+          </p-toast>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+{{professionalSearchFormGroup.value|json}}

@@ -1,0 +1,572 @@
+﻿<app-breadcrumb [btnAdd]="breadcrumbFlag.btnAdd" [btnSave]="breadcrumbFlag.btnSave"
+  [btnSaveDisabled]="breadcrumbFlag.btnSaveDisabled" [btnBack]="breadcrumbFlag.btnBack"
+  [btnReset]="breadcrumbFlag.btnReset" [btnResetTbl]="breadcrumbFlag.btnResetTbl" (eventAdd)="openForm();"
+  [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag" (eventBack)="closeForm()"
+  (eventSave)="addComponents()" [toolTip]="breadcrumbFlag.toolTip" (eventReset)="resetForm()"
+(eventResetTbl)="dt.reset()"></app-breadcrumb>
+<div fxLayout="row" fxLayoutGap="20px">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                  fxLayout.xs="column" fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                    fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">Sub Component</h1>
+                  </div>
+                  <!-- <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxHide.xs fxLayoutAlign="end center" fxLayoutAlign.sm="start center"
+                  fxLayoutAlign.xs="start center">
+                  <div class="tbl-commonsearch" *ngIf="dispalyTable">
+                    <mat-form-field fxFlex="100%">
+                      <mat-icon matPrefix>search</mat-icon>
+                      <input matInput placeholder="Search here..." type="text" pInputText
+                        size="50"
+                        (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                    </mat-form-field>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </mat-card-title>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      @if (dispalyTable) {
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+          fxLayout.xs="row">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="row">
+              <div fxFlex="100%">
+                <p-table #dt [columns]="displayedColumns" (onRowReorder)="onRowReorder($event);"
+                  [value]="componentList" [scrollable]="true" [resizableColumns]="true"
+                  [rows]="componentList.length" columnResizeMode="expand">
+                  <!-- ===== COLGROUP ===== -->
+                  <ng-template pTemplate="colgroup" let-colGroupCols>
+                    <colgroup>
+                    @for (col of colGroupCols; track col) {
+                      <col style="min-width:200px" />
+                    }
+                  </colgroup>
+                </ng-template>
+                <!-- ===== HEADER ===== -->
+                <ng-template pTemplate="header" let-headerCols>
+                  <tr>
+                    <th style="width:70px">#order</th>
+                    <th class="action">Actions</th>
+                    @for (col of headerCols; track col) {
+<th [ngClass]="{
+            'text-right': col.field === 'nrp' || col.field === 'msp' || col.field === 'tat',
+            'text-left': col.field === 'active'
+          }" pResizableColumn>
+                        @if (col.field !== 'msp' && col.field !== 'nrp' && col.field !== 'tat' && col.field !== 'active') {
+                          <div
+                            class="thname">
+                            {{ col.header }}
+                          </div>
+                        }
+                        @if (col.field === 'msp' || col.field === 'nrp' || col.field === 'tat' || col.field === 'active') {
+                          <div
+                            >
+                            {{ col.header }}
+                          </div>
+                        }
+                      </th>
+                    }
+                  </tr>
+                </ng-template>
+                <!-- ===== BODY ===== -->
+                <ng-template pTemplate="body" let-rowData let-index="rowIndex"
+                  let-bodyCols="columns">
+                  <tr [pReorderableRow]="index">
+                    <td style="width:70px">
+                      <i class="icon-menu" matTooltip="Re-order"
+                        matTooltipClass="accent-tooltip" pReorderableRowHandle>
+                      </i>
+                    </td>
+                    <td class="action desg-bg">
+                      <div fxLayout="row" class="tbl-icon">
+                        <div fxFlex="100%" fxLayoutGap="10px">
+                          <mat-icon
+                            [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                            <i class="material-icons-outlined" matTooltip="Edit"
+                              matTooltipClass="accent-tooltip"
+                              (click)="GetSubComponentsById(rowData.subCompId)">
+                              edit
+                            </i>
+                          </mat-icon>
+                          <mat-icon
+                            [ngClass]="screenAuth.viewFlag === false ? 'page-btn disabled' : ''">
+                            <i class="material-icons-outlined" matTooltip="View"
+                              matTooltipClass="accent-tooltip"
+                              (click)="GetSubComponentsById(rowData.subCompId, 'view')">
+                              visibility
+                            </i>
+                          </mat-icon>
+                        </div>
+                      </div>
+                    </td>
+                    @for (col of bodyCols; track col) {
+<td [ngClass]="{
+            'text-right': col.field === 'nrp' || col.field === 'msp' || col.field === 'tat'
+          }">
+                        @if (col.field !== 'active') {
+                          <span>
+                            {{ rowData[col.field] }}
+                          </span>
+                        }
+                        @if (col.field === 'active') {
+                          <span>
+                            <div fxLayout="row" class="tbl-icon">
+                              @if (rowData.active) {
+                                <span class="istrue">
+                                  <i matTooltip="Active" class="material-icons">thumb_up</i>
+                                </span>
+                              }
+                              @if (!rowData.active) {
+                                <span class="isfalse">
+                                  <i matTooltip="In-Active"
+                                  class="material-icons">thumb_down</i>
+                                </span>
+                              }
+                            </div>
+                          </span>
+                        }
+                      </td>
+                    }
+                  </tr>
+                </ng-template>
+              </p-table>
+              <div fxLayout="row" [ngClass]="{ 'empty-record': componentList.length == 0 }"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    @if (!dispalyTable) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+        fxLayoutGap="10px">
+        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <form [formGroup]="ComponentForm" id='ngForm' autocomplete="off" role="presentation"
+            id="ngForm">
+            <!--
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+              fxLayout.xs="column" fxLayoutGap="20px">
+              <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                  <mat-label>Component</mat-label>
+                  <input matInput placeholder="Component" formControlName="compId"
+                    [matAutocomplete]="autoComponent" #compInput
+                    (focus)="compItems(compInput.value)"
+                    (blur)="checkValidCompValue();compValid()"
+                    (keyup)="compKeyupFunction($event, compInput.value)"
+                    (input)="compItems(compInput.value)" (click)="compInput.select()" />
+                  <mat-error *ngIf="!!ComponentForm.get('compId')?.errors?.required"> Component is
+                  required. </mat-error>
+                  <mat-error *ngIf="ComponentForm?.get('compId')?.errors?.incorrect"> Component
+                  name is not valid. </mat-error>
+                  <mat-autocomplete #autoComponent="matAutocomplete"
+                    [displayWith]="displayCompFn">
+                    <mat-option [value]="comp.compId"
+                      (onSelectionChange)='ComponentForm.controls["subCompName"].setValue(undefined)'
+                      *ngFor="let comp of compfilterlist" class="autocom-option autocom-tr">
+                      <span [innerHTML]="comp.compName"></span> </mat-option>
+                      <mat-option *ngIf="compfilterlist.length == 0">
+                        <div class="no-record"><span>No Data Found</span></div>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                    fxLayout.xs="column" fxLayoutGap="20px grid">
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%"
+                      fxFlex.xs="100%">
+                      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                        <mat-label>Sub Component Name</mat-label>
+                        <input matInput type="text" (blur)='isSubComponentExist()'
+                          placeholder="SubComponent" formControlName="subCompName" />
+                        <mat-error *ngIf="ComponentForm.get('subCompName').invalid"> Sub
+                        Component is required. </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%"
+                      fxFlex.xs="100%">
+                      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                        <mat-label>Sub Component Short Name</mat-label>
+                        <input matInput type="text" placeholder="Component Short Name"
+                          formControlName="subCompDesc" />
+                        <mat-error *ngIf="ComponentForm.get('subCompDesc').invalid"> Sub
+                        Component short name is required. </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+                <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                      fxFlex.xs="100%">
+                      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                        <mat-label>MSP</mat-label>
+                        <input matInput placeholder="MSP" formControlName="msp" maxlength="5"
+                          appNumberOnly [NumberOnly]="false" min="0"
+                          oninput="validity.valid || (value='');" />
+                        <mat-icon matSuffix><i class="icon-banknote"></i></mat-icon>
+                        <mat-error *ngIf="ComponentForm.get('msp').invalid"> MSP is required.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                      fxFlex.xs="100%">
+                      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                        <mat-label>NRP</mat-label>
+                        <input matInput placeholder="NRP" formControlName="nrp" maxlength="5"
+                          appNumberOnly [NumberOnly]="false" min="0"
+                          oninput="validity.valid || (value='');" />
+                        <mat-icon matSuffix><i class="icon-banknote"></i></mat-icon>
+                        <mat-error *ngIf="ComponentForm.get('nrp').invalid"> NRP is required.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                      fxFlex.xs="100%">
+                      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                        <mat-label>TAT</mat-label>
+                        <input formControlName="tat" type="text" autocomplete="off"
+                          role="presentation" appNumberOnly [PhoneNumber]="false"
+                          minlength="1" maxlength="2" matInput placeholder="TAT">
+                        <mat-error *ngIf="ComponentForm.get('tat')?.invalid">
+                          TAT is required.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                      fxFlex.xs="100%">
+                      <mat-label class="lbl">Choose</mat-label>
+                      <mat-checkbox formControlName="active"
+                      [disabled]="isEdit && activeDisableFlag">Is Active</mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              -->
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Component</mat-label>
+                    <input matInput placeholder="Component" formControlName="compId"
+                      [matAutocomplete]="autoComponent" #compInput
+                      (focus)="compItems(compInput.value)"
+                      (blur)="checkValidCompValue();compValid()" required
+                      (keyup)="compKeyupFunction($event, compInput.value)"
+                      (input)="compItems(compInput.value)" (click)="compInput.select()" />
+                    @if (!!ComponentForm.get('compId')?.errors?.required) {
+                      <mat-error> Component is
+                      required. </mat-error>
+                    }
+                    @if (ComponentForm?.get('compId')?.errors?.incorrect) {
+                      <mat-error> Component
+                      name is not valid. </mat-error>
+                    }
+                    <mat-autocomplete #autoComponent="matAutocomplete"
+                      (optionSelected)="getCompStatus($event)" [displayWith]="displayCompFn">
+                      @for (comp of compfilterlist; track comp) {
+                        <mat-option [value]="comp.compId"
+                          (onSelectionChange)='ComponentForm.controls["subCompName"].setValue(undefined)'
+                          class="autocom-option autocom-tr">
+                          <span [innerHTML]="comp.compName"></span> </mat-option>
+                        }
+                        @if (compfilterlist.length == 0) {
+                          <mat-option>
+                            <div class="no-record"><span>No Data Found</span></div>
+                          </mat-option>
+                        }
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                      fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid"
+                      fxLayoutGap.xs="0px grid">
+                      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%"
+                        fxFlex.xs="100%">
+                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                          <mat-label>Sub Component Name</mat-label>
+                          <input matInput type="text" (blur)='isSubComponentExist()' required
+                            maxlength="75" placeholder="SubComponent"
+                            formControlName="subCompName" />
+                          @if (ComponentForm.get('subCompName').invalid) {
+                            <mat-error> Sub
+                            Component is required. </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%"
+                        fxFlex.xs="100%">
+                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                          <mat-label>Sub Component Desc</mat-label>
+                          <input matInput type="text" placeholder="Sub Component Desc"
+                            formControlName="subCompDesc" required maxlength="200" />
+                          @if (ComponentForm.get('subCompDesc').invalid) {
+                            <mat-error> Sub
+                            Component short name is required. </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                  fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                      fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                      fxLayoutGap.xs="0px grid">
+                      <div fxFlex="66.67%" fxFlex.lg="66.67%" fxFlex.md="66.67%" fxFlex.sm="100%"
+                        fxFlex.xs="100%">
+                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+                          fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+                          fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%"
+                            fxFlex.xs="100%">
+                            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                              <mat-label>MSP</mat-label>
+                              <input matInput placeholder="MSP" formControlName="msp"
+                                maxlength="5" appNumberOnly [NumberOnly]="false" min="0"
+                                oninput="validity.valid || (value='');" required />
+                              <mat-icon matSuffix><i class="icon-banknote"></i></mat-icon>
+                              @if (ComponentForm.get('msp').invalid) {
+                                <mat-error> MSP is
+                                  required.
+                                </mat-error>
+                              }
+                            </mat-form-field>
+                          </div>
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%"
+                            fxFlex.xs="100%">
+                            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                              <mat-label>NRP</mat-label>
+                              <input matInput placeholder="NRP" formControlName="nrp"
+                                maxlength="5" appNumberOnly [NumberOnly]="false" min="0"
+                                oninput="validity.valid || (value='');" required />
+                              <mat-icon matSuffix><i class="icon-banknote"></i></mat-icon>
+                              @if (ComponentForm.get('nrp').invalid) {
+                                <mat-error> NRP is
+                                  required.
+                                </mat-error>
+                              }
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                        fxFlex.xs="100%">
+                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                          <mat-label>TAT</mat-label>
+                          <input formControlName="tat" autocomplete="off" role="presentation"
+                            preventDragdrop preventCutCopyPaste appNumberOnly
+                            (blur)="checkTat($event?.target?.value, 'tat')"
+                            [PhoneNumber]="false" required minlength="1" maxlength="2" matInput
+                            placeholder="TAT">
+                          @if (ComponentForm.get('tat')?.invalid) {
+                            <mat-error>
+                              TAT is required.
+                            </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                      fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                      fxLayoutGap.xs="0px grid">
+                      <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%"
+                        fxFlex.xs="100%">
+                        <app-auto-complete
+                        [selectProperties]="currencyControls"></app-auto-complete>
+                      </div>
+                      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%"
+                        fxFlex.xs="100%">
+                        <mat-form-field fxFlex.sm="100%" fxFlex.xs="100%" appearance="outline">
+                          <mat-label>Max No of Components</mat-label>
+                          <input matInput placeholder="Max No of Components"
+                            formControlName="maxNoOfComp" maxlength="2" appNumberOnly
+                            [NumberOnly]="false" />
+                          <!-- oninput="validity.valid || (value='');"
+                          required
+                          <mat-error
+                            *ngIf="!!ComponentForm?.get('maxNoOfComp')?.errors?.required">
+                            Max No of Components is required.
+                          </mat-error> -->
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px"
+                    fxLayoutGap.xs="0px">
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%"
+                      fxFlex.xs="100%">
+                      <mat-label class="lbl">Choose</mat-label>
+                      <mat-checkbox formControlName="active"
+                      [disabled]="isEdit && activeDisableFlag">Is Active</mat-checkbox>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+              <div fxLayout="row" class="pb-15">
+                <div fxFlex="100%" fxLayoutGap="20px">
+                  <mat-label class="lbl">Choose</mat-label>
+                  <mat-checkbox formControlName="active" [disabled]="isEdit && activeDisableFlag">Is
+                  Active</mat-checkbox>
+                  <mat-checkbox formControlName="abroadCompFlag">This is abroad
+                    component
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="deqcFlag">This component will have Pre QC
+                  </mat-checkbox>
+                </div>
+              </div>
+              @if (showBt) {
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                  fxLayout.xs="column">
+                  <div fxflex="100%">
+                    <h3 class="sub-header">TAT Calculation Index</h3>
+                  </div>
+                </div>
+              }
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                fxLayoutGap.xs="0px grid">
+                @if (showBt) {
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                    fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Beyond TAT</mat-label>
+                      <input matInput formControlName="beyondTat" appNumberOnly maxlength="2"
+                        [PhoneNumber]="false" preventDragdrop preventCutCopyPaste autocomplete="off"
+                        (blur)="checkTat($event?.target?.value,'bt')" placeholder="BT" required />
+                      @if (ComponentForm?.get('beyondTat')?.errors?.incorrect) {
+                        <mat-error>
+                        Beyond TAT should be Greater than component TAT </mat-error>
+                      }
+                      @if (ComponentForm?.get('beyondTat')?.errors?.required) {
+                        <mat-error>
+                        BT is required </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                }
+                @if (showCt) {
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                    fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Current TAT</mat-label>
+                      <input matInput formControlName="currentTat" appNumberOnly maxlength="2"
+                        [PhoneNumber]="false" preventDragdrop preventCutCopyPaste autocomplete="off"
+                        (blur)="checkTat($event?.target?.value,'ct')" placeholder="CT" required />
+                      @if (ComponentForm?.get('currentTat')?.errors?.incorrect) {
+                        <mat-error>
+                        Current TAT should be Lesser than or equal to Beyond TAT </mat-error>
+                      }
+                      @if (ComponentForm?.get('currentTat')?.errors?.required) {
+                        <mat-error>
+                        CT is required </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                }
+                @if (showNt) {
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                    fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Near TAT</mat-label>
+                      <input matInput formControlName="nearTat" appNumberOnly maxlength="2"
+                        [PhoneNumber]="false" preventDragdrop preventCutCopyPaste autocomplete="off"
+                        (blur)="checkTat($event?.target?.value,'nt')" placeholder="NT" required />
+                      @if (ComponentForm?.get('nearTat')?.errors?.incorrect) {
+                        <mat-error>
+                        Near TAT should be Lesser than or equal to current TAT </mat-error>
+                      }
+                      @if (ComponentForm?.get('nearTat')?.errors?.required) {
+                        <mat-error>
+                        NT is required </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                }
+                @if (showWt) {
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                    fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Within TAT</mat-label>
+                      <input matInput formControlName="withInTat" appNumberOnly maxlength="2"
+                        [PhoneNumber]="false" preventDragdrop preventCutCopyPaste autocomplete="off"
+                        (blur)="checkTat($event?.target?.value,'wt')" placeholder="WT" required />
+                      @if (ComponentForm?.get('withInTat')?.errors?.incorrect) {
+                        <mat-error>
+                        Within TAT should be Lesser than or equal to near TAT </mat-error>
+                      }
+                      @if (ComponentForm?.get('withInTat')?.errors?.required) {
+                        <mat-error>
+                        WT is required </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                }
+              </div>
+            </form>
+          </div>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
+</div>
+<ng-template #updateConfirmation class="warning-digBox">
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+          src="assets/images/alert-warning.gif"> </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">Confirmation !</h3>
+            <p class="text-sm">Do you want to save re-ordered records..?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <!-- <button mat-flat-button color="warn" (click)="dialogClose()">No, Keep it</button>
+    <button mat-flat-button color="accent" (click)="onClickUpdateOk()"> Yes, Update it </button> -->
+    <button mat-flat-button color="warn" (click)="onClickUpdateOk()"> Yes, Update it </button>
+    <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose()">No, Keep it</button>
+  </mat-dialog-actions>
+
+</ng-template>
+<ng-template #tatValidation let-message>
+  <h1 mat-dialog-title>{{message}}</h1>
+  <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" mat-dialog-close="cancel"> Cancel </button>
+    <button mat-flat-button color="warn" mat-dialog-close="ok"> OK </button>
+  </mat-dialog-actions>
+</ng-template>

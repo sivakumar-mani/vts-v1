@@ -1,0 +1,99 @@
+<div class="raise-bg">
+  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+    <div fxFlex="100%">
+      <h3 class="sub-header">Call charges alert</h3>
+    </div>
+  </div>
+
+  <div>
+    <form [formGroup]="alertForm" autocomplete="off" role="presentation" id="ngForm">
+      <div>
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutGap="20px">
+            <div fxFlex>
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Client Limit</mat-label>
+                <input matInput type="text" maxlength="2" (focusout)="assignClientLt()"
+                  placeholder="Enter Client Limit" formControlName="clientLimit" appNumberOnly />
+                <mat-icon matSuffix><i class="icon-banknote"> </i></mat-icon>
+                @if (alertForm?.get('clientLimit')?.invalid) {
+                  <mat-error> Client limit is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Call Charges Limit</mat-label>
+                <input matInput type="text" maxlength="2" mat-autofocus="true"
+                  placeholder="Enter Call Charges Limit" appNumberOnly
+                  (blur)="checkValidValue('callChargeAlert')" formControlName="callChargelimit" />
+                <mat-icon matSuffix><i class="icon-banknote"> </i></mat-icon>
+                @if (alertForm?.get('callChargelimit').invalid) {
+                  <mat-error> Call charges limit is
+                  required </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Call Charges Alert</mat-label>
+                <input matInput type="text" maxlength="2" mat-autofocus="true"
+                  placeholder="Enter Call Charges Alert" formControlName="callChargeAlert"
+                  appNumberOnly (blur)="checkValidValue('callChargeAlert')" />
+                <mat-icon matSuffix><i class="icon-banknote"> </i></mat-icon>
+                @if (
+                  !!alertForm?.get('callChargeAlert')?.errors?.required
+                  ) {
+                  <mat-error> Call charges alert is required </mat-error>
+                }
+                @if (
+                  alertForm?.get('callChargeAlert')?.hasError &&
+                  !alertForm?.get('callChargeAlert')?.errors?.required
+                  ) {
+                  <mat-error> Call charges alert should be less than {{ alertForm.get("callChargelimit").value }}
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutGap="20px">
+            <div fxFlex>
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>University Fee Limit</mat-label>
+                <input matInput type="text" maxlength="2" [disabled]="true"
+                  placeholder="Enter Client Limit" formControlName="univFeelimit" appNumberOnly />
+                <mat-icon matSuffix><i class="icon-banknote"> </i></mat-icon>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>University Fee Alert</mat-label>
+                <input matInput type="text" maxlength="2" mat-autofocus="true"
+                  placeholder="Enter University Fee Alert" formControlName="univFeeAlert"
+                  (blur)="checkValidValue('univFeeAlert')" appNumberOnly />
+                <mat-icon matSuffix><i class="icon-banknote"> </i></mat-icon>
+                @if (!!alertForm?.get('univFeeAlert')?.errors?.required) {
+                  <mat-error> University
+                  fee alert required</mat-error>
+                }
+                @if ( alertForm?.get('univFeeAlert')?.hasError &&
+                  !alertForm?.get('univFeeAlert')?.errors?.required
+                  ) {
+                  <mat-error> University fee alert should be less than {{ alertForm.get("clientLimit").value }}
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-label class="lbl">University Fee</mat-label>
+              <mat-checkbox formControlName="univFeeFlag"> University Fee </mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

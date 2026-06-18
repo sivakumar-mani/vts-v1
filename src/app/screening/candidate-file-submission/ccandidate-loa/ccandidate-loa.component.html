@@ -1,0 +1,56 @@
+@if (mainForm.get(formgroupName+'.consentLookupName').value ==='EConsent') {
+  <div>
+    <div [formGroup]="mainForm">
+      @if (userData.applicationId === 3) {
+        <div fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxflex="100%">
+            <h3 class="sub-header">Authorization Form</h3>
+          </div>
+        </div>
+      }
+      <div [formGroupName]="formgroupName">
+        <h4 style="color: white;background-color: black; padding: 7px;"> Declaration and Authorization</h4>
+        I hereby authorize Krya Screening Private Limited and its representative to verify information provided in my application for employment and this employee background verification form, and to conduct enquiries as may be necessary, at Krya’s
+        discretion. I authorize all persons who may have information relevant to this enquiry to disclose it to Krya Screening Private Limited or its representative.<br>
+        <input type="checkbox" (change)="agreeChange($event)" formControlName="iagreeFlag">
+        <!-- <mat-checkbox  (change)="agreeChange($event)" formControlName="iagreeFlag"></mat-checkbox> -->
+        I
+        <mat-form-field>
+          <input matInput formControlName="consentSignature" autocomplete="off" role="presentation" readonly>
+        </mat-form-field>
+        release all persons from liability on account of such disclosure.<br> This authorization and release, in original, faxed, photocopied form or e-mail transmission, shall be valid for this and any future reference. I confirm that the above information
+        is correct to the best of my knowledge.
+        <br>
+          <br>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <div>
+                <mat-form-field>
+                  <b> <i><input matInput formControlName="consentSignature" readonly></i></b>
+                </mat-form-field><br> Signature
+              </div>
+              <div>
+                <mat-form-field>
+                  <b> <input matInput value="{{common.currentDateTime}}" readonly></b>
+                </mat-form-field><br>Date & Time
+              </div>
+            </div>
+            <br>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <app-screening-documents [header]="'LOA Document'" [mainForm]="mainForm" [formgroupName]="'document'" [doctType]="doctType" [dupScreeningDoc]="screeningDocument" [showDocType]="false">
+            </app-screening-documents>
+          </div>
+        </div>
+        @if (userData.applicationId===3) {
+          <div fxLayout="row" fxLayoutGap="20px" class="mb-10">
+            <div fxFlex="100%">
+              <span><strong>Note:-</strong> <mat-label>  Please ensure that the uploaded Letter of Authorization is manually signed.
+            Your verification process will be kept on hold in case if there is no manual signature</mat-label></span>
+          </div>
+        </div>
+      }
+    }

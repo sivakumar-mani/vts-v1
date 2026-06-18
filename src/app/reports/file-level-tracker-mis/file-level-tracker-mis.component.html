@@ -1,0 +1,515 @@
+﻿<app-breadcrumb [btnExportDisabled] ="!screenAuth?.exportFlag" [btnExcelExport]="btnExcelExport" [routePath]="routePath" (eventExcelExport)="exportAsExcelFile()">
+</app-breadcrumb>
+
+@if (common.hide === false) {
+  <div fxLayout="row" class="advSearch">
+    <form autocomplete="off" [formGroup]="fileLevelTrackerFilterForm">
+      <div class="advSearch-forms">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
+          fxLayoutGap="0px">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <!-- Cmd By Megala For - (sprint -16 )VTS2-2024-CRT-0170 -->
+              <!-- <div fxFlex="200px">
+              <p-multiSelect fxFlex="100%" [options]="clientList" formControlName="clientName"
+                optionLabel="clientName" filterPlaceHolder="Select Components"
+                selectedItemsLabel="{0} Client selected" [style]="{XminWidth: '270px', width:'100%'}"
+                defaultLabel="Select Client Name" (propValueEvent)="getPropertyValue($event)"
+                [showHeader]="true" resetFilterOnHide=true>
+              </p-multiSelect>
+            </div> -->
+            <div fxFlex="200px">
+              <app-auto-complete [selectProperties]='clientControl' >
+              </app-auto-complete>
+            </div>
+            <div fxFlex="180px">
+              <app-auto-complete [selectProperties]='caseStatusControl' (selectionChange)="chDateVal()" required>
+              </app-auto-complete>
+            </div>
+            <!-- <div fxFlex="200px">
+            <app-auto-complete [selectProperties]='candidateControl'>
+            </app-auto-complete>
+          </div> -->
+          <!-- <div fxFlex="180px">
+          <app-auto-complete [selectProperties]='caseRefNoControl'>
+          </app-auto-complete>
+        </div> -->
+        <div fxFlex="180px">
+          <mat-form-field fxFlex="100%">
+            <mat-label>Client Ref Number</mat-label>
+            <input matInput formControlName="clientRefNo" placeholder="Search here..." type="text"
+              size="50" autocomplete="off" />
+            <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+          </mat-form-field>
+        </div>
+        <!-- Condition Added By Megala For - (sprint -16 )VTS2-2024-CRT-0170 -->
+        @if (fileLevelTrackerFilterForm.get('caseStatus').value == 'Completed') {
+          <div fxFlex="120px" >
+            <mat-form-field fxFlex="100%">
+              <mat-label>From Date</mat-label>
+              <input matInput [matDatepicker]="sampledatePicker" required readonly [max]="maxDate"
+                placeholder="From Date" formControlName='fromDate' (focus)="sampledatePicker.open()"
+                (click)="sampledatePicker.open()" (dateChange)="checkPeriod('fromDate')" />
+              <mat-datepicker-toggle matSuffix [for]="sampledatePicker">
+              </mat-datepicker-toggle>
+              <mat-datepicker #sampledatePicker></mat-datepicker>
+              @if (!!fileLevelTrackerFilterForm?.get('fromDate')?.errors?.required) {
+                <mat-error>From
+                Date is required </mat-error>
+              }
+              @if (!!fileLevelTrackerFilterForm.get('fromDate')?.errors?.incorrect) {
+                <mat-error>Date should less than 180 days
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        }
+        <!-- Condition Added By Megala For - (sprint -16 )VTS2-2024-CRT-0170 -->
+        @if (fileLevelTrackerFilterForm.get('caseStatus').value == 'Completed') {
+          <div fxFlex="120px">
+            <mat-form-field fxFlex="100%">
+              <mat-label>To Date</mat-label>
+              <input matInput [matDatepicker]="sampledatePicker1" placeholder="To Date" required
+                readonly [min]="fileLevelTrackerFilterForm.get('fromDate').value" [max]="maxDate"
+                formControlName='toDate' (focus)="sampledatePicker1.open()"
+                (click)="sampledatePicker1.open()" (dateChange)="checkPeriod('toDate')" />
+              <mat-datepicker-toggle matSuffix [for]="sampledatePicker1">
+              </mat-datepicker-toggle>
+              <mat-datepicker #sampledatePicker1></mat-datepicker>
+              @if (!!fileLevelTrackerFilterForm.get('toDate')?.errors?.required) {
+                <mat-error>To Date is
+                  required
+                </mat-error>
+              }
+              @if (!!fileLevelTrackerFilterForm.get('toDate')?.errors?.incorrect) {
+                <mat-error>Date should less than 180 days
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        }
+        <!-- <div fxFlex="200px">
+        <p-multiSelect fxFlex="100%" [options]="components" formControlName="component"
+          optionLabel="name" filterPlaceHolder="Select Components"
+          selectedItemsLabel="{0} Components selected"
+          [style]="{XminWidth: '270px', width:'100%'}" defaultLabel="Select Component"
+          (propValueEvent)="getPropertyValue($event)" [showHeader]="true" resetFilterOnHide=true>
+        </p-multiSelect>
+      </div> -->
+    </div>
+  </div>
+</div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <a (click)="searchValue()" type="submit">Search</a>
+    <span>|</span>
+    <a (click)="resetfrom()">Reset</a>
+    <span> &nbsp;&nbsp; | </span>
+    <!-- Cmd By Megala For - (sprint -16 )VTS2-2024-CRT-0170 -->
+    <!-- <a (click)='SearchCriFilter = !SearchCriFilter'>{{ SearchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+  class="icon-chevron-{{ SearchCriFilter?'up':'down' }}"></i></a> -->
+</div>
+</div>
+@if (SearchCriFilter) {
+  <div fxLayout="row" class="advSearchshow">
+    <div class="advSearch-forms">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <!-- <div fxFlex="180px">
+            <app-auto-complete [selectProperties]='caseStatusControl' required>
+            </app-auto-complete>
+          </div>   -->
+          <!-- Cmd By Megala For - (sprint -16 )VTS2-2024-CRT-0170 -->
+          <!-- <div fxFlex="200px">
+          <app-auto-complete [selectProperties]='candidateControl'>
+          </app-auto-complete>
+        </div> -->
+        <!-- <div fxFlex="200px">
+        <p-multiSelect fxFlex="100%" [options]="components" formControlName="component"
+          optionLabel="name" filterPlaceHolder="Select Components"
+          selectedItemsLabel="{0} Components selected"
+          [style]="{XminWidth: '270px', width:'100%'}" defaultLabel="Select Component"
+          (propValueEvent)="getPropertyValue($event)" [showHeader]="true" resetFilterOnHide=true>
+        </p-multiSelect>
+      </div> -->
+    </div>
+  </div>
+</div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+</div>
+</div>
+}
+</form>
+</div>
+}
+
+<div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px"
+  style="margin-top: 75px;">
+  <div fxFlex="100%" class="dt-viewBg">
+    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="0px" fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="24%" fxFlex.sm="100%" fxFlex.xs="100%" class="border-right">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+          <div fxFlex="100%">
+            <h4>File Tracker</h4>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="Column" fxLayout.xs="column">
+          <div fxFlex="100%">
+            <div class="dt-list-scrollbar " style="overflow:auto">
+              @for (tracker of fileLevelTrackerlist ; track tracker; let i = $index) {
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                  fxLayout.xs="column" fxLayoutGap="0px"
+                  (click)="selectDetail(tracker.screeningId);">
+                  <div fxFlex="100%"
+                    [ngClass]="tracker.screeningId === selectedRow?.screeningId? 'dt-list active':'dt-list'">
+                    <div class="team-details">
+                      <div class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                        {{ (tracker?.firstName)?tracker?.firstName.slice(0,
+                        1):''}}{{(tracker?.lastName) ? tracker?.lastName.slice(0, 1):''}}
+                      </div>
+                      <div class="teamL-Detail Report">
+                        <h5 matTooltip="Candidate Name" matTooltipClass="accent-tooltip">
+                        {{tracker.candidateName}}</h5>
+                        <dt matTooltip="DOB" matTooltipClass="accent-tooltip">
+                          {{common.getTimezoneOffset(tracker.dob, false) |date:"dd/MM/yyyy"}}
+                        </dt>
+                        <p matTooltip="Krya Ref #" matTooltipClass="accent-tooltip">
+                        {{tracker.clientRefNo}} </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+            @if (totalPages !==undefined && totalPages.length > 0) {
+              <div>
+                <mat-paginator [length]="totalPages" hidePageSize [pageSize]="pageSize"
+                  [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)">
+                </mat-paginator>
+              </div>
+            }
+
+          </div>
+        </div>
+
+      </div>
+
+      @if (fileLevelTrackerlist !== undefined && fileLevelTrackerlist !== null && selectedRow !== undefined && selectedRow !== null && selectedRow !== '') {
+        <div
+          fxFlex="80%" fxFlex.lg="80%" fxFlex.md="76%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px">
+            @if (selectedRow !== undefined && selectedRow !== null) {
+              <div fxFlex="100%" class="ReportView">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="Column"
+                  fxLayoutGap="20px">
+                  <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="45%" fxFlex.xs="100%">
+                    <p>
+                      <label>Candidate Name</label>
+                      <span>{{selectedRow?.candidateName}}</span>
+                    </p>
+                  </div>
+                  <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="55%" fxFlex.xs="100%"
+                    class="Rt">
+                    <ul>
+                      <li>
+                        <p>
+                          <label>Krya Ref. #</label>
+                          <span class="text-sm text-semi-bold">{{selectedRow?.clientRefNo}}</span>
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <label>D.O.B</label>
+                          <span class="text-sm text-semi-bold">
+                            {{common.getTimezoneOffset(selectedRow?.dob, false)
+                          |date:"dd/MM/yyyy"}}</span>
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <label>Case Status</label>
+                          <span
+                          class="text-sm text-semi-bold">{{selectedRow?.caseStatus?selectedRow?.caseStatus:"N/A"}}</span>
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px" class="teamdata-view">
+            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                fxLayout.xs="column" fxLayoutGap="20px grid" class="d-view">
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%"
+                  class="pb-0">
+                  <p>
+                    <label>Applicant ID:</label>
+                    <span>{{selectedRow?.applicantId?selectedRow?.applicantId:"N/A"}}</span>
+                  </p>
+                  <p>
+                    <label>Client Name:</label>
+                    <span>{{selectedRow?.clientName}}</span>
+                  </p>
+                  <p>
+                    <label>Site</label>
+                    <span>{{selectedRow?.siteName}}</span>
+                  </p>
+                  <p>
+                    <label>Package:</label>
+                    <span>{{selectedRow?.package}}</span>
+                  </p>
+                  @if (selectedRow?.clientCategoryId===4) {
+                    <p>
+                      <label>BV SPOC Name:</label>
+                      <span>{{selectedRow?.bvspocName}}</span>
+                    </p>
+                  }
+                  @if (selectedRow?.clientCategoryId===4) {
+                    <p >
+                      <label>Joining Location:</label>
+                      <span>{{selectedRow?.joiningLocation}}</span>
+                    </p>
+                  }
+                </div>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%"
+                  class="pb-0">
+                  <p>
+                    <label>Case Sent Date:</label>
+                    <span>{{selectedRow?.caseReceivedDate?(common.getTimezoneOffset(selectedRow?.caseReceivedDate,
+                    false) |date:"dd/MMM/yyyy"):"N/A"}}</span>
+                  </p>
+                  <p>
+                    <label>Case Initiation Date:</label>
+                    <span>{{common.getTimezoneOffset(selectedRow?.caseInititationDate, false)
+                    |date:"dd/MMM/yyyy"}}</span>
+                  </p>
+                  <p>
+                    <label>Case Due Date:</label>
+                    <span class="red">{{selectedRow?.caseDueDate?(common.getTimezoneOffset(selectedRow?.caseDueDate, false)
+                      |date:"dd/MMM/yyyy"):"N/A"}}
+                    </span>
+                  </p>
+                  <p>
+                    <label>Agreed TAT (Days):</label>
+                    <span>{{selectedRow?.clientTat}}</span>
+                  </p>
+                  @if (selectedRow?.clientCategoryId===4) {
+                    <p>
+                      <label>Recruiter:</label>
+                      <span>{{selectedRow?.recruiter}}</span> </p>
+                    }
+                    @if (selectedRow?.clientCategoryId===4) {
+                      <p>
+                        <label>CE Clearance Date:</label>
+                        <span>{{common.getTimezoneOffset( selectedRow?.ceInsuffClearedDate,false)|date:"dd/MMM/yyyy"}}</span> </p>
+                      }
+                    </div>
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <p class="whitespace-preline">
+                        <label>Under Package:</label>
+                        <span fxFlex="100%">
+                          @for (comp of selectedRow?.component; track comp) {
+                            <span class="cn-chip">{{
+                              comp.subCompName? comp.componentName + ' - ' +comp?.subCompName +' - '+
+                            comp.count:comp?.componentName +' - '+comp.count }}</span>
+                          }
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <hr class="seventhdayrpt">
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" class="tbl-doc">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <h3 class="sub-header">Components Details</h3>
+                      @for (comp of selectedRow?.componentSeventhDayReportVm; track comp) {
+                        <div fxLayout="row"
+                          class="history-view">
+                          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                            fxFlex.xs="100%">
+                            <div fxLayout="row" fxLayout.xs="Column">
+                              <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="41%" fxFlex.sm="35%"
+                                fxFlex.xs="100%" class="dt text-cap">
+                                {{comp.subCompName? comp.componentName + ' - ' +comp?.subCompName
+                                :comp.compIndex?comp.componentName+' -
+                                '+comp?.compIndex:comp?.componentName}}
+                              </div>
+                              <span fxFlex fxHide.xs></span>
+                              <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="60%" fxFlex.sm="40%"
+                                fxFlex.xs="100%" fxLayoutAlign.xs="start center"
+                                fxLayoutAlign="end center" fxLayoutAlign.xs="start center"
+                                [ngClass]="comp.notApplicableFlag===true?'red': getclass(comp.status)">
+                              &nbsp;{{comp.notApplicableFlag===true?'Cancel':comp.status}}</div>
+                            </div>
+                            <div fxLayout="row" fxLayout.xs="Column">
+                              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                                fxFlex.xs="100%" class="text-cap">
+                                {{comp.functionalEntity}}
+                              </div>
+                            </div>
+                            @for (insuff of comp?.insuffSeventhDayReportVm ; track insuff) {
+                              <div>
+                                <div class="dt"> {{common.getTimezoneOffset(insuff.insuffDate, false)
+                                  |date:"dd/MM/yyyy hh:mm"}} -
+                                  {{common.getTimezoneOffset(insuff.clearedDate, false) |date:"dd/MM/yyyy
+                                  hh:mm"}}
+                                </div>
+                                <p> {{insuff.remarks}}</p>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  class="border-left pl-20">
+                  <div class="rptDgnFRSR-scrollbar" style="overflow:auto">
+                    <div fxLayout="row" fxLayoutGap="20px">
+                      <h3 class="sub-header">Final Report Details</h3>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="20px">
+                      <div fxFlex="100%" class="subteam-data">
+                        <p>
+                          <label>Individual Report Date :</label>
+                          <span>
+                            {{common.getTimezoneOffset(selectedRow?.IndividualReportDate, false)
+                            |date:"dd/MM/yyyy hh:mm"}}
+                          </span>
+                        </p>
+                        <p>
+                          <label>Status :</label>
+                          <span>{{selectedRow?.finalReportStatus}}</span>
+                        </p>
+                        <p> <label>Color Code :</label>
+                        <span>
+                          @switch (selectedRow?.finalReportColorcode) {
+                            @case ('Green') {
+                              <span style="color:#08BA53;"> {{
+                              selectedRow?.finalReportColorcode}}</span>
+                            }
+                            @case ('Red') {
+                              <span style="color:red;"> {{selectedRow?.clientCategoryId===4?'Red- Discrepancy':
+                              selectedRow?.finalReportColorcode}}</span>
+                            }
+                            @case ('Yellow') {
+                              <span style="color: #FFBF00;"> {{
+                              selectedRow?.finalReportColorcode}}</span>
+                            }
+                            @case ('Orange') {
+                              <span style="color: orange;"> {{selectedRow?.clientCategoryId===4?'Amber – Unable to verify':
+                              selectedRow?.finalReportColorcode}}</span>
+                            }
+                            @case ('Magenta') {
+                              <span style="color:magenta ;"> {{
+                              selectedRow?.finalReportColorcode}}</span>
+                            }
+                            @case ('Stop') {
+                              <span style="color:#121212;"> {{
+                              selectedRow?.finalReportColorcode}}</span>
+                            }
+                            @case ('Positive') {
+                              <span style="color:#08BA53;"> {{
+                              selectedRow?.finalReportColorcode}}</span>
+                            }
+                            @case ('Negative') {
+                              <span style="color:red;"> {{
+                              selectedRow?.finalReportColorcode}}</span>
+                            }
+                            @case ('Positive-Review') {
+                              <span style="color: #ff6600;"> {{
+                              selectedRow?.finalReportColorcode}}</span>
+                            }
+                            @case ('Negative-Please Review') {
+                              <span style="color: #ffff00;"> {{
+                              selectedRow?.finalReportColorcode}}</span>
+                            }
+                          }
+                        </span>
+                      </p>
+                      <p>
+                        <label>Discrepancy Remarks :</label>
+                        <span>{{selectedRow?.finalReportRemarks}}</span>
+                      </p>
+                      <p>
+                        <label>Sent Date :</label>
+                        <span>
+                          {{common.getTimezoneOffset(selectedRow?.finalReportSendDate, false)
+                          |date:"dd/MM/yyyy hh:mm"}}
+                        </span>
+                      </p>
+                      <p>
+                        <label>TAT (Days) :</label>
+                        <span>{{selectedRow?.finalReportTat}}</span>
+                      </p>
+                      <p>
+                        <label>TAT Status :</label>
+                        <span>{{selectedRow?.finalReportTatStatus}}</span>
+                      </p>
+                      <p>
+                        <label>Delay reason :</label>
+                        <span>{{selectedRow?.finalReportDelayReason}}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <h3 class="sub-header">Supplementary Report Details</h3>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="100%" class="subteam-data">
+                      <p>
+                        <label>SR Sent Date :</label>
+                        <span>
+                          {{common.getTimezoneOffset(selectedRow?.supplementarySendDate, false)
+                          |date:"dd/MM/yyyy hh:mm"}}
+                        </span>
+                      </p>
+                      <p>
+                        <label>SR TAT (Days) :</label>
+                        <span>{{selectedRow?.supplementaryTatDay}}</span>
+                      </p>
+                      <p>
+                        <label>SR TAT Status :</label>
+                        <span>{{selectedRow?.supplementaryTatStatus}}</span>
+                      </p>
+                      <p>
+                        <label>SR Delay Reason :</label>
+                        <span>{{selectedRow?.supplementaryRemarks}}</span>
+                      </p>
+                      <p>
+                        <label>Abroad Component :</label>
+                        <span>{{selectedRow?.supplementaryRemarks}}</span>
+                      </p>
+                      <p>
+                        <label>Invoice # :</label>
+                        <span>{{selectedRow?.invoiceNumber}}</span>
+                      </p>
+                      <p>
+                        <label>Invoice Date :</label>
+                        <span>
+                          {{common.getTimezoneOffset(selectedRow?.invoiceDate, false)
+                          |date:"dd/MM/yyyy hh:mm"}}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>

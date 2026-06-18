@@ -1,0 +1,1380 @@
+﻿<div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card-header>
+      <!-- <mat-card-title fxLayout="row" fxFlex="100%" fxLayoutGap="50px">
+      <h1 class="header-title"> <span class="StprH">Step 2:</span>
+      <span *ngIf='!isEditMode'>Component Details </span>
+    </h1>
+  </mat-card-title> -->
+</mat-card-header>
+<mat-card-content>
+  <!-- <app-header [verificationForm]="verificationForm"></app-header> -->
+  <div fxLayout="row" fxLayoutGap="20px">
+    <div fxFlex="100%" class="mb-5" fxLayoutGap="10px">
+      <span fxFlex></span>
+      @if (name === 'Employment (HR)' || name ==='Education'||name === 'Employment International') {
+        <div>
+          <!-- <app-emp-closed-cases [screeningCompId]="verificationService.tempData.screeningCompId"
+          [empInsId]="empInsMasterDet.value.id" [empEduFlag]="true"
+        [name]="empInsMasterDet.value.name"></app-emp-closed-cases> -->
+        <app-emp-closed-cases [screeningCompId]="verificationService.tempData.screeningCompId"
+          [empInsId]="empinsIDs" [empEduFlag]="empEduFlag" [clientCatID]="clientCategoryId"
+        [name]="empInsMasterDet.value.name"></app-emp-closed-cases>
+      </div>
+    }
+    @if (isEditShowButton && !isEditMode && authService.employerInstutionId > 0 && userData.applicationId !== 2 &&
+      userData.subTeamName !== common.COMMONSUBCAMTEAM &&
+      (userData.teamName !== common.COMMONCRTTEAM) && common.VE === false) {
+      <button (click)='isEditMode = true'
+        mat-icon-button matTooltip="Edit" class="in-btn" matTooltipClass="accent-tooltip">
+        <i class="icon-new-message"></i>
+      </button>
+    }
+    <span fxLayoutGap="10px">
+      @if (isEditMode) {
+        <button
+          (click)='empInsProfDetailComponent.addUpdateEmployerInstution(verificationService.tempData.screeningCompId)'
+          mat-icon-button matTooltip="Update" class="in-btn" matTooltipClass="accent-tooltip">
+          <i class="icon-save"></i>
+        </button>
+      }
+      @if (isEditMode) {
+        <button (click)='employeeDetailsEdit = false; isEditMode = false'
+          mat-icon-button matTooltip="Back" class="in-btn" matTooltipClass="accent-tooltip">
+          <i class="icon-arrowleft"></i>
+        </button>
+      }
+    </span>
+  </div>
+</div>
+@if (componentContent.length > 0 || socialMediaId === common.SOCIAL_MEDIAID  && !isEditMode) {
+  <div
+    fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div class="d-view">
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+              fxLayout.sm="column" fxLayout.xs="column" fxLayout.lg="row" class="h3-header">
+              <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <h3 class="p-0">{{name}} Details</h3>
+              </div>
+              @if (userData.applicationId !== 2 && userData.subTeamName !== 'CRTCAMTeam' &&  verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=='Rejection'
+                && closedFlag === false && common.VE === false && common.modifyAdditionalFeeFlag != true && common.modifyComponentFeeFlag != true) {
+                <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="end center" fxLayoutAlign.sm="start center" [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : '' "
+                  fxLayoutAlign.xs="start center" fxLayoutGap="8px" style="font-weight: normal;"
+                  >
+                  <a class="text-ini" (click)="openReject()" >Move to File Submission</a>
+                  @if (name === 'Education' || (fresherFlag != true && (name  ==='Employment (HR)' || name  ==='Current Employment' ||name  ==='Previous Employment')  && verificationService.tempData?.verificationScreeningDet?.manualFileSubmissionFlag === false)) {
+                    <a class="text-ini"
+                    (click)="viewVerifiedList()">| For Research Detail </a>
+                  }
+                  @if ((fresherFlag != true && (name  ==='Employment (HR)'||name === 'Employment International'  || name  ==='Current Employment' ||name  ==='Previous Employment'))) {
+                    <a class="text-ini"
+                    (click)="getSupervisor()">| Send Mail To Sup </a>
+                  }
+                </div>
+              }
+            </div>
+            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+              @for (CC of componentContent; track CC) {
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>{{CC.header}}</label>
+                    <em [ngClass]="CC.header === 'Voter ID' ? 'text-upp':''">
+                      @if (CC.header === 'Company Name' || CC.header === 'Institution Name';) {
+                        <span
+                          [ngStyle]=" verificationService.frStatusId  == 170  && verificationService.tempData?.verificationScreeningDet?.manualFileSubmissionFlag!=true? {'color':'red'} : {}">
+                          {{(CC.value ? CC.value : 'N/A')}}
+                        </span>
+                        }@if (CC.header !== 'Company Name' &&  CC.header !== 'Institution Name'
+                        ) {
+                        <em>{{(CC.header === 'Expiry Date' || CC.dataType === 'Date') && CC.header !== 'Company Name'
+                          ? (CC.value ? (CC.value | date : 'dd/MMM/yyyy') : 'N/A') : (CC.value
+                          ? CC.value : 'N/A')}}
+                        </em>
+                      }</em>
+                    </p>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  @if (isEditMode) {
+    <div>
+      <app-emp-ins-prof-detail (refreshData)='generateCaption()' [isEditMode]='isEditMode'
+        (isEditModeFlag)="getFlag($event)" [verificationForm]='verificationForm'
+      [isVerification]='isVerification'> </app-emp-ins-prof-detail>
+    </div>
+  }
+  @if (name === 'Education') {
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%" class="mb-5">
+        <span fxFlex></span>
+        @if (!isEditFeesMode && name === 'Education') {
+          <button (click)='isEditFeesMode = true'
+            mat-icon-button matTooltip="Edit" class="in-btn" matTooltipClass="accent-tooltip">
+            <i class="icon-new-message"></i>
+          </button>
+        }
+        <span fxLayoutGap="10px">
+          @if (isEditFeesMode) {
+            <button (click)='insFees.saveInstituteFee();bindInsFees()'
+              mat-icon-button matTooltip="Update" class="in-btn" matTooltipClass="accent-tooltip">
+              <i class="icon-save"></i>
+            </button>
+          }
+          @if (isEditFeesMode) {
+            <button (click)='isEditFeesMode = false' mat-icon-button
+              matTooltip="Back" class="in-btn" matTooltipClass="accent-tooltip">
+              <i class="icon-arrowleft"></i>
+            </button>
+          }
+        </span>
+      </div>
+    </div>
+  }
+  @if (!isEditFeesMode && name === 'Education') {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+      fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+      fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <div class="d-view">
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <h3>Fees Details</h3>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Institution</label>
+                    <em>{{empInsMasterDet?.value?.name ? empInsMasterDet?.value?.name :
+                    'N/A'}}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Infovour of</label>
+                    <em>{{this.verificationForm?.value?.institutionFees?.infavourof ?
+                      this.verificationForm?.value?.institutionFees?.infavourof
+                    : 'N/A'}}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Payable at</label>
+                    <em>{{this.verificationForm?.value?.institutionFees?.payableAt ?
+                      this.verificationForm?.value?.institutionFees?.payableAt
+                    : 'N/A'}}</em>
+                  </p>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Bank</label>
+                    <em>{{this.verificationForm?.value?.institutionFees?.bankName ?
+                      this.verificationForm?.value?.institutionFees?.bankName
+                    : 'N/A'}}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Check/DD Amount</label>
+                    <em>{{this.verificationForm?.value?.institutionFees?.ddamount ?
+                      this.verificationForm?.value?.institutionFees?.ddamount
+                    : 'N/A'}}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Additional Charges</label>
+                    <em>{{this.verificationForm?.value?.institutionFees?.additionalCharges ?
+                      this.verificationForm?.value?.institutionFees?.additionalCharges
+                    : 'N/A'}}</em>
+                  </p>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Remarks</label>
+                    <em>{{this.verificationForm?.value?.institutionFees?.remarks ?
+                      this.verificationForm?.value?.institutionFees?.remarks
+                    : 'N/A'}}</em>
+                  </p>
+                </div>
+                <!-- <div fxFlex="33.33%"></div>
+                <div fxFlex="33.33%"></div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  @if (isEditFeesMode) {
+    <div>
+      <app-institution-fees
+        [feesId]="!verificationForm?.value?.institutionFees ? 0 : verificationForm?.value?.institutionFees.feesId"
+      [insId]="empInsMasterDet.value.id"></app-institution-fees>
+    </div>
+  }
+
+  @if (compType === "criminalCheckPCC1PCC2") {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+      fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+      fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <div class="d-view">
+              @for (CC of criminalContent; track CC; let i = $index) {
+                <div>
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                    fxLayout.sm="column" fxLayout.xs="column" fxLayout.lg="row" class="h3-header">
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%"
+                      fxFlex.xs="100%">
+                      <h3 class="title">Criminal Check Address {{i+1}}</h3>
+                    </div>
+                    @if (userData.applicationId !== 2  && common.VE === false) {
+                      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%"
+                        fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.sm="start center"
+                        fxLayoutAlign.xs="start center" fxLayoutGap="8px"
+                        style="font-weight: normal;"
+                        >
+                        <a class="text-ini" (click)="openReject()">Move to File Submission </a>
+                      </div>
+                    }
+                  </div>
+                  <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                    @for (capt of displayCaption?.value; track capt) {
+                      <div fxFlex="33.33%">
+                        <p>
+                          <label>{{capt.caption}}</label>
+                          <em>{{(CC[capt.key]) ? CC[capt.key] : 'N/A' }}</em>
+                        </p>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  <!-- <div *ngIf='compType === "cRC"' fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div class="d-view">
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <h3>Current Address</h3>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+            <div fxFlex="33.33%" *ngFor='let CC of currentAddressContent'>
+              <p>
+                <label>{{CC.header}}</label>
+                <!-- <em>{{CC.value ? CC.value : 'N/A'}}</em>
+                <em>{{(CC.header === 'From Date' || CC.header === 'To Date') ? (CC.value ?
+                  (CC.value | date : 'dd/MM/yyyy')
+                : 'N/A') : (CC.value ? CC.value : 'N/A')}}</em>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+
+@if (addressPos?addressPos.length:0 > 0) {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+    fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+    fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div class="d-view">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3>Period Of Stay Details</h3>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+              @for (ad of addressPos ; track ad; let QIndex = $index) {
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Period of Stay From {{QIndex+1}}</label>
+                    <!-- <em>{{CC.value ? CC.value : 'N/A'}}</em> -->
+                    <em>
+                    {{ad.periodOfStay}}</em>
+                  </p>
+                  <p>
+                    <label>Period of Stay To {{QIndex+1}}</label>
+                    <!-- <em>{{CC.value ? CC.value : 'N/A'}}</em> -->
+                    <em>
+                    {{ad.periodOfStayTo}}</em>
+                  </p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+@if (CourtDetails?CourtDetails.length:0 > 0) {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+    fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+    fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div class="d-view">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3>Court Details</h3>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+              @for (court of CourtDetails ; track court; let i = $index) {
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Court Name {{i+1}}</label>
+                    <em>
+                    {{court.courtName}}</em>
+                  </p>
+                  <p>
+                    <label> Jurisdiaction {{i+1}}</label>
+                    <em>
+                    {{court.jurisdiction}}</em>
+                  </p>
+                  <p>
+                    <label> Location {{i+1}}</label>
+                    <em>
+                    {{court.location}}</em>
+                  </p>
+                  <p>
+                    <label> Verification Remark {{i+1}}</label>
+                    <em>
+                    {{court.remarks}}</em>
+                  </p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+@if (empHrContact?.length > 0) {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+    fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+    fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div class="d-view">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3>HR Contact Details</h3>
+              </div>
+            </div>
+            @for (contact of empHrContact; track contact) {
+              <div fxLayout="row wrap" fxLayoutAlign="start stretch" class="btmline">
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Employer Name</label>
+                    <em>{{ contact.employerName }}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Contact Number</label>
+                    <em>{{ contact.contactNumber }}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>HR Name</label>
+                    <em>{{ contact.name }}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Email ID</label>
+                    <em>{{ contact.emailId }}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Last Updated Date</label>
+                    <em>{{ common.getTimezoneOffset(contact.updated, false) | date:'dd/MMM/yyyy' }}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Remarks</label>
+                    <em>{{ contact.comments }}</em>
+                  </p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+
+@if (miscContent.length > 0) {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+    fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+    fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div class="d-view">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3>Miscellenous Questions</h3>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="qnans">
+              @for (MC of miscContent; track MC) {
+                <div fxFlex="100%">
+                  <p>
+                    <label>Qn. {{MC.miscQuestion}}</label>
+                    <!-- <em>{{CC.value ? CC.value : 'N/A'}}</em> -->
+                    @if (socialMediaId !== common.SOCIAL_MEDIAID) {
+                      <em>Ans.
+                      {{MC.miscAnswer}}</em>
+                    }
+                    @if (socialMediaId === common.SOCIAL_MEDIAID) {
+                      <em>Ans.</em>
+                    }
+                  </p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+@if (ctsFlag) {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div class="d-view">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3>Client Details</h3>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+              @for (CC of verificationService.tempData.verificationScreeningDet.componentCustomFields; track CC) {
+                <div fxFlex="33.33%"
+                  >
+                  <p>
+                    <label>{{CC.fieldName}}</label>
+                    <!-- <em>{{CC.value ? CC.value : 'N/A'}}</em> -->
+                    <!-- <em>{{([CC.fieldValue]) ? [CC.fieldValue] : 'N/A' }}</em> -->
+                    <em>{{(CC.fieldType=='Date')
+                      ? (CC.fieldValue ? (CC.fieldValue | date : 'dd/MMM/yyyy') : 'N/A') :
+                    (CC.fieldValue ? CC.fieldValue : 'N/A')}}</em>
+                  </p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+<!-- <app-dynamic-component
+[verificationForm]="verificationForm" [verificationComponentDet]="this.verificationForm.controls['verificationComponentDet']"></app-dynamic-component> -->
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <h3 class="sub-header">Component Documents
+      <span fxFlex></span>
+      @if (closedFlag === false && common.modifyAdditionalFeeFlag != true && common.modifyComponentFeeFlag != true) {
+        <button  [ngClass]="screenAuth.addFlag === false ? 'page-btn disabled' : '' "
+          mat-icon-button matTooltip="Update Component Documents"
+          class="in-btn mb-5" matTooltipClass="accent-tooltip" (click)="saveDocument('document')">
+          <i class="icon-save"></i>
+        </button>
+      }
+    </h3>
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="20px" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <app-screening-documents header="component" [showDocumentRemove]="false" [mainForm]="compDocument"
+      [formgroupName]="'document'" [dupScreeningDoc]="screeningDocument"
+    [doctType]="verificationTransBindDet" [showDocType]="false"> </app-screening-documents>
+  </div>
+</div>
+@if (policy) {
+  <form [formGroup]="policy">
+    @if (userData.applicationId !== 2 && authService.employerInstutionId > 0 && userData.subTeamName !== common.COMMONSUBCAMTEAM &&
+      (userData.teamName !== common.COMMONCRTTEAM && userData.teamLeadFlag !== true) && this.common.VE === false) {
+      <div>
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+          <div fxFlex="100%">
+            <h3 class="sub-header">Policy Details</h3>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+          fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+          fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <!-- (selectedTabChange)="initpolicyCommentForm(); clearControls" -->
+            <mat-tab-group class="tabalign-left" mat-align-tabs="start">
+              <mat-tab label="Main">
+                <div fxLayoutAlign="end center">
+                  <button (click)="updateComments()" mat-icon-button matTooltip="Update"
+                    class="in-btn" matTooltipClass="accent-tooltip">
+                    <i class="icon-save"></i>
+                  </button>
+                </div>
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="66.67%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Comments </mat-label>
+                      <textarea matInput formControlName="mainComment" #main maxlength="1000"
+                      placeholder="Leave a comment..."></textarea>
+                      <mat-hint class="mat-hint"> ({{main.value.length}} /1000 max)
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Sub">
+                <div fxLayoutAlign="end center">
+                  <button (click)="updateComments()" mat-icon-button matTooltip="Update"
+                    class="in-btn" matTooltipClass="accent-tooltip">
+                    <i class="icon-save"></i>
+                  </button>
+                </div>
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="66.67%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Comments </mat-label>
+                      <textarea matInput formControlName="subComment" #sub maxlength="1000"
+                      placeholder="Leave a comment..."></textarea>
+                      <mat-hint class="mat-hint"> ({{sub.value.length}} /1000 max) </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-tab>
+              <!-- <mat-tab label="Country">
+              <div fxLayoutAlign="end center"><button (click)="updateComments()" mat-icon-button matTooltip="Update"
+                class="in-btn" matTooltipClass="accent-tooltip"> <i class="icon-save"></i></button></div>
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="66.67%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Comments </mat-label>
+                      <textarea matInput formControlName="countrySubComment" #country maxlength="200"
+                      placeholder="Leave a comment..."></textarea>
+                      <mat-hint class="mat-hint"> ({{country.value.length}} /200 max) </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-tab> -->
+              <mat-tab label="Screening">
+                <div fxLayoutAlign="end center">
+                  <button (click)="updateComments()" mat-icon-button matTooltip="Update"
+                    class="in-btn" matTooltipClass="accent-tooltip">
+                    <i class="icon-save"></i>
+                  </button>
+                </div>
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="66.67%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Comments </mat-label>
+                      <textarea matInput formControlName="screeningComment" #screening
+                      maxlength="1000" placeholder="Leave a comment..."></textarea>
+                      <mat-hint class="mat-hint"> ({{screening.value.length}} /1000 max)
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+      </div>
+    }
+  </form>
+}
+</mat-card-content>
+</div>
+</div>
+
+<ng-template #reject>
+  <form>
+    <h1 mat-dialog-title>Move to File Submission</h1>
+    <mat-dialog-content>
+      <!-- <div fxlayout="row" *ngIf="rejectedCommentsList.length > 0">
+      <div fxflex="100%">
+        <h3 class="sub-header">Rejected comments history</h3>
+      </div>
+    </div> -->
+    <!-- <div fxLayout="row" *ngIf="rejectedCommentsList.length > 0">
+    <div fxFlex="100%">
+      <div class="history-view" *ngFor="let rej of rejectedCommentsList">
+        <div class="dt">{{rej.rejectedDate | date:'dd-MM-yyyy'}}</div>
+        <div class="uname">
+          <div class="user avatarBg1">{{rej.name[0]}}</div>
+        {{rej.name}} </div>
+        <p> {{rej.comments}} </p>
+      </div>
+    </div>
+  </div> -->
+  <div fxLayout="row" class="pt-15">
+    <div fxFlex="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Comments</mat-label>
+        <textarea fxFlex="100%" #rej [formControl]="rejectComments" required matInput
+          placeholder="Comments" maxlength="1000">
+        </textarea>
+        <mat-hint class="f-13"> ({{rej.value.length}} /1000 max) </mat-hint>
+        @if (!rejectComments.value) {
+          <mat-error>Comments is required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+  <button mat-flat-button color="warn" [disabled]="!rejectComments.valid" (click)="moveDE()"> Submit </button>
+  <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose()"> Cancel </button>
+</mat-dialog-actions>
+</form>
+</ng-template>
+
+<ng-template #verifiedList>
+  <h1 mat-dialog-title>
+  {{empFlag === false ? 'Institution' : 'Employer'}} - For Research Details </h1>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div f fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+          fxLayout.xs="column" fxLayoutGap="0px grid">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div class="client-details mb-0">
+              <div class="client-avatar" fxHide.sm fxHide.xs>
+                <i class="icon-referencecheck"></i>
+              </div>
+              <div class="client-data">
+                <h3 matTooltip="Employer details" matTooltipClass="accent-tooltip">{{empInsName}} -
+                ({{clientRefNo}})</h3>
+                <div fxLayout="row wrap" class="mt-15">
+                  <div fxFlex="100%">
+                    <p-progressBar [ngStyle]="{'igreen': provalue > 50, 'ired': provalue < 50}"
+                      [value]="provalue">
+                    </p-progressBar>
+                  </div>
+                  <!-- <div fxFlex="100%" >
+                  <p-progressBar  [value]="proAnsvalue" ></p-progressBar>
+                </div> -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      @if (empFlag) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="50%">
+            <h3 class="sub-header">Business Category:</h3>
+            <span class="ansqn">{{BusinesscatName}}</span>
+          </div>
+          <div fxFlex="50%">
+            @if (FrConDocuments.length > 0) {
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.xs="15px grid" class="mt-15 mb-15"
+                fxLayoutAlign="start center" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"
+                class="pt-15">
+                <!-- <div fxLayout="row" class="pt-15"> -->
+                <div class="file-names">
+                  @for (op of ResearchQuestAnsValue[0].frConDocument; track op; let docIndex = $index) {
+                    <div
+                      class="file-upload-files" [matTooltip]="op.fileName">
+                      <a (click)="preview(op,'FRScreening')">
+                        {{op.fileName}}
+                      </a>
+                    </div>
+                  }
+                </div>
+              <!-- </div> -->
+            </div>
+          }
+        </div>
+      </div>
+    }
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <h3 class="sub-header">Step 1:</h3>
+      </div>
+    </div>
+    @for (col of ResearchQuestAnsValue; track col; let QIndex = $index) {
+      @if (col?.verifyStep === 1) {
+        <span>
+          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+            fxLayout.xs="column wrap" class="ansqn">
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+              class="pt-15">
+              <h4> <span>{{QIndex+1}} ) . </span> <span [innerHTML]='col.questionName'></span> </h4>
+            </div>
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+              fxFlex.xs="100%">
+              @if (getOpame(col.options,col.selectedOption) && col.selectedOption!==0 ) {
+                <div>
+                  @for (op of SelectedOptionname; track op) {
+                    <p>
+                      <label>Answer : </label>
+                      <span>{{op?.optionName}}</span>
+                    </p>
+                  }
+                </div>
+              }
+              @if ( col.selectedOption===0 ) {
+                <div>
+                  <p>
+                    <label>Answer : </label>
+                    <span>N/A</span>
+                  </p>
+                </div>
+              }
+            </div>
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+              fxFlex.xs="100%">
+              <p> <label>Number of Employees : </label>
+              <span>{{col?.noOfEmployee?col.noOfEmployee:"N/A"}}</span>
+            </p>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            @if (getStatus(col.options[0].subDetail,col.mcaCompanyStatus) && col.mcaCompanyStatus!== 0 ) {
+              <div
+                >
+                @for (op of SelectedStatusOption; track op) {
+                  <p>
+                    <label>{{this.empFlag ? 'Status Of the Company :' : 'Institution Type32 :'
+                    }}</label>
+                    <span>{{op.lookUpName}}</span>
+                  </p>
+                }
+              </div>
+            }
+            @if ( col.mcaCompanyStatus===0 ) {
+              <div>
+                <p>
+                  <label>{{this.empFlag ? 'Status Of the Company :' : 'Institution Type878 :'
+                  }}</label>
+                  <span>N/A</span>
+                </p>
+              </div>
+            }
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Paid Up Capital(₹) : </label>
+              <span>{{col?.paidUpCaptial?col.paidUpCaptial:"N/A"}}</span>
+            </p>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Date Of Last AGM : </label>
+              @if (col?.lastAGMDate !== null) {
+                <span>
+                  {{ common.getTimezoneOffset(col?.lastAGMDate, false) | date: "dd/MMM/yyyy"
+                }}</span>
+              }
+              @if (col?.lastAGMDate === null) {
+                <span> N/A</span>
+              }
+            </p>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Employee Records: </label>
+              <span>{{col?.employeeRecord?col.employeeRecord:"N/A"}}</span>
+            </p>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Domain Creation Date : </label>
+              @if (col?.domainCreatedDate !== null) {
+                <span>{{
+                  common.getTimezoneOffset(col?.domainCreatedDate, false) | date: "dd/MMM/yyyy"
+                }}</span>
+              }
+              @if (col?.domainCreatedDate === null) {
+                <span> N/A</span>
+              }
+            </p>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Domain Expired Date : </label>
+              @if (col?.domainExpireDate !== null) {
+                <span
+                  >{{common.getTimezoneOffset(col?.domainExpireDate,
+                false) | date: "dd/MMM/yyyy" }}</span>
+              }
+              @if (col?.domainExpireDate === null) {
+                <span> N/A</span>
+              }
+            </p>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Payment Details : </label>
+              <span>{{col?.paymentDetailsId?col.paymentDetailsId:"N/A"}}</span>
+            </p>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Incorporation Date : </label>
+              @if (col?.incorporationDate !== null) {
+                <span
+                  >{{common.getTimezoneOffset(col?.incorporationDate,
+                false) | date: "dd/MMM/yyyy" }}</span>
+              }
+              @if (col?.incorporationDate === null) {
+                <span> N/A</span>
+              }
+            </p>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>PaymentDetails : </label>
+              <span>{{col?.paymentDetails?col.paymentDetails:"N/A"}}</span>
+            </p>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Remark : </label>
+              <span>{{col.remarks?col.remarks:"N/A"}}</span>
+            </p>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Document : </label>
+              @if (col?.researchDocument !== null) {
+                <span>
+                  @for (op of col?.researchDocument.researchDocumentTrans; track op; let docIndex = $index) {
+                    <div
+                      class="file-upload-files" [matTooltip]="op.fileName">
+                      <a (click)="preview(op,'FR')">
+                        {{op.fileName}}
+                      </a>
+                    </div>
+                  }
+                </span>
+              }
+              @if (col?.researchDocument === null) {
+                <span>
+                  N/A
+                </span>
+              }
+            </p>
+          </div>
+        </div>
+      </span>
+    }
+  }
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%">
+      <h3 class="sub-header">Step 2:</h3>
+    </div>
+  </div>
+  @for (col of ResearchQuestAnsValue; track col; let QIndex = $index) {
+    @if (col?.verifyStep === 2) {
+      <span>
+        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+          fxLayout.xs="column wrap" class="ansqn">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+            class="pt-15">
+            <h4> <span>{{QIndex+1}} ) . </span> <span [innerHTML]='col.questionName'></span> </h4>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            @if (getOpame(col.options,col.selectedOption) && col.selectedOption!==0 ) {
+              <div>
+                @for (op of SelectedOptionname; track op) {
+                  <p>
+                    <label>Answer : </label>
+                    <span>{{op?.optionName}}</span>
+                  </p>
+                }
+              </div>
+            }
+            @if ( col.selectedOption===0 ) {
+              <div>
+                <p>
+                  <label>Answer : </label>
+                  <span>N/A</span>
+                </p>
+              </div>
+            }
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Remark : </label>
+              <span>{{col.remarks?col.remarks:"N/A"}}</span>
+            </p>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+            fxFlex.xs="100%">
+            <p>
+              <label>Document : </label>
+              @if (col?.researchDocument !== null) {
+                <span>
+                  @for (op of col?.researchDocument.researchDocumentTrans; track op; let docIndex = $index) {
+                    <div
+                      class="file-upload-files" [matTooltip]="op.fileName">
+                      <a (click)="preview(op,'FR')">
+                        {{op.fileName}}
+                      </a>
+                    </div>
+                  }
+                </span>
+              }
+              @if (col?.researchDocument === null) {
+                <span>
+                  N/A
+                </span>
+              }
+            </p>
+          </div>
+        </div>
+      </span>
+    }
+  }
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%">
+      <h3 class="sub-header">Conclusion:</h3>
+    </div>
+  </div>
+  @if (empFlag) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="0px grid" fxLayoutGap.xs="15px grid" class="mt-15 mb-15" fxLayoutAlign="start center"
+      fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+      @if (ResearchQuestAnsValue?.length > 0) {
+        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+          >
+          <mat-label class="lbl">Based on the above analysis the employer falls under :</mat-label>
+          <mat-radio-group fxLayoutGap="20px" fxLayoutGap.xs="15px grid"
+            [(ngModel)]='ResearchQuestAnsValue[0].categoryLookupId' disabled>
+            @for (op of researchStatusLookUpValue?.researchCategoryType; track op) {
+              <mat-radio-button [value]="op?.lookUpId"
+                >
+              {{op?.lookUpName}} </mat-radio-button>
+            }
+          </mat-radio-group>
+        </div>
+      }
+    </div>
+  }
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="0px grid" fxLayoutGap.xs="15px grid" class="mt-15 mb-15" fxLayoutAlign="start center"
+    fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start" class="pt-15">
+    <!-- <div fxLayout="row" class="pt-15"> -->
+    @if (ResearchQuestAnsValue?.length > 0) {
+      <div fxFlex="50%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Conclusion</mat-label>
+          <textarea #con [(ngModel)]="ResearchQuestAnsValue[0].researchConclusion" matInput
+            autocomplete="off" placeholder="Conclusion" (focus)="con.select()"
+            (click)="con.select()" role="presentation" maxlength="1000" disabled>
+          </textarea>
+          <mat-hint class="f-13"> ({{con.value?.length}} /1000 max) </mat-hint>
+        </mat-form-field>
+      </div>
+    }
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="0px grid" fxLayoutGap.xs="15px grid" class="mt-15 mb-15" fxLayoutAlign="start center"
+    fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+    @if (ResearchQuestAnsValue?.length > 0) {
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+        >
+        <mat-label class="lbl">Based on the above analysis the employer is :</mat-label>
+        <mat-radio-group [(ngModel)]='ResearchQuestAnsValue[0].researchResultId' fxLayoutGap="20px"
+          (change)="resultChange($event.value)" fxLayoutGap.xs="15px grid" disabled>
+          @for (op of researchStatusLookUpValue?.researchResult; track op) {
+            <mat-radio-button [value]="op?.lookUpId"
+              (click)="progresscalc()">
+            {{op?.lookUpName}} </mat-radio-button>
+          }
+        </mat-radio-group>
+      </div>
+    }
+  </div>
+  @if (getValue(ResearchQuestAnsValue[0]?.researchResultId)) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="0px grid" fxLayoutGap.xs="15px grid" class="mt-15 mb-15" fxLayoutAlign="start center"
+      fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"
+      >
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-label class="lbl">Review Type</mat-label>
+        <mat-radio-group [(ngModel)]='ResearchQuestAnsValue[0].underReviewLookupId' fxLayoutGap="20px"
+          fxLayoutGap.xs="15px grid" disabled>
+          @for (op of researchStatusLookUpValue?.underReview; track op) {
+            <mat-radio-button [value]="op?.lookUpId"
+              >
+            {{op?.lookUpName}} </mat-radio-button>
+          }
+        </mat-radio-group>
+      </div>
+    </div>
+  }
+  @if (empFlag) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <h3 class="sub-header">Case Comments:</h3>
+      </div>
+    </div>
+  }
+  @if (empFlag) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.xs="15px grid" class="mt-15 mb-15" fxLayoutAlign="start center"
+      fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+      @if (ResearchQuestAnsValue?.length > 0) {
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="50%"
+          >
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Case Comments</mat-label>
+            <textarea #txt1 [(ngModel)]="ResearchQuestAnsValue[0].caseComments" matInput
+              autocomplete="off" placeholder="Case Comments" (focus)="txt1.select()"
+            (click)="txt1.select()" role="presentation" maxlength="1000" disabled></textarea>
+            <mat-hint class="f-13"> ({{txt1.value?.length}} /1000 max) </mat-hint>
+          </mat-form-field>
+        </div>
+      }
+    </div>
+  }
+</div>
+</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+  <button mat-stroked-button (click)="dialogRef.close()">Close</button>
+</mat-dialog-actions>
+</ng-template>
+
+<!-- <preview> -->
+<ng-template #pdfDialog>
+  <div class=" confirm-pop">
+    <button mat-icon-button class="closed" [mat-dialog-close]="true">
+      <mat-icon class="close-icon" color="warn">close</mat-icon>
+    </button>
+    <h1 mat-dialog-title>Pdf Viewer</h1>
+    <br>
+      <mat-dialog-content>
+        <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <pdf-viewer [src]="url" [render-text]="true" [original-size]="true" [show-borders]="true"
+              [zoom]="zoomval" [zoom-scale]="'page-height'" [rotation]="rvalue"
+            [fit-to-page]="true"></pdf-viewer>
+          </div>
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+        <button mat-icon-button matTooltip="Download Pdf" (click)="pdftool('download')"
+          matTooltipClass="accent-tooltip">
+          <mat-icon>cloud_download</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Rotate right" (click)="pdftool('right')"
+          matTooltipClass="accent-tooltip">
+          <mat-icon>rotate_right</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Rotate left" (click)="pdftool('left')" matTooltipClass="accent-tooltip">
+          <mat-icon>rotate_left</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Zoom In" (click)="pdftool('zoomin')" matTooltipClass="accent-tooltip">
+          <mat-icon>zoom_in</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Zoom Out" (click)="pdftool('zoomout')" matTooltipClass="accent-tooltip">
+          <mat-icon>zoom_out</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Reset" (click)="pdftool('reset')" matTooltipClass="accent-tooltip">
+          <mat-icon>settings_backup_restore</mat-icon>
+        </button>
+      </mat-dialog-actions>
+    </div>
+  </ng-template>
+  <ng-template #mailDialog>
+    <h1 mat-dialog-title>Supervisor Verification Mail</h1>
+    <mat-dialog-content>
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%" class="text-sm text-dull">
+          <!-- <p class="text-ilatic">Email will be sent to following mail id&#96;s of the Client: <span class="text-bold">
+        {{SendCaseMailList.clientName}}</span> </p> -->
+      </div>
+    </div>
+    <!-- <div fxLayout="row" class="mb-10">
+    <div fxFlex="8.5%"></div>
+    <div fxFlex="40%" style="margin-bottom: -18px;">
+      <div class="mail-list">
+        <mat-form-field appearance="outline">
+          <input matInput autocomplete="off" [formControl]="addMailCtrl" (keydown.enter)="addMail('To')"
+            (keydown.tab)="addMail('To')" (blur)="addMail('To')" />
+            <mat-error *ngIf="addMailCtrl?.errors?.pattern"> Enter Valid
+            Email </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxFlex="20%">
+      </div>
+      <div></div>
+    </div> -->
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%">
+        <div class="mail-list">
+          <button mat-stroked-button [matMenuTriggerFor]="menu1">To...</button>
+          <mat-menu #menu1="matMenu">
+            @if (checkIsExist("ToInc")) {
+              <button mat-menu-item>ToMail Not Found to Add</button>
+            }
+            @for (mail of SendCaseMailList?.ClientMailId; track mail; let i = $index) {
+              <!-- {{mail | json}} -->
+              @if (mail.selected === false && mail.emailType ==="To") {
+                <button (click)='mailChange(mail.emailAddress,true)'
+                  mat-menu-item>{{
+                mail.emailAddress }}</button>
+              }
+            }
+          </mat-menu>
+          <div class="list-area">
+            <!-- <span class="tag" *ngIf='checkIsExist("ToDec")'>ToMail Not Found </span> -->
+            <ng-container>
+              <mat-form-field appearance="outline" fxFlex="100%" style="width: 100%;">
+                <mat-chip-grid #chipList>
+                  @if (checkIsExist("ToDec") && toList.length === 0 ) {
+                    <mat-chip-row
+                      [removable]="removable">
+                      ToMail Not Found
+                    </mat-chip-row>
+                  }
+                  @for (mail of SendCaseMailList?.ClientMailId; track mail; let i = $index) {
+                    <span>
+                      @if (mail?.emailType==="To" && mail?.selected===true) {
+                        <mat-chip-row
+                          [removable]="removable">
+                          {{ mail.emailAddress }}
+                          <span matChipRemove (click)='mailChange(mail.emailAddress,false)'>×</span>
+                        </mat-chip-row>
+                      }
+                    </span>
+                  }
+                  @for (mail of toList; track mail; let j = $index) {
+                    <mat-chip-row [removable]="removable" (removed)="removeControl( j, 'To')">
+                      {{mail}}
+                      @if (removable) {
+                        <span matChipRemove>×</span>
+                      }
+                    </mat-chip-row>
+                  }
+                  <input placeholder="To" matInput autocomplete="off" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="addOnBlur"
+                    (matChipInputTokenEnd)="addMail($event, 'To')">
+                  </mat-chip-grid>
+                  @if (addMailCtrl?.errors) {
+                    <mat-error> Enter Valid Email </mat-error>
+                  }
+                </mat-form-field>
+              </ng-container>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" class="mb-10">
+        <div fxFlex="100%">
+          <div class="mail-list">
+            <button mat-stroked-button [matMenuTriggerFor]="menu">Cc...</button>
+            <mat-menu #menu="matMenu">
+              @if (checkIsExist("CCInc")) {
+                <button mat-menu-item>CCMail Not found to Add</button>
+              }
+              @for (mail of SendCaseMailList?.ClientMailId; track mail; let i = $index) {
+                @if (mail.selected === false && mail.emailType ==="CC") {
+                  <button (click)='mailChange(mail.emailAddress,true)'
+                    mat-menu-item>{{
+                  mail.emailAddress }}</button>
+                }
+              }
+            </mat-menu>
+            <div class="list-area">
+
+              <mat-form-field appearance="outline" fxFlex="100%" style="width: 100%;">
+                <mat-chip-grid #chipList1>
+                  @if (checkIsExist("CCDec") && ccList.length === 0) {
+                    <mat-chip-row [removable]="removable">
+                      CCMail Not Found
+                    </mat-chip-row>
+                  }
+                  @for (mail of SendCaseMailList?.ClientMailId; track mail; let i = $index) {
+                    <span>
+                      @if (mail?.emailType ==="CC" && mail?.selected ===  true) {
+                        <mat-chip-row
+                          [removable]="removable">
+                          {{ mail.emailAddress }}
+                          <span matChipRemove (click)='mailChange(mail.emailAddress,false)'>×</span>
+                        </mat-chip-row>
+                      }
+                    </span>
+                  }
+                  @if ((ccvalue)) {
+                    <span>
+                      @for (cc of ccList; track cc; let j = $index) {
+                        <mat-chip-row [removable]="removable" (removed)="removeControl( j, 'CC')">
+                          {{cc}}
+                          @if (removable) {
+                            <span matChipRemove>×</span>
+                          }
+                        </mat-chip-row>
+                      }
+                    </span>
+                  }
+                  <input placeholder="CC" matInput autocomplete="off" [matChipInputFor]="chipList1"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addMail($event, 'CC')">
+                  </mat-chip-grid>
+                </mat-form-field>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="row" class="mb-10">
+          <div fxFlex="100%">
+            <div class="mail-list">
+              <button mat-stroked-button>Subject</button>
+
+              <div class="list-area">
+
+                <mat-form-field appearance="outline" fxFlex="100%" style="width: 100%;">
+
+                  <input placeholder="Subject" readonly matInput [(ngModel)]="SendCaseMailList.Subject"
+                    autocomplete="off">
+
+                  </mat-form-field>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ng-template [ngTemplateOutlet]="pTableTemplate"></ng-template>
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+          <button (click)='sendSupMail()' mat-flat-button color="primary" matTooltip="Send mail"
+          matTooltipClass="accent-tooltip">Send Mail</button>
+          <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+        </mat-dialog-actions>
+      </ng-template>
+
+      <ng-template #pTableTemplate>
+        <p [innerHtml]="SendCaseMailList.EmailTemplate"></p>
+
+      </ng-template>
+
+
+      <ng-template #imgprDialog>
+        <div class=" confirm-pop">
+          <button mat-icon-button class="closed" [mat-dialog-close]="true">
+            <mat-icon class="close-icon" color="warn">close</mat-icon>
+          </button>
+          <h1 mat-dialog-title>Image Viewer</h1>
+          <br>
+            <mat-dialog-content>
+              <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="100%">
+
+                  <img id="imgpre" [@rotatedState]='state' [src]='imageSource'>
+
+                </div>
+              </div>
+            </mat-dialog-content>
+            <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+              <button mat-icon-button matTooltip="Download Image" (click)="pdftool('download')"
+                matTooltipClass="accent-tooltip">
+                <mat-icon>cloud_download</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Rotate Left" (click)="rotateimg('left')"
+                matTooltipClass="accent-tooltip">
+                <mat-icon>arrow_back</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Rotate Right" (click)="rotateimg('right')"
+                matTooltipClass="accent-tooltip">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Rotate Up" (click)="rotateimg('up')" matTooltipClass="accent-tooltip">
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Rotate Down" (click)="rotateimg('down')"
+                matTooltipClass="accent-tooltip">
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Zoom In" (click)="zoomin()" matTooltipClass="accent-tooltip">
+                <mat-icon>zoom_in</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Zoom Out" (click)="zoomout()" matTooltipClass="accent-tooltip">
+                <mat-icon>zoom_out</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Reset" (click)="rotateimg('reset')" matTooltipClass="accent-tooltip">
+                <mat-icon>settings_backup_restore</mat-icon>
+              </button>
+            </mat-dialog-actions>
+          </div>
+        </ng-template>

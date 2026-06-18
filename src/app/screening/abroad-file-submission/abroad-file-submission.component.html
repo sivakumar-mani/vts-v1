@@ -1,0 +1,177 @@
+<app-breadcrumb [btnSave]="true" [btnReset]="true" [routePath]='routePath' (eventSave)="saveFileSubmission()"
+(eventReset)="resetForm()" [toolTip]="breadcrumbFlags.toolTip"></app-breadcrumb>
+<mat-card>
+  <mat-card-header>
+    <div fxFlex="100%">
+      <mat-card-title>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+              fxLayout.xs="column" fxLayoutGap="10px grid">
+              <div fxFlex="100%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center">
+                <h1 class="header-title">IND. Clients File Creation For Abroad Components</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-title>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="abroadForm" autocomplete="off">
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <app-auto-complete [selectProperties]='clientControls' (propValueEvent)="getSiteLocation($event);getScreeningColorCodeList($event.value)">
+          </app-auto-complete>
+        </div>
+        <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <app-auto-complete [selectProperties]='siteControls' (propValueEvent)="getCandidateList($event)">
+          </app-auto-complete>
+        </div>
+        <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Country (Verf.In)</mat-label>
+            <input matInput placeholder="Country (Verf.In)" formControlName="country">
+
+          </mat-form-field>
+        </div>
+        <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Location</mat-label>
+            <input matInput placeholder="Location" required formControlName="location" maxlength="50">
+            @if (!!abroadForm?.get('location')?.errors?.required) {
+              <mat-error> Location is
+                required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <app-auto-complete [selectProperties]='candidateControls'
+            (propValueEvent)="getRefNo($event);getComponentList($event)">
+          </app-auto-complete>
+        </div>
+        <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Reference No</mat-label>
+            <input matInput placeholder="Reference No" readonly formControlName="refNo">
+
+          </mat-form-field>
+        </div>
+        <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Component Name</mat-label>
+            <mat-select placeholder="Component Name" formControlName="compId" required>
+              @for (comp of componentList; track comp) {
+                <mat-option [value]="comp.componentId">
+                {{comp.compName}} </mat-option>
+              }
+            </mat-select>
+            @if (!!abroadForm?.get('compId')?.errors?.required) {
+              <mat-error>Component name is required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Screening Status</mat-label>
+            <mat-select placeholder="Screening Status" formControlName="statusId" required>
+              @for (status of screeningStatusList; track status) {
+                <mat-option [value]="status.statusId">
+                {{status.screeningStatus}}</mat-option>
+              }
+            </mat-select>
+            @if (!!abroadForm?.get('statusId')?.errors?.required) {
+              <mat-error> Screening status is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Information Source</mat-label>
+            <input matInput placeholder="Information Source" required maxlength="50"
+              formControlName="informationSource">
+            @if (!!abroadForm?.get('informationSource')?.errors?.required) {
+              <mat-error> Information source
+                is
+                required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Fee (₹)</mat-label>
+            <input matInput placeholder="Fee (₹)" appNumberOnly [NumberOnly]="false" required maxlength="5"
+              formControlName="fee">
+            @if (!!abroadForm?.get('fee')?.errors?.required) {
+              <mat-error> Fee is required
+              </mat-error>
+            }
+            @if (!!abroadForm?.get('fee')?.errors?.pattern) {
+              <mat-error> Fee is invalid
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Completed Date</mat-label>
+            <input matInput [matDatepicker]="picker" placeholder="Completed Date" autocomplete="off"
+              role="presentation" formControlName="completedDate" [max]="maxDate"  (focus)="picker.open()"
+              (click)="picker.open()">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            @if (!!abroadForm?.get('completedDate')?.errors?.required) {
+              <mat-error> Completed date is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Color Code</mat-label>
+            <mat-select placeholder="Color Code" formControlName="colorCodeId" required>
+              @for (color of colorCodeList; track color) {
+                <mat-option [value]="color.lookUpId">
+                {{color.lookUpName}}</mat-option>
+              }
+            </mat-select>
+            @if (!!abroadForm?.get('colorCodeId')?.errors?.required) {
+              <mat-error>Color code is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-label class="lbl">For Client Review</mat-label>
+          <mat-radio-group formControlName="clientReviewFlag" aria-label="Select an option"
+            fxLayoutGap="20px">
+            <mat-radio-button [value]=true fxLayoutGap="20px">Yes</mat-radio-button>
+            <mat-radio-button [value]=false fxLayoutGap="20px">No</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <app-screening-documents [header]="'Annexure Upload'" [fileBtn]="false" [mainForm]="abroadForm"
+            [frmArray]="docFormArray" [formgroupName]="'document'"
+            [dupScreeningDoc]="screeningComponent.componentDocument">
+          </app-screening-documents>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

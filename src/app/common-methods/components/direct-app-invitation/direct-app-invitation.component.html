@@ -1,0 +1,507 @@
+﻿ 
+<!-- <div fxLayout="row" class="srchPad" style="width: 80%;margin:auto;">
+  <div fxFlex="100%">
+  <mat-card>
+      <div fxLayout="row" fxLayoutGap="30px">
+        <div fxFlex="100%">
+          <div class="stepper-steps hori-stepper">
+            
+            <mat-vertical-stepper #stepper1 (selectionChange)="createView($event)">
+              <mat-step>
+                <ng-template matStepLabel>
+                  <div class="stpMenu"></div>
+                  <div class="name">Form Controls</div>
+                  <i class="icon-users"> </i>
+                </ng-template>
+              </mat-step>
+              <mat-step>
+                <ng-template matStepLabel>
+                  <div class="stpMenu"></div>
+                  <div class="name">Componenets</div>
+                  <i class="icon-users1"> </i>
+                </ng-template>
+              </mat-step>
+              
+            </mat-vertical-stepper>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="30px">
+        <div fxFlex="100%">
+          <div *ngIf='step1 === 0'>
+            <mat-card-header>
+              <mat-card-title>
+                <h1 class="header-title">Form Components</h1>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+
+              <div fxLayout="row" fxLayoutGap="20px">
+               sgfsdfdsfdsaf dsfds fdsfdsfsd
+              </div> 
+            </mat-card-content>
+          </div>
+          <div *ngIf='step1 === 1'>
+            <mat-card-header>
+              <mat-card-title>
+                <h1 class="header-title">Buttons, Alert & Dialog</h1>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="20px">
+                <div fxFlex="100%">
+                  sfsdfs fasfds sfdasf sfdsfdsf sfdsfsdfdsfdsf sfdsfds
+                </div>
+              </div>
+             
+            
+             
+
+            </mat-card-content>
+          </div> 
+        </div>
+       
+      </div>
+    </mat-card>
+  </div>
+</div> -->
+
+
+<!-- <div class="FullBody">
+  <div class="HeaderBg">
+    <div class="HContBody">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxFlex="100%"
+                fxLayoutGap="20px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0px" fxLayoutAlign="center center">
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="70%" fxFlex.xs="100%">
+          <div class="LogTxt"> <a href="#aaa" routerLink="/" class="link">
+            <div class="Logo lnd-logo"><i class="icon-acheck"></i></div>
+            <div class="logo-lett">
+              <div class="logo-txt">Krya Screening Private Limited</div>
+              <div class="logo-sol">Screening Made Smart</div>
+            </div>
+            </a> </div>
+        </div>
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="30%" fxHide.xs fxLayoutAlign="end center">
+          <div class="HDetails">
+            <div class="d-inline-block"><h4>Welcome, TanDish! </h4>
+              <p>Last Login: 5/20/2016 @ 11:21 IST</p></div>
+            <div class="avatar avatarBg1">TD</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ContBody">
+    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="100px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                    fxLayout.xs="column">
+          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">  
+            <mat-horizontal-stepper [linear]="isLinear" #stepper>
+              <mat-step [stepControl]="firstFormGroup">
+                <form [formGroup]="firstFormGroup">
+                  <ng-template matStepLabel>Start</ng-template>
+                  <div fxLayout="row">
+                    <div fxFlex="100%">
+                      <h1 class="header-title">Start</h1>
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxFlex="100%">
+                      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. </p>
+                      <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
+                      <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. </p>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a href="">In pulvinar odio</a>.</p>
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxFlex="100%" fxLayoutAlign="end center" fxLayoutGap="8px">
+                      <button mat-flat-button color="primary" matStepperNext>Next</button>
+                    </div>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step [stepControl]="secondFormGroup" label="Personal Info">
+                <form [formGroup]="secondFormGroup">
+                  <div fxLayout="row">
+                    <div fxFlex="100%">
+                      <h1 class="header-title">Personal Info</h1>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>First Name</mat-label>
+                        <input matInput placeholder="Enter the First Name" required>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Middle Name</mat-label>
+                        <input matInput placeholder="Enter the Middle Name">
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Last Name</mat-label>
+                        <input matInput placeholder="Enter the Last Name" required>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>D.O.B.</mat-label>
+                        <input matInput [matDatepicker]="sampledatePicker"
+                                                    placeholder="Enter the D.O.B." />
+                        <mat-datepicker-toggle matSuffix [for]="sampledatePicker"> </mat-datepicker-toggle>
+                        <mat-datepicker #sampledatePicker></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Email</mat-label>
+                        <mat-icon matSuffix><i class="icon-email"></i></mat-icon>
+                        <input matInput placeholder="Enter the Email" required>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Phone Number</mat-label>
+                        <mat-icon matSuffix><i class="icon-phone"></i></mat-icon>
+                        <input matInput placeholder="Enter the Phone Number" required>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxFlex="100%">
+                      <h3 class="sub-header">Current Address</h3>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="33.33%"> 
+                        <mat-radio-button value="1">Permanent Address</mat-radio-button> 
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-radio-button value="2">Previous Address</mat-radio-button>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-checkbox>Same as Current Address</mat-checkbox>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>First Name</mat-label>
+                        <input matInput placeholder="Enter the First Name" required>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Middle Name</mat-label>
+                        <input matInput placeholder="Enter the Middle Name">
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Last Name</mat-label>
+                        <input matInput placeholder="Enter the Last Name" required>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxFlex="100%" fxLayoutAlign="end center" fxLayoutGap="8px">
+                      <button mat-flat-button color="primary" matStepperPrevious>Back</button>
+                      <button mat-flat-button color="primary" matStepperNext>Next</button>
+                    </div>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step [stepControl]="thirdFormGroup" label="Component">
+                <form [formGroup]="thirdFormGroup">
+                  <div fxLayout="row">
+                    <div fxFlex="100%">
+                      <h1 class="header-title">Component</h1>
+                    </div>
+                  </div>
+                  <mat-form-field>
+                    <mat-label>Address</mat-label>
+                    <input matInput formControlName="secondCtrl"
+                                            placeholder="Ex. 1 Main St, New York, NY" required>
+                  </mat-form-field>
+                  <div fxLayout="row">
+                    <div fxFlex="100%" fxLayoutAlign="end center" fxLayoutGap="8px">
+                      <button mat-flat-button color="primary" matStepperPrevious>Back</button>
+                      <button mat-flat-button color="primary" matStepperNext>Next</button>
+                    </div>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step>
+                <ng-template matStepLabel>Review</ng-template>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <h1 class="header-title">Review</h1>
+                  </div>
+                </div>
+                <p>You are now done.</p>
+                <div fxLayout="row">
+                  <div fxFlex="100%" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <button mat-flat-button color="primary" matStepperPrevious>Back</button>
+                    <button mat-flat-button color="primary" (click)="stepper.reset()">Reset</button>
+                  </div>
+                </div>
+              </mat-step>
+            </mat-horizontal-stepper>
+          </div>
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                            fxLayout.xs="column">
+              <div fxFlex="100%">
+                <h1 class="header-title">General and Special Instruction</h1>
+                
+                <div class="side-scroll" style="overflow:auto">
+                  <div fxLayout="row">
+                    <div fxFlex="100%" class="hints">
+                      <h6 class="hints">Sub Header</h6>
+                      <ul>
+                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been 
+                          the industry's standard dummy text ever since the 1500s</li>
+                        <li>When an unknown printer took a galley of type and scrambled it to make a type specimen book</li>
+                        <li>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxFlex="100%" class="hints">
+                      <h6 class="hints">Sub Header1</h6>
+                      <ul>
+                        <li>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+                          and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</li>
+                        <li>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested</li>
+                        <li>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</li>
+                        <li>Various versions have evolved over the years, sometimes by accident, sometimes on purpose</li>
+                      </ul>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer><strong>Verification Tracking System.</strong>Copyright © Krya Screening Private Limited. All rights reserved. <a routerLink="/privacy" target="_blank">Privacy Policies</a></footer>
+</div> -->
+
+
+<div fxLayout="row" style="width: 80%;margin:auto;">
+  <div fxFlex="100%">
+    <mat-card>
+      <div fxLayout="row" fxLayoutGap="30px"> 
+        <div fxFlex="100%">
+          <mat-card-header>
+            <mat-card-title>
+              <h1 class="header-title">Digital Address Verification</h1>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div  fxLayout="row wrap" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="20px grid">
+              <div fxFlex="32%" fxFlex.md="32%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Verification ID</mat-label> 
+                    <input matInput placeholder="Verification ID"> 
+                </mat-form-field>
+              </div>
+              <div fxFlex="34%" fxFlex.md="34%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Client Name</mat-label>
+                  <input matInput placeholder="Client Name"> 
+                </mat-form-field>
+              </div>
+              <div fxFlex="34%" fxFlex.md="34%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Candidate Name</mat-label>
+                  <input matInput placeholder="Candidate Name"> 
+                </mat-form-field>
+              </div>
+              <div fxFlex="32%" fxFlex.md="32%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Address Type</mat-label> 
+                    <input matInput placeholder="Address Type"> 
+                </mat-form-field>
+              </div>
+              <div fxFlex="25%" fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Latitude</mat-label>
+                  <input matInput placeholder="Latitude"> 
+                </mat-form-field>
+              </div>
+              <div fxFlex="25%" fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Longitude</mat-label>
+                  <input matInput placeholder="Longitude"> 
+                </mat-form-field>
+              </div>
+              <div fxFlex="10%" fxFlex.md="10%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <button mat-flat-button color="primary"  style="margin-top: 8px;">Get Location</button>
+              </div>
+              <div fxFlex="57%" fxFlex.md="57%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Address</mat-label> 
+                  <textarea matInput placeholder="Address"></textarea>
+                </mat-form-field>
+              </div>
+              <div fxFlex="25%" fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Distance(km)</mat-label>
+                  <input matInput placeholder="Distance(km)"> 
+                </mat-form-field>
+              </div>
+            </div>
+            
+            </mat-card-content>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="30px"> 
+        <div fxFlex="100%">
+          <mat-card-header>
+            <mat-card-title>
+              <h1 class="header-title">Applicant Details</h1>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div  fxLayout="row wrap" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="20px grid">
+              <div fxFlex="32%" fxFlex.md="32%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Respondent Name</mat-label> 
+                    <input matInput placeholder="Respondent Name"> 
+                </mat-form-field>
+              </div>
+              <div fxFlex="34%" fxFlex.md="34%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Relationship with the Candidate</mat-label>
+                  <input matInput placeholder="Relationship with the Candidate"> 
+                  <mat-hint>Self/Family Member/Neighbour/Friend</mat-hint>
+                </mat-form-field>
+              </div>
+             
+              <div fxFlex="34%" fxFlex.md="34%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Ownership Details</mat-label>
+                  <mat-select matNativeControl>
+                    <mat-option value="option">Option 1</mat-option>
+                    <mat-option value="option">Option 2</mat-option>
+                    <mat-option value="option">Option 3</mat-option>
+                    <mat-option value="option">Option 4</mat-option>
+                    <mat-option value="option">Option 5</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+               
+              <div fxFlex="32%" fxFlex.md="32%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Alternative Contact Number</mat-label>
+                  <input matInput placeholder="Contact Number"> 
+                </mat-form-field>
+              </div>
+              <div fxFlex="20%" fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Stay from Date</mat-label>
+                  <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date" (focus)="sampledatePicker.open()"/>
+                  <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #sampledatePicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div fxFlex="20%" fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="100%"> 
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Stay to Date</mat-label>
+                  <input matInput [matDatepicker]="sampledatePicker1" placeholder="From Date" (focus)="sampledatePicker1.open()" />
+                  <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+                  <mat-datepicker #sampledatePicker1></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div fxFlex="32%" fxFlex.md="32%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Address</mat-label>
+                  <textarea matInput placeholder="Address"></textarea>
+                </mat-form-field>
+              </div>
+              <div fxFlex="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Land Mark</mat-label> 
+                    <input matInput placeholder="Land Mark"> 
+                </mat-form-field>
+              </div>
+            </div>
+            
+            </mat-card-content>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="30px"> 
+        <div fxFlex="100%">
+          <mat-card-header>
+            <mat-card-title>
+              <h1 class="header-title">Attachments Enclosures</h1>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div  fxLayout="row wrap" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="20px grid">
+              <div fxFlex="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <div class="file-container">
+                  <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse here...</span>
+                    <input type="file" #fileInput>
+                  </div>
+                  <div class="file-names">
+                    <div class="file-upload-files"> sample-upload-images-files.jpg
+                      <button type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="file-upload-files">01-Aadharcard.jpg
+                      <button type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="file-upload-files">Pancard.jpg
+                      <button type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxFlex="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <div class="file-container">
+                  <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse here...</span>
+                    <input type="file" #fileInput>
+                  </div>
+                  <div class="file-names">
+                    <div class="file-upload-files"> sample-upload-images-files.jpg
+                      <button type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="file-upload-files">01-Aadharcard.jpg
+                      <button type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="file-upload-files">Pancard.jpg
+                      <button type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+            
+            
+            
+            
+            </div>
+          
+            </mat-card-content>
+        </div>
+      </div>
+      </mat-card>
+    </div></div> 

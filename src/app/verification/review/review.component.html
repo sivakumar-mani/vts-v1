@@ -1,0 +1,1322 @@
+<!-- <mat-card-header>
+<mat-card-title fxLayout="row" fxFlex="100%" fxLayoutGap="50px">
+  <h1 class="header-title">
+    <span class="StprH">Step 6:</span>Generate Response
+  </h1>
+</mat-card-title>
+</mat-card-header> -->
+<!-- <app-header [verificationForm]="verificationForm"></app-header> -->
+<!-- <p class="text-sm">To verify the Ministry of Corporate Affairs status
+<a *ngIf="componentType === 'employee'" target="_blank" href="http://www.mca.gov.in/mcafoportal/viewCompanyMasterData.do">click here</a>
+</p> -->
+<mat-card-content>
+  <form appScrollToError>
+    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="end center" class="mb-10">
+      @if (componentType === 'employee' ||componentType === 'currentemployee' ||componentType === 'previousemployee' ) {
+        <p class="text-sm green">To verify the Ministry of Corporate Affairs status
+          <a target="_blank" href="http://www.mca.gov.in/mcafoportal/viewCompanyMasterData.do">click here</a>
+        </p>
+      }
+      <!--  updateData -->
+      <!-- <div fxLayoutGap="8px" *ngIf="fontColor">
+      <button mat-icon-button matTooltip="Send To QC" class="in-btn" matTooltipClass="accent-tooltip"
+        (click)="openDialogQc(reviewSaveTemplate, '266px', '377px', 'Not')"> <i class="icon-qc" style="font-size: 20px;"></i> </button>
+        <button mat-icon-button matTooltip="Pre-View Document" class="in-btn" matTooltipClass="accent-tooltip"
+          (click)="getFinalReprt('preview')"> <i class="icon-previewdocument"></i> </button>
+        </div>
+        <button (click)="updateContactDetails('updateData', f)" type="submit" mat-icon-button matTooltip="Save"
+          class="in-btn" matTooltipClass="accent-tooltip"> <i class="icon-save"></i> </button> -->
+        </div>
+        <form #f="ngForm">
+          <div fxLayour ="row" >
+            <div fxFlex = "100%">
+              <!-- //Added by megala SRS - VTS2-2024-CRT-0195 -->
+              <div  fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="end center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center" fxLayoutGap="8px" style="font-weight: normal;" >
+                @if (verificationService.tempData.verificationScreeningDet.camRejectStatus != null && verificationService.tempData.verificationScreeningDet.camRejectStatus === 'Rejection') {
+                  <a class="text-cap"
+                  (click)="camRejectionComments()">CAM Rejection Comments</a>
+                }
+              </div>
+            </div>
+          </div>
+          <!-- //Ended by megala SRS - VTS2-2024-CRT-0195 -->
+          <div fxLayout="row" class="review">
+            <div fxFlex="100%">
+              @if (verContent.length > 0) {
+                <table class="tbl-reviwe">
+                  <thead>
+                    <tr>
+                      <th scope="col" width="20%">Particulars</th>
+                      <th scope="col" width="35%">Applicant Details</th>
+                      <th scope="col">Reported Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (item of verContent; track item; let ind = $index) {
+                      <tr>
+                        @if (item.key === 'civilCourtOriginalSuitForCivil' || item.key === 'civilCourtOriginalSuitForCriminal') {
+                          <td class="partName"
+                          [innerHtml]="getCrcContentForCivil(item)"></td>
+                        }
+                        @if (item.dataType !== 'Hide' && item.dataType!=='years' && item.dataType!=='latLongitude' &&  item.key !== 'civilCourtOriginalSuitForCivil' && item.key !== 'civilCourtOriginalSuitForCriminal') {
+                          <td class="partName" scope="row"
+                            >
+                            {{
+                          item.caption }} </td>
+                        }
+                        @if (
+                          verificationService.caseDetailFlag && (item.dataType === 'Hide' || item.dataType ==='years' || item.dataType ==='latLongitude')
+                          ) {
+                          <td class="partName" scope="row"> {{ item.caption }} </td>
+                        }
+                        @if (item.dataType === 'Date' || item.dataType === 'Dob') {
+                          <td> {{ item.applicanttVal ?
+                          (commonService.getTimezoneOffset(item.applicanttVal, false) | date:'dd/MMM/yyyy') : "N/A" }} </td>
+                        }
+                        @if (item.dataType !== 'Hide' && item.dataType !== 'Date' && item.dataType !== 'Dob' && item.dataType!=='years' && item.dataType!=='latLongitude') {
+                          <td
+                            >
+                            {{
+                          item.applicanttVal ? item.applicanttVal : "N/A" }} </td>
+                        }
+                        @if (
+                          verificationService.caseDetailFlag && (item.dataType === 'Hide' || item.dataType ==='years' || item.dataType ==='latLongitude')
+                          && item.dataType !== 'Date') {
+                          <td> {{ item.applicanttVal ? item.applicanttVal : "N/A" }} </td>
+                        }
+                        @if (item.dataType !== 'Hide' && item.dataType!=='years' && item.dataType!=='latLongitude') {
+                          <td class="review-input"
+                            ><span
+                            fxFlex="100%">
+                            @switch (item.dataType) { @case ('Label') {
+                              <span>{{
+                                item.key === "employerName" ||
+                                item.key === "institutionName" ||
+                                item.key === "instituteName"
+                                ? item.applicanttVal
+                                : item.reportVal
+                              }}</span>
+                            }
+                            @case ('DateTime') {
+                              <mat-form-field appearance="outline" fxFlex="60%">
+                                <mat-label>{{ item.caption }}</mat-label>
+                                <input [ngClass]="{ green: fontColor, red: !fontColor }" matInput #reportVal="ngModel"
+                                  [max]="item.key==='expiryDate' ? true: retCurrentDate(item) " [name]="item.key"
+                                  (click)="minDate(item)" [(ngModel)]="item.reportVal" [owlDateTimeTrigger]="dateTime"
+                                  [owlDateTime]="dateTime" [min]='respName(item)'
+                                  required="{{ item.required && (item.key === 'testDate' || item.key === 'reportDate' || item.key === 'collectionDate') && componentStatus !== 'Close - Stop Check' && componentStatus !== 'Close - Unverified' }}">
+                                  <mat-datepicker-toggle [owlDateTimeTrigger]="dateTime" matSuffix></mat-datepicker-toggle>
+                                  <owl-date-time [pickerMode]="'popup'" #dateTime></owl-date-time>
+                                  @if (componentStatus !== 'Close - Stop Check' || componentStatus !== 'Close - Unverified') {
+                                    <mat-error
+                                      > {{
+                                    item.caption }} is required. </mat-error>
+                                  }
+                                </mat-form-field>
+                              }
+                              @case ('Date') {
+                                <mat-form-field appearance="outline" fxFlex="60%">
+                                  <mat-label>{{ item.caption }}</mat-label>
+                                  <input [ngClass]="{ green: fontColor, red: !fontColor }" matInput autocomplete="off"
+                                    #reportVal="ngModel"
+                                    [max]="item.key==='expiryDate'|| item.key === 'recordSearchDate'|| item.key === 'incorporationDate' || item.key === 'statementFrom' || item.key === 'statementTo' || item.key === 'resultSearchDate' || item.key === 'dateOfInfoFromPS'  ? true : (item.key === 'dob' || item.key === 'dateOfBirth' || item.dataType==='Date' ) ? commonService?.maxDob : dateMax "
+                                    [name]="item.key" [(ngModel)]="item.reportVal"
+                                    [min]="item.key === 'incorporationDate' || item.key === 'statementFrom' || item.key === 'statementTo' || item.key === 'recordSearchDate' || item.key === 'dateOfIssue' || (item.key === 'dob' || item.key === 'dateOfBirth' || item.dataType==='Date' )  ? ' ' :getMinDate(item)"
+                                    [matDatepicker]="sampledatePicker" placeholder="{{ item.caption }}" maxLength="30"
+                                    required="{{ item?.required && (item.key === 'expiryDate' || item.key === 'recordSearchDate' || item.key === 'dateOfInfoFromPS') && componentStatus !== 'Close - Stop Check' && componentStatus !== 'Close - Unverified' }}" />
+                                    <mat-datepicker-toggle matSuffix [for]="sampledatePicker"> </mat-datepicker-toggle>
+                                    <mat-datepicker #sampledatePicker></mat-datepicker>
+                                    @if (reportVal?.errors?.matDatepickerMin && (componentType != commonComp && componentType != ssn)) {
+                                      <mat-error
+                                        >
+                                        {{ item.caption }} should be greater than
+                                      issued date. </mat-error>
+                                    }
+                                    @if (componentStatus !== 'Close - Stop Check' && componentStatus !== 'Close - Unverified') {
+                                      <mat-error
+                                        > {{
+                                      item.caption }} is required. </mat-error>
+                                    }
+                                  </mat-form-field>
+                                }
+                                @case ('uan') {
+                                  <mat-form-field fxFlex="60%" appearance="outline">
+                                    <mat-label>{{ item.caption }}</mat-label>
+                                    <input type="text" matInput placeholder="{{ item.caption }}" autocomplete="off"
+                                      [(ngModel)]="item.reportVal" [ngClass]="{ green: fontColor, red: !fontColor }"
+                                      #reportVal="ngModel" [name]="item.key" appNumberOnly [NumericValue]="false"
+                                      pattern="^(0|[1-9][0-9]*)$" maxlength="12" minlength="12" required="{{ item.required }}"
+                                      (keyup)="item.reportVal = item.reportVal.toUpperCase()" />
+                                      @if (reportVal?.errors?.required) {
+                                        <mat-error> {{ item.caption }} is required. </mat-error>
+                                      }
+                                      @if (reportVal?.errors?.minlength) {
+                                        <mat-error> {{ item.caption }} should contain
+                                          {{item.maxLength}} character.
+                                        </mat-error>
+                                      }
+                                    </mat-form-field>
+                                  }
+                                  @case ('Dob') {
+                                    <mat-form-field appearance="outline" fxFlex="60%">
+                                      <mat-label>{{ item.caption }}</mat-label>
+                                      <input [ngClass]="{ green: fontColor, red: !fontColor }" matInput autocomplete="off"
+                                        #reportVal="ngModel" [name]="item.key" [(ngModel)]="item.reportVal"
+                                        [matDatepicker]="sampledatePicker" appNumberOnly [NumberOnlyWithslash]="false"
+                                        placeholder="{{ item.caption }}" maxLength="30" required="{{ item.required }}"
+                                        (focus)="sampledatePicker.open()" (click)="sampledatePicker.open()" />
+                                        <mat-datepicker-toggle matSuffix [for]="sampledatePicker"> </mat-datepicker-toggle>
+                                        <mat-datepicker #sampledatePicker></mat-datepicker>
+                                        @if (reportVal?.errors?.required) {
+                                          <mat-error> {{ item.caption }} is required. </mat-error>
+                                        }
+                                      </mat-form-field>
+                                    }
+                                    @case ('Radio') {
+                                      <mat-radio-group #reportVal="ngModel" [name]="item.key"
+                                        [(ngModel)]="item.reportVal" #radioGroup="matRadioGroup" fxLayoutGap="20px"
+                                        [ngModelOptions]="{standalone: true}">
+                                        @for (cd of controlData[0][item.key]; track cd; let i = $index) {
+                                          <mat-radio-button
+                                          value="{{ ''+cd.controlId }}"> {{ cd.controlValue }} </mat-radio-button>
+                                        }
+                                      </mat-radio-group>
+                                    }
+                                    @case ('Edit') {
+                                      <span fxLayout="row" fxFlex="100%"> <span fxFlex="80%"> {{
+                                        item.key === "employerName" ||
+                                        item.key === "institutionName"
+                                        ? item.applicanttVal
+                                        : item.reportVal
+                                      }}</span> @if (item.key === 'addressPCC1' || item.key === 'addressCRC' || item.key === 'addressLicense' || item.key === 'addressCredit') {
+                                      <span fxFlex="20%"
+                                        fxLayout="row" fxLayoutAlign="end center">
+                                        <button [ngClass]="screenAuth.editFlag===false?'page-btn disabled':''" mat-icon-button (click)="openDialog(addressTemplate, '400px', '700px')"
+                                          matTooltip="Edit" class="in-btn" matTooltipClass="accent-tooltip"> <i
+                                        class="icon-new-message"></i> </button>
+                                      </span>
+                                    } </span>
+                                  }
+                                  @case ('DropDown') {
+                                    <mat-form-field fxFlex="60%" appearance="outline">
+                                      <mat-label>{{ item.caption }}</mat-label>
+                                      <mat-select placeholder="{{ item.caption }}" [(ngModel)]="item.reportVal"
+                                        required="{{ item.required }}" #reportVal="ngModel" [name]="item.key">
+                                        <!-- <mat-option>{{item.caption}}</mat-option> -->
+                                        @for (cs of criminalStatus; track cs; let i = $index) {
+                                          <mat-option [value]="''+cs.lookUpId"> {{
+                                          cs.lookUpName }} </mat-option>
+                                        }
+                                      </mat-select>
+                                      @if (item?.required) {
+                                        <mat-error> {{ item.caption }} is required. </mat-error>
+                                      }
+                                    </mat-form-field>
+                                  }
+                                  @case ('AutoComplete') {
+                                    <mat-form-field appearance="outline" fxFlex="60%">
+                                      <mat-label>{{ item.caption }}</mat-label>
+                                      <input [ngClass]="{ green: fontColor, red: !fontColor }" class="color" matInput
+                                        placeholder="{{ item.caption }}" #empInsProf [(ngModel)]="item.reportVal"
+                                        required="{{ item.required }}" (select)="empInsProf.select()" #reportVal="ngModel"
+                                        [name]="item.key" [matAutocomplete]="auto" (focus)="setItems(empInsProf.value, item.key)"
+                                        (keyup)="keyUpFunction($event,empInsProf.value, item.key)"
+                                        (input)="setItems(empInsProf.value, item.key)" autocomplete="off" role="presentation"
+                                        required />
+                                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="display(item.key)"
+                                          (optionSelected)="changeDegree($event.option.value, item.key)">
+                                          @for (pot of autocompleteFilterValue[0][item.key]; track pot; let i = $index) {
+                                            <mat-option
+                                              [value]="pot.value" class="autocom-option autocom-tr"> <span
+                                            [innerHTML]="pot.value | highlight:  pot.value"></span>
+                                          </mat-option>
+                                        }
+                                      </mat-autocomplete>
+                                      @if (item?.required) {
+                                        <mat-error> {{ item.caption }} is required. </mat-error>
+                                      }
+                                      <!-- <mat-error *ngIf="!!employerInsutionFormGroup?.get('name')?.errors?.alreadyExist"> {{placeHolder}} is
+                                    already exist, Please try another one</mat-error> -->
+                                  </mat-form-field>
+                                }
+                                @case ('Textarea') {
+                                  <mat-form-field fxFlex="60%" appearance="outline">
+                                    <mat-label>{{ item.caption }}</mat-label>
+                                    <textarea matInput placeholder="{{ item.caption }}" autocomplete="off"
+                                      [(ngModel)]="item.reportVal" [ngClass]="{ green: fontColor, red: !fontColor }"
+                                      #reportVal="ngModel" [name]="item.key" maxLength="{{ item.maxLength }}"
+                                    required="{{ item.required }}"></textarea>
+                                    @if (item?.required) {
+                                      <mat-error> {{ item.caption }} is required. </mat-error>
+                                    }
+                                  </mat-form-field>
+                                }
+                                @case ('int') {
+                                  <mat-form-field fxFlex="60%" appearance="outline">
+                                    <mat-label>{{ item.caption }}</mat-label>
+                                    <input type="text" matInput placeholder="{{ item.caption }}" autocomplete="off"
+                                      [(ngModel)]="item.reportVal" [ngClass]="{ green: fontColor, red: !fontColor }"
+                                      #reportVal="ngModel" [name]="item.key" appNumberOnly [NumericValue]="false"
+                                      maxLength="{{ item.maxLength }}"
+                                      required="{{ item?.required && (item.key === 'cibilScore' || item.key === 'psPhoneNo') && componentStatus !== 'Close - Stop Check' && componentStatus !== 'Close - Unverified' }}" />
+                                      @if (componentStatus !== 'Close - Stop Check' || componentStatus !== 'Close - Unverified') {
+                                        <mat-error
+                                          > {{
+                                        item.caption }} is required. </mat-error>
+                                      }
+                                    </mat-form-field>
+                                  }
+                                  @case ('Readonly') {
+                                    <mat-form-field fxFlex="60%" appearance="outline">
+                                      <mat-label>{{ item.caption }}</mat-label>
+                                      <input [ngClass]="{ green: fontColor, red: !fontColor }" type="text" matInput autocomplete="off"
+                                        placeholder="{{ item.caption }}" readonly="true" [(ngModel)]="item.reportVal" appNumberOnly
+                                        [PhoneNumber]="false" />
+                                      </mat-form-field>
+                                    }
+                                    @case ('CheckBox') {
+                                      <mat-checkbox [(ngModel)]="item.reportVal"
+                                        (change)="changeCheck($event, item.reportVal)" [name]="item.key"> {{ item.caption }}
+                                      </mat-checkbox>
+                                    }
+                                    @case ('MaxLength') {
+                                      <mat-form-field appearance="outline" fxFlex="60%">
+                                        <input [ngClass]="{ green: fontColor, red: !fontColor }" class="color" maxlength="50"
+                                          autocomplete="off" [(ngModel)]="item.reportVal" matInput placeholder="{{ item.caption }}"
+                                          #reportVal="ngModel" [name]="item.key" />
+                                        </mat-form-field>
+                                      }
+                                      @case ('StringDate') {
+                                        <mat-form-field appearance="outline" fxFlex="60%">
+                                          <span matSuffix class="suff-lbtn" [ngClass]="'page-btn'" matTooltip="Click here if not available"
+                                            matTooltipClass="accent-tooltip">
+                                            <a mat-flat-button (click)="naFlag= true;setNotProvide(item)">NA</a></span>
+                                            <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+                                            @if (item.key === 'incorporationDate') {
+                                              <input class="text-upp"
+                                                (keyup)="item.reportVal = item.reportVal.toUpperCase()"
+                                                matTooltip="Eg.(DD/MMM/YYYY) or Not Applicable." matTooltipClass="accent-tooltip"
+                                                [ngClass]="{ green: fontColor, red: !fontColor }" maxlength="60" class="color"
+                                                autocomplete="off" (focus)="naFlag !== true ? datePicker.open():''"
+                                                (click)="naFlag !== true ? datePicker.open():''"
+                                                pattern="^(0[1-9]|1\d|2\d|3[01])\/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\/(18|19|20)\d{2}$|^(19|20)\d{2}$|^(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\/(18|19|20)\d{2}$|^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(18|19|20)\d{2}$|([Nn]){1}([Oo]){1}([Tt]){1}([ ]){1}([Aa]){1}([Pp]){1}([Pp]){1}([Ll]){1}([Ii]){1}([Cc]){1}([Aa]){1}([Bb]){1}([Ll]){1}([Ee]){1}?$|([T]){1}([I]){1}([L]){1}([L]){1}([ ]){1}([D]){1}([A]){1}([T]){1}([E]){1}?$|([S]){1}([I]){1}([N]){1}([C]){1}([E]){1}([ ]){1}([B]){1}([I]){1}([R]){1}([T]){1}([H]){1}?$|^(Not Applicable)$"
+                                                required="{{ item.required }}" [(ngModel)]="item.reportVal" #reportVal="ngModel"
+                                                [name]="item.key" matInput placeholder="{{item.caption}}" />
+                                            }
+                                            @if ((item.key === 'incorporationDate') ) {
+                                              <mat-error>Eg.(DD/MMM/YYYY) or Not Applicable.
+                                              </mat-error>
+                                            }
+                                            @if (item.key !== 'incorporationDate') {
+<input autocomplete="off" matTooltip="(Eg.(DD/MM/YYYY or DD/MMM/YYYY or MMM/YYYY or
+                    YYYY) or Not Applicable)" matTooltipClass="accent-tooltip"
+                                                [ngClass]="{ green: fontColor, red: !fontColor }" maxlength="60" class="color"
+                                                (focus)="naFlag !== true ? datePicker.open():''" (click)="naFlag !== true ?datePicker.open():''"
+                                                pattern="^(0[1-9]|1\d|2\d|3[01])\/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\/(19|20)\d{2}$|^(19|20)\d{2}$|^(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\/(19|20)\d{2}$|^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$|([Nn]){1}([Oo]){1}([Tt]){1}([ ]){1}([Aa]){1}([Pp]){1}([Pp]){1}([Ll]){1}([Ii]){1}([Cc]){1}([Aa]){1}([Bb]){1}([Ll]){1}([Ee]){1}?$|([T]){1}([I]){1}([L]){1}([L]){1}([ ]){1}([D]){1}([A]){1}([T]){1}([E]){1}?$|([S]){1}([I]){1}([N]){1}([C]){1}([E]){1}([ ]){1}([B]){1}([I]){1}([R]){1}([T]){1}([H]){1}?$|^(Not Applicable)$"
+                                                required="{{ item.required }}" [(ngModel)]="item.reportVal" #reportVal="ngModel"
+                                                [name]="item.key" matInput placeholder="{{item.caption}}" (input)="setMinDateError(item)"
+                                                (keyup)="item.reportVal =item.reportVal.toUpperCase()" />
+                                            }
+                                            @if (reportVal?.errors?.required) {
+                                              <mat-error> {{ item.caption }} is required. </mat-error>
+                                            }
+                                            @if (reportVal?.errors?.pattern || reportVal?.errors?.incorrect) {
+                                              <mat-error>{{ item.caption }}
+                                                is invalid. (Eg.(DD/MM/YYYY or
+                                              DD/MMM/YYYY or MMM/YYYY or YYYY) or Not Applicable or TILL DATE.) </mat-error>
+                                            }
+                                            @if ((item.key === 'fromDate' || item.key === 'toDate') || (item.key === 'periodOfStay' || item.key === 'periodOfStayFrom' || item.key === 'periodOfStayTo') ||(item.key === 'gapFrom' || item.key === 'gapTo')
+                                              && reportVal?.errors?.date?.overLap === true) {
+                                              <mat-error>To date should be greater than from date. </mat-error>
+                                            }
+                                            <mat-hint>Please Enter
+                                            Not Applicable or TILL DATE or Choose a Date</mat-hint>
+                                            @if ((item.key === 'courseCompletion'  || item.key === 'yearOfPassing' || item.key === 'certificateIssue') ||
+                                              reportVal?.errors?.date?.overLap) {
+                                              <mat-error>Certificate issue date should be greater than course completion
+                                              date. </mat-error>
+                                            }
+                                            @if (((item.key === 'validFrom' || item.key === 'validTo') ||
+                                              reportVal?.errors?.date?.overLap)) {
+                                              <mat-error>Valid to date should be
+                                              greater than valid from date. </mat-error>
+                                            }
+                                            <input matInput #date hidden [(ngModel)]="item.reportVal" autocomplete="off"
+                                              [min]=" item.key === 'courseCompletion' || item.key ==='yearOfPassing' || item.key === 'certificateIssue' ?setMinDateError(item): ''"
+                                              (dateChange)="dateChange(item);setMinDateError(item)" [ngModelOptions]="{standalone: true}"
+                                              [matDatepicker]="datePicker" (keyup)="item.reportVal =item.reportVal.toUpperCase()" />
+                                              <mat-datepicker #datePicker></mat-datepicker>
+                                            </mat-form-field>
+                                          }
+                                          <!--  pattern="^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}" -->
+                                          @case ('Identification') {
+                                            <mat-form-field appearance="outline" fxFlex="60%">
+                                              <input [ngClass]="{ green: fontColor, red: !fontColor }" class="color" pattern="^(0|[1-9][0-9]*)$"
+                                                [(ngModel)]="item.reportVal" autocomplete="off" matInput placeholder="{{ item.caption }}"
+                                                #reportVal="ngModel" [name]="item.key" required="{{ item.required }}" appNumberOnly
+                                                [PhoneNumber]="false" />
+                                                @if (reportVal?.errors?.required) {
+                                                  <mat-error> {{ item.caption }} is required. </mat-error>
+                                                }
+                                                <!--<mat-error *ngIf="reportVal?.errors?.minlength"> {{ item.caption }} should contain 12 characters. </mat-error> -->
+                                              </mat-form-field>
+                                            }
+                                            @case ('pos') {
+                                              <mat-form-field appearance="outline" fxFlex="60%">
+                                                <span matSuffix class="suff-lbtn" [ngClass]="'page-btn'" matTooltip="Click here if not available"
+                                                  matTooltipClass="accent-tooltip">
+                                                  <a mat-flat-button (click)="naFlag= true;setNotProvide(item)">NA</a></span>
+                                                  <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+                                                  @if (item.key !== 'incorporationDate') {
+<input autocomplete="off" matTooltip="(Eg.(DD/MM/YYYY or DD/MMM/YYYY or MMM/YYYY or
+                  YYYY) or Not Applicable)" matTooltipClass="accent-tooltip"
+                                                      [ngClass]="{ green: fontColor, red: !fontColor }" maxlength="60" class="color"
+                                                      (focus)="naFlag !== true ? datePicker.open():''" (click)="naFlag !== true ?datePicker.open():''"
+                                                      pattern="^(0[1-9]|1\d|2\d|3[01])\/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\/(19|20)\d{2}$|^(19|20)\d{2}$|^(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\/(19|20)\d{2}$|^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$|([Nn]){1}([Oo]){1}([Tt]){1}([ ]){1}([Aa]){1}([Pp]){1}([Pp]){1}([Ll]){1}([Ii]){1}([Cc]){1}([Aa]){1}([Bb]){1}([Ll]){1}([Ee]){1}?$|([T]){1}([I]){1}([L]){1}([L]){1}([ ]){1}([D]){1}([A]){1}([T]){1}([E]){1}?$|([S]){1}([I]){1}([N]){1}([C]){1}([E]){1}([ ]){1}([B]){1}([I]){1}([R]){1}([T]){1}([H]){1}?$|^(Not Applicable)$"
+                                                      required="{{ item.required }}" [(ngModel)]="item.reportVal" #reportVal="ngModel"
+                                                      [name]="item.key" matInput placeholder="{{item.caption}}" (input)="setMinDateError(item)"
+                                                      (keyup)="item.reportVal =item.reportVal.toUpperCase()"
+                                                      (blur)="setdate(item.reportVal,item.key)" />
+                                                  }
+                                                  @if (reportVal?.errors?.required) {
+                                                    <mat-error> {{ item.caption }} is required. </mat-error>
+                                                  }
+                                                  @if (reportVal?.errors?.pattern || reportVal?.errors?.incorrect) {
+                                                    <mat-error>{{ item.caption }}
+                                                      is invalid. (Eg.(DD/MM/YYYY or
+                                                    DD/MMM/YYYY or MMM/YYYY or YYYY) or Not Applicable or TILL DATE.) </mat-error>
+                                                  }
+                                                  @if ((item.key === 'fromDate' || item.key === 'toDate') || (item.key === 'periodOfStay' || item.key === 'periodOfStayFrom' || item.key === 'periodOfStayTo') ||(item.key === 'gapFrom' || item.key === 'gapTo')
+                                                    && reportVal?.errors?.date?.overLap === true) {
+                                                    <mat-error>To date should be greater than from date. </mat-error>
+                                                  }
+                                                  <mat-hint>Please Enter
+                                                  Not Applicable or TILL DATE or Choose a Date</mat-hint>
+                                                  @if ((item.key === 'courseCompletion' || item.key === 'certificateIssue') ||
+                                                    reportVal?.errors?.date?.overLap) {
+                                                    <mat-error>Certificate issue date should be greater than course completion
+                                                    date. </mat-error>
+                                                  }
+                                                  @if (((item.key === 'validFrom' || item.key === 'validTo') ||
+                                                    reportVal?.errors?.date?.overLap)) {
+                                                    <mat-error>Valid to date should be
+                                                    greater than valid from date. </mat-error>
+                                                  }
+                                                  <input matInput #date hidden [(ngModel)]="item.reportVal" autocomplete="off"
+                                                    [min]=" item.key === 'courseCompletion' || item.key === 'certificateIssue' ?setMinDateError(item): ''"
+                                                    [max]="item.maxDates" (dateChange)="dateChange(item);setMinDateError(item);setdate(item.reportVal,item.key)"
+                                                    [ngModelOptions]="{standalone: true}" [matDatepicker]="datePicker"
+                                                    (keyup)="item.reportVal =item.reportVal.toUpperCase()" />
+                                                    <mat-datepicker #datePicker></mat-datepicker>
+                                                  </mat-form-field>
+                                                }
+                                                @case ('misq') {
+                                                  <mat-form-field appearance="outline" fxFlex="60%">
+                                                    <textarea [ngClass]="{ green: fontColor, red: !fontColor }" class="color" autocomplete="off"
+                                                      [(ngModel)]="item.reportVal" matInput placeholder="{{ item.caption }}" #reportVal="ngModel"
+                                                      [name]="item.reportVal ? item.reportVal : 'miscQues' + ind" minlength="2" maxlength="1000"
+                                                    required></textarea>
+                                                    @if (reportVal?.errors?.required) {
+                                                      <mat-error>
+                                                        {{ item.caption }} is required.
+                                                      </mat-error>
+                                                    }
+                                                    @if (reportVal?.errors?.minlength) {
+                                                      <mat-error>
+                                                        {{ item.caption }} - Answer are minimum 2 characters.
+                                                      </mat-error>
+                                                    }
+                                                    @if (reportVal?.errors?.maxlength) {
+                                                      <mat-error>
+                                                        {{ item.caption }} is {{item.maxLength}}.
+                                                      </mat-error>
+                                                    }
+                                                  </mat-form-field>
+                                                }
+                                                @case ('database') {
+                                                  <mat-form-field appearance="outline" fxFlex="60%">
+                                                    <textarea [ngClass]="{ green: fontColor, red: !fontColor }" class="color" autocomplete="off"
+                                                      [(ngModel)]="item.reportVal" matInput placeholder="{{ item.caption }}" #reportVal="ngModel"
+                                                      [name]="item.reportVal ? item.reportVal : 'miscQues' + ind" minlength="2" maxlength="1000"
+                                                    required></textarea>
+                                                    @if (reportVal?.errors?.required) {
+                                                      <mat-error>
+                                                        {{ item.caption }} is required.
+                                                      </mat-error>
+                                                    }
+                                                    @if (reportVal?.errors?.minlength) {
+                                                      <mat-error>
+                                                        {{ item.caption }} - Answer are minimum 2 characters.
+                                                      </mat-error>
+                                                    }
+                                                    @if (reportVal?.errors?.maxlength) {
+                                                      <mat-error>
+                                                        {{ item.caption }} is {{item.maxLength}}.
+                                                      </mat-error>
+                                                    }
+                                                  </mat-form-field>
+                                                }
+                                                @default {
+                                                  <mat-form-field appearance="outline" fxFlex="60%">
+                                                    <input autocomplete="off" [ngClass]="{ green: fontColor, red: !fontColor }" class="color"
+                                                      [(ngModel)]="item.reportVal" matInput placeholder="{{ item.caption }}" #reportVal="ngModel"
+                                                      [name]="item.key ? item.key : 'miscQues'" required="{{ item.required }}"
+                                                      maxlength="{{ item.maxLength }}" />
+                                                      @if (reportVal?.errors?.required) {
+                                                        <mat-error> {{ item.caption }} is required. </mat-error>
+                                                      }
+                                                    </mat-form-field>
+                                                  }
+                                                  @case ('DateIssue') {
+                                                    <mat-form-field appearance="outline" fxFlex="60%">
+                                                      <span matSuffix class="suff-lbtn" [ngClass]="'page-btn'" matTooltip="Click here if not available"
+                                                        matTooltipClass="accent-tooltip">
+                                                        <a mat-flat-button (click)="naFlag= true;setNotProvide(item)">NA</a></span>
+                                                        <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+                                                        <input [ngClass]="{ green: fontColor, red: !fontColor }" class="color" autocomplete="off"
+                                                          matTooltip="(Eg.(DD/MM/YYYY or DD/MMM/YYYY or MMM/YYYY or YYYY) or Not Applicable.)"
+                                                          pattern="^(0[1-9]|1\d|2\d|3[01])\/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\/(19|20)\d{2}$|^(19|20)\d{2}$|^(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\/(19|20)\d{2}$|^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$|([Nn]){1}([Oo]){1}([Tt]){1}([ ]){1}([Aa]){1}([Pp]){1}([Pp]){1}([Ll]){1}([Ii]){1}([Cc]){1}([Aa]){1}([Bb]){1}([Ll]){1}([Ee]){1}?$|([T]){1}([I]){1}([L]){1}([L]){1}([ ]){1}([D]){1}([A]){1}([T]){1}([E]){1}?$|^(Not Applicable)$"
+                                                          [(ngModel)]="item.reportVal" matInput placeholder="{{ item.caption }}" #reportVal="ngModel"
+                                                          [name]="item.key" required="{{ item.required }}" maxlength="20"
+                                                          (keyup)="item.reportVal = item.reportVal.toUpperCase()"
+                                                          (focus)="naFlag !== true ? datePicker.open():''"
+                                                          (click)="naFlag !== true ?datePicker.open():''" />
+                                                          <input matInput hidden [(ngModel)]="item.reportVal" autocomplete="off"
+                                                            [ngModelOptions]="{standalone: true}" (dateChange)="dateChange(item)"
+                                                            [matDatepicker]="datePicker" />
+                                                            <mat-datepicker #datePicker></mat-datepicker>
+                                                            <mat-hint>Please Enter a Date or Not Applicable</mat-hint>
+                                                            @if (reportVal?.errors?.required) {
+                                                              <mat-error> {{ item.caption }} is required. </mat-error>
+                                                            }
+                                                            @if (reportVal?.errors?.pattern) {
+                                                              <mat-error> Eg. Enter date as (DD/MM/YYYY or DD/MMM/YYYY or
+                                                              MMM/YYYY or YYYY) or Not Applicable.) </mat-error>
+                                                            }
+                                                          </mat-form-field>
+                                                        }
+                                                        @case ('passport') {
+                                                          <mat-form-field appearance="outline" fxFlex="60%">
+                                                            <mat-icon matSuffix class="suff-lbtn" matTooltip="Click here if not available"
+                                                              matTooltipClass="accent-tooltip">
+                                                              <a mat-flat-button (click)="setNotProvide(item)">NA</a>
+                                                            </mat-icon>
+                                                            <input [ngClass]="{ green: fontColor, red: !fontColor }" class="color"
+                                                              matTooltip="(Eg.A1234567 or Not Applicable)" autocomplete="off"
+                                                              [(ngModel)]="item.reportVal" matInput placeholder="{{ item.caption }}" #reportVal="ngModel"
+                                                              [name]="item.key" required="{{ item.required }}" maxlength="20"
+                                                              (keyup)="item.reportVal = item.reportVal.toUpperCase()" />
+                                                              <mat-hint>Please Enter A1234567 or Not Applicable</mat-hint>
+                                                              @if (reportVal?.errors?.required) {
+                                                                <mat-error> {{ item.caption }} is required. </mat-error>
+                                                              }
+                                                              <!-- <mat-error *ngIf="reportVal?.errors?.pattern"> Please enter valid Passport Number (Eg.A1234567 or
+                                                            Not Applicable). </mat-error>
+                                                            pattern="^(Not Applicable)|^([A-Z]){1}([0-9]){7}$|^([A-Z]){2}([0-9]){7}?$"-->
+                                                          </mat-form-field>
+                                                        }
+                                                        @case ('ctc') {
+                                                          <mat-form-field appearance="outline" fxFlex="60%">
+                                                            <input [ngClass]="{ green: fontColor, red: !fontColor }" class="color" matTooltip="(Eg.100000)"
+                                                              autocomplete="off" [(ngModel)]="item.reportVal" matInput placeholder="{{ item.caption }}"
+                                                              #reportVal="ngModel" [name]="item.key" required="{{ item.required }}" maxlength="150" />
+                                                              @if (reportVal?.errors?.required) {
+                                                                <mat-error> {{ item.caption }} is required. </mat-error>
+                                                              }
+                                                              <!-- pattern="^(\d{1,2})(,\d{2})*(,\d{1,3}){1}(\.\d{1,})?$"  <mat-error *ngIf="reportVal?.errors?.pattern"> Please enter valid CTC (Eg.1,00,000). </mat-error> -->
+                                                            </mat-form-field>
+                                                          }
+                                                          @case ('pan') {
+                                                            <mat-form-field appearance="outline" fxFlex="60%">
+                                                              <mat-icon matSuffix class="suff-lbtn" matTooltip="Click here if not available"
+                                                                matTooltipClass="accent-tooltip">
+                                                                <a mat-flat-button (click)="setNotProvide(item)">NA</a>
+                                                              </mat-icon>
+                                                              <input [ngClass]="{ green: fontColor, red: !fontColor }" class="color"
+                                                                matTooltip="(Eg.AAAAA9999A or Not Applicable)" autocomplete="off"
+                                                                pattern="^(Not Applicable)|^([A-ZA-Z]{5})(\d{4})([A-ZA-Z]{1})$" [(ngModel)]="item.reportVal"
+                                                                matInput placeholder="{{ item.caption }}" #reportVal="ngModel" [name]="item.key"
+                                                                required="{{ item.required }}" maxlength="20"
+                                                                (keyup)="item.reportVal = item.reportVal.toUpperCase();" />
+                                                                <mat-hint>Please Enter 'Not Applicable' or AAAAA9999A</mat-hint>
+                                                                @if (reportVal?.errors?.required) {
+                                                                  <mat-error> {{ item.caption }} is required. </mat-error>
+                                                                }
+                                                                @if (reportVal?.errors?.pattern) {
+                                                                  <mat-error> Please enter valid PAN Number (Eg.AAAAA9999A or
+                                                                  (Not Applicable). </mat-error>
+                                                                }
+                                                              </mat-form-field>
+                                                            }
+                                                            @case ('aadhar') {
+                                                              <mat-form-field appearance="outline" fxFlex="60%">
+                                                                <mat-icon matSuffix class="suff-lbtn" matTooltip="Click here if not available"
+                                                                  matTooltipClass="accent-tooltip">
+                                                                  <a mat-flat-button (click)="setNotProvide(item)">NA</a>
+                                                                </mat-icon>
+                                                                <input [ngClass]="{ green: fontColor, red: !fontColor }" class="color"
+                                                                  pattern="^(Not Applicable)|^(0|[1-9][0-9]*)$" [(ngModel)]="item.reportVal" autocomplete="off"
+                                                                  matInput placeholder="{{ item.caption }}" #reportVal="ngModel" [name]="item.key"
+                                                                  required="{{ item.required }}" minlength="12" maxlength="15" appNumberOnly
+                                                                  [PhoneNumber]="false" />
+                                                                  @if (reportVal?.errors?.required) {
+                                                                    <mat-error> {{ item.caption }} is required. </mat-error>
+                                                                  }
+                                                                  @if (reportVal?.errors?.pattern) {
+                                                                    <mat-error> Please enter valid Aadhaar number or (Not
+                                                                    Applicable). </mat-error>
+                                                                  }
+                                                                  @if (reportVal?.errors?.minlength) {
+                                                                    <mat-error>
+                                                                      {{ item.caption }} should contain 12 characters.
+                                                                    </mat-error>
+                                                                  }
+                                                                </mat-form-field>
+                                                              }
+                                                              @case ('gpa') {
+                                                                <mat-form-field appearance="outline" fxFlex="60%">
+                                                                  <input [ngClass]="{ green: fontColor, red: !fontColor }" class="color" autocomplete="off"
+                                                                    [(ngModel)]="item.reportVal" matInput placeholder="{{ item.caption }}" #reportVal="ngModel"
+                                                                    [name]="item.key" required="{{ item.required }}" maxlength="4" appNumberOnly
+                                                                    [NumberOnlyWithDot]="false" />
+                                                                  </mat-form-field>
+                                                                }
+                                                                @case ('voter') {
+                                                                  <mat-form-field appearance="outline" fxFlex="60%">
+                                                                    <mat-icon matSuffix class="suff-lbtn" matTooltip="Click here if not available"
+                                                                      matTooltipClass="accent-tooltip">
+                                                                      <a mat-flat-button (click)="setNotProvide(item)">NA</a>
+                                                                    </mat-icon>
+                                                                    <input [ngClass]="{ green: fontColor, red: !fontColor }" class="color" autocomplete="off"
+                                                                      matTooltip="(Eg:AAA9999999 or Eg:AA/00/000/0000000 or Not Applicable)"
+                                                                      pattern="^(Not Applicable)|^([A-Z]){2}\/([0-9]{2})\/([0-9]{3})\/([0-9]{7})|^[A-Z]{3}[0-9]{7}$"
+                                                                      [(ngModel)]="item.reportVal" matInput placeholder="{{ item.caption }}" #reportVal="ngModel"
+                                                                      [name]="item.key" required="{{ item.required }}" maxlength="20"
+                                                                      (keyup)="item.reportVal = item.reportVal.toUpperCase()" />
+                                                                      <mat-hint>Please Enter Not Applicable or AAA9999999 or AA/00/000/0000000</mat-hint>
+                                                                      @if (reportVal?.errors?.required) {
+                                                                        <mat-error> {{ item.caption }} is required. </mat-error>
+                                                                      }
+                                                                      @if (reportVal?.errors?.pattern) {
+                                                                        <mat-error> Please enter valid VoterId (Eg:AAA9999999 or
+                                                                        Eg:AA/00/000/0000000 or Not Applicable). </mat-error>
+                                                                      }
+                                                                    </mat-form-field>
+                                                                  }
+                                                                }
+                                                              </span></td>
+                                                            }
+                                                            @if (verificationService.caseDetailFlag && (item.dataType === 'Hide' || item.dataType==='years' || item.dataType==='latLongitude')) {
+                                                              <td class="review-input"
+                                                                >
+                                                                <span fxFlex="100%">
+                                                                  @if (item.dataType!=='latLongitude') {
+                                                                    <mat-form-field fxFlex="60%" appearance="outline">
+                                                                      <mat-label>{{ item.caption }}</mat-label>
+                                                                      <input [ngClass]="{ green: fontColor, red: !fontColor }" class="color" type="text" matInput
+                                                                        placeholder="{{ item.caption }}" [(ngModel)]="item.reportVal" maxlength="{{ item.maxLength }}"
+                                                                        required="{{ item.required }}" autocomplete="off" #reportVal="ngModel" [name]="item.key" />
+                                                                        @if (reportVal?.errors?.required) {
+                                                                          <mat-error> {{ item.caption }} is required. </mat-error>
+                                                                        }
+                                                                      </mat-form-field>
+                                                                    }
+                                                                    @if (item.dataType==='latLongitude') {
+                                                                      <mat-form-field appearance="outline" fxFlex="60%">
+                                                                        <span matSuffix class="suff-lbtn" [ngClass]="'page-btn'" matTooltip="Click here if not available"
+                                                                          matTooltipClass="accent-tooltip">
+                                                                          <a mat-flat-button (click)="naFlag= true;setNotProvide(item)">NA</a></span>
+                                                                          <input autocomplete="off"
+                                                                            matTooltipClass="accent-tooltip" [ngClass]="{ green: fontColor, red: !fontColor }"
+                                                                            maxlength="60" class="color" required [(ngModel)]="item.reportVal" #reportVal="ngModel"
+                                                                            [name]="item.key" matInput placeholder="{{ item.caption }}" />
+                                                                            @if (reportVal?.errors?.required) {
+                                                                              <mat-error> {{ item.caption }} is required. </mat-error>
+                                                                            }
+                                                                            <!-- <mat-error *ngIf="reportVal?.errors?.pattern">{{ item.caption }} is invalid. Enter Format as [-]
+                                                                            (Any
+                                                                            Digit between 0 to 90)(.)[6 Digits(one digit is must)]
+                                                                            (e.g) 90.0,-90.9,-23.343342 or (0-90) Degree (0-59)
+                                                                            Minutes (0-59) Seconds (N or S or E or W) Direction (e.g)
+                                                                          88° 55' 52" N </mat-error> -->
+                                                                        </mat-form-field>
+                                                                      }
+                                                                    </span>
+                                                                  </td>
+                                                                }
+                                                              </tr>
+                                                            }
+                                                          </tbody>
+                                                        </table>
+                                                      }
+                                                    </div>
+                                                  </div>
+                                                </form>
+                                                <!-- this.componentType == {{this.componentType}} -->
+                                                <!-- || componentType === 'referenceSelfEmployed' || componentType === 'employmentSupervisor'
+                                                || componentType === 'referenceCheck' || componentType === 'companySiteVisit' -->
+                                                @if (
+                                                  componentType=='uan'||
+                                                  componentType=='employmentHrAndSupervisor'
+                                                  ) {
+                                                  <div>
+                                                    <!-- <ng-container *ngTemplateOutlet="MiscQns"></ng-container> -->
+                                                    <!-- <app-ques-ans></app-ques-ans>
+                                                    -->
+                                                    @if (miscForm?.get('misc')) {
+                                                      <div>
+                                                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                                                          fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                                          <div fxFlex="100%">
+                                                            <app-ques-ans [mainForm]="miscForm" [formArrName]="'misc'" [miscType]="'textarea'"></app-ques-ans>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    }
+                                                  </div>
+                                                }
+
+                                                @if ( componentName !=='OFAC'&&
+                                                  componentType=='criminalDatabase'&&verificationService.tempData.verificationScreeningDet.clientCategoryId === 4
+                                                  ) {
+                                                  <div>
+                                                    @if (databaseForm?.get('dbase')) {
+                                                      <div>
+                                                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                                                          fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                                          <div fxFlex="100%">
+                                                            <app-database-ques-ans [mainForm]="databaseForm" [formArrName]="'dbase'"
+                                                            [miscType]="'textarea'"></app-database-ques-ans>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    }
+                                                  </div>
+                                                }
+
+                                                @if (componentType !== 'jcr' || (componentType === 'jcr' && verificationService.tempData.verificationScreeningDet.removeContactDetailsFlag === false)) {
+                                                  <div fxLayout="row"
+                                                    >
+                                                    <div fxFlex="100%">
+                                                      <div>
+                                                        <div fxLayout="row" fxLayoutGap="20px">
+                                                          <div fxFlex="100%">
+                                                            <h3 class="sub-header">Contact Details</h3>
+                                                          </div>
+                                                        </div>
+                                                        <form [formGroup]="contactDet" autocomplete="off" #documentEditForm="ngForm">
+                                                          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                                                            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                                            @if (checkFormControls('contactPerson')) {
+                                                              <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                  <mat-label>{{
+                                                                    componentLabelData[componentType].personName
+                                                                  }}</mat-label>
+                                                                  <input #input formControlName="contactPerson" type="text" matInput
+                  [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''" placeholder="{{
+                        this.componentLabelData[this.componentType].personName
+                      }}" maxlength="75" (input)="getConfirmationType(true)" />
+                                                                    @if (contactDet.get('contactPerson')?.errors) {
+                                                                      <mat-error>Please enter
+                                                                      {{ componentLabelData[componentType].personName }}</mat-error>
+                                                                    }
+                                                                    @if (!!contactDet.get('contactPerson')?.errors?.required) {
+                                                                      <mat-error> {{
+                                                                      componentLabelData[componentType].personName }} is required </mat-error>
+                                                                    }
+                                                                    <!-- <mat-error *ngIf="contactPerson.errors">Contact Person is required</mat-error> -->
+                                                                  </mat-form-field>
+                                                                </div>
+                                                              }
+                                                              @if (checkFormControls('contactPersonDesign')) {
+                                                                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                  fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                    <mat-label>{{
+                                                                      this.componentLabelData[this.componentType].personDesign
+                                                                    }}</mat-label>
+                  <input formControlName="contactPersonDesign" [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''" type="text" matInput maxlength="75" placeholder="{{
+                        this.componentLabelData[this.componentType].personDesign
+                      }}" (input)="getConfirmationType(true)" required />
+                                                                      @if (
+                                                                        !!contactDet.get('contactPersonDesign')?.errors?.required
+                                                                        ) {
+                                                                        <mat-error> {{
+                                                                          this.componentLabelData[this.componentType].personDesign
+                                                                          }}
+                                                                        is required </mat-error>
+                                                                      }
+                                                                    </mat-form-field>
+                                                                  </div>
+                                                                }
+                                                                @if (checkFormControls('location')) {
+                                                                  <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%"
+                                                                    fxFlex.xs="100%">
+                                                                    <mat-form-field appearance="outline" fxFlex="100%" >
+                                                                      <mat-label>{{
+                                                                        componentLabelData[componentType].location
+                                                                      }}</mat-label>
+                                                                      <input  formControlName="location" type="text" matInput maxlength="75"
+                                                                        placeholder="{{ componentLabelData[componentType].location }}" />
+                                                                        <!-- <mat-error *ngIf="!!contactDet.get('location')?.errors?.required"> {{
+                                                                      componentLabelData[componentType].location }} is required </mat-error> -->
+                                                                      @if (!!contactDet.get('location')?.errors?.maxlength) {
+                                                                        <mat-error> Enter at least 10 numbers
+                                                                        </mat-error>
+                                                                      }
+                                                                    </mat-form-field>
+                                                                  </div>
+                                                                }
+                                                              </div>
+                                                              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                                                                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                                                @if (checkFormControls('contactEmail')) {
+                                                                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%"
+                                                                    fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                      <mat-label> {{
+                                                                        componentLabelData[componentType].mail
+                                                                      }}</mat-label>
+                                                                      <input formControlName="contactEmail" type="text" matInput maxlength="75" [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''"
+                                                                        placeholder="{{ componentLabelData[componentType].mail }}" [required]="confirmEmailFlag === true" />
+                                                                        @if (!!contactDet.get('contactEmail')?.errors?.pattern || !!contactDet.get('contactEmail')?.errors?.email) {
+                                                                          <mat-error
+                                                                            >
+                                                                          {{ componentLabelData[componentType].mail }} invalid </mat-error>
+                                                                        }
+                                                                        @if (!!contactDet.get('contactEmail')?.errors?.required) {
+                                                                          <mat-error> {{
+                                                                          componentLabelData[componentType].mail }} is required </mat-error>
+                                                                        }
+                                                                      </mat-form-field>
+                                                                    </div>
+                                                                  }
+                                                                  @if (checkFormControls('contactPersonPhone')) {
+                                                                    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                      fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                        <mat-label>{{
+                                                                          componentLabelData[componentType].personPhone
+                                                                        }}</mat-label>
+                                                                        <input formControlName="contactPersonPhone" matInput [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''" type="text" matInput appNumberOnly
+                    [NumericValue]="false" maxlength="14" minlength="10" placeholder="{{
+                      componentLabelData[componentType].personPhone 
+                    }}" [required]="confirmPhFlag === true" />
+                                                                          @if (
+                                                                            !!contactDet.get('contactPersonPhone')?.errors?.minlength
+                                                                            ) {
+                                                                            <mat-error> Enter at least 10 numbers </mat-error>
+                                                                          }
+                                                                          @if (!!contactDet.get('contactPersonPhone')?.errors?.required) {
+                                                                            <mat-error>
+                                                                            {{ componentLabelData[componentType].personPhone }} is required </mat-error>
+                                                                          }
+                                                                          <mat-icon matSuffix><i class="material-icons-outlined"> phone </i></mat-icon>
+                                                                        </mat-form-field>
+                                                                      </div>
+                                                                    }
+                                                                    <!-- //Added By Megala - For VTS2-2025-EMP-0253 (Sprint 26) -->
+                                                                    @if (checkFormControls('verificationReceivedDate') && verificationService.tempData.verificationScreeningDet.ctsFlag != true) {
+                                                                      <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                        fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                          <mat-label>{{
+                                                                            componentLabelData[componentType].verificationReceivedDate
+                                                                          }}</mat-label>
+                                                                          <input appNumberOnly [PhoneNumber]="false" formControlName="verificationReceivedDate"  [max]="maxDate" matInput [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''"
+                                                                            [matDatepicker]="verificationReceivedDate" placeholder="{{componentLabelData[componentType].verificationReceivedDate}}"
+                                                                            (focus)="verificationReceivedDate.open()" (click)="verificationReceivedDate.open()" />
+                                                                            <mat-datepicker-toggle matSuffix [for]="verificationReceivedDate"> </mat-datepicker-toggle>
+                                                                            <mat-datepicker #verificationReceivedDate></mat-datepicker>
+                                                                            <!-- <mat-error *ngIf="verificationForm.get('verificationReceivedDate').hasError('invalidDate')">
+                                                                            Invalid date format. Please use DD-MM-YYYY.
+                                                                          </mat-error> -->
+                                                                        </mat-form-field>
+                                                                      </div>
+                                                                    }
+                                                                    <!-- //Ended By Megala - For VTS2-2025-EMP-0253 (Sprint 26) -->
+                                                                    @if (checkFormControls('contactDate')) {
+                                                                      <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                        fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                          <mat-label>{{
+                                                                            componentLabelData[componentType].contactDate
+                                                                          }}</mat-label>
+                                                                          <input appNumberOnly [PhoneNumber]="false" formControlName="contactDate" matInput [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''"
+                                                                            [matDatepicker]="contactDate" placeholder="{{componentLabelData[componentType].contactDate}}"
+                                                                            (focus)="contactDate.open()" (click)="contactDate.open()" />
+                                                                            <mat-datepicker-toggle matSuffix [for]="contactDate"> </mat-datepicker-toggle>
+                                                                            <mat-datepicker #contactDate></mat-datepicker>
+                                                                            <!-- <input
+                                                                            *ngIf="componentType === 'voterId' || componentType === 'nic'|| componentType === 'emergencyContactVerification'"
+                                                                            matInput [max]="retCurrentDate()" appNumberOnly [PhoneNumber]="false"
+                                                                            [min]="verificationService.tempData.verificationScreeningDet.requestDate"
+                                                                            formControlName="contactDate" [owlDateTimeTrigger]="dateTime" [owlDateTime]="dateTime"
+                                                                            placeholder="{{componentLabelData[componentType].contactDate}}">
+                                                                            <mat-datepicker-toggle
+                                                                              *ngIf="componentType === 'voterId' || componentType === 'nic'|| componentType === 'emergencyContactVerification'"
+                                                                            [owlDateTimeTrigger]="dateTime" matSuffix></mat-datepicker-toggle>
+                                                                            <owl-date-time [pickerMode]="'popup'" #dateTime></owl-date-time> -->
+                                                                          </mat-form-field>
+                                                                        </div>
+                                                                      }
+                                                                    </div>
+                                                                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                                                                      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                                                      @if (checkFormControls('contactDetail')) {
+                                                                        <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                          fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                            <mat-label> {{
+                                                                              componentLabelData[componentType].contactDetail
+                                                                            }}</mat-label>
+                  <input formControlName="contactDetail" type="text" matInput maxlength="150" [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''" placeholder="{{
+                        componentLabelData[componentType].contactDetail
+                      }}" />
+                                                                            </mat-form-field>
+                                                                          </div>
+                                                                        }
+                                                                        @if (checkFormControls('colorStatusLookupId')) {
+                                                                          <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                            fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                                                              <mat-label>{{
+                                                                                componentLabelData[componentType].colorStatus
+                                                                              }}</mat-label>
+                                                                              <mat-select formControlName="colorStatusLookupId"
+                    (selectionChange)="getContactRemarksList($event.value); updateColorName()" placeholder="{{
+                        componentLabelData[componentType].colorStatus
+                      }}" required>
+                                                                                <mat-option>Select</mat-option>
+                                                                                @for (id of colorStatus; track id; let i = $index) {
+                                                                                  <mat-option [value]="id.lookUpId"> {{ id.lookUpName }}
+                                                                                  </mat-option>
+                                                                                }
+                                                                                <!-- <mat-option *ngFor="let id of colorStatus; let i = index" [value]="id.lookUpId">
+                                                                                {{ id.lookUpName }}
+                                                                              </mat-option> -->
+                                                                            </mat-select>
+                                                                            @if (
+                                                                              !!contactDet.get('colorStatusLookupId')?.errors?.required
+                                                                              ) {
+                                                                              <mat-error> {{ componentLabelData[componentType].colorStatus }} is
+                                                                              required </mat-error>
+                                                                            }
+                                                                          </mat-form-field>
+                                                                        </div>
+                                                                      }
+                                                                      @if (checkFormControls('contactRemarksLookupId') && (verificationForm?.value?.verificationScreeningDet?.clientContactRemark === true)) {
+                                                                        <div
+                                                                          fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                          <!-- <app-auto-complete [selectProperties]='remarksControls'>
+                                                                        </app-auto-complete> -->
+                                                                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                                                          <mat-label>{{
+                                                                            componentLabelData[componentType].contactRemarksLookupId
+                                                                          }}</mat-label>
+                  <mat-select formControlName="contactRemarksLookupId" [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''" placeholder="{{
+                      componentLabelData[componentType].contactRemarksLookupId
+                    }}">
+                                                                            <mat-option>Select</mat-option>
+                                                                            @for (id of contactRemarks; track id; let i = $index) {
+                                                                              <mat-option [value]="id.contactRemarkTransId"> {{
+                                                                              id.remarks }} </mat-option>
+                                                                            }
+                                                                          </mat-select>
+                                                                          @if (
+                                                                            !!contactDet.get('contactRemarksLookupId')?.errors?.required
+                                                                            ) {
+                                                                            <mat-error> {{ componentLabelData[componentType].contactRemarksLookupId }} is
+                                                                            required </mat-error>
+                                                                          }
+                                                                        </mat-form-field>
+                                                                      </div>
+                                                                    }
+                                                                    @if (checkFormControls('relationWithCandidate')) {
+                                                                      <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                        fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                          <mat-label>{{
+                                                                            componentLabelData[componentType].relationWithCandidate
+                                                                          }}</mat-label>
+                                                                          @if (componentType !== 'panIndiaOCRV') {
+                                                                            <input [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''" formControlName="relationWithCandidate" type="text"
+                    matInput maxlength="75" placeholder="{{
+                      componentLabelData[componentType].relationWithCandidate
+                    }}" required (input)="getConfirmationType(true)" />
+                                                                          }
+                                                                          @if (componentType === 'panIndiaOCRV') {
+                                                                            <input formControlName="relationWithCandidate" type="text"
+                    matInput maxlength="75" placeholder="{{
+                      componentLabelData[componentType].relationWithCandidate
+                    }}" (input)="getConfirmationType(true)" />
+                                                                          }
+                                                                          @if (!!contactDet.get('relationWithCandidate')?.errors?.required) {
+                                                                            <mat-error> {{
+                                                                              componentLabelData[componentType].relationWithCandidate }} is
+                                                                            required </mat-error>
+                                                                          }
+                                                                        </mat-form-field>
+                                                                      </div>
+                                                                    }
+                                                                  </div>
+                                                                  <!-- //Added by megala SRS - VTS2-2024-CRT-0195 -->
+                                                                  @if (verificationService.tempData.verificationScreeningDet.isDisableClosureFlag == false) {
+                                                                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                                                                      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                                                      <div  fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                        fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                                                          <mat-label>{{
+                                                                            componentLabelData[componentType].camApproval
+                                                                          }}</mat-label>
+                                                                          <mat-select formControlName="camApprovalId" [ngClass]=" commonService.camRejection == true && verificationService.tempData.verificationScreeningDet.camRejectStatus !=null && verificationService.tempData.verificationScreeningDet.camRejectStatus =='Rejection'?'page-btn disabled':''"
+                   (selectionChange)="updateValidation();updateCamApproval()" placeholder="{{
+                       componentLabelData[componentType].camApproval
+                     }}" required>
+                                                                            <mat-option>Select</mat-option>
+                                                                            @for (id of camFlagStatus; track id; let i = $index) {
+                                                                              <mat-option [value]="id.lookUpId"> {{ id.lookUpName }}
+                                                                              </mat-option>
+                                                                            }
+                                                                          </mat-select>
+                                                                          @if (
+                                                                            !!contactDet.get('camApprovalId')?.errors?.required
+                                                                            ) {
+                                                                            <mat-error> {{ componentLabelData[componentType].camApproval }} is
+                                                                            required </mat-error>
+                                                                          }
+                                                                        </mat-form-field>
+                                                                      </div>
+                                                                      @if (verificationService.tempData.verificationScreeningDet.isDisableClosureFlag == false && commonService.MVCamFlag == true) {
+                                                                        <div fxFlex="25%"  fxFlex.lg="25%" fxFlex.md="25%"
+                                                                          fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                                                            <mat-label>{{
+                                                                              componentLabelData[componentType].scenarioType
+                                                                            }}</mat-label>
+                                                                            <mat-select formControlName="scenarioTypeId" [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''"
+                 (selectionChange)="updateScenarioType()" placeholder="{{
+                     componentLabelData[componentType].scenarioType
+                   }}" required>
+                                                                              <mat-option>Select</mat-option>
+                                                                              @for (id of scenarioTypeStatus; track id; let i = $index) {
+                                                                                <mat-option [value]="id.lookUpId"> {{ id.lookUpName }}
+                                                                                </mat-option>
+                                                                              }
+                                                                            </mat-select>
+                                                                            @if (
+                                                                              !!contactDet.get('scenarioTypeId')?.errors?.required
+                                                                              ) {
+                                                                              <mat-error> {{ componentLabelData[componentType].scenarioType }} is
+                                                                              required </mat-error>
+                                                                            }
+                                                                          </mat-form-field>
+                                                                        </div>
+                                                                      }
+                                                                    </div>
+                                                                  }
+                                                                  <!-- //ended by megala SRS - VTS2-2024-CRT-0195 -->
+                                                                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                                                                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                                                    @if (checkFormControls('remarksLookupId')) {
+                                                                      <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                        fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                                                          <mat-label>{{
+                                                                            componentLabelData[componentType].verifierRemarks
+                                                                          }}</mat-label>
+                  <mat-select formControlName="remarksLookupId" [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''" placeholder="{{
+                      componentLabelData[componentType].verifierRemarks
+                    }}">
+                                                                            <mat-option>Select</mat-option>
+                                                                            @for (id of nicRemarks; track id; let i = $index) {
+                                                                              <mat-option [value]="id.lookUpId"> {{ id.lookUpName }}
+                                                                              </mat-option>
+                                                                            }
+                                                                          </mat-select>
+                                                                          <!-- <mat-error *ngIf="!!contactDet.get('remarksLookupId')?.errors?.required"> {{
+                                                                          componentLabelData[componentType].verifierRemarks }} is
+                                                                        required </mat-error> -->
+                                                                      </mat-form-field>
+                                                                    </div>
+                                                                  }
+                                                                  @if (checkFormControls('collectionSite')) {
+                                                                    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                      fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                        <mat-label>{{
+                                                                          componentLabelData[componentType].collectionSite
+                                                                        }}</mat-label>
+                  <input formControlName="collectionSite" type="text" matInput [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''" maxlength="75" placeholder="{{
+                      componentLabelData[componentType].collectionSite
+                    }}" required />
+                                                                          @if (!!contactDet.get('collectionSite')?.errors?.required) {
+                                                                            <mat-error> {{
+                                                                              componentLabelData[componentType].collectionSite }} is
+                                                                            required </mat-error>
+                                                                          }
+                                                                        </mat-form-field>
+                                                                      </div>
+                                                                    }
+                                                                    @if (checkFormControls('specimenId')) {
+                                                                      <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%"
+                                                                        fxFlex.xs="100%">
+                                                                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                          <mat-label>{{
+                                                                            componentLabelData[componentType].specimenId
+                                                                          }}</mat-label>
+                  <input formControlName="specimenId" type="text" matInput maxlength="75" [ngClass]=" commonService.camRejection == true &&verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection'?'page-btn disabled':''" placeholder="{{
+                      componentLabelData[componentType].specimenId
+                    }}" required />
+                                                                            @if (!!contactDet.get('specimenId')?.errors?.required) {
+                                                                              <mat-error> {{
+                                                                                componentLabelData[componentType].specimenId }} is
+                                                                              required </mat-error>
+                                                                            }
+                                                                          </mat-form-field>
+                                                                        </div>
+                                                                      }
+                                                                    </div>
+                                                                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                                                                      fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                                                      @if (checkFormControls('remarks')) {
+                                                                        <div fxFlex="75%" fxFlex.lg="75%" fxFlex.md="75%" fxFlex.sm="100%"
+                                                                          fxFlex.xs="100%">
+                                                                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                            <mat-label>{{
+                                                                              componentLabelData[componentType].remarks
+                                                                            }}</mat-label>
+                                                                            <textarea formControlName="remarks" #remInput matInput maxlength="5000"
+                                                                            placeholder="{{ componentLabelData[componentType].remarks }}"></textarea>
+                                                                            <mat-hint>({{ remInput.value.length }}/5000)</mat-hint>
+                                                                          </mat-form-field>
+                                                                        </div>
+                                                                      }
+                                                                    </div>
+                                                                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                                                                      fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                                                      @if (checkFormControls('reportSignedFlag')) {
+                                                                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%"
+                                                                          fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                          <mat-checkbox formControlName="reportSignedFlag"> Report Signed by FA / FE </mat-checkbox>
+                                                                        </div>
+                                                                      }
+                                                                      @if (checkFormControls('reportDateAvailableFlag')) {
+                                                                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%"
+                                                                          fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                          <mat-checkbox formControlName="reportDateAvailableFlag"> Date available in the report </mat-checkbox>
+                                                                        </div>
+                                                                      }
+                                                                    </div>
+                                                                  </form>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          }
+
+                                                          <!-- JCR online verf Status Details -->
+                                                          @if ((componentType === 'jcr') && (verificationService.tempData.verificationScreeningDet.onlineVerificationJcrflag === true)) {
+                                                            <form [formGroup]="JCROnlineDataVerification" autocomplete="off" #documentEditForm="ngForm"
+                                                              >
+                                                              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+                                                                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                                                @if (checkFormControls('onlineVerficDataStatusLookupid')) {
+                                                                  <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%"
+                                                                    fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                                                      <mat-label>{{
+                                                                        componentLabelData[componentType].onlineVerfStatus
+                                                                      }}</mat-label>
+            <mat-select formControlName="onlineVerficDataStatusLookupid" placeholder="{{
+        componentLabelData[componentType].onlineVerfStatus
+      }}">
+                                                                        <mat-option>Select</mat-option>
+                                                                        @for (id of onlineVerfStatus; track id; let i = $index) {
+                                                                          <mat-option [value]="id.lookUpId"> {{ id.lookUpName }}
+                                                                          </mat-option>
+                                                                        }
+                                                                      </mat-select>
+                                                                      <!-- <mat-error *ngIf="!!contactDet.get('remarksLookupId')?.errors?.required"> {{
+                                                                      componentLabelData[componentType].verifierRemarks }} is
+                                                                    required </mat-error> -->
+                                                                  </mat-form-field>
+                                                                </div>
+                                                              }
+                                                            </div>
+                                                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+                                                              fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                                              @if (checkFormControls('onlineVerfDataRemarks')) {
+                                                                <div fxFlex="75%" fxFlex.lg="75%" fxFlex.md="75%"
+                                                                  fxFlex.sm="100%" fxFlex.xs="100%">
+                                                                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                    <mat-label>{{
+                                                                      componentLabelData[componentType].onlinedatabaseremarks
+                                                                    }}</mat-label>
+                                                                    <textarea formControlName="onlineVerfDataRemarks" #onlineremInput matInput maxlength="5000"
+                                                                    placeholder="{{ componentLabelData[componentType].onlinedatabaseremarks }}"></textarea>
+                                                                    <mat-hint>({{ onlineremInput.value.length }}/5000)</mat-hint>
+                                                                  </mat-form-field>
+                                                                </div>
+                                                              }
+                                                            </div>
+                                                          </form>
+                                                        }
+                                                        <br />
+                                                      </form>
+                                                    </mat-card-content>
+
+                                                    <ng-template #addressTemplate>
+                                                      <h1 mat-dialog-title>Address Details</h1>
+                                                      <div mat-dialog-content>
+                                                        <div fxLayout="row">
+                                                          <div fxFlex="100%">
+                                                            <app-address #addressComp [addressList]="addressData" [addressformgrp]="addressFormGroup"> </app-address>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      <div mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+                                                        <button (click)="closeDialog()" mat-flat-button color="primary" matTooltip="Update"
+                                                        matTooltipClass="accent-tooltip"> Update </button>
+                                                        <button (click)="dialog.closeAll()" mat-flat-button color="warn" matTooltip="Cancel"
+                                                        matTooltipClass="accent-tooltip"> Cancel </button>
+                                                        @if (
+                                                          componentType === 'address' || componentType === 'panIndiaOCRV') {
+                                                          <button (click)="notProvide()" mat-flat-button color="accent"
+                                                          matTooltip="Not Applicable" matTooltipClass="accent-tooltip"> Not Applicable </button>
+                                                        }
+                                                      </div>
+                                                    </ng-template>
+
+                                                    <ng-template #reviewSaveTemplate>
+                                                      <mat-dialog-content>
+                                                        <div fxLayout="row">
+                                                          <div fxFlex="100%">
+                                                            <div fxLayout="row">
+                                                              <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+                                                              </div>
+                                                            </div>
+                                                            <div fxLayout="row" fxLayoutAlign="center center">
+                                                              <div fxFlex="100%" class="text-center">
+                                                                <h3 class="m-0">Confirmation !</h3>
+                                                                <p class="text-sm">Do you want <b>move</b> it to QC ?</p>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </mat-dialog-content>
+
+                                                      <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+                                                        <button (click)="sendMail();verificationService.isFinalReport = false" mat-flat-button color="primary"
+                                                        matTooltip="Update" matTooltipClass="accent-tooltip"> Yes </button>
+                                                        <button (click)="dialog.closeAll();verificationService.isFinalReport = false" mat-flat-button color="warn"
+                                                        matTooltip="Cancel" matTooltipClass="accent-tooltip"> No </button>
+                                                      </mat-dialog-actions>
+                                                    </ng-template>
+
+
+                                                    <ng-template #mailTemplate>
+                                                      <h1 mat-dialog-title>Response Document Email</h1>
+                                                      <div fxLayout="row" fxLayoutGap="20px" class="mlr-min24">
+                                                        <div fxFlex="100%">
+                                                          <div class="mailtemp">
+                                                            <div class="addline" fxLayout="row" fxLayoutGap="10px">
+                                                              <div fxFlex="20%">
+                                                                <label>To:</label>
+                                                              </div>
+                                                              <div fxFlex="80%"> {{ mailBodyValue?.toMailAddress }} </div>
+                                                              <span fxFlex></span>
+                                                              <div fxLayoutGap="8px">
+                                                                <!-- <a class="text-sm">Cc</a> <a href="" class="text-sm">Bcc</a> -->
+                                                              </div>
+                                                            </div>
+                                                            <div class="addline" fxLayout="row" fxLayoutGap="10px">
+                                                              <div fxFlex="20%">
+                                                                <label>Subject:</label>
+                                                              </div>
+                                                              <div fxFlex="80%">{{ mailBodyValue?.subject }}</div>
+                                                            </div>
+                                                            <div class="addline" fxLayout="row" fxLayoutGap="10px">
+                                                              <div fxFlex="20%">
+                                                                <label><i class="material-icons fsize-20 valign-top">attach_file </i>Attachment: </label>
+                                                              </div>
+                                                              @if (this.verificationService.pdfvalue) {
+                                                                <div fxFlex="80%"> <a (click)="getPDFfile()">{{
+                                                                  this.verificationService.pdfvalue.fileName
+                                                                }}</a> </div>
+                                                              }
+                                                              <!-- <div *ngIf="!this.verificationService.pdfvalue" fxFlex="87%"> Loading ...</div> -->
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      <mat-dialog-content class="scrollCls">
+                                                        <div fxLayout="row" fxLayoutGap="20px">
+                                                          <div fxFlex="100%">
+                                                            <div class="addline" fxLayout="row" fxLayoutGap="20px">
+                                                              <div fxFlex="100%" class="mt-15"> <span [innerHTML]="mailBodyValue?.mailBody"></span>
+                                                              <!-- <angular-editor [placeholder]="'Enter text here...'" formControlName="htmlTemplateBody">
+                                                              <span [innerHTML]="mailBodyValue?.mailBody"></span>
+                                                            </angular-editor> -->
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </mat-dialog-content>
+                                                  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+                                                    <button mat-flat-button color="warn" (click)="sendMail(); verificationService.isFinalReport = false"> Send mail to
+                                                    QC </button>
+                                                    <button color="warn" (click)="dialog.closeAll(); verificationService.isFinalReport = false" mat-flat-button> Cancel
+                                                    </button>
+                                                  </mat-dialog-actions>
+                                                </ng-template>
+                                                <ng-template #UnderReviewFR>
+                                                  <mat-dialog-content>
+                                                    <div fxLayout="row">
+                                                      <div fxFlex="100%">
+                                                        <div fxLayout="row">
+                                                          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                                                          src="assets/images/alert-danger.gif"></div>
+                                                        </div>
+                                                        <div fxLayout="row" fxLayoutAlign="center center">
+                                                          <div fxFlex="100%" class="text-center">
+                                                            <h3 class="m-0">{{ headerText}} </h3>
+                                                            <p class="text-sm">{{ messageOne }} <strong>{{ UnderReviewStatusName }}</strong>{{messagetwo}}</p>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </mat-dialog-content>
+
+                                                  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+                                                    <button mat-flat-button color="warn"  (click)="continuetoQc()"> Continue</button>
+                                                    <button mat-stroked-button [mat-dialog-close]="true" (click)="dialog.closeAll()"> Cancel </button>
+                                                  </mat-dialog-actions>
+                                                </ng-template>
+                                                <!-- // Added By Megala - For (sprint -22) VTS2-2024-CRT-0195 -->
+                                                <ng-template #rejectionPopUP>
+                                                  <h1 mat-dialog-title>CAM Rejection Comments
+                                                  </h1>
+                                                  <mat-dialog-content>
+                                                    <div fxLayout="row" fxLayoutGap="20px">
+                                                      <div fxFlex="100%">
+                                                        <span [innerHTML]="htmlTempBody"></span>
+                                                      </div>
+                                                    </div>
+                                                    <h3 class="sub-header"> Rejection Comments <span fxFlex></span>
+                                                  </h3>
+                                                  <div fxLayout="row" fxLayoutGap="20px">
+                                                    <div fxFlex="100%">
+                                                      <!-- content -->
+                                                      <span>{{verificationService.tempData.camRejectRemarks ?verificationService.tempData.camRejectRemarks : "N/A" }}</span>
+                                                    </div>
+                                                  </div>
+                                                </mat-dialog-content>
+                                                <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+                                                  <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+                                                </mat-dialog-actions>
+                                              </ng-template>

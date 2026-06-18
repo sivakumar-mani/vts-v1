@@ -1,0 +1,307 @@
+<app-breadcrumb [btnReset]="true" [routePath]="routePath" (eventReset)="resetForm()"></app-breadcrumb>
+<div fxLayout="row" class="advSearch" [formGroup]="criminalCheckReportForm" autocomplete="off">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="230px">
+            <mat-form-field fxFlex="100%">
+              <mat-label>Client Name</mat-label>
+              <input matInput placeholder="Client Name" formControlName="clientId"
+                [matAutocomplete]="autocandidate" #clientInput (focus)="clientItems(clientInput.value)"
+                (keyup)="clientKeyupFunction($event,clientInput.value)"
+                (input)="clientItems(clientInput.value)" (click)="clientInput.select()"
+                (blur)="checkValidValue('clientName')">
+              <mat-autocomplete #autocandidate="matAutocomplete" [displayWith]="displayclientFn"
+                (optionSelected)="getComponetDetailsByClient('clientName');getPropertyValue(clientInput,'clientId')">
+                @for (client of clientflterlist; track client) {
+                  <mat-option [value]="client.clientId"
+                    class="autocom-option autocom-tr"> <span
+                  [innerHTML]="client.clientName | highlight: clientInput.value"></span>
+                </mat-option>
+              }
+              @if (clientflterlist.length==0) {
+                <mat-option>
+                  <div class="no-record"><span>No Data Found</span></div>
+                </mat-option>
+              }
+            </mat-autocomplete>
+            @if (criminalCheckReportForm?.get('clientId')?.errors?.required) {
+              <mat-error>
+                Client Name is required.
+              </mat-error>
+            }
+            @if (criminalCheckReportForm?.get('clientId')?.errors?.incorrect) {
+              <mat-error>
+                Client Name is not valid.
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div fxFlex="230px">
+          <mat-form-field fxFlex="100%">
+            <mat-label>Status</mat-label>
+            <input matInput placeholder="Status" formControlName="statusId"
+              [matAutocomplete]="autoRCheck" #rCheckInput
+              (focus)="recordCheckItems(rCheckInput.value)"
+              (keyup)="rCheckKeyupFunction($event,rCheckInput.value)"
+              (input)="recordCheckItems(rCheckInput.value)" (click)="rCheckInput.select()"
+              (blur)="checkValidValue('rCheckName')">
+
+            <mat-autocomplete #autoRCheck="matAutocomplete" [displayWith]="displayrcheckFn"
+              (optionSelected)="getComponetDetailsByClient('rCheckName');getPropertyValue(rCheckInput,'statusId')">
+              @for (rCheck of statusflterlist; track rCheck) {
+                <mat-option [value]="rCheck.screeningStatusId"
+                  class="autocom-option autocom-tr"> <span
+                [innerHTML]="rCheck.statusName | highlight: rCheckInput.value"></span>
+              </mat-option>
+            }
+            @if (statusflterlist.length==0) {
+              <mat-option>
+                <div class="no-record"><span>No Data Found</span></div>
+              </mat-option>
+            }
+          </mat-autocomplete>
+
+          @if (criminalCheckReportForm?.get('statusId')?.errors?.required) {
+            <mat-error>
+              Recrod Check Name is required.
+            </mat-error>
+          }
+          @if (criminalCheckReportForm?.get('statusId')?.errors?.incorrect) {
+            <mat-error>
+              Recrod Check Name is not valid.
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="230px">
+        <mat-form-field fxFlex="100%">
+          <mat-label>Component Name</mat-label>
+          <input matInput placeholder="" formControlName="componentId"
+            [matAutocomplete]="autoRCheckCgry" #rCheckCgryInput
+            (focus)="recordCheckCatGryItems(rCheckCgryInput.value)"
+            (keyup)="rCheckCatGryKeyupFunction($event,rCheckCgryInput.value)"
+            (input)="recordCheckCatGryItems(rCheckCgryInput.value)"
+            (click)="rCheckCgryInput.select()" (blur)="checkValidValue('rCheckCtgryName')" required>
+
+          <mat-autocomplete #autoRCheckCgry="matAutocomplete" [displayWith]="displayrcheckCatGryFn"
+            (optionSelected)="getComponetDetailsByClient('rCheckCtgryName');getPropertyValue(rCheckCgryInput,'componentId')">
+            @for (rCheckCgy of componentflterlist; track rCheckCgy) {
+              <mat-option [value]="rCheckCgy.compId"
+                class="autocom-option autocom-tr"> <span
+              [innerHTML]="rCheckCgy.compName | highlight: rCheckCgryInput.value"></span>
+            </mat-option>
+          }
+          @if (componentflterlist.length==0) {
+            <mat-option>
+              <div class="no-record"><span>No Data Found</span></div>
+            </mat-option>
+          }
+        </mat-autocomplete>
+
+        @if (criminalCheckReportForm?.get('componentId')?.errors?.required) {
+          <mat-error>
+            Component Name is required.
+          </mat-error>
+        }
+        @if (criminalCheckReportForm?.get('componentId')?.errors?.incorrect) {
+          <mat-error>
+            Component Name is not valid.
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <a (click)="searchValue()">Search</a><span>|</span>
+    <a (click)="resetForm()"> Reset</a><span>|</span>
+    <a (click)='SearchCriFilter = !SearchCriFilter'>
+      {{ SearchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+    class="icon-chevron-{{ SearchCriFilter?'up':'down' }}"></i></a> </div>
+  </div>
+  @if (SearchCriFilter) {
+    <div fxLayout="row" class="advSearchshow">
+      <div class="advSearch-forms">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="200px" fxLayoutGap="10px">
+                <mat-form-field fxFlex="100%">
+                  <mat-label>From Date</mat-label>
+                  <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date"
+                    formControlName="fromDate" [max]="maxDate" (focus)="sampledatePicker.open()"
+                    (click)="sampledatePicker.open()"/>
+                  <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #sampledatePicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div fxFlex="200px">
+                <mat-form-field fxFlex="100%">
+                  <mat-label>To Date</mat-label>
+                  <input matInput [matDatepicker]="sampledatePicker1" placeholder="To Date"
+                    formControlName="toDate" [max]="maxDate" (focus)="sampledatePicker1.open()" (click)="sampledatePicker1.open()"/>
+                  <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+                  <mat-datepicker #sampledatePicker1></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="100%" class="advSearch-btn">
+        <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+      </div>
+    </div>
+  }
+</div>
+
+<div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">Criminal Tracker Report</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <b class="text-sm mr-10 text-semi-bold text-dull">Search results for:</b>
+                @for (s of searchValueArr; track s; let in = $index) {
+                  <span class="tag">{{s.value}} <a
+                  class="close" (click)="removeSearchValue(s.propertyName,in)">×</a></span>
+                } </div>
+              </div>
+              <div fxLayout="row" class="sortrow">
+                <div fxFlex="100%" fxLayoutAlign="end center">
+                  <ul>
+                    <li><span class="text-dull"> Showing {{(itemPerPage*page)-itemPerPage+1}} -
+                      {{(itemPerPage*page)>=criminalCheckReportList?.length?(criminalCheckReportList?.length):itemPerPage*page}}
+                      of
+                    </span>
+                    <b>{{criminalCheckReportList?.length}} record(s)</b></li> |
+                    <li><b>Sort By:</b> <a [ngClass]="column==='candidateName'?'active':''"
+                    (click)="sortBy('candidateName')">Candidate
+                  Name</a>
+                                        <i [ngClass]="{'icon-sort': column != 'candidateName', 
+                                                       'icon-sort-asc': (column == 'candidateName' && !isDesc), 
+                                                       'icon-sort-desc': (column == 'candidateName' && isDesc) }"
+                    aria-hidden="true">
+                  </i>
+                  <a [ngClass]="column==='clientReferenceNo'?'active':''"
+                  (click)="sortBy('clientReferenceNo')">Reference No</a>
+                                        <i [ngClass]="{'icon-sort': column != 'clientReferenceNo', 
+                                                        'icon-sort-asc': (column == 'clientReferenceNo' && !isDesc), 
+                                                        'icon-sort-desc': (column == 'clientReferenceNo' && isDesc) }"
+                  aria-hidden="true"> </i>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              @for (report of criminalCheckReportList | sort: {property: column, direction: direction}
+                | paginate: { itemsPerPage: itemPerPage, currentPage: page }; track report; let i = $index) {
+                <div fxLayout="row" class="listrow">
+                  <div fxFlex="100%">
+                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+                      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="100%">
+                        <mat-card-header>
+                          <div mat-card-avatar class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                            {{(report?.firstName) ? (report?.firstName.slice(0, 1)) : ''}}{{ (report?.lastName) ? (report?.lastName.slice(0, 1)) : ''}}
+                          </div>
+                          <mat-card-title class="cname">
+                            {{report?.firstName + ' ' +  report?.middleName + ' ' + report?.lastName }}
+                          </mat-card-title>
+                          <mat-card-subtitle class="cdesg mb-0">{{report?.clientReferenceNo }}
+                          </mat-card-subtitle>
+                        </mat-card-header>
+                      </div>
+                      <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+                        <p>
+                          <label>Client Name:</label>
+                          <em>{{report?.clientName}}</em> </p>
+                          <p>
+                            <label>AccManager Name:</label>
+                            <em>{{report?.clientAccountManager}}</em> </p>
+                            <p>
+                              <label>Verification ID:</label>
+                              <em>{{report?.verificationID}}</em> </p>
+                              <p>
+                                <label>Report Source Name:</label>
+                                <em>{{report?.firstName + ' ' +  report?.middleName + ' ' + report?.lastName }}</em>
+                              </p>
+                            </div>
+                            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="100%">
+                              <p>
+                                <label>Screening Status:</label>
+                                <em>{{report?.screeningStatus}}</em> </p>
+                                <p>
+                                  <label>Component Name:</label>
+                                  <em>{{report?.serviceType}}</em> </p>
+                                  <p>
+                                    <label>Father Name:</label>
+                                    <em>{{report?.fatherName}}</em> </p>
+                                    <p>
+                                      <label>DOB:</label>
+                                      <em>{{(report?.dob) ? (report.dob | date:'dd-MM-yyyy') : 'N/A'}}</em>
+                                    </div>
+                                    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%">
+                                      <p>
+                                        <label>Address:</label>
+                                        <em>{{report?.address}}</em> </p>
+                                        <p>
+                                          <label>CaseReqDate:</label>
+                                          <em>{{(report?.caseReqDate) ? (report.caseReqDate | date:'dd-MM-yyyy') : 'N/A'}}</em>
+                                        </p>
+                                        <p>
+                                          <label>Component ReOpen Date:</label>
+                                          <em>{{(report?.componentReOpenDate)? (report.caseReqDate  | date:'dd-MM-yyyy') : 'N/A'}}</em>
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              }
+                            </div>
+
+                          </div>
+
+
+                          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"  fxLayout.xs="column"  fxLayoutGap="20px grid" fxLayoutGap.md="0px grid" fxLayoutGap.sm="20px grid"  fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start" class="cus-paginator">
+                            <div fxFlex="76%" fxFlex.lg="76%" fxFlex.md="50%" fxFlex.sm="100%"  fxFlex.xs="100%" fxLayoutAlign="end end" fxLayoutAlign.md="start start" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start" class="tex t-right dev-paginator">
+                              <pagination-controls (pageChange)="getPage($event)"></pagination-controls>
+                            </div>
+                            <div fxHide.xs fxFlex="22%" fxFlex.lg="22%" fxFlex.md="50%" fxFlex.sm="100%"  fxFlex.xs="100%" fxLayoutAlign="end end" fxLayoutAlign.md="end end" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+                              <span class="gotopagbg ml-2">Go to Page
+                                <span class="input-num">
+                                  <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+                                </span>
+                              </span>
+                              <span class="gotopagbg ml-2">Items / page
+                                <span class="input-num">
+                                  <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="50" appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false" (blur)="preventInfinite()">
+                                </span>
+                              </span>
+                            </div>
+                          </div>
+
+
+
+
+
+                        </div>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>

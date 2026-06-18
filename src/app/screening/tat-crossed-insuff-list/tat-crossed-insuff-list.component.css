@@ -1,0 +1,50 @@
+/*Owner Vendor List Starts*/
+.ownven-list{
+    padding: 8px 10px;
+    position: relative;
+    cursor: pointer;
+  }
+  .ownven-list:hover, .ownven-list.active{
+    background: #daeeff;
+  }
+  .ownven-list .user {
+    text-transform: uppercase;
+  border-radius: 50%;
+  text-align: center;
+  color:
+  #fff;
+  cursor: pointer;
+  font-size: 11px;
+  width: 30px;
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  font-weight: 400;
+  }
+  .ownven-list .pos{
+    color: #fff;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    border: 2px solid #fff;
+    position: absolute;
+    left: 34px;
+    text-shadow: none;
+    bottom: 7px;
+    font-size: 6px;
+    line-height: 12px;
+    text-align: center;
+  }
+  .ownven-list .pos.act{
+    background: #08BA53;
+  }
+  .ownven-list .pos.inact{
+    background: #acacae;
+  }
+  .ownven-list .ovname{ 
+    font-size: 14px;
+      display: inline-block;
+      margin-left: 15px;
+      font-weight: 500;
+  }

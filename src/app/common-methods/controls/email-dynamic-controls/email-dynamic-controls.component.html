@@ -1,0 +1,61 @@
+<div [formGroup]="contactForm">
+  @for (item of getContactFormGroup(); track item; let i = $index) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" [formGroupName]=formArrayNanme>
+      <div fxFlex="100%" [formGroupName]="i">
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          @if (emailType) {
+            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Email Type</mat-label>
+                <mat-select matNativeControl formControlName="destLookupId" placeholder="Select Email Type" (selectionChange)="lookupChange($event.value)">
+                  @for (type of emailTypeData; track type) {
+                    <mat-option [value]="type.lookUpId"> {{ type.lookUpName }}</mat-option>
+                  }
+                </mat-select>
+                @if (!!item?.get('destLookupId')?.errors?.required) {
+                  <mat-error>Email type is required </mat-error>
+                }
+                @if (!!item.get('destLookupId')?.errors?.incorrect) {
+                  <mat-error>Atleast select one Email Type To</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Email ID</mat-label>
+              <input email="true" #email matInput type="email" formControlName="contactData" placeholder="Email ID"
+                maxlength="100" autocomplete="off" role="presentation" (blur)="checkValidEmail(i,email.value)" [required]="emailRequired"/>
+              <div matSuffix>
+                <div fxLayout="row">
+                  <div fxFlex="100%" class="adrem suf" fxLayoutGap="8px" fxLayoutAlign="end end">
+                    @if ((i === rowCount-1)) {
+                      <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                        (click)="emailValidation(i,emailType);addItem(i,true)"> <i
+                      class="icon-plus-circle"></i> </button>
+                    }
+                    @if (rowCount >1) {
+                      <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                        (click)="removeControl(i)"> <i class="icon-x-circle"></i> </button>
+                      }
+                    </div>
+                  </div>
+                </div>
+                @if (!!item.get('contactData')?.errors?.required) {
+                  <mat-error> Email ID is required</mat-error>
+                }
+                @if (!!item?.get('contactData')?.errors?.alreadyExist) {
+                  <mat-error> Email ID exist, Please try another one</mat-error>
+                }
+                @if (!!item?.get('contactData')?.errors?.pattern) {
+                  <mat-error>Please enter valid Email </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>

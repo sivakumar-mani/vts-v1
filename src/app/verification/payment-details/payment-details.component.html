@@ -1,0 +1,243 @@
+<form [formGroup]="paymentDetailForm" autocomplete="off">
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <!-- <h3 class="sub-header">Payment Details  -->
+      <span fxFlex></span>
+      @if (closedFlag === false) {
+        <button mat-icon-button class="in-btn mb-10" matTooltip="Save" (click)="savePaymentDetails()"
+          matTooltipClass="accent-tooltip"> <i class="icon-save"></i></button>
+        }
+      <!-- </h3> -->
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+    fxLayoutGap="20px grid">
+    <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Payment Mode</mat-label>
+        <mat-select placeholder="Payment Mode"
+          (selectionChange)="getFormGroupName(paymentDetailForm?.get('paymentModeLookupId')?.value)"
+          formControlName="paymentModeLookupId" required>
+          <mat-option>Select Payment mode</mat-option>
+          @for (pay of paymentModeList; track pay) {
+            <mat-option [value]="pay.lookUpId"> {{pay.lookUpName}}</mat-option>
+          }
+        </mat-select>
+        @if (paymentDetailForm?.get('paymentModeLookupId')?.errors?.required) {
+          <mat-error> Payment Mode is
+          required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <!-- DD / CHEQUE -->
+    @if (formName==='ddCheckForm') {
+      <div fxFlex="44%" fxFlex.lg="44%" fxFlex.md="44%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="ddCheckForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>In Favour Of</mat-label>
+          <input matInput required formControlName="favourOf" placeholder="In Favour Of" maxlength="60">
+          @if (paymentDetailForm?.get('ddCheckForm.favourOf')?.errors?.required) {
+            <mat-error> In favour of is
+            required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+    @if (formName==='ddCheckForm') {
+      <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="ddCheckForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Cheque / DD Number</mat-label>
+          <input matInput required formControlName="chqDDNo" maxlength="20" placeholder="Cheque / DD Number">
+          @if (paymentDetailForm?.get('ddCheckForm.chqDDNo')?.errors?.required) {
+            <mat-error> Cheque / DD Number
+            is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+    <!-- CASH -->
+    @if (formName==='cashForm') {
+      <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="cashForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Cash Amount (₹)</mat-label>
+          <input matInput required formControlName="chqDDAmount" maxlength="5" placeholder="Cash Amount (₹)"
+            preventDragdrop preventCutCopyPaste appNumberOnly [NumberOnlyWithDot]="false">
+          <mat-icon matSuffix><i class="icon-inrrupeesb"></i></mat-icon>
+          @if (paymentDetailForm?.get('cashForm.chqDDAmount')?.errors?.required) {
+            <mat-error> Cash amount is
+            required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+    <!-- MISC CHARGES  -->
+    @if (formName==='miscChargesForm') {
+      <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="miscChargesForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Miscellaneous Charges (₹)</mat-label>
+          <input matInput required formControlName="miscCharges" placeholder="Miscellaneous Charges (₹)" maxlength="5"
+            preventDragdrop preventCutCopyPaste appNumberOnly [NumberOnlyWithDot]="false">
+          <mat-icon matSuffix><i class="icon-inrrupeesb"></i></mat-icon>
+          @if (paymentDetailForm?.get('miscChargesForm.miscCharges')?.errors?.required) {
+            <mat-error> Miscellaneous
+            charges is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+
+    <!-- WIRE TRANSFER -->
+    @if (formName==='wireTransferForm') {
+      <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="wireTransferForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Transaction Reference Number</mat-label>
+          <input matInput required formControlName="chqDDNo" maxlength="20" placeholder="Transaction Reference Number">
+          @if (paymentDetailForm?.get('wireTransferForm.chqDDNo')?.errors?.required) {
+            <mat-error> Transaction
+            reference number is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+    @if (formName==='wireTransferForm') {
+      <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        formGroupName="wireTransferForm">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Transaction Date</mat-label>
+          <input matInput required formControlName="chqDDDate" [matDatepicker]="picker1" placeholder="Transaction Date"
+            autocomplete="off" role="presentation" [max]="maxDate" preventDragdrop preventCutCopyPaste appNumberOnly
+            [NumberOnlyWithslash]="false" (focus)="picker1.open()" (click)="picker1.open()">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+          @if (paymentDetailForm?.get('wireTransferForm.chqDDDate')?.errors?.required) {
+            <mat-error> Transaction date is
+            required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+  </div>
+  <!-- DD / CHEQUE Starts-->
+  @if (formName==='ddCheckForm') {
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+      fxLayoutGap="20px grid" formGroupName="ddCheckForm">
+      <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Cheque / DD Date</mat-label>
+          <input matInput required formControlName="chqDDDate" [matDatepicker]="picker" placeholder="Cheque / DD Date"
+            autocomplete="off" role="presentation" [max]="maxDate" preventDragdrop preventCutCopyPaste appNumberOnly
+            [NumberOnlyWithslash]="false" (focus)="picker.open()" (click)="picker.open()">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (paymentDetailForm?.get('ddCheckForm.chqDDDate')?.errors?.required) {
+            <mat-error> Cheque / DD
+            date is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="24%" fxFlex.lg="24%" fxFlex.md="24%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Cheque / DD Amount (₹)</mat-label>
+          <input matInput required formControlName="chqDDAmount" maxlength="5" placeholder="Cheque / DD Amount (₹)"
+            preventDragdrop preventCutCopyPaste appNumberOnly [NumberOnlyWithDot]="false">
+          <mat-icon matSuffix><i class="icon-inrrupeesb"></i></mat-icon>
+          @if (paymentDetailForm?.get('ddCheckForm.chqDDAmount')?.errors?.required) {
+            <mat-error> Cheque / DD
+            amount is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="24%" fxFlex.lg="24%" fxFlex.md="24%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Cheque / DD Commission (₹)</mat-label>
+          <input matInput required formControlName="chqDDCommision" maxlength="4" placeholder="Cheque / DD Commission (₹)"
+            preventDragdrop preventCutCopyPaste appNumberOnly [NumberOnlyWithDot]="false">
+          <mat-icon matSuffix><i class="icon-inrrupeesb"></i></mat-icon>
+          @if (paymentDetailForm?.get('ddCheckForm.chqDDCommision')?.errors?.required) {
+            <mat-error> Cheque /
+            DD commission is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Bank Name</mat-label>
+          <input matInput required formControlName="bankName" placeholder="Bank Name" maxlength="60">
+          <mat-icon matSuffix><i class="material-icons"> account_balance </i></mat-icon>
+          @if (paymentDetailForm?.get('ddCheckForm.bankName')?.errors?.required) {
+            <mat-error> Bank name is
+            required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Payable At</mat-label>
+          <input matInput required formControlName="payableAt" placeholder="Payable At" maxlength="60">
+          @if (paymentDetailForm?.get('ddCheckForm.payableAt')?.errors?.required) {
+            <mat-error> Payable at is
+            required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  }
+  <!-- DD / CHEQUE Ends-->
+
+  <!-- MISC CHARGES Starts -->
+  @if (formName==='miscChargesForm') {
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+      fxLayoutGap="20px grid" formGroupName="miscChargesForm">
+      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Miscellaneous Description</mat-label>
+          <textarea #misc matInput maxlength="500" placeholder="Miscellaneous Description" formControlName="miscDesc"
+            required>
+          </textarea>
+          <mat-hint>({{misc.value.length}}/500 Max)</mat-hint>
+          @if (paymentDetailForm?.get('miscChargesForm.miscDesc')?.errors?.required) {
+            <mat-error> Miscellaneous
+            description is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  }
+  <!-- MISC CHARGES  Ends-->
+
+  <!-- WIRE TRANSFER Starts-->
+  @if (formName==='wireTransferForm') {
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+      fxLayoutGap="20px grid" formGroupName="wireTransferForm">
+      <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Wire Transfer Fee ($)</mat-label>
+          <input matInput required formControlName="chqDDCommision" maxlength="4" placeholder="Wire Transfer Fee ($)"
+            readonly preventDragdrop preventCutCopyPaste appNumberOnly [NumberOnlyWithDot]="false">
+          <mat-icon matSuffix><i class="icon-inrrupeesb"></i></mat-icon>
+          @if (paymentDetailForm?.get('wireTransferForm.chqDDCommision')?.errors?.required) {
+            <mat-error> Wire
+            transfer fee is required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>University Fee ($)</mat-label>
+          <input matInput required formControlName="chqDDAmount" maxlength="5" placeholder="University Fee ($)"
+            preventDragdrop preventCutCopyPaste appNumberOnly [NumberOnlyWithDot]="false">
+          <mat-icon matSuffix><i class="icon-inrrupeesb"></i></mat-icon>
+          @if (paymentDetailForm?.get('wireTransferForm.chqDDAmount')?.errors?.required) {
+            <mat-error> University Fee is
+            required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  }
+  <!-- WIRE TRANSFER Ends-->
+</form>

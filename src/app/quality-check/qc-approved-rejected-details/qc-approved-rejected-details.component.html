@@ -1,0 +1,358 @@
+<app-breadcrumb [routePath]="'Quality Check / ' + qcService?.approveOrRejectType" [btnBack]="true" (eventBack)="backToDashboard()" (eventExcelExport)="exportExcel()" [btnExcelExport]="qcDetails?.length > 0">
+</app-breadcrumb>
+<div fxLayout="row" class="advSearch">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <form autocomplete="off" [formGroup]="qcForm">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="200px">
+              <mat-form-field [appearance]="'standard'" fxFlex="100%">
+                <mat-label>Candidate Name </mat-label>
+                <input matInput placeholder="Candidate Name" formControlName="candidateName" type="text" size="50" />
+              </mat-form-field>
+            </div>
+            <div fxFlex="190px">
+              <mat-form-field [appearance]="'standard'" fxFlex="100%">
+                <mat-label>Client Ref No </mat-label>
+                <input matInput placeholder="Client Ref No." formControlName="clientRefNo" type="text" size="50" />
+              </mat-form-field>
+            </div>
+            <div fxFlex="200px">
+              <!-- <app-auto-complete [selectProperties]='componentControl'>
+            </app-auto-complete> -->
+            <mat-form-field [appearance]="'standard'" fxFlex="100%">
+              <mat-label>Component Name</mat-label>
+              <input matInput placeholder="Component Name" formControlName="compName" type="text" size="50" />
+            </mat-form-field>
+          </div>
+          <div fxFlex="190px">
+            <mat-form-field [appearance]="'standard'" fxFlex="100%">
+              <mat-label>QC Owner Name </mat-label>
+              <input matInput placeholder="QC Owner Name" formControlName="ownerName" type="text" size="50" />
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px"><a (click)="search()">Search</a><span>|</span><a (click)="resetFilterSort()">Reset</a>@if (this.qcDetails?.length > 0 && this.qcDetails[0]?.finalQcFlag === false) {
+  <span>|</span>
+  }@if (this.qcDetails?.length > 0 && this.qcDetails[0]?.finalQcFlag === false) {
+  <a
+    (click)='SearchCriFilter = !SearchCriFilter'>
+    {{ SearchCriFilter?'Show Less':'Show More'}}&nbsp;
+    <i class="icon-chevron-{{ SearchCriFilter?'up':'down' }}"></i></a>
+  }</div>
+</div>
+@if (SearchCriFilter && this.qcDetails?.length > 0 && this.qcDetails[0]?.finalQcFlag === false) {
+  <div fxLayout="row" class="advSearchshow">
+    <div class="advSearch-forms" [formGroup]="qcForm">
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="200px">
+              <!-- <app-auto-complete [selectProperties]='clientControl'>
+            </app-auto-complete> -->
+            <mat-form-field [appearance]="'standard'" fxFlex="100%">
+              <mat-label>Client Name </mat-label>
+              <input matInput placeholder="Client Name" formControlName="clientName" type="text" size="50" />
+            </mat-form-field>
+          </div>
+          <!-- <div fxFlex="200px">
+          <mat-form-field fxFlex="100%">
+            <mat-label>Received From Date</mat-label>
+            <input matInput [matDatepicker]="sampledatePicker" [max]="commonservice?.getMaxDate()"
+              placeholder="Received From Date" [(ngModel)]="fromDate" (focus)="sampledatePicker.open()"
+              (click)="sampledatePicker.open()" (blur)="getRecordBydate(fromDate, toDate)" />
+            <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #sampledatePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div fxFlex="190px">
+          <mat-form-field fxFlex="100%">
+            <mat-label>Received To Date</mat-label>
+            <input matInput [matDatepicker]="sampledatePicker1" [max]="commonservice?.getMaxDate()"
+              placeholder="Received To Date" [min]="fromDate" [(ngModel)]="toDate"
+              (focus)="sampledatePicker1.open()" (click)="sampledatePicker1.open()"
+              (blur)="getRecordBydate(fromDate, toDate)" />
+            <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+            <mat-datepicker #sampledatePicker1></mat-datepicker>
+          </mat-form-field>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+</div>
+</div>
+}
+</div>
+<div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">{{qcService?.approveOrRejectType}}</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            @if (searchValueArr?.length > 0) {
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <b class="text-sm mr-10 text-semi-bold text-dull">Search results for:</b>
+                  @for (s of searchValueArr; track s; let in = $index) {
+                    <span class="tag">{{s.value}}
+                      <a class="close" (click)="removeSearchValue(s?.propertyName,in)">×</a></span>
+                    }
+                  </div>
+                </div>
+              }
+              <div fxLayout="row" class="sortrow">
+                <div fxFlex="100%" fxLayoutAlign="end center">
+                  <ul>
+                    <li><span class="text-dull">
+                      Showing
+                      {{(qcDetails?.length > 0 ? ((userData.pageSize*userData.page)-userData.pageSize+1): 0)}} -
+                      {{((userData.pageSize*userData.page)>=(shieveTotalCount))?(shieveTotalCount):(userData.pageSize*userData.page)}}
+                    of </span> <b> {{shieveTotalCount}}
+                  record(s)</b>
+                </li>
+                |
+                <li>
+                  <a (click)="shieveShowall()">Show All</a>
+                </li>
+                |
+                <li><b>Sort By:</b> <a [ngClass]="column==='firstName'?'active':''" (click)="sortBy('firstName')">Candidate
+              Name</a>
+                                        <i [ngClass]="{'icon-sort': column != 'firstName', 
+                                                    'icon-sort-asc': (column == 'firstName' && !isDesc), 
+                                                    'icon-sort-desc': (column == 'firstName' && isDesc) }" aria-hidden="true">
+              </i>
+              <a [ngClass]="column==='clientName'?'active':''" (click)="sortBy('clientName')">Client Name</a>
+                                        <i [ngClass]="{'icon-sort': column != 'clientName', 
+                                                      'icon-sort-asc': (column == 'clientName' && !isDesc), 
+                                                      'icon-sort-desc': (column == 'clientName' && isDesc) }" aria-hidden="true"> </i>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="100%">
+          <!-- search:
+          [
+          {key:(qcDetails?.length > 0 && qcDetails[0]?.finalQcFlag === false ? 'componentName' : ''),value:(qcDetails?.length > 0 && qcDetails[0]?.finalQcFlag === false ? qcForm?.get('compName')?.value : 0)},
+          {key:(qcDetails?.length > 0 && qcDetails[0]?.finalQcFlag === false ? 'verificationId' : ''),value:(qcDetails?.length > 0 && qcDetails[0]?.finalQcFlag === false ? qcForm?.get('verificationId')?.value : 0)},
+          {key:'clientRefNo',value:qcForm?.get('clientRefNo')?.value},
+          {key:'candidateFullName',value:qcForm?.get('candidateName')?.value},
+          {key:'clientName',value:qcForm?.get('clientName')?.value},
+          {key:'vendorName',value:qcForm?.get('vendorName')?.value},
+          {key:'statusName',value:qcForm?.get('statusName')?.value},
+          {key:'empInsName',value:qcForm?.get('empInsName')?.value},
+          {key:'ownerName',value:qcForm?.get('ownerName')?.value}] -->
+          @for (empj of qcDetails | sort: {property: column, direction: direction}
+            | paginate: { itemsPerPage: shievePageSize, currentPage: shievePageNo, totalItems: shieveTotalCount }; track empj; let c = $count; let j = $index) {
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="20px" fxLayoutGap.xs="20px" [class]="getFilterLen(c)">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid">
+                  <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="22%">
+                    <mat-card-header>
+                      <div mat-card-avatar class="avatar avatarBg{{(j%6)+1}}">
+                        {{ empj?.firstName?.slice(0, 1)}}{{ empj?.lastName?.slice(0, 1)}}
+                      </div>
+                      <mat-card-title class="cname">
+                      {{empj?.candidateFullName}}</mat-card-title>
+                      <mat-card-subtitle class="cdesg">
+                        {{empj?.verificationId}}
+                      </mat-card-subtitle>
+                      @if (qcService.approveOrRejectType!='Individual QC Rejected'&&qcService.approveOrRejectType!='Individual QC Approved'&&qcService.approveOrRejectType!='Today Individual QC Approved') {
+                        <mat-card-subtitle class="mb-0 inproges"> <i class="icon-tatpending dc-ico"></i>
+                        <span class="dc-dn">{{empj?.inProgressDays}}</span><span class="dc-sub">days<br>Over</span>
+                      </mat-card-subtitle>
+                    }
+                  </mat-card-header>
+                </div>
+                <div fxFlex="24%" fxFlex.lg="24%" fxFlex.md="24%" fxFlex.sm="24%">
+                  <p>
+                    <label>Client Name:</label>
+                    <em>{{empj?.clientName}}</em>
+                  </p>
+                  <p>
+                    <label>{{empj?.iqcByPassFlag === true ? 'Transaction Id:' : 'Client Ref No.:'}}</label>
+                    <em>{{empj?.clientRefNo}}</em>
+                  </p>
+                  <p>
+                    <label>Site Name:</label>
+                    <em>{{empj?.siteName}}</em>
+                  </p>
+                  <p>
+                    <label>TAT Days:</label>
+                    <em>{{empj?.tatDays ? empj?.tatDays : 'N/A'}}</em>
+                  </p>
+                  <!-- <p>
+                  <label>Work Flow:</label>
+                  <em>{{empj?.workFlow ? empj?.workFlow : (empj?.finalQcFlag === true ? 'FQC' : 'N/A')}}</em> </p> -->
+                </div>
+                <div fxFlex="27%" fxFlex.lg="27%" fxFlex.md="27%" fxFlex.sm="27%">
+                  <p>
+                    <label>{{empj?.status}} Date & Time:</label>
+                    <em>{{empj?.receivedDate ? (commonservice.getTimezoneOffset(empj?.receivedDate, false) | date
+                    : 'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}</em>
+                  </p>
+                  <p>
+                    <label>Status:</label>
+                    <em>{{empj?.status}}</em>
+                  </p>
+                  <p>
+                    <label>QC Owner:</label>
+                    <em>{{empj?.ownerName ? empj?.ownerName : 'N/A'}}</em>
+                  </p>
+                  @if (qcService.approveOrRejectType!='Individual QC Rejected'&&qcService.approveOrRejectType!='Individual QC Approved'&&qcService.approveOrRejectType!='Today Individual QC Approved') {
+                    <p>
+                      <label>TAT Status:</label>
+                      <em>{{empj?.tatStatus ? empj?.tatStatus : 'N/A'}}</em>
+                    </p>
+                  }
+                </div>
+                <div fxFlex="27%" fxFlex.lg="27%" fxFlex.md="27%" fxFlex.sm="27%">
+                  <p>
+                    <label>{{empj?.status}} By:</label>
+                    <em>{{empj?.submittedBy ? empj?.submittedBy : 'N/A'}}</em>
+                  </p>
+                  @if (empj?.finalQcFlag === false) {
+                    <p>
+                      <label>Component Name:</label>
+                      <em class="cn-chip">{{empj?.componentName}}
+                        <!-- {{empj?.subCompName ? (' - ' + empj?.subCompName) : ''}} -->
+                      </em>
+                    </p>
+                  }
+                  <p>
+                    <label>Color Code:</label>
+                    <span>
+                      @switch (empj?.colourCode ? empj?.colourCode : 'N/A') {
+                        @case ('Red') {
+                          <em> <span class="ccode" style="background-color:red;"> </span> {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+                        }
+                        @case ('Green') {
+                          <em> <span class="ccode" style="background-color:#08BA53;"> </span>
+                        {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+                      }
+                      @case ('Yellow') {
+                        <em> <span class="ccode" style="background-color:#FFBF00;"> </span>
+                      {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+                    }
+                    @case ('Orange') {
+                      <em> <span class="ccode" style="background-color:orange;"> </span>
+                    {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+                  }
+                  @case ('Magenta') {
+                    <em> <span class="ccode" style="background-color:magenta;"> </span>
+                  {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+                }
+                @case ('Stop') {
+                  <em> <span class="ccode" style="background-color:#121212;"> </span>
+                {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+              }
+              @case ('Positive') {
+                <em> <span class="ccode" style="background-color: #008000;">
+                </span>
+              {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+            }
+            @case ('Negative') {
+              <em> <span class="ccode" style="background-color: #ff0000;">
+              </span>
+            {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+          }
+          @case ('Positive-Review') {
+            <em> <span class="ccode" style="background-color: #ff6600;">
+            </span>
+          {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+        }
+        @case ('Positive-') {
+          <em> <span class="ccode" style="background-color: #ff6600;">
+          </span>
+        {{empj?.colourCode ? empj?.colourCode : 'N/A'}} Review</em>
+      }
+      @case ('Negative-Please Review') {
+        <em> <span class="ccode" style="background-color:#ffff00;">
+        </span>
+      {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+    }
+    @case ('Negative-') {
+      <em> <span class="ccode" style="background-color:#ffff00;">
+      </span>
+    {{empj?.colourCode ? empj?.colourCode : 'N/A'}} Please Review</em>
+  }
+  @case ('N/A') {
+    <em>
+    {{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em>
+  }
+}
+</span>
+<!-- <em>{{empj?.colourCode ? empj?.colourCode : 'N/A'}}</em> -->
+</p>
+</div>
+@if (qcService.approveOrRejectType ==='Final Report Not Sent') {
+  <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="25%"
+    fxFlex.xs="25%">
+    <p>
+      <em>
+        <a (click)="getFinalReportDocument(empj?.screeningId)">Generate Final
+        Report</a> </em>
+      </p>
+    </div>
+  }
+  @if (qcService.approveOrRejectType ==='Final Report Not Sent') {
+    <div fxFlex="7%" fxFlex.lg="7%" fxFlex.md="7%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <a (click)="sendFinalReportMail(empj?.iqcByPassFlag,empj?.clientId,empj?.siteId,empj?.screeningId,empj?.candidateFullName,empj?.clientRefNo,empj?.colourCode)">Send Mail</a>
+    </div>
+  }
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid">
+  <div fxFlex="100%">
+    @if (empj?.finalQcFlag === false&&qcService.approveOrRejectType!='Individual QC Rejected'&&qcService.approveOrRejectType!='Individual QC Approved'&&qcService.approveOrRejectType!='Today Individual QC Approved') {
+      <p>
+        <label>Functional Entity:</label>
+        <em>{{empj?.functionalEntity ? empj?.functionalEntity : 'N/A'}}</em>
+      </p>
+    }
+  </div>
+</div>
+</div>
+</div>
+}
+</div>
+</div>
+<div fxLayout="row">
+  <!-- paginator -->
+  <div class="cus-paginator">
+    <div fxLayout="">
+      <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+        <pagination-controls class="cus-paginator" (pageChange)="shievePagination($event)"></pagination-controls>
+      </span>
+      <span fxHide.xs class="gotopagbg ml-2">Go to Page<span class="input-num">
+        <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4" appNumberOnly preventDragdrop
+          preventCutCopyPaste autocomplete="off" [NumberOnly]="false" (blur)="Qclimit()">
+      </span></span>
+      <span fxHide.xs class="gotopagbg ml-2">Items / page<span class="input-num">
+        <input type="number" [(ngModel)]="shievePageSize" min="1" maxlength="4" appNumberOnly
+          preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false"
+          (blur)="preventInfinite();Qclimit()">
+      </span> </span>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</mat-card-content>
+</mat-card>
+</div>
+</div>

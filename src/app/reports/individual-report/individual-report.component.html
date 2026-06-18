@@ -1,0 +1,270 @@
+<app-breadcrumb [btnReset]="false" [routePath]="routePath" (eventReset)="resetForm()"></app-breadcrumb>
+<div fxLayout="row" class="advSearch" [formGroup]="qcApprovedForm" autocomplete="off">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="175px">
+            <!-- <app-auto-complete [selectProperties]='candidateControl'>
+          </app-auto-complete> -->
+          <mat-form-field fxFlex="100%">
+            <mat-label>Candidate Name</mat-label>
+            <input matInput formControlName="candidateName" placeholder="Search here..." type="text" size="50" autocomplete="off" />
+            <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+
+          </mat-form-field>
+        </div>
+        <div fxFlex="175px">
+          <!-- <app-auto-complete [selectProperties]='clientNameControl'>
+        </app-auto-complete> -->
+        <mat-form-field fxFlex="100%">
+          <mat-label>Client Name</mat-label>
+          <input matInput formControlName="clientName" placeholder="Search here..." type="text" size="50" autocomplete="off" />
+          <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+        </mat-form-field>
+      </div>
+      <div fxFlex="160px">
+        <!-- <app-auto-complete [selectProperties]='caseRefNoControl'>
+      </app-auto-complete> -->
+      <mat-form-field fxFlex="100%">
+        <mat-label>Client Ref Number</mat-label>
+        <input matInput formControlName="clientRefNo" placeholder="Search here..." type="text" size="50" autocomplete="off" />
+        <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="160px">
+      <!-- <app-auto-complete [selectProperties]='closedUserControl'>
+    </app-auto-complete> -->
+    <mat-form-field fxFlex="100%">
+      <mat-label>IQC closed By</mat-label>
+      <input matInput formControlName="fqcClosedUserFName" placeholder="Search here..." type="text" size="50" autocomplete="off" />
+      <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+    </mat-form-field>
+  </div>
+
+</div>
+</div>
+</div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <span><a (click)="search()">Search</a>
+    <span> &nbsp;&nbsp; | </span></span>
+    <a (click)="reset()">Reset</a>
+    <span> &nbsp;&nbsp; | </span>
+    <a (click)='SearchCriFilter = !SearchCriFilter'>{{ SearchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+    class="icon-chevron-{{ SearchCriFilter?'up':'down' }}"></i></a>
+  </div>
+</div>
+@if (SearchCriFilter) {
+  <div fxLayout="row" class="advSearchshow">
+    <div class="advSearch-forms">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            @if (!ctsFlag) {
+              <div fxFlex="160px">
+                <mat-form-field fxFlex="100%">
+                  <mat-label>Screening ID</mat-label>
+                  <input matInput formControlName="applicantId" placeholder="Search here..." type="text"
+                    size="50" autocomplete="off" />
+                    <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                  </mat-form-field>
+                </div>
+              }
+              <div fxFlex="130px">
+                <mat-form-field fxFlex="100%">
+                  <mat-label>From Date</mat-label>
+                  <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date"
+                    (focus)="sampledatePicker.open()" (click)="sampledatePicker.open()"
+                    formControlName="from" />
+                    <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #sampledatePicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="130px">
+                  <mat-form-field fxFlex="100%">
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="sampledatePicker1" placeholder="To Date"
+                      (focus)="sampledatePicker1.open()" (click)="sampledatePicker1.open()"
+                      formControlName="to" />
+                      <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+                      <mat-datepicker #sampledatePicker1></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxFlex="100%" class="advSearch-btn">
+            <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+          </div>
+        </div>
+      }
+    </div>
+    <div fxLayout="row" class="srchPad">
+      <div fxFlex="100%">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <h1 class="header-title">Individual Report
+              </h1>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="100%">
+                @if (searchValueArr.length > 0) {
+                  <div fxLayout="row">
+                    <div fxFlex="100%"> <b class="text-sm mr-10 text-semi-bold text-dull">Search results for:</b> @for (s of searchValueArr; track s; let in = $index) {
+                    <span class="tag">{{s.value}} <a class="close"
+                    (click)="removeSearchValue(s.propertyName,in)">×</a></span>
+                  } </div>
+                </div>
+              }
+              <div fxLayout="row" class="sortrow">
+                <div fxFlex="100%" fxLayoutAlign="end center">
+                  <ul>
+                    <li><span class="text-dull"> Showing
+                      {{(individualQCApprovedList?.length > 0 ? ((userData.pageSize*userData.page)-userData.pageSize+1): 0)}} -
+                      {{((userData.pageSize*userData.page)>=(shieveTotalCount))?(shieveTotalCount):(userData.pageSize*userData.page)}}
+                      of </span> <b> {{shieveTotalCount}}record(s)</b></li>
+                      |
+                      <li>
+                        <a (click)="shieveShowall()">Show All</a>
+                      </li>|
+                      <li><b>Sort By:</b> <a [ngClass]="column==='candidateFullName'?'active':''" (click)="sortBy('candidateFullName')">Candidate
+                      Name</a> <i [ngClass]="{'icon-sort': column != 'candidateFullName', 
+                                                  'icon-sort-asc': (column == 'candidateFullName' && !isDesc), 
+                                                  'icon-sort-desc': (column == 'candidateFullName' && isDesc) }" aria-hidden="true"> </i> <a [ngClass]="column==='clientRefNo'?'active':''" (click)="sortBy('clientRefNo')">Reference No</a> <i [ngClass]="{'icon-sort': column != 'clientRefNo', 
+                                                    'icon-sort-asc': (column == 'clientRefNo' && !isDesc), 
+                                                    'icon-sort-desc': (column == 'clientRefNo' && isDesc) }" aria-hidden="true"> </i> </li>
+                </ul>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="100%">
+                @for (qcapproved of individualQCApprovedList
+                  | sort: {property: column, direction: direction}
+                  | paginate: { itemsPerPage: shievePageSize, currentPage: shievePageNo, totalItems: shieveTotalCount }; track qcapproved; let c = $count; let i = $index) {
+                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="20px" fxLayoutGap.xs="20px" class="listrow">
+                    <div fxFlex="14%" fxFlex.lg="14%" fxFlex.md="14%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-card-header>
+                        <div mat-card-avatar class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                        {{ qcapproved?.firstName?.slice(0, 1)}}{{ qcapproved?.lastName?.slice(0, 1)}} </div>
+                        <mat-card-title class="cname">
+                          {{qcapproved?.firstName + ' ' + qcapproved?.middleName + ' ' + qcapproved?.lastName }}
+                        </mat-card-title>
+                        <mat-card-subtitle class="cdesg">{{qcapproved?.clientRefNo }}</mat-card-subtitle>
+                      </mat-card-header>
+                    </div>
+                    <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="29%" fxFlex.xs="100%">
+                      <p>
+                        <label>Client Name:</label>
+                        <em>{{qcapproved.clientName}}</em>
+                      </p>
+                      <p>
+                        <label>QC Closed By:</label>
+                        <em>{{qcapproved?.fqcClosedUserFName}}</em>
+                      </p>
+                    </div>
+                    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="36.5%" fxFlex.xs="100%">
+                      <p>
+                        <label>Requested Date & Time:</label>
+                        <em>{{qcapproved?.requestedDate ? ((common.getTimezoneOffset(qcapproved?.requestedDate, false)) |
+                        date : 'dd/MM/yyyy hh:mm:ss a'):'N/A'}}</em>
+                      </p>
+                      <p>
+                        <label>QC Closed Date & Time</label>
+                        <em>{{qcapproved?.closedDate ? ((common.getTimezoneOffset(qcapproved?.closedDate, false)) | date :
+                        'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}</em>
+                      </p>
+                      <p>
+                        <label>Case Created Date & Time </label>
+                        <em>{{qcapproved?.caseCreatedDate ? ((common.getTimezoneOffset(qcapproved?.caseCreatedDate ,
+                        false)) | date : 'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}</em>
+                      </p>
+                      <p>
+                        <label>Scope Submitted Date & Time</label>
+                        <em>{{qcapproved?.scopeSubmittedDate ? ((common.getTimezoneOffset(qcapproved?.scopeSubmittedDate ,
+                        false)) | date : 'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}</em>
+                      </p>
+                    </div>
+                    <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <p>
+                        <label>Component(s) Name:</label>
+                        @for (comp of qcapproved.compDocument; track comp; let last = $last) {
+                          <em>
+                            {{comp.compName}} - {{comp.colorCode}} - {{comp.functionalEntity}}
+                            <span class="text-dull">&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+                            <a (click)="getIndividualReportDocument(comp.screeningCompId)">Generate Report</a>
+                            @if (!last) {
+                              <span class="text-dull">&nbsp;&nbsp;&#9679;&nbsp;&nbsp;</span>
+                            }
+                          </em>
+                        }
+                      </p>
+                    </div>
+                    <div fxFlex="8%" fxFlex.lg="8%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <button mat-icon-button class="in-btn" (click)="GetIndividualQCHistoryReportDetails(qcapproved?.candidateId)" matTooltipClass="accent-tooltip" matTooltip="History"> <i class="icon-report"></i> </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+            <div fxLayout="row">
+              <div class="cus-paginator">
+                <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                  <pagination-controls class="cus-paginator"
+                  (pageChange)="shievePagination($event)"></pagination-controls>
+                </span> <span fxHide.xs class="gotopagbg ml-2">Go to Page<span class="input-num">
+                <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4" appNumberOnly
+                  preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+                </span></span> <span fxHide.xs class="gotopagbg ml-2">Items / page<span class="input-num">
+                <input type="number" [(ngModel)]="shievePageSize" min="1" maxlength="4" appNumberOnly
+                  preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false"
+                  (blur)="preventInfinite()">
+                </span> </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+</div>
+<!-- VP -->
+<ng-template #history>
+  <h1 mat-dialog-title>Individual Report History</h1>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        @for (hist of qualityCheckService?.historyReportList; track hist; let j = $index) {
+          <div class="history-view">
+            <div class="uname">
+                        <div matTooltip="{{ hist?.candidateFirstName }} {{ hist?.candidateMiddleName ? hist?.candidateMiddleName : '' }}
+            {{ hist?.candidateLastName ? hist?.candidateLastName : '' }}" matTooltipClass="accent-tooltip" class="user avatarBg{{(j%6)+1}}">
+              {{ hist?.candidateFirstName?.slice(0, 1)}}{{ hist?.candidateLastName?.slice(0, 1)}}</div>
+              {{ hist?.candidateFirstName }} {{ hist?.candidateMiddleName ? hist?.candidateMiddleName : '' }} {{ hist?.candidateLastName ? hist?.candidateLastName : '' }} - <span matTooltip="Client Reference Number" matTooltipClass="accent-tooltip">{{hist?.clientRefNo}} </span>
+            </div>
+            <div class="dt">Component Name : {{hist?.componentName}}</div>
+            <p>Generated by : {{ hist?.userFirstName }} {{ hist?.userMiddleName ? hist?.userMiddleName : '' }} {{ hist?.userLastName ? hist?.userLastName : '' }} | Generated Date & Time : {{common?.getTimezoneOffset(hist?.generatedOn, false) | date
+            : 'dd/MM/yyyy hh:mm:ss a'}} </p>
+          </div>
+        }
+      </div>
+    </div>
+    @if (qualityCheckService?.historyReportList?.length === 0) {
+      <div fxLayout="row" fxLayoutGap="0px">
+        <div fxFlex="100%" class="text-center" fxLayoutAlign="center center">
+          <div class="no-record"><span>No History Found</span></div>
+        </div>
+      </div>
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="dialog?.closeAll();">Close</button>
+  </mat-dialog-actions>
+</ng-template>

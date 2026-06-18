@@ -1,0 +1,302 @@
+<app-breadcrumb [routePath]="routePath" [btntatInsuff]="btnTatInsuff" (eventTatInsuff)="moveTatInsuff()"
+  (eventExcelExport)="exportAsExcelFile()" [btnExcelExport]="btnExcelExport" (eventBack)="back()" [btnBack]="btnBack">
+</app-breadcrumb>
+<div fxLayout="row" class="advSearch">
+  <form autocomplete="off" [formGroup]="insuffSearchForm">
+    <div class="advSearch-forms">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row" fxLayoutGap="0px">
+        <div fxFlex="100%">
+
+          @if (this.screeningService.caseFlagType !== this.common.INSUFFCLEARANCE) {
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="170px">
+                <app-auto-complete (selectionChange)="getPropertyValue($event)" [selectProperties]='clientControl'>
+                </app-auto-complete>
+              </div>
+              <div fxFlex="170px">
+                <app-auto-complete (selectionChange)="getPropertyValue($event)" [selectProperties]='ClientRefNoControl'>
+                </app-auto-complete>
+              </div>
+              <div fxFlex="170px">
+                <app-auto-complete (selectionChange)="getPropertyValue($event)" [selectProperties]='VerificationControl'>
+                </app-auto-complete>
+              </div>
+              <div fxFlex="170px">
+                <app-auto-complete (selectionChange)="getPropertyValue($event)" [selectProperties]='candidateControl'>
+                </app-auto-complete>
+              </div>
+              <div fxFlex="170px">
+                <app-auto-complete (selectionChange)="getPropertyValue($event)" [selectProperties]='screeningIdControl'>
+                </app-auto-complete>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div fxFlex="100%" class="advSearch-btn">
+      <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+        @if (this.screeningService.caseFlagType === this.common.INSUFFCLEARANCE) {
+          <span><a (click)="search()">Search</a>
+          <span>  &nbsp;&nbsp; |  </span></span>
+        }
+        <a (click)="resetFilterSort('reset')">Reset</a>
+      </div>
+    </div>
+  </form>
+</div>
+<div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="10px grid">
+          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%" fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+            <mat-card-title>
+              <h1 class="header-title">{{headerName}}</h1>
+            </mat-card-title>
+          </div>
+          <span fxFlex></span>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (btnTatInsuff) {
+          <div>
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid" class="sortrow">
+              @if (btnTatInsuff && raiseInsuffCompList?.length > 0) {
+                <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="10%" fxFlex.xs="100%" class="mt-5">
+                  <mat-checkbox [formControl]="selectall" (change)="selectAll($event)">Select All
+                  </mat-checkbox>
+                </div>
+              }
+              <span fxFlex></span>
+              <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="90%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+                <div fxFlex="88%" fxFlex.lg="88%" fxFlex.md="88%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+                  <ul class="pl-0">
+                    <li><span class="text-dull"> Showing
+                      {{(raiseInsuffCompList?.length > 0 ?
+                      ((itemPerPage*pageNo)-itemPerPage+1): 0)}} -
+                      {{((itemPerPage*pageNo)>=(raiseInsuffCompList?.length))?(raiseInsuffCompList?.length):(itemPerPage*pageNo)}}
+                      of </span> <b> {{raiseInsuffCompList?.length}}record(s)</b>
+                    </li>
+                    |
+                    <li>
+                      <a (click)="showall()">Show All</a>
+                    </li>|
+                    <li>
+                                        <b>Sort By:</b> <a [ngClass]="column==='candidateName'?'active':''" (click)="sortBy('candidateName')">Candidate Name</a> <i [ngClass]="{'icon-sort': column != 'candidateName',
+                                                'icon-sort-asc': (column == 'candidateame' && !isDesc),
+                                                'icon-sort-desc': (column == 'candidateName' && isDesc) }" aria-hidden="true"> </i> <a [ngClass]="column==='verificationId'?'active':''" (click)="sortBy('verificationId')">Verification ID</a> <i [ngClass]="{'icon-sort': column != 'clientName',
+                                                  'icon-sort-asc': (column == 'verificationId' && !isDesc),
+                                                  'icon-sort-desc': (column == 'verificationId' && isDesc) }" aria-hidden="true"> </i> </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- <div fxFlex="9%" fxFlex.lg="9%" fxFlex.md="9%" fxFlex.sm="18%" fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+              <button mat-flat-button color="warn">Re-Assign</button>
+            </div> -->
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              @for (insuff of raiseInsuffCompList  |
+                search: [{key:'clientName', value: insuffSearchForm?.get('clientName')?.value},
+                {key:'clientRefNo', value: insuffSearchForm?.get('clientRefNo')?.value},
+                {key:'candidateName', value: insuffSearchForm?.get('candidateName')?.value},
+                {key:'clientScreeningId', value: insuffSearchForm?.get('screeningId')?.value},
+                {key:'verificationId', value: insuffSearchForm?.get('verificationId')?.value}]
+                | sort: {property: column, direction: direction}
+                | paginate: { itemsPerPage: itemPerPage, currentPage: pageNo }; track insuff; let i = $index; let count = $count) {
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" [class]="getFilterLen(c)">
+                  <div fxFlex="3%" fxFlex.lg="3%" fxFlex.md="4%" fxFlex.sm="7%" fxFlex.xs="100%">
+                    <mat-checkbox class="Xverifi-checkbox" [checked]="insuff?.selected" (change)="checkChanged($event, insuff)"></mat-checkbox>
+                                    <!-- <i matTooltip="{{insuff?.priorityLookupName ? insuff?.priorityLookupName : 'N/A'}}" matTooltipClass="accent-tooltip" [ngClass]="insuff?.priorityLookupName === 'Normal case' ? 'icon-status csatus Normal' :
+                        insuff?.priorityLookupName === 'Pilot case' ? 'icon-status csatus Pilot' :
+                        insuff?.priorityLookupName === 'Priority case' ? 'icon-status csatus Priority' :
+                        insuff?.priorityLookupName === 'Rush case' ? 'icon-status csatus Rush' : 'icon-status csatus Normal'"></i> -->
+                </div>
+                <div fxFlex="21%" fxFlex.lg="21%" fxFlex.md="21%" fxFlex.sm="24%" fxFlex.xs="100%">
+                  <!-- <a (click)="openFileSubmission(insuff);common.funcEntity = insuff?.functionalEntity"> -->
+                  <a>
+                    <mat-card-header>
+                      <div mat-card-avatar class="avatar avatarBg{{(j%6)+1}}">
+                        {{ insuff?.candidateFName ? insuff?.candidateFName.slice(0, 1) : ''}}{{insuff?.candidateLName ? insuff?.candidateLName.slice(0, 1) : ''}}
+                      </div>
+                      <mat-card-title class="cname">{{ insuff?.candidateFName }}</mat-card-title>
+                      <mat-card-subtitle class="cdesg mb-0">{{insuff?.clientRefNo}}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </a>
+                </div>
+                <div fxFlex="21%" fxFlex.lg="21%" fxFlex.md="21%" fxFlex.sm="29%" fxFlex.xs="100%">
+                  @if (insuff?.manualFileSubmissionFlag ==true) {
+                    <p>
+                      <label>Verification Id:</label>
+                      <em>{{insuff?.clientScreeningId ? insuff?.clientScreeningId : "N/A"}}</em>
+                    </p>
+                  }
+                  @if (insuff?.manualFileSubmissionFlag !=true) {
+                    <p>
+                      <label>Verification Id:</label>
+                      <em>{{insuff?.verificationId ? insuff?.verificationId : "N/A"}}</em>
+                    </p>
+                  }
+                  <p>
+                    <label>functional Entity:</label>
+                    <em>{{ insuff?.functionalEntity ?insuff?.functionalEntity : "N/A" }}</em>
+                  </p>
+                  <p>
+                    <label>Client Name:</label>
+                    <em>{{ insuff?.clientName? insuff?.clientName : "N/A" }}</em>
+                  </p>
+                </div>
+                <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="30%" fxFlex.xs="100%">
+                  <p>
+                    <label>Component Name:</label>
+                    <em>{{ insuff?.componentName? insuff?.componentName : "N/A" }}</em>
+                  </p>
+                  <p>
+                    <label>Raised Date:</label>
+                    <!-- <em>{{insuff?.raisedDate ? insuff?.raisedDate : 'N/A'}}</em> -->
+                    <em>{{insuff?.raisedDate ? (common.getTimezoneOffset(insuff?.raisedDate, false)
+                    | date: "dd/MM/yyyy hh:mm:ss a"):'N/A'}}</em>
+                  </p>
+                  @if (insuff.manualFileSubmissionFlag === true) {
+                    <p>
+                      <label>Screening Id:</label>
+                      <!-- <em>{{insuff?.raisedDate ? insuff?.raisedDate : 'N/A'}}</em> -->
+                      <em>{{insuff?.clientScreeningId ? insuff.clientScreeningId:'N/A'}}</em>
+                    </p>
+                  }
+                </div>
+                <div fxFlex="27%" fxFlex.lg="27%" fxFlex.md="27%" fxFlex.sm="90%" fxFlex.xs="100%">
+                  <p>
+                    <label>Raised in {{insuff?.insuffLevel}} by:</label>
+                    <em>{{insuff?.insuffRaisedBy ? insuff?.insuffRaisedBy : 'N/A'}}</em>
+                  </p>
+                  <!-- <p *ngIf="insuff?.insuffStatus">
+                  <label>Insufficiency Status:</label>
+                  <em>{{ insuff?.insuffStatus }}</em>
+                </p> -->
+                <p>
+                  <label>Required Type:</label>
+                  <em>{{insuff?.insuffReqType ? insuff?.insuffReqType : 'N/A'}}</em>
+                </p>
+                <p>
+                  <label>Status:</label>
+                  <em>{{insuff?.insuffStatus ? insuff?.screeningStatus : 'N/A'}}</em>
+                </p>
+              </div>
+              <div fxFlex="5%" fxFlex.lg="5%" fxFlex.md="5%" fxFlex.sm="20%" fxFlex.xs="100%">
+                <app-insuff-history [screeningCompId]="insuff.screeningCompId" [isInsuffScreen]="true">
+                </app-insuff-history>
+              </div>
+              <!-- <div fxFlex="63.33" fxFlex.lg="63.33" fxFlex.md="63.33" fxFlex.sm="50%" fxFlex.xs="100%">
+              <p>
+                <label>Functional Entity:</label>
+                <span>{{insuff.functionalEntity ?insuff.functionalEntity : 'N/A'}}</span> </p>
+              </div> -->
+            </div>
+          }
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start" class="cus-paginator">
+            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="54%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end end" fxLayoutAlign.md="start start" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start" class="tex t-right dev-paginator">
+              <pagination-controls (pageChange)="getPage($event)"></pagination-controls>
+            </div>
+            <div fxHide.xs fxFlex="30%" fxFlex.lg="30%" fxFlex.md="46%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end end" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+              <span class="gotopagbg ml-2">Go to Page
+                <span class="input-num">
+                  <input type="number" [(ngModel)]="pageNo" min="1" maxlength="4" appNumberOnly preventDragdrop
+                    preventCutCopyPaste autocomplete="off" [NumberOnly]="false" >
+                </span>
+              </span>
+              <span class="gotopagbg ml-2">Items / page
+                <span class="input-num">
+                  <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4" appNumberOnly preventDragdrop
+                    preventCutCopyPaste autocomplete="off" [NumberOnly]="false" (blur)="getTotalPage()">
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</mat-card-content>
+</mat-card>
+</div>
+</div>
+<ng-template #insufficiency>
+  <h1 mat-dialog-title>Insufficiency</h1>
+  <mat-dialog-content>
+    <app-raise-insufficiency #insuff [mainForm]="insufficiencyForm" [formgroupName]="'screeningInsufficiency'" [docList]="docList" [compBaseDetails]="{ compId: this.insufficiencyForm.get('screeningInsufficiency.compId').value }" [docdata]="insufficiencyForm.get('screeningInsufficiency').get('insuffDocument').value"></app-raise-insufficiency>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+    <button mat-flat-button color="accent" (click)="SaveInsuff()">Submit</button>
+    <button mat-flat-button color="warn" (click)="dialogRef.close()">Close</button>
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #assignPopUp>
+  <h1 mat-dialog-title>Screening Owner
+    <div fxLayout="row" class="scrollCls">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            @if (userData.deptName === common.DATA_ENTRY_DEPARTMENT) {
+              <p class="text-sm text-dull text-ilatic mt-10 line-height"> Assign the below Screening Owner to following Verification Reference no.: <span class="text-bold"> {{ screeningOwnerId?.value?.screeningOwnerFName}}
+              </span> </p>
+            }
+            @if (userData.deptName != common.DATA_ENTRY_DEPARTMENT) {
+              <p class="text-sm text-dull text-ilatic mt-10 line-height"> Assign the below Screening Owner to following Verification Reference no.: <span class="text-bold"> {{ screenowner?.value?.name}}
+              </span> </p>
+            }
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <mat-form-field fxFlex="100%" appearance="outline" autocomplete="off" class="scr-own">
+              <mat-label></mat-label>
+              <mat-icon matPrefix>search</mat-icon>
+              <input matInput placeholder="Find someone" [formControl]="filterOwnerName" type="text" pInputText size="50">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </h1>
+  <mat-dialog-content class="scrollCls">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        @if (userData.deptName === common.DATA_ENTRY_DEPARTMENT) {
+          <div>
+            @for (owner of screeningOwnerList | search:
+              [{key:'screeningOwnerFName' ,value:filterOwnerName?.value}]; track owner; let i = $index) {
+              <div class="ownven-list" id="ownerDiv" (click)="assignScrnOwner(owner,i)">
+                <div class="user avatarBg{{(i%6) +1}}">
+                {{ owner.screeningOwnerFName.slice(0,1)}}{{ owner?.screeningOwnerLName?.slice(0,1)}} </div>
+                <span [ngClass]="owner.lastLoginFlag === true? 'pos act' : 'pos inact'"><i
+                [ngClass]="owner.lastLoginFlag === true ? 'icon-approv': 'icon-reject'"></i></span>
+                <div class="ovname"> {{(owner.screeningOwnerFName !== null? owner.screeningOwnerFName: '') + ' ' + (owner.screeningOwnerMName !== null ? owner.screeningOwnerMName: ' ') + ' ' + (owner.screeningOwnerLName !== null ? owner.screeningOwnerLName: '')}}</div>
+              </div>
+            }
+          </div>
+        }
+        @if (userData.deptName != common.DATA_ENTRY_DEPARTMENT) {
+          <div>
+            @for (owner of screeningOwnerList | search:
+              [{key:'name',value:filterOwnerName?.value}]; track owner; let i = $index) {
+              <div class=" ownven-list" id="ownerDiv" (click)="assignScrnOwner(owner,i)">
+                <div class="user avatarBg{{(i%6) +1}}"> {{(owner.name.split(' ').length - 1) > 0 ? owner.name.split(' ')[0].charAt(0).toUpperCase() + owner.name.split(' ')[1].charAt(0).toUpperCase() : owner.name.charAt(0).toUpperCase()}} </div>
+                <span [ngClass]="owner.lastLoginFlag === true? 'pos act' : 'pos inact'"><i
+                [ngClass]="owner.lastLoginFlag === true ? 'icon-approv': 'icon-reject'"></i></span>
+                <div class="ovname">{{ owner.name }}</div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+    <button mat-stroked-button (click)="dialogClose()">No</button>
+    <button mat-flat-button color="warn" (click)="assignOwner()"> Submit </button>
+  </mat-dialog-actions>
+</ng-template>

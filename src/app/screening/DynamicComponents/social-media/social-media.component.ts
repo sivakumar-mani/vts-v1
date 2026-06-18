@@ -1,0 +1,78 @@
+﻿import { Component, OnInit, Input } from '@angular/core';
+import { UntypedFormGroup, Validators } from '@angular/forms';
+import {  ScreeningComponentInfo } from 'src/app/common-methods/models/screening-details';
+import { MasterService } from 'src/app/common-methods/services/master.service';
+import { CommonService } from 'src/app/common-methods/services/common.service';
+
+@Component({
+  standalone: false,
+  selector: 'app-social-media',
+  templateUrl: './social-media.component.html',
+  styleUrls: ['./social-media.component.css']
+})
+export class SocialMediaComponent implements OnInit {
+  screeningQuestionList:any;
+  nFlag = false;
+  @Input() formArrName: string;
+  @Input() disableAnswer = true;
+  @Input() SmcQuestion :string;
+  @Input() SmcAnswer: string;
+  @Input() hiddenAddRemove = false;
+  rowCount = 1;
+  @Input() formgroupName: string;
+  @Input() mainForm: UntypedFormGroup;
+  @Input() compBaseDetails: any;
+  @Input() fileBtn: boolean;
+  @Input() docList: any;
+  @Input() showNotApplicable: boolean;
+  @Input() hiddenInsuff: boolean;
+  docdata: any[] = [];
+  screeningComponent = new ScreeningComponentInfo();
+  userData: any;
+  showInSuff: boolean;
+  docData: any;
+  constructor(public common: CommonService, private master: MasterService) { }
+
+  ngOnInit() {
+    this.userData = JSON.parse(sessionStorage.getItem('user_data') as string);
+    this.getquestion();
+    this.showInsuff();
+    }
+  showInsuff() {
+    if (!this.hiddenInsuff) {
+      this.showInSuff = this.mainForm.get('screeningComponentInfo')?.get('insuffRaisedFlag')?.value;
+      // this.showInSuff = event.checked;
+    } else {
+      this.showInSuff = false;
+    }
+    if(this.mainForm.get('screeningInsufficiency')?.get('screeningStatusId')?.value === 0) {
+      this.mainForm.get('screeningInsufficiency')?.get('screeningStatusId')?.setValue(null);
+    }
+    if (this.showInSuff) {
+      this.mainForm.get('screeningInsufficiency')?.get('requiredLookupId')?.setValidators(Validators.required);
+      this.mainForm.get('screeningInsufficiency')?.get('requiredLookupId')?.updateValueAndValidity();
+      this.mainForm.get('screeningInsufficiency')?.get('screeningStatusId')?.setValidators(Validators.required);
+      this.mainForm.get('screeningInsufficiency')?.get('screeningStatusId')?.updateValueAndValidity();
+    } else {
+      this.mainForm.get('screeningInsufficiency')?.get('requiredLookupId')?.clearValidators();
+      this.mainForm.get('screeningInsufficiency')?.get('requiredLookupId')?.updateValueAndValidity();
+      this.mainForm.get('screeningInsufficiency')?.get('levelLookupId')?.setValue(null);
+      this.mainForm.get('screeningInsufficiency')?.get('raisedDate')?.setValue(null);
+      this.mainForm.get('screeningInsufficiency')?.get('screeningStatusId')?.clearValidators();
+      this.mainForm.get('screeningInsufficiency')?.get('screeningStatusId')?.updateValueAndValidity();
+    }
+  }
+  notApplicable(event: any) {
+    this.fileBtn = event.checked;
+    this.nFlag = true;
+  }
+  getquestion() {
+    this.master.getScreeningQuestionList(this.userData.clientId).subscribe(resp => {
+      if (resp) {
+        const ques = resp;
+         const screeningQuestion = ques.filter(x=> x.clientId = this.common.SOCIAL_MEDIAID);
+        this.screeningQuestionList = screeningQuestion[0].question;
+        }
+    });
+  }
+}

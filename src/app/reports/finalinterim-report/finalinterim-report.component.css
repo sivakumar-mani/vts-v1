@@ -1,0 +1,9 @@
+.follow-up-text, .up-arrow-icon {
+    color: blue;
+    text-align: center;
+  }
+   
+  .up-arrow-button {
+    margin-bottom: 1px;
+    cursor: pointer;
+  }

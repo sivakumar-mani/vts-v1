@@ -1,0 +1,811 @@
+﻿<app-breadcrumb [btnSearch]="btnSearch" [btnSend]="btnSend" [btnSendDisabled]="!screenAuth.addFlag" [btnBack]="btnBack" [btnReset]="btnReset" [btnResetTbl]="btnResetTbl" [btnAdd]="btnAdd" [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag" (eventBack)="closeForm()" (eventSend)="sendInvitation()"
+    [toolTip]="breadcrumbFlags.toolTip" (eventReset)="resetForm()" (eventResetTbl)="tblReset()" (eventAdd)="addInvitation()" (eventSearch)="searchCase()" [toolTip]="breadcrumbFlags.toolTip" [toolTip]="breadcrumbFlags.toolTip" [btnSave]="btnSave" (eventSave)="sendInvitation()">
+</app-breadcrumb>
+<mat-card>
+
+    <div fxLayout="row">
+        <mat-card-header fxFlex="100%">
+            <div fxFlex="100%">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="10px">
+                    <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%" fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                        <mat-card-title>
+                            <h1 class="header-title">{{getHeader()}}</h1>
+                        </mat-card-title>
+                    </div>
+
+                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" *ngIf="btnSearch" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                        <div class="tbl-commonsearch" *ngIf="showGrid">
+                            <mat-form-field fxFlex="100%">
+                                <mat-label></mat-label>
+                                <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                                <input #global matInput placeholder="Search here..." type="text" pInputText size="50" autocomplete="off" (input)="invitetab.filterGlobal($event.target.value, 'contains')" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-card-header>
+    </div>
+    <mat-card-content>
+        <div *ngIf="!showGrid">
+            <form [formGroup]="invitationFormGroup" id="ngForm" (keydown.enter)="$event.preventDefault()">
+                <div *ngIf="!caseFlag" fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap" fxLayout.xs="column" fxLayoutGap="0px grid">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <div class="client-details">
+                            <div class="client-avatar" fxHide.sm fxHide.xs>
+                                <i class="icon-referencecheck"></i>
+                        </div>
+                        <div class="client-data">
+                            <h3 matTooltip="Client details" matTooltipClass="accent-tooltip">{{ dataValue?.clientName }} - ({{ dataValue.clientReferenceNo }})</h3>
+
+                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                                    <p>
+                                        <label>Site No:</label>
+                                        <span>{{ dataValue?.siteNo? dataValue?.siteNo: "N/A" }}</span>
+                                    </p>
+                                </div>
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                                    <p>
+                                        <label>Site Name:</label>
+                                        <span>{{ dataValue?.siteName? dataValue?.siteName: "N/A" }}</span>
+                                    </p>
+                                </div>
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                                    <p>
+                                        <label>Candidate Name:</label>
+                                        <span>{{dataValue?.firstName}}</span>
+                                    </p>
+                                </div>
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                                    <p>
+                                        <label>{{caseDetails? caseDetails.applicantIdColumnName: "Applicant Id"}}:</label>
+                                        <span>{{ dataValue?.applicationId }}</span>
+                                    </p>
+                                </div>
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                                    <p>
+                                        <label>Mobile Number:</label>
+                                        <span>{{ dataValue?.phoneNo ? dataValue?.phoneNo: "N/A" }}</span>
+                                    </p>
+                                </div>
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                                    <p>
+                                        <label>Email Id:</label>
+                                        <span>{{ dataValue?.emailId? dataValue?.emailId: "N/A" }}</span>
+                                    </p>
+                                </div>
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                                    <p>
+                                        <label>Expiry Days:</label>
+                                        <span>{{ dataValue?.invitationExpiryLookupName? dataValue?.invitationExpiryLookupName: "N/A"
+                        }}</span>
+                                    </p>
+                                </div>
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                                    <p>
+                                        <label>Consent Type:</label>
+                                        <span class="tex">{{dataValue?.consentLookupName? dataValue?.consentLookupName: 'N/A'}}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <div *ngIf="caseFlag" fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="33%" fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <app-auto-complete (selectionChange)="getClientId($event); enableNoCases()" [selectProperties]="clientControls"> </app-auto-complete>
+            </div>
+            <div fxFlex="30%" fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Site Name</mat-label>
+                    <input matInput placeholder="Select Site Name" formControlName="siteId" [matAutocomplete]="autoComponent" #compInput (focus)="siteItems(compInput.value)" (keyup)="siteKeyupFunction($event, compInput.value)" (input)="siteItems(compInput.value)" (click)="compInput.select()"
+                        (blur)="checkVal(compInput.value)" required />
+                    <mat-error *ngIf="invitationFormGroup?.get('siteId')?.errors?.required"> Site Name required </mat-error>
+                    <mat-error *ngIf="invitationFormGroup?.get('siteId')?.errors?.incorrect"> Site Name is not valid
+                    </mat-error>
+                    <mat-autocomplete #autoComponent="matAutocomplete" [displayWith]="displaySiteFn">
+                        <mat-option [value]="comp.siteId" *ngFor="let comp of sitefilterlist" class="autocom-option autocom-tr">
+                            <span [innerHTML]="comp.siteNoWithsiteName | highlight: compInput.value"></span> </mat-option>
+                        <mat-option *ngIf="sitefilterlist.length == 0">
+                            <div class="no-record"><span>No Data Found</span></div>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div fxFlex="37%" fxFlex="37%" fxFlex.lg="37%" fxFlex.md="37%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <div fxLayout="row" fxLayoutGap="20px">
+                    <mat-form-field fxFlex="32%" fxFlex.md="65%" fxFlex.md="65%" fxFlex.sm="100%" fxFlex.xs="100%" appearance="outline">
+                        <mat-label>No. of Candidates</mat-label>
+                        <input formControlName="noOfCases" (blur)="caseCountCreate();isFocused = true" maxlength="2" appNumberOnly [NumberOnly]="false" autocomplete="off" role="presentation" matInput placeholder="No. of Candidates" required />
+                        <mat-error *ngIf="invitationFormGroup?.get('noOfCases')?.errors?.required">No. of Candidates is required
+                        </mat-error>
+                        <mat-error *ngIf="invitationFormGroup?.get('noOfCases')?.errors?.min">Min-1 </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <!-- <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%" >
+            <mat-label class="lbl">Upload Document</mat-label>
+            <mat-label class="mat-hint-upload">Acceptable file Formats : xlsx, xls </mat-label>
+            <mat-label class="mat-hint-upload"><span class="red text-semi-bold">Note:&nbsp;</span>Reference number
+              will be generate based on the client creation settings.</mat-label>
+
+            <div class="file-upload">
+              <i class="material-icons">cloud_upload</i>
+              <span>Browse here...</span>
+              <input type="file" #fileInput (change)="openUploadDoc($event)" />
+            </div>
+            <div class="file-names mt-10" *ngIf="bulkUploadDoc?.name">
+              <div class="file-upload-files"> <a routerLinkActive="active-link">{{bulkUploadDoc?.name}}</a>
+                <button type="button" class="close" aria-label="Close" (click)="removeDocument()">
+                  <span aria-hidden="true">&times;</span> </button> </div>
+
+            </div>
+          </div>
+        </div> -->
+
+        <!-- <div *ngIf="caseFlag" fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="25%">
+            <mat-form-field appearance="outline" fxFlex="100%">
+              <mat-label>Email</mat-label>
+              <input #mailInput type="email" placeholder="Email ID" autocomplete="off" role="presentation" matInput
+                formControlName="email" maxlength="75" (blur)="checkvalidEmail($event.target.value)" required />
+              <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+              <mat-error *ngIf="invitationFormGroup?.get('email')?.errors?.required"> Email id is required. </mat-error>
+              <mat-error *ngIf="invitationFormGroup.get('email')?.errors?.pattern"> Please enter a valid email.
+              </mat-error>
+              <mat-error *ngIf="invitationFormGroup?.get('email')?.errors?.incorrect"> Email id is already exist.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="10%">
+            <app-auto-complete [selectProperties]='expDateControls' (selectionChange)="getExpiryDateLst()">
+            </app-auto-complete>
+          </div>
+          <div fxFlex="25%">
+            <mat-label class="lbl">Choose</mat-label>
+            <mat-checkbox formControlName="econsentFlag">E-Consent</mat-checkbox>
+          </div>
+          <div fxFlex="40%"></div>
+        </div> -->
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid" *ngIf="common.subCheckFlag">
+            <div fxFlex="100%">
+                <label>Components:</label>
+                <span class="cn-chip" *ngFor="let component of packlist">{{component.componentName ?
+            component.componentName : 'N/A'}}
+            {{ component.noOfComp ? (' - ' + component.noOfComp) : '' }}
+            <span *ngFor="let sub of component?.subComponent"> {{ sub.subComponentName ? (' - ' +
+              sub.subComponentName) : '' }}
+              {{ sub.noOfComp ? (' - ' + sub.noOfComp) : '' }}</span>
+                </span>
+                <span class="cn-chip" *ngFor="let component of scopelist">
+            {{ component.compName ? component.compName : 'N/A'}}
+            {{ component.noOfComponent ? (' - ' + component.noOfComponent) : '' }}
+            <span *ngFor="let sub of component?.caseSubComponent"> {{ sub.subCompName ? (' - ' + sub.subCompName)
+              : '' }}
+              {{ sub.noOfComponent ? (' - ' + sub.noOfComponent) : '' }}</span>
+                </span>
+            </div>
+        </div>
+        <ng-template *ngIf="caseFlag" [ngTemplateOutlet]="pTableTemplate"></ng-template>
+
+        <mat-tab-group #tab (selectedTabChange)="goToStep($event.index)" *ngIf="!caseFlag">
+            <mat-tab label=" {{ compbar[0].menuName }} ">
+                <div *ngIf="step1===0 ">
+
+                    <app-additional-component #additioncomp *ngIf="!caseFlag && (componentList.length> 0 || packagelist.length > 0)" [getValues]="commonControls" (compToEmit)="getCommonValues($event)"></app-additional-component>
+
+                </div>
+            </mat-tab>
+            <mat-tab label="{{ compbar[1].menuName }}">
+                <div *ngIf="step1 === 1">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <div fxLayout="row" fxLayoutGap="20px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxFlex="100%">
+                                <div fxFlex="100%">
+                                    <h1 class="header-title"> <span class="StprH">Step 2:</span>Component Review</h1>
+                                </div>
+                            </div>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" *ngIf="invitationFormGroup.controls.packageId.value > 0">
+                            Selected Package Name: &nbsp; <b>{{ packName }},</b> &nbsp;<span>Package Price :-</span> &nbsp; {{packPrice}}
+                        </div> &nbsp;
+                        <br />
+                        <div class="d-view" *ngIf="invitationFormGroup.controls.packageId.value > 0 && packComponent &&
+                      packComponent.length > 0">
+                            <div fxLayout="row">
+                                <div fxFlex="100%">
+                                    <h3>Package Details</h3>
+                                </div>
+                            </div>
+                            <table mat-table [dataSource]="packtableSource" style="width: 100%;">
+                                <ng-container matColumnDef="compName">
+                                    <th mat-header-cell *matHeaderCellDef>Component Name</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{ element.compName }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="noOfComponent">
+                                    <th mat-header-cell *matHeaderCellDef>No of Component</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{ element.noOfComponent }}
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="packColumnsheaders"></tr>
+                                <tr mat-row *matRowDef="let row; columns: packColumnsheaders"></tr>
+                            </table>
+                        </div>
+                        <br />
+                        <!-- // Component Details -->
+                        <div class="d-view">
+                            <div fxLayout="row">
+                                <div fxFlex="100%">
+                                    <h3>Component Details</h3>
+                                </div>
+                            </div>
+                            <table mat-table [dataSource]="mattableSource" style="width: 100%;">
+                                <ng-container matColumnDef="compName">
+                                    <th mat-header-cell *matHeaderCellDef>Component Name</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{ element.compName }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="noOfComponent">
+                                    <th mat-header-cell *matHeaderCellDef>No of Component</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{ element.noOfComponent }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="price">
+                                    <th mat-header-cell *matHeaderCellDef>Price</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{ element.price}}
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="tableColumnsheadersd"></tr>
+                                <tr mat-row *matRowDef="let row; columns: tableColumnsheadersd"></tr>
+                            </table>
+                        </div>
+                    </mat-card-content>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+        <br />
+        <!-- <span *ngIf="!caseFlag && saveInvitation.caseComponent.length == 0" class="error">{{ errormsg }}</span> -->
+        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" *ngIf="searchFlag === true && step1 === 1">
+            <div fxFlex="2%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%">
+                    <mat-label>Sub Check Received Date & Time</mat-label>
+                    <input matInput formControlName="compReceivedDate" [owlDateTimeTrigger]="dateTime" [owlDateTime]="dateTime" placeholder="Sub Check Received Date & Time">
+                    <mat-datepicker-toggle matSuffix [owlDateTimeTrigger]="dateTime"></mat-datepicker-toggle>
+                    <owl-date-time [pickerMode]="'popup'" #dateTime></owl-date-time>
+                </mat-form-field>
+            </div>
+            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%">
+                    <mat-label>Sub Check Initiation Date</mat-label>
+                    <input matInput formControlName="compInitiationDate" [matDatepicker]="dateTime1" (focus)="dateTime1.open()" (click)="dateTime1.open()" placeholder="Sub Check Initiation Date">
+                    <mat-datepicker-toggle matSuffix [for]="dateTime1"></mat-datepicker-toggle>
+                    <mat-datepicker #dateTime1></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        </form>
+        </div>
+    </mat-card-content>
+
+    <div fxLayout="row">
+        <mat-card-content fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div *ngIf="btnSearch !== true && caseFlag !== true && showGrid === true">
+
+                <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="40%">
+                        <mat-form-field appearance="outline" fxFlex="100%">
+                            <mat-label>Client Reference No.</mat-label>
+                            <input matInput #clear minlength="2" [formControl]="searchUser" autocomplete="off" (input)="searchCaseClear(clear.value)" maxlength="20" placeholder="Client Reference No." required />
+                            <mat-error *ngIf="searchUser.invalid">Client Reference no is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayoutGap="20px" style="margin-bottom: 20px;">
+                        <button mat-flat-button color="primary" (click)="searchList();searchCaseClear(clear.value)">Search</button>
+                    </div>
+                </div>
+
+                <!-- <app-search-case></app-search-case> -->
+            </div>
+            <div fxLayout="row" *ngIf="showGrid" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="(searchFlag === true && invitationList.length > 0)
+          || searchFlag !== true">
+                    <!-- <mat-tab-group>
+            <mat-tab *ngFor="let res of menubar;let ind = index" label="{{res.menuName}}"> -->
+
+                    <p-table #invitetab [columns]="invitationcols" [value]="invitationList" [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="itemPerPage" [resizableColumns]="true" [reorderableColumns]="true" frozenWidth="100px" [frozenColumns]="frozenCols">
+                        <ng-template pTemplate="colgroup" let-columns>
+                            <colgroup>
+                                <col *ngFor="let col of columns" style="width:200px" />
+                            </colgroup>
+                        </ng-template>
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns" pReorderableColumn [ngSwitch]="col.field">
+                                    <div class="thname"> {{col.header}} </div>
+                                    <span [pSortableColumn]="col.field"> <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                      ariaLabelDesc="Activate to sort in descending order"
+                      ariaLabelAsc="Activate to sort in ascending order"> </p-sortIcon></span>
+                                    <span class="ico-fieldsearch">
+                    <i *ngSwitchCase="'clientReferenceNo'" class="icon-search2" matTooltip="Search"
+                      matTooltipClass="accent-tooltip" (click)="referencenumberTrigger.openMenu()"></i>
+                    <i *ngSwitchCase="'clientName'" class="icon-search2" matTooltip="Search"
+                      matTooltipClass="accent-tooltip" (click)="clientNameTrigger.openMenu()"></i>
+                    <i *ngSwitchCase="'firstName'" class="icon-search2" matTooltip="Search"
+                      matTooltipClass="accent-tooltip" (click)="candidateNameTrigger.openMenu()"></i>
+                  </span>
+                                    <span *ngSwitchCase="'clientReferenceNo'">
+                    <div matTooltip="client Reference Number" matTooltipClass="accent-tooltip"
+                      #referencenumberTrigger="matMenuTrigger" [matMenuTriggerFor]="clientReferenceNoCtrl"
+                      fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                    <mat-menu #clientReferenceNoCtrl class="pos-top">
+                      <div fxLayout="row">
+                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                          <mat-form-field (click)="$event.stopPropagation()">
+                            <input type="text" #clientReferenceNoCtl matInput [matAutocomplete]="autoclientReferenceNo"
+                              placeholder="client Reference Number" autocomplete="off" role="presentation"
+                              (click)="clientReferenceNoCtl.select()" [formControl]="referencenumberCtrl"
+                              (change)="invitetab.filter($event.target.value, col.field, 'contains')"
+                              (blur)="invitetab.filter($event.target.value, col.field, 'contains')"
+                              (focusin)="invitetab.filter($event.target.value, col.field, 'contains')"
+                              (keyup)="invitetab.filter($event.target.value, col.field, 'contains')" />
+                          </mat-form-field>
+                          <mat-autocomplete #autoclientReferenceNo="matAutocomplete">
+                            <mat-option (onSelectionChange)="referencenumberTrigger.closeMenu()"
+                              *ngFor="let option of (referencenumberFilteredOptions | async)" [value]="option"> <span
+                                [innerHTML]="option"></span> </mat-option>
+                                    </mat-autocomplete>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                    <a *ngIf="clientReferenceNoCtl.value" (click)="
+                                  invitetab.filter('', col.field, 'contains');" class="text-sm">Reset</a>
+                </div>
+            </div>
+            </mat-menu>
+            </span>
+            <span *ngSwitchCase="'clientName'">
+                    <div matTooltip="client Name" matTooltipClass="accent-tooltip" #clientNameTrigger="matMenuTrigger"
+                      [matMenuTriggerFor]="clientnameCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                      class="txtborder-bot"></div>
+                    <mat-menu #clientnameCtrl class="pos-top">
+                      <div fxLayout="row">
+                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                          <mat-form-field (click)="$event.stopPropagation()">
+                            <input type="text" #clientnameCtl matInput [matAutocomplete]="autoclientName"
+                              placeholder="client Name" autocomplete="off" role="presentation"
+                              (click)="clientnameCtl.select()" [formControl]="clientNameCtrl"
+                              (change)="invitetab.filter($event.target.value, col.field, 'contains')"
+                              (blur)="invitetab.filter($event.target.value, col.field, 'contains')"
+                              (focusin)="invitetab.filter($event.target.value, col.field, 'contains')"
+                              (keyup)="invitetab.filter($event.target.value, col.field, 'contains')" />
+                          </mat-form-field>
+                          <mat-autocomplete #autoclientName="matAutocomplete">
+                            <mat-option (onSelectionChange)="clientNameTrigger.closeMenu()"
+                              *ngFor="let option of (clientNamesFilteredOptions | async)" [value]="option"> <span
+                                [innerHTML]="option"></span> </mat-option>
+            </mat-autocomplete>
+    </div>
+    </div>
+    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+        <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+            <a *ngIf="clientnameCtl.value" (click)="
+                                    invitetab.filter('', col.field, 'contains');" class="text-sm">Reset</a>
+        </div>
+    </div>
+    </mat-menu>
+    </span>
+    <span *ngSwitchCase="'firstName'">
+                    <div matTooltip="candidate Name" matTooltipClass="accent-tooltip"
+                      #candidateNameTrigger="matMenuTrigger" [matMenuTriggerFor]="candidatenameCtrl" fxLayout="row"
+                      fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                    <mat-menu #candidatenameCtrl class="pos-top">
+                      <div fxLayout="row">
+                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                          <mat-form-field (click)="$event.stopPropagation()">
+                            <input type="text" #candidatenameCtl matInput [matAutocomplete]="autocandidateName"
+                              placeholder="candidate Name" autocomplete="off" role="presentation"
+                              (click)="candidatenameCtl.select()" [formControl]="candidateNameCtrl"
+                              (change)="invitetab.filter($event.target.value, col.field, 'contains')"
+                              (blur)="invitetab.filter($event.target.value, col.field, 'contains')"
+                              (focusin)="invitetab.filter($event.target.value, col.field, 'contains')"
+                              (keyup)="invitetab.filter($event.target.value, col.field, 'contains')" />
+                          </mat-form-field>
+                          <mat-autocomplete #autocandidateName="matAutocomplete">
+                            <mat-option (onSelectionChange)="candidateNameTrigger.closeMenu()"
+                              *ngFor="let option of (candidateNameFilteredOptions | async)" [value]="option"> <span
+                                [innerHTML]="option"></span> </mat-option>
+    </mat-autocomplete>
+    </div>
+    </div>
+    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+        <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+            <a *ngIf="candidatenameCtl.value" (click)="
+                                      invitetab.filter('', col.field, 'contains');" class="text-sm">Reset</a>
+        </div>
+    </div>
+    </mat-menu>
+    </span>
+    </th>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns; let i = index" [ngSwitch]="col.field" [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                <div *ngSwitchCase="'clientReferenceNo'"> {{rowData.clientReferenceNo}} </div>
+                <div *ngSwitchCase="'clientName'"> {{rowData.clientName}} </div>
+                <div *ngSwitchCase="'firstName'">
+                    {{rowData.firstName}} </div>
+                <!-- <div *ngSwitchCase="'invitationSendDate'">
+                        {{common.getTimezoneOffset(rowData.invitationSendDate, false) |date : 'dd/MM/yyyy  hh:mm:ss a'}} </div>
+                      <div *ngSwitchCase="'invitationExpiryDate'">
+                        {{common.getTimezoneOffset(rowData.invitationExpiryDate, false) | date : 'dd/MM/yyyy  hh:mm:ss a'}} </div>
+                      <div *ngSwitchCase="'invitationStatus'"> {{rowData.invitationStatus}} </div> -->
+
+                <div *ngIf='col.field === "action"' width='300px' fxLayout="row" class="desg-icon">
+                    <div fxFlex="100%" fxLayoutGap="10px">
+                        <mat-icon *ngIf="searchFlag !== true" [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+
+                            <i matTooltip="Edit" matTooltipClass="accent-tooltip" (click)="editInvitation(rowData,'case');" class="material-icons">edit</i> </mat-icon>
+                        <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+
+                            <i matTooltip="Send Invitation" matTooltipClass="accent-tooltip" (click)="editInvitation(rowData,'invite');getCaseDetailsByClientId(rowData.clientId);" class="material-icons">send</i> </mat-icon>
+                        <!-- <mat-icon
+                            *ngIf='ind !== 0 && (rowData.invitationStatus === "Sent" || rowData.invitationStatus === "CancelInvitation" || rowData.invitationStatus === "Expired" || rowData.invitationStatus === "In Progress")'>
+                            <i matTooltip='View' matTooltipClass="accent-tooltip"
+                              (click)="editInvitation(rowData, ind , manageTemplate ,'View')"
+                              class="material-icons material-icons-outlined ">remove_red_eye</i> </mat-icon>
+                          <mat-icon
+                            *ngIf='ind !== 0 && (rowData.invitationStatus === "Approved" || rowData.invitationStatus === "Completed")'>
+                            <i matTooltip='View/Download' matTooltipClass="accent-tooltip"
+                              (click)="editInvitation(rowData, ind , manageTemplate ,'View/Download')"
+                              class="material-icons material-icons-outlined">cloud_download</i> </mat-icon>
+                          <mat-icon *ngIf='ind !== 0 && (rowData.invitationStatus === "Completed")'>
+                            <i matTooltip='Approve' matTooltipClass="accent-tooltip"
+                              (click)="editInvitation(rowData, ind , manageTemplate ,'Approve')"
+                              class="material-icons material-icons-outlined">check_circle_outline</i> </mat-icon>
+                          <mat-icon
+                            *ngIf='ind !== 0 &&(rowData.invitationStatus === "Approved" || rowData.invitationStatus === "Completed" || rowData.invitationStatus === "In Progress")'>
+                            <i matTooltip='Log' matTooltipClass="accent-tooltip"
+                              (click)="editInvitation(rowData, ind , manageTemplate ,'Log')"
+                              class="material-icons material-icons-outlined">exit_to_app</i> </mat-icon>
+                          <mat-icon *ngIf='ind !== 0 && rowData.invitationStatus === "Sent"'> <i matTooltip='Resend'
+                              matTooltipClass="accent-tooltip"
+                              (click)="editInvitation(rowData, ind , manageTemplate ,'Resend')"
+                              class="icon-action-redo"> </i> </mat-icon>
+                          <mat-icon
+                            *ngIf='ind !== 0 && ( rowData.invitationStatus === "CancelInvitation" || rowData.invitationStatus === "Expired")'>
+                            <i matTooltip='Reopen' matTooltipClass="accent-tooltip"
+                              (click)="editInvitation(rowData, ind , manageTemplate ,'Reopen')"
+                              class="material-icons material-icons-outlined">menu_open</i> </mat-icon>
+                          <mat-icon
+                            *ngIf='ind !== 0 && (rowData.invitationStatus === "Sent" || rowData.invitationStatus === "In Progress")'>
+                            <i matTooltip='Cancel' matTooltipClass="accent-tooltip"
+                              (click)="editInvitation(rowData, ind , manageTemplate ,'Cancel')"
+                              class="material-icons material-icons-outlined">cancel</i> </mat-icon> -->
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+    </p-table>
+
+    <div class="cus-paginator" [ngClass]="{'empty-record': invitationList.length == 0}" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+
+        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="start center"> Showing {{ invitetab.totalRecords
+            < 1 ? 0 : invitetab.first + 1 }} - {{ invitetab.totalRecords> 0 ? invitetab.rows + invitetab.first
+                <=invitetab.totalRecords ? invitetab.rows + invitetab.first : invitetab.totalRecords : 0 }} of {{ invitetab.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a>
+        </div>
+
+        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+            <a [ngClass]="invitetab.first===0?'page-btn disabled': 'page-btn'" (click)="invitetab.onPageChange({ first: invitetab.first - invitetab.rows, rows: invitetab.rows });
+                    navigateNxtPrevPage(invitetab.first + invitetab.rows,invitetab.rows)"> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to
+                Page<span class="input-num">
+                  <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                    [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value,invitetab.rows)" />
+                </span></span> <span class="mr-2" fxHide.xs> of
+                {{ getTotalPages(invitetab.totalRecords,invitetab.rows) }}</span> <a [ngClass]="(invitetab.rows + invitetab.first)>=invitetab.totalRecords?'page-btn disabled': 'page-btn'" (click)="invitetab.onPageChange({ first: invitetab.first + invitetab.rows, rows: invitetab.rows });
+                                                    navigateNxtPrevPage(invitetab.first + invitetab.rows,invitetab.rows)"><i
+                  class="icon-control-end ml-5"></i></a> </div>
+
+    </div>
+    </div>
+    </div>
+
+    <!-- <app-screeing-review *ngIf="showcaseDetaile && !showGrid && !editClick" [screeningDetails]="screeningDetails"
+        [inviteflag]="editClick" [compBaseDetailslist]="compBaseDetailslist"></app-screeing-review> -->
+    </mat-card-content>
+    </div>
+    <!-- <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px" class="row pt-20"  *ngIf="uploadFlag">
+  <div fxFlex="100%" >
+    <p-table #dt [columns]="displayedImportCol" [value]="docErrorList" [resizableColumns]="true" 
+      [reorderableColumns]="true" [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="10"
+      [scrollable]="true" >
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" [style.width]="col.field ==='excelRow' ? '80px' : '150px'" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" [ngSwitch]="col.field" pReorderableColumn pResizableColumn
+            [ngClass]="{ 'text-center': col.field === 'Action' }">
+            <span [pSortableColumn]="col.field">
+              <div class="thname"> {{col.header}} </div>
+              <p-sortIcon *ngIf="col.field !== 'actions'" [field]="col.field" matTooltip="Sort"
+                matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
+                ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+              </p-sortIcon>
+            </span>
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td *ngFor="let col of columns">
+            <span [ngClass]="rowData['status']==='Failure'?'red':'green'">
+              {{ rowData[col.field] }}</span>
+
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns *ngIf="docErrorList.length == 0">
+        <tr>
+          <td [attr.colspan]="columns.length">
+            <div fxLayout="row">
+              <div fxFlex="100%" class="pt-15">
+                <div class="no-record text-center">
+                  <span>No Record Found</span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+      
+        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="start center">
+          Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} -
+          {{ dt.totalRecords > 0 ? dt.rows + dt.first <= dt.totalRecords
+                        ? dt.rows + dt.first : dt.totalRecords : 0   }} of {{ dt.totalRecords }} record(s)
+        </div>
+        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+        fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+        fxLayoutAlign.xs="start center">
+          <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                      dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                      navigateNxtPrevPage(dt.first + dt.rows, dt.rows)">
+            <i class="icon-control-start mr-5"></i></a>
+          <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+              <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly [NumberOnly]="false"
+                (keyup.enter)="navigatePage(pageNo.value, dt.rows)" /> </span></span>
+          <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+          <a [ngClass]="
+                      dt.rows + dt.first >= dt.totalRecords
+                        ? 'page-btn disabled' : 'page-btn'" (click)="
+                      dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                      navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                    "><i class="icon-control-end ml-5"></i></a>
+        </div> 
+    </div>
+  </div>
+</div> -->
+</mat-card>
+
+<ng-template #pTableTemplate>
+    <p-table #dtable [columns]="caseCreationColumns" [value]="caseCreationList" [resizableColumns]="true" [responsive]="true" columnResizeMode="expand" scrollX="true" scrollHeight="200px">
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns" [style.width]="col.field === 'sno' ? '20px' : ''" />
+            </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns let-rowdata>
+            <tr>
+                <th *ngFor="let col of columns" [style.width]="col.field === 'sno' ? '20px' : ''" [ngSwitch]="col.field" pReorderableColumn pResizableColumn matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip"> <span [pSortableColumn]="col.field">
+            <div> {{ col.header }}</div>
+          </span>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
+
+            <tr>
+                <td *ngFor="let col of columns" [style.width]="col.field ==='sno' ? '20px' : ''">
+                    <span *ngIf='col.field === "sno"'>{{index + 1}}</span>
+                    <span>
+            <span
+              *ngIf='col.field !== "sno" && col.field !== "contactData" && col.field !== "consentLookupId" && col.field !== "invitationExpiryLookupId" && col.field !== "phoneNo" && col.field !== "emailId" && col.field !== "action"'>
+              <mat-form-field>
+                <mat-label>{{col.header}}</mat-label>
+                <input role="presentation" matInput [(ngModel)]="rowData[col.field]" autocomplete="off"
+                  (blur)='isExist(col.field,index,rowData[col.field],col.header,rowData)' />
+              </mat-form-field>
+            </span>
+
+                    <form [formGroup]="tableForm">
+                        <span *ngIf='col.field === "phoneNo" && col.field !== "action"'>
+                <mat-form-field>
+                  <mat-label>{{col.header}}</mat-label>
+                  <input maxlength="75" role="presentation" autocomplete="off" formControlName="phoneNo{{index}}"
+                    matInput maxlength="10" minlength="10" appNumberOnly [(ngModel)]="rowData[col.field]"
+                    (blur)="isExist(col.field,index,rowData[col.field],col.header)" [NumericValue]="false" />
+                  <mat-error
+                    *ngIf="tableForm.get('phoneNo'+ index)?.errors?.minlength || tableForm.get('phoneNo'+ index)?.errors?.pattern">
+                    Number is Invalid</mat-error>
+                </mat-form-field>
+              </span>
+                        <span *ngIf='col.field === "emailId" && col.field !== "contactData"  && col.field !== "sno" && col.field !== "consentLookupId" && col.field !== "invitationExpiryLookupId" && col.field !== "action"'>
+                <mat-form-field>
+                  <mat-label>{{col.header}}</mat-label>
+                  <input maxlength="75" role="presentation" autocomplete="off" formControlName="emailId{{index}}"
+                    matInput [(ngModel)]="rowData[col.field]"
+                    (blur)="isExist(col.field,index,rowData[col.field],col.header)" />
+                  <mat-error *ngIf="tableForm.get('emailId'+ index)?.errors?.pattern"> Please enter a valid email.
+                  </mat-error>
+                  <mat-error *ngIf="tableForm.get('emailId'+ index)?.errors?.required"> Email Id is required.
+                  </mat-error>
+                </mat-form-field>
+              </span>
+                        <span *ngIf='col.field !== "emailId" && col.field  === "contactData" && col.field !== "sno" && col.field !== "consentLookupId" && col.field !== "invitationExpiryLookupId" && col.field !== "action"'>
+                <mat-form-field>
+                  <mat-chip-grid #chipList1>
+                    <span *ngFor="let cc of CcList; let j = index">
+                      <mat-chip-row *ngIf="cc.index === index" [removable]="removable"
+                        (removed)="removeControl( j, 'CC')">
+                        {{cc.index === index ? cc.contactData : ''}}<br />
+                        <span matChipRemove *ngIf="removable">×</span>
+                        </mat-chip-row>
+                        </span>
+                        <input placeholder="CC" matInput autocomplete="off" formControlName="contactData{{index}}" [matChipInputFor]="chipList1" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" [(ngModel)]="rowData[col.field]" (matChipInputTokenEnd)="addMail($event, 'CC', index)"
+                            (blur)='isExist(col.field,index,rowData[col.field],col.header,rowData)'>
+                        <mat-error *ngIf="tableForm.get('contactData'+ index)?.errors?.pattern"> Please enter a valid email.
+                        </mat-error>
+                        <mat-error *ngIf="tableForm.get('contactData'+ index)?.errors?.required"> Email Id is required.
+                        </mat-error>
+                        </mat-chip-grid>
+                        </mat-form-field>
+                        </span>
+                        <mat-form-field fxFlex="100%" *ngIf='col.field === "invitationExpiryLookupId" && col.field !== "sno" && col.field !== "consentLookupId" && col.field !== "emailId" && col.field !== "action"'>
+                            <mat-label>Expiry Days</mat-label>
+                            <mat-select placeholder="Expiry Days" formControlName="expirelookupId{{index}}" [(ngModel)]="rowData[col.field]" (selectionChange)="getExpiryDateLst()">
+                                <mat-option *ngFor="let exp of expiryDateLst" [value]="exp.lookUpId"> {{ exp.lookUpDesc }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="tableForm.get('expirelookupId'+ index)?.errors?.required">Expiry Days required
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="100%" *ngIf="col.field === 'consentLookupId' && col.field !== 'invitationExpiryLookupId' && col.field !== 'sno' && col.field !== 'emailId' && col.field !== 'action'">
+                            <mat-label>Consent Type</mat-label>
+                            <mat-select placeholder="Consent Types" formControlName="consentLookupId{{index}}" [(ngModel)]="rowData[col.field]">
+                                <mat-option *ngFor="let cons of consentList" [value]="cons.lookUpId"> {{cons.lookUpName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <!-- <mat-label class="lbl">&nbsp;</mat-label><mat-checkbox [value]="rowData" [(ngModel)]="rowData[col.field]">E-Consent</mat-checkbox> -->
+                    </form>
+                    <div class="tbl-icon text-center" *ngIf="col.field === 'action' && col.field !== 'consentLookupId' && col.field !== 'invitationExpiryLookupId' && col.field !== 'sno' && col.field !== 'emailId'">
+                        <mat-icon [ngClass]="dataValue?.invitationId > 0 ? 'page-btn disabled' : ''"> <i class="material-icons-outlined" matTooltip="Delete" matTooltipClass="accent-tooltip" (click)="deleteRow(index)">delete</i> </mat-icon>
+                    </div>
+                    </span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</ng-template>
+<ng-template #getTemplate>
+    <h1 mat-dialog-title>Please make a note of the reference number</h1>
+    <mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="100%">
+                <p-table #invitetab [columns]="tableColumnsheaders" [value]="dataList" [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="10" [resizableColumns]="true" [reorderableColumns]="true">
+                    <ng-template pTemplate="colgroup" let-columns>
+                        <colgroup>
+                            <col *ngFor="let col of columns" style="width:140px" [style.width]="col.field === 'caseComponent' ? '300px' : '140px'" />
+                        </colgroup>
+                    </ng-template>
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns" pReorderableColumn [ngSwitch]="col.field" matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
+                                <div class="thname"> {{col.header}} </div>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr>
+                            <td *ngFor="let col of columns; let i = index">
+                                <div *ngIf="col.field !== 'caseComponent'"> {{rowData[col.field]}} </div>
+                                <div *ngIf="col.field === 'caseComponent'">
+                                    <div *ngIf="rowData.caseComponent.length > 0">
+                                        <b>Individual Components:</b>
+                                        <span *ngFor="let comp of rowData.caseComponent; let i = index">
+                      <ul>
+                        <li>
+                          <span *ngIf="!comp.caseSubComponent"> {{ comp.compName }} - {{ comp.noOfComponent }}</span>
+                                        <span *ngIf="comp.caseSubComponent"> {{ comp.compName }} :
+
+                            <span *ngFor="let sub of comp.caseSubComponent; let j = index; let last = last">
+                              <ul>
+                                <li> {{ sub.subCompName }} -
+                                  {{ sub.noOfComponent }}<span *ngIf="j >= 0 && !last">,</span>
+                                        </li>
+                                        </ul>
+                                        </span>
+                                        </span>
+                                        </li>
+                                        </ul>
+                                        </span>
+                                    </div>
+                                    <div *ngIf="rowData.packageId > 0">
+                                        <b>Package Components:</b>
+                                        <span *ngFor="let comp of packComponent; let i = index">
+                      <ul>
+                        <li>
+                          <span *ngIf="!comp.packageSubComponent"> {{ comp.compName }} - {{ comp.noOfComponent }}</span>
+                                        <span *ngIf="comp.packageSubComponent"> {{ comp.compName }}:
+                            <span *ngFor="let sub of comp.packageSubComponent; let j = index; let last = last">
+                              <ul>
+                                <li>{{ sub.subCompName }} -
+                                  {{ sub.noOfComponent }}<span *ngIf="j >= 0 && !last">,</span>
+                                        </li>
+                                        </ul>
+                                        </span>
+                                        </span>
+                                        </li>
+                                        </ul>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+        <button (click)='closeAll()' color="primary" mat-flat-button color="warn">Close</button>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #NotCompletedSubcheckAlert>
+  <mat-dialog-content>
+      <div fxLayout="row">
+          <div fxFlex="100%">
+              <div fxLayout="row">
+                  <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                          src="assets/images/alert-warning.gif"></div>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center center">
+                <div fxFlex="100%" class="text-center">
+                    <h3 class="m-0">{{ headerText}} </h3>
+                    <p class="text-sm">{{ messageText }}</p>
+                </div>
+            </div>
+          </div>
+      </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-flat-button color="warn" (click)="dialog.closeAll();">Okay</button>
+  </mat-dialog-actions>
+</ng-template>

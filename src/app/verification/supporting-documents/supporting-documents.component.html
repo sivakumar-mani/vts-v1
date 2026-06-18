@@ -1,0 +1,330 @@
+﻿@if (verificationForm?.get('paymentFlag').value === true) {
+  <div fxLayout='row'>
+    <div fxFlex="100%">
+      <!-- <div> -->
+      <h3 class="sub-header">Payment / Communication Details</h3>
+      <!-- / Override Fee  -->
+      <mat-tab-group>
+        <mat-tab label="Payment Details">
+          <app-payment-details [screeningCompId]=" screeningCompId" [paymentDetails]="paymentDetails"
+          [paymentList]="paymentList"></app-payment-details>
+        </mat-tab>
+        <!-- <mat-tab label="Communication Details">
+        <app-communication-details [screeningCompId]="screeningCompId" [communicationDetails]="communicationDetails"
+          [commList]="commList">
+        </app-communication-details>
+      </mat-tab> -->
+      <!-- <mat-tab label="Override Fee">
+      <app-override-fee [overrideFeeDetails]="overrideFeeDetails" [screeningCompId]="screeningCompId">
+      </app-override-fee>
+    </mat-tab> -->
+  </mat-tab-group>
+<!-- </div> -->
+</div>
+</div>
+}
+
+<!--Supporting DOCUMENTS -->
+<div fxLayout='row'>
+  <div fxFlex="100%">
+    <!-- <div> -->
+    <h3 class="sub-header">Documents</h3>
+    <mat-tab-group>
+      @if (userData.applicationId !== 2 && userData.subTeamName !== commonService.COMMONSUBCAMTEAM &&
+        (userData.teamName !== commonService.COMMONCRTTEAM) && commonService.VE === false) {
+        <mat-tab label="Received Confirmation for Response Creation">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutGap="10px">
+              <div fxLayout="row" fxLayoutGap="10px">
+                <div fxFlex="100%" class="mb-5">
+                  <span fxFlex></span>
+                  @if (closedFlag === false && commonService.modifyAdditionalFeeFlag!=true && commonService.modifyComponentFeeFlag!=true) {
+                    <button [ngClass]="screenAuth.addFlag===false || (verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection')?'page-btn disabled':''" mat-icon-button class="in-btn mb-10" matTooltip="Update Response"
+                      matTooltipClass="accent-tooltip" (click)="saveDocument('responseDocument')">
+                      <i class="icon-save"></i></button>
+                    }
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <div fxFlex="100%">
+                    <div fxLayoutGap="20px" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <app-screening-documents [header]="responseDoc"
+                          [mainForm]="verificationForm.get('verificationResponseDocument.receivedResponseDocument')"
+                          [formgroupName]="'document'"
+                          [confirmtype] = "verificationForm.controls.verificationResponseDocument"
+                          [doctType]="verificationForm?.get('verificationTransBindDet').value.documentType"
+                          [responseConfirmationType]="verificationForm.get('verificationTransBindDet').value.receivedConfirmationType"
+                          [verificationMode]="verificationForm.get('verificationTransBindDet').value.verificationMode"
+                          [dupScreeningDoc]="responseDocument" [showDocType]="false"
+                          [digitalDocument]="digitalDocument"
+                          [verificationTransBindDet]="verificationForm?.get('verificationTransBindDet').value">
+                        </app-screening-documents>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        }
+        <mat-tab label="BGV / FR Documents">
+          <div fxLayout="row">
+            <!-- <div *ngIf="col.field ==='document'">
+            <span *ngFor="let col1 of rowData[col.field]; let in = index">
+              <a routerLinkActive="active-link" (click)="downloadFile(col1, col1.fileName, col1.docId)">
+              {{ col1.fileName +',' }}</a>
+            </span>
+          </div> -->
+
+          @if (verificationForm?.value?.verificationResponseDocument?.responseFileDocument?.document?.length === 0 && !digitalDocument && verificationService.tempData?.researchDocument?.length === 0 && verificationService.tempData?.frConDocument?.length > 0) {
+            <div
+              fxFlex="100%" class="no-record text-center"><span>No Records Found</span></div>
+            }
+            @if (verificationForm?.value?.verificationResponseDocument?.responseFileDocument?.document?.length > 0 || digitalDocument || verificationService.tempData?.researchDocument?.length > 0 || verificationService.tempData?.frConDocument?.length > 0) {
+              <div fxFlex="100%" >
+                <mat-label class="lbl">Attached Supporting Documents</mat-label>
+                <!-- <div *ngFor="let docu of digitalDocument;let i=index">
+                <span *ngFor="let col of docu.document; let in = index">
+                  <a routerLinkActive="active-link" (click)="downloadFile(col, col.fileName, col.docId)">
+                  {{ col.fileName +',' }}</a>
+                </span>
+              </div> -->
+              <div class="file-names">
+                @for (document of verificationForm?.value?.verificationResponseDocument?.responseFileDocument?.document; track document; let i = $index) {
+                  <div class="file-upload-files">
+                    @if (document.fileName) {
+                      <a (click)="preview(document,'screening')" routerLinkActive="active-link" [matTooltip]="document.fileName"
+                      matTooltipClass="accent-tooltip"> {{document.fileName}}</a>
+                    }
+                  </div>
+                }
+                @if (verificationService.tempData?.researchDocument?.length > 0) {
+                  <div>@for (document of verificationService.tempData?.researchDocument; track document; let i = $index) {
+                    <div class="file-upload-files"
+                      >
+                      @for (doc of document.researchDocumentTrans; track doc; let i = $index) {
+                        <div
+                          >
+                          @if (doc.fileName) {
+                            <a (click)="preview(doc,'screening')"
+                            routerLinkActive="active-link">{{doc.fileName}}</a>
+                          }
+                        </div>
+                      }  </div>
+                    }</div>
+                  }
+                  @if (verificationService.tempData?.frConDocument?.length > 0) {
+                    <div>@for (document of verificationService.tempData?.frConDocument; track document; let i = $index) {
+                      <div class="file-upload-files"
+                        >
+                        <!-- <div
+                        *ngFor="let doc of document.researchDocumentTrans;let i=index"> -->
+                        @if (document.fileName) {
+                          <a (click)="preview(document,'FrScreening')"
+                          routerLinkActive="active-link">{{document.fileName}}</a>
+                        }
+                      </div>
+                    }  </div>
+                  }
+                <!-- </div> -->
+              </div>
+              <!-- <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="100%" class="mb-5">
+                <span fxFlex></span>
+                <button mat-icon-button class="in-btn mb-5" matTooltip="Update Supporting Documents"
+                  matTooltipClass="accent-tooltip" (click)="saveDocument('document')">
+                  <i class="icon-save"></i></button>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <app-screening-documents [header]="docHeader"
+                    [mainForm]="verificationForm.get('verificationResponseDocument.responseFileDocument')"
+                    [formgroupName]="'document'" [doctType]="docType" [showDocType]="true">
+                  </app-screening-documents>
+                </div>
+              </div> -->
+            </div>
+          }
+        </div>
+      </mat-tab>
+      @if (userData.applicationId !== 2 && userData.subTeamName !== commonService.COMMONSUBCAMTEAM &&
+        (userData.teamName !== commonService.COMMONCRTTEAM) && commonService.VE === false) {
+        <mat-tab label="Received Letter for more Information / Document">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutGap="20px">
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="100%" class="mb-5">
+                  <span fxFlex></span>
+                  @if (closedFlag === false) {
+                    <button  [ngClass]="screenAuth.addFlag===false || (verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection')?'page-btn disabled':''" mat-icon-button class="in-btn mb-5" matTooltip="Update Documents"
+                      matTooltipClass="accent-tooltip" (click)="saveDocument('recivedDocument')">
+                      <i class="icon-save"></i></button>
+                    }
+                  </div>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  fxLayoutGap="20px" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <app-screening-documents header="recievedInfo"
+                      [mainForm]="verificationForm.get('verificationResponseDocument.receivedInfoDocument')"
+                      [formgroupName]="'document'"
+                      [doctType]="verificationForm?.get('verificationTransBindDet').value.documentType"
+                      [showDocType]="false"
+                      [verificationTransBindDet]="verificationForm?.get('verificationTransBindDet').value">
+                    </app-screening-documents>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        }
+        <!-- //Added by Megala - For VTS2-2024-CRT-0155-->
+        <mat-tab label="Reopen Document Added By CRT">
+          <div fxLayout="row">
+            @if (verificationForm?.value?.verificationResponseDocument?.reOpenResponseDocument?.document?.length === 0 && !digitalDocument && verificationService.tempData?.researchDocument?.length === 0) {
+              <div
+                fxFlex="100%" class="no-record text-center"><span>No Records Found</span></div>
+              }
+              @if (verificationForm?.value?.verificationResponseDocument?.reOpenResponseDocument?.document?.length > 0 || digitalDocument || verificationService.tempData?.researchDocument?.length > 0) {
+                <div fxFlex="100%" >
+                  <mat-label class="lbl">Attached Supporting Documents</mat-label>
+                  <div class="file-names">
+                    @for (document of verificationForm?.value?.verificationResponseDocument?.reOpenResponseDocument?.document; track document; let i = $index) {
+                      <div class="file-upload-files">
+                        @if (document.fileName) {
+                          <a (click)="preview(document,'screening')" routerLinkActive="active-link" [matTooltip]="document.fileName"
+                          matTooltipClass="accent-tooltip"> {{document.fileName}}</a>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </mat-tab>
+          <mat-tab label="DigiLocker Document">
+
+            <div fxLayout="row">
+
+              @if (verificationService.tempData.digiLockerDocuments?.length === 0) {
+                <div
+                  fxFlex="100%" class="no-record text-center"><span>No Records Found</span></div>
+                }
+                @if (verificationService.tempData.digiLockerDocuments?.length !== 0 ) {
+                  <div fxFlex="100%" >
+                    <mat-label class="lbl">Attached DigiLocker Documents</mat-label>
+                    <div class="file-names">
+                      @for (document of verificationService.tempData.digiLockerDocuments; track document; let i = $index) {
+                        <div class="file-upload-files">
+                          @if (document.fileName) {
+                            <a (click)="DigiLockerpreview(document,'DigiLockerScreening')" routerLinkActive="active-link" [matTooltip]="document.fileName"
+                            matTooltipClass="accent-tooltip"> {{document.fileName}}</a>
+                          }
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+                <div>
+                  <span fxFlex fxLayoutAlign="end center">
+                    <a (click)="RefreshDigiLockerDocuments()"
+                      matTooltip="Digilocker Documents"><mat-icon>refresh</mat-icon></a>
+                    </span>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+            <!-- </di/v> -->
+          </div>
+        </div>
+
+        <!-- <preview> -->
+        <ng-template #pdfDialog>
+          <div class=" confirm-pop">
+            <button mat-icon-button class="closed" [mat-dialog-close]="true">
+              <mat-icon class="close-icon" color="warn">close</mat-icon>
+            </button>
+            <h1 mat-dialog-title>Pdf Viewer</h1>
+            <br>
+              <mat-dialog-content>
+                <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="100%">
+                    <pdf-viewer [src]="url" [render-text]="true" [original-size]="true" [show-borders]="true" [zoom]="zoomval"
+                    [zoom-scale]="'page-height'" [rotation]="rvalue" [fit-to-page]="true"></pdf-viewer>
+                  </div>
+                </div>
+              </mat-dialog-content>
+              <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+                <button mat-icon-button matTooltip="Download Pdf" (click)="pdftool('download')" matTooltipClass="accent-tooltip">
+                  <mat-icon>cloud_download</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Rotate right" (click)="pdftool('right')" matTooltipClass="accent-tooltip">
+                  <mat-icon>rotate_right</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Rotate left" (click)="pdftool('left')" matTooltipClass="accent-tooltip">
+                  <mat-icon>rotate_left</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Zoom In" (click)="pdftool('zoomin')" matTooltipClass="accent-tooltip">
+                  <mat-icon>zoom_in</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Zoom Out" (click)="pdftool('zoomout')" matTooltipClass="accent-tooltip">
+                  <mat-icon>zoom_out</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Reset" (click)="pdftool('reset')" matTooltipClass="accent-tooltip">
+                  <mat-icon>settings_backup_restore</mat-icon>
+                </button>
+              </mat-dialog-actions>
+            </div>
+          </ng-template>
+
+
+
+          <ng-template #imgprDialog>
+            <div class=" confirm-pop">
+              <button mat-icon-button class="closed" [mat-dialog-close]="true">
+                <mat-icon class="close-icon" color="warn">close</mat-icon>
+              </button>
+              <h1 mat-dialog-title>Image Viewer</h1>
+              <br>
+                <mat-dialog-content>
+                  <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="100%" >
+
+                      <img  id ="imgpre" [@rotatedState]='state'  [src]='imageSource' >
+
+                    </div>
+                  </div>
+                </mat-dialog-content>
+                <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+                  <button mat-icon-button matTooltip="Download Image" (click)="pdftool('download')" matTooltipClass="accent-tooltip">
+                    <mat-icon>cloud_download</mat-icon>
+                  </button>
+                  <button  mat-icon-button matTooltip="Rotate Left" (click)="rotateimg('left')" matTooltipClass="accent-tooltip">
+                    <mat-icon>arrow_back</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Rotate Right" (click)="rotateimg('right')" matTooltipClass="accent-tooltip">
+                    <mat-icon>arrow_forward</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Rotate Up" (click)="rotateimg('up')" matTooltipClass="accent-tooltip">
+                    <mat-icon>arrow_upward</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Rotate Down" (click)="rotateimg('down')" matTooltipClass="accent-tooltip">
+                    <mat-icon>arrow_downward</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Zoom In" (click)="zoomin()" matTooltipClass="accent-tooltip">
+                    <mat-icon>zoom_in</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Zoom Out" (click)="zoomout()" matTooltipClass="accent-tooltip">
+                    <mat-icon>zoom_out</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Reset" (click)="rotateimg('reset')" matTooltipClass="accent-tooltip">
+                    <mat-icon>settings_backup_restore</mat-icon>
+                  </button>
+                </mat-dialog-actions>
+              </div>
+            </ng-template>

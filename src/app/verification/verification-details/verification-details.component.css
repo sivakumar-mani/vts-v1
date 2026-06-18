@@ -1,0 +1,137 @@
+@import "../../stepper.css";
+/* Sample works for background designs in forms page, pls don't take this style  */
+.fake-comp{
+    background: #e98f87;
+    color: #fff;
+    font-size: 12px;
+}
+.vtp-avatar {
+    text-align: center;
+    line-height: 18px;
+    margin-top: 15px;
+}
+.avatar{
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    margin-right: 10px;
+    line-height: 40px;
+    height: 40px;
+    width: 40px; 
+    margin-bottom: 10px;
+}
+.aname{ 
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 5px 0;
+    color: #353537;
+}
+.aid{
+    color:#58595C; 
+    font-size: 12px; 
+    text-transform: uppercase;
+    font-weight: 500;
+}
+.vtp-list{
+    border-bottom: 1px solid #dedede;
+    margin: 15px 0 0 0;
+    padding: 0 0 10px 0;
+}
+.vtp-list p{
+    margin: 0 0 5px 0;
+    display: flex;
+}
+.vtp-list p i{
+    font-size: 18px;
+    padding-right: 15px;
+    color: #727375;
+    vertical-align: sub;
+}
+.vtp-list p span{
+    color: #353537; 
+    font-size: 13px;
+}
+.vtp-list p span a{
+    font-size: 13px;
+}
+.vtp-list .vtp-header h3{
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0px 0px 5px 0px;
+}
+.vtp-list label{
+    color: #9b9b9d;
+    font-size: 13px;
+    font-weight: normal;
+    min-width: 90px;
+}
+.vtp-list .linkbtn{ 
+    font-size: 13px;
+    margin-top: 10px;
+    text-align: center;
+} 
+.vtp-accordion .mat-expansion-panel-header .mat-expansion-panel:not([class*=mat-elevation-z]) , .vtp-accordion  .mat-expansion-panel-header{
+    box-shadow: none !important;
+    border: 1px solid #dedede;
+    background: rgba(226, 232, 239, 0.70);
+    height: 40px !important;
+    margin-bottom: 0px; 
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+} 
+.vtp-accordion .mat-expansion-panel-header .mat-panel-title{ 
+    padding: 0 20px;  
+}
+.vtp-accordion .mat-expansion-panel-header-title /*, .vtp-accordion .mat-expansion-panel-header-description*/{     
+    color: #58595c;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    width: 95% !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    display: block;
+}
+.vtp-accordion .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover{
+    background: #d2dbe6;
+}
+.vtp-accordion .mat-accordion .mat-card{
+    padding: 20px 20px !important;
+    /* padding: 20px 20px 0px 20px !important;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px; */
+}
+.vtp-accordion .mat-expansion-panel{
+    margin-bottom: 5px;
+}
+.vtp-accordion .mat-expansion-panel:not([class*=mat-elevation-z]){
+    box-shadow: 0 0px 0px 0px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.54), 0 0px 1px 0 rgba(0,0,0,.81) !important;
+    margin-bottom: 5px;
+}
+::ng-deep .vtp-accordion .mat-accordion .mat-expansion-panel-body {
+    padding: 0px 0 !important;
+}
+.email-elli{
+    display: block;
+    white-space: nowrap;
+    width: 85%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.f16sb{
+    font-size: 16px;
+    font-weight: 500;
+}
+.vtp-accordion mat-accordion .mcard-table.mat-card {
+    padding-top: 0px !important;
+}
+
+::ng-deep mat-tab-group.tabalign-left .mat-tab-body .mat-tab-body-content{
+    overflow: hidden;
+}
+::ng-deep mat-tab-group.tabalign-left .mat-mdc-tab-body .mat-mdc-tab-body-content{
+    overflow: hidden;
+}

@@ -1,0 +1,75 @@
+perfect-scrollbar.chat-right {
+    max-height: calc(100vh - 349px);
+  }
+  perfect-scrollbar.chatlist-left {
+    max-height: calc(100vh - 232px);
+  }
+  ::ng-deep perfect-scrollbar.chat-right .ps.ps--active-y > .ps__rail-y:hover {
+    width: 6px !important;
+  }
+  ::ng-deep perfect-scrollbar.chat-right .ps__rail-y:hover > .ps__thumb-y { 
+    width: 4px !important;
+  } 
+.chatHeader-right {
+    float: right;
+  }
+  .chatHeader-right i {
+    padding: 0px 10px;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+  .dt-viewBg h4.chatHeader {
+    background: #ededed; 
+    color: rgb(0 0 0 / 75%);   
+    font-size: 17px;
+  } 
+  .chatHeader-right i:last-child {
+    padding-right: 0px !important;
+  }
+  .chatleft-search {
+    background: #ffffff;
+    height: 55px;
+  } 
+  .mat-card-avatar.chat-avatar {
+    font-size: 27px;
+    line-height: 57px;
+    height: 58px !important;
+    width: 58px !important;
+  }
+  input[type='text'].chatsearchbx  {  
+    padding: 10px 15px;
+      font-size: 14px;
+      color: #7b7b7b;
+      width: 60%;
+      height: 55px;
+      border-radius: 30px !important;
+      border: none;
+      transition: width .35s ease-in-out;
+      position: relative;
+      z-index: 5;
+      padding-left: 48px;
+  }
+   input[type='text'].chatsearchbx:focus {
+      background: rgb(0 0 0 / 0.02);
+      border: none !important;
+      width: 100%;
+      border-top-style: hidden;
+      border-right-style: hidden;
+      border-left-style: hidden;
+      border-bottom-style: groove;
+      outline: none;
+      border-radius: 0px !important;
+  }
+  .ser {
+    position: absolute; 
+    top: 143px;
+    left: 49px;
+    color: #5D5D5F;
+    margin-right: 12px;
+    z-index: 9;
+  } 
+  input[type='text'].chatsearchbx::placeholder {
+    color: #000;
+    opacity: 0.2;  
+    font-size: 12px;
+  }

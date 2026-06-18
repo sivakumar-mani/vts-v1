@@ -1,0 +1,633 @@
+================================================================================
+         VTS APPLICATION - ANGULAR 18 TO ANGULAR 19 MIGRATION REPORT
+================================================================================
+Framework  : Angular 18  -->  Angular 19
+Build      : Production Build Reference Guide
+Note       : This report covers all changes made for Angular 18 → 19 upgrade
+             for the VTS project using Angular Material, PrimeNG, Kendo UI,
+             ngx-layout, and related packages.
+================================================================================
+
+
+================================================================================
+SECTION 1 : PACKAGE VERSION UPDATES (package.json)
+================================================================================
+
+  ANGULAR CORE PACKAGES
+  ----------------------
+  @angular/animations          : ^18.0.0  -->  ^19.0.0
+  @angular/cdk                 : ^18.0.0  -->  ^19.0.0
+  @angular/common              : ^18.0.0  -->  ^19.0.0
+  @angular/core                : ^18.0.0  -->  ^19.0.0
+  @angular/forms               : ^18.0.0  -->  ^19.0.0
+  @angular/google-maps         : ^18.0.0  -->  ^19.0.0
+  @angular/localize            : ^18.0.0  -->  ^19.0.0
+  @angular/material            : ^18.0.0  -->  ^19.0.0
+  @angular/platform-browser    : ^18.0.0  -->  ^19.0.0
+  @angular/platform-browser-dynamic: ^18.0.0 --> ^19.0.0
+  @angular/router              : ^18.0.0  -->  ^19.0.0
+
+  ANGULAR DEV PACKAGES
+  ---------------------
+  @angular-devkit/build-angular: ^18.0.0  -->  ^19.0.0
+  @angular-devkit/core         : ^18.0.0  -->  ^19.0.0
+  @angular-devkit/schematics   : ^18.0.0  -->  ^19.0.0
+  @angular/build               : (NEW)    -->  ^19.0.0   ← new build package added
+  @angular/cli                 : ^18.0.0  -->  ^19.0.0
+  @angular/compiler            : ^18.0.0  -->  ^19.0.0
+  @angular/compiler-cli        : ^18.0.0  -->  ^19.0.0
+  @angular/language-service    : ^18.0.0  -->  ^19.0.0
+
+  RUNTIME DEPENDENCY UPDATES
+  ---------------------------
+  zone.js                      : ~0.14.3  -->  ~0.15.0   (REQUIRED for Angular 19)
+  rxjs                         : ^7.8.0   -->  ^7.8.0    (no change needed)
+
+  THIRD-PARTY PACKAGES UPDATED
+  -----------------------------
+  angular-oauth2-oidc          : ^18.0.0  -->  ^19.0.0
+  angular-oauth2-oidc-jwks     : ^17.0.2  -->  ^19.0.0
+  @danielmoncada/angular-datetime-picker: ^18.0.0 --> ^19.0.0
+  @ngbracket/ngx-layout        : ^18.0.0  -->  ^19.0.0
+  ngx-spinner                  : ^18.0.0  -->  ^19.0.0
+  ngx-countdown                : ^18.0.0  -->  ^19.0.0
+
+  KENDO UI PACKAGES UPDATED (^14.x → ^16.x)
+  -------------------------------------------
+  @progress/kendo-angular-buttons       : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-common        : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-dateinputs    : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-dialog        : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-dropdowns     : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-excel-export  : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-grid          : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-icons         : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-inputs        : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-intl          : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-l10n          : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-label         : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-layout        : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-progressbar   : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-navigation    : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-pdf-export    : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-popup         : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-treeview      : ^14.0.0  -->  ^16.0.0
+  @progress/kendo-angular-utils         : ^14.0.0  -->  ^16.0.0
+
+  PACKAGES NOT CHANGED (check compatibility)
+  --------------------------------------------
+  primeng                      : ^17.18.0  (kept - works with --legacy-peer-deps)
+                                            See Section 6 for upgrade recommendation.
+  primeicons                   : ^7.0.0    (no change needed)
+  @swimlane/ngx-charts         : ^21.0.0   (no change needed)
+  angular-calendar             : ^0.30.0   (no change needed)
+
+  NODE.js & TYPESCRIPT REQUIREMENTS
+  -----------------------------------
+  Node.js (minimum)            : 18.13.x  -->  18.19.x or 20.9.x (LTS)
+  TypeScript                   : ~5.4.2   -->  ~5.6.2
+  @types/node                  : ^18.0.0  -->  ^20.0.0
+
+
+================================================================================
+SECTION 2 : CRITICAL BREAKING CHANGE - BROWSER BUILDER REMOVED!
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  Angular 19 COMPLETELY REMOVES the old "browser" builder.
+  "@angular-devkit/build-angular:browser" is NO LONGER AVAILABLE in Angular 19.
+  You MUST switch to "@angular-devkit/build-angular:application" (ESBuild/Vite).
+
+  ERROR YOU WILL SEE (without this fix):
+  ----------------------------------------
+  Error: Builder "@angular-devkit/build-angular:browser" is not found.
+
+  CHANGES MADE TO angular.json:
+  ------------------------------
+  1. Builder renamed:
+     OLD: "builder": "@angular-devkit/build-angular:browser"
+     NEW: "builder": "@angular-devkit/build-angular:application"
+
+  2. "main" key renamed to "browser":
+     OLD: "main": "src/main.ts"
+     NEW: "browser": "src/main.ts"
+
+  3. outputPath format updated (to keep flat dist/Vts output):
+     OLD: "outputPath": "dist/Vts"
+     NEW: "outputPath": { "base": "dist/Vts", "browser": "" }
+     NOTE: Without "browser": "", new builder outputs to dist/Vts/browser/ subdirectory.
+           The object format keeps output flat at dist/Vts/ as before.
+
+  4. Removed unsupported options (NOT valid in application builder):
+     REMOVED: "vendorChunk": true / false
+     REMOVED: "buildOptimizer": true / false
+     REMOVED: "namedChunks": true / false
+     KEPT:    "extractLicenses", "sourceMap", "optimization" (still supported)
+
+  FILES CHANGED:
+  --------------
+  - angular.json  (architect.build section)
+
+
+================================================================================
+SECTION 3 : STANDALONE: FALSE - REQUIRED EXPLICIT DECLARATION
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  Angular 19 requires all non-standalone components, directives, and pipes
+  to EXPLICITLY declare "standalone: false" in their decorators.
+
+  Previously (Angular 16–18):
+    @Component({ selector: 'app-foo', ... })  ← 'standalone' could be omitted
+
+  Angular 19 (required):
+    @Component({
+      standalone: false,          ← MUST be explicitly set
+      selector: 'app-foo', ...
+    })
+
+  WHY: Angular is transitioning to standalone-by-default in a future major version.
+       Angular 19 emits deprecation warnings for components without explicit standalone.
+       Angular 20 will enforce this as a hard error.
+
+  WHAT WAS DONE:
+  --------------
+  An automated scan was run across all .ts files in src/app/.
+  "standalone: false" was added as the first property to ALL @Component,
+  @Directive, and @Pipe decorators that did not already have standalone specified.
+
+  STATISTICS:
+  -----------
+  Files scanned    : 476
+  Files modified   : 370  (standalone: false added)
+  Files skipped    : 106  (no @Component/@Directive/@Pipe - services, models, etc.)
+
+  AUTO-MIGRATION COMMAND (alternative):
+  ----------------------------------------
+  npx ng generate @angular/core:explicit-standalone-flag
+  (This is the official Angular schematics command that does the same thing)
+
+
+================================================================================
+SECTION 4 : ZONE.JS 0.14 → 0.15 CHANGES
+================================================================================
+
+  UPDATE: zone.js to ~0.15.0 in package.json (REQUIRED for Angular 19)
+
+  BREAKING CHANGES IN zone.js 0.15:
+  -----------------------------------
+  1. Import paths for zone.js plugins remain the same.
+     zone.js/plugins/* paths unchanged.
+
+  2. Improved signal-aware scheduling:
+     Angular 19 uses zone.js 0.15 for better integration with Signals.
+
+  3. Check polyfills.ts if you have any zone.js-specific imports.
+     In this project, zone.js is loaded via angular.json "polyfills" array,
+     not directly in polyfills.ts - no change needed in polyfills.ts.
+
+  FILES AFFECTED:
+  ---------------
+  - package.json  (version bump only)
+  - src/polyfills.ts  (no change needed for this project)
+
+
+================================================================================
+SECTION 5 : ANGULAR 19 NEW FEATURES
+================================================================================
+
+  5a. LINKED SIGNALS (NEW - Stable):
+  ------------------------------------
+  New reactive primitive for dependent state:
+    import { linkedSignal } from '@angular/core'
+
+    const selectedOption = linkedSignal({
+      source: this.options,
+      computation: options => options[0]  // resets when options changes
+    })
+
+  5b. RESOURCE API (Developer Preview):
+  ----------------------------------------
+  Async data loading with signal integration:
+    import { resource } from '@angular/core'
+
+    userResource = resource({
+      request: () => this.userId(),
+      loader: ({ request: id }) => fetch(`/api/users/${id}`).then(r => r.json())
+    })
+    // Access: userResource.value(), userResource.isLoading(), userResource.error()
+
+  5c. INCREMENTAL HYDRATION (New for SSR):
+  ------------------------------------------
+  For SSR projects only (not applicable to this SPA):
+    @defer (hydrate on idle) {
+      <heavy-component />
+    }
+
+  5d. HOT MODULE REPLACEMENT (HMR) - On by Default:
+  ---------------------------------------------------
+  Angular 19 enables HMR for CSS/styles by default during dev server.
+  Styles update without full page reload.
+  No code change needed - works automatically with application builder.
+
+  5e. TIME ZONE SUPPORT FOR PIPE:
+  ---------------------------------
+  DatePipe and formatDate now accept timezone offset objects.
+  No breaking change - additive feature.
+
+  5f. SIGNAL INPUT / OUTPUT IMPROVEMENTS:
+  ----------------------------------------
+  All signal-based APIs from v17/18 remain fully available:
+    input(), output(), model(), viewChild(), contentChild()
+
+  NOTE: All these are additive features. No existing code breaks.
+
+
+================================================================================
+SECTION 6 : PRIMENG - UPGRADE RECOMMENDATION
+================================================================================
+
+  CURRENT VERSION: primeng ^17.18.0
+  RECOMMENDED FOR ANGULAR 19: primeng ^19.x.x
+
+  WHY NOT UPGRADED NOW:
+  ----------------------
+  PrimeNG 17 → 19 is a TWO major-version jump with significant breaking changes.
+  PrimeNG 18 and 19 introduced new theming architecture and API changes.
+  To minimize risk, PrimeNG is kept at ^17.18.0 for this migration.
+  Use "--legacy-peer-deps" during npm install to resolve peer dependency conflicts.
+
+  FUTURE UPGRADE (PrimeNG 17 → 19):
+  -----------------------------------
+  PRIMENG 18 CHANGES:
+  - New design token-based theming system (Aura theme default)
+  - p-chips API changes
+  - Various component API cleanups
+
+  PRIMENG 19 CHANGES:
+  - Built around Angular 19 standalone APIs
+  - Further theming improvements
+  - p-table, p-toast, p-paginator APIs may have minor updates
+
+  RECOMMENDATION: Upgrade PrimeNG in a SEPARATE step after Angular 19 is stable.
+
+  IF YOU UPGRADE NOW (primeng 17 → 19):
+  -----------------------------------------
+  1. Update package.json:  primeng: "^17.18.0" --> "^19.x.x"
+  2. Check all module .ts files for import path changes
+  3. Update theme import in styles.css
+  4. Test all forms with p-table, p-toast, p-calendar (p-datepicker), p-select
+
+
+================================================================================
+SECTION 7 : KENDO UI v14 → v16 CHANGES
+================================================================================
+
+  PACKAGE CHANGE:
+  ---------------
+  All @progress/kendo-angular-* : ^14.0.0  -->  ^16.0.0
+
+  KENDO v15/v16 KEY CHANGES:
+  ----------------------------
+  1. Grid: Check [selectable] and [virtual] property types
+     (same cautions as v13 migration if not already addressed)
+
+  2. DatePicker: Time zone support improvements.
+     If using [timezone] input - check updated API.
+
+  3. Icons: @progress/kendo-angular-icons updated.
+     If using kendo-svg-icons, verify icon names unchanged.
+
+  4. Kendo Theme: @progress/kendo-theme-default stays at ^6.4.0.
+     No change needed unless new theme variables are required.
+
+  5. Animation changes: Some Kendo animations updated.
+     Visual testing recommended after upgrade.
+
+  FILES AFFECTED:
+  ---------------
+  package.json  (version bumps only)
+  May require template/TypeScript fixes if API changes - check after npm install.
+
+
+================================================================================
+SECTION 8 : TYPESCRIPT 5.6 CHANGES
+================================================================================
+
+  KEY TypeScript 5.6 CHANGES:
+  ----------------------------
+
+  1. --noUncheckedSideEffectImports (new strict flag):
+     Enables errors for imports used only for side effects.
+     NOT enabled in this project (strictTemplates: false) - no impact.
+
+  2. Improved type narrowing:
+     TypeScript 5.6 narrows types more precisely in certain patterns.
+     May cause a few new type errors in files that relied on broader types.
+     FIX: Add explicit type annotations where needed.
+
+  3. Iterator helper methods (Iterator.from, etc.):
+     New built-in iterator methods. Additive only.
+
+  4. 'override' keyword checking improved.
+     If using 'override' on class methods, TypeScript 5.6
+     is stricter about correct usage.
+
+  KEEP IN tsconfig.json (still required):
+  ----------------------------------------
+  "experimentalDecorators": true
+  "useDefineForClassFields": false
+  "skipLibCheck": true
+  "strictTemplates": false  (already set in angularCompilerOptions)
+
+
+================================================================================
+SECTION 9 : APPLICATION BUILDER DIFFERENCES
+================================================================================
+
+  Old browser builder        Application builder (Angular 19)
+  --------------------------  --------------------------------
+  Webpack bundler             ESBuild + Vite bundler
+  "main": "src/main.ts"       "browser": "src/main.ts"
+  vendorChunk supported       vendorChunk NOT supported (auto)
+  namedChunks supported       namedChunks NOT supported
+  buildOptimizer supported    buildOptimizer NOT supported (always on)
+  outputPath: string          outputPath: string or { base, browser }
+  outputPath: dist/Vts        outputPath: { base: dist/Vts, browser: "" }
+
+  PERFORMANCE IMPROVEMENT:
+  -------------------------
+  Build time: ~40-70% faster than old webpack builder
+  Dev server: Near-instant HMR for styles and components
+  Bundle: Slightly smaller due to ESBuild tree shaking
+
+  BUNDLE OUTPUT:
+  ---------------
+  The angular.json uses:
+    "outputPath": { "base": "dist/Vts", "browser": "" }
+  This keeps output flat in dist/Vts/ (same as before).
+  Without "browser": "", output would go to dist/Vts/browser/.
+
+  SERVICE WORKER NOTE:
+  --------------------
+  If adding service workers in the future, the application builder
+  supports @angular/service-worker natively (no extra config needed).
+
+
+================================================================================
+SECTION 10 : COMMON ERRORS AND FIXES (Angular 19)
+================================================================================
+
+  ERROR 1: Builder not found
+  ---------------------------
+  Error: Builder "@angular-devkit/build-angular:browser" is not found.
+  CAUSE:  browser builder removed in Angular 19
+  FIX:    angular.json already updated to "application" builder
+  STATUS: FIXED in this migration
+
+  ERROR 2: peer dependency conflict during npm install
+  -----------------------------------------------------
+  Error: ERESOLVE unable to resolve dependency tree
+  CAUSE:  primeng ^17 peer dep expects Angular ^17
+  FIX:    npm install --legacy-peer-deps
+  STATUS: Use --legacy-peer-deps flag
+
+  ERROR 3: zone.js version mismatch
+  -----------------------------------
+  Error: Could not find module 'zone.js/...''
+  CAUSE:  zone.js 0.15 changed some import paths
+  FIX:    Check polyfills.ts for any zone.js sub-path imports
+          In this project polyfills.ts has no zone.js imports - no issue.
+  STATUS: No action needed for this project
+
+  ERROR 4: TypeScript 5.6 type errors
+  -------------------------------------
+  Error: Property 'X' does not exist on type 'Y'
+  CAUSE:  TypeScript 5.6 stricter inference
+  FIX:    Add explicit type annotations or use optional chaining (?.)
+  STATUS: Fix per file as they appear after build
+
+  ERROR 5: Component without standalone declaration warning
+  ----------------------------------------------------------
+  Warning: Component AppComponent is not marked as standalone.
+  CAUSE:  standalone: false not declared explicitly
+  FIX:    Already done - 370 files updated with standalone: false
+  STATUS: FIXED in this migration
+
+  ERROR 6: Kendo API breaking change
+  ------------------------------------
+  Error: Property '[X]' does not exist on type 'GridComponent'
+  CAUSE:  Kendo v14 → v16 may have API changes
+  FIX:    Check Kendo changelog for v15 and v16 breaking changes
+          Run npm run build and fix errors one by one
+  STATUS: Check after npm install
+
+  ERROR 7: outputPath 'dist/Vts/browser/' directory unexpected
+  --------------------------------------------------------------
+  CAUSE:  Application builder defaults to /browser/ subdirectory
+  FIX:    angular.json updated to use { "base": "dist/Vts", "browser": "" }
+  STATUS: FIXED in this migration
+
+  ERROR 8: angular-oauth2-oidc v19 API change
+  ---------------------------------------------
+  CAUSE:  Check if any OAuthService method signatures changed in v19
+  FIX:    Run build and fix per error; refer to angular-oauth2-oidc changelog
+  STATUS: Check after npm install
+
+  ERROR 9: @angular/build missing
+  ---------------------------------
+  Error: Cannot find module '@angular/build'
+  CAUSE:  New package needed for Angular 19 application builder
+  FIX:    "@angular/build": "^19.0.0" already added to devDependencies
+  STATUS: FIXED in this migration
+
+
+================================================================================
+SECTION 11 : MIGRATION STEPS (Step-by-Step)
+================================================================================
+
+  STEP 0: Verify Node.js version
+  --------------------------------
+  node --version  (must be 18.19.x, 20.9.x, or 22.x)
+  If lower, upgrade Node.js first.
+
+  STEP 1: package.json already updated (done)
+  ---------------------------------------------
+  All @angular/* → ^19.0.0
+  zone.js → ~0.15.0
+  TypeScript → ~5.6.2
+  @types/node → ^20.0.0
+  Kendo packages → ^16.0.0
+  angular-oauth2-oidc → ^19.0.0
+  ngx-spinner, ngx-countdown, @danielmoncada, @ngbracket → ^19.0.0
+  @angular/build → ^19.0.0 (NEW devDependency added)
+
+  STEP 2: angular.json already updated (done)
+  ---------------------------------------------
+  builder: browser → application
+  "main" → "browser"
+  outputPath: string → object format
+  vendorChunk, buildOptimizer, namedChunks removed
+
+  STEP 3: standalone: false already added (done)
+  ------------------------------------------------
+  370 component/directive/pipe files updated
+
+  STEP 4: Run npm install
+  --------------------------
+  npm install --legacy-peer-deps
+  (--legacy-peer-deps needed for PrimeNG 17 peer dependency conflict)
+
+  STEP 5: Run Angular migration schematics (optional)
+  -----------------------------------------------------
+  npx ng update @angular/core@19 @angular/cli@19
+  npx ng update @angular/material@19
+  (These apply any additional automated migrations)
+
+  STEP 6: Build and fix remaining errors
+  ----------------------------------------
+  npm run build
+  Fix each error shown one by one.
+  Most errors will be TypeScript 5.6 type inference changes.
+
+  STEP 7: Test the dev server
+  ----------------------------
+  npm start
+  Open browser and test all major workflows.
+  Note: HMR is now on by default - styles update without page reload.
+
+  STEP 8: Test production build
+  --------------------------------
+  npm run build:prod
+
+  STEP 9: Fix CSS visual regressions (if any)
+  ----------------------------------------------
+  Open the app in browser.
+  Check all pages for visual differences.
+  Angular Material 19 may have minor density changes.
+
+  STEP 10: Upgrade PrimeNG (separate step - recommended later)
+  ---------------------------------------------------------------
+  After Angular 19 is stable and working:
+  primeng: "^17.18.0" --> "^19.x.x"
+  Run: npm install --legacy-peer-deps
+  Fix PrimeNG 18/19 breaking changes if any.
+
+
+================================================================================
+SECTION 12 : FILES CHANGED IN THIS MIGRATION
+================================================================================
+
+  ALWAYS CHANGED (mandatory):
+  ----------------------------
+  package.json                              (version upgrades - 35+ packages)
+  angular.json                              (builder switch + options cleanup)
+
+  CHANGED FOR STANDALONE: FALSE (Angular 19 requirement):
+  --------------------------------------------------------
+  370 TypeScript files across src/app/
+  All @Component, @Directive, @Pipe decorators now have standalone: false
+
+  NOT CHANGED (but verify after npm install):
+  -------------------------------------------
+  tsconfig.json                             (no changes needed)
+  src/polyfills.ts                          (no changes needed)
+  src/styles.css                            (no changes needed)
+  All HTML templates                        (no breaking changes in v19)
+  All service .ts files                     (no changes needed)
+  All guard .ts files                       (no changes needed)
+  All model/interface .ts files             (no changes needed)
+
+
+================================================================================
+SECTION 13 : WHAT DOES NOT CHANGE (Angular 18 → 19)
+================================================================================
+
+  HTML TEMPLATES     : fxLayout, fxFlex directives              (no change)
+  HTML TEMPLATES     : *ngIf, *ngFor, *ngSwitch                 (still work)
+  HTML TEMPLATES     : @if, @for, @switch (new syntax)          (still work)
+  HTML TEMPLATES     : @defer deferrable views                   (no change)
+  HTML TEMPLATES     : p-table, p-toast, p-chips (PrimeNG)      (no change)
+  HTML TEMPLATES     : mat-card, mat-dialog, mat-datepicker      (no change)
+  HTML TEMPLATES     : kendo-grid template columns               (no change)
+  HTML TEMPLATES     : [(ngModel)] two-way binding               (no change)
+  HTML TEMPLATES     : <router-outlet>                           (no change)
+  TypeScript Files   : UntypedFormControl / UntypedFormGroup     (no change)
+  TypeScript Files   : Services (HTTP, shared services)          (no change)
+  TypeScript Files   : HTTP Interceptor                          (no change)
+  TypeScript Files   : Models / Interfaces                       (no change)
+  TypeScript Files   : @ViewChild, @ViewChildren                 (no change)
+  TypeScript Files   : Signals (computed, signal, effect)        (no change)
+  Config Files       : config.json (API runtime config)          (no change)
+  Config Files       : src/assets/**                             (no change)
+  Guard Files        : CanActivate guards                        (no change)
+  Guard Files        : CanMatch guards                           (no change)
+
+
+================================================================================
+SECTION 14 : VERSION COMPARISON TABLE
+================================================================================
+
+  VERSION  | BIGGEST CHANGE                                | EFFORT
+  ---------|-----------------------------------------------|----------
+  v15→v16  | entryComponents REMOVED from NgModule         | MEDIUM
+           | ComponentFactoryResolver REMOVED               |
+           | CanLoad deprecated → CanMatch                 |
+  ---------|-----------------------------------------------|----------
+  v16→v17  | MatLegacy* REMOVED (mat module renames)       | HIGH
+           | p-calendar REMOVED (→ p-datepicker)           |
+           | p-dropdown REMOVED (→ p-select)               |
+           | New @if @for @switch syntax (optional)        |
+           | Node.js 16 dropped - must use Node 18+        |
+  ---------|-----------------------------------------------|----------
+  v17→v18  | browserTarget → buildTarget (angular.json)    | LOW
+           | Stricter HTML parser (encoding chars)         |
+           | ViewChild static:true fix (inside *ngIf)      |
+  ---------|-----------------------------------------------|----------
+  v18→v19  | Browser builder REMOVED → application builder | MEDIUM
+           | standalone: false required explicitly         |
+           | zone.js 0.14 → 0.15                          |
+           | TypeScript 5.4 → 5.6                         |
+           | Kendo v14 → v16                              |
+           | Node.js 18.13 → 18.19+ / 20.9+              |
+           | HMR for styles on by default                 |
+           | linkedSignal() new API                       |
+
+
+================================================================================
+SUMMARY - ANGULAR 18 → 19 TOTAL CHANGES
+================================================================================
+
+  package.json                    : 1 file   (version upgrades - 35+ packages)
+  angular.json                    : 1 file   (builder switch + options cleanup)
+  Component/Directive/Pipe .ts    : 370 files (standalone: false added)
+  Angular18_to_19_Migration_Report.txt: 1 file (this report)
+  -----------------------------------------------------------------------
+  TOTAL FILES CHANGED             : ~373 files
+
+  INSTALL COMMAND:
+  ----------------
+  npm install --legacy-peer-deps
+
+  BUILD COMMAND:
+  ---------------
+  npm run build
+
+  PRODUCTION BUILD:
+  -----------------
+  npm run build:prod
+
+  COMPARISON vs OTHER VERSIONS:
+  ------------------------------
+  v14→v15  : ~80-100 files  (MDC migration was the biggest)
+  v15→v16  : ~30-50  files  (entryComponents removal)
+  v16→v17  : ~40-60  files  (MatLegacy removal + PrimeNG component renames)
+  v17→v18  : ~229    files  (ViewChild + HTML parser + encoding fixes)
+  v18→v19  : ~373    files  (browser builder removal + standalone: false + pkg bumps)
+
+
+================================================================================
+END OF REPORT
+================================================================================

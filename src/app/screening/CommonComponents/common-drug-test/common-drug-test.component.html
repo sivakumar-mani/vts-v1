@@ -1,0 +1,121 @@
+<!-- Dont Delete this comm line for my Ref :  Responsive design completed  -->
+<div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="0px grid">
+  <div fxFlex="100%">
+
+    <form [formGroup]="mainForm" autocomplete="off" role="presentation">
+
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+        <div fxFlex="100%">
+          <app-common-base-info [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'"
+            [compBaseDetails]="compBaseDetails" (emitNotappChange)="notApplicable($event)"
+            [showNotApplicable]="showNotApplicable">
+          </app-common-base-info>
+        </div>
+      </div>
+
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"
+          [formGroupName]="formgroupName">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Kit Type</mat-label>
+            <mat-select placeholder="Select kit type" formControlName="kitId" [required]="true"
+              (selectionChange)="drugKitChange(mainForm.get(formgroupName).get('kitId').value)">
+              @for (drug of drugKitList; track drug) {
+                <mat-option [value]="drug.kitId">
+                {{drug.kitName}}</mat-option>
+              }
+            </mat-select>
+            @if (!!mainForm?.get(formgroupName)?.get('kitId')?.errors?.required) {
+              <mat-error> Kit type is
+                required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      @if (compName === 'DRUG TEST') {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+          >
+          <div fxFlex="100%">
+            <app-address [addressList]="address" [addressformgrp]="getAddressForm()"></app-address>
+          </div>
+        </div>
+      }
+      <div fxLayout="row" fxLayoutGap="0px" class="mb-10">
+        <div fxFlex="100%">
+          <app-common-custom-fields [mainForm]="mainForm"
+          [formArrName]="'componentCustomFields'"></app-common-custom-fields>
+        </div>
+      </div>
+
+      @if (!fileBtn) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
+          <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
+            [formGroupName]="'screeningComponentInfo'">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Remarks</mat-label>
+              <textarea #remark formControlName="remark" maxlength="1000" matInput
+              placeholder="Remarks"> </textarea>
+              <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
+            </mat-form-field>
+          </div>
+          @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length) {
+            <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%" ngClass.sm="mt-15"
+              ngClass.xs="mt-15" [formGroupName]="'screeningComponentInfo'"
+              >
+              <mat-label class="lbl">Choose</mat-label>
+              <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise
+              Insufficiency</mat-checkbox>
+            </div>
+          }
+        </div>
+      }
+      @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+          >
+          <div fxFlex="100%">
+            <div class="alert alert-info" role="alert">
+              <h4>Insufficiency Clearance Remarks: </h4>
+              @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+                <span
+                  >
+                  {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+                }
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (showInSuff) {
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+              <app-common-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm"
+                [compBaseDetails]="mainForm.get('screeningComponentInfo').value"
+                [formgroupName]="'screeningInsufficiency'">
+              </app-common-raise-insufficiency>
+            </div>
+          </div>
+        }
+
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <app-client-app-document-upload [fileBtn]="fileBtn" [mainForm]="mainForm"
+              [formgroupName]="'screeningComponentInfo'"
+              [dupScreeningDoc]="screeningComponent?.componentDocument"
+              [validationFlag]="nFlag !== true && userData.applicationId === 3 && compName !== common?.DRUG_TEST? true : false">
+            </app-client-app-document-upload>
+          </div>
+        </div>
+
+
+      </form>
+
+    </div>
+  </div>

@@ -1,0 +1,583 @@
+<app-breadcrumb  [btnBack]="true" (eventBack)="common.moveToDashboard()" [btnExportDisabled] ="!screenAuth?.exportFlag"
+(eventExcelExport)="exportExcelAll()" [btnExcelExport]="viewInvoiceList?.length > 0" [btnSend]="mailList?.length > 0" [routePath]="routePath" (eventSend)="sendMail({})"></app-breadcrumb>
+<div fxLayout="row" class="advSearch" [formGroup]="viewInvoiceForm" autocomplete="off">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="50%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="50%">
+            <app-auto-complete  [selectProperties]='clientNameControl'>
+            </app-auto-complete>
+          </div>
+          <div fxFlex="50%">
+            <app-auto-complete  [selectProperties]='invoiceNoControl'>
+            </app-auto-complete>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="25%">
+        <mat-form-field fxFlex="100%">
+          <mat-label>From Date</mat-label>
+          <input matInput [matDatepicker]="sampledatePicker" formControlName="fromDate" placeholder="From Date" (focus)="sampledatePicker.open()"
+            (click)="sampledatePicker.open()"/>
+          <mat-datepicker-toggle matSuffix [for]="sampledatePicker"> </mat-datepicker-toggle>
+          <mat-datepicker #sampledatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div fxFlex="25%">
+        <mat-form-field fxFlex="100%">
+          <mat-label>To Date</mat-label>
+          <input matInput [matDatepicker]="sampledatePicker1" formControlName="todate" placeholder="To Date"  (focus)="sampledatePicker1.open()"
+            (focus)="sampledatePicker1.open()"/>
+          <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"> </mat-datepicker-toggle>
+          <mat-datepicker #sampledatePicker1></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="100%" class="advSearch-btn">
+    <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <a (click)="GetViewInvoiceDetails()"> Search</a>
+      <a (click)="clearInvoice()"> Reset</a>
+    </div>
+  </div>
+</div>
+<div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">View Invoice</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <div fxLayout="row" class="sortrow">
+              <div fxFlex="100%" fxLayoutAlign="end center">
+                <ul class="pl-0">
+                  <li><span class="text-dull"> Showing
+                    {{(viewInvoiceList?.length > 0 ?
+                    ((shievePageSize*shievePageNo)-shievePageSize+1): 0)}} -
+                    {{((shievePageSize*shievePageNo)>=(shieveTotalCount))?(shieveTotalCount):(shievePageSize*shievePageNo)}}
+                    of </span> <b> {{shieveTotalCount}}record(s)</b></li>
+                    |
+                    <li>
+                      <a (click)="shieveShowall()">Show All</a>
+                    </li>
+                    |
+                    <li>
+                      <b>Sort By:</b>
+                      <a [ngClass]="column === 'clientName' ? 'active' : ''"
+                      (click)="sortBy('clientName')">Client Name</a>
+                    <i [ngClass]="{
+                            'icon-sort': column != 'clientName',
+                            'icon-sort-asc': column == 'clientName' && !isDesc,
+                            'icon-sort-desc': column == 'clientName' && isDesc
+                          }" aria-hidden="true">
+                      </i>
+                      <a [ngClass]="column === 'invoiceNo' ? 'active' : ''"
+                        (click)="sortBy('invoiceNo')">Invoice No
+                      No</a>
+                    <i [ngClass]="{
+                            'icon-sort': column != 'invoiceNo',
+                            'icon-sort-asc': column == 'invoiceNo' && !isDesc,
+                            'icon-sort-desc': column == 'invoiceNo' && isDesc
+                          }" aria-hidden="true"></i>
+
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  @for (
+                    view of viewInvoiceList| sort: {property: column, direction: direction}
+                    | paginate: { itemsPerPage: shievePageSize, currentPage: shievePageNo, totalItems: shieveTotalCount }; track
+                    view; let i = $index; let count = $count) {
+                    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="cloumn"
+                      fxLayoutGap="20px" class="listrow">
+                      <div fxFlex="100%">
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <!-- <div fxFlex="4%" fxFlex.lg="4%" fxFlex.md="4%" fxFlex.sm="10%"  fxFlex.xs="100%">
+                          <mat-checkbox class="Xverifi-checkbox" (change)="assignMail($event.checked, view)"></mat-checkbox>
+                        </div> -->
+                        <div fxFlex="31%">
+                          <mat-card-header>
+                            <div mat-card-avatar class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                              {{(view.clientName.split(' ').length - 1) > 0 ? view.clientName.split(' ')[0].charAt(0).toUpperCase() +
+                              view.clientName.split(' ')[1].charAt(0).toUpperCase() : view.clientName.charAt(0).toUpperCase()}}
+                            </div>
+                            <mat-card-title class="cname">{{view.clientName}}</mat-card-title>
+                            <mat-card-subtitle class="cdesg mb-0">{{view.invoiceNo}} </mat-card-subtitle>
+                          </mat-card-header>
+                        </div>
+                        <div fxFlex="21%">
+                          <p>
+                            <label>Site/Group Name:</label>
+                            <em>{{view.siteName ? view.siteName: view.groupName}}</em> </p>
+                            <p>
+                              <label>No. of Candidates:</label>
+                              <em>{{view.noOfQty}}</em> </p>
+                            </div>
+                            <div fxFlex="22%">
+                              <p>
+                                <label>From Date:</label>
+                                <em>{{common?.getTimezoneOffset(view.fromDate, false) | date : 'dd/MM/yyyy'}}</em> </p>
+                                <p>
+                                  <label>To Date:</label>
+                                  <em>{{common?.getTimezoneOffset(view.toDate, false) | date : 'dd/MM/yyyy'}}</em> </p>
+                                  <p>
+                                    <label>Inv.Gen. On:</label>
+                                    <em>{{  view.created | date: "dd/MM/yyyy"}}</em> </p>
+                                    <p>
+                                    </div>
+                                    <div fxFlex="22%">
+                                      <p>
+                                        <label>Grand Total:</label>
+                                        <em>{{view?.caseByPassFlag === true ? '$' : '₹'}} {{view.totalAmount}}</em> </p>
+                                        <p>
+                                          <em [ngClass]="screenAuth.viewFlag===false?'page-btn disabled':''" >
+                                            <button mat-icon-button class="iconbtn" (click)="downloadFile(view.document,view.fileName)"
+                                              matTooltip="{{view.fileName}}" matTooltipClass="accent-tooltip"> <i
+                                            class="icon-downloadbutton"></i>
+                                          </button>
+                                          <button mat-icon-button class="iconbtn" matTooltip="Send Mail" (click)="sendMail(view)"
+                                            matTooltipClass="accent-tooltip"> <i class="material-icons">send</i> </button>
+                                            <button mat-icon-button class="iconbtn" matTooltipClass="accent-tooltip"
+                                              matTooltip="Export"><i class="icon-excel csatus Normal"
+                                            (click)="getComponentDetails(view);"></i></button>
+                                            <button mat-icon-button class="iconbtn" matTooltip="Delete Invoice"
+                                              matTooltipClass="accent-tooltip" (click)="openDialog(view.invoiceId)"> <i
+                                            class="icon-delete"></i> </button>
+                                            <button mat-icon-button class="iconbtn" matTooltip="Batch Edit"
+                                              matTooltipClass="accent-tooltip" (click)="goToRevert(view)"> <i
+                                            class="icon-arrow-left-circle"></i> </button>
+                                          </em> </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                              </div>
+                            </div>
+                            <!-- // added megha -->
+                            <div fxLayout="row">
+                              <div class="cus-paginator">
+                                <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                                  <pagination-controls class="cus-paginator"
+                                  (pageChange)="shievePagination($event)"></pagination-controls>
+                                </span> <span fxHide.xs class="gotopagbg ml-2">Go to Page<span
+                                class="input-num">
+                                <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4"
+                                  appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                  [NumberOnly]="false">
+                              </span></span> <span fxHide.xs class="gotopagbg ml-2">Items / page<span
+                              class="input-num">
+                              <input type="number" [(ngModel)]="shievePageSize" min="1" maxlength="4"
+                                appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                [NumberOnly]="false" (blur)="preventInfinite($event)">
+                            </span> </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div fxLayout="row" fxLayoutGap="30px"  *ngIf="res.menuName === 'Generate Invoice'" >
+                  <div fxFlex="20%" *ngIf="!!showdSearch">
+                    <div fxLayout="row">
+                      <h4 class="search-header">Search Criteria</h4>
+                      <span fxFlex></span> <a class="text-sm text-upp">Reset</a>
+                    </div>
+                    <div fxLayout="row wrap" fxLayoutGap="0px grid">
+                      <div fxFlex="100%" class="mb-15">
+                        <mat-label class="lbl">Select option for the Invoice period</mat-label>
+                        <mat-radio-group fxLayoutGap="20px">
+                          <mat-radio-button value="1">By Date</mat-radio-button>
+                          <mat-radio-button value="2">By Current Month</mat-radio-button>
+                          <mat-radio-button value="2">By Previous Month</mat-radio-button>
+                        </mat-radio-group>
+                      </div>
+                      <div fxFlex="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>From Date</mat-label>
+                          <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date" />
+                          <mat-datepicker-toggle matSuffix [for]="sampledatePicker"> </mat-datepicker-toggle>
+                          <mat-datepicker #sampledatePicker></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>To Date</mat-label>
+                          <input matInput [matDatepicker]="sampledatePicker1" placeholder="To Date" />
+                          <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"> </mat-datepicker-toggle>
+                          <mat-datepicker #sampledatePicker1></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxFlex="100%">
+                    <div fxLayout="row">
+                      <div fxFlex="100%">
+                        <a class="srch-o-btn" matTooltip="Click here for Search"
+                          matTooltipClass="accent-tooltip" (click)="toggle('show_Search')"> <i class="icon-search1"></i>
+                        </a>
+                        <span class="tag">2d<a class="close">×</a></span><span class="tag">04-11-2019<a
+                      class="close">×</a></span> </div>
+                    </div>
+                    <div fxLayout="row" class="sortrow">
+                      <div fxFlex="100%" fxLayoutAlign="end center">
+                        <ul>
+                          <li><b>5 Record(s) </b> <span class="text-dull"> found</span></li>
+                          |
+                          <li><b>Sort By: </b> <a class="active">Client Name</a> <a>Invoice
+                          Status</a><a>Inv.Gen. On</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div fxLayout="row" class="listrow">
+                      <div fxFlex="100%">
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <div fxFlex="36%"> <a>
+                            <mat-card-header>
+                              <div mat-card-avatar class="avatar avatarBg1">2d</div>
+                              <mat-card-title class="cname">2d Entertainment Pvt Ltd </mat-card-title>
+                              <mat-card-subtitle class="cdesg mb-0">FY2017-18/000150 </mat-card-subtitle>
+                            </mat-card-header>
+                          </a> </div>
+                          <div fxFlex="28%">
+                            <p>
+                              <label>Site/Group Name:</label>
+                              <em>2DENTERLTD</em> </p>
+                            </div>
+                            <div fxFlex="18%">
+                              <p>
+                                <label>Inv.Gen. On:</label>
+                                <em>15/10/2019</em> </p>
+                              </div>
+                              <div fxFlex="18%">
+                                <p>
+                                  <label>Invoice Status:</label>
+                                  <em>pending</em> </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div fxLayout="row" class="listrow">
+                            <div fxFlex="100%">
+                              <div fxLayout="row" fxLayoutGap="20px">
+                                <div fxFlex="36%"> <a>
+                                  <mat-card-header>
+                                    <div mat-card-avatar class="avatar avatarBg2">AG</div>
+                                    <mat-card-title class="cname">AGS Health India Private Limited </mat-card-title>
+                                    <mat-card-subtitle class="cdesg mb-0">FY2017-18/000150 </mat-card-subtitle>
+                                  </mat-card-header>
+                                </a> </div>
+                                <div fxFlex="28%">
+                                  <p>
+                                    <label>Site/Group Name:</label>
+                                    <em>AGS</em> </p>
+                                  </div>
+                                  <div fxFlex="18%">
+                                    <p>
+                                      <label>Inv.Gen. On:</label>
+                                      <em>15/10/2019</em> </p>
+                                    </div>
+                                    <div fxFlex="18%">
+                                      <p>
+                                        <label>Invoice Status:</label>
+                                        <em>pending</em> </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div fxLayout="row" class="listrow">
+                                  <div fxFlex="100%">
+                                    <div fxLayout="row" fxLayoutGap="20px">
+                                      <div fxFlex="36%"> <a>
+                                        <mat-card-header>
+                                          <div mat-card-avatar class="avatar avatarBg3">B2</div>
+                                          <mat-card-title class="cname">Billed 2 unbilled case list Pvt
+                                          Ltd </mat-card-title>
+                                          <mat-card-subtitle class="cdesg mb-0">FY2017-18/000150 </mat-card-subtitle>
+                                        </mat-card-header>
+                                      </a> </div>
+                                      <div fxFlex="28%">
+                                        <p>
+                                          <label>Site/Group Name:</label>
+                                          <em>B2UNB-EAST-DVSN</em> </p>
+                                        </div>
+                                        <div fxFlex="18%">
+                                          <p>
+                                            <label>Inv.Gen. On:</label>
+                                            <em>15/10/2019</em> </p>
+                                          </div>
+                                          <div fxFlex="18%">
+                                            <p>
+                                              <label>Invoice Status:</label>
+                                              <em>pending</em> </p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div fxLayout="row" class="listrow">
+                                        <div fxFlex="100%">
+                                          <div fxLayout="row" fxLayoutGap="20px">
+                                            <div fxFlex="36%"> <a>
+                                              <mat-card-header>
+                                                <div mat-card-avatar class="avatar avatarBg4">MM</div>
+                                                <mat-card-title class="cname">Mahindra & Mahindra Ltd </mat-card-title>
+                                                <mat-card-subtitle class="cdesg mb-0">FY2017-18/000150 </mat-card-subtitle>
+                                              </mat-card-header>
+                                            </a> </div>
+                                            <div fxFlex="28%">
+                                              <p>
+                                                <label>Site/Group Name:</label>
+                                                <em>MAU</em> </p>
+                                              </div>
+                                              <div fxFlex="18%">
+                                                <p>
+                                                  <label>Inv.Gen. On:</label>
+                                                  <em>15/10/2019</em> </p>
+                                                </div>
+                                                <div fxFlex="18%">
+                                                  <p>
+                                                    <label>Invoice Status:</label>
+                                                    <em>pending</em> </p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div fxLayout="row" class="listrow">
+                                              <div fxFlex="100%">
+                                                <div fxLayout="row" fxLayoutGap="20px">
+                                                  <div fxFlex="36%"> <a>
+                                                    <mat-card-header>
+                                                      <div mat-card-avatar class="avatar avatarBg5">IT</div>
+                                                      <mat-card-title class="cname">InfoBeans Technologies Limited</mat-card-title>
+                                                      <mat-card-subtitle class="cdesg mb-0">FY2017-18/000150 </mat-card-subtitle>
+                                                    </mat-card-header>
+                                                  </a> </div>
+                                                  <div fxFlex="28%">
+                                                    <p>
+                                                      <label>Site/Group Name:</label>
+                                                      <em>INFO-123</em> </p>
+                                                    </div>
+                                                    <div fxFlex="18%">
+                                                      <p>
+                                                        <label>Inv.Gen. On:</label>
+                                                        <em>15/10/2019</em> </p>
+                                                      </div>
+                                                      <div fxFlex="18%">
+                                                        <p>
+                                                          <label>Invoice Status:</label>
+                                                          <em>pending</em> </p>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div> -->
+                                            <!-- </mat-tab> -->
+                                            <!-- <mat-tab label="Generate Invoice">
+                                            <div fxLayout="row" fxLayoutGap="30px">
+                                              <div fxFlex="20%" *ngIf="!!showdSearch">
+                                                <div fxLayout="row">
+                                                  <h4 class="search-header">Search Criteria</h4>
+                                                  <span fxFlex></span> <a class="text-sm text-upp">Reset</a>
+                                                </div>
+                                                <div fxLayout="row wrap" fxLayoutGap="0px grid">
+                                                  <div fxFlex="100%" class="mb-15">
+                                                    <mat-label class="lbl">Select option for the Invoice period</mat-label>
+                                                    <mat-radio-group fxLayoutGap="20px">
+                                                      <mat-radio-button value="1">By Date</mat-radio-button>
+                                                      <mat-radio-button value="2">By Current Month</mat-radio-button>
+                                                      <mat-radio-button value="2">By Previous Month</mat-radio-button>
+                                                    </mat-radio-group>
+                                                  </div>
+                                                  <div fxFlex="100%">
+                                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                      <mat-label>From Date</mat-label>
+                                                      <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date" />
+                                                      <mat-datepicker-toggle matSuffix [for]="sampledatePicker"> </mat-datepicker-toggle>
+                                                      <mat-datepicker #sampledatePicker></mat-datepicker>
+                                                    </mat-form-field>
+                                                  </div>
+                                                  <div fxFlex="100%">
+                                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                      <mat-label>To Date</mat-label>
+                                                      <input matInput [matDatepicker]="sampledatePicker1" placeholder="To Date" />
+                                                      <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"> </mat-datepicker-toggle>
+                                                      <mat-datepicker #sampledatePicker1></mat-datepicker>
+                                                    </mat-form-field>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div fxFlex="100%">
+                                                <div fxLayout="row">
+                                                  <div fxFlex="100%">
+                                                    <a class="srch-o-btn" matTooltip="Click here for Search"
+                                                      matTooltipClass="accent-tooltip" (click)="toggle('show_Search')"> <i class="icon-search1"></i>
+                                                    </a>
+                                                    <span class="tag">2d<a class="close">×</a></span><span class="tag">04-11-2019<a
+                                                  class="close">×</a></span> </div>
+                                                </div>
+                                                <div fxLayout="row" class="sortrow">
+                                                  <div fxFlex="100%" fxLayoutAlign="end center">
+                                                    <ul>
+                                                      <li><b>5 Record(s) </b> <span class="text-dull"> found</span></li>
+                                                      |
+                                                      <li><b>Sort By: </b> <a class="active">Client Name</a> <a>Invoice
+                                                      Status</a><a>Inv.Gen. On</a></li>
+                                                    </ul>
+                                                  </div>
+                                                </div>
+                                                <div fxLayout="row" class="listrow">
+                                                  <div fxFlex="100%">
+                                                    <div fxLayout="row" fxLayoutGap="20px">
+                                                      <div fxFlex="36%"> <a>
+                                                        <mat-card-header>
+                                                          <div mat-card-avatar class="avatar avatarBg1">2d</div>
+                                                          <mat-card-title class="cname">2d Entertainment Pvt Ltd </mat-card-title>
+                                                          <mat-card-subtitle class="cdesg mb-0">FY2017-18/000150 </mat-card-subtitle>
+                                                        </mat-card-header>
+                                                      </a> </div>
+                                                      <div fxFlex="28%">
+                                                        <p>
+                                                          <label>Site/Group Name:</label>
+                                                          <em>2DENTERLTD</em> </p>
+                                                        </div>
+                                                        <div fxFlex="18%">
+                                                          <p>
+                                                            <label>Inv.Gen. On:</label>
+                                                            <em>15/10/2019</em> </p>
+                                                          </div>
+                                                          <div fxFlex="18%">
+                                                            <p>
+                                                              <label>Invoice Status:</label>
+                                                              <em>pending</em> </p>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      <div fxLayout="row" class="listrow">
+                                                        <div fxFlex="100%">
+                                                          <div fxLayout="row" fxLayoutGap="20px">
+                                                            <div fxFlex="36%"> <a>
+                                                              <mat-card-header>
+                                                                <div mat-card-avatar class="avatar avatarBg2">AG</div>
+                                                                <mat-card-title class="cname">AGS Health India Private Limited </mat-card-title>
+                                                                <mat-card-subtitle class="cdesg mb-0">FY2017-18/000150 </mat-card-subtitle>
+                                                              </mat-card-header>
+                                                            </a> </div>
+                                                            <div fxFlex="28%">
+                                                              <p>
+                                                                <label>Site/Group Name:</label>
+                                                                <em>AGS</em> </p>
+                                                              </div>
+                                                              <div fxFlex="18%">
+                                                                <p>
+                                                                  <label>Inv.Gen. On:</label>
+                                                                  <em>15/10/2019</em> </p>
+                                                                </div>
+                                                                <div fxFlex="18%">
+                                                                  <p>
+                                                                    <label>Invoice Status:</label>
+                                                                    <em>pending</em> </p>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                            <div fxLayout="row" class="listrow">
+                                                              <div fxFlex="100%">
+                                                                <div fxLayout="row" fxLayoutGap="20px">
+                                                                  <div fxFlex="36%"> <a>
+                                                                    <mat-card-header>
+                                                                      <div mat-card-avatar class="avatar avatarBg3">B2</div>
+                                                                      <mat-card-title class="cname">Billed 2 unbilled case list Pvt
+                                                                      Ltd </mat-card-title>
+                                                                      <mat-card-subtitle class="cdesg mb-0">FY2017-18/000150 </mat-card-subtitle>
+                                                                    </mat-card-header>
+                                                                  </a> </div>
+                                                                  <div fxFlex="28%">
+                                                                    <p>
+                                                                      <label>Site/Group Name:</label>
+                                                                      <em>B2UNB-EAST-DVSN</em> </p>
+                                                                    </div>
+                                                                    <div fxFlex="18%">
+                                                                      <p>
+                                                                        <label>Inv.Gen. On:</label>
+                                                                        <em>15/10/2019</em> </p>
+                                                                      </div>
+                                                                      <div fxFlex="18%">
+                                                                        <p>
+                                                                          <label>Invoice Status:</label>
+                                                                          <em>pending</em> </p>
+                                                                        </div>
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+                                                                  <div fxLayout="row" class="listrow">
+                                                                    <div fxFlex="100%">
+                                                                      <div fxLayout="row" fxLayoutGap="20px">
+                                                                        <div fxFlex="36%"> <a>
+                                                                          <mat-card-header>
+                                                                            <div mat-card-avatar class="avatar avatarBg4">MM</div>
+                                                                            <mat-card-title class="cname">Mahindra & Mahindra Ltd </mat-card-title>
+                                                                            <mat-card-subtitle class="cdesg mb-0">FY2017-18/000150 </mat-card-subtitle>
+                                                                          </mat-card-header>
+                                                                        </a> </div>
+                                                                        <div fxFlex="28%">
+                                                                          <p>
+                                                                            <label>Site/Group Name:</label>
+                                                                            <em>MAU</em> </p>
+                                                                          </div>
+                                                                          <div fxFlex="18%">
+                                                                            <p>
+                                                                              <label>Inv.Gen. On:</label>
+                                                                              <em>15/10/2019</em> </p>
+                                                                            </div>
+                                                                            <div fxFlex="18%">
+                                                                              <p>
+                                                                                <label>Invoice Status:</label>
+                                                                                <em>pending</em> </p>
+                                                                              </div>
+                                                                            </div>
+                                                                          </div>
+                                                                        </div>
+                                                                        <div fxLayout="row" class="listrow">
+                                                                          <div fxFlex="100%">
+                                                                            <div fxLayout="row" fxLayoutGap="20px">
+                                                                              <div fxFlex="36%"> <a>
+                                                                                <mat-card-header>
+                                                                                  <div mat-card-avatar class="avatar avatarBg5">IT</div>
+                                                                                  <mat-card-title class="cname">InfoBeans Technologies Limited</mat-card-title>
+                                                                                  <mat-card-subtitle class="cdesg mb-0">FY2017-18/000150 </mat-card-subtitle>
+                                                                                </mat-card-header>
+                                                                              </a> </div>
+                                                                              <div fxFlex="28%">
+                                                                                <p>
+                                                                                  <label>Site/Group Name:</label>
+                                                                                  <em>INFO-123</em> </p>
+                                                                                </div>
+                                                                                <div fxFlex="18%">
+                                                                                  <p>
+                                                                                    <label>Inv.Gen. On:</label>
+                                                                                    <em>15/10/2019</em> </p>
+                                                                                  </div>
+                                                                                  <div fxFlex="18%">
+                                                                                    <p>
+                                                                                      <label>Invoice Status:</label>
+                                                                                      <em>pending</em> </p>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                </div>
+                                                                              </div>
+                                                                            </div>
+                                                                          </div>
+                                                                        </mat-tab> -->
+                                                                      <!-- </mat-tab-group> -->
+                                                                    </mat-card-content>
+                                                                  </mat-card>
+                                                                </div>
+                                                              </div>

@@ -1,0 +1,745 @@
+﻿<app-breadcrumb [btnAdd]="btnAdd" [btnResetTbl]="btnResetTbl" (eventAdd)="editpackage(0,'Add');" [routePath]='routePath'
+  [btnAddDisabled]="!screenAuth.addFlag" (eventResetTbl)="refresh()"></app-breadcrumb>
+<!-- <div>
+    <div fxFlex="100%" class="b-crumb-toolbar">
+        <div class="btnTool" fxLayoutGap="10px">
+            <button mat-icon-button matTooltip="Reset" matTooltipClass="accent-tooltip" (click)="refresh()"> <i
+                    class="icon-cycle"></i> </button>
+            <button mat-icon-button matTooltip="Add" [disabled]="!screenAuth.addFlag" matTooltipClass="accent-tooltip"
+                (click)="editpackage(0,'Add')"> <i class="icon-plus"></i> </button>
+        </div>
+    </div>
+</div> -->
+
+<!-- <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="22.8%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Client Name</mat-label>
+                    <input matInput placeholder="Search Client Name" [formControl]="clientname"
+                        [matAutocomplete]="autocandidate" #clientInput (focus)="clientItems(clientInput.value)"
+                        (keyup)="clientKeyupFunction($event,clientInput.value)" (input)="clientItems(clientInput.value)"
+                        (click)="clientInput.select()" (blur)="checkValidValue()">
+                    <mat-error *ngIf="clientname?.errors?.required">
+                        Client name is required.
+                    </mat-error>
+                    <mat-error *ngIf="clientname?.errors?.incorrect">
+                        Client name is not valid.
+                    </mat-error>
+                    <mat-autocomplete #autocandidate="matAutocomplete" [displayWith]="displayclientFn"
+                        (optionSelected)="getPackageByClientId()" placeholder="Select Client Name">
+                       
+                        <mat-option [value]="client.clientId" *ngFor="let client of clientflterlist "
+                            class="autocom-option autocom-tr">
+                            <span [innerHTML]="client.clientName | highlight: clientInput.value">
+                                <mat-option>Select Client Name</mat-option>
+                            </span>
+                        </mat-option>
+                        <mat-option *ngIf="clientflterlist.length==0">
+                            <div class="no-record"><span>No Record Found</span></div>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+         
+            <div fxFlex="50%"></div>
+        </div> -->
+<div fxLayout="row" class="advSearch" [formGroup]="packageListForm" autocomplete="off">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="200px">
+            <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='clientNameControl'>
+            </app-auto-complete>
+          </div>
+          <div fxFlex="200px">
+            <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='packageNameControl'>
+            </app-auto-complete>
+          </div>
+          <div fxFlex="200px">
+            <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='packPriceControl'>
+            </app-auto-complete>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="100%" class="advSearch-btn">
+    <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px"> <a
+        (click)="searchValueArr = [];packageListForm.reset()"> Reset</a><span></span> </div>
+  </div>
+</div>
+<div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">Package Creation</h1>
+                  </div>
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" fxHide.xs
+                    fxLayoutAlign="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center"> </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <!-- <div *ngIf="packageList.length > 0">
+            <div fxLayout="row" class="pb-20">
+                <div fxFlex="100%">
+                    <div fxLayout="row">
+                        <div fxFlex="100%">
+                            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                                fxLayout.xs="column" fxLayoutGap="20px">
+                                <div fxFlex="100%" fxLayoutGap="20px grid" fxLayoutGap.md="20px grid"
+                                    fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+                                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                                        fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid">
+
+                                        <div #packageList1 fxFlex="25%"
+                                            *ngFor="let package of packageList;let packageIndex = index" fxFlex.lg="25%"
+                                            fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+                                            <div class="Pack-Box">
+                                                <div class="header">
+                                                    <h4>{{package.packageName}}</h4>
+                                                    <p>{{package.clientName}}</p>
+                                                    <div class="more">
+                                                        <button mat-icon-button [matMenuTriggerFor]="menu"
+                                                            matTooltip="Action" matTooltipClass="accent-tooltip">
+                                                            <i class="icon-more-vertical"></i>
+                                                        </button>
+                                                        <mat-menu #menu="matMenu">
+                                                            <button mat-menu-item  [ngClass]="
+                                                            screenAuth.editFlag === false ? 'page-btn disabled' : ''"
+                                                                (click)="editpackage(package,'Edit')">
+                                                                <mat-icon><i class="material-icons material-icons-outlined">edit</i></mat-icon>
+                                                                <span>Edit</span></button>
+                                                            <button mat-menu-item
+                                                                (click)="editpackage(package,'Effective')">
+                                                                <mat-icon><i class="material-icons material-icons-outlined">calendar_today</i></mat-icon>
+                                                                <span>Effective Date</span>
+                                                                </button>
+                                                            <button mat-menu-item [ngClass]="
+                                                            screenAuth.editFlag === false ? 'page-btn disabled' : ''"
+                                                                (click)="openDialog(package)">
+                                                                <mat-icon><i class="material-icons material-icons-outlined">delete</i></mat-icon>
+                                                                <span>Delete</span>
+                                                            </button>
+                                                            <button mat-menu-item
+                                                                (click)="openDialogWithTemplateRef(effectiveDialog,package.packageHistoryTransVm,package.packageName)">
+                                                                <mat-icon><i class="material-icons material-icons-outlined">history</i></mat-icon>
+                                                                <span>History</span></button>
+                                                        </mat-menu>
+                                                    </div>
+                                                </div>
+                                                <div class="content">
+                                                    <div class="pack-scroll" style="overflow:auto">
+                                                        <mat-list role="list">
+                                                            <ng-container *ngFor="let packComp of package.packComp">
+                                                                <mat-list-item *ngIf='packComp.subComponent.length == 0'
+                                                                    role="listitem">
+                                                                    {{packComp.componentName}} - {{packComp.noOfComp}}
+                                                                </mat-list-item>
+                                                                <ng-container *ngIf='packComp.subComponent.length > 0'>
+                                                                    <span *ngFor="let ps of packComp.subComponent"
+                                                                        role="listitem">
+                                                                       
+                                                                        <mat-list-item role="listitem">
+                                                                            {{packComp.componentName}} -
+                                                                            {{ps.subComponentName}} - {{ps.noOfComp}}
+                                                                        </mat-list-item>
+                                                                    </span>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </mat-list>
+                                                    </div>
+                                                </div>
+                                                <div class="action"><sup>₹</sup><span
+                                                        class="prate">{{package.fees}}</span>/{{package.tatDays}} days
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- sample begin -->
+        <!-- <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+            fxLayout.xs="column" fxLayoutGap="20px grid">
+            <div fxFlex="50%">
+                <div class="pack-list">
+                    <div fxLayout="row">
+                        <div fxFlex="100%">
+                            <div fxLayout="row" class="pb-5">
+                                <div fxFlex="33%">
+                                    <div class="team-details">
+                                        <div class="teamAvtar avatarBg1"> <i class="icon-present"></i> </div>
+                                        <div class="teamL-Detail line-h">
+                                            <h5>Basic Package</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div fxFlex="33%" class="db-listdetails line-h">
+                                    <div fxFlex="15%" class="tbl-lblname">
+                                        <label>Client:</label>
+                                    </div>
+                                    <div fxFlex="85%" class="tbl-result">DSSI Solution</div>
+                                </div>
+                                <div fxFlex="33%" class="db-listdetails line-h">
+                                    <div fxFlex="95%" class="tbl-lblname"> <sup>₹</sup>
+                                        <label><a href="#"> 2500</a> /
+                                            36 days</label>
+                                    </div>
+                                    <div fxFlex="5%" class="more" fxLayoutAlign="end center">
+                                        <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action"
+                                            matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i>
+                                        </button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item>
+                                                <mat-icon>settings_applications</mat-icon>
+                                                <span>Manage Team</span>
+                                            </button>
+                                            <button mat-menu-item>
+                                                <mat-icon>voicemail</mat-icon>
+                                                <span>Add Member</span>
+                                            </button>
+                                            <button mat-menu-item>
+                                                <mat-icon>notifications_off</mat-icon>
+                                                <span>Leave the Team</span>
+                                            </button>
+                                            <button mat-menu-item>
+                                                <mat-icon>notifications_off</mat-icon>
+                                                <span>Edit Team</span>
+                                            </button>
+                                            <button mat-menu-item>
+                                                <mat-icon>delete_outline</mat-icon>
+                                                <span>Delete Team</span>
+                                            </button>
+                                        </mat-menu>
+                                    </div>
+                                </div>
+                            </div>
+                            <div fxLayout="row" class="border-top" *ngIf="!showMorepackage">
+                                <ul class="pack-ul">
+                                    <li>Address (3)</li>
+                                    <li>Education (2)</li>
+                                    <li>Employment HR (6)</li>
+                                    <li>Employment HR (6)</li>
+                                    <li class="FloatR"><a class="cursor-pointer"
+                                            (click)='showMorepackage = !showMorepackage'>More Components
+                                            &nbsp;<i class="icon-chevron-{{ showMorepackage?'up':'down' }}"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div fxLayout="row" *ngIf="showMorepackage" class="mt-15">
+                                <div fxFlex="100%">
+                                    <div fxLayout="row">
+                                        <div fxFlex="100%" class="dt-viewBg">
+                                            <div fxLayout="row" fxLayoutGap="20px" class="dt-viewBg pack-title">
+                                                <div fxFlex="90%" fxLayoutAlign="start center">
+                                                    <h4>Package Component List</h4>
+                                                </div>
+                                                <div fxFlex="10%" fxLayoutAlign="end center">
+                                                    <button mat-icon-button
+                                                        (click)='showMorepackage = !showMorepackage'>×</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div fxLayout="row">
+                                        <div fxFlex="33%">
+                                            <ul class="morepack-ul">
+                                                <li>Address (3)</li>
+                                                <li>Education (5)</li>
+                                                <li>Employment HR (2)</li>
+                                                <li>Drug Test ()2</li>
+                                            </ul>
+                                        </div>
+                                        <div fxFlex="33%">
+                                            <ul class="morepack-ul">
+                                                <li>Address (3)</li>
+                                                <li>Education (5)</li>
+                                                <li>Employment HR (2)</li>
+                                                <li>Drug Test ()2</li>
+                                            </ul>
+                                        </div>
+                                        <div fxFlex="33%">
+                                            <ul class="morepack-ul">
+                                                <li>Address (3)</li>
+                                                <li>Education (5)</li>
+                                                <li>Employment HR (2)</li>
+                                                <li>Drug Test ()2</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div fxLayout="row" *ngIf="showMorepackage">
+                                        <div fxFlex="100%" fxLayoutAlign="end center"> <a class="cursor-pointer text-sm"
+                                                (click)='showMorepackage = !showMorepackage'>Less Components
+                                                &nbsp;<i class="icon-chevron-{{ showMorepackage?'up':'down' }}"></i>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div> -->
+        <!-- sample end -->
+
+        <div fxLayout="row" *ngIf="searchValueArr.length > 0">
+          <div fxFlex="100%"> <b class="text-sm mr-10 text-semi-bold text-dull">Search results for:</b> <span
+              class="tag" *ngFor="let s of searchValueArr;let in = index">{{s.value}} <a class="close"
+                (click)="removeSearchValue(s.propertyName,in)">×</a></span> </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" class="pack-mb" *ngIf="packageList.length > 0">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"
+            *ngFor="let package of packageList | search: [{key:'clientName', value: packageListForm?.get('clientName')?.value},
+            {key:'packageName', value: packageListForm?.get('packageName')?.value},  {key:'packFees', value: packageListForm?.get('packPrice')?.value}]; let packageIndex = index;">
+            <div class="pack-list">
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <div fxLayout="row" class="pb-5">
+                    <div fxFlex="40%">
+                      <div class="team-details">
+                        <div class="teamAvtar avatarBg{{packageIndex % 6 + 1 }}"> <i class="icon-present"></i> </div>
+                        <div class="teamL-Detail line-h">
+                          <h5>{{package.packageName}}</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxFlex="32%" class="db-listdetails clname">
+                      <p>
+                        <label>Client:</label>
+                        <em>{{package.clientName}}</em>
+                      </p>
+                    </div>
+                    <div fxFlex="25%" class="db-listdetails rate">
+                      <div fxLayout="row">
+                        <div fxFlex="100%"> <sup>₹ </sup> <span class="amnt">{{package.fees}}</span><br />
+                          <span class="days">/{{package.tatDays}} days</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxFlex="3%" fxLayoutAlign="end center"> <span fxFlex></span> <span class="more"
+                        fxLayoutAlign="end center">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action"
+                          matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                        <mat-menu #menu="matMenu"> <span
+                            matTooltip="{{package.packFee === true ? 'Its a Requesting Package': ''}}">
+                            <button mat-menu-item [ngClass]="screenAuth.editFlag ===false?'page-btn disabled':''"
+                              (click)="editpackage(package,'Edit')">
+                              <mat-icon><i matTooltip="Its a Requesting Package"
+                                  class="material-icons material-icons-outlined">edit</i> </mat-icon>
+                              <span>Edit</span> </button>
+                          </span> <span matTooltip="{{package.packFee === true ? 'Its a Requesting Package': ''}}">
+                            <button mat-menu-item
+                              [ngClass]="screenAuth.editFlag === false ||  package.packFee === true ? '' : ''"
+                              (click)="editpackage(package,'Effective')">
+                              <mat-icon><i class="material-icons material-icons-outlined">calendar_today</i> </mat-icon>
+                              <span>Effective Date</span> </button>
+                          </span> <span matTooltip="{{package.packFee === true ? 'Its a Requesting Package': ''}}">
+                            <button mat-menu-item [ngClass]="screenAuth.deleteFlag===false?'page-btn disabled':''"
+                              (click)="openDialog(package)">
+                              <mat-icon><i class="material-icons material-icons-outlined">delete</i> </mat-icon>
+                              <span>Delete</span> </button>
+                          </span>
+                          <button mat-menu-item
+                            (click)="openDialogWithTemplateRef(effectiveDialog,package.packageHistoryTransVm,package.packageName)">
+                            <mat-icon><i class="material-icons material-icons-outlined">history</i> </mat-icon>
+                            <span>History</span> </button>
+                        </mat-menu>
+                      </span> </div>
+                  </div>
+                  <!-- Note  -->
+                  <div fxLayout="row" class="border-top" *ngIf="!package.showMorepackage">
+                    <ul class="pack-ul">
+                      <span *ngFor="let packComp of package.packComp;let packCompIndex = index">
+                        <li *ngIf="packCompIndex < 3 && packComp.subComponent.length == 0">
+                          {{packComp.componentName}}-{{packComp.noOfComp}} </li>
+                        <span *ngIf='packCompIndex < 3 &&  packComp.subComponent.length > 0'> <span
+                            *ngFor="let ps of packComp.subComponent;let psIndex = index">
+                            <li *ngIf="psIndex < 1"> {{packComp.componentName}} -{{ps.subComponentName}} -
+                              {{ps.noOfComp}} </li>
+                          </span> </span>
+                      </span>
+                    </ul>
+                    <span fxFlex></span> <a class="packmore"
+                      (click)='package.showMorepackage = !package.showMorepackage'>More
+                      Components <i class="icon-chevron-{{ package.showMorepackage?'up':'down' }}"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+              fxLayout.xs="column" fxLayoutGap="0px grid" *ngIf="package.showMorepackage" class="moreCompon">
+              <div fxFlex="100%">
+                <div fxLayout="row">
+                  <div fxFlex="100%" class="dt-viewBg mb-0">
+                    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="row"
+                      fxLayoutGap="0px" class="dt-viewBg pack-title mb-0">
+                      <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="90%" fxFlex.sm="90%" fxFlex.xs="90%"
+                        fxLayoutAlign="start center">
+                        <h4>{{package.packageName}} List</h4>
+                      </div>
+                      <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="10%" fxFlex.xs="10%"
+                        fxLayoutAlign="end center">
+                        <button mat-icon-button (click)='package.showMorepackage = !package.showMorepackage'>×</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%"> <span *ngFor="let packComp of package.packComp">
+                      <ul class="morepack-ul">
+                        <span *ngIf='packComp.subComponent.length == 0'>
+                          <li *ngIf='packComp.subComponent.length == 0'>
+                            {{packComp.componentName}}-{{packComp.noOfComp}} </li>
+                        </span> <span *ngIf='packComp.subComponent.length > 0'> <span
+                            *ngFor="let ps of packComp.subComponent" role="listitem">
+                            <li> {{packComp.componentName}} -
+                              {{ps.subComponentName}} - {{ps.noOfComp}} </li>
+                          </span> </span>
+                      </ul>
+                    </span> </div>
+                </div>
+                <div fxLayout="row" *ngIf="package.showMorepackage">
+                  <div fxFlex="100%" fxLayoutAlign="end center" class="lessCompo"> <a class="cursor-pointer text-sm"
+                      (click)='package.showMorepackage = !package.showMorepackage'>Less Components
+                      &nbsp;<i class="icon-chevron-{{ package.showMorepackage?'up':'down' }}"></i> </a> </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="packageList.length > 0 && 1 !== 1">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <p-table [value]="packageList" dataKey="packageId" [scrollable]="true" [paginator]="true" [rows]="10"
+              [resizableColumns]="true" [reorderableColumns]="true" columnResizeMode="expand">
+
+              <!-- ================= COLGROUP ================= -->
+              <ng-template pTemplate="colgroup" let-mainColGroupCols>
+                <colgroup>
+                  <col *ngFor="let col of mainColGroupCols" style="min-width:150px" />
+                </colgroup>
+              </ng-template>
+
+              <!-- ================= HEADER ================= -->
+              <ng-template pTemplate="header" let-mainHeaderCols>
+                <tr>
+                  <th class="w-3em"></th>
+
+                  <th *ngFor="let col of mainHeaderCols" [ngClass]="{ 'text-center action': col.field === 'action' }"
+                    [pSortableColumn]="col.field" pReorderableColumn pResizableColumn [ngSwitch]="col.field">
+
+                    <div class="thname">{{ col.header }}</div>
+
+                    <p-sortIcon *ngIf="col.field !== 'expand' && col.field !== 'action'" [field]="col.field">
+                    </p-sortIcon>
+
+                    <!-- SEARCH ICONS -->
+                    <span class="ico-fieldsearch">
+                      <i *ngSwitchCase="'packageName'" class="icon-search2" matTooltip="Search"
+                        matTooltipClass="accent-tooltip" (click)="packageNameTrigger.openMenu()"></i>
+
+                      <i *ngSwitchCase="'fees'" class="icon-search2" matTooltip="Search"
+                        matTooltipClass="accent-tooltip" (click)="feesTrigger.openMenu()"></i>
+                    </span>
+
+                    <!-- PACKAGE NAME FILTER -->
+                    <span *ngSwitchCase="'packageName'">
+                      <div #packageNameTrigger="matMenuTrigger" [matMenuTriggerFor]="packageNameCtrl"
+                        class="txtborder-bot">
+                      </div>
+
+                      <mat-menu #packageNameCtrl class="pos-top">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input matInput #packageNameCtl placeholder="Package Name" [formControl]="packageNameFormCtrl"
+                            (input)="packtab.filter($event.target.value, col.field, 'contains')" />
+                        </mat-form-field>
+                        <a *ngIf="packageNameCtl.value"
+                          (click)="packtab.filter('', col.field, 'contains'); packageNameFormCtrl.setValue('')">
+                          Reset
+                        </a>
+                      </mat-menu>
+                    </span>
+
+                    <!-- FEES FILTER -->
+                    <span *ngSwitchCase="'fees'">
+                      <div #feesTrigger="matMenuTrigger" [matMenuTriggerFor]="feesCtrl" class="txtborder-bot">
+                      </div>
+
+                      <mat-menu #feesCtrl class="pos-top">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input matInput #feesCtl placeholder="Fees" [formControl]="feesFormCtrl"
+                            (input)="packtab.filter($event.target.value, col.field, 'contains')" />
+                        </mat-form-field>
+                        <a *ngIf="feesCtl.value"
+                          (click)="packtab.filter('', col.field, 'contains'); feesFormCtrl.setValue('')">
+                          Reset
+                        </a>
+                      </mat-menu>
+                    </span>
+
+                  </th>
+
+                  <th class="action">Action</th>
+                </tr>
+              </ng-template>
+
+              <!-- ================= BODY ================= -->
+              <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-mainBodyCols="columns">
+
+                <tr>
+                  <td class="w-3em">
+                    <a [pRowToggler]="rowData">
+                      <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i>
+                    </a>
+                  </td>
+
+                  <td>{{ rowData.packageName }}</td>
+                  <td>{{ rowData.tatDays }}</td>
+                  <td>{{ rowData.fees }}</td>
+
+                  <td class="action">
+                    <mat-icon matTooltip="Edit" [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''"
+                      (click)="editpackage(rowData,'Edit')">
+                      edit
+                    </mat-icon>
+
+                    <mat-icon matTooltip="Effective Date"
+                      [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''"
+                      (click)="editpackage(rowData,'Effective')">
+                      date_range
+                    </mat-icon>
+
+                    <mat-icon matTooltip="Delete" [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''"
+                      (click)="openDialog(rowData)">
+                      delete
+                    </mat-icon>
+                  </td>
+                </tr>
+
+              </ng-template>
+
+              <!-- ================= ROW EXPANSION ================= -->
+              <ng-template pTemplate="rowexpansion" let-rowData let-mainExpCols="columns">
+                <tr>
+                  <td [attr.colspan]="4">
+
+                    <div fxLayout="row" fxLayoutGap="20px">
+
+                      <!-- COMPONENT TABLE -->
+                      <p-table [columns]="colname" [value]="rowData.packComp" class="inn-table" [paginator]="true"
+                        [rows]="10">
+
+                        <ng-template pTemplate="header" let-compHeaderCols>
+                <tr>
+                  <th *ngFor="let col of compHeaderCols">
+                    {{ col.header }}
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-compRow let-compBodyCols="columns">
+                <tr>
+                  <td *ngFor="let col of compBodyCols">
+                    {{ compRow[col.field] }}
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage" let-compEmptyCols>
+                <tr>
+                  <td [attr.colspan]="compEmptyCols.length" class="text-center">
+                    No Record Found
+                  </td>
+                </tr>
+              </ng-template>
+
+            </p-table>
+
+            <!-- HISTORY TABLE -->
+            <p-table [columns]="hiscolname" [value]="rowData.packageHistoryTransVm" class="inn-table" [paginator]="true"
+              [rows]="10">
+
+              <ng-template pTemplate="header" let-hisHeaderCols>
+                <tr>
+                  <th *ngFor="let col of hisHeaderCols">
+                    {{ col.header }}
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-hisRow let-hisBodyCols="columns">
+                <tr>
+                  <td *ngFor="let col of hisBodyCols">
+                    {{ hisRow[col.field] }}
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage" let-hisEmptyCols>
+                <tr>
+                  <td [attr.colspan]="hisEmptyCols.length" class="text-center">
+                    No Record Found
+                  </td>
+                </tr>
+              </ng-template>
+
+            </p-table>
+
+          </div>
+
+          </td>
+          </tr>
+          </ng-template>
+
+          <!-- ================= MAIN EMPTY ================= -->
+          <ng-template pTemplate="emptymessage" let-mainEmptyCols>
+            <tr>
+              <td [attr.colspan]="mainEmptyCols.length" class="text-center">
+                No Record Found
+              </td>
+            </tr>
+          </ng-template>
+
+          </p-table>
+        </div>
+        <div fxLayout="row" class="cus-paginator">
+          <div fxFlex="30%"> Showing {{ packtab.totalRecords
+            < 1 ? 0 : packtab.first + 1 }} - {{ packtab.totalRecords> 0 ? packtab.rows + packtab.first
+              <=packtab.totalRecords ? packtab.rows + packtab.first : packtab.totalRecords : 0 }} of {{
+                packtab.totalRecords }} record(s) </div>
+                <span fxFlex></span>
+                <div fxFlex="50%" fxLayoutAlign="end center"> <a
+                    [ngClass]="packtab.first===0?'page-btn disabled': 'page-btn'"
+                    (click)="packtab.onPageChange({ first: packtab.first - packtab.rows, rows: packtab.rows });
+                                                                  navigateNxtPrevPage(packtab.first + packtab.rows,packtab.rows)"> <i class="icon-control-start mr-5"></i></a> <span
+                    class="gotopagbg mr-2 ml-2">Go to
+                    Page<span class="input-num">
+                      <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                        [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value,packtab.rows)" />
+                    </span></span> <span class="mr-2">Of {{ getTotalPages(packtab.totalRecords,packtab.rows) }}</span>
+                  <a [ngClass]="(packtab.rows + packtab.first)>=packtab.totalRecords?'page-btn disabled': 'page-btn'"
+                    (click)="packtab.onPageChange({ first: packtab.first + packtab.rows, rows: packtab.rows });
+                                                                      navigateNxtPrevPage(packtab.first + packtab.rows,packtab.rows)"><i
+                      class="icon-control-end ml-5"></i></a>
+                </div>
+          </div>
+        </div>
+        <!-- <div *ngIf="!packageList.length && clientInput.value"> -->
+        <div *ngIf="!packageList.length">
+          <div fxLayout="row">
+            <div fxFlex="100%" class="pt-15">
+              <div class="no-record text-center"> <span>No Record Found</span> </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<ng-template #effectiveDialog>
+  <h1 mat-dialog-title>{{heading}} History</h1>
+  <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip" (click)="dialog.closeAll()">
+    <i class="material-icons">clear</i> </button>
+  <mat-dialog-content>
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <p-table #statustab [columns]="hiscolname" [value]="gridData" [scrollable]="true" scrollHeight=""
+          [paginator]="true" [rows]="10" class="inn-table">
+
+          <!-- HEADER -->
+          <ng-template pTemplate="header" let-headerCols>
+            <tr>
+              <th *ngFor="let coll of headerCols" [pSortableColumn]="coll.field">
+
+                <div class="thname" matTooltip="{{ coll.header }}" matTooltipClass="accent-tooltip">
+                  {{ coll.header }}
+                </div>
+
+                <p-sortIcon *ngIf="coll.field !== 'action'" [field]="coll.field" ariaLabel="Activate to sort"
+                  ariaLabelDesc="Activate to sort in descending order"
+                  ariaLabelAsc="Activate to sort in ascending order">
+                </p-sortIcon>
+
+              </th>
+            </tr>
+          </ng-template>
+
+          <!-- BODY -->
+          <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+            <tr>
+              <td *ngFor="let coll of bodyCols" [ngSwitch]="coll.field">
+
+                <div *ngSwitchCase="'effectiveDate'">
+                  {{ rowData.effectiveDate | date:'dd/MM/yyyy' }}
+                </div>
+
+                <div *ngSwitchCase="'originalFee'">
+                  {{ rowData.originalFee }}
+                </div>
+
+                <div *ngSwitchCase="'updatedFee'">
+                  {{ rowData.updatedFee }}
+                </div>
+
+                <div *ngSwitchCase="'reason'">
+                  {{ rowData.reason }}
+                </div>
+
+                <div *ngSwitchCase="'userName'">
+                  {{ rowData.userName }}
+                </div>
+
+                <div *ngSwitchCase="'action'">
+                  <div fxLayout="row" class="tbl-icon" fxLayoutAlign="start start">
+                    <div fxLayoutGap="10px">
+                      <i class="material-icons-outlined" matTooltip="Delete Package history"
+                        matTooltipClass="accent-tooltip" (click)="openDialog(rowData, 'history')">
+                        delete
+                      </i>
+                    </div>
+                  </div>
+                </div>
+
+              </td>
+            </tr>
+          </ng-template>
+
+          <!-- EMPTY MESSAGE -->
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td [attr.colspan]="hiscolname.length" class="text-center">
+                <div class="no-record">
+                  <span>No Record Found</span>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+    <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+  </mat-dialog-actions>
+</ng-template>

@@ -1,0 +1,20 @@
+<div style="text-align:center">
+  <h1>Welcome to WebRTC</h1>
+  <video class="video" #video autoplay controls></video>
+  <span class="m-1"></span>
+  <video class="video" style="width:360 !important;" controls #recordedVideo></video>
+  <br>
+    @if (!isRecording) {
+      <button class="btn btn-primary btn-lg" (click)="startRecording()">Start Recording</button>
+    }
+    @if (isRecording) {
+      <button class="btn btn-warning btn-lg" (click)="stopRecording()">Stop Recording</button>
+    }
+
+  </div>
+  <div>
+    <button (click)="saveVideo()">Save Recorded Video</button>
+  </div>
+  <div>
+    <button (click)="openDialog()">View All Saved Videos</button>
+  </div>

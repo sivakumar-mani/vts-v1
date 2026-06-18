@@ -1,0 +1,168 @@
+<app-breadcrumb [routePath]="routePath" [btnExport]="btnExport" [btnExportDisabled]="!screenAuth?.exportFlag"
+  (eventExport)="getCaseImportTemplete()" [btnAddUpload]="btnAddUpload"
+  [btnAddUploadDisabled]="!screenAuth.addFlag || !isExcelValid" [btnValidate]="btnValidate"
+  (eventValidate)="validateUploadFile(false)" (eventAddUpload)="bulkUpload()">
+</app-breadcrumb>
+
+<mat-card>
+
+  <!-- HEADER -->
+  <mat-card-header>
+    <h1 class="header-title">Bulk Invitation</h1>
+  </mat-card-header>
+
+  <!-- FORM -->
+  <mat-card-content>
+    <form [formGroup]="bulkFormGroup" (keydown.enter)="$event.preventDefault()">
+
+      <!-- CLIENT -->
+      <app-auto-complete (selectionChange)="getClientId($event)" [selectProperties]="clientControls">
+      </app-auto-complete>
+
+      <!-- SITE -->
+      <mat-form-field appearance="outline">
+        <mat-label>Site Name</mat-label>
+        <input matInput formControlName="siteNo" [matAutocomplete]="autoComponent" #compInput
+          (focus)="siteItems(compInput.value)" (keyup)="siteKeyupFunction($event, compInput.value)"
+          (input)="siteItems(compInput.value)">
+        <mat-autocomplete #autoComponent="matAutocomplete" [displayWith]="displaySiteFn">
+          @for (comp of sitefilterlist; track comp) {
+            <mat-option [value]="comp.siteId">
+              <span [innerHTML]="comp.siteNoWithsiteName | highlight: compInput.value"></span>
+            </mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- FILE UPLOAD -->
+      <div class="file-upload">
+        <input type="file" (change)="openUploadDoc($event)">
+      </div>
+
+    </form>
+  </mat-card-content>
+
+  <!-- TABLE -->
+  @if (isExcelValid) {
+    <p-table [columns]="bulkInvitationColumns" [value]="bulkInvitationList" [scrollable]="true"
+      [paginator]="true" [rows]="10">
+      <!-- HEADER -->
+      <ng-template pTemplate="header" let-headerCols>
+        <tr>
+          @for (col of headerCols; track col) {
+            <th>
+              {{ col.header }}
+            </th>
+          }
+        </tr>
+      </ng-template>
+      <!-- BODY -->
+      <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+        <tr>
+          @for (col of bodyCols; track col) {
+            <td>
+              <!-- SNO -->
+              @if (col.field === 'sno') {
+                <span>
+                  {{ index + 1 }}
+                </span>
+              }
+              <!-- BASIC -->
+              @if (col.field === 'email' || col.field === 'firstName') {
+                <span>
+                  {{ rowData[col.field] || 'N/A' }}
+                </span>
+              }
+              <!-- PACKAGE -->
+              @if (col.field === 'packageId') {
+                <mat-form-field>
+                  <mat-select [(ngModel)]="rowData.packageId">
+                    @for (pack of packAndCompList?.package; track pack) {
+                      <mat-option [value]="pack.packageId">
+                        {{ pack.packageName }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+              <!-- ✅✅ FIXED INDIVIDUAL COMPONENT -->
+              @if (col.field === 'indComp') {
+                <mat-form-field>
+                  <mat-select [(ngModel)]="rowData.indComponentList" multiple [compareWith]="compareComponents">
+                    <mat-select-trigger>
+                      {{
+                      rowData.indComponentList?.length
+                      ? rowData.indComponentList[0].compName
+                      : ''
+                      }}
+                      @if (rowData.indComponentList?.length > 1) {
+                        <span>
+                          (+{{ rowData.indComponentList.length - 1 }} others)
+                        </span>
+                      }
+                    </mat-select-trigger>
+                    @for (packComp of packAndCompList?.component; track packComp) {
+                      @if (packComp.subCompFlag) {
+                        <mat-optgroup [label]="packComp.compName">
+                          @for (subComp of packComp.packageSubComponent; track subComp) {
+                            <mat-option
+                              [value]="setSubCompValue(packComp, subComp)" (onSelectionChange)="onSubCompSelectionChange($event)">
+                              {{ subComp.subCompName }}
+                            </mat-option>
+                          }
+                        </mat-optgroup>
+                      }
+                      @if (!packComp.subCompFlag) {
+                        <mat-option [value]="packComp"
+                          (onSelectionChange)="onSubCompSelectionChange($event)">
+                          {{ packComp.compName }}
+                        </mat-option>
+                      }
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+              <!-- COMPONENT LIST -->
+              @if (col.field === 'comps') {
+                <span>
+                  @if (rowData.indComponentList?.length) {
+                    <div>
+                      @for (comp of rowData.indComponentList; track comp; let i = $index) {
+                        <div>
+                          {{ i + 1 }}. {{ comp.compName }}
+                        </div>
+                      }
+                    </div>
+                  } @else {
+                    N/A
+                  }
+                </span>
+              }
+            </td>
+          }
+        </tr>
+      </ng-template>
+      <!-- EMPTY -->
+      <ng-template pTemplate="emptymessage" let-emptyCols>
+        <tr>
+          <td [attr.colspan]="emptyCols.length">
+            <div class="no-record text-center">No Record Found</div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+
+</mat-card>
+
+<!-- CONFIRM DIALOG -->
+<ng-template #uploadConfirm>
+  <mat-dialog-content>
+    <h3>Confirmation!</h3>
+    <p>Are you sure you want to update this records?</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="warn" (click)="dialog.closeAll()">No</button>
+    <button mat-flat-button color="accent" (click)="validateUploadFile(true)">Yes</button>
+  </mat-dialog-actions>
+</ng-template>

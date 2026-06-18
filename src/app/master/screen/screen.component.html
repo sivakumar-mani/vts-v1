@@ -1,0 +1,305 @@
+﻿<app-breadcrumb [btnAdd]="breadcrumbFlags.btnAdd" [btnSave]="breadcrumbFlags.btnSave"
+    [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset"
+    [btnResetTbl]="breadcrumbFlags.btnResetTbl" (eventAdd)="addForm()" [routePath]="'Configure / Master / Screen'"
+    [btnAddDisabled]="!screenAuth.addFlag" (eventBack)="backForm()" (eventSave)="saveForm()"
+    [toolTip]="breadcrumbFlags.toolTip" (eventReset)="resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
+<mat-card>
+    <div fxLayout="row">
+        <mat-card-header fxFlex="100%">
+            <div fxFlex="100%">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                    fxLayoutGap="10px">
+                    <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                        fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                        <mat-card-title>
+                            <h1 class="header-title">Screen</h1>
+                        </mat-card-title>
+                    </div>
+                    <span fxFlex></span>
+                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                        fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                        <div class="tbl-commonsearch" *ngIf="!showFlag">
+                            <mat-form-field fxFlex="100%">
+                                <mat-label></mat-label>
+                                <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                                <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                                    autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-card-header>
+    </div>
+    <mat-card-content>
+        <div class="content-area">
+            <form *ngIf="showFlag" id="ngForm" autocomplete="off" [formGroup]="screenForm">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="33%" fxFlex.xs="100%">
+                        <app-auto-complete [selectProperties]='moduleControls'
+                            (selectionChange)="GetAllSubmodule(screenForm?.value?.moduleId)"></app-auto-complete>
+                    </div>
+                    <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="33%" fxFlex.xs="100%">
+                        <app-auto-complete [selectProperties]='subModuleControls'></app-auto-complete>
+                    </div>
+                    <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="33%" fxFlex.xs="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Screen Name</mat-label>
+                            <input matInput type="text" placeholder="Screen Name" formControlName="screenName"
+                                maxlength="75" autocomplete="off" role="presentation" required />
+                            <mat-error *ngIf="screenForm?.get('screenName')?.errors?.required">Screen Name
+                                is required </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="33%" fxFlex.xs="100%">
+                        <app-auto-complete [selectProperties]='applicationControls'></app-auto-complete>
+                    </div>
+                    <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="33%" fxFlex.xs="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Routing Url</mat-label>
+                            <input matInput type="text" placeholder="Routing Url" formControlName="routingUrl"
+                                maxlength="200" autocomplete="off" role="presentation" required />
+                            <mat-error *ngIf="screenForm?.get('routingUrl')?.errors?.required"> Routing Url
+                                is required </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="20%" fxFlex.xs="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Display Order</mat-label>
+                            <input matInput type="text" placeholder="Display Order" formControlName="displayOrder"
+                                appNumberOnly maxlength="2" autocomplete="off" role="presentation" required
+                                [NumberOnly]="false" />
+                            <mat-error *ngIf="screenForm?.get('displayOrder')?.errors?.required"> Display Order
+                                is required </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="14%" fxFlex.lg="14%" fxFlex.md="14%" fxFlex.sm="14%" fxFlex.xs="100%">
+                        <mat-label class="lbl">Is Active</mat-label>
+                        <mat-checkbox formControlName="active">Active</mat-checkbox>
+                    </div>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="22%" fxFlex.sm="30%" fxFlex.xs="100%" ngClass.xs="mb-20">
+                        <mat-label class="lbl">Is Disabled View</mat-label>
+                        <mat-checkbox formControlName="disabledView">Disabled View</mat-checkbox>
+                    </div>
+                    <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="22%" fxFlex.sm="30%" fxFlex.xs="100%" ngClass.xs="mb-20">
+                        <mat-label class="lbl">Is Disabled Add</mat-label>
+                        <mat-checkbox formControlName="disabledAdd">Disabled Add</mat-checkbox>
+                    </div>
+                    <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="22%" fxFlex.sm="30%" fxFlex.xs="100%" ngClass.xs="mb-20">
+                        <mat-label class="lbl">Is Disabled Edit</mat-label>
+                        <mat-checkbox formControlName="disabledEdit">Disabled Edit</mat-checkbox>
+                    </div>
+                    <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="22%" fxFlex.sm="30%" fxFlex.xs="100%" ngClass.xs="mb-20">
+                        <mat-label class="lbl">Is Disabled Delete</mat-label>
+                        <mat-checkbox formControlName="disabledDelete">Disabled Delete</mat-checkbox>
+                    </div>
+                    <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="22%" fxFlex.sm="30%" fxFlex.xs="100%" ngClass.xs="mb-20">
+                        <mat-label class="lbl">Is Disabled Approve</mat-label>
+                        <mat-checkbox formControlName="disabledApprove">Disabled Approve</mat-checkbox>
+                    </div>
+                    <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="22%" fxFlex.sm="30%" fxFlex.xs="100%" ngClass.xs="mb-20">
+                        <mat-label class="lbl">Is Disabled Export</mat-label>
+                        <mat-checkbox formControlName="disabledExport">Disabled Export</mat-checkbox>
+                    </div>
+                </div>
+            </form>
+            <div fxLayout="row" *ngIf="!showFlag">
+                <div fxFlex="100%">
+                    
+                    <p-table
+  #dt
+  [columns]="displayedColumns"
+  [value]="screenList"
+  [scrollable]="true"
+  [rows]="itemperpage"
+  [resizableColumns]="true"
+  [reorderableColumns]="true"
+  [paginator]="true"
+  frozenWidth="100px"
+  [frozenColumns]="frozenCols">
+
+  <!-- ================= COLGROUP ================= -->
+  <ng-template pTemplate="colgroup" let-colGroupCols>
+    <colgroup>
+      <col *ngFor="let col of colGroupCols" style="width:200px" />
+    </colgroup>
+  </ng-template>
+
+  <!-- ================= HEADER ================= -->
+  <ng-template pTemplate="header" let-headerCols>
+    <tr>
+      <th *ngFor="let col of headerCols"
+          [ngSwitch]="col.field"
+          pReorderableColumn
+          pResizableColumn>
+
+        <div
+          class="thname"
+          matTooltip="{{ col.header }}"
+          matTooltipClass="accent-tooltip">
+          {{ col.header }}
+        </div>
+
+        <span
+          [pSortableColumn]="col.field"
+          *ngIf="col.field !== 'action'">
+          <p-sortIcon
+            [field]="col.field"
+            ariaLabel="Activate to sort"
+            ariaLabelDesc="Activate to sort in descending order"
+            ariaLabelAsc="Activate to sort in ascending order">
+          </p-sortIcon>
+        </span>
+
+      </th>
+    </tr>
+  </ng-template>
+
+  <!-- ================= BODY ================= -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-index="rowIndex"
+    let-bodyCols="columns"
+    let-expanded="expanded">
+
+    <tr>
+      <td *ngFor="let col of bodyCols"
+          [ngClass]="{ 'desg-bg': col.field === 'action' }">
+
+        <!-- ===== ACTION ===== -->
+        <div
+          fxLayout="row"
+          class="desg-icon"
+          *ngIf="col.field === 'action'">
+
+          <div fxFlex="100%" fxLayoutGap="10px">
+
+            <mat-icon
+              [ngClass]="screenAuth?.editFlag === false ? 'page-btn disabled' : ''"
+              matTooltip="Edit"
+              matTooltipClass="accent-tooltip">
+              <i
+                (click)="editForm(rowData)"
+                class="material-icons-outlined">
+                edit
+              </i>
+            </mat-icon>
+
+            <mat-icon
+              [ngClass]="screenAuth?.deleteFlag === false ? 'page-btn disabled' : ''"
+              matTooltip="Delete"
+              matTooltipClass="accent-tooltip">
+              <i
+                (click)="deleteForm(rowData)"
+                class="material-icons-outlined">
+                delete
+              </i>
+            </mat-icon>
+
+          </div>
+        </div>
+
+        <!-- ===== NON-ACTION FIELDS ===== -->
+        <div *ngIf="col.field !== 'action'">
+
+          <!-- NORMAL VALUES -->
+          <span *ngIf="col.field !== 'active'"
+                matTooltip="{{ rowData[col.field]
+                  ? (rowData[col.field] === false
+                      ? 'No'
+                      : (rowData[col.field] === true
+                          ? 'Yes'
+                          : rowData[col.field]))
+                  : 'N/A' }}"
+                matTooltipClass="accent-tooltip">
+            {{
+              rowData[col.field]
+                ? (rowData[col.field] === false
+                    ? 'No'
+                    : (rowData[col.field] === true
+                        ? 'Yes'
+                        : rowData[col.field]))
+                : 'N/A'
+            }}
+          </span>
+
+          <!-- ACTIVE / INACTIVE ICON -->
+          <span *ngIf="col.field === 'active'">
+            <div fxLayout="row" class="tbl-icon">
+              <div fxFlex="100%" fxLayoutGap="10px">
+
+                <span *ngIf="rowData.active === true" class="istrue">
+                  <i
+                    class="material-icons"
+                    matTooltip="Active"
+                    matTooltipClass="accent-tooltip">
+                    thumb_up
+                  </i>
+                </span>
+
+                <span *ngIf="rowData.active === false" class="isfalse">
+                  <i
+                    class="material-icons"
+                    matTooltip="In-Active"
+                    matTooltipClass="accent-tooltip">
+                    thumb_down
+                  </i>
+                </span>
+
+              </div>
+            </div>
+          </span>
+
+        </div>
+
+      </td>
+    </tr>
+
+  </ng-template>
+
+</p-table>
+                    <div [ngClass]="{'empty-record': subModuleList?.length === 0}" class="cus-paginator"
+                        fxLayout="row wrap" fxLayoutGap="0px grid"   fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+                        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                            fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} -
+                            {{
+              dt.totalRecords > 0
+              ? dt.rows + dt.first <= dt.totalRecords
+              ? dt.rows + dt.first
+              : dt.totalRecords
+              : 0
+              }}
+                            of {{ dt.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a> </div>
+                        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                            fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                            fxLayoutAlign.xs="start center"> <a
+                                [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                                    dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                                    navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"> <i
+                                    class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2"
+                                fxHide.xs>Go to
+                                Page<span class="input-num">
+                                    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5"
+                                        appNumberOnly [NumberOnly]="false"
+                                        (keyup.enter)="navigatePage(pageNo.value, dt.rows, true)" />
+                                </span></span> <span class="mr-2" fxHide.xs> of
+                                {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
+                                [ngClass]=" dt.rows + dt.first >= dt.totalRecords? 'page-btn disabled': 'page-btn'"
+                                (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                                    navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"><i
+                                    class="icon-control-end ml-5"></i></a> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

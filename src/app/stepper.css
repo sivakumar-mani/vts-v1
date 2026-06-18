@@ -1,0 +1,188 @@
+.mat-stepper-vertical {
+    background: transparent;
+    padding-top: 30px;
+    /* margin: 0px -25px; */
+}
+.stepper-steps {
+    min-height: calc(100% - -32px);
+    position: relative;
+    /* border-left: 1px solid #dedede; */
+    background: rgba(222, 222, 222, 1);
+    background: -moz-linear-gradient(left, rgba(222, 222, 222, 1) 0%, rgba(238, 238, 238, 1) 3%, rgba(255, 255, 255, 1) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(222, 222, 222, 1)), color-stop(3%, rgba(238, 238, 238, 1)), color-stop(100%, rgba(255, 255, 255, 1)));
+    background: -webkit-linear-gradient(left, rgba(222, 222, 222, 1) 0%, rgba(238, 238, 238, 1) 3%, rgba(255, 255, 255, 1) 100%);
+    background: -o-linear-gradient(left, rgba(222, 222, 222, 1) 0%, rgba(238, 238, 238, 1) 3%, rgba(255, 255, 255, 1) 100%);
+    background: -ms-linear-gradient(left, rgba(222, 222, 222, 1) 0%, rgba(238, 238, 238, 1) 3%, rgba(255, 255, 255, 1) 100%);
+    background: linear-gradient(to right, rgba(222, 222, 222, 1) 0%, rgba(238, 238, 238, 1) 3%, rgba(255, 255, 255, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#dedede', endColorstr='#ffffff', GradientType=1);
+    /* background: url(../assets/images/stp-m-bg.gif) repeat-y scroll 0 0 rgba(0, 0, 0, 0); */
+    margin-right: -25px;
+    margin-top: -16px;
+}
+
+::ng-deep .stepper-steps .mat-stepper-vertical .mat-step .mat-step-header {
+    /* border-bottom: 1px solid #e2e2e2; */
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(to right, #cacaca, #ffffff);
+    border-image-slice: 1;
+}
+
+::ng-deep .stepper-steps .mat-vertical-content-container.mat-stepper-vertical-line {
+    display: none !important;
+}
+
+::ng-deep .stepper-steps .mat-vertical-stepper-header .mat-step-icon {
+    margin-right: 0px;
+    display: none;
+}
+
+::ng-deep .stepper-steps .mat-vertical-stepper-header {
+    padding: 22px 15px 18px;
+}
+
+::ng-deep .stepper-steps .mat-step-label.mat-step-label-active.mat-step-label-selected {
+    color: #FF8500 !important;
+    width: 100%;
+}
+
+::ng-deep .stepper-steps .mat-step-label.mat-step-label-active.mat-step-label-selected i {
+    color: #FF8500;
+}
+
+::ng-deep .stepper-steps .mat-step-label {
+    width: 100%;
+}
+
+::ng-deep .stepper-steps i {
+    font-size: 24px;
+    text-align: right;
+    float: right;
+    vertical-align: middle;
+    z-index: 1;
+    position: relative;
+}
+
+::ng-deep .stepper-steps .matStepLabel span {
+    top: 50px;
+}
+
+::ng-deep .stepper-steps .current.active {
+    background: #fff;
+}
+
+::ng-deep .stepper-steps .mat-step-header .mat-step-label.mat-step-label-active {
+    color: #8A8B8D;
+}
+
+mat-step .active {
+    background: #ffffff;
+}
+
+.name {
+    width: 82%;
+    white-space: pre-line;
+    text-overflow: inherit;
+    overflow: hidden;
+    display: inline-block;
+    z-index: 1;
+    position: relative;
+}
+
+.stepper-steps .mat-card {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.StpActive {
+    background: #252525;
+}
+
+.stpMenu.sm-a {
+    background: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 90px;
+    z-index: 0;
+    width: 100%;
+}
+
+
+/*New Stepper Starts*/
+
+.step {
+    background: rgba(222, 222, 222, 1);
+    background: -moz-linear-gradient(left, rgba(222, 222, 222, 1) 0%, rgba(238, 238, 238, 1) 3%, rgba(255, 255, 255, 1) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(222, 222, 222, 1)), color-stop(3%, rgba(238, 238, 238, 1)), color-stop(100%, rgba(255, 255, 255, 1)));
+    background: -webkit-linear-gradient(left, rgba(222, 222, 222, 1) 0%, rgba(238, 238, 238, 1) 3%, rgba(255, 255, 255, 1) 100%);
+    background: -o-linear-gradient(left, rgba(222, 222, 222, 1) 0%, rgba(238, 238, 238, 1) 3%, rgba(255, 255, 255, 1) 100%);
+    background: -ms-linear-gradient(left, rgba(222, 222, 222, 1) 0%, rgba(238, 238, 238, 1) 3%, rgba(255, 255, 255, 1) 100%);
+    background: linear-gradient(to right, rgba(222, 222, 222, 1) 0%, rgba(238, 238, 238, 1) 3%, rgba(255, 255, 255, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#dedede', endColorstr='#ffffff', GradientType=1);
+    border-radius: 0 4px 4px 0;
+
+    /*     
+    Dont delete this comme line,    
+    height: -moz-calc(100% - (20px + 30px));
+    height: -webkit-calc(100% - (20px + 30px));
+    height: calc(100% - (20px + 30px)); */
+
+    min-height: -ms-calc(100% - -32px);
+    height: 100%;
+    min-height: calc(100% - -32px);
+    position: relative;
+    margin-right: -25px;
+    margin-top: -16px;
+    padding-top: 30px;
+}
+
+.step .list {
+    display: block;
+    font-size: 14px;
+    list-style: outside none none;
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(to right, #cacaca, #ffffff);
+    border-image-slice: 1;
+}
+
+.step .list.completed a {
+    color: #58595c;
+    font-weight: 700;
+}
+
+.step .list.active {
+    background: #fff;
+}
+
+.step .list.active a {
+    color: #FF8500;
+    font-weight: 500;
+}
+
+.step .list a {
+    color: #acacae;
+    display: block;
+    outline: 0 none;
+    padding: 20px 60px 20px 20px;
+    position: relative;
+    text-decoration: none;
+}
+
+.step .list a i {
+    right: 20px;
+    position: absolute;
+    top: 20px;
+    vertical-align: middle;
+    font-size: 24px;
+}
+
+.step .list a:hover {
+    background-color: rgba(0, 0, 0, .04);
+}
+
+
+/*New Stepper Ends*/
+
+::ng-deep .horStepper-none .mat-horizontal-stepper-header-container {
+    display: none !important;
+}

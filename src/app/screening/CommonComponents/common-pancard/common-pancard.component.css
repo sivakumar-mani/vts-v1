@@ -1,0 +1,13 @@
+.hint-txt {
+    color: #9B9B9D;
+    text-align: left;
+    width: 100%;
+    font-size: 12px;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.hint-txt b {
+    color: #58595c;
+    font-weight: 500;
+}

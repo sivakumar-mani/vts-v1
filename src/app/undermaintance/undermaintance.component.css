@@ -1,0 +1,40 @@
+.error-box {
+    background-color: #ffffff;
+    min-height: calc(100vh - 0px);
+    width: 100%;
+    font-family: Roboto, Helvetica Neue, PT Sans, Helvetica, Arial, sans-serif;
+}
+
+.error-body {
+    text-align: center;
+}
+
+.error-body p {
+    color: #acacae;
+    margin: 15px 0 60px;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 300;
+}
+
+.error-body h3 {
+    line-height: 30px;
+    font-size: 21px;
+    text-transform: uppercase;
+    color: #0073B1;
+    margin: 10px 0;
+    font-weight: 400;
+}
+
+.error-body a {
+    background: #f9be00;
+    color: #353535;
+    text-decoration: none;
+    padding: 10px 30px;
+    border-radius: 4px;
+}
+
+.error-body img {
+    width: 25%;
+    margin: 50px 0;
+}

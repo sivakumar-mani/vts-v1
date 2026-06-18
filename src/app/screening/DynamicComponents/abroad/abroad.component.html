@@ -1,0 +1,280 @@
+<div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="0px grid">
+  <div fxFlex="100%">
+
+    <form [formGroup]="mainForm" autocomplete="off" role="presentation">
+
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+        <div fxFlex="100%">
+          <app-base-info [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'"
+            [compBaseDetails]="compBaseDetails" (emitNotappChange)="notApplicable($event)"
+            [showNotApplicable]="showNotApplicable">
+          </app-base-info>
+        </div>
+      </div>
+
+      @if (criminalcontrol) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"
+            [formGroupName]="formgroupName">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Information Source</mat-label>
+              <input matInput placeholder="Information Source" formControlName="informationSource"
+                maxlength="50" />
+              @if (!!mainForm?.get(formgroupName)?.get('informationSource')?.errors?.required) {
+                <mat-error>
+                  Information source is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      }
+
+      @if (!criminalcontrol) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+            [formGroupName]="formgroupName">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Full Name</mat-label>
+              <input matInput type="text" mat-autofocus="true" placeholder="Full Name"
+                formControlName="fullName" maxlength="120" required />
+              @if (!!mainForm.get(formgroupName +
+                '.fullName')?.errors?.required) {
+                <mat-error> Full name is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+            [formGroupName]="formgroupName">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Father Name</mat-label>
+              <input matInput type="text" mat-autofocus="true" placeholder="Father Name"
+                formControlName="fatherName" maxlength="100" required />
+              @if (!!mainForm.get(formgroupName +
+                '.fatherName')?.errors?.required) {
+                <mat-error> Father name is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+            [formGroupName]="formgroupName">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Date of Birth</mat-label>
+              <input #ref matInput placeholder="Date of birth" autocomplete="off" [max]="common?.maxDob"
+                            role="presentation" [formControlName]="ssnControl ? 'dob' : 'dateOfBirth'" (dateInput)="screeningService.dob=
+                                ref.value" (input)="upperCase(ref.value, ssnControl ? 'dob' : 'dateOfBirth')"
+                [max]="maxDate" (focus)="picker.open()" (click)="picker.open()" required />
+              <input matInput hidden [max]="common?.maxDob"
+                (dateChange)="handleDateChange($event,ssnControl ? 'dob' : 'dateOfBirth')"
+                [matDatepicker]="picker">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-hint class="f-13">(E.g. Enter date as (01/JAN/2021 or 01/01/2021),01st January 2021 should
+                be typed as 01/JAN/2021.
+              </mat-hint>
+              @if (!!mainForm?.get(formgroupName +
+                '.dob')?.errors?.date?.invalidPattern) {
+                <mat-error>
+                  Date Of Birth is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 ),01st January 2021
+                  should be typed as 01/JAN/2021.
+                </mat-error>
+              }
+              @if (!!mainForm.get(formgroupName +
+                '.dob')?.errors?.required) {
+                <mat-error> Date of Birth is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      }
+      @if (!criminalcontrol) {
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          >
+          <div fxFlex="100%">
+            <h3 class="sub-header">Address Details</h3>
+          </div>
+        </div>
+      }
+      @if (!criminalcontrol) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <app-address [addressList]="address" [ssn]="true" [addressformgrp]="getAddressForm()"></app-address>
+          </div>
+        </div>
+      }
+
+      <div fxLayout="row" fxLayoutGap="0px" class="mb-10">
+        <div fxFlex="100%">
+          <app-custom-fields [mainForm]="mainForm"
+          [formArrName]="'componentCustomFields'"></app-custom-fields>
+        </div>
+      </div>
+
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"
+          [formGroupName]="'screeningComponentInfo'">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Remarks</mat-label>
+            <textarea #remark formControlName="remark" maxlength="1000" matInput
+            placeholder="Remarks"> </textarea>
+            <mat-hint>({{remark.value.length}}/1000Max)</mat-hint>
+          </mat-form-field>
+        </div>
+        @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length && !criminalcontrol) {
+          <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
+            [formGroupName]="'screeningComponentInfo'"
+            >
+            <mat-label class="lbl">Choose</mat-label>
+            <mat-checkbox (change)="showInsuff($event)" formControlName="insuffRaisedFlag">Raise Insufficiency
+            </mat-checkbox>
+          </div>
+        }
+      </div>
+      @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0 && !criminalcontrol) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+          >
+          <div fxFlex="100%">
+            <div class="alert alert-info" role="alert">
+              <h4>Insufficiency Clearance Remarks: </h4>
+              @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+                <span
+                  >
+                  {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+                }
+              </div>
+            </div>
+          </div>
+        }
+        @if (userData.applicationId === 1 && !criminalcontrol) {
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+            >
+            @if (showInSuff) {
+              <div fxFlex="100%">
+                <app-common-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm"
+                  [compBaseDetails]="mainForm.get('screeningComponentInfo').value"
+                  [formgroupName]="'screeningInsufficiency'">
+                </app-common-raise-insufficiency>
+              </div>
+            }
+          </div>
+        }
+        @if (nationCriminalControl) {
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+            >
+            <div fxFlex="100%" [formGroupName]="formgroupName" style="margin-bottom: 20px;">
+              <mat-radio-group aria-label="Select an option" formControlName="documentTypeLookupId"
+                fxLayoutGap="20px" #ctrlvalue (change)="changeDocument($event.value)">
+                @for (res of documentList; track res; let i = $index) {
+                  <mat-radio-button
+                    [value]="i">{{res.docName}}<span class="info-text"></span></mat-radio-button>
+                  }
+                  &nbsp;
+                </mat-radio-group>
+              </div>
+            </div>
+          }
+          @if (nationCriminalControl) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+              >
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                [formGroupName]="formgroupName">
+                @if (docTypeId == 0) {
+                  <mat-form-field floatLabel="always" fxFlex="100%" appearance="outline">
+                    <mat-label>{{getName('number')}}</mat-label>
+                    <input formControlName="idProofNumber" autocomplete="off" #mobnum preventDragdrop
+                      role="presentation" type="text" matInput appNumberOnly [SsnValue]="false" maxlength="9"
+                      minlength="0">
+                    <!-- <mat-hint class="f-13"> [SSN must be 9 Numeric digits ]</mat-hint> -->
+                    @if (!!mainForm.get(formgroupName + '.idProofNumber')?.errors?.required) {
+                      <mat-error> The
+                      {{getName('number')}} is required</mat-error>
+                    }
+                    @if (docTypeId == 0 && !!mainForm.get(formgroupName + '.idProofNumber')?.value && !!mainForm.get(formgroupName + '.idProofNumber')?.value < 9) {
+                      <mat-error
+                        >
+                      The {{getName('number')}} should be 9 digits</mat-error>
+                    }
+                  </mat-form-field>
+                }
+                @if (docTypeId != 0) {
+                  <mat-form-field fxFlex="100%" appearance="outline">
+                    <mat-label>{{getName('number')}}</mat-label>
+                    <input formControlName="idProofNumber" autocomplete="off" #mobnum preventDragdrop
+                      role="presentation" type="text" matInput maxlength="20" minlength="0">
+                    <!-- <mat-hint class="f-13"> [SSN must be 9 Numeric digits ]</mat-hint> -->
+                    @if (!!mainForm.get(formgroupName + '.idProofNumber')?.errors?.required) {
+                      <mat-error> The
+                      {{getName('number')}} is required</mat-error>
+                    }
+                    @if (docTypeId == 0 && !!mainForm.get(formgroupName + '.idProofNumber')?.value && !!mainForm.get(formgroupName + '.idProofNumber')?.value < 9) {
+                      <mat-error
+                        >
+                      The {{getName('number')}} should be 9 digits</mat-error>
+                    }
+                  </mat-form-field>
+                }
+              </div>
+              @if (docTypeId != 0) {
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  [formGroupName]="formgroupName">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>{{getName('agency')}}</mat-label>
+                    <input matInput type="text" mat-autofocus="true" formControlName="issuedBy" maxlength="120" />
+                    @if (!!mainForm.get(formgroupName + '.issuedBy')?.errors?.required) {
+                      <mat-error
+                        >{{getName('agency')}}
+                        is required
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+            </div>
+          }
+          @if (ssnControl) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                [formGroupName]="formgroupName">
+                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                  <mat-label>SSN Number</mat-label>
+                  <input formControlName="ssnNo" autocomplete="off" #mobnum preventDragdrop role="presentation"
+                    type="text" matInput appNumberOnly [SsnValue]="false" minlength="9"
+                    placeholder="SSN Number" required>
+                  <mat-hint class="f-13"> [SSN must be 9 Numeric digits ]</mat-hint>
+                  @if (!!mainForm.get(formgroupName + '.ssnNo')?.errors?.pattern) {
+                    <mat-error> The SSN Number is
+                    Invalid</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+          }
+
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+              <app-screening-documents [fileBtn]="fileBtn" [mainForm]="mainForm"
+                [formgroupName]="'screeningComponentInfo'"
+                [dupScreeningDoc]="screeningComponent.componentDocument"
+              [validationFlag]="getValidorNot()"></app-screening-documents>
+            </div>
+          </div>
+
+
+        </form>
+
+      </div>
+    </div>

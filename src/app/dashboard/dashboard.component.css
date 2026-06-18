@@ -1,0 +1,1523 @@
+﻿.header-bg {
+    background: #0073B1;
+    height: 34px;
+    font-size: 12px;
+    font-weight: 400;
+    top: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+}
+
+.mat-toolbar-row,
+.mat-toolbar-single-row {
+    padding: 0 25px 0 0;
+}
+
+.toolbar-icons {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    right: 15px;
+    top: 5px;
+}
+
+.toolbar-icons button:hover,
+.toolbar-icons button:focus {
+    /* background: rgba(28, 34, 96, 0.09); */
+    /* background: rgba(255, 255, 255, 0.25); */
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.toolbar-icons .mat-mdc-icon-button,
+.toolbar-icons .mat-mdc-icon-button {
+    padding: 0 !important;
+    min-width: 0;
+    width: 24px !important;
+    height: 24px !important;
+    flex-shrink: 0;
+    line-height: 20px !important;
+    border-radius: 50%;
+}
+
+.toolbar-icons i {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 14px;
+}
+
+.toolbar-icons mat-icon {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 14px;
+}
+
+.toolbar-user {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    right: 15px;
+    top: 3px;
+}
+
+.toolbar-user .mat-mdc-icon-button,
+.toolbar-user .mat-mdc-icon-button {
+    padding: 0 !important;
+    min-width: 0;
+    width: 28px !important;
+    height: 28px !important;
+    flex-shrink: 0;
+    line-height: 21px !important;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 500;
+    height: 22px;
+    line-height: 22px;
+    margin-right: 10px !important;
+    position: relative;
+    text-align: center;
+    top: 1px;
+    width: 22px;
+}
+
+.user img {
+    height: 100%;
+    border-radius: 50%;
+}
+
+footer {
+    bottom: 0;
+    display: block;
+    position: absolute;
+    padding: 15px 0 20px;
+    font-size: 11px;
+    color: #8A8B8D;
+    border-top: 1px dashed #DEDEDE;
+    margin: 0 18px;
+    z-index: 95;
+}
+
+.drawer-height {
+    background: #0e4872 !important;
+    background-color: #0e4872 !important;
+    border-radius: 0px !important;
+    border: 0px none !important;
+    display: flex !important;
+    min-height: calc(100vh - 0px);
+    position: fixed !important;
+    top: 0 !important;
+    width: 70px;
+    z-index: 99 !important;
+    padding: 0px !important;
+    box-shadow: none !important;
+}
+
+.drawer-height button {
+    border-radius: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 22px;
+    height: 65px;
+    width: 70px;
+}
+
+.drawer-height button:hover {
+    fill: #fff;
+    color: #fff;
+    -ms-text-fill-color: #fff;
+    -webkit-text-fill-color: #fff;
+    -o-text-fill-color: #fff;
+    -moz-text-fill-color: #fff;
+    background: rgba(255, 255, 255, 0.12) !important;
+    cursor: pointer;
+}
+
+.LogRnd {
+    text-align: center;
+    vertical-align: middle;
+    padding: 15px 16px 20px;
+    cursor: pointer;
+    outline: none;
+}
+
+.LogRnd img {
+    height: 37px;
+}
+
+.side-icon-menu .mat-list-base {
+    padding-top: 8px;
+}
+
+.side-icon-menu .mat-list-base .mat-mdc-list-item .mat-mdc-list-item-content {
+    padding: 0 20px;
+}
+.side-icon-menu .mat-mdc-list-base .mat-mdc-list-item .mdc-list-item__content {
+    padding: 0 20px;
+}
+
+.side-icon-menu .mat-list.menu-icon .mat-icon,
+.side-icon-menu .mat-list.menu-icon .mat-icon i {
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+}
+
+.side-icon-menu .mat-list .mat-mdc-list-item:hover {
+    fill: #fff;
+    color: #fff;
+    -ms-text-fill-color: #fff;
+    -webkit-text-fill-color: #fff;
+    -o-text-fill-color: #fff;
+    -moz-text-fill-color: #fff;
+}
+
+::ng-deep .side-icon-menu .menu-icon.mat-list-base .mat-mdc-list-item .mat-mdc-list-item-content {
+    padding: 0 22px !important;
+    display: inline !important;
+}
+::ng-deep .side-icon-menu .menu-icon.mat-mdc-list-base .mat-mdc-list-item .mdc-list-item__content {
+    padding: 0 22px !important;
+    display: inline !important;
+}
+/* Don't delete below comments:
+ padding: 5px 10px !important;
+ display: inline-block !important;
+ width: 100%;
+ text-align: center; */
+
+::ng-deep .side-icon-menu .menu-icon.mat-list-base .mat-mdc-list-item .mat-mdc-list-item-content .menu-name,
+::ng-deep .side-icon-menu .menu-icon.mat-mdc-list-base .mat-mdc-list-item .mdc-list-item__content .menu-name,
+button.menu-name {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 11.5px;
+    font-weight: 500;
+    font-family: "Calibri", Arial, Helvetica, sans-serif;
+    letter-spacing: 0px;
+    line-height: 1.2;
+    text-align: center;
+    width: 100%;
+}
+
+.drawer-height button .menu-name {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 11.5px;
+    font-weight: 500;
+    font-family: "Calibri", Arial, Helvetica, sans-serif;
+    letter-spacing: 0px;
+    line-height: 1.2;
+    text-align: center;
+    width: 100%;
+}
+
+.drawer-height button {
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+}
+
+::ng-deep .side-icon-menu .mat-list .mat-mdc-list-item:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: rgba(255, 255, 255, 0.84) !important;
+    cursor: pointer;
+}
+
+.side-icon-menu mat-list-item.active-sidenav {
+    background: #f8f8f8;
+    position: relative;
+}
+
+.side-icon-menu .mat-list-base .mat-mdc-list-item,
+.side-icon-menu .mat-mdc-list-base .mat-mdc-list-item {
+    padding: 10px 0px !important;
+}
+
+.side-icon-menu mat-list.menu-icon .mat-mdc-list-item,
+.side-icon-menu mat-list.menu-icon .mat-mdc-list-item {
+    height: 65px !important;
+}
+
+
+/* .side-icon-menu mat-list-item.active-sidenav:after {
+    background-color: #f5b666;
+    position: absolute;
+    top: 0px;
+    right: 0;
+    bottom: 0px;
+    content: "";
+    width: 3px;
+} */
+
+mat-expansion-panel-header .mat-expanded {
+    background: gray;
+}
+
+.menu-sel {
+    background: rgba(88, 89, 92, 0.1);
+    color: #58595c !important;
+    font-weight: 700 !important;
+}
+
+.mat-card.drawer-height,
+.mat-mdc-card.drawer-height {
+    padding: 0px !important;
+    border-right: none !important;
+    box-shadow: none !important;
+    background: #0e4872 !important;
+    background-color: #0e4872 !important;
+}
+
+.active-sidenav .menu-name,
+.active-sidenav .mat-icon i {
+    color: rgb(0, 115, 177) !important;
+    cursor: pointer;
+}
+
+.menuContainer {
+    background: rgba(255, 255, 255, 1);
+    border-right: solid 1px #DEDEDE;
+    font-size: 13px;
+    left: 70px;
+    margin-left: 0;
+    margin-top: 0;
+    padding: 0;
+    position: fixed;
+    width: 220px;
+    top: 0;
+    height: 100vh;
+    z-index: 98;
+}
+
+.menuContainer p {
+    color: rgba(255, 255, 255, 0.60);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 0 10px;
+    margin: 0 0 15px 0;
+    text-transform: uppercase;
+}
+
+.LogTxt {
+    vertical-align: middle;
+    background: transparent;
+    margin-bottom: 20px;
+    text-align: left;
+    float: left;
+    outline: none !important;
+    cursor: pointer;
+}
+
+.LogTxt .Big {
+    font-family: Arial;
+    font-size: 21px;
+    font-weight: 600;
+    color: #58595c;
+    margin: 0;
+    line-height: 25px;
+    letter-spacing: -0.5px;
+    padding: 15px 15px 0 15px;
+    text-align: left;
+    outline: none;
+}
+
+.LogTxt .Small {
+    color: #58595c;
+    outline: none;
+    line-height: 1.5em;
+    font-family: Georgia;
+    font-weight: 600;
+    font-size: 10px;
+    font-style: italic;
+    margin: 0;
+    padding: 0px 25px;
+    text-align: center;
+    letter-spacing: 0;
+}
+
+.LogTxt img {
+    height: 42px;
+}
+
+.SMenu {
+    height: calc(40vh - -270px);
+}
+
+.SMenu a {
+    display: block;
+    padding: 8px 10px;
+    color: #cfdae3;
+    font-weight: 500;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.SMenu a i {
+    margin-right: 5px;
+    display: inline-block;
+    font-size: 16px;
+    vertical-align: sub;
+}
+
+.SMenu a:hover {
+    background: rgb(11, 61, 97);
+    color: rgba(255, 255, 255, 0.89);
+    text-decoration: none;
+}
+
+mat-sidenav-content.sidenav-width {
+    overflow: hidden;
+}
+
+.mat-drawer-content,
+.mat-mdc-drawer-content {
+    padding-left: 70px !important;
+}
+
+
+/* User profile in top header */
+
+ul.usrset {
+    color: #353537;
+    margin: 0px;
+    padding: 0px;
+    font-size: 12px;
+    /* min-width: 200px;
+    max-width: 250px; */
+}
+
+ul.usrset li {
+    cursor: default;
+    list-style: none;
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, .08);
+}
+
+ul.usrset li:hover {
+    background: rgba(0, 0, 0, .04);
+}
+
+ul.usrset li a {
+    color: #58595c;
+    text-decoration: none;
+    width: 145px;
+    display: inline-block;
+}
+
+ul.usrset li span {
+    color: #858585;
+    display: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+ul.usrset li i {
+    color: #8A8B8D;
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 10px;
+    position: relative;
+    top: 3px;
+}
+
+ul.usrset li:last-child {
+    border-bottom: none;
+}
+
+.teamName {
+    color: rgba(255, 255, 255, 0.78);
+    padding: 3px 16px !important;
+    font-size: 12px;
+    border: 1px solid rgba(255, 254, 254, 0.39);
+    border-radius: 50px;
+    /* display: inline-block; */
+    margin: 5px 0 0 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.teamName i {
+    color: rgba(255, 255, 255, 0.78) !important;
+    font-size: 16px !important;
+    font-weight: normal !important;
+}
+
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 8px solid #fff;
+    position: absolute;
+    right: 22px;
+    top: -5px;
+}
+
+::ng-deep .mat-menu-content:not(:empty) {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.module-arr {
+    right: 5px !important;
+}
+
+.module-ddl {
+    margin: 0px;
+}
+
+.module-ddl .modules-icons {
+    padding: 15px 20px;
+    text-align: center;
+}
+
+.module-ddl .modules-icons a {
+    text-decoration: none !important;
+    filter: grayscale(100%);
+}
+
+.module-ddl .modules-icons a img {
+    vertical-align: middle;
+}
+
+.module-ddl .modules-icons a span {
+    font-size: 13px;
+    color: #58595c;
+    text-decoration: none !important;
+    white-space: nowrap;
+}
+
+.module-ddl .modules-icons a:hover {
+    filter: grayscale(0);
+}
+
+
+/* Left Nav Menu */
+
+.SideNav {
+    background: transparent;
+    width: 250px;
+    display: block;
+}
+
+.SideNav mat-expansion-panel,
+.sub-menuitems mat-expansion-panel,
+.sidenav-menu mat-expansion-panel {
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.sidenav-menu .mat-expansion-panel-body,
+.sub-menuitems .mat-expansion-panel-body {
+    padding: 0 !important;
+}
+
+.sidenav-menu .mat-expansion-panel-header-title {
+    font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 500;
+    color: #58595c;
+}
+
+.sidenav-menu .mat-expansion-panel-header {
+    background: transparent !important;
+}
+
+.sub-menuitems {
+    display: inline-block;
+    width: 100%;
+}
+
+.sub-menuitems .meuns {
+    color: #58595c !important;
+}
+
+.sub-menuitems .mat-list {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+/* Angular 16 MDC: zero out mat-list padding (default mdc-list has padding:8px 0) */
+/* Each menu item is wrapped in its own <mat-list> due to *ngFor on mat-list,
+   so padding-bottom:8px per list × N items = large cumulative gap */
+.sub-menuitems .mat-mdc-list {
+    padding: 0 !important;
+    margin: 0 !important;
+    --mdc-list-list-item-one-line-container-height: 45px;
+}
+
+.mat-accordion.sidenav-menu {
+    width: 220px;
+}
+
+.sidenav-menu .mat-expansion-panel-header {
+    padding: 5px 16px;
+    height: 45px !important;
+}
+
+.sidenav-menu .mat-expansion-panel-header-title {
+    font-size: 12px;
+    width: 184px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: pre-line !important;
+}
+
+.sidenav-menu .mat-expansion-panel-header-title {
+    margin-right: 5px;
+}
+
+.sidenav-menu .mat-expansion-indicator::after {
+    border-width: 0 1px 1px 0 !important;
+    color: #58595c !important;
+    vertical-align: middle;
+}
+
+.sidenav-menu .pagename-icon i {
+    color: #58595c;
+    vertical-align: middle;
+    padding-top: 10px;
+    font-size: 17px;
+    padding-right: 10px;
+}
+
+.sidenav-menu .mat-expansion-indicator::after {
+    border-width: 0 1px 1px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    color: #58595c !important;
+}
+
+.sub-menuitems .mat-list a .menus,
+.sub-menuitems .mat-mdc-list a .menus {
+    color: #353537;
+    padding: 0px !important;
+    font-size: 12px;
+    font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 45px !important;
+    min-height: 45px !important;
+    line-height: 45px;
+}
+
+::ng-deep .sub-menuitems .mat-mdc-list-item.menus .mdc-list-item__content {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    height: 100% !important;
+    padding: 0 16px !important;
+    font-size: 12px !important;
+    font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+    overflow: hidden !important;
+}
+
+::ng-deep .sub-menuitems .mat-mdc-list-item.menus .mdc-list-item__primary-text {
+    font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+    font-size: 12px !important;
+    color: #353537 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    flex: 1 !important;
+}
+
+::ng-deep .sub-menuitems .mat-mdc-list-item.menus {
+    height: 45px !important;
+    min-height: 45px !important;
+    max-height: 45px !important;
+}
+
+/* Remove MDC's default horizontal padding on list item root so our content padding controls it */
+::ng-deep .sub-menuitems .mat-mdc-list-item.menus.mdc-list-item {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin: 0 !important;
+}
+
+::ng-deep .mat-sidenav .mat-drawer-inner-container {
+    overflow: hidden !important;
+    position: relative !important;
+    height: 100% !important;
+}
+
+.atag-link .mat-mdc-list-item-content {
+    padding: 0px 10px;
+}
+.atag-link .mdc-list-item__content {
+    padding: 0px 10px;
+}
+
+.atag-link i.material-icons-outlined {
+    font-size: 17px;
+    color: #fff;
+    height: 0px;
+    padding-right: 10px;
+}
+
+.sub-menuitems .mat-list a:hover {
+    text-decoration: none;
+}
+
+.atag-link .mat-expansion-indicator::after {
+    border-width: 0 1px 1px 0 !important;
+    color: #fff !important;
+    vertical-align: middle;
+}
+
+.menu-header {
+    border-bottom: 1px dashed #DEDEDE;
+    color: #8a8b8d;
+    font-size: 11px;
+    padding: 0 0 8px 0;
+    margin: 0 16px 10px;
+    text-transform: uppercase;
+    padding-top: 25px;
+}
+
+.sub-menuitems .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]).cdk-keyboard-focused,
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]).cdk-program-focused,
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
+    background: rgba(88, 89, 92, 0.1) !important;
+    color: #58595c !important;
+}
+
+.sub-menuitems .mat-mdc-list-item.menus.mat-mdc-list-item.ng-star-inserted:hover,
+.sub-menuitems .mat-mdc-list-item.menus:hover {
+    background: rgba(88, 89, 92, 0.1) !important;
+    color: #58595c !important;
+}
+
+.SideNav.sidenav-menu span.mat-expansion-indicator::after {
+    border-width: 0 1px 1px 0 !important;
+    color: #58595c !important;
+    vertical-align: middle !important;
+    transform: rotate(-47deg);
+    vertical-align: super;
+}
+
+.SideNav.sidenav-menu mat-list-item.child-listitem.mat-mdc-list-item.ng-star-inserted,
+.SideNav.sidenav-menu mat-list-item.child-ddl.mat-mdc-list-item.ng-star-inserted {
+    color: #58595c;
+    font-size: 12px;
+    font-weight: 400;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: pre-line !important;
+    cursor: pointer;
+}
+
+.SideNav.sidenav-menu .child-ddl-first {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+
+/* Sub menu  child list */
+
+ ::ng-deep span.menu-Childlist a .mat-mdc-list-item.menus .mat-mdc-list-item-content {
+    padding-left: 30px !important;
+}
+::ng-deep span.menu-Childlist a .mat-mdc-list-item.menus .mdc-list-item__content {
+    padding-left: 30px !important;
+}
+
+mat-expansion-panel.mat-expansion-panel.mat-expanded {
+    background: rgba(138, 139, 141, 0.15);
+}
+
+::ng-deep .SideNav.sidenav-menu .mat-expansion-panel-body {
+    padding: 0px 0px 0px 0px !important;
+}
+
+::ng-deep .sub-menuitems mat-list-item.menus.mat-mdc-list-item:hover {
+    background: rgba(88, 89, 92, 0.1) !important;
+    color: #58595c !important;
+}
+
+
+/*perfect-scrollbar for side nav menu starts*/
+
+.perfectscrol-wdthheigh {
+    max-width: 600px;
+    height: calc(100vh - 250px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+::ng-deep .sub-menuitems perfect-scrollbar>.ps.ps--active-y>.ps__rail-y {
+    top: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+    width: 10px;
+    cursor: default;
+    transition: width 200ms linear, opacity 200ms linear, background-color 200ms linear;
+    background: rgba(0, 0, 0, 0.23);
+}
+
+::ng-deep .sub-menuitems .ps__rail-y:hover>.ps__thumb-y,
+.ps__rail-y:focus>.ps__thumb-y,
+.ps__rail-y.ps--clicking .ps__thumb-y {
+    background-color: rgba(255, 255, 255, 0.67);
+    width: 11px;
+}
+
+::ng-deep .sub-menuitems .ps__thumb-y {
+    background-color: rgba(255, 255, 255, 0.55);
+}
+
+::ng-deep .sub-menuitems .mat-expansion-indicator::after {
+    border: none;
+    content: "\e201" !important;
+    display: inline-block;
+    font-family: 'custmIcons', 'Line-Icons', 'screeningicon', 'Ico-font', 'insuffi' !important;
+    padding: 3px;
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+    vertical-align: middle;
+}
+
+
+/*perfect-scrollbar for side nav menu ends*/
+
+.scrollToTop {
+    bottom: 17px;
+    position: fixed;
+    right: 25px;
+    z-index: 999;
+}
+
+.scrollToTop i {
+    background: #08BA53 none repeat scroll 0 0;
+    padding: 10px 5px;
+    border-radius: 50%;
+    color: #fff;
+    height: 40px;
+    font-size: 28px;
+    width: 40px;
+    text-align: center;
+    line-height: 22px;
+}
+
+.scrollToTop i:hover {
+    background: #0E4872;
+}
+
+.mat-badge-medium .mat-badge-content {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    height: auto;
+    min-width: 18px;
+    line-height: 1;
+    padding: 3px 3px 3px 3px;
+    width: auto;
+}
+
+.mat-badge-medium.mat-badge-above .mat-badge-content {
+    top: 0px;
+}
+
+.mat-badge-medium.mat-badge-overlap.mat-badge-after .mat-badge-content {
+    right: -8px;
+}
+
+.noti.mat-list-base .mat-mdc-list-item.mat-2-line,
+.noti.mat-mdc-list-base .mat-mdc-list-item.mat-mdc-2-line {
+    height: 56px !important;
+}
+
+.mat-list-base .mat-mdc-list-item .mat-line:nth-child(n+2),
+.mat-mdc-list-base .mat-mdc-list-item .mdc-list-item__secondary-text {
+    color: #58595C;
+    font-size: 12px;
+}
+
+.n-logo {
+    cursor: pointer;
+    outline: 0;
+    margin: 15px 0;
+    text-align: center;
+}
+
+.n-logo i {
+    color: #fff;
+    font-size: 52px;
+}
+
+.logo-lett {
+    float: left;
+    outline: none !important;
+    cursor: pointer;
+    margin: 23px 15px;
+}
+
+.logo-lett .big {
+    color: #58595c;
+    font-family: Arial;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0;
+    margin: 0;
+    text-align: left;
+    width: 100%;
+}
+
+.logo-lett .small {
+    color: #58595c;
+    font-family: Georgia;
+    font-size: 11px;
+    font-style: italic;
+    letter-spacing: 0;
+    line-height: 1.5em;
+    margin: 0;
+    padding: 0px 0;
+    text-align: center;
+    font-weight: bold;
+    width: 100%;
+}
+
+.u-bg {
+    bottom: 0px;
+    position: absolute;
+    background: rgba(255, 255, 255, .15);
+    display: block;
+    -webkit-tap-highlight-color: transparent;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+}
+
+.u-bg button {
+    height: 50px
+}
+
+.u-detail {
+    background: #81A027;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 32px;
+    height: 32px;
+    width: 32px;
+    text-align: center;
+    margin: 25px 18px 25px;
+}
+
+.side-user {
+    background: #08BA53;
+    margin: 0px;
+    text-align: center;
+    border: none !important;
+    padding: 20px 15px !important;
+}
+
+.side-user:hover {
+    background: #08BA53 !important;
+}
+
+.side-user .uicon {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 100px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 47px;
+    color: #08BA53;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    border: 1px solid rgb(255, 255, 255);
+    margin: 0 auto;
+}
+
+.side-user .udetail {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 10px 0 5px 0;
+}
+
+.side-user .udetail h4 {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    margin: 0 0 3px 0;
+    line-height: 1;
+}
+
+.side-user .udetail small {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1;
+}
+
+.llogin {
+    color: #8A8B8D;
+    font-size: 11px;
+    font-weight: 400;
+    margin: 0;
+    line-height: 18px;
+}
+
+.toggle-btn {
+    color: #fff;
+    font-size: 16px;
+    border-radius: 0;
+    cursor: pointer;
+    margin: 0 15px;
+    height: 34px;
+    width: 34px;
+    line-height: 1;
+}
+
+.appname {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.page-container {
+    min-height: calc(100vh - 0px);
+    padding: 117px 25px 10px 25px;
+}
+
+
+/* theme change */
+
+.theme-options {
+    margin: 0;
+    padding: 0;
+    display: inherit;
+    text-align: center;
+}
+
+.theme-options i {
+    cursor: pointer;
+    border-radius: 4px;
+    display: inline-block;
+    text-align: center;
+    height: 20px;
+    width: 20px;
+    margin: 0 0 0 15px;
+}
+
+button.mat-menu-item {
+    width: 89%;
+}
+
+
+/* .panel mat-menu {
+  min-width: 112px;
+  max-width: 280px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height:0;
+  border-radius: 4px;
+  outline: 0;
+  min-height: 0px;
+} */
+
+.theme-options i activity {
+    opacity: 1px;
+}
+
+.theme-options #theme-black {
+    background-color: #0c0c0e;
+}
+
+.theme-options #theme-blue {
+    background-color: #0014b0;
+}
+
+.theme-options #theme-orange {
+    background-color: #FA9905;
+}
+
+.theme-options #theme-purple {
+    background-color: #9A1BAA;
+}
+
+.theme-options #theme-default {
+    background-color: #0073B1;
+}
+
+
+/* .content{
+ max-height: auto; 
+  }*/
+
+
+/* Orange,grey,blue,purple */
+
+.content.theme-black .drawer-height {
+    background-color: #0c0c0e;
+}
+
+.content.theme-black .active-sidenav .menu-name,
+.content.theme-black .active-sidenav .mat-icon i {
+    color: #0c0c0e !important;
+}
+
+.content.theme-black .header-bg {
+    background: #3a3e3e;
+}
+
+.content.theme-orange .drawer-height {
+    background-color: #ff6a00;
+}
+
+.content.theme-orange .active-sidenav .menu-name,
+.content.theme-orange .active-sidenav .mat-icon i {
+    color: #ff6a00 !important;
+}
+
+.content.theme-orange .header-bg {
+    background: #FA9905;
+}
+
+.content.theme-blue .drawer-height {
+    background-color: #0014b0;
+}
+
+.content.theme-blue .active-sidenav .menu-name,
+.content.theme-blue .active-sidenav .mat-icon i {
+    color: #0014b0 !important;
+}
+
+.content.theme-blue .header-bg {
+    background: #0502FD;
+}
+
+.content.theme-purple .drawer-height {
+    background-color: #72147E;
+}
+
+.content.theme-purple .active-sidenav .menu-name,
+.content.theme-purple .active-sidenav .mat-icon i {
+    color: #72147E !important;
+}
+
+.content.theme-purple .header-bg {
+    background: #9A1BAA;
+}
+
+.content.theme-default .drawer-height {
+    background-color: #0e4872;
+}
+
+.content.theme-default .header-bg {
+    background: #0073B1;
+}
+
+ul.usrset1 {
+    color: #353537;
+    margin: 0px;
+    padding: 0px;
+    font-size: 12px;
+}
+
+ul.usrset1 li {
+    cursor: default;
+    list-style: none;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, .08);
+}
+
+ul.usrset1 li:hover {
+    background: rgba(0, 0, 0, .04);
+}
+
+ul.usrset1 li a {
+    color: #58595c;
+    text-decoration: none;
+    width: 145px;
+    display: inline-block;
+}
+
+ul.usrset1 li span {
+    color: #858585;
+    display: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+ul.usrset1 li:last-child {
+    border-bottom: none;
+}
+
+
+/* Loginuser */
+
+
+/* User Dropdown */
+
+::ng-deep .user_profiledrop {
+    width: 285px;
+    margin-top: 10px;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+}
+
+.profile_bg {
+    height: 74px;
+    width: 100%;
+    background-image: url('../../assets/images/user_detail_bg.jpg');
+    position: relative;
+    background-size: cover;
+    background-position: right;
+}
+
+.profile_img_bx {
+    width: 100%;
+    position: absolute;
+    bottom: -20px;
+}
+
+.profile_img_bx .inside {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #64C2FE 0%, #004C80 100%);
+    border-radius: 64px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.profile_img_bx h2 {
+    color: #fff;
+    text-align: center;
+    line-height: 58px;
+    letter-spacing: 1.5px;
+}
+
+.profile_name {
+    text-align: center;
+    padding: 10px;
+}
+
+.profile_name .name {
+    margin-bottom: 0;
+    color: #004C80;
+}
+
+.profile_name .dec {
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+.profile_name .teamName span {
+    width: 32px;
+    height: 32px;
+    background: #E6EEFC;
+    border-radius: 6px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.profile_name .teamName span svg {
+    position: relative;
+    top: 4px;
+}
+
+.profile_name .teamName {
+    margin-top: 5px;
+    line-height: 32px;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #000;
+    font-weight: 500;
+}
+
+.last_seen {
+    color: #939496;
+    font-size: 12px;
+}
+
+.user_btns {
+    padding: 0 10px;
+}
+
+.user_btns .change_password,
+.user_btns .user_logout {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 4px;
+    color: #fff;
+    padding: 8px 0;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.user_btns .change_password {
+    background: #004C80;
+}
+
+.user_btns .user_logout {
+    background: #64C2FE;
+}
+::ng-deep mat-dialog-container .cmn-srch .mat-mdc-dialog-content,
+::ng-deep .mat-mdc-dialog-container .cmn-srch .mat-mdc-dialog-content {
+    max-height: 100% !important;
+}
+.lens-icon-button {
+    
+    border-radius: 50%; /* Circular shape */
+    width: 60px; /* Size of the lens */
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+.lens-icon-button mat-icon {
+    font-size: 25px; /* Slightly larger icon */
+    color: #dacaca; /* Dark color for contrast */
+}
+
+.lens-icon-button:hover {
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.lens-icon-button:active {
+    box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.2); /* Inset shadow on click */
+    transform: scale(0.95); /* Slight shrink on click */
+}
+
+/* ===== Angular Material 15 MDC Compatibility Fixes ===== */
+
+/* mat-card → mat-mdc-card for drawer-height
+   Dev URL computed style: display:flex; flex-direction:row; position:fixed; top:0;
+   z-index:99; padding:0; box-shadow:none; border-radius:0; background:#0e4872 */
+.mat-mdc-card.drawer-height {
+    background: #0e4872 !important;
+    background-color: #0e4872 !important;
+    padding: 0px !important;
+    margin: 0px !important;
+    border-right: none !important;
+    border: 0px none !important;
+    box-shadow: none !important;
+    width: 70px;
+    min-height: calc(100vh - 0px);
+    position: fixed;
+    top: 0;
+    z-index: 99 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    box-sizing: border-box !important;
+    border-radius: 0px !important;
+}
+
+/* mat-drawer-content → mat-mdc-drawer-content */
+.mat-mdc-drawer-content {
+    padding-left: 70px !important;
+}
+
+/* mat-list-base → mat-mdc-list for icon sidebar */
+.side-icon-menu .mat-mdc-list {
+    padding-top: 8px;
+}
+
+.side-icon-menu .mat-mdc-list .mat-mdc-list-item .mdc-list-item__content {
+    padding: 0 20px;
+}
+
+.side-icon-menu .mat-mdc-list.menu-icon .mat-icon,
+.side-icon-menu .mat-mdc-list.menu-icon .mat-icon i {
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+}
+
+.side-icon-menu .mat-mdc-list .mat-mdc-list-item:hover {
+    fill: #fff;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+}
+
+/* Angular 16 MDC: icon+label are inside mdc-list-item__content (default ng-content slot) */
+::ng-deep .side-icon-menu .mat-mdc-list-item .mdc-list-item__content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    text-align: center !important;
+}
+
+::ng-deep .side-icon-menu .mat-mdc-list-item .mdc-list-item__content .menu-name {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 11.5px;
+    font-weight: 500;
+    font-family: "Calibri", Arial, Helvetica, sans-serif;
+    letter-spacing: 0px;
+    line-height: 1.2;
+    text-align: center;
+    width: 100%;
+}
+
+::ng-deep .side-icon-menu .mat-mdc-list .mat-mdc-list-item:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: rgba(255, 255, 255, 0.84) !important;
+    cursor: pointer;
+}
+
+.side-icon-menu .mat-mdc-list .mat-mdc-list-item {
+    padding: 10px 0px !important;
+}
+
+.side-icon-menu mat-list.menu-icon .mat-mdc-list-item {
+    height: 65px !important;
+}
+
+/* Fix mat-mdc-list-item height and layout for icon rail */
+::ng-deep .side-icon-menu .mat-mdc-list-item {
+    height: 65px !important;
+    min-height: 65px !important;
+    padding: 8px 0 !important;
+}
+
+/* mat-sidenav inner container */
+::ng-deep .mat-mdc-drawer .mat-drawer-inner-container {
+    overflow: hidden !important;
+    position: relative !important;
+    height: 100% !important;
+}
+
+/* atag-link list item content */
+.atag-link .mdc-list-item__content {
+    padding: 0px 10px;
+}
+
+/* sub-menuitems mat-list → mat-mdc-list */
+.sub-menuitems .mat-mdc-list {
+    padding: 0px !important;
+    margin: 0px !important;
+    --mdc-list-list-item-one-line-container-height: 45px;
+}
+
+.sub-menuitems .mat-mdc-list a .menus {
+    color: #353537;
+    padding: 0px !important;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 45px !important;
+}
+
+/* mat-menu-item MDC */
+button.mat-mdc-menu-item {
+    width: 89%;
+}
+
+/* Theme color overrides for MDC card */
+.content.theme-black .mat-mdc-card.drawer-height {
+    background-color: #0c0c0e !important;
+}
+
+.content.theme-blue .mat-mdc-card.drawer-height {
+    background-color: #0014b0 !important;
+}
+
+.content.theme-orange .mat-mdc-card.drawer-height {
+    background-color: #FA9905 !important;
+}
+
+.content.theme-purple .mat-mdc-card.drawer-height {
+    background-color: #9A1BAA !important;
+}
+
+/* Fix MDC list item ripple/hover background in icon bar */
+::ng-deep .side-icon-menu mat-list-item.mat-mdc-list-item.active-sidenav {
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Fix mat-expansion-panel in sidenav for MDC */
+::ng-deep .mat-mdc-nav-list .mat-mdc-list-item {
+    height: 45px !important;
+}
+/* ===== End MDC Compatibility Fixes ===== */
+
+/* ===== Angular 16: Sidebar perfect-scrollbar & footer positioning ===== */
+
+/* Sidebar scroll container: position:relative needed so ps__rail-y anchors within it */
+perfect-scrollbar.perfectscrol-wdthheigh {
+    display: block !important;
+    position: relative !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: calc(100vh - 250px) !important;
+    max-height: calc(100vh - 250px) !important;
+}
+
+/* .perfectscrol-wdthheigh on host element (fallback) */
+.perfectscrol-wdthheigh {
+    position: relative !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: calc(100vh - 250px) !important;
+    max-height: calc(100vh - 250px) !important;
+}
+
+/* Notification panel scroll area */
+perfect-scrollbar.perfectscrol-notification {
+    display: block !important;
+    position: relative !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    max-height: 320px !important;
+}
+
+/* Native scrollbar styling (matches the ps__thumb-y appearance from dev URL) */
+perfect-scrollbar.perfectscrol-wdthheigh::-webkit-scrollbar { width: 5px; }
+perfect-scrollbar.perfectscrol-wdthheigh::-webkit-scrollbar-track { background: transparent; }
+perfect-scrollbar.perfectscrol-wdthheigh::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.18);
+    border-radius: 4px;
+}
+
+/* Guarantee footer stays pinned to bottom of sidenav */
+::ng-deep .menuContainer .mat-drawer-inner-container {
+    position: relative !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+/* Active menu item highlight (matches Angular 14 dev URL appearance) */
+::ng-deep .sub-menuitems a.active .mat-mdc-list-item.menus {
+    background: rgba(88, 89, 92, 0.1) !important;
+}
+::ng-deep .sub-menuitems a.active .mat-mdc-list-item.menus .mdc-list-item__primary-text {
+    color: #58595c !important;
+    font-weight: 700 !important;
+}
+
+/* Child submenu items (inside expansion panels) */
+::ng-deep .SideNav.sidenav-menu .mat-mdc-list-item.child-listitem .mdc-list-item__content,
+::ng-deep .SideNav.sidenav-menu .mat-mdc-list-item.child-ddl .mdc-list-item__content {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 0 16px !important;
+}
+::ng-deep .SideNav.sidenav-menu .mat-mdc-list-item.child-listitem .mdc-list-item__primary-text,
+::ng-deep .SideNav.sidenav-menu .mat-mdc-list-item.child-ddl .mdc-list-item__primary-text {
+    font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+    font-size: 12px !important;
+    color: #58595c !important;
+}
+
+

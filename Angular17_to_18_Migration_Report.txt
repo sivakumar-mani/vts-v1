@@ -1,0 +1,425 @@
+================================================================================
+         VTS APPLICATION - ANGULAR 17 TO ANGULAR 18 MIGRATION REPORT
+================================================================================
+Project    : VTS (Verification Tracking System)
+Upgraded By: Claude Code (AI Assistant)
+Build      : Production Build - SUCCESS (No Errors)
+================================================================================
+
+
+================================================================================
+SECTION 1 : PACKAGE VERSION UPDATES (package.json)
+================================================================================
+
+  ANGULAR CORE PACKAGES
+  ----------------------
+  @angular/animations          : ^17.3.0  -->  ^18.0.0
+  @angular/cdk                 : ^17.3.0  -->  ^18.0.0
+  @angular/common              : ^17.3.0  -->  ^18.0.0
+  @angular/compiler            : ^17.3.0  -->  ^18.0.0
+  @angular/core                : ^17.3.0  -->  ^18.0.0
+  @angular/forms               : ^17.3.0  -->  ^18.0.0
+  @angular/material            : ^17.3.0  -->  ^18.0.0
+  @angular/platform-browser    : ^17.3.0  -->  ^18.0.0
+  @angular/router              : ^17.3.0  -->  ^18.0.0
+
+  ANGULAR DEV PACKAGES
+  ---------------------
+  @angular-devkit/build-angular: ^17.3.0  -->  ^18.0.0
+  @angular-devkit/core         : ^17.3.0  -->  ^18.0.0
+  @angular-devkit/schematics   : ^17.3.0  -->  ^18.0.0
+  @angular/cli                 : ^17.3.0  -->  ^18.0.0
+  @angular/compiler-cli        : ^17.3.0  -->  ^18.0.0
+  @angular/language-service    : ^17.3.0  -->  ^18.0.0
+
+  THIRD-PARTY PACKAGES UPDATED
+  -----------------------------
+  angular-oauth2-oidc          : ^17.0.0  -->  ^18.0.0
+  @ngbracket/ngx-layout        : ^17.0.0  -->  ^18.0.0
+  ngx-spinner                  : ^17.0.0  -->  ^18.0.0
+  ngx-countdown                : ^17.0.0  -->  ^18.0.0
+  @danielmoncada/angular-datetime-picker : ^17.0.0  -->  ^18.0.0
+
+  KENDO UI PACKAGES UPDATED (^13.0.0 --> ^14.0.0)
+  -------------------------------------------------
+  @progress/kendo-angular-buttons
+  @progress/kendo-angular-charts
+  @progress/kendo-angular-common
+  @progress/kendo-angular-dateinputs
+  @progress/kendo-angular-dropdowns
+  @progress/kendo-angular-excel-export
+  @progress/kendo-angular-grid
+  @progress/kendo-angular-icons
+  @progress/kendo-angular-inputs
+  @progress/kendo-angular-intl
+  @progress/kendo-angular-label
+  @progress/kendo-angular-layout
+  @progress/kendo-angular-notification
+  @progress/kendo-angular-pdf-export
+  @progress/kendo-angular-popup
+  @progress/kendo-angular-toolbar
+  @progress/kendo-angular-tooltip
+  @progress/kendo-angular-treeview
+  @progress/kendo-drawing
+  @progress/kendo-theme-default
+
+  PACKAGES KEPT AS-IS (REASON)
+  -----------------------------
+  primeng                      : ^17.18.0  (KEPT - PrimeNG 18 removed 'chips' module
+                                             which is used throughout this app.
+                                             PrimeNG 17.18.x officially supports Angular 18)
+  angular-oauth2-oidc-jwks     : ^17.0.2   (KEPT - No v18 release exists on npm.
+                                             This package has no Angular peer dependency
+                                             so v17 works fine with Angular 18)
+
+
+================================================================================
+SECTION 2 : CONFIG FILE CHANGES
+================================================================================
+
+  FILE: tsconfig.json
+  -------------------
+  ADDED: "useDefineForClassFields": false
+  REASON: TypeScript 5.4 + ES2022 target uses defineProperty semantics by default
+          which breaks Angular decorators. This flag restores legacy behavior.
+
+  FILE: angular.json
+  ------------------
+  CHANGED: browserTarget --> buildTarget  (in serve options)
+  CHANGED: browserTarget --> buildTarget  (in serve production configuration)
+  CHANGED: browserTarget --> buildTarget  (in extract-i18n options)
+  REASON: Angular 18 deprecated 'browserTarget' in favor of 'buildTarget'
+
+
+================================================================================
+SECTION 3 : HTML TEMPLATE FIXES - TWO-WAY BINDING ERROR (3 Files)
+================================================================================
+
+  ERROR WAS: NG5002 - Unsupported expression in a two-way binding
+  FIX       : Changed [(required)]="!showInSuff"  -->  [required]="!showInSuff"
+  REASON    : Angular 18 stricter template compiler rejects two-way binding on
+              a negated expression (can't write back to !showInSuff)
+
+  FILES CHANGED:
+  1. src/app/screening/CommonComponents/common-cv-validation/
+        common-cv-validation.component.html  (Line 205)
+
+  2. src/app/screening/CommonComponents/common-gap-verification/
+        common-gap-verification.component.html  (Line 242)
+
+  3. src/app/screening/DynamicComponents/cv-validation/
+        cv-validation.component.html  (Line 183)
+
+
+================================================================================
+SECTION 4 : TYPESCRIPT FIXES - ViewChild static: true --> static: false (110 Files)
+================================================================================
+
+  ERROR WAS: TypeError: Cannot read properties of undefined (reading 'filterGlobal')
+  FIX       : @ViewChild('dt', { static: true })  -->  @ViewChild('dt', { static: false })
+  REASON    : static: true resolves before *ngIf renders, leaving 'dt' as undefined.
+              Angular 18 surfaces this timing issue more strictly.
+
+  FILES CHANGED (110 files):
+  --------------------------
+  src/app/master/fake-employer/fake-employer.component.ts
+  src/app/master/vendor-user/vendor-user.component.ts
+  src/app/master/sub-module/sub-module.component.ts
+  src/app/master/screen/screen.component.ts
+  src/app/master/research-emp-ques/research-ques.component.ts
+  src/app/master/research-emp-answer/research-emp-answer.component.ts
+  src/app/master/research-business-category-mapping/research-business-category-mapping.component.ts
+  src/app/master/recruiter details/recruiter details.component.ts
+  src/app/master/qa-subdetail/qa-subdetail.component.ts
+  src/app/master/record-check-category-mapping/record-check-category-mapping.component.ts
+  src/app/master/place/place.component.ts
+  src/app/master/onlinerecordcheck/onlinerecordcheck.component.ts
+  src/app/master/organization-info/organization-info.component.ts
+  src/app/master/module/module.component.ts
+  src/app/master/lookup-category/lookup-category.component.ts
+  src/app/master/invoicetax/invoicetax.component.ts
+  src/app/master/institution-fees/institution-fees.component.ts
+  src/app/master/hoilday/hoilday.component.ts
+  src/app/master/fake-institution/fake-institution.component.ts
+  src/app/master/drug-panel/drug-panel.component.ts
+  src/app/master/drug-kit/drug-kit.component.ts
+  src/app/master/drug/drug.component.ts
+  src/app/master/district/district.component.ts
+  src/app/master/department-details/department-details.component.ts
+  src/app/master/data-set-record-check/data-set-record-check.component.ts
+  src/app/master/course-master/course-master.component.ts
+  src/app/master/city/city.component.ts
+  src/app/master/vendor/vendor-entry/vendor-entry.component.ts
+  src/app/master/team/team.component.ts
+  src/app/master/system-notifications/system-notifications.component.ts
+  src/app/master/subcomponent-details/subcomponent-details.component.ts
+  src/app/master/status-list/status-list.component.ts
+  src/app/master/state/state.component.ts
+  src/app/master/screening-question/screening-question.component.ts
+  src/app/master/sales-client-mapping/sales-client-mapping.component.ts
+  src/app/master/recruiter details/recruiter details.component (2).ts
+  src/app/master/professional-list/professional-list.component.ts
+  src/app/master/predefined-roles/predefined-roles.component.ts
+  src/app/master/institute/institute.component.ts
+  src/app/master/ins-for-research/ins-for-research.component.ts
+  src/app/master/employer-institution/employer-institutionentry-list/employer-institutionentry-list.component.ts
+  src/app/master/emp-re-verify/emp-re-verify.component.ts
+  src/app/master/email-queue/email-queue.component.ts
+  src/app/master/email-config/email-config.component.ts
+  src/app/master/doj-bulkupload/doj-bulkupload.component.ts
+  src/app/master/department-components/department-components.component.ts
+  src/app/master/country/country.component.ts
+  src/app/master/components-details/components-details.component.ts
+  src/app/master/call-charges/call-charges.component.ts
+  src/app/master/auditing-details/auditing-details.component.ts
+  src/app/master/alert-rules/alert-rules.component.ts
+  src/app/master/mode-of-verification-components/mode-of-verification-components.component.ts
+  src/app/common-methods/components/insufficiency/insufficiency.component.ts
+  src/app/common-methods/components/emp-ins-prof-list/emp-ins-prof-list.component.ts
+  src/app/common-methods/components/user-creation/user-creation.component.ts
+  src/app/common-methods/components/invitation-creation/invitation-creation.component.ts
+  src/app/common-methods/components/insufficiencyclearance/insufficiencyclearance.component.ts
+  src/app/common-methods/components/emp-ins-prof-detail/emp-ins-prof-detail.component.ts
+  src/app/common-methods/components/bulkinvitation/bulkinvitation.component.ts
+  src/app/common-methods/components/bulk-export-import/bulk-export-import.component.ts
+  src/app/common-methods/components/client-bulk-case-creation/client-bulk-case-creation.component.ts
+  src/app/verification/verification-details/verification-details.component.ts
+  src/app/verification/red-case-approval/red-case-approval.component.ts
+  src/app/verification/hr-contact-details/hr-contact-details.component.ts
+  src/app/verification/digital-check-pv-report/digital-check-pv-report.component.ts
+  src/app/verification/digital-address-check/digital-address-check.component.ts
+  src/app/verification/color-code-approval/color-code-approval.component.ts
+  src/app/verification/annexure-check/annexure-check.component.ts
+  src/app/screening/DynamicComponents/previous-employment/previous-employment.component.ts
+  src/app/screening/DynamicComponents/employment/employment.component.ts
+  src/app/screening/DynamicComponents/current-employment/current-employment.component.ts
+  src/app/screening/CommonComponents/common-previous-employment/common-previous-employment.component.ts
+  src/app/screening/CommonComponents/common-employment-international/common-employment-international.component.ts
+  src/app/screening/CommonComponents/common-emloyement/common-emloyement.component.ts
+  src/app/screening/CommonComponents/common-current-employment/common-current-employment.component.ts
+  src/app/screening/client-file-submission/candidate/candidate.component.ts
+  src/app/screening/case-created-list/case-created-list.component.ts
+  src/app/screening/candidate-file-submission/ccandidate/ccandidate.component.ts
+  src/app/reports/statistics/statistics.component.ts
+  src/app/quality-check/qualitycheck-details/qualitycheck-details.component.ts
+  src/app/paymenthistory/paymenthistory.component.ts
+  src/app/invoice/unbilled-invoice/unbilled-invoice.component.ts
+  src/app/invoice/preview-invoice/preview-invoice.component.ts
+  src/app/invoice/manual-reg-invoice/manual-reg-invoice.component.ts
+  src/app/icertiscandidates/icertiscandidates.component.ts
+  src/app/dashboard/advancesearch/advance-search.component.ts
+  src/app/client-entry/tat-approval/tat-approval.component.ts
+  src/app/client-entry/sites/site-entry/site-entry.component.ts
+  src/app/client-entry/package-fee-approval/package-fee-approval.component.ts
+  src/app/client-entry/package-creation-detail/package-creation-detail.component.ts
+  src/app/client-entry/client-master/client-mails/client-mails.component.ts
+  src/app/client-entry/client-master/client-creation/client-creation.component.ts
+  src/app/client-entry/client-master/client-components/client-components.component.ts
+  src/app/client-entry/client-fee-approval/client-fee-approval.component.ts
+  src/app/client-entry/client-custom-fields/client-custom-fields.component.ts
+  src/app/client-entry/client-agreement-approval/client-agreement-approval.component.ts
+  src/app/client-entry/cancellation-rule/cancellation-rule.component.ts
+  src/app/client-entry/billing-rule/billing-rule-entry.component.ts
+  src/app/client-entry/billing-cycle/billing-cycle.component.ts
+  src/app/client-entry/agent-entry-master/component-entry/component-entry.component.ts
+  src/app/client-entry/agent-entry-master/client-mail-ids/client-mail-ids.component.ts
+  src/app/client-entry/agent-entry-master/client-instruction/client-instruction.component.ts
+  src/app/client-entry/agent-entry-master/agent-entry-master.component.ts
+  src/app/client-entry/mail-creation/mail-creation.component.ts
+  src/app/case/stop-check/stop-check.component.ts
+  src/app/case/scopebypass-case/scopebypass-case.component.ts
+  src/app/case/loastatus/loastatus.component.ts
+  src/app/case/crtcase-creation/crtcase-creation.component.ts
+  src/app/case/casehistory/casehistory.component.ts
+  src/app/case/case-creation/case-creation.component.ts
+
+
+================================================================================
+SECTION 5 : HTML TEMPLATE FIXES - Optional Chaining on dt (73 Files)
+================================================================================
+
+  FIX    : dt.filterGlobal(  -->  dt?.filterGlobal(
+  REASON : Guards against undefined 'dt' ViewChild reference in templates
+
+  FILES CHANGED (73 files):
+  --------------------------
+  src/app/invoice/preview-invoice/preview-invoice.component.html
+  src/app/common-methods/components/insufficiency/insufficiency.component.html
+  src/app/common-methods/components/emp-ins-prof-list/emp-ins-prof-list.component.html
+  src/app/client-entry/tat-approval/tat-approval.component.html
+  src/app/client-entry/package-fee-approval/package-fee-approval.component.html
+  src/app/client-entry/client-fee-approval/client-fee-approval.component.html
+  src/app/client-entry/client-agreement-approval/client-agreement-approval.component.html
+  src/app/client-entry/cancellation-rule/cancellation-rule.component.html
+  src/app/verification/red-case-approval/red-case-approval.component.html
+  src/app/dashboard/forms/forms.component.html
+  src/app/verification/digital-check-pv-report/digital-check-pv-report.component.html
+  src/app/verification/digital-address-check/digital-address-check.component.html
+  src/app/verification/color-code-approval/color-code-approval.component.html
+  src/app/paymenthistory/paymenthistory.component.html
+  src/app/master/vendor-user/vendor-user.component.html
+  src/app/master/vendor/vendor-entry/vendor-entry.component.html
+  src/app/master/team-users/team-users.component.html
+  src/app/master/system-notifications/system-notifications.component.html
+  src/app/master/subcomponent-details/subcomponent-details.component.html
+  src/app/master/sub-module/sub-module.component.html
+  src/app/master/status-list/status-list.component.html
+  src/app/master/state/state.component.html
+  src/app/master/screening-question/screening-question.component.html
+  src/app/master/screen/screen.component.html
+  src/app/master/sales-client-mapping/sales-client-mapping.component.html
+  src/app/master/research-emp-ques/research-ques.component.html
+  src/app/master/research-emp-answer/research-emp-answer.component.html
+  src/app/master/research-business-category-mapping/research-business-category-mapping.component.html
+  src/app/master/recruiter details/recruiter details.component.html
+  src/app/master/record-check-category-mapping/record-check-category-mapping.component.html
+  src/app/master/qa-subdetail/qa-subdetail.component.html
+  src/app/master/predefined-roles/predefined-roles.component.html
+  src/app/master/place/place.component.html
+  src/app/master/organization-info/organization-info.component.html
+  src/app/master/onlinerecordcheck/onlinerecordcheck.component.html
+  src/app/master/module/module.component.html
+  src/app/master/mode-of-verification-components/mode-of-verification-components.component.html
+  src/app/master/lookup-category/lookup-category.component.html
+  src/app/master/lookup/lookup.component.html
+  src/app/master/invoicetax/invoicetax.component.html
+  src/app/master/insufficiency-document/insufficiency-document.component.html
+  src/app/master/institution-fees/institution-fees.component.html
+  src/app/master/institute/institute.component.html
+  src/app/master/hoilday/hoilday.component.html
+  src/app/master/fake-institution/fake-institution.component.html
+  src/app/master/fake-employer/fake-employer.component.html
+  src/app/master/email-queue/email-queue.component.html
+  src/app/master/email-config/email-config.component.html
+  src/app/master/drug-panel/drug-panel.component.html
+  src/app/master/drug-kit/drug-kit.component.html
+  src/app/master/drug/drug.component.html
+  src/app/master/district/district.component.html
+  src/app/master/department-details/department-details.component.html
+  src/app/master/data-set-record-check/data-set-record-check.component.html
+  src/app/master/department-components/department-components.component.html
+  src/app/master/course-master/course-master.component.html
+  src/app/master/country/country.component.html
+  src/app/master/contact-remarks/contact-remarks.component.html
+  src/app/master/components-details/components-details.component.html
+  src/app/master/city/city.component.html
+  src/app/master/call-charges/call-charges.component.html
+  src/app/master/alert-rules/alert-rules.component.html
+  src/app/icertiscandidates/icertiscandidates.component.html
+  src/app/client-entry/mail-creation/mail-creation.component.html
+  src/app/client-entry/billing-rule/billing-rule-entry.component.html
+  src/app/client-entry/billing-cycle/billing-cycle.component.html
+  src/app/client-entry/agent-entry-master/agent-entry-master.component.html
+  src/app/case/stop-check/stop-check.component.html
+  src/app/case/loastatus/loastatus.component.html
+  src/app/case/crtcase-creation/crtcase-creation.component.html
+  src/app/common-methods/components/user-creation/user-creation.component.html
+  src/app/master/emp-re-verify/emp-re-verify.component.html
+  src/app/master/doj-bulkupload/doj-bulkupload.component.html
+
+
+================================================================================
+SECTION 6 : HTML TEMPLATE FIXES - Invalid Characters / Encoding (39 Files)
+================================================================================
+
+  ERROR WAS: NG5002 - Unexpected closing tag / tag name contains invalid character
+             (Angular 18 HTML parser is stricter - rejects non-ASCII in tag names)
+  FIX       : Removed  Â  (U+00C2) and  NBSP  (U+00A0) characters
+              that were incorrectly placed inside HTML tag names like <divÂ <iÂ
+  REASON    : Copy-paste from Word/PDF introduced non-breaking spaces into HTML
+
+  MODULE: client-entry (5 files)
+  --------------------------------
+  src/app/client-entry/client-agreement-approval/client-agreement-approval.component.html
+  src/app/client-entry/client-fee-approval/client-fee-approval.component.html
+  src/app/client-entry/package-fee-approval/package-fee-approval.component.html
+  src/app/client-entry/tat-approval/tat-approval.component.html
+  src/app/client-entry/client-master/client-creation/client-creation.component.html
+
+  MODULE: screening (10 files)
+  ------------------------------
+  src/app/screening/CommonComponents/common-cv-validation/common-cv-validation.component.html
+  src/app/screening/CommonComponents/common-gap-verification/common-gap-verification.component.html
+  src/app/screening/CommonComponents/common-employment-international/common-employment-international.component.html
+  src/app/screening/CommonComponents/common-emloyement/common-emloyement.component.html
+  src/app/screening/CommonComponents/common-current-employment/common-current-employment.component.html
+  src/app/screening/CommonComponents/common-previous-employment/common-previous-employment.component.html
+  src/app/screening/DynamicComponents/cv-validation/cv-validation.component.html
+  src/app/screening/DynamicComponents/employment/employment.component.html
+  src/app/screening/DynamicComponents/current-employment/current-employment.component.html
+  src/app/screening/DynamicComponents/previous-employment/previous-employment.component.html
+
+  MODULE: verification (4 files)
+  --------------------------------
+  src/app/verification/verification-details/verification-details.component.html
+  src/app/verification/digital-check-pv-report/digital-check-pv-report.component.html
+  src/app/verification/digital-address-check/digital-address-check.component.html
+  src/app/verification/color-code-approval/color-code-approval.component.html
+
+  MODULE: master (8 files)
+  --------------------------
+  src/app/master/city/city.component.html
+  src/app/master/district/district.component.html
+  src/app/master/country/country.component.html
+  src/app/master/state/state.component.html
+  src/app/master/place/place.component.html
+  src/app/master/institute/institute.component.html
+  src/app/master/fake-employer/fake-employer.component.html
+  src/app/master/fake-institution/fake-institution.component.html
+
+  MODULE: common-methods (5 files)
+  ----------------------------------
+  src/app/common-methods/components/insufficiency/insufficiency.component.html
+  src/app/common-methods/components/insufficiencyclearance/insufficiencyclearance.component.html
+  src/app/common-methods/components/emp-ins-prof-list/emp-ins-prof-list.component.html
+  src/app/common-methods/components/user-creation/user-creation.component.html
+  src/app/common-methods/components/bulkinvitation/bulkinvitation.component.html
+
+  MODULE: quality-check (2 files)
+  ---------------------------------
+  src/app/quality-check/qualitycheck-details/qualitycheck-details.component.html
+  src/app/quality-check/qc-list/qc-list.component.html
+
+  MODULE: invoice (2 files)
+  ---------------------------
+  src/app/invoice/preview-invoice/preview-invoice.component.html
+  src/app/invoice/manual-reg-invoice/manual-reg-invoice.component.html
+
+  MODULE: case (2 files)
+  -----------------------
+  src/app/case/case-creation/case-creation.component.html
+  src/app/case/casehistory/casehistory.component.html
+
+  MODULE: reports (1 file)
+  -------------------------
+  src/app/reports/statistics/statistics.component.html
+
+
+================================================================================
+SECTION 7 : TYPESCRIPT FIXES - Bad Import Removed (1 File)
+================================================================================
+
+  FILE: src/app/master/fake-employer/fake-employer.component.ts
+  CHANGE: Removed corrupted import  ÉµConsole  from '@angular/core'
+  REASON: ɵConsole is Angular's private internal API (ɵ prefix = internal).
+          The character 'ɵ' was corrupted to 'Éµ' due to file encoding issue.
+          This symbol was never used in the component - safe to remove.
+
+================================================================================
+SUMMARY - TOTAL FILES CHANGED
+================================================================================
+
+  package.json             : 1 file  (version upgrades)
+  tsconfig.json            : 1 file  (useDefineForClassFields)
+  angular.json             : 1 file  (browserTarget --> buildTarget)
+  Two-way binding fix      : 3 HTML files
+  ViewChild static fix     : 110 TypeScript files
+  Optional chaining fix    : 73 HTML files
+  Encoding/char fix        : 39 HTML files
+  Bad import removed       : 1 TypeScript file
+  -------------------------------------------
+  TOTAL                    : 229 files changed
+
+================================================================================
+END OF REPORT
+================================================================================

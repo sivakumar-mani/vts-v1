@@ -1,0 +1,237 @@
+<app-breadcrumb [routePath]='"Configure / Auditing"'></app-breadcrumb>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h1 class="header-title">Auditing Details</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <mat-card-content>
+          <form [formGroup]="audoitSearchForm" class="form-center" id="ngForm" autocomplete="off">
+            <div fxLayout="row" fxLayoutGap="30px">
+              @if (!!showdSearch) {
+                <div fxFlex="20%">
+                  <div fxLayout="row">
+                    <h4 class="search-header">Search Criteria</h4>
+                    <span fxFlex></span> <a class="text-sm text-upp" matTooltip="Refresh / Reset"
+                  matTooltipClass="accent-tooltip" (click)="resetFilterSort()">Reset</a>
+                </div>
+                <div fxLayout="row wrap" fxLayoutGap="0px grid">
+                  <div fxFlex="100%">
+                    <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                      [selectProperties]='applicatinControl'>
+                    </app-auto-complete>
+                  </div>
+                  <div fxFlex="100%">
+                    <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                      [selectProperties]='moduleControl' (propValueEvent)="setSubModule($event)"
+                      (selectionChange)="submodulefilter($event);screenNameFilter($event)">
+                    </app-auto-complete>
+                  </div>
+                  <div fxFlex="100%">
+                    <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                      [selectProperties]='submoduleControl' (propValueEvent)="setScreen($event)"
+                      (selectionChange)="screenFilter($event)">
+                    </app-auto-complete>
+                  </div>
+                  <div fxFlex="100%">
+                    <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                      [selectProperties]='screennameControl'>
+                    </app-auto-complete>
+                  </div>
+                  @if (expandedSC) {
+                    <div fxFlex="100%">
+                      <div fxLayout="row wrap">
+                        <div fxFlex="100%">
+                          <mat-label class="lbl text-upp mb-10">Requested Date</mat-label>
+                        </div>
+                        <div fxFlex="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Start date</mat-label>
+                            <input (click)="sd.open()" formControlName="stateDate" matInput
+                              [matDatepicker]="sd" mat-autofocus="true"
+                              placeholder="Start date" (focus)="sd.open()">
+                            <mat-datepicker-toggle matSuffix [for]="sd">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #sd></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>End date</mat-label>
+                            <input (click)="ed.open()" matInput formControlName="endDate"
+                              [min]="audoitSearchForm?.get('stateDate')?.value"
+                              [matDatepicker]="ed" mat-autofocus="true"
+                              (dateChange)="getRecordBydate('endDate')"
+                              placeholder="End date"  (focus)="ed.open()">
+                            <mat-datepicker-toggle matSuffix [for]="ed">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #ed></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                  <div fxFlex="100%">
+                    <a mat-flat-button class="view-more" (click)='expandedSC = !expandedSC'
+                      [matTooltip]="!expandedSC?'Click here for more':'Click here for less'"
+                    matTooltipClass="accent-tooltip">{{!expandedSC? 'Show More'  : 'Show Less'}}</a>
+                  </div>
+                </div>
+              </div>
+            }
+            <div fxFlex="100%">
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <button mat-icon-button class="srch-o-btn" matTooltip="Click here for Search"
+                    matTooltipClass="accent-tooltip" (click)="toggle()"> <i
+                  class="icon-search1 fsize-20"></i> </button>
+                  @for (filter of filterListContent; track filter; let in = $index) {
+                    <span class="tag"
+                      >{{filter.value}} <a
+                      class="close"
+                    (click)="removeSearchValue(filter.propertyName,in)">×</a></span>
+                  }
+                </div>
+              </div>
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" class="sortrow">
+                <div fxFlex="100%" fxLayoutAlign="end center">
+                  <ul>
+                    <li><span class="text-dull"> Showing {{(itemPerPage*page)-itemPerPage+1}} -
+                      {{(itemPerPage*page)>=auditTransVmList?.length?(auditTransVmList?.length):itemPerPage*page}}
+                      of </span> <b>{{auditTransVmList?.length}} record(s)</b></li>
+                      <li><b>Sort By:</b> <a [ngClass]="column==='lookupName'?'active':''"
+                                                    (click)="sortBy('lookupName')">Action</a> <i [ngClass]="{'icon-sort': column != 'lookupName', 
+                                                   'icon-sort-asc': (column == 'lookupName' && !isDesc), 
+                                                   'icon-sort-desc': (column == 'lookupName' && isDesc) }"
+                  aria-hidden="true"> </i>
+                </li>
+                <li><a [ngClass]="column==='created'?'active':''"
+                                                    (click)="sortBy('created')">Created Date</a> <i [ngClass]="{'icon-sort': column != 'created', 
+                                               'icon-sort-asc': (column == 'created' && !isDesc), 
+                                               'icon-sort-desc': (column == 'created' && isDesc) }" aria-hidden="true">
+              </i>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="100%">
+
+          @for (filter of auditTransVmList |
+            search:
+            [{key:'lookupName',value:lookupNameControl?.value},
+            {key:'applicationName',value:audoitSearchForm?.get('applicationName')?.value},
+            {key:'moduleName',value:audoitSearchForm?.get('moduleName')?.value},
+            {key:'subModuleName',value:audoitSearchForm?.get('subModuleName')?.value},
+            {key:'screenName',value:audoitSearchForm?.get('screenName')?.value}]
+            | sort: {property: column, direction: direction}
+            | paginate: { itemsPerPage: itemPerPage, currentPage: page }; track filter) {
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row wrap"
+              fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px"
+              fxLayoutGap.sm="20px" fxLayoutGap.xs="20px" class="listrow">
+              <!-- <div fxFlex="100%">
+              <div fxLayout="row" fxLayoutGap="20px"> -->
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33%" fxFlex.sm="48%"
+                  fxFlex.xs="100%">
+                  <p>
+                    <label>Application Name:</label>
+                    <em>
+                      {{filter.applicationName}}
+                    </em>
+                  </p>
+                  <p>
+                    <label>Module Name:</label>
+                    <em>{{filter.moduleName}}</em>
+                  </p>
+                  <p>
+                    <label>Submodule Name:</label>
+                    <em>{{filter.subModuleName}}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="30%" fxFlex.sm="40%"
+                  fxFlex.xs="100%">
+                  <p>
+                    <label>Action:</label>
+                    <em>{{filter.lookupName}}</em> </p>
+                    <p>
+                      <label>Screen Name:</label>
+                      <em>{{filter.screenName}}</em> </p>
+                    </div>
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="30%" fxFlex.sm="100%"
+                      fxFlex.xs="100%">
+                      <p>
+                        <label>User Name:</label>
+                        <em>{{filter.userName}}</em> </p>
+                        <p>
+                          <label>Created Date:</label>
+                          <em>{{filter.created | date: 'dd/MM/yyyy h:mm:ss a'}}</em>
+                        </p>
+                      </div>
+                      <!--
+                    </div>
+                  </div> -->
+                </div>
+              }
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+    <!-- <div class="cus-paginator">
+    <div fxLayout="">
+      <div fxFlex="100%" fxLayoutAlign="end center" class="cus-paginator"> <span>
+        <pagination-controls  (pageChange)="getPage($event)">
+        </pagination-controls>
+      </span>
+      <span class="gotopagbg ml-2">Go to Page<span class="input-num">
+        <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly
+          preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+      </span></span>
+      <span class="gotopagbg ml-2">Items / page<span class="input-num">
+        <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4"
+          appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+          [NumberOnly]="false">
+      </span> </span>
+    </div>
+  </div>
+</div> -->
+
+
+
+<div fxLayout="row">
+  <div class="cus-paginator">
+
+    <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+      <pagination-controls class="cus-paginator" (pageChange)="getPage($event)">
+      </pagination-controls>
+    </span>
+    <span>| &nbsp;<a (click)="showall()">Show All</a> &nbsp; | </span>
+    <span fxHide.xs class="gotopagbg ml-2">Go to Page<span class="input-num">
+      <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly
+        preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+    </span></span>
+    <span fxHide.xs class="gotopagbg ml-2">Items / page<span class="input-num">
+      <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4"
+        appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+        [NumberOnly]="false">
+    </span> </span>
+  </div>
+
+</div>
+</div>
+
+
+
+</mat-card-content>
+</div>
+</div>
+</mat-card-content>
+</mat-card>

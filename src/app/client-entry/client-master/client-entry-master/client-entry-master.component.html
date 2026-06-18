@@ -1,0 +1,734 @@
+﻿<app-breadcrumb [btnAdd]="breadcrumbFlags.btnAdd" [btnAddDisabled]="!screenAuth.addFlag"
+    (eventAdd)="addClientForm(false, 0)" [btnSave]="breadcrumbFlags.btnSave"
+    [btnSaveDisabled]="breadcrumbFlags.btnSaveDisabled" (eventSave)="goToStepAndSave(stepper + 1, 'saveClientForm')"
+    [btnBack]="breadcrumbFlags.btnBack" (eventBack)="closeClientForm()" [routePath]="'Client / Client Creation'"
+    [btnReset]="breadcrumbFlags.btnReset" (eventReset)="resetClientForm()" [toolTip]="breadcrumbFlags.toolTip"
+    [btnResetTbl]="breadcrumbFlags.btnResetTbl"
+    (eventResetTbl)="resetClientTable();clientNameFormCtrl?.reset();
+    statusFormCtrl?.reset();countryFormCtrl?.reset();stateFormCtrl?.reset();cityFormCtrl?.reset();firstNameFormCtrl?.reset();"></app-breadcrumb>
+<div fxLayout="row">
+    <div fxFlex="100%">
+        <mat-card>
+            <div fxLayout="row" *ngIf="breadcrumbFlags?.btnAdd === true">
+                <mat-card-header fxFlex="100%">
+                    <div fxFlex="100%">
+                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                            fxLayoutGap="10px">
+                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                                fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                                fxLayoutAlign.xs="start center">
+                                <mat-card-title>
+                                    <h1 class="header-title">Client Creation</h1>
+                                </mat-card-title>
+                            </div>
+                            <span fxFlex></span>
+                            <!-- // Global Filter -->
+                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                                fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                                <div class="tbl-commonsearch">
+                                    <mat-form-field fxFlex="100%">
+                                        <mat-label></mat-label>
+                                        <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                                        <input #global matInput placeholder="Search Client Name" type="text" pInputText
+                                            size="50" autocomplete="false"
+                                            (input)="tableData?.filterGlobal($event?.target?.value, 'contains')" />
+                                        <!--<input #global matInput placeholder="Search here..." type="text" pInputText
+                                            size="50" autocomplete="off" [readOnly]="pwdFlag"
+                                            (input)="tableData?.filterGlobal($event?.target?.value, 'contains')" />-->
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-header>
+            </div>
+            <mat-card-content *ngIf="breadcrumbFlags?.btnAdd === true">
+                <div class="content-area">
+                    <div fxLayout="row">
+                        <div fxFlex="100%">
+                            <!-- // P - Table -->
+                           <p-table
+  #tableData
+  [totalRecords]="totalpages"
+  [columns]="displayedColumns"
+  [value]="clientGridList"
+  [scrollable]="true"
+  scrollHeight=""
+  [paginator]="true"
+  [rows]="itemperpage"
+  [resizableColumns]="true"
+  [lazy]="true"
+  (onLazyLoad)="LoadHistory($event)"
+  [reorderableColumns]="true"
+  columnResizeMode="expand">
+
+  <!-- ================= COLGROUP ================= -->
+  <ng-template pTemplate="colgroup" let-colGroupCols>
+    <colgroup>
+      <col *ngFor="let col of colGroupCols" [style.width]="col.field === 'action' ? '130px' : '200px'" />
+    </colgroup>
+  </ng-template>
+
+  <!-- ================= HEADER ================= -->
+  <ng-template pTemplate="header" let-headerCols>
+    <tr>
+      <th *ngFor="let col of headerCols"
+          [ngSwitch]="col.field"
+          pReorderableColumn
+          pResizableColumn
+          [ngClass]="{ 'actionrow': col.field === 'action' }">
+
+        <span [pSortableColumn]="col.field">
+          <span class="desg-col" *ngIf="col.field === 'action'">
+            <i class="icon-grid"
+               matTooltip="Filter Columns"
+               matTooltipClass="accent-tooltip"
+               (click)="actionTrigger.openMenu()">
+            </i>
+          </span>
+
+          <div class="action-name"
+               [ngClass]="{ 'thname': col.field !== 'action' }">
+            {{ col.header }}
+          </div>
+
+          <p-sortIcon
+            *ngIf="col.field !== 'action' && col.field !== 'pdfpassword'"
+            ariaLabel="Activate to sort"
+            ariaLabelDesc="Activate to sort in descending order"
+            ariaLabelAsc="Activate to sort in ascending order">
+          </p-sortIcon>
+        </span>
+
+        <!-- SEARCH ICONS -->
+        <span class="ico-fieldsearch">
+          <i *ngSwitchCase="'clientName'" class="icon-search2" (click)="clientNameTrigger.openMenu()"></i>
+          <i *ngSwitchCase="'status'" class="icon-search2" (click)="statusTrigger.openMenu()"></i>
+          <i *ngSwitchCase="'country'" class="icon-search2" (click)="countryTrigger.openMenu()"></i>
+          <i *ngSwitchCase="'state'" class="icon-search2" (click)="stateTrigger.openMenu()"></i>
+          <i *ngSwitchCase="'city'" class="icon-search2" (click)="cityTrigger.openMenu()"></i>
+          <i *ngSwitchCase="'firstName'" class="icon-search2" (click)="firstNameTrigger.openMenu()"></i>
+        </span>
+
+
+        <!-- ACTION column chooser trigger -->
+        <span *ngSwitchCase="'action'">
+          <div #actionTrigger="matMenuTrigger" [matMenuTriggerFor]="actionCtrl"
+            fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+          <mat-menu class="tbl-filtercolumn" #actionCtrl>
+            <mat-card>
+              <mat-card-content>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div fxLayout="row" fxLayoutAlign="end end" class="pb-15">
+                      <div fxFlex="100%">
+                        <button mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip" class="close">
+                          <i class="material-icons" (click)="actionTrigger.closeMenu()">clear</i>
+                        </button>
+                      </div>
+                    </div>
+                    <div fxLayout="row">
+                      <div fxFlex="100%">
+                        <div style="overflow:auto">
+                          <mat-selection-list class="row-design">
+                            <mat-list-option [disabled]="field.disabled" [value]="field"
+                              *ngFor="let field of fieldName" [selected]="field.value"
+                              (click)="$event.stopPropagation(); toggleColumn(field)">
+                              {{field.header}}
+                            </mat-list-option>
+                          </mat-selection-list>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </mat-menu>
+        </span>
+
+        <!-- clientName filter -->
+        <span *ngSwitchCase="'clientName'">
+          <div #clientNameTrigger="matMenuTrigger" [matMenuTriggerFor]="clientNameCtrl"
+            fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+          <mat-menu #clientNameCtrl class="pos-top">
+            <div fxLayout="row">
+              <div fxFlex="100%" class="p-10 tbl-fillddl">
+                <mat-form-field (click)="$event.stopPropagation()">
+                  <input type="text" #clientNameCtl matInput [matAutocomplete]="autoclientName"
+                    placeholder="Client Name" autocomplete="off" role="presentation"
+                    (click)="clientNameCtl.select()" [formControl]="clientNameFormCtrl" />
+                </mat-form-field>
+                <mat-autocomplete #autoclientName="matAutocomplete">
+                  <mat-option (onSelectionChange)="clientNameTrigger.closeMenu()"
+                    *ngFor="let option of clientNameFilteredOptions | async" [value]="option">
+                    <span [innerHTML]="option"></span>
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+              <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                <a class="text-sm">Cancel</a>
+                <a *ngIf="clientNameCtl.value"
+                  (click)="clientNameFormCtrl.setValue('')" class="text-sm">Reset</a>
+              </div>
+            </div>
+          </mat-menu>
+        </span>
+
+        <!-- status filter -->
+        <span *ngSwitchCase="'status'">
+          <div #statusTrigger="matMenuTrigger" [matMenuTriggerFor]="statusCtrl"
+            fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+          <mat-menu #statusCtrl class="pos-top">
+            <div fxLayout="row">
+              <div fxFlex="100%" class="p-10 tbl-fillddl">
+                <mat-form-field (click)="$event.stopPropagation()">
+                  <input type="text" #statusCtl matInput [matAutocomplete]="autostatus"
+                    placeholder="Status" autocomplete="off" role="presentation"
+                    (click)="statusCtl.select()" [formControl]="statusFormCtrl" />
+                </mat-form-field>
+                <mat-autocomplete #autostatus="matAutocomplete">
+                  <mat-option (onSelectionChange)="statusTrigger.closeMenu()"
+                    *ngFor="let option of statusFilteredOptions | async" [value]="option">
+                    <span [innerHTML]="option"></span>
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+              <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                <a class="text-sm">Cancel</a>
+                <a *ngIf="statusCtl.value" (click)="statusFormCtrl.setValue('')" class="text-sm">Reset</a>
+              </div>
+            </div>
+          </mat-menu>
+        </span>
+
+        <!-- country filter -->
+        <span *ngSwitchCase="'country'">
+          <div #countryTrigger="matMenuTrigger" [matMenuTriggerFor]="countryCtrl"
+            fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+          <mat-menu #countryCtrl class="pos-top">
+            <div fxLayout="row">
+              <div fxFlex="100%" class="p-10 tbl-fillddl">
+                <mat-form-field (click)="$event.stopPropagation()">
+                  <input type="text" #countryCtl matInput [matAutocomplete]="autocountry"
+                    placeholder="Country" autocomplete="off" role="presentation"
+                    (click)="countryCtl.select()" [formControl]="countryFormCtrl" />
+                </mat-form-field>
+                <mat-autocomplete #autocountry="matAutocomplete">
+                  <mat-option (onSelectionChange)="countryTrigger.closeMenu()"
+                    *ngFor="let option of countryFilteredOptions | async" [value]="option">
+                    <span [innerHTML]="option"></span>
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+              <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                <a class="text-sm">Cancel</a>
+                <a *ngIf="countryCtl.value" (click)="countryFormCtrl.setValue('')" class="text-sm">Reset</a>
+              </div>
+            </div>
+          </mat-menu>
+        </span>
+
+        <!-- state filter -->
+        <span *ngSwitchCase="'state'">
+          <div #stateTrigger="matMenuTrigger" [matMenuTriggerFor]="stateCtrl"
+            fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+          <mat-menu #stateCtrl class="pos-top">
+            <div fxLayout="row">
+              <div fxFlex="100%" class="p-10 tbl-fillddl">
+                <mat-form-field (click)="$event.stopPropagation()">
+                  <input type="text" #stateCtl matInput [matAutocomplete]="autostate"
+                    placeholder="State" autocomplete="off" role="presentation"
+                    (click)="stateCtl.select()" [formControl]="stateFormCtrl" />
+                </mat-form-field>
+                <mat-autocomplete #autostate="matAutocomplete">
+                  <mat-option (onSelectionChange)="stateTrigger.closeMenu()"
+                    *ngFor="let option of stateFilteredOptions | async" [value]="option">
+                    <span [innerHTML]="option"></span>
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+              <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                <a class="text-sm">Cancel</a>
+                <a *ngIf="stateCtl.value" (click)="stateFormCtrl.setValue('')" class="text-sm">Reset</a>
+              </div>
+            </div>
+          </mat-menu>
+        </span>
+
+        <!-- city filter -->
+        <span *ngSwitchCase="'city'">
+          <div #cityTrigger="matMenuTrigger" [matMenuTriggerFor]="cityCtrl"
+            fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+          <mat-menu #cityCtrl class="pos-top">
+            <div fxLayout="row">
+              <div fxFlex="100%" class="p-10 tbl-fillddl">
+                <mat-form-field (click)="$event.stopPropagation()">
+                  <input type="text" #cityCtl matInput [matAutocomplete]="autocity"
+                    placeholder="City" autocomplete="off" role="presentation"
+                    (click)="cityCtl.select()" [formControl]="cityFormCtrl" />
+                </mat-form-field>
+                <mat-autocomplete #autocity="matAutocomplete">
+                  <mat-option (onSelectionChange)="cityTrigger.closeMenu()"
+                    *ngFor="let option of cityFilteredOptions | async" [value]="option">
+                    <span [innerHTML]="option"></span>
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+              <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                <a class="text-sm">Cancel</a>
+                <a *ngIf="cityCtl.value" (click)="cityFormCtrl.setValue('')" class="text-sm">Reset</a>
+              </div>
+            </div>
+          </mat-menu>
+        </span>
+
+        <!-- firstName (Account Manager) filter -->
+        <span *ngSwitchCase="'firstName'">
+          <div #firstNameTrigger="matMenuTrigger" [matMenuTriggerFor]="firstNameCtrl"
+            fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+          <mat-menu #firstNameCtrl class="pos-top">
+            <div fxLayout="row">
+              <div fxFlex="100%" class="p-10 tbl-fillddl">
+                <mat-form-field (click)="$event.stopPropagation()">
+                  <input type="text" #firstNameCtl matInput [matAutocomplete]="autofirstName"
+                    placeholder="Account Manager" autocomplete="off" role="presentation"
+                    (click)="firstNameCtl.select()" [formControl]="firstNameFormCtrl" />
+                </mat-form-field>
+                <mat-autocomplete #autofirstName="matAutocomplete">
+                  <mat-option (onSelectionChange)="firstNameTrigger.closeMenu()"
+                    *ngFor="let option of firstNameFilteredOptions | async" [value]="option">
+                    <span [innerHTML]="option"></span>
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+              <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                <a class="text-sm">Cancel</a>
+                <a *ngIf="firstNameCtl.value" (click)="firstNameFormCtrl.setValue('')" class="text-sm">Reset</a>
+              </div>
+            </div>
+          </mat-menu>
+        </span>
+
+
+      </th>
+    </tr>
+  </ng-template>
+
+  <!-- ================= BODY ================= -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-bodyCols="columns">
+
+    <tr>
+      <td *ngFor="let col of bodyCols"
+          [ngSwitch]="col.field"
+          [ngClass]="{ 'desg-bg': col.field === 'action' }"
+          matTooltip="Client was assigned in the Case's, Could not remove the client"
+          matTooltipClass="accent-tooltip"
+          [matTooltipDisabled]="rowData.clientDeleteFlag !== true">
+
+        <!-- NORMAL DATA -->
+        <div *ngIf="col.field !== 'active' && col.field !== 'action'">
+          {{ rowData[col.field] }}
+        </div>
+
+        <!-- ACTION -->
+        <div fxLayout="row"
+             *ngSwitchCase="'action'"
+             class="desg-icon">
+
+          <div fxFlex="100%" fxLayoutGap="10px">
+
+            <mat-icon *ngIf="userData.teamName !== 'DataEntry'"
+                      [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+              <i class="material-icons-outlined"
+                 matTooltip="Edit"
+                 matTooltipClass="accent-tooltip"
+                 (click)="editForm(rowData.completeFlag, rowData.clientId)">
+                edit
+              </i>
+            </mat-icon>
+
+            <mat-icon
+              [ngClass]="screenAuth.deleteFlag === false || rowData.clientDeleteFlag === true
+                        ? 'page-btn disabled' : ''">
+              <i class="material-icons-outlined"
+                 matTooltip="Delete"
+                 matTooltipClass="accent-tooltip"
+                 (click)="deleteDialog(
+                   rowData.clientId,
+                   'Confirmation',
+                   'Are you sure you want to delete this record?',
+                   null,
+                   'deleteForm',
+                   null)">
+                delete
+              </i>
+            </mat-icon>
+
+            <mat-icon>
+              <i class="material-icons-outlined"
+                 matTooltip="View"
+                 matTooltipClass="accent-tooltip"
+                 (click)="editForm(rowData.completeFlag, rowData.clientId, 'view')">
+                remove_red_eye
+              </i>
+            </mat-icon>
+
+            <mat-icon (click)="openPWDialog(rowData);getPassword(rowData.clientId)">
+              <i class="material-icons"
+                 matTooltip="PDF Password"
+                 matTooltipClass="accent-tooltip">
+                layers
+              </i>
+            </mat-icon>
+
+          </div>
+        </div>
+
+        <!-- ACTIVE -->
+        <div *ngSwitchCase="'active'" class="tbl-icon">
+          <span *ngIf="rowData.active" class="istrue">
+            <i class="material-icons"
+               matTooltip="Active"
+               matTooltipClass="accent-tooltip">
+              thumb_up
+            </i>
+          </span>
+          <span *ngIf="!rowData.active" class="isfalse">
+            <i class="material-icons"
+               matTooltip="In-Active"
+               matTooltipClass="accent-tooltip">
+              thumb_down
+            </i>
+          </span>
+        </div>
+
+      </td>
+    </tr>
+
+  </ng-template>
+
+</p-table>
+                            <!-- // Table Paginator -->
+                            <div [ngClass]="{'empty-record': clientGridList?.length === 0}" class="cus-paginator"
+                                fxLayout="row wrap" fxLayoutGap="10px grid">
+                                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                    fxLayoutAlign="start center"> Showing
+                                    {{ tableData?.totalRecords < 1 ? 0 : tableData?.first + 1 }} - {{
+                                        tableData?.totalRecords> 0 ? tableData?.rows + tableData?.first <=
+                                            tableData?.totalRecords ? tableData?.rows + tableData?.first :
+                                            tableData?.totalRecords : 0 }} of {{ tableData?.totalRecords }} record(s) |
+                                            &nbsp;<a (click)="showall()">Show All</a></div>
+                                <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                    fxLayoutAlign="end center" fxLayoutAlign.md="end center"
+                                    fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                                    <a [ngClass]="tableData?.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                            tableData?.onPageChange({
+                              first: tableData?.first - tableData?.rows,
+                              rows: tableData?.rows
+                            });
+                            navigateNxtPrevPage(tableData?.first + tableData?.rows, tableData?.rows)
+                          "> <i class="icon-control-start mr-5"></i> </a> <span class="gotopagbg mr-2 ml-2"
+                                        fxHide.xs>Go to Page<span class="input-num">
+                                            <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5"
+                                                appNumberOnly [NumberOnly]="false"
+                                                (keyup.enter)="navigatePage(pageNo.value, tableData?.rows)" />
+                                        </span></span> <span class="mr-2" fxHide.xs> of
+                                        {{ getTotalPages(tableData?.totalRecords, tableData?.rows) }}</span>
+                                    <a [ngClass]="
+                            tableData?.rows + tableData?.first >= tableData?.totalRecords
+                              ? 'page-btn disabled'
+                              : 'page-btn'
+                          " (click)="
+                            tableData?.onPageChange({
+                              first: tableData?.first + tableData?.rows,
+                              rows: tableData?.rows
+                            });
+                            navigateNxtPrevPage(tableData?.first + tableData?.rows, tableData?.rows)
+                          "><i class="icon-control-end ml-5"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+            <div *ngIf="breadcrumbFlags?.btnAdd === false">
+                <form #scrollError appScrollToError>
+                    <div fxLayout="row" fxFlex="100%" fxLayoutGap="0px">
+                        <!-- // Child Components -->
+                        <div fxFlex="80%" fxFlex.lg="80%" fxFlex.md="75%" fxFlex.sm="70%" fxFlex.xs="100%">
+                            <div fxLayout="row wrap" fxFlex="100%" fxLayoutGap="25px grid" fxLayoutGap.xs="0px grid">
+                                <div fxFlex="100%">
+                                    <div fxLayout='row'>
+                                        <div fxFlex="100%">
+                                            <!-- // Tab Headers -->
+                                            <mat-card-header>
+                                                <mat-card-title><span *ngFor="let step of stepList">
+                                                        <h1 class="header-title" *ngIf="step?.value === this.stepper">
+                                                            <span class="StprH">Step
+                                                                {{
+                                                                (clientEntryForm.get('clientEntry.siteCreationFlag').value
+                                                                === true && stepper === 5) ? step?.value : step?.value +
+                                                                1 }}:</span>{{step?.name}}
+                                                        </h1>
+                                                    </span>
+                                                </mat-card-title>
+                                            </mat-card-header>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="stepper === 0">
+                                        <app-client-creation #clientScreen
+                                            [clientForm]="clientEntryForm?.controls?.clientEntry"
+                                            [customLOAForm]="clientEntryForm?.controls?.clientEntry?.controls?.ClientCustomLoa"
+                                            [bindData]="clientBindData" [mainForm]="clientEntryForm" [address]="address"
+                                            [userData]="userData" [insuffClientId]="insuffClient" [stepList]="stepList">
+                                        </app-client-creation>
+                                    </div>
+                                    <div *ngIf="stepper === 1">
+                                        <app-client-components #componentScreen [bindData]="componentBindData"
+                                            [mainForm]="clientEntryForm" [currencyList]="currencyList"
+                                            (deleteEvent)="deleteDialog($event?.data, $event?.hText, $event?.bText, $event?.method1, $event?.method2, $event?.methodNo)">
+                                        </app-client-components>
+                                    </div>
+                                    <div *ngIf="stepper === 2">
+                                        <app-client-agreement
+                                            [agreementForm]="clientEntryForm?.controls?.clientAgreement"
+                                            [bindData]="agreementBindData" [mainForm]="clientEntryForm">
+                                        </app-client-agreement>
+                                    </div>
+                                    <div *ngIf="stepper === 3">
+                                        <app-client-instructions #instructionScreen [bindData]="instructionBindData"
+                                            [mainForm]="clientEntryForm"
+                                            (deleteEvent)="deleteDialog($event?.data, $event?.hText, $event?.bText, $event?.method1, $event?.method2, $event?.methodNo)">
+                                        </app-client-instructions>
+                                    </div>
+                                    <div *ngIf="stepper === 4">
+                                        <app-client-mails #mailScreen [bindData]="mailBindData"
+                                            [mainForm]="clientEntryForm"
+                                            (deleteEvent)="deleteDialog($event?.data, $event?.hText, $event?.bText, $event?.method1, $event?.method2, $event?.methodNo)">
+                                        </app-client-mails>
+                                    </div>
+                                    <div *ngIf="stepper === 5">
+                                        <app-client-reviews [mainForm]="clientEntryForm" [currencyList]="currencyList"
+                                            [formValue]="clientEntryForm.getRawValue()" [mailBindData]="mailBindData"
+                                            [instructionBindData]="instructionBindData"
+                                            [agreementBindData]="agreementBindData"
+                                            [componentBindData]="componentBindData" [clientBindData]="clientBindData">
+                                        </app-client-reviews>
+                                    </div>
+                                    <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+                                        <button *ngIf="stepper > 0" mat-flat-button color="primary"
+                                            (click)="goToStepAndSave((clientEntryForm.get('clientEntry.siteCreationFlag').value === true && stepper === 5) ? stepper - 2 : stepper - 1, 'stepperChange')">Previous</button>
+                                        <button *ngIf="stepper < 5" mat-flat-button color="primary"
+                                            (click)="goToStepAndSave((clientEntryForm.get('clientEntry.siteCreationFlag').value === true && stepper === 3) ? stepper + 2 : stepper + 1, 'stepperChange')">Next
+                                        </button>
+                                        <button *ngIf="stepper === 5 && !this.type" mat-flat-button color="accent"
+                                            (click)="goToStepAndSave(stepper + 1, 'saveClientForm')"
+                                            [disabled]="breadcrumbFlags?.btnSaveDisabled">
+                                            {{ clientEntryForm?.value?.clientEntry?.completeFlag === true ? "Update" :
+                                            "Save" }}
+                                        </button>
+                                    </mat-card-actions>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- // Stepper -->
+                        <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="25%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs>
+                            <div class="step">
+                                <div fxLayout='row'>
+                                    <div fxFlex="100%">
+                                        <div *ngFor="let step of stepList" class="list"> <a
+                                                (click)="goToStepAndSave(step?.value, 'stepperChange')">{{step?.name}}<i
+                                                    class="{{step?.cls}}" fxHide.sm fxHide.xs>
+                                                </i></a> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </mat-card>
+    </div>
+</div>
+<ng-template #PDFPasswordDialog>
+    <div >
+        <h1 mat-dialog-title>PDF Password</h1>
+        <mat-dialog-content>
+            <form [formGroup]="paswordFormGrp"autocomplete="off">
+                <div fxLayout="row">
+                    <div fxFlex="100%">
+                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                            <mat-label>Enter the Password for final Report</mat-label>
+                            <input autocomplete="new-password" maxlength="15" role="presentation"
+                                [type]="hide ? 'password' : 'text'" matInput formControlName="finalPassword"
+                                placeholder="Enter the Password" [class.blur-textbox1]="!isChecked1">
+
+                            <button mat-icon-button matSuffix (click)="hide = !hide;"
+                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                <mat-icon><i class="material-icons material-icons">
+                                        {{hide ? 'visibility_off' : 'visibility'}}
+                                    </i></mat-icon>
+                            </button> 
+                            <mat-error *ngIf="paswordFormGrp?.get('finalPassword')?.errors?.required">Final Report Password is required</mat-error>
+                        </mat-form-field>&nbsp;
+                        <mat-slide-toggle [checked]="isChecked1" (change)="toggleSlideToggle1()"
+                            style="padding-top: 15px;">{{ toggleLabel }}
+                        </mat-slide-toggle>&nbsp;
+                        <button mat-icon-button color="primary" style="padding-top: 7px;"
+                            matTooltip="View PassWord History" matTooltipClass="accent-tooltip"
+                            (click)="OpenPasswordHistoryDetails(this.clientId ,620)">
+                            <i class="icon-info" style="font-size: 24px;"></i>
+                        </button>
+
+                    </div>
+                </div>
+                <div fxLayout="row">
+                    <div fxFlex="100%">
+                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                            <mat-label>Enter the Password for interim report</mat-label>
+                            <input maxlength="15" autocomplete="new-password" role="presentation"
+                                [type]="hide1 ? 'password' : 'text'" matInput formControlName="interimPassword"
+                                placeholder="Enter the Password" [class.blur-textbox2]="!isChecked2">
+
+                            <button mat-icon-button matSuffix (click)="hide1 = !hide1;"
+                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide1">
+                                <mat-icon><i class="material-icons material-icons">
+                                        {{hide1 ? 'visibility_off' : 'visibility'}}
+                                    </i></mat-icon>
+                            </button>
+                            <mat-error *ngIf="paswordFormGrp?.get('interimPassword')?.errors?.required">Interim Report Password is required</mat-error>
+                        </mat-form-field>&nbsp;
+                        <mat-slide-toggle [checked]="isChecked2" (change)="toggleSlideToggle2()"
+                            style="padding-top: 15px;">{{ toggleLabe2 }}
+                        </mat-slide-toggle>&nbsp;
+                        <button mat-icon-button color="primary" style="padding-top: 7px;"
+                            matTooltip="View PassWord History" matTooltipClass="accent-tooltip"
+                            (click)="OpenPasswordHistoryDetails(this.clientId,622)">
+                            <i class="icon-info" style="font-size: 24px;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div fxLayout="row">
+                    <div fxFlex="100%">
+                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                            <mat-label>Enter the Password for individual report</mat-label>
+                            <input maxlength="15" autocomplete="new-password" role="presentation"
+                                [type]="hide2 ? 'password' : 'text'" matInput formControlName="individualPassword"
+                                placeholder="Enter the Password" [class.blur-textbox3]="!isChecked3">
+
+                            <button mat-icon-button matSuffix (click)="hide2 = !hide2;"
+                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2">
+                                <mat-icon><i class="material-icons material-icons">
+                                        {{hide2 ? 'visibility_off' : 'visibility'}}
+                                    </i></mat-icon>
+                            </button>
+                            <mat-error *ngIf="paswordFormGrp?.get('individualPassword')?.errors?.required">Individual Report Password is required</mat-error>
+                        </mat-form-field>&nbsp;
+                        <mat-slide-toggle [checked]="isChecked3" (change)="toggleSlideToggle3()"
+                            style="padding-top: 15px;">{{ toggleLabe3 }}
+                        </mat-slide-toggle>&nbsp;
+                        <button mat-icon-button color="primary" style="padding-top: 7px;"
+                            matTooltip="View PassWord History" matTooltipClass="accent-tooltip"
+                            (click)="OpenPasswordHistoryDetails(this.clientId,621)">
+                            <i class="icon-info" style="font-size: 24px;"></i>
+                        </button>
+
+                    </div>
+                </div>
+                <div fxLayout="row">
+                    <div fxFlex="100%">
+                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                            <mat-label>Enter the Password for supplementary report</mat-label>
+                            <input maxlength="15" autocomplete="new-password" role="presentation"
+                                [type]="hide3 ? 'password' : 'text'" matInput formControlName="supplementaryPassword"
+                                placeholder="Enter the Password">
+
+                            <button mat-icon-button matSuffix (click)="hide3 = !hide3;"
+                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide3">
+                                <mat-icon><i class="material-icons material-icons">
+                                        {{hide3 ? 'visibility_off' : 'visibility'}}
+                                    </i></mat-icon>
+                            </button>
+                            <mat-error *ngIf="paswordFormGrp?.get('supplementaryPassword')?.errors?.required">Supplementary Report Password is required</mat-error>
+                        </mat-form-field>&nbsp;
+                        <mat-slide-toggle [checked]="isChecked4"  (change)="toggleSlideToggle4()"
+                            style="padding-top: 15px;">{{ toggleLabe4 }}
+                        </mat-slide-toggle>&nbsp;
+                        <button mat-icon-button color="primary" style="padding-top: 7px;"
+                            matTooltip="View PassWord History" matTooltipClass="accent-tooltip"
+                            (click)="OpenPasswordHistoryDetails(this.clientId,619)">
+                            <i class="icon-info" style="font-size: 24px;"></i>
+                        </button>
+                    </div>
+
+                </div>
+                <div fxLayout="row">
+                    <mat-checkbox [formControl]="sendCrtFlag"> Send to CRT
+                    </mat-checkbox>
+                </div>
+            </form>
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+            <button mat-flat-button color="primary" matTooltip="Save" matTooltipClass="accent-tooltip"
+                (click)="savePassword()">Save</button>
+            <button (click)='dialog.closeAll()' mat-flat-button color="warn">Cancel</button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>
+
+<ng-template #passwordHistoryDetails>
+    <form>
+        <h1 mat-dialog-title>Password History</h1>
+        <mat-dialog-content>
+            <div fxLayout="column" fxLayoutGap="0px" class="border-dashed" *ngIf="clientRptPasswordDetails?.length > 0">
+                <div class="history-view" fxFlex="100%" *ngFor="let history of clientRptPasswordDetails; let i = index">
+
+                    <!-- <div> <span matTooltip="Component Name" matTooltipClass="accent-tooltip"><b>{{
+                                history.description}}</b></span>
+                    </div> -->
+                    <div> <span  matTooltipClass="accent-tooltip" [innerHTML]="getHeader(history.description)"></span>
+                    </div>
+                    <div class="uname">
+                        <div matTooltip="Qc Approved By" matTooltipClass="accent-tooltip"
+                            class="user avatarBg{{(j%6)+1}}">
+                            {{ history?.userName?.slice(0, 1)}}{{ history?.userName?.slice(0, 1)}}</div>
+                        Updated By - {{history?.userName}}
+                    </div>
+                    <p> Status Date - {{this.datepipe.transform(history.statusDate, 'dd/MM/yyyy hh:mm:ss a')}}
+                    </p>
+
+                </div>
+            </div>
+            <div *ngIf="clientRptPasswordDetails?.length == 0">
+                <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="0px">
+                    <div fxFlex="100%" class="pt-15">
+                        <div class="no-record text-center">
+                            <span>No Record Found</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end center">
+            <button mat-flat-button color="warn" (click)="closeDialog()">Close</button>
+        </mat-dialog-actions>
+    </form>
+</ng-template>

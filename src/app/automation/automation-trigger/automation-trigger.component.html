@@ -1,0 +1,114 @@
+<app-breadcrumb [routePath]="routePath">
+</app-breadcrumb>
+<div fxLayout="row" fxLayoutGap="20px">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">Automation Trigger</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" style="display: none !important;">
+          <div fxFlex="100%" fxLayoutGap="8px" class="pb-15">
+            <!-- <button mat-flat-button color="primary" (click)="TatOutCloseInsufficiency()" class="mb-10">TAT out insuff raised cases status change to Close Insufficiency</button> -->
+            @if (userData.teamName!='CRTIndia') {
+              <button mat-flat-button color="primary" (click)="DOJRemainderMail()" class="mb-10">Date of joining recruiter mail</button>
+            }
+            @if (userData.teamName!='CRTIndia') {
+              <button mat-flat-button color="primary" (click)="SendInvitationReminderMail()" class="mb-10">Send Invitation Reminder Mail</button>
+            }
+            @if (userData.teamName!='CRTIndia') {
+              <button mat-flat-button color="primary" (click)="GetConsolidateInsuffMail(false)" class="mb-10">Send Insufficiency Consolidate Mail</button>
+            }
+            @if (userData.teamName!='CRTIndia') {
+              <button mat-flat-button color="primary" (click)="GetConsolidateInsuffMail(true)" class="mb-10">Send Cumulative Mail</button>
+            }
+            @if (userData.teamName!='CRTIndia') {
+              <button mat-flat-button color="primary" (click)="SendClientAgreementReminderMail()" class="mb-10">Client Agreement</button>
+            }
+            @if (userData.teamName!='CRTIndia') {
+              <button mat-flat-button color="primary" (click)="ConsolidateCandidateCreateACK()" class="mb-10">Consolidate Candidate Create</button>
+            }
+            @if (userData.teamName!='CRTIndia') {
+              <button mat-flat-button color="primary" (click)="ConsolidateCandidateSubmissionACK()" class="mb-10">Consolidate Candidate Submission</button>
+            }
+            @if (userData.teamName!='CRTIndia') {
+              <button mat-flat-button color="primary" (click)="CalculateInprogressDays()" class="mb-10">Calculate Inprogress Days</button>
+            }
+            <button mat-flat-button color="primary" (click)="SaveInvitationExpireDate()" class="mb-10">Invitation Expiry Date</button>
+            @if (showInfoceptTrigger) {
+              <button mat-flat-button color="primary" (click)="InfoceptApiCaseCreation()" class="mb-10">Infocept Case Creation</button>
+            }
+            @if (showInfoceptTrigger) {
+              <button mat-flat-button color="primary" (click)="InfoceptApiFTP()" class="mb-10">Infocept FTP</button>
+            }
+          </div>
+        </div>
+        <div fxLayout="row" [formGroup]="qcApprovedForm">
+          <div fxFlex="100%" fxLayoutGap="8px" class="pb-15">
+            <div fxFlex="130px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>From Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date"
+                  (focus)="sampledatePicker.open()" (click)="sampledatePicker.open()"
+                  formControlName="from" />
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxFlex="130px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>To Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker1" placeholder="To Date"
+                  (focus)="sampledatePicker1.open()" (click)="sampledatePicker1.open()"
+                  formControlName="to" />
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker1></mat-datepicker>
+              </mat-form-field>
+
+            </div>
+            <div fxFlex="130px">
+              <mat-form-field fxFlex="100%">
+                <input required placeholder="Type" autocomplete="off" formControlName="type"
+                  role="presentation" matInput type="'text'">
+              </mat-form-field>
+            </div>
+            <button mat-flat-button color="primary" (click)="approvedFileMoveToTempPath(from,to)"
+            class="mb-10">Duplicate Reports moved to Temp folder</button>
+
+          </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>
+
+
+<div fxLayout="row" fxLayoutGap="20px">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">Statistics Report</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" style="display: none !important;">
+          <div fxFlex="100%" fxLayoutGap="8px" class="pb-15">
+            <button mat-flat-button color="primary" (click)="GetMonthWiseComponentCompletedList()" class="mb-10">Component Completed Monthly List with TAT Status</button>
+            <button mat-flat-button color="primary" (click)="GetCumulativeMonthlyCasesAndChecksReportList()" class="mb-10">Cumulative Monthly  Cases And Checks Report</button>
+            <button mat-flat-button color="primary" (click)="GetFileCompletedMonthlyDataList()" class="mb-10">File compleated Monthly data Report</button>
+            <button mat-flat-button color="primary" (click)="GetMonthlySLAReportsList()" class="mb-10">Consolidated list of Report to Automation : Monthly SLA report for all clients</button>
+            <button mat-flat-button color="primary" (click)="GetMonthlyStatisticsReports()" class="mb-10">Consolidated list of Report to Automation : Monthly statistics report . Cases closed , UTV closed, Closed unverified</button>
+            <button mat-flat-button color="primary" (click)="GetIQCPartialDetails()" class="mb-10">Individual QC Partial Details</button>
+          </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>

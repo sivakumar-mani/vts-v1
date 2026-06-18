@@ -1,0 +1,58 @@
+<form autocomplete="off" role="presentation">
+  <div [formGroup]="mainForm">
+    @for (item of getGapFormGroup(); track item; let i = $index) {
+      <div formArrayName="gapReason">
+        <div [formGroupName]="i">
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+            <div fxflex="100%">
+              <h3 class="sub-header">{{item.get("gapTypeName").value}}</h3>
+            </div>
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <mat-label class="lbl">{{item.get("gapTypeName").value}}</mat-label>
+              <mat-radio-group aria-label="Select an option" fxLayoutGap="20px" formControlName="reasonFlag"
+                (change)="reasonTypeChange($event, item)">
+                <mat-radio-button [value]="true" fxLayoutGap="20px">Yes</mat-radio-button>
+                <mat-radio-button [value]="false" fxLayoutGap="20px">No</mat-radio-button>
+              </mat-radio-group>
+              @if (item?.get('reasonFlag')?.errors?.required &&
+                item?.get('reasonFlag')?.touched) {
+                <mat-error>{{item.get("gapTypeName").value}} is required
+                </mat-error>
+              }
+            </div>
+          </div>
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+            <div fxflex="100%">&nbsp;
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="0px grid">
+            <div fxFlex="75%" fxFlex.lg="75%" fxFlex.md="75%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Remarks(Please Specify Reason for Gap)</mat-label>
+                <textarea #edutoedu maxlength="1000" matInput formControlName="remarks"
+                placeholder="Remarks" [required]="item.get('reasonFlag').value === true"> </textarea>
+                <mat-hint>({{edutoedu.value.length}}/1000 Max)</mat-hint>
+                @if (!!item.get('remarks')?.errors?.required) {
+                  <mat-error> Remarks is required.
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <app-screening-documents [header]="'Gap Reason Supporting Documents'" [mainForm]="item"
+                [formgroupName]="'reasonDoument'" [doctType]="[]" [fileBtn]="!item.get('reasonFlag').value"
+                [dupScreeningDoc]="screeningComponent.componentDocument" [showDocType]="false">
+              </app-screening-documents>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</form>

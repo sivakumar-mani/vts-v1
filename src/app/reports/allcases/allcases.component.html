@@ -1,0 +1,289 @@
+<app-breadcrumb [routePath]="routePath" [btnExportDisabled] ="!screenAuth?.exportFlag" [btnBack]="true" (eventBack)="common.moveToDashboard()"
+(eventExcelExport)="exportExcel()" [btnExcelExport]="allCaseList?.length > 0"></app-breadcrumb>
+<div fxLayout="row" class="advSearch" [formGroup]="allcaseSearchForm" autocomplete="off">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <!-- <div fxFlex="200px">
+          <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='clientRefNoCtrl'>
+          </app-auto-complete>
+        </div> -->
+        @if (clientControl) {
+          <div  class="search_select_custom"  fxFlex="200px">
+            <p-multiSelect
+              fxFlex="100%" [options]="clientList" formControlName="clientName" optionLabel="clientName" filterPlaceHolder="Select Client name" selectedItemsLabel="{0} Client name selected" [style]="{XminWidth: '270px', width:'100%'}" defaultLabel="Select Client name"
+              (propValueEvent)="getPropertyValue($event)" resetFilterOnHide=true required>
+            </p-multiSelect>
+          </div>
+        }
+
+
+        <!-- <div fxFlex="200px">
+        <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='candidateControl'>
+        </app-auto-complete>
+      </div> -->
+      <div fxFlex="200px">
+        <app-auto-complete  [selectProperties]='casePriorityControl'>
+        </app-auto-complete>
+      </div>
+      <div fxFlex="200px">
+        <app-auto-complete  [selectProperties]='statusControl'>
+        </app-auto-complete>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+
+  <div class="FloatR mt-15" fxLayoutAlign="end end" fxLayoutGap="10px"> <a
+    (click)="searchValueArr = [];;allcaseSearchForm.reset();resetForm()"> Reset</a><span> </span> </div>
+    &nbsp;&nbsp;
+    <div class="FloatR mt-15" fxLayoutAlign="start start" fxLayoutGap="10px"> <a
+      (click)="searchcase()"> Search</a><span></span> </div>
+
+    </div>
+  </div>
+  <div fxLayout="row" class="srchPad" fxLayoutGap="20px" fxlayout.lg="row" fxlayout.md="row" fxLayout.sm="column"
+    fxlayout.xs="column">
+    <mat-card style="width: 100%;">
+      <div fxLayout="row">
+        <mat-card-header fxFlex="100%">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+              fxLayoutGap="10px">
+              <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                <mat-card-title>
+                  <h1 class="header-title">All Cases History</h1>
+                </mat-card-title>
+              </div>
+              <span fxFlex></span>
+            </div>
+          </div>
+        </mat-card-header>
+      </div>
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+          fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid" class="sortrow">
+          <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center"
+            fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+            <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="90%" fxFlex.sm="92%" fxFlex.xs="100%" fxLayoutAlign="end center"
+              fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+              <ul class="pl-0">
+                <!-- <li>
+                <span class="text-dull"> Showing {{ itemPerPage * page - itemPerPage + 1 }} - {{ count }} of </span>
+                <b>{{ searchList?.length }}</b> Record(s)
+              </li> -->
+              <li><span class="text-dull"> Showing
+                {{(allCaseList?.length > 0 ?
+                ((shievePageSize*shievePageNo)-shievePageSize+1): 0)}} -
+                {{((shievePageSize*shievePageNo)>=(shieveTotalCount))?(shieveTotalCount):(shievePageSize*shievePageNo)}}
+                of </span> <b> {{shieveTotalCount}}record(s)</b></li>
+                |
+                <li>
+                  <a (click)="shieveShowall()">Show All</a>
+                </li>
+                |
+                <li>
+                  <b>Sort By:</b>
+                  <a [ngClass]="column === 'candidateFirstName' ? 'active' : ''"
+                  (click)="sortBy('candidateFirstName')">Candidate Name</a>
+                <i [ngClass]="{
+                        'icon-sort': column != 'candidateFirstName',
+                        'icon-sort-asc': column == 'candidateFirstName' && !isDesc,
+                        'icon-sort-desc': column == 'candidateFirstName' && isDesc
+                      }" aria-hidden="true">
+                  </i>
+                  <a [ngClass]="column === 'clientReferenceNo' ? 'active' : ''"
+                    (click)="sortBy('clientReferenceNo')">Client Ref
+                  No</a>
+                <i [ngClass]="{
+                        'icon-sort': column != 'clientReferenceNo',
+                        'icon-sort-asc': column == 'clientReferenceNo' && !isDesc,
+                        'icon-sort-desc': column == 'clientReferenceNo' && isDesc
+                      }" aria-hidden="true">
+                  </i><a [ngClass]="column === 'clientName' ? 'active' : ''" (click)="sortBy('clientName')">Client
+                Name</a>
+                <i [ngClass]="{
+                        'icon-sort': column != 'clientName',
+                        'icon-sort-asc': column == 'clientName' && !isDesc,
+                        'icon-sort-desc': column == 'clientName' && isDesc
+                      }" aria-hidden="true">
+                </i>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          @for (
+            search of allCaseList| sort: {property: column, direction: direction}
+            | paginate: { itemsPerPage: shievePageSize, currentPage: shievePageNo, totalItems: shieveTotalCount }; track
+            search; let i = $index; let count = $count) {
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="cloumn"
+              fxLayoutGap="20px" class="listrow">
+              <div fxFlex="100%">
+                <div fxLayout="row" fxLayoutGap="20px" [class]="getcount(count)">
+                  <div fxFlex="15%">
+                    <mat-card-header>
+                      <div mat-card-avatar ngClass="avatar avatarBg{{ (i % 6) + 1 }}">
+                        {{ search?.candidateFirstName?.slice(0, 1) }}{{ search?.candidateLastName?.slice(0, 1) }}
+                      </div>
+                      <mat-card-title class="cname">
+                        {{ search?.candidateFirstName }}
+                      </mat-card-title>
+                      <mat-card-subtitle class="mb-10 cdesg">{{ search?.clientReferenceNo }}</mat-card-subtitle>
+                    </mat-card-header>
+                  </div>
+                  <div fxFlex="25%">
+                    <p>
+                      <label>Client Name:</label> <em>{{ search.clientName }}</em>
+                    </p>
+                    <p>
+                      <label>Applicant Id:</label> <em>{{ search?.applicantId ? search?.applicantId : 'N/A' }}</em>
+                    </p>
+                    <p>
+                      <label>Charge Code:</label> <em>{{ search?.chargeCode ? search?.chargeCode : 'N/A' }} </em>
+                    </p>
+                    <p>
+                      <label>Color Code:</label>
+                      <!-- <em>{{ search?.colorCode ? search?.colorCode : 'N/A' }}</em> -->
+                      <span>
+                        @switch (search?.colorCode ? search?.colorCode : 'N/A') {
+                          @case ('Red') {
+                            <em> <span class="ccode" style="background-color:red;"> </span>
+                          {{ search?.colorCode ? search?.colorCode : 'N/A' }}</em>
+                        }
+                        @case ('Green') {
+                          <em> <span class="ccode" style="background-color:#08BA53;"> </span>
+                        {{ search?.colorCode ? search?.colorCode : 'N/A' }}</em>
+                      }
+                      @case ('Yellow') {
+                        <em> <span class="ccode" style="background-color:#FFBF00;"> </span>
+                      {{ search?.colorCode ? search?.colorCode : 'N/A' }}</em>
+                    }
+                    @case ('Orange') {
+                      <em> <span class="ccode" style="background-color:orange;"> </span>
+                    {{ search?.colorCode ? search?.colorCode : 'N/A' }}</em>
+                  }
+                  @case ('Magenta') {
+                    <em> <span class="ccode" style="background-color:magenta;"> </span>
+                  {{ search?.colorCode ? search?.colorCode : 'N/A' }}</em>
+                }
+                @case ('Stop') {
+                  <em> <span class="ccode" style="background-color:#121212;"> </span>
+                {{ search?.colorCode ? search?.colorCode : 'N/A' }}</em>
+              }
+              @case ('Positive') {
+                <em> <span class="ccode" style="background-color: #008000;">
+                </span>
+              {{ search?.colorCode ? search?.colorCode : 'N/A' }}</em>
+            }
+            @case ('Negative') {
+              <em> <span class="ccode" style="background-color: #ff0000;">
+              </span>
+            {{ search?.colorCode ? search?.colorCode : 'N/A' }}</em>
+          }
+          @case ('Positive-Review') {
+            <em> <span class="ccode" style="background-color: #ff6600;">
+            </span>
+          {{ search?.colorCode ? search?.colorCode : 'N/A' }}</em>
+        }
+        @case ('Negative-Please Review') {
+          <em> <span class="ccode" style="background-color:#ffff00;">
+          </span>
+        {{ search?.colorCode ? search?.colorCode : 'N/A' }}</em>
+      }
+      @case ('N/A') {
+        <em> {{ search?.colorCode ? search?.colorCode : 'N/A' }}</em>
+      }
+    }
+  </span>
+</p>
+</div>
+<div fxFlex="25%">
+  <p>
+    <label>Created By:</label> <em>{{ search?.userName ? search?.userName : 'N/A' }}</em>
+  </p>
+  <p>
+    <label>Site Name:</label> <em>{{ search?.siteName ? search?.siteName : 'N/A' }}</em>
+  </p>
+  <p>
+    <label>Case Status:</label> <em>{{ search?.status ? search?.status : 'Pending' }} </em>
+  </p>
+  <p>
+    <label>Case Priority:</label> <em>{{ search?.casePriority ? search?.casePriority : 'N/A' }} </em>
+  </p>
+</div>
+<div fxFlex="35%">
+  <p>
+    <label>Case Initiation Date:</label>
+    <em>{{ search.caseInititationDate ? (common.getTimezoneOffset(search.caseInititationDate, false)
+    | date: "dd/MMM/yyyy") : "N/A" }}</em>
+  </p>
+  <p>
+    <label>Case Received Date & Time:</label>
+    <em>{{ search.caseReceivedDate ? (common.getTimezoneOffset(search.caseReceivedDate, false)
+    | date: "dd/MM/yyyy hh:mm:ss a") : "N/A" }}</em>
+  </p>
+  <p>
+    <label>Report Sent Date & Time:</label>
+    <em>{{ search?.closedDate ? (common.getTimezoneOffset(search.closedDate, false)
+    | date: "dd/MM/yyyy hh:mm:ss a") : 'N/A' }}</em>
+  </p>
+</div>
+</div>
+</div>
+</div>
+}
+</div>
+</div>
+<!-- <div *ngIf="allCaseList?.length > 0" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutAlign.sm="start start"
+fxLayoutAlign.xs="start start" class="cus-paginator mb-15">
+<div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end end"
+  fxLayoutAlign.md="start start" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"
+  class="tex t-right dev-paginator">
+  <pagination-controls (pageChange)="getPage($event)"></pagination-controls>
+</div>
+<div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end end"
+  fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+  <span class="gotopagbg ml-2">Go to Page
+    <span class="input-num">
+      <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly preventDragdrop
+        preventCutCopyPaste autocomplete="off" [NumberOnly]="false" />
+    </span>
+  </span>
+  <span class="gotopagbg ml-2">Items / page
+    <span class="input-num">
+      <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4" appNumberOnly preventDragdrop
+        preventCutCopyPaste autocomplete="off" [NumberOnly]="false" (blur)="preventInfinite()" />
+    </span>
+  </span>
+</div>
+</div> -->
+<div fxLayout="row">
+  <div class="cus-paginator">
+    <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+      <pagination-controls class="cus-paginator"
+      (pageChange)="shievePagination($event)"></pagination-controls>
+    </span> <span fxHide.xs class="gotopagbg ml-2">Go to Page<span
+    class="input-num">
+    <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4"
+      appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+      [NumberOnly]="false">
+  </span></span> <span fxHide.xs class="gotopagbg ml-2">Items / page<span
+  class="input-num">
+  <input type="number" [(ngModel)]="shievePageSize" min="1" maxlength="4"
+    appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+    [NumberOnly]="false" (blur)="preventInfinite($event)">
+</span> </span>
+</div>
+</div>
+</div>
+</mat-card-content>
+</mat-card>
+</div>

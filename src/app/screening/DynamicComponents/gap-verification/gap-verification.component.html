@@ -1,0 +1,343 @@
+<form [formGroup]="mainForm" autocomplete="off" role="presentation">
+  <app-base-info [mainForm]="mainForm" [compBaseDetails]="compBaseDetails" [formgroupName]="'screeningComponentInfo'"
+    (emitNotappChange)="notApplicable($event)" [showNotApplicable]="showNotApplicable">
+  </app-base-info>
+  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+    <div fxFlex="100%">
+      <h3 class="sub-header">Gap Verifiaction Details</h3>
+    </div>
+  </div>
+  @if (this.screeningService.ClientCategoryId !== 4) {
+    <div [formGroupName]="formgroupName" fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+      fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+      fxLayoutGap.xs="0px grid">
+      <div fxFlex="33.33%" fxFlex.lg="33.33%"  fxFlex.md="33.33%" fxFlex.sm="100%"  fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Gap Type</mat-label>
+          <mat-select placeholder="Select gap type" formControlName="gapTypeLookupId" required
+            (selectionChange)="gapChange(mainForm?.get(formgroupName+'.gapTypeLookupId').value)">
+            @for (g of gapList; track g) {
+              <mat-option [value]="g.lookUpId"> {{g.lookUpName}}</mat-option>
+            }
+          </mat-select>
+          @if (!!mainForm?.get(formgroupName)?.get('gapTypeLookupId')?.errors?.required) {
+            <mat-error>
+              Gap type is required
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33%" fxFlex.lg="33.33%"  fxFlex.md="33.33%" fxFlex.sm="100%"  fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Gap From</mat-label>
+          @if (userData.applicationId !==3) {
+            <span matSuffix class="suff-lbtn"
+              [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+              matTooltip="Click here if not available" matTooltipClass="accent-tooltip">
+              <a mat-flat-button (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'gapFrom')">NP</a></span>
+            }
+            <input matInput placeholder="Gap From" formControlName="gapFrom" required
+              (input)="touchValidation(frmdate.value,'gapTo');dateCalc()"
+              (focus)="naFlag !== true ? PeriodOf.open(): ''" (click)="naFlag !== true ? PeriodOf.open():''"
+              #frmdate (keyup)="notProvidevalidation(frmdate.value)"/>
+            <input matInput hidden (dateChange)="handleDateChange($event,'gapFrom');dateCalc()"
+              [matDatepicker]="PeriodOf">
+            <mat-datepicker-toggle [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'" matSuffix [for]="PeriodOf"></mat-datepicker-toggle>
+            <mat-datepicker #PeriodOf></mat-datepicker>
+            @if (userData.applicationId !==3) {
+              <mat-hint class="f-13">(Eg. Gap from Date or Period,Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or Not Provided),01st January 2019 should be typed as 01/JAN/2021.)</mat-hint>
+            }
+            @if (userData.applicationId ===3) {
+              <mat-hint class="f-13">(Eg. Gap from Date or Period,Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022),01st January 2019 should be typed as 01/JAN/2021.)</mat-hint>
+            }
+            @if (!!mainForm?.get(formgroupName)?.get('gapFrom')?.errors?.required) {
+              <mat-error> Gap from is required
+              </mat-error>
+            }
+            @if (!!mainForm?.get(formgroupName)?.get('gapFrom')?.errors?.date?.invalidPattern) {
+              <mat-error>{{userData.applicationId === 3 ? "Gap from date is invalid (E.g. Enter date as (01/JAN/2021 or 01/01/2021 or
+                JAN/2017 or 2022),01st January 2021 should be typed as 01/JAN/2021." : "Gap from date is invalid (E.g. Enter date as
+                (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or Not Provided),01st January 2021 should be typed as 01/JAN/2021."}}
+              </mat-error>
+            }
+            @if (!!mainForm?.get(formgroupName)?.get('gapFrom')?.errors?.incorrect && userData.applicationId === 3) {
+              <mat-error>
+                Gap from date is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022),01st January 2021 should
+              be typed as 01/JAN/2021. </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="33.33%" fxFlex.lg="33.33%"  fxFlex.md="33.33%" fxFlex.sm="100%"  fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Gap To</mat-label>
+            @if (userData.applicationId !==3) {
+              <span matSuffix class="suff-lbtn"
+                [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                matTooltip="Click here if not available" matTooltipClass="accent-tooltip">
+                <a mat-flat-button (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'gapTo')">NP</a></span>
+              }
+              <input matInput placeholder="Gap To" formControlName="gapTo" required  (focus)="naFlag !== true ? PeriodOfStay.open():''" (click)="naFlag !== true ? PeriodOfStay.open():''"
+                #todate (keyup)="notProvide(todate.value)" (input)="touchValidation(todate.value,'gapTo');dateCalc()"/>
+              <input matInput hidden (dateChange)="handleDateChange($event,'gapTo');dateCalc()"
+                [matDatepicker]="PeriodOfStay">
+              <mat-datepicker-toggle [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'" matSuffix [for]="PeriodOfStay"></mat-datepicker-toggle>
+              <mat-datepicker #PeriodOfStay></mat-datepicker>
+              @if (userData.applicationId !==3) {
+                <mat-hint class="f-13">(Eg. Gap to Date or Period,Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or Not Provided),01st January 2019 should be typed as 01/JAN/2021.)</mat-hint>
+              }
+              @if (userData.applicationId ===3) {
+                <mat-hint class="f-13">(Eg. Gap to Date or Period,Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022),01st January 2019 should be typed as 01/JAN/2021.)</mat-hint>
+              }
+              @if (!!mainForm?.get(formgroupName)?.get('gapTo')?.errors?.required) {
+                <mat-error> Gap to is required
+                </mat-error>
+              }
+              @if (!!mainForm?.get(formgroupName)?.get('gapTo')?.errors?.date?.invalidPattern) {
+                <mat-error>{{userData.applicationId === 3 ? "Gap to date is invalid (E.g. Enter date as (01/JAN/2021 or 01/01/2021 or
+                  JAN/2017 or 2022),01st January 2021 should be typed as 01/JAN/2021." : "Gap to date is invalid (E.g. Enter date as
+                  (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or Not Provided),01st January 2021 should be typed as 01/JAN/2021."}}
+                </mat-error>
+              }
+              @if (!!mainForm?.get(formgroupName)?.get('gapTo')?.errors?.comparison) {
+                <mat-error>
+                  Gap to date should be greater than gap from date
+                </mat-error>
+              }
+              @if (!!mainForm?.get(formgroupName)?.get('gapTo')?.errors?.incorrect && userData.applicationId === 3) {
+                <mat-error>
+                  Gap to date is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022),01st January 2021 should
+                be typed as 01/JAN/2021. </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      }
+      @if (this.screeningService.ClientCategoryId === 4) {
+        <div [formGroupName]="gapDetails" >
+          @for (group of formArray.controls; track group; let i = $index) {
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <ng-container [formGroup]="group" >
+                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Gap Type</mat-label>
+                    <mat-select placeholder="Select gap type" formControlName="gapTypeLookupId" required
+                      (selectionChange)="gapvarificationChange(mainForm?.get('gapDetails')?.controls[i]?.get('gapTypeLookupId')?.value,i)" [disabled]=true>
+                      @for (g of gapStatusList; track g) {
+                        <mat-option [value]="g.lookUpId" > {{g.lookUpName}}</mat-option>
+                      }
+                    </mat-select>
+                    @if (!!mainForm?.get('gapDetails')?.controls[i]?.get('gapTypeLookupId')?.errors?.required) {
+                      <mat-error>
+                        Gap type is required
+                      </mat-error>
+                    }
+                    @if (!!mainForm?.get('gapDetails')?.controls[i]?.get('gapTypeLookupId')?.errors?.incorrect) {
+                      <mat-error>
+                        Gap type is already exist
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Gap From</mat-label>
+                    @if (userData.applicationId !==3) {
+                      <span matSuffix class="suff-lbtn"
+                        [ngClass]="mainForm?.get('gapDetails')?.controls[i]?.get('gapFrom')?.disabled?'page-btn disabled': 'page-btn'"
+                        matTooltip="Click here if not available" matTooltipClass="accent-tooltip">
+                        <a mat-flat-button
+                        (click)="naFlag= true;setNotProvideGap('gapFrom',i)">NP</a></span>
+                      }
+                      <input matInput placeholder="Gap From" formControlName="gapFrom" required
+                        (input)="touchValidation(gfrmdate.value,'gapTo');dateCalc()"
+                        (focus)="naFlag !== true ? PeriodOffs.open(): ''"
+                        (click)="naFlag !== true ? PeriodOffs.open():''" #gfrmdate
+                        (keyup)="notProvidevalidation(gfrmdate.value)" />
+                      <input matInput hidden (dateChange)="handleDateChangeChild($event,'gapFrom',i);"
+                        [matDatepicker]="PeriodOffs">
+                      <mat-datepicker-toggle
+                        [ngClass]="mainForm?.get('gapDetails')?.controls[i]?.get('gapFrom')?.disabled?'page-btn disabled': 'page-btn'"
+                      matSuffix [for]="PeriodOffs"></mat-datepicker-toggle>
+                      <mat-datepicker #PeriodOffs></mat-datepicker>
+                      @if (userData.applicationId !==3) {
+                        <mat-hint class="f-13">(Eg. Gap from Date or Period,Enter date
+                          as
+                          (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or Not Provided),01st January 2019 should be
+                          typed as
+                        01/JAN/2021.)</mat-hint>
+                      }
+                      @if (!!mainForm?.get('gapDetails')?.controls[i]?.get('gapFrom')?.errors?.required) {
+                        <mat-error> Gap from is
+                          required
+                        </mat-error>
+                      }
+                      @if (!!mainForm?.get('gapDetails')?.controls[i]?.get('gapFrom')?.errors?.date?.invalidPattern) {
+                        <mat-error
+                          >{{userData.applicationId
+                          === 3 ? "Gap from date is invalid (E.g. Enter date as (01/JAN/2021 or 01/01/2021 or
+                          JAN/2017 or 2022),01st January 2021 should be typed as 01/JAN/2021." : "Gap from date is invalid
+                          (E.g. Enter date as
+                          (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or Not Provided),01st January 2021 should be
+                          typed as
+                          01/JAN/2021."}}
+                        </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Gap To</mat-label>
+                      @if (userData.applicationId !==3) {
+                        <span matSuffix class="suff-lbtn"
+                          [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                          matTooltip="Click here if not available" matTooltipClass="accent-tooltip">
+                          <a mat-flat-button
+                          (click)="naFlag= true;setNotProvideGap('gapTo',i)">NP</a></span>
+                        }
+                        <input matInput placeholder="Gap To" formControlName="gapTo" required
+                          (focus)="naFlag !== true ? PeriodOfStayss.open():''"
+                          (click)="naFlag !== true ? PeriodOfStayss.open():''" #gtodate (keyup)="notProvide(gtodate.value)"
+                          (input)="touchValidation(gtodate.value,'gapTo');dateCalc()" />
+                        <input matInput hidden (dateChange)="handleDateChangeChild($event,'gapTo',i);"
+                          [matDatepicker]="PeriodOfStayss">
+                        <mat-datepicker-toggle
+                          [ngClass]="mainForm?.get('gapDetails')?.controls[i]?.get('gapTo')?.disabled?'page-btn disabled': 'page-btn'"
+                        matSuffix [for]="PeriodOfStayss"></mat-datepicker-toggle>
+                        <mat-datepicker #PeriodOfStayss></mat-datepicker>
+                        @if (userData.applicationId !==3) {
+                          <mat-hint class="f-13">(Eg. Gap to Date or Period,Enter date as
+                            (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or Not Provided),01st January 2019 should be
+                            typed as
+                          01/JAN/2021.)</mat-hint>
+                        }
+                        @if (!!mainForm?.get('gapDetails')?.controls[i]?.get('gapTo')?.errors?.required) {
+                          <mat-error> Gap to is required
+                          </mat-error>
+                        }
+                        @if (!!mainForm?.get('gapDetails')?.controls[i]?.get('gapTo')?.errors?.date?.invalidPattern) {
+                          <mat-error
+                            >{{userData.applicationId
+                            === 3 ? "Gap to date is invalid (E.g. Enter date as (01/JAN/2021 or 01/01/2021 or
+                            JAN/2017 or 2022),01st January 2021 should be typed as 01/JAN/2021." : "Gap to date is invalid
+                            (E.g.
+                            Enter date as
+                            (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or Not Provided),01st January 2021 should be
+                            typed as
+                            01/JAN/2021."}}
+                          </mat-error>
+                        }
+                        <!-- <mat-error *ngIf="!!mainForm?.get('gapDetails.gapTo')?.errors?.comparison">
+                        Gap to date should be greater than gap from date
+                      </mat-error> -->
+                      @if (!!mainForm?.get('gapDetails')?.controls[i]?.get('gapTo')?.errors?.comparison) {
+                        <mat-error
+                          >
+                          Gap To date should be greater than Gap From date
+                        </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Gap Reason</mat-label>
+                      <textarea formControlName="techMGapReason" maxlength="1000"  matInput
+                      placeholder="Gap Reason" required> </textarea>
+                      @if (!!mainForm?.get('gapDetails')?.controls[i]?.get('techMGapReason')?.errors?.required) {
+                        <mat-error>
+                          Gap Reason is required
+                        </mat-error>
+                      }
+                      <!-- <mat-hint>({{techMGapreason.value.length}}/1000 Max)</mat-hint> -->
+                    </mat-form-field>
+                  </div>
+                </ng-container>
+              </div>
+            }
+          </div>
+        }
+        <div fxLayout="row" fxLayoutGap="0px" class="mb-10">
+          <div fxFlex="100%">
+            <app-custom-fields [mainForm]="mainForm" [formArrName]="'componentCustomFields'"></app-custom-fields>
+          </div>
+        </div>
+        @if (userData.applicationId !== 3 && !showInSuff && screeningMatError) {
+          <div fxLayout="row wrap" fxLayout.lg="row"
+            fxLayout.md="row" fxLayo.ut.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+            fxLayoutGap.xs="0px grid" [formGroupName]="'screeningComponentInfo'">
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Select Status</mat-label>
+                <mat-select placeholder="Select Status" formControlName="screeningStatusId"
+                  (selectionChange)="onSelectionChange($event.value)" required>
+                  @for (option of items; track option) {
+                    <mat-option [value]="option.value">
+                      {{ option.label }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        }
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
+          @if (screeningService.ClientCategoryId !== 4) {
+            <div>
+              @if (!fileBtn) {
+                <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  [formGroupName]="'screeningComponentInfo'">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Gap Reason</mat-label>
+                    <textarea #remark formControlName="remark" maxlength="1000" matInput placeholder="Gap Reason"> </textarea>
+                    <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
+                  </mat-form-field>
+                </div>
+              }
+            </div>
+          }
+          @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length) {
+            <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
+              [formGroupName]="'screeningComponentInfo'">
+              <mat-label class="lbl">Choose</mat-label>
+              <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise Insufficiency</mat-checkbox>
+            </div>
+          }
+        </div>
+
+        @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+            >
+            <div fxFlex="100%">
+              <div class="alert alert-info" role="alert">
+                <h4>Insufficiency Clearance Remarks: </h4>
+                @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+                  <span
+                    >
+                    {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+
+          @if (showInSuff) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="100%">
+                <app-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm"
+                  [compBaseDetails]="mainForm.get('screeningComponentInfo').value" [formgroupName]="'screeningInsufficiency'">
+                </app-raise-insufficiency>
+              </div>
+            </div>
+          }
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+              <app-screening-documents [fileBtn]="fileBtn" [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'"
+                [dupScreeningDoc]="screeningComponent.componentDocument"
+              [validationFlag]="nFlag!== true &&userData.applicationId === 3 && compName !== common.GAP_VERIFICATION? true : false"></app-screening-documents>
+            </div>
+          </div>
+        </form>

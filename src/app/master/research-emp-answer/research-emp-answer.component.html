@@ -1,0 +1,301 @@
+﻿<app-breadcrumb [routePath]="routePath" [btnResetTbl]="breadcrumbFlags.btnResetTbl" (eventResetTbl)="resetTbl()"
+  [btnAdd]="breadcrumbFlags.btnAdd" (eventAdd)="addEmpAns()" [btnBack]="breadcrumbFlags.btnBack"
+  (eventBack)="closeForm()" [btnSave]="breadcrumbFlags.btnSave" (eventSave)="saveEmpAns()"  [btnAddDisabled]="!screenAuth.addFlag"
+  [btnReset]="breadcrumbFlags.btnReset" (eventReset)="resetForm()" [toolTip]="breadcrumbFlags.toolTip">
+</app-breadcrumb>
+
+<div fxLayout="row" fxLayoutGap="20px">
+  <div fxFlex="100%">
+    <mat-card>
+      <div fxLayout="row">
+        <mat-card-header fxFlex="100%">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+              fxLayoutGap="10px">
+              <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                <mat-card-title>
+                  <h1 class="header-title">Research {{ typeansFlag ? "Institution" : "Employee" }} Answers</h1>
+                </mat-card-title>
+              </div>
+              <span fxFlex></span>
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                @if (!showFlag) {
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                        autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                    </mat-form-field>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </mat-card-header>
+      </div>
+      <div fxLayout="row">
+        <mat-card-content fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+          @if (showFlag) {
+            <div>
+              <form [formGroup]="employeeAnsFormGroup" autocomplete="off" id="ngForm">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <app-auto-complete [selectProperties]="questionControl" (selectionChange)="getOptions($event)">
+                    </app-auto-complete>
+                  </div>
+                  <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%" style="margin-top: -15px;">
+                    <div fxFlex="100%">
+                      <span class="p-float-label">
+                        <p-multiSelect fxFlex="100%" [options]="fullOptionList" formControlName="options"
+                          optionLabel="lookUpName" filterPlaceHolder="Select Options"
+                          selectedItemsLabel="{0} Options selected" [style]="{XminWidth: '250px', width:'100%'}"
+                          defaultLabel="Select Options" [showHeader]="true" [filter]="true">
+                        </p-multiSelect>
+                        <label class="lbl-float">Options</label>
+                        @if (!!employeeAnsFormGroup?.get('options')?.errors?.required) {
+                          <mat-error>
+                          Options is required. </mat-error>
+                        }
+                      </span>
+                    </div>
+                  </div>
+                  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="10%">
+                    <mat-label class="lbl">Is Active</mat-label>
+                    <mat-checkbox formControlName="active">Active</mat-checkbox>
+                  </div>
+                </div>
+              </form>
+            </div>
+          }
+          @if (!showFlag) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+              fxLayout.xs="column" fxLayoutGap="20px grid">
+              <div fxFlex="100%">
+                <p-table
+                  #dt
+                  [columns]="displayedColumns"
+                  [value]="empInsAnsList"
+                  dataKey="questionId"
+                  [scrollable]="true"
+                  scrollHeight=""
+                  [paginator]="true"
+                  [rows]="itemperpage"
+                  [resizableColumns]="true"
+                  [reorderableColumns]="true">
+                  <!-- ================= COLGROUP ================= -->
+                  <ng-template pTemplate="colgroup" let-colGroupCols>
+                    <colgroup>
+                    <col style="width:50px" />
+                    <col style="width:80px" />
+                    @for (col of colGroupCols; track col) {
+                      <col style="min-width:200px" />
+                    }
+                  </colgroup>
+                </ng-template>
+                <!-- ================= HEADER ================= -->
+                <ng-template pTemplate="header" let-headerCols>
+                  <tr>
+                    <th class="action"></th>
+                    <th class="action">Action</th>
+                    @for (col of headerCols; track col) {
+                      <th
+                        pReorderableColumn
+                        pResizableColumn>
+                        <div class="thname"
+                          matTooltip="{{ col.header }}"
+                          matTooltipClass="accent-tooltip">
+                          {{ col.header }}
+                        </div>
+                        <span [pSortableColumn]="col.field">
+                          <p-sortIcon
+                            [field]="col.field"
+                            matTooltip="Sorting"
+                            matTooltipClass="accent-tooltip">
+                          </p-sortIcon>
+                        </span>
+                      </th>
+                    }
+                  </tr>
+                </ng-template>
+                <!-- ================= BODY ================= -->
+                <ng-template
+                  pTemplate="body"
+                  let-rowData
+                  let-index="rowIndex"
+                  let-expanded="expanded"
+                  let-bodyCols="columns">
+                  <tr [pReorderableRow]="index">
+                    <!-- EXPAND -->
+                    <td class="desg-bg">
+                      <a href="#" [pRowToggler]="rowData">
+                        <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i>
+                      </a>
+                    </td>
+                    <!-- ACTION -->
+                    <td class="desg-bg">
+                      <mat-icon
+                        [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''"
+                        (click)="editEmpQues(rowData)">
+                        <i class="material-icons-outlined"
+                          matTooltip="Edit"
+                          matTooltipClass="accent-tooltip">
+                          edit
+                        </i>
+                      </mat-icon>
+                    </td>
+                    <!-- DATA -->
+                    @for (col of bodyCols; track col) {
+                      <td
+                        [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                        @switch (col.field) {
+                          @case ('questionName') {
+                            <div>
+                              {{ rowData.questionName || 'N/A' }}
+                            </div>
+                          }
+                          @case ('questionWithUrl') {
+                            <div>
+                              {{ rowData.questionWithUrl || 'N/A' }}
+                            </div>
+                          }
+                        }
+                      </td>
+                    }
+                  </tr>
+                </ng-template>
+                <!-- ================= ROW EXPANSION ================= -->
+                <ng-template pTemplate="rowexpansion" let-moduleRowData let-expCols="columns">
+                  <tr>
+                    <td [attr.colspan]="4">
+                      <p-table
+                        [columns]="optionListColumn"
+                        [value]="moduleRowData.options"
+                        class="inn-table"
+                        [responsive]="true"
+                        [reorderableColumns]="true"
+                        (onRowReorder)="onRowReorder($event, moduleRowData.options)">
+                        <!-- INNER HEADER -->
+                        <ng-template pTemplate="header" let-innerHeaderCols>
+                          <tr>
+                            <th style="width:70px">#Order</th>
+                            <th style="width:100px">Action</th>
+                            @for (col of innerHeaderCols; track col) {
+                              <th
+                                pReorderableColumn
+                                pResizableColumn>
+                                <span matTooltip="{{ col.header }}"
+                                  matTooltipClass="accent-tooltip">
+                                  {{ col.header }}
+                                </span>
+                                <span [pSortableColumn]="col.field">
+                                  <p-sortIcon
+                                    [field]="col.field"
+                                    matTooltip="Sorting"
+                                    matTooltipClass="accent-tooltip">
+                                  </p-sortIcon>
+                                </span>
+                              </th>
+                            }
+                          </tr>
+                        </ng-template>
+                        <!-- INNER BODY -->
+                        <ng-template
+                          pTemplate="body"
+                          let-screenRowData
+                          let-index="rowIndex"
+                          let-innerBodyCols="columns">
+                          <tr [pReorderableRow]="index">
+                            <td style="width:40px">
+                              <i class="icon-menu"
+                                pReorderableRowHandle
+                                matTooltip="Re-order"
+                              matTooltipClass="accent-tooltip"></i>
+                            </td>
+                            <td style="width:100px" class="desg-bg">
+                              <mat-icon>
+                                <i class="material-icons-outlined"
+                                  matTooltip="Delete"
+                                  matTooltipClass="accent-tooltip"
+                                  (click)="openDialog(screenRowData.answerId)">
+                                  delete
+                                </i>
+                              </mat-icon>
+                            </td>
+                            @for (col of innerBodyCols; track col) {
+                              <td>
+                                @if (col.field !== 'active') {
+                                  <span>
+                                    {{ screenRowData[col.field] }}
+                                  </span>
+                                }
+                                @if (col.field === 'active') {
+                                  <span>
+                                    @if (moduleRowData.active) {
+                                      <span class="istrue">
+                                        <i class="material-icons"
+                                          matTooltip="Active"
+                                          matTooltipClass="accent-tooltip">
+                                          thumb_up
+                                        </i>
+                                      </span>
+                                    }
+                                    @if (!moduleRowData.active) {
+                                      <span class="isfalse">
+                                        <i class="material-icons"
+                                          matTooltip="In-Active"
+                                          matTooltipClass="accent-tooltip">
+                                          thumb_down
+                                        </i>
+                                      </span>
+                                    }
+                                  </span>
+                                }
+                              </td>
+                            }
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <div class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                fxLayoutGap.xs="20px grid" [ngClass]="{ 'empty-record': empInsAnsList.length == 0 }">
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center">
+                  Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} -
+                  {{
+                  dt.totalRecords > 0 ? (dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords) : 0
+                  }}
+                  of {{ dt.totalRecords }} record(s) |&nbsp;<a (click)="showall()">Show All</a>
+                </div>
+                <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                  fxLayoutAlign.xs="start center">
+                <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                      dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                      navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                    ">
+                    <i class="icon-control-start mr-5"></i></a>
+                    <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                      <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" /> </span></span>
+                      <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                <a [ngClass]="dt.rows + dt.first >= dt.totalRecords ? 'page-btn disabled' : 'page-btn'" (click)="
+                      dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                      navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                    "><i class="icon-control-end ml-5"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </mat-card-content>
+          </div>
+        </mat-card>
+      </div>
+    </div>

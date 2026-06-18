@@ -1,0 +1,64 @@
+<div [formGroup]="contactForm">
+  @for (item of getContactFormGroup(); track item; let i = $index) {
+    <div [formArrayName]=phoneFormArrayName>
+      <div [formGroupName]="i">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Phone Number Type</mat-label>
+              <mat-select matNativeControl formControlName="lookupId" placeholder="Select Phone Number Type">
+                @for (categories of phoneNumberList; track categories) {
+                  <mat-option [value]="categories.lookUpId">
+                  {{ categories.lookUpName }}</mat-option>
+                }
+              </mat-select>
+              @if (!!item?.get('lookupId')?.errors?.required) {
+                <mat-error>
+                Phone Number Type is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Phone Number</mat-label>
+              <mat-icon matPrefix><i class="material-icons material-icons-outlined">phone</i></mat-icon>
+              <input matInput type="Phone Number" formControlName="contactData" placeholder="Phone Number" preventDragdrop
+                preventCutCopyPaste appNumberOnly [PhoneNumber]="false" autocomplete="off" role="presentation"
+                minlength="10" maxlength="10" />
+              <div matSuffix>
+                <div fxLayout="row">
+                  <div fxFlex="100%" class="adrem suf" fxLayoutGap="8px" fxLayoutAlign="end end">
+                    @if ((i === rowCount-1)) {
+                      <button mat-button color="primary" matTooltip="Add"
+                        matTooltipClass="accent-tooltip" (click)="addItem(i, true)">
+                        <i class="icon-plus-circle"></i>
+                      </button>
+                    }
+                    @if (i!=rowCount + 1 && rowCount !== 1) {
+                      <button mat-button color="warn" matTooltip="Remove"
+                        matTooltipClass="accent-tooltip" (click)="removeControl(i)">
+                        <i class="icon-x-circle"></i>
+                      </button>
+                    }
+                  </div>
+                </div>
+              </div>
+              @if (!!item?.get('contactData')?.errors?.minlength) {
+                <mat-error>
+                Enter atleast 10 numbers </mat-error>
+              }
+              @if (!!item?.get('contactData')?.errors?.required) {
+                <mat-error>
+                Phone Number is required</mat-error>
+              }
+              @if (!!item?.get('contactData')?.errors?.alreadyExist) {
+                <mat-error>
+                Phone Number exist, Please try another one</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

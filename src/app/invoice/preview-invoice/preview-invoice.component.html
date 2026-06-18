@@ -1,0 +1,478 @@
+﻿<app-breadcrumb [btnSave]="invoiceService.enablePre" [btnExportDisabled]="!screenAuth?.exportFlag"
+  [btnBack]="(invoiceService.isRevertInvoice === true && !invoiceService.enablePre) ? true : invoiceService.enablePre"
+  [btnBack]="btnBack" [toolTip]="breadcrumbFlags.toolTip" [routePath]='routePath'
+  [btnPreviewInvoice]="!invoiceService.enablePre && bindBilledList.length > 0"
+  [btnPreviewInvoiceDisabled]="!screenAuth.viewFlag"
+  [btnEstExcelExport]="invoiceService.isRevertInvoice === true ? false : (!invoiceService.enablePre && bindBilledList.length > 0)"
+  (eventSave)="SaveInvoiceGeneration()" (eventBack)="goBack()" (eventPreviewInvoice)='getPreInvoice()'
+  (eventEstExcelExport)="getExcel()">
+</app-breadcrumb>
+@if (invoiceService.isRevertInvoice !== true) {
+  <div fxLayout="row" class="advSearch">
+    <div class="advSearch-forms">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="180px" [formGroup]="invoiceClientListForm">
+              <!-- <mat-form-field fxFlex="100%">
+              <mat-label>Select Client</mat-label>
+              <mat-select [formControl]="clientId" placeholder="Select Client"
+                (selectionChange)="siteName($event.value)">
+                <mat-option>Select Client</mat-option>
+                <mat-option *ngFor="let agent of agentvalue" [value]="agent.clientId">
+                  {{ agent.clientName }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="clientId?.errors?.required">
+                Client is required
+              </mat-error>
+            </mat-form-field> -->
+            <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+              (selectionChange)="siteName($event.value)" [selectProperties]='clientNameControl'>
+            </app-auto-complete>
+          </div>
+          <div fxFlex="180px">
+            <mat-form-field fxFlex="100%">
+              <mat-label>{{checkFlag !== true? 'Select Site' : 'Select Group'}}</mat-label>
+              @if (checkFlag === true) {
+                <mat-select [formControl]="groupId" value="selectedDropdown"
+                  placeholder="Select Group">
+                  <mat-option>Select Group</mat-option>
+                  @for (agent of sitevalue; track agent) {
+                    <mat-option [value]="agent.groupId">
+                      {{ agent.groupName }}
+                    </mat-option>
+                  }
+                </mat-select>
+              }
+              @if (checkFlag !== true) {
+                <mat-select [formControl]="siteId" value="selectedDropdown"
+                  placeholder="Select Site">
+                  <mat-option>Select Site</mat-option>
+                  @for (agent of sitevalue; track agent) {
+                    <mat-option [value]="agent.siteId">
+                      {{ agent.siteName }}
+                    </mat-option>
+                  }
+                </mat-select>
+              }
+              @if (siteId?.errors?.required || groupId?.errors?.required) {
+                <mat-error>
+                  {{checkFlag !== true? 'Site ' : 'Group '}} is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="150px">
+            <mat-form-field fxFlex="100%">
+              <mat-label>From Date</mat-label>
+              <input matInput [matDatepicker]="from" (click)="from.open()" (focus)="from.open()"
+                [formControl]="fromDate" placeholder="From Date" [max]="common?.getMaxDate()">
+              <mat-datepicker-toggle matSuffix [for]="from"></mat-datepicker-toggle>
+              <mat-datepicker #from></mat-datepicker>
+              @if (fromDate?.errors?.required) {
+                <mat-error>
+                  From Date is required
+                </mat-error>
+              }
+            </mat-form-field>
+            <!-- <mat-form-field fxFlex="100%">
+            <mat-label>From Date & Time</mat-label>
+            <input matInput [formControl]="fromDate" placeholder="From Date" [owlDateTimeTrigger]="from"
+              [owlDateTime]="from">
+            <mat-datepicker-toggle [owlDateTimeTrigger]="from" matSuffix></mat-datepicker-toggle>
+            <owl-date-time [pickerMode]="'popup'" #from></owl-date-time>
+          </mat-form-field> -->
+        </div>
+        <div fxFlex="150px">
+          <mat-form-field fxFlex="100%">
+            <mat-label>To Date</mat-label>
+            <input matInput [matDatepicker]="to" [formControl]="toDate" (click)="to.open()"
+              (focus)="to.open()" [min]="fromDate?.value" [max]="common?.getMaxDate()"
+              placeholder="To Date">
+            <mat-datepicker-toggle matSuffix [for]="to"></mat-datepicker-toggle>
+            <mat-datepicker #to></mat-datepicker>
+            @if (toDate?.errors?.required) {
+              <mat-error>
+                To Date is required
+              </mat-error>
+            }
+          </mat-form-field>
+          <!-- <mat-form-field fxFlex="100%">
+          <mat-label>To Date & Time</mat-label>
+          <input matInput [formControl]="toDate" placeholder="To Date" [owlDateTimeTrigger]="to"
+            [owlDateTime]="to">
+          <mat-datepicker-toggle [owlDateTimeTrigger]="to" matSuffix></mat-datepicker-toggle>
+          <owl-date-time [pickerMode]="'popup'" #to></owl-date-time>
+        </mat-form-field> -->
+      </div>
+      <div fxFlex="50px">
+        <mat-label class="lbl">Monthly</mat-label>
+        <mat-checkbox (change)='monthlyChange($event.checked)' [formControl]="monthly"></mat-checkbox>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+@if (invoiceService.show) {
+  <ngx-spinner bdOpacity=0.9 bdColor="rgba(0,0,0,0)" size="medium" color="#fff" type="ball-clip-rotate-pulse"
+  [fullScreen]="true"></ngx-spinner>
+}
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <a (click)="searchInvoice()">Search</a><span>|</span>
+    <a (click)="clearInvoice()"> Reset</a>
+    <!-- <a (click)='SearchCriFilter = !SearchCriFilter'> {{ SearchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+  class="icon-chevron-{{ SearchCriFilter?'up':'down' }}"></i></a> -->
+</div>
+</div>
+</div>
+}
+@if (invoiceService.enablePre !== true) {
+  <span>
+    <!-- (eventReset)="resetForm()" -->
+    <div fxLayout="row" fxLayoutGap="20px" [ngClass]="invoiceService.isRevertInvoice === true ? '' : 'srchPad'">
+      <div fxFlex="100%">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <h1 class="header-title"> {{invoiceService.isRevertInvoice === true ? 'Batch Edit Invoice' :
+              'Un-billed Invoice Generation'}} </h1>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div fxLayout="row" fxLayoutGap="20px">
+              @if (bindBilledList.length > 0) {
+                <div fxFlex="100%" fxLayoutAlign="end end">
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input #global matInput size="50" placeholder="Search here..."
+                        (input)="dt?.filterGlobal($event.target.value, 'contains')"
+                        (keypress)="dt.reset();dt?.filterGlobal($event.target.value, 'contains');"
+                        autocomplete="off" role="presentation" />
+                      @if (global.value) {
+                        <button mat-button matSuffix mat-icon-button aria-label="Clear"
+                          (click)="global.value = ''; dt?.filterGlobal($event.target.value, 'contains')">
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+              }
+            </div>
+            <div fxLayout="row" style="display: none !important;">
+              <div fxFlex="100%">
+                <!-- <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="25%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Select Client</mat-label>
+                    <mat-select [formControl]="clientId" placeholder="Select Client"
+                      (selectionChange)="siteName($event.value)">
+                      <mat-option>Select Client</mat-option>
+                      <mat-option *ngFor="let agent of agentvalue" [value]="agent.clientId">
+                        {{ agent.clientName }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>{{checkFlag !== true? 'Select Site' : 'Select Group'}}</mat-label>
+                    <mat-select *ngIf="checkFlag === true" [formControl]="groupId"
+                      value="selectedDropdown" placeholder="Select Group">
+                      <mat-option>Select Group</mat-option>
+                      <mat-option *ngFor="let agent of sitevalue" [value]="agent.groupId">
+                        {{ agent.groupName }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-select *ngIf="checkFlag !== true" [formControl]="siteId"
+                      value="selectedDropdown" placeholder="Select Site">
+                      <mat-option>Select Site</mat-option>
+                      <mat-option *ngFor="let agent of sitevalue" [value]="agent.siteId">
+                        {{ agent.siteName }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>From Date</mat-label>
+                    <input matInput [matDatepicker]="from" [formControl]="fromDate"
+                      placeholder="From Date">
+                    <mat-datepicker-toggle matSuffix [for]="from"></mat-datepicker-toggle>
+                    <mat-datepicker #from></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="to" [formControl]="toDate"
+                      placeholder="To Date">
+                    <mat-datepicker-toggle matSuffix [for]="to"></mat-datepicker-toggle>
+                    <mat-datepicker #to></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div> -->
+              <!-- <div fxLayout="row">
+              <div fxFlex="100%" fxLayoutGap="8px" fxLayoutAlign="end center">
+                <button mat-flat-button color="primary" (click)="searchInvoice()">Search</button>
+                <button mat-flat-button color="warn" (click)="clearInvoice()">Clear</button>
+              </div>
+            </div> -->
+            <!-- enablePre - {{enablePre}} -->
+            <!-- <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="end center">
+              <div fxLayout="row">
+                <div fxFlex="100%" class="sortrow mt-15">
+                  <ul>
+                    <li>
+                      <button mat-flat-button class="filetypeicon"
+                        (click)="getPreInvoice()"><i
+                      class="icon-invoice csatus Normal"></i>
+                      <span>Generate Invoice</span></button>
+                    </li> -->
+                    <!-- <li>
+                    <button mat-flat-button class="filetypeicon"><i
+                    class="icon-document csatus Normal"></i>
+                    <span>Re-Generate Invoice</span></button>
+                  </li> -->
+                  <!-- <li>
+                  <button mat-flat-button class="filetypeicon"><i
+                  class="icon-verification csatus Normal"></i> <span>Manually
+                Biled</span></button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div fxLayout="row" class="mt-15">
+      <div fxFlex="100%">
+        @if (bindBilledList.length > 0) {
+          <p-table #dt [columns]="invoiceCols"
+            [value]="bindBilledList" [(selection)]="selectedBindList" [scrollable]="true"
+            [paginator]="true" [rows]="itemperpage" [resizableColumns]="true"
+            [reorderableColumns]="true" columnResizeMode="expand">
+            <!-- ================= COLGROUP ================= -->
+            <ng-template pTemplate="colgroup" let-colGroupCols>
+              <colgroup>
+              <col style="width:60px" />
+            </colgroup>
+          </ng-template>
+          <!-- ================= HEADER ================= -->
+          <ng-template pTemplate="header" let-headerCols>
+            <tr>
+              <th>
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th style="width:80px">Action</th>
+              @for (col of headerCols; track col) {
+                <th pReorderableColumn pResizableColumn>
+                  <span [pSortableColumn]="col.field">
+                    <div matTooltip="{{ col.header }}"
+                      matTooltipClass="accent-tooltip" class="thname">
+                      {{ col.header }}
+                    </div>
+                    <p-sortIcon ariaLabel="Activate to sort"
+                      ariaLabelDesc="Activate to sort in descending order"
+                      ariaLabelAsc="Activate to sort in ascending order"
+                      matTooltip="Sorting" matTooltipClass="accent-tooltip">
+                    </p-sortIcon>
+                  </span>
+                </th>
+              }
+            </tr>
+          </ng-template>
+          <!-- ================= BODY ================= -->
+          <ng-template pTemplate="body" let-rowData let-index="rowIndex"
+            let-bodyCols="columns">
+            <tr>
+              <!-- SELECT -->
+              <td>
+                <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+              </td>
+              <!-- ACTION -->
+              <td style="width:80px">
+                <div fxLayout="row" class="desg-icon">
+                  <div fxFlex="100%" fxLayoutGap="10px">
+                                                            <mat-icon [ngClass]="(screenAuth.editFlag === true &&
+                          rowData?.listOfComponent?.listOfComponent?.length > 0)
+                          ? '' : 'page-btn disabled'" matTooltip="Select Components" matTooltipClass="accent-tooltip">
+                      <i class="material-icons-outlined"
+                        (click)="openInvocompdialog(rowData)">
+                        edit
+                      </i>
+                    </mat-icon>
+                  </div>
+                </div>
+              </td>
+              <!-- DATA COLUMNS -->
+              @for (col of bodyCols; track col) {
+                <td>
+                  @if (col.field !== 'components'
+                    && col.field !== 'selectedComponents'
+                    && col.field !== 'reportSentOn') {
+                    <span>
+                      {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                    </span>
+                  }
+                  @if (col.field === 'reportSentOn') {
+                    <span>
+                      {{ rowData[col.field] | date:'dd/MM/yyyy' }}
+                    </span>
+                  }
+                  @if (col.field === 'selectedComponents' || col.field === 'components') {
+                    <span
+                      >
+                      @for (comp of rowData?.componentName; track comp; let last = $last) {
+                        <span
+                          >
+                          {{ comp.componentName }}
+                          {{ comp?.subComponentName ? (' - ' + comp.subComponentName)
+                          : '' }}
+                          @if (!last) {
+                            <em>,</em>
+                          }
+                        </span>
+                      }
+                    </span>
+                  }
+                </td>
+              }
+            </tr>
+          </ng-template>
+        </p-table>
+      }
+      <div class="cus-paginator">
+        <div fxLayout="">
+          <div fxFlex="30%"> Showing {{ dt?.totalRecords < 1 ? 0 : dt?.first + 1 }} -
+            {{ dt?.totalRecords> 0
+            ? dt?.rows + dt?.first <= dt?.totalRecords ? dt?.rows + dt?.first :
+            dt?.totalRecords : 0 }} of {{ dt?.totalRecords }} record(s) |
+            &nbsp;<a (click)="showall()">Show
+          All</a> </div>
+          <span fxFlex></span>
+          <div fxFlex="50%" fxLayoutAlign="end center"> <a
+            [ngClass]="dt?.first === 0 ? 'page-btn disabled' : 'page-btn'"
+                                                    (click)="
+                      dt?.onPageChange({ first: dt?.first - dt?.rows, rows: dt?.rows });
+                      navigateNxtPrevPage(dt?.first + dt?.rows, dt?.rows)"> <i class="icon-control-start mr-5"></i></a>
+            <span class="gotopagbg mr-2 ml-2">Go to Page<span class="input-num">
+              <input type="number" min="1" #pageNo [(ngModel)]="currentPage"
+                maxlength="5" appNumberOnly [NumberOnly]="false"
+                (keyup.enter)="navigatePage(pageNo.value, dt?.rows)" />
+            </span></span> <span class="mr-2">Of
+          {{ getTotalPages(dt?.totalRecords, dt?.rows) }}</span> <a
+          [ngClass]=" dt?.rows + dt?.first >= dt?.totalRecords? 'page-btn disabled': 'page-btn'"
+                                                    (click)="dt?.onPageChange({ first: dt?.first + dt?.rows, rows: dt?.rows });
+                      navigateNxtPrevPage(dt?.first + dt?.rows, dt?.rows)"><i class="icon-control-end ml-5"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</mat-card-content>
+</mat-card>
+</div>
+</div>
+</span>
+}
+<ng-template #InvoiceCompopup>
+  <!-- <div id="ownerDiv" *ngFor="let com of compdetail"> -->
+  <h1 mat-dialog-title>Select <span style="color: green;">{{selectedCase?.candidateName}}</span>'s Invoice Components
+</h1>
+<mat-dialog-content class="mat-dialog-conScroll">
+  <div fxFlex="100%">
+    <p-table #dtcom [value]="selectedCase?.listOfComponent?.listOfComponent" [scrollable]="true"
+      [rows]="itemperpage" [(selection)]="selectedScreeningCompId" [resizableColumns]="true"
+      [reorderableColumns]="true" [paginator]="true">
+
+      <!-- ================= HEADER ================= -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width:3rem">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+
+          <th pReorderableColumn pResizableColumn pSortableColumn="componentName">
+            Components
+            <!--  œ… FIX: field must be string -->
+            <p-sortIcon field="componentName"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+
+      <!-- ================= BODY ================= -->
+      <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+
+        <tr>
+          <td style="width:3rem">
+            <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+          </td>
+
+          <td>
+            {{ rowData?.componentName || 'N/A' }}
+            @if (rowData?.subComponentName) {
+              <span>
+                - {{ rowData.subComponentName }}
+              </span>
+            }
+          </td>
+        </tr>
+
+      </ng-template>
+
+    </p-table>
+    <div [ngClass]="selectedCase?.length === 0 ? 'empty-record':''" fxLayout="row wrap" class="cus-paginator"
+      fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+
+      <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+        fxLayoutAlign="start center">
+        Showing {{ dtcom?.totalRecords
+        < 1 ? 0 : dtcom.first + 1 }} - {{ dtcom?.totalRecords> 0 ? dtcom.rows + dtcom.first
+        <=dtcom?.totalRecords ? dtcom?.rows + dtcom?.first : dtcom?.totalRecords : 0 }} of {{
+      dtcom?.totalRecords }} record(s) </div>
+      <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+        fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+        fxLayoutAlign.xs="start center">
+                                <a [ngClass]="dtcom.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                dt.onPageChange({ first: dtcom.first - dtcom.rows, rows: dtcom.rows });
+                navigateNxtPrevPage(dtcom.first + dtcom.rows, dtcom.rows)
+              ">
+          <i class="icon-control-start mr-5"></i></a>
+          <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+            <input type="number" #pageNo [(ngModel)]="currentPage" min="1" maxlength="5"
+              appNumberOnly [NumberOnly]="false"
+              (keyup.enter)="navigatePage(pageNo.value, dtcom.rows)" />
+          </span></span>
+          <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt?.totalRecords, dtcom.rows)
+          }}</span>
+                                <a [ngClass]="
+                    dtcom.rows + dtcom.first >= dtcom?.totalRecords
+                  ? 'page-btn disabled'
+                  : 'page-btn'
+              " (click)="
+              dtcom.onPageChange({ first: dtcom.first + dtcom.rows, rows: dtcom.rows });
+                navigateNxtPrevPage(dtcom.first + dtcom.rows, dtcom.rows)
+              "><i class="icon-control-end ml-5"></i></a>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-flat-button color="warn" (click)="selectComp()">Select</button>
+      <button mat-stroked-button (click)="dialog.closeAll()">Cancel</button>
+    </mat-dialog-actions>
+  <!-- </div> -->
+</ng-template>
+@if (invoiceService.enablePre === true) {
+  <div [ngClass]="invoiceService.isRevertInvoice === true ? '' : 'srchPad'">
+    <app-generate-invoice></app-generate-invoice>
+  </div>
+}

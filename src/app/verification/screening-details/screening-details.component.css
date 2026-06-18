@@ -1,0 +1,104 @@
+﻿/*Owner Vendor List Starts*/
+
+.ownven-list {
+    padding: 8px 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.ownven-list:hover,
+.ownven-list.active {
+    background: #daeeff;
+}
+
+.ownven-list .user {
+    text-transform: uppercase;
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    font-size: 11px;
+    width: 30px;
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    font-weight: 400;
+}
+
+.ownven-list .pos {
+    color: #fff;
+    border-radius: 50%;
+    width: 15px;
+    height: 16px;
+    display: inline-block;
+    border: 2px solid #fff;
+    position: absolute;
+    left: 33px;
+    text-shadow: none;
+    bottom: 8px;
+    line-height: 14px;
+    text-align: center;
+    font-size: 7px;
+}
+
+.ownven-list .pos.act {
+    background: #08BA53;
+}
+
+.ownven-list .pos.inact {
+    background: #acacae;
+}
+
+.ownven-list .ovname {
+    font-size: 14px;
+    display: inline-block;
+    margin-left: 15px;
+    font-weight: 500;
+}
+
+.mat-mdc-outlined-button {
+    height: 43px !important;
+}
+
+.mail-list {
+    display: flex;
+    flex-direction: row;
+}
+
+.list-area {
+    margin: 0 0 0 15px;
+    width: 100%;
+}
+
+.tag {
+    text-transform: none !important;
+}
+
+.example-trigger {
+    display: inline-block;
+}
+
+.example-container {
+    padding: 1rem;
+}
+
+.example-wrapper {
+    margin-bottom: 3rem;
+}
+
+.example-input-wrapper {
+    display: block;
+    width: 200px;
+    margin-bottom: 1.5rem;
+}
+
+.close {
+    top: 3px;
+    right: 11px;
+    line-height: 14px;
+}
+
+.verification-float-label {
+    /* margin-top: 18.3px !important; */
+    margin-top: 5px !important;
+}

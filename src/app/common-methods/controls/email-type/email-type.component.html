@@ -1,0 +1,68 @@
+<div [formGroup]="contactForm">
+  <div [formGroupName]="formGroupNanme">
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="35%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Email Type</mat-label>
+              <mat-select matNativeControl formControlName="emailDestLookupId">
+                <mat-option value=''>----Select Email Type----</mat-option>
+                @for (categories of emailtypeList; track categories) {
+                  <mat-option [value]="categories.lookUpId">
+                  {{ categories.lookUpName }}</mat-option>
+                }
+              </mat-select>
+              @if (!!contactForm?.get(formGroupNanme).get('emailDestLookupId')?.errors?.required) {
+                <mat-error>
+                Email Type is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="65%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Email ID</mat-label>
+              <input matInput type="email" appNumberOnly placeholder="Email ID" formControlName="emailaddress"
+                autocomplete="off" role="presentation" />
+              <mat-icon matPrefix><i class="icon-mail"></i></mat-icon>
+              <button mat-icon-button matSuffix color="primary" matTooltip="Sample Add Button"
+                matTooltipClass="accent-tooltip" (click)="add()">
+                <mat-icon class="btn-inputIcon"><i class="icon-plus-circle"></i></mat-icon>
+              </button>
+              @if (!!contactForm?.get(formGroupNanme).get('emailaddress')?.errors?.required) {
+                <mat-error>
+                Email ID is required</mat-error>
+              }
+              @if (!!contactForm?.get(formGroupNanme).get('emailaddress')?.errors?.alreadyExist) {
+                <mat-error>
+                Email ID exist, Please try another one</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div class="add-data">
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            @for (contact of contactForm.get(formGroupNanme).value.contact; track contact; let i = $index) {
+              <div>
+                <div class="add-title">
+                  <span>{{contact.contactData}}</span>
+                </div>
+                <div class="add-titleaction">
+                  <ul>
+                    <li>{{getEmailType(contact.emailDestLookupId)}}</li>
+                    <li><a (click)="editEmail(i)">Edit</a></li>
+                    <li><a (click)="removeControl(i)">Delete</a></li>
+                  </ul>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

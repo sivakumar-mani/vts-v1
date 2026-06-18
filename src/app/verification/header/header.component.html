@@ -1,0 +1,125 @@
+<div class="client-details">
+  <div class="client-avatar" fxHide.md fxHide.sm fxHide.xs>
+    <i class="icon-referencecheck"></i>
+  </div>
+  <div class="client-data">
+    <h3 matTooltip="Client Name" matTooltipClass="accent-tooltip">
+      {{verificationForm?.get('verificationScreeningDet.clientName')?.value
+      ? verificationForm?.get('verificationScreeningDet.clientName')?.value : 'N/A'}} -
+    </h3>
+    <h3 matTooltip="Client Reference No." matTooltipClass="accent-tooltip">
+      ({{verificationForm?.get('clientRefNo')?.value
+      ? verificationForm?.get('clientRefNo')?.value : 'N/A'}})
+    </h3>
+
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+      fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="0px grid" fxLayoutGap.md="5px grid"
+      fxLayoutGap.sm="5px grid" fxLayoutGap.xs="15px grid">
+
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <p>
+          <label>Site&nbsp;Number:</label>
+          <span>{{verificationForm?.get('verificationScreeningDet.siteNo')?.value
+          ? verificationForm?.get('verificationScreeningDet.siteNo')?.value : 'N/A'}}</span>
+        </p>
+      </div>
+
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <p>
+          <label>Site&nbsp;Name:</label>
+          <span>{{verificationForm?.get('verificationScreeningDet.siteName')?.value
+          ? verificationForm?.get('verificationScreeningDet.siteName')?.value : 'N/A'}}</span>
+        </p>
+      </div>
+
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <p>
+          <label>Candidate&nbsp;Name:</label>
+          <span>
+            {{(verificationForm?.get('screeningCandidateDet.firstName')?.value
+            ? verificationForm?.get('screeningCandidateDet.firstName')?.value : '') + ' '}}
+            {{(verificationForm?.get('screeningCandidateDet.middleName')?.value
+            ? verificationForm?.get('screeningCandidateDet.middleName')?.value : '') + ' '}}
+            {{(verificationForm?.get('screeningCandidateDet.lastName')?.value
+            ? verificationForm?.get('screeningCandidateDet.lastName')?.value : '') + ' '}}
+          </span>
+        </p>
+      </div>
+
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <p>
+          <label>Application&nbsp;Id:</label>
+          <span>{{verificationForm?.get('applicationId')?.value
+          ? verificationForm?.get('applicationId')?.value : 'N/A'}}</span>
+        </p>
+      </div>
+
+      <!-- Verification Id — normal case -->
+      @if (verification?.tempData?.verificationScreeningDet?.manualFileSubmissionFlag !== true) {
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"
+          >
+          <p>
+            <label>Verification&nbsp;Id:</label>
+            <span>{{verificationForm?.get('verificationId')?.value
+            ? verificationForm?.get('verificationId')?.value : 'N/A'}}</span>
+          </p>
+        </div>
+      }
+
+      <!-- Verification Id — manual file submission case -->
+      @if (verification?.tempData?.verificationScreeningDet?.manualFileSubmissionFlag === true) {
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"
+          >
+          <p>
+            <label>Verification&nbsp;Id:</label>
+            <span>{{verificationForm?.get('applicationId')?.value
+            ? verificationForm?.get('applicationId')?.value : 'N/A'}}</span>
+          </p>
+        </div>
+      }
+
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <p>
+          <label>Component&nbsp;Name:</label>
+          <!-- FIX: added ?. safe nav on verificationForm.value access -->
+          <span>{{verificationForm?.value?.['responseDocument']?.componentName
+          ? verificationForm?.value?.['responseDocument']?.componentName : 'N/A'}}</span>
+        </p>
+      </div>
+
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <p>
+          <label>Report&nbsp;Source&nbsp;Name:</label>
+          <span>{{verificationForm?.get('verificationScreeningDet.reportCandidateName')?.value
+          ? verificationForm?.get('verificationScreeningDet.reportCandidateName')?.value : 'N/A'}}</span>
+        </p>
+      </div>
+
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <p>
+          <label>Status&nbsp;Last&nbsp;Updated&nbsp;By:</label>
+          <span>{{name}}</span>
+        </p>
+      </div>
+
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <p>
+          <label>Component&nbsp;Type:</label>
+          <!-- FIX: component[0] → component?.[0] prevents crash when component is null -->
+          <span>{{verificationForm?.value?.['verificationComponentDet']?.component?.[0]?.compType
+          ? verificationForm?.value?.['verificationComponentDet']?.component?.[0]?.compType : 'N/A'}}</span>
+        </p>
+      </div>
+
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <p>
+          <label>Doc Path:</label>
+          <span>{{verificationForm?.get('verificationScreeningDet.urlName')?.value
+          ? verificationForm?.get('verificationScreeningDet.urlName')?.value : 'N/A'}}</span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

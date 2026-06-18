@@ -1,0 +1,33 @@
+
+.mailtemp{
+   display: block;
+    padding: 0px 35px;
+    background: rgba(0, 0, 0, 0.03);
+    border-bottom: 2px solid #dedede; 
+}
+.addline{
+    /* border-width: 1px 0 0;
+    border-style: solid none;
+    border-color: #dedede;  */
+    font-size: 13px;
+    padding: 5px 0;
+    border-bottom: 1px solid #dedede;
+}
+.addline:last-child {
+    border-bottom: 0px solid #dedede;
+}
+.addline label{
+  color:  #8a8b8d
+}
+
+.color.red{
+    color:#E53935;
+}
+
+.color.green{
+    color:#08BA53;
+}
+.center{
+    cursor: not-allowed;
+    pointer-events: none;
+}

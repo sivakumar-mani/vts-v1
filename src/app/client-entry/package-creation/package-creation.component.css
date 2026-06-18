@@ -1,0 +1,12 @@
+﻿.mat-mdc-dialog-container {
+    overflow: hidden !important;
+}
+.mat-mdc-dialog-container .mdc-dialog__surface {
+    overflow: hidden !important;
+}
+.mat-mdc-dialog-content {
+    height: 270px;
+}
+.mat-mdc-dialog-content {
+    height: 270px;
+}

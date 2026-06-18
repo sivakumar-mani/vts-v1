@@ -1,0 +1,804 @@
+﻿<form appScrollToError>
+  <app-breadcrumb [btnSave]="btnSave" [btnBack]="btnBack" [btnReset]="btnReset" [routePath]='routePath'
+    (eventBack)="getSiteList()" (eventSave)="openSaveDialog()" [toolTip]="tooTip" (eventReset)="resetForm()">
+  </app-breadcrumb>
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      <mat-card>
+        <div fxLayout="row" fxLayoutGap="25px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+          fxLayout.xs="column">
+          <div fxFlex="80%" fxFlex.lg="80%" fxFlex.md="80%" fxFlex.sm="70%" fxFlex.xs="100%">
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <form [formGroup]="siteFormGroup" class="form-center" autocomplete="off" role="presentation">
+                  @if (step1 === 0) {
+                    <div>
+                      <mat-card-header>
+                        <mat-card-title>
+                          <div fxLayout="row" fxLayoutGap="20px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                            fxLayout.xs="column" fxFlex="100%">
+                            <div fxFlex="100%">
+                              <h1 class="header-title"> <span class="StprH">Step 1:</span>Add Site</h1>
+                            </div>
+                          </div>
+                        </mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content>
+                        <div fxLayout="row">
+                          <div fxFlex="100%" formGroupName="siteDetails">
+                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                              fxLayoutGap.xs="0px grid">
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                fxFlex.xs="100%">
+                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                  <mat-label>Select Client</mat-label>
+                                  <mat-select matNativeControl formControlName="clientId"
+                                    (selectionChange)="getClientMail($event.value)" placeholder="Select Client">
+                                    @for (site of clientList; track site) {
+                                      <mat-option [value]="site.clientId">
+                                      {{ site.clientName }} </mat-option>
+                                    }
+                                  </mat-select>
+                                  @if (siteFormGroup?.get('siteDetails.clientId')?.errors?.required) {
+                                    <mat-error> Client
+                                      is
+                                    required </mat-error>
+                                  }
+                                </mat-form-field>
+                              </div>
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                fxFlex.xs="100%">
+                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                  <mat-label>Site No</mat-label>
+                                  <input matInput formControlName="siteNo" placeholder="Site No" minlength="3"
+                                    maxlength="50" autocomplete="off" role="presentation" (blur)="checkValidValue()"
+                                    required />
+                                  @if (siteFormGroup?.get('siteDetails.siteNo')?.errors?.required) {
+                                    <mat-error> Site No
+                                      is
+                                    required </mat-error>
+                                  }
+                                  @if (siteFormGroup?.get('siteDetails.siteNo')?.errors?.minlength) {
+                                    <mat-error> Minimum
+                                    length should be 3</mat-error>
+                                  }
+                                  @if (siteFormGroup?.get('siteDetails.siteNo')?.errors?.incorrect) {
+                                    <mat-error> Site No
+                                    already Exists.</mat-error>
+                                  }
+                                </mat-form-field>
+                              </div>
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                fxFlex.xs="100%">
+                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                  <mat-label>Site Name</mat-label>
+                                  <input matInput id="val" maxlength="100" formControlName="siteName"
+                                    placeholder="Site Name" autocomplete="off" role="presentation" required />
+                                  @if (siteFormGroup?.get('siteDetails.siteName')?.errors ?.required) {
+                                    <mat-error> Site
+                                    Name is required </mat-error>
+                                  }
+                                  @if (siteFormGroup?.get('siteDetails.siteName')?.errors?.minlength) {
+                                    <mat-error>
+                                      Minimum
+                                    length should be 3</mat-error>
+                                  }
+                                </mat-form-field>
+                              </div>
+                            </div>
+                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                              fxLayoutGap.xs="0px grid">
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                fxFlex.xs="100%">
+                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                  <mat-label>Billing Person Name</mat-label>
+                                  <input id="val" matInput formControlName="contactPerson"
+                                    placeholder="Billing Person Name" maxlength="75" autocomplete="off"
+                                    role="presentation" required />
+                                  @if (siteFormGroup?.get('siteDetails.contactPerson')?.errors ?.required) {
+                                    <mat-error>
+                                    Billing Person Name is required</mat-error>
+                                  }
+                                </mat-form-field>
+                              </div>
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                fxFlex.xs="100%">
+                                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                  <mat-label>Phone Number</mat-label>
+                                  <input formControlName="phoneNo" type="text" preventDragdrop autocomplete="off"
+                                    role="presentation" appNumberOnly [NumericValue]="false" maxlength="10" minlength="10"
+                                    matInput placeholder="Phone Number" required>
+                                  <mat-icon matSuffix><i class="material-icons-outlined"> phone_iphone </i></mat-icon>
+                                  @if (siteFormGroup?.get('siteDetails.phoneNo')?.errors?.required) {
+                                    <mat-error> Phone
+                                    number is required </mat-error>
+                                  }
+                                  @if (siteFormGroup?.get('siteDetails.phoneNo')?.errors?.pattern || siteFormGroup?.get('siteDetails.phoneNo')?.errors?.minlength) {
+                                    <mat-error
+                                      >
+                                    Phone Number is Invalid</mat-error>
+                                  }
+                                </mat-form-field>
+                              </div>
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                fxFlex.xs="100%">
+                                <div fxLayout="row" fxLayoutGap="10px grid">
+                                  <div fxFlex="30%">
+                                    <app-auto-complete [selectProperties]="codeControls"></app-auto-complete>
+                                  </div>
+                                  <div fxFlex="70%">
+                                    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                      <mat-label>Mobile Number</mat-label>
+                                      <input formControlName="mobileNo" type="text" preventDragdrop autocomplete="off"
+                                        role="presentation" appNumberOnly [NumericValue]="false" maxlength="10"
+                                        minlength="10" matInput placeholder="Mobile Number" required>
+                                      <mat-icon matSuffix><i class="material-icons-outlined"> phone_iphone </i></mat-icon>
+                                      @if (siteFormGroup?.get('siteDetails.mobileNo')?.errors?.required) {
+                                        <mat-error>
+                                          Mobile
+                                        number is required </mat-error>
+                                      }
+                                      @if (siteFormGroup?.get('siteDetails.mobileNo')?.errors?.pattern || siteFormGroup?.get('siteDetails.mobileNo')?.errors?.minlength) {
+                                        <mat-error
+                                          >
+                                        Mobile Number is Invalid</mat-error>
+                                      }
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                              fxLayoutGap.xs="0px grid">
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                fxFlex.xs="100%">
+                                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                  <mat-label>Email Id</mat-label>
+                                  <input formControlName="contactEmailId" type="text" preventDragdrop maxlength="200"
+                                    autocomplete="off" role="presentation" matInput placeholder="Email Id" required>
+                                  <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+                                  @if (siteFormGroup?.get('siteDetails.contactEmailId')?.errors?.required) {
+                                    <mat-error>
+                                    Email Id is required </mat-error>
+                                  }
+                                  @if (siteFormGroup?.get('siteDetails.contactEmailId')?.errors?.pattern || siteFormGroup?.get('siteDetails.contactEmailId')?.errors?.minlength) {
+                                    <mat-error
+                                      >
+                                    Email Id is Invalid</mat-error>
+                                  }
+                                </mat-form-field>
+                              </div>
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="33.33%"
+                                fxFlex.xs="100%">
+                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                  <mat-label>Billing Name</mat-label>
+                                  <input matInput id="val" maxlength="100" formControlName="billingName"
+                                    placeholder="Billing Name" required />
+                                  @if (siteFormGroup?.get('siteDetails.billingName')?.errors?.required) {
+                                    <mat-error>
+                                    Billing Name is required</mat-error>
+                                  }
+                                </mat-form-field>
+                              </div>
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="33.33%"
+                                fxFlex.xs="100%">
+                                @if (indianClientFlag === true) {
+                                  <mat-form-field fxFlex="100%" appearance="outline">
+                                    <mat-label>GST No</mat-label>
+                                    <input class="text-upp" formControlName="gstNumber" required autocomplete="off"
+                                      role="presentation" type="text" maxlength="17" matInput placeholder="GST No">
+                                    @if (siteFormGroup?.get('siteDetails.gstNumber')?.errors?.required) {
+                                      <mat-error> GST No
+                                      is required </mat-error>
+                                    }
+                                    @if (siteFormGroup?.get('siteDetails.gstNumber')?.errors?.minlength) {
+                                      <mat-error> Enter
+                                      at least 15 characters </mat-error>
+                                    }
+                                  </mat-form-field>
+                                }
+                              </div>
+                            </div>
+                            @if (common.hideandShowFlag == true) {
+                              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                                fxLayoutGap.xs="0px grid">
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                  fxFlex.xs="100%">
+                                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                                    <mat-label>Select Invoice Title</mat-label>
+                                    <mat-select formControlName="invoiceTitleLookupId" placeholder="Select Invoice Title"
+                                      required>
+                                      @for (invoiceTitle of clientBindData; track invoiceTitle) {
+                                        <mat-option
+                                          [value]="invoiceTitle?.lookUpId">
+                                        {{invoiceTitle?.lookUpName}} </mat-option>
+                                      }
+                                    </mat-select>
+                                    @if (siteFormGroup?.get('siteDetails.invoiceTitleLookupId')?.errors?.required) {
+                                      <mat-error
+                                        >
+                                        Invoice Title is
+                                      required </mat-error>
+                                    }
+                                  </mat-form-field>
+                                </div>
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                  fxLayoutGap="20px">
+                                  <mat-checkbox formControlName="enableLUT">Enable LUT details</mat-checkbox>
+                                </div>
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                  fxLayoutGap="20px">
+                                  <mat-checkbox formControlName="enableGST">GST Flag</mat-checkbox>
+                                </div>
+                              </div>
+                            }
+                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                              fxLayoutGap.xs="0px grid">
+                              <!-- <div fxFlex="66.66%" fxFlex.lg="66.66%" fxFlex.md="66.66%" fxFlex.sm="66.66%"
+                              fxFlex.xs="100%">
+                              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                <mat-label>Central HR Email ID</mat-label>
+                                <textarea formControlName="centralHREmailId" matInput #ramarks placeholder="Central HR Email ID" autocomplete="off"
+                                role="presentation" maxlength="1000" (blur)="getEmailValidation($event.target.value)"></textarea>
+                                <mat-hint style="text-align: left;">Ex: one&#64;mail.com,two&#64;mail.com</mat-hint>
+                                <mat-hint style="text-align: right;"> ({{ramarks?.value?.length}}/1000 max) </mat-hint>
+                                <mat-error *ngIf="siteFormGroup.get('siteDetails.centralHREmailId')?.errors?.incorrect">
+                                Please enter valid Email </mat-error>
+                                <mat-error *ngIf="siteFormGroup.get('siteDetails.centralHREmailId')?.errors?.required">
+                                Central HR Email ID is required </mat-error>
+                              </mat-form-field>
+                            </div> -->
+                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="33.33%"
+                              fxFlex.xs="100%">
+                              <mat-label class="lbl">Active</mat-label>
+                              <mat-checkbox formControlName="active">Is active</mat-checkbox>
+                            </div>
+                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="33.33%"
+                              fxFlex.xs="100%">
+                              <mat-label class="lbl">Enable DAV</mat-label>
+                              <mat-checkbox formControlName="isDAVEnabled">Enable DAV</mat-checkbox>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div formGroupName="address">
+                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                          fxLayout.xs="column">
+                          <div fxFlex="100%">
+                            <h3 class="sub-header">Address Details</h3>
+                          </div>
+                        </div>
+                        <div fxLayout="row wrap" [formGroup]="siteFormGroup" fxLayout.lg="row" fxLayout.md="row"
+                          fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                          fxLayoutGap.xs="0px grid">
+                          <div fxFlex="20%" formGroupName="siteDetails" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%"
+                            fxFlex.xs="100%" Class="mb-25">
+                            <!-- <mat-label class="lbl">As Same Address</mat-label> -->
+                            @if (clientAddress) {
+                              <mat-checkbox formControlName="siteAddress" (change)="changeAddress($event)"
+                                >Site
+                                Address Same As Client Address?
+                              </mat-checkbox>
+                            }
+                          </div>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                          fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid"
+                          fxLayoutGap.xs="0px grid">
+                          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <app-address [addressList]="address" (eventValidation)="addressValidation($event)"
+                            [addressformgrp]="siteFormGroup"></app-address>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-card-content>
+                  </div>
+                }
+
+                @if (step1 === 3) {
+                  <div>
+                    <mat-card-header>
+                      <mat-card-title>
+                        <div fxLayout="row" fxLayoutGap="20px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                          fxLayout.xs="column" fxFlex="100%">
+                          <div fxFlex="100%">
+                            <h1 class="header-title"> <span class="StprH">Step 2:</span>DAV Management Module</h1>
+                          </div>
+                        </div>
+                      </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div formGroupName="siteDetails">
+                        <!-- <div fxLayout="row" >
+                        <div fxFlex="100%" >
+                          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                            <div fxFlex="100%">
+                              <h3 class="sub-header">PDF report title</h3>
+                            </div>
+                          </div>
+                          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                            <div fxFlex="70%">
+                              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                <mat-label>Site Based Final Report Title Name</mat-label>
+                                <input matInput id="val" maxlength="100" formControlName="siteReportTitle"
+                                  placeholder="Final Report Title Name" required />
+                                <mat-error *ngIf="siteFormGroup?.get('siteDetails.siteReportTitle')?.errors?.required">
+                                Final Report Title Name is required</mat-error>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                            fxLayoutGap.xs="0px grid">
+                            <div fxFlex="100%">
+                              <h3 class="sub-header">Logo to appear in the final report</h3>
+                            </div>
+                          </div>
+                          <div>
+                            <mat-radio-group aria-label="Select an option" fxLayoutGap="20px"
+                              formControlName="logoToAppearFlag" matTooltip="Logo to appear in the final report "
+                              matTooltipClass="accent-tooltip">
+                              <mat-label class="lbl">Do you want enable site logo to appear in final
+                              report?</mat-label>
+                              <mat-radio-button [value]="true">Yes</mat-radio-button>
+                              <mat-radio-button [value]="false">No</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                            fxLayoutGap.xs="0px grid">
+                            <div fxFlex="100%">
+                              <h3 class="sub-header">Document Details</h3>
+                            </div>
+                          </div>
+                          <div>
+                            <div fxFlex="100%" class="file-container" [ngClass]="{'disabled-section': isDisabled}">
+                              <mat-label class="lbl pb-5">Upload Logo Images</mat-label>
+                              <mat-hint>
+                                File size must not exceed 5 MB , Upload only jpeg ,jpg or png file format.
+                              </mat-hint>
+                              <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                            here...</span>
+                            <input type="file" #fileInput (change)='uploadLogoDoc($event)'
+                              accept="image/x-png,image/gif,image/jpeg">
+                            </div>
+                            <div class="file-names mt-10">
+                              @for (document of sitedeatil.clientLogo; track document; let i = $index) {
+                                <div class="file-upload-files"
+                                  >
+                                @if (document.fileName) {
+                                  <a (click)="downloadLogoDoc(document)"
+                                    routerLinkActive="active-link">
+                                  {{document.fileName}}</a>
+                                }
+                                <button type="button" class="close" aria-label="Close"
+                                  (click)='sitedeatil.clientLogo.splice(docIndex,1); deleteSiteLogo(document.logoTransId);'>
+                                  <span aria-hidden="true">&times;</span></button>
+                                </div>
+                              }
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div fxLayout="row">
+                    <div fxFlex="100%">
+                      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                        fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" class="mt-10">
+                        <div fxFlex="100%">
+                          <h3 class="sub-header">From Email ID</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxFlex="100%">
+                      <div>
+                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                          fxLayoutGap="50px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                          <div fxFlex="50%">
+                            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                              <mat-label>TO Email ID</mat-label>
+                              <input maxlength="50" autocomplete="off" formControlName="siteFromMailId" role="presentation"
+                                type="email" matInput placeholder="To Email ID" required>
+                              <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+                </div>
+              </mat-card-content>
+            </div>
+          }
+          @if (step1 === 1) {
+            <div>
+              <mat-card-header>
+                <mat-card-title>
+                  <div fxLayout="row" fxLayoutGap="20px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                    fxLayout.xs="column" fxFlex="100%">
+                    <div fxFlex="100%">
+                      <h1 class="header-title"> <span class="StprH">Step 3:</span>Site
+                    Email Id</h1>
+                  </div>
+                </div>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div fxLayout="row">
+                <div formGroupName="emailConfig" fxFlex="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                    fxLayoutGap.xs="0px grid">
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                      fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Email Category Type</mat-label>
+                        <mat-select matNativeControl formControlName="categoryLookupId"
+                          placeholder="Select Email Category"
+                          (selectionChange)="categoryTypeChange($event.value)">
+                          @for (categories of emailcategory; track categories) {
+                            <mat-option [value]="categories.lookUpId">
+                            {{ categories.lookUpName }}</mat-option>
+                          }
+                        </mat-select>
+                        @if (siteFormGroup?.get('emailConfig.categoryLookupId')?.errors?.required) {
+                          <mat-error>
+                          Email Category Type is required </mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+                    @if (categoryName === common.INSUF_NOTIFICATION || categoryName === common.FINAL_REPORT) {
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                        >
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>Report Type</mat-label>
+                          <mat-select matNativeControl placeholder="Select Report Type"
+                            formControlName="reportLookupId">
+                            @for (report of reporttype; track report) {
+                              <mat-option [value]="report.lookUpId">
+                              {{ report.lookUpName }}</mat-option>
+                            }
+                          </mat-select>
+                          @if (!!siteFormGroup?.get('emailConfig.reportLookupId')?.errors?.required) {
+                            <mat-error>
+                            Report Type is required </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                    }
+                    @if (categoryName === common.INSUF_NOTIFICATION) {
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%"
+                        fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>Send Type</mat-label>
+                          <mat-select matNativeControl formControlName="sendTypeLookupId"
+                            placeholder="Select Send Type">
+                            @for (sendlist of sendtype; track sendlist) {
+                              <mat-option [value]="sendlist.lookUpId">
+                              {{ sendlist.lookUpName }}</mat-option>
+                            }
+                          </mat-select>
+                          @if (siteFormGroup?.get('emailConfig.sendTypeLookupId')?.errors?.required) {
+                            <mat-error>
+                            Send Type is required </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                    }
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                    fxLayoutGap.xs="0px grid">
+                    <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <app-email-dynamic-controls [contactForm]="emailConfig" [emailTypeData]="emaildest"
+                        [formArrayNanme]="'commonEmailDet'" [commonContact]="emailData" [emailType]="true">
+                      </app-email-dynamic-controls>
+                    </div>
+                    <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutGap="20px">
+                      <mat-label class="lbl">Do you want us to send an Email? </mat-label>
+                      <mat-checkbox fxLayoutGap="15px" formControlName="sendFlag" matTooltip="Send Email"
+                      matTooltipClass="accent-tooltip">Yes </mat-checkbox>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="20px grid">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-label>&nbsp;</mat-label>
+                      <div class="adrem" fxLayoutGap="8px">
+                        <button mat-button color="primary" matTooltip={{tooltipName}}
+                          matTooltipClass="accent-tooltip" (click)="adduserApplicationfrm()">
+                          <i [ngClass]="tooltipName === 'Update' ? 'icon-updatearrow': 'icon-plus-circle'"></i>
+                        </button>
+                        <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                          (click)="resetEmailConfig()"> <i class="icon-x-circle"></i> </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="row wrap" class="pt-15">
+                  <div fxFlex="100%">
+                    <p-table #dt [columns]="columns" [value]="emailconfifList" dataKey="siteNotifyId"
+                      [scrollable]="true" [paginator]="true" [rows]="10" [resizableColumns]="true"
+                      [reorderableColumns]="true" columnResizeMode="expand">
+                      <!-- ================= COLGROUP ================= -->
+                      <ng-template pTemplate="colgroup" let-colGroupCols>
+                        <colgroup>
+                        <col style="width: 40px" />
+                        @for (col of colGroupCols; track col) {
+                          <col style="min-width:200px" />
+                        }
+                        <col style="width: 100px" />
+                      </colgroup>
+                    </ng-template>
+                    <!-- ================= HEADER ================= -->
+                    <ng-template pTemplate="header" let-headerCols>
+                      <tr>
+                        <th class="action"></th>
+                        @for (col of headerCols; track col) {
+                          <th matTooltip="{{ col.header }}"
+                            matTooltipClass="accent-tooltip"
+                            [ngClass]="{ 'text-center action': col.field === 'action' }"
+                            [pSortableColumn]="col.field" pReorderableColumn pResizableColumn>
+                            <div class="thname">{{ col.header }}</div>
+                            @if (col.field !== 'expand' && col.field !== 'action') {
+                              <p-sortIcon
+                                [field]="col.field">
+                              </p-sortIcon>
+                            }
+                          </th>
+                        }
+                        <th class="action">Action</th>
+                      </tr>
+                    </ng-template>
+                    <!-- ================= BODY ================= -->
+                    <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-bodyCols="columns">
+                      <tr>
+                        <td class="action">
+                          <a [pRowToggler]="rowData">
+                            <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i>
+                          </a>
+                        </td>
+                        @for (col of bodyCols; track col) {
+                          <td>
+                            @switch (col.field) {
+                              @case ('categoryLookupId') {
+                                <span>
+                                  {{ filterEmailConfigNames('categoryLookupId', rowData.categoryLookupId) }}
+                                </span>
+                              }
+                              @case ('sendTypeLookupId') {
+                                <span>
+                                  {{ filterEmailConfigNames('sendTypeLookupId', rowData.sendTypeLookupId) }}
+                                </span>
+                              }
+                              @case ('reportLookupId') {
+                                <span>
+                                  {{ rowData.reportName || filterEmailConfigNames('reportLookupId',
+                                  rowData.reportLookupId) }}
+                                </span>
+                              }
+                              @case ('sendFlag') {
+                                <span>
+                                  {{ rowData.sendFlag ? 'True' : 'False' }}
+                                </span>
+                              }
+                            }
+                          </td>
+                        }
+                        <td class="action">
+                          <mat-icon matTooltip="Edit" matTooltipClass="accent-tooltip"
+                            (click)="editDelete(rowData, 'Edit')">
+                            <i class="material-icons-outlined">edit</i>
+                          </mat-icon>
+                          <mat-icon matTooltip="Delete" matTooltipClass="accent-tooltip"
+                            (click)="openDialogForDelete(rowData)">
+                            <i class="material-icons-outlined">delete</i>
+                          </mat-icon>
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <!-- ================= ROW EXPANSION ================= -->
+                    <ng-template pTemplate="rowexpansion" let-rowData let-expCols="columns">
+                      <tr>
+                        <td [attr.colspan]="6">
+                          <p-table #statustab [columns]="emailColumn" [value]="rowData.commonEmailDet"
+                            [scrollable]="true" [paginator]="true" [rows]="10" class="inn-table">
+                            <!-- INNER HEADER -->
+                            <ng-template pTemplate="header" let-innerHeaderCols>
+                              <tr>
+                                @for (col of innerHeaderCols; track col) {
+                                  <th [pSortableColumn]="col.field">
+                                    <div class="thname">{{ col.header }}</div>
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                  </th>
+                                }
+                              </tr>
+                            </ng-template>
+                            <!-- INNER BODY -->
+                            <ng-template pTemplate="body" let-subRow let-innerBodyCols="columns">
+                              <tr>
+                                @for (col of innerBodyCols; track col) {
+                                  <td>
+                                    @switch (col.field) {
+                                      @case ('destLookupId') {
+                                        <span>
+                                          {{ filterEmailConfigNames('destLookupId', subRow.destLookupId) }}
+                                        </span>
+                                      }
+                                      @case ('contactData') {
+                                        <span>
+                                          {{ subRow.contactData }}
+                                        </span>
+                                      }
+                                    }
+                                  </td>
+                                }
+                              </tr>
+                            </ng-template>
+                            <!-- INNER EMPTY -->
+                            <ng-template pTemplate="emptymessage" let-innerEmptyCols>
+                              <tr>
+                                <td [attr.colspan]="innerEmptyCols.length" class="text-center">
+                                  <div class="no-record">
+                                    <span>No Records Found</span>
+                                  </div>
+                                </td>
+                              </tr>
+                            </ng-template>
+                          </p-table>
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <!-- ================= MAIN EMPTY ================= -->
+                    <ng-template pTemplate="emptymessage" let-emptyCols>
+                      <tr>
+                        @if (errormsg !== '') {
+                          <td [attr.colspan]="emptyCols.length">
+                            <div class="no-record text-center">
+                              <span class="error">{{ errormsg }}</span>
+                            </div>
+                          </td>
+                        }
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                  <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid"
+                    fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid"
+                    [ngClass]="{'empty-record': emailconfifList.length == 0}">
+                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutAlign="start center"> Showing
+                      {{ dt.totalRecords< 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                      <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }}
+                    record(s) </div>
+                    <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutAlign="end center" fxLayoutAlign.md="end center"
+                      fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center"> <a
+                                      [ngClass]="dt.first===0?'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                navigateNxtPrevPage(dt.first + dt.rows,dt.rows)"> <i class="icon-control-start mr-5"></i></a> <span
+                      class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                      <input type="number" min="1" #pageNo [formControl]="currentPageNo"
+                        [(ngModel)]="currentPage" maxlength="5" appNumberOnly [NumberOnly]="false"
+                        (keyup.enter)="navigatePage(pageNo.value,dt.rows)" />
+                    </span></span> <span class="mr-2" fxHide.xs> of
+                  {{ getTotalPages(dt.totalRecords,dt.rows) }}</span> <a
+                  [ngClass]="(dt.rows + dt.first)>=dt.totalRecords?'page-btn disabled': 'page-btn'"
+                                      (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                navigateNxtPrevPage(dt.first + dt.rows,dt.rows)"><i class="icon-control-end ml-5"></i></a> </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </div>
+      }
+      @if (step1 === 2) {
+        <div>
+          <mat-card-header>
+            <mat-card-title>
+              <div fxLayout="row" fxLayoutGap="20px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                fxLayout.xs="column" fxFlex="100%">
+                <div fxFlex="100%">
+                  <h1 class="header-title"> <span class="StprH">Step 4:</span>Entity selection</h1>
+                </div>
+              </div>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div fxLayout="row">
+              <div fxFlex="100%" formGroupName="siteDetails">
+                <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                fxLayoutGap.xs="0px grid">
+                <div fxFlex="100%">
+                  <h3 class="sub-header">Selection Entity</h3>
+                </div>
+              </div> -->
+              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="20px grid">
+                <div fxFlex="66.66%" fxFlex.lg="66.66%" fxFlex.md="66.66%" fxFlex.sm="100%"
+                  fxFlex.xs="100%">
+                  <mat-label class="lbl">Select Entity</mat-label>
+                  <mat-radio-group formControlName="companyId" aria-label="Select an option"
+                    fxLayoutGap="20px">
+                    @for (entity of entitySelection; track entity) {
+                      <mat-radio-button [value]="entity.companyId"
+                        fxLayoutGap="20px">
+                        {{entity.companyName}}
+                      </mat-radio-button>
+                    }
+                  </mat-radio-group>
+                  @if (siteFormGroup?.get(entitySelection)?.get('companyId')?.errors?.required) {
+                    <mat-error
+                      >
+                      Entity is required
+                    </mat-error>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </div>
+    }
+
+  </form>
+</div>
+</div>
+<mat-card-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+  @if (step1 === 0 || step1 === 1 || step1===2) {
+    <button mat-flat-button color="primary"
+      (click)='goToStep(step1+1)'>
+    Next </button>
+  }
+  @if (step1 === 1 ||step1 === 2 || step1 ===3) {
+    <button mat-flat-button color="primary"
+      (click)='goToStep(step1-1)'> Previous
+    </button>
+  }
+  @if (step1 === 3) {
+    <button mat-flat-button color="accent" (click)="openSaveDialog()">
+    {{ editFlag ? "Update" : "Save" }} </button>
+  }
+</mat-card-actions>
+</div>
+<div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs>
+  <div class="step">
+    <div class="list"> <a (click)="goToStep(0)">Site&nbsp;Entry<i class="icon-note" fxHide.sm fxHide.xs>
+    </i></a>
+  </div>
+  <div class="list "> <a (click)="goToStep(1)">Site&nbsp;Mail&nbsp;Id's<i class="icon-user-follow" fxHide.sm
+  fxHide.xs> </i></a> </div>
+  <div class="list "> <a (click)="goToStep(2)">Entity&nbsp;Selection<i class="icon-news-paper" fxHide.sm
+    fxHide.xs>
+  </i></a> </div>
+  @if (siteFormGroup.get('siteDetails.isDAVEnabled')?.value) {
+    <div class="list "> <a
+      (click)="goToStep(3)">DAV&nbsp;Management&nbsp;Module<i class="icon-news-paper" fxHide.sm fxHide.xs>
+    </i></a> </div>
+  }
+</div>
+</div>
+</div>
+</mat-card>
+</div>
+</div>
+</form>

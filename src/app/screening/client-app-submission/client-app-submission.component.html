@@ -1,0 +1,584 @@
+﻿<app-breadcrumb [btnSave]="breadcrumbFlags.btnSave" [btnReset]="false" [price]="price" [btnDelete]="getPaymentFlag()" [showRoutePath]="this.userData.applicationId !==3? true: false" [btnSaveDisabled]="breadcrumbFlags.btnSaveDisabled" [routePath]="routePath"
+  [btnBack]="breadcrumbFlags.btnBack" (eventSave)="savecase()" [toolTip]="buttonvalue()" [btnPreviewInvoice]="getPaymentFlag()" [btnApprove]="false" [btnReject]="false" (eventApprove)="savecase()" (eventReset)="resetForm()" (eventPreviewInvoice)="previewInvoice()"
+(eventBack)="backToList()" (eventReject)="rejectPreQC()" (eventDelete)="openDialogDeleteOrder()" [btnDownLoad]="btnDownLoad" (eventDownload)="opendownload()"> </app-breadcrumb>
+<p-toast position="top-center"></p-toast>
+@if (showGrid) {
+  <div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <h1 class="header-title">Client File Submission</h1>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="0px
+                        grid">
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Candidate Name</mat-label>
+                  <input matInput placeholder="Candidate Name">
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Reference No. / Verification Id
+                  </mat-label>
+                                <input matInput placeholder="Reference No. /
+                                    Verification Id">
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%" fxLayoutAlign="end start" style="margin-top: 8px;">
+                <button mat-flat-button color="primary" (click)="getSearchComponents()">Search</button>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+}
+@if (!showGrid) {
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      <mat-card>
+        <div fxLayout="row" fxFlex="100%" fxLayoutGap="0px" [formGroup]="fileSubmission">
+          <div fxFlex="80%" fxFlex.lg="80%" fxFlex.md="75%" fxFlex.sm="70%" fxFlex.xs="100%">
+                    <div fxLayout="row wrap" fxFlex="100%" fxLayoutGap="25px
+                        grid" fxLayoutGap.sm="25px grid" fxLayoutGap.xs="0px
+                        grid">
+              <div fxFlex="100%">
+                @if (step1 === 0) {
+                  <div>
+                    <div fxLayout='row'>
+                      <div fxFlex="100%">
+                        <mat-card-header>
+                          <mat-card-title>
+                            <h1 class="header-title"> <span class="StprH">Step
+                            {{step1+1}}:</span>Candidate
+                          </h1>
+                        </mat-card-title>
+                      </mat-card-header>
+                    </div>
+                  </div>
+                  @if (manualFilesubmissionRE !==
+                    undefined) {
+                    <app-client-app-candidate-details [mainForm]="fileSubmission" [formgroupName]="'candidate'" [compAddress]="compAddress" [screeningDocument]="screeningDocument" [manualFilesubmissionRE]="manualFilesubmissionRE" (componentChange)="clientChangeEmit($event)">
+                    </app-client-app-candidate-details>
+                  }
+                </div>
+              }
+              @if (step1 === 1 && applicationId !== 3 &&
+                screeningService.caseFlagType !== common.NEWCASE
+                &&
+                !manualFilesubmissionRE) {
+                <div>
+                  <div fxLayout="row">
+                    <div fxFlex="100%" class="test">
+                      <mat-card-header>
+                        <mat-card-title>
+                          <h1 class="header-title"> <span class="StprH">Step
+                          {{step1+1}}:</span>Client Details </h1>
+                        </mat-card-title>
+                      </mat-card-header>
+                    </div>
+                  </div>
+                  <app-client-app-client-details [mainForm]="fileSubmission" [formgroupName]="'screening'" (componentChange)="clientChangeEmit($event)">
+                  </app-client-app-client-details>
+                </div>
+              }
+              @if ((step1 === (applicationId !== 3 &&
+                (screeningService.caseFlagType !==
+                common.NEWCASE &&
+                !manualFilesubmissionRE)? 2:1)) &&
+                stepHiddenFlag) {
+                <div>
+                  <div fxLayout='row'>
+                    <div fxFlex="100%">
+                      <mat-card-header>
+                        <mat-card-title>
+                          <h1 class="header-title"> <span class="StprH">Step
+                          {{step1+1}}:</span>Component Name
+                        </h1>
+                      </mat-card-title>
+                    </mat-card-header>
+                  </div>
+                </div>
+                <app-client-app-screening-component #ScreeningComponents [Paymentflag]="paymenFlag" [cusAddress]="Address" [compBaseDetails]="compBaseDetails" (emitAddnewComp)="getScreeningFormGroup($event)" (emitgetComp)="getScreeningCompDetails($event)" [mainForm]="fileSubmission"
+                  [formgroupName]="'screeningComponent'" (emitgetGapComp)="getGapReason($event)" (emitSubmitComp)="saveScreeningComp($event)" (emitRejectcomp)="rejecrComp($event)" (emitCompId)="getCompId($event)" (emitAddNewCV)="addNewCV($event)"
+                  [tabIndex]="tabIndex" (emitLastComp)="getLastId($event)">
+                </app-client-app-screening-component>
+              </div>
+            }
+            @if (step1 === (applicationId !== 3 &&
+              screeningService.caseFlagType !== common.NEWCASE
+              &&
+              !manualFilesubmissionRE? 3:
+              userData.applicationId === 3 &&
+              stepHiddenFlag ?3 :2)) {
+              <div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <mat-card-header>
+                      <mat-card-title>
+                        <h1 class="header-title"> <span class="StprH">Step
+                        {{step1+1}}:</span>Review
+                      </h1>
+                    </mat-card-title>
+                  </mat-card-header>
+                </div>
+              </div>
+              <app-client-app-screening-review [screeningDetails]="screeningDetails" [inviteflag]=screeningService.invitationFlag> </app-client-app-screening-review>
+            </div>
+          }
+          <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end"> @if (applicationId !== 3) {
+            <span>
+              @if (step1 !== 0) {
+                <button mat-flat-button color="primary"
+                (click)='goToStep(step1-1,"previous")'>Previous</button>
+              }
+            </span>
+          }
+          @if (applicationId !== 3&&step1==0) {
+            <span>
+              @if (step1 !==3) {
+                <button mat-flat-button color="primary"
+                  (click)='goToStep(step1+1,"nxt")'>Save
+                & Next Tab</button>
+              }
+            </span>
+          }
+          @if (applicationId !== 3&&step1==1) {
+            <span>
+              @if (step1 !==3) {
+                <button mat-flat-button color="primary"
+                  (click)='goToStep((step1+1),"nxt")'>Save
+                & Next Tab</button>
+              }
+            </span>
+          }
+          @if (applicationId !== 3&&step1==2) {
+            <span>
+              @if (step1 !==3) {
+                <button mat-flat-button color="primary"
+                  (click)='goToStepCom("nxt")'>Save
+                & Next Tab</button>
+              }
+            </span>
+          }
+          @if (screeningService.caseFlagType
+            === common.NEWCASE ||
+            manualFilesubmissionRE) {
+            <span>
+              @if (step1 !== 0) {
+                <button mat-flat-button color="primary"
+                (click)='goToStepcan(step1-1,"")'>Previous</button>
+              }
+            </span>
+          }
+          @if (step1==3) {
+            <button mat-flat-button color="accent" [disabled]="breadcrumbFlags.btnSaveDisabled" (click)='savecase()'>{{buttonvalue()}}
+            </button>
+          }
+        </mat-card-actions>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="25%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs>
+    <div class="step">
+      <div fxLayout='row'>
+        @if (applicationId !== 3 &&
+          screeningService.caseFlagType !==
+          common.NEWCASE && !manualFilesubmissionRE) {
+          <div fxFlex="100%">
+            <div class="list"> <a (click)="goToStepTab(0);saveCurrentTab(0);">Candidate<i class="icon-client" fxHide.sm
+              fxHide.xs>
+            </i></a> </div>
+            @if (screeningService.caseFlagType !==
+              common.NEWCASE) {
+              <div class="list"> <a (click)="goToStepTab(1);saveCurrentTab(1);">Client
+                Details<i class="icon-support" fxHide.sm fxHide.xs>
+              </i></a> </div>
+            }
+            <div class="list"> <a (click)="goToStepTab(2);saveCurrentTab(2);">Component
+              Name<i class="icon-componententry" fxHide.sm fxHide.xs> </i></a></div>
+              <div class="list"> <a (click)="saveCurrentTab(3);">Review<i class="icon-book-open"
+                fxHide.sm fxHide.xs>
+              </i></a> </div>
+            </div>
+          }
+          @if (applicationId === 3 ||
+            screeningService.caseFlagType ===
+            common.NEWCASE || manualFilesubmissionRE) {
+            <div fxFlex="100%">
+              <div class="list"> <a (click)="goToStepcan(0,'')">Candidate<i class="icon-client"
+                fxHide.sm fxHide.xs>
+              </i></a> </div>
+              @if (stepHiddenFlag) {
+                <div class="list"> <a (click)="goToStepcan(1,'')">Component
+                  Name<i class="icon-componententry" fxHide.sm fxHide.xs> </i></a>
+                </div>
+              }
+              @if (userData.applicationId===3) {
+                <div class="list"> <a (click)="goToStepcan(stepHiddenFlag?2:1,'')">LOA
+                  Document<i class="icon-componententry" fxHide.sm fxHide.xs>
+                </i></a> </div>
+              }
+                                <div class="list"> <a (click)="goToStepcan(applicationId===3?
+                                        (stepHiddenFlag?3:2):(screeningService.caseFlagType
+                                        ===
+                                        common.NEWCASE ||
+                                        manualFilesubmissionRE)?(stepHiddenFlag?2:1):2,'')">Review<i
+              class="icon-book-open" fxHide.sm fxHide.xs> </i></a>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+</mat-card>
+</div>
+</div>
+}
+
+<!------- Right Side Area Start ----->
+
+@if (!showGrid) {
+  <mat-drawer-container class="PView">
+    <mat-drawer #drawer mode="side" position="end">
+      @if (applicationId!==3) {
+        <div>
+          @if (step1 === (screeningService?.caseFlagType ===
+            common?.NEWCASE ? 1
+            : 2) ) {
+            <div class="PView-box">
+              <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+              <h4 class="sub-header">Component Information</h4>
+              <div class="side-scroll" style="overflow:auto">
+                <div fxLayout="row">
+                  <div fxFlex="100%" class="hints">
+                    <h6 class="hints">Component Name</h6>
+                    <ul>
+                      <li> {{ screeningService?.caseFlagType === common?.NEWCASE ? common.manualClientDetails?.component[0]?.compName : screeningService.compData?.compName }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%" class="hints">
+                    <h6 class="hints">Component Description</h6>
+                    <ul>
+                      <li> {{ screeningService?.caseFlagType === common?.NEWCASE ? common.manualClientDetails?.component[0]?.compDesc : screeningService.compData?.compDesc }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%" class="hints">
+                    <h6 class="hints">Special Instructions</h6>
+                    <ul>
+                      <li> @if (screeningService?.caseFlagType
+                        ===
+                        common?.NEWCASE) {
+<span [innerHTML]="common.manualClientDetails?.component[0]?.instruction
+                                            ?
+                                            common.manualClientDetails?.component[0]?.instruction
+                                            :
+                                            'N/A'">
+                        </span>
+                        } @if (screeningService?.caseFlagType
+                        !==
+                        common?.NEWCASE) {
+<span [innerHTML]="screeningService.compData?.instruction
+                                            ?
+                                            screeningService.compData?.instruction
+                                            : 'N/A'">
+                        </span>
+                      } </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <div class="PView-box">
+              <button class="instruct_close" (click)="drawerToggle()"><i class="icon-close"></i></button>
+              <h4 class="sub-header">Client Information</h4>
+              <div class="side-scroll" style="overflow:auto">
+                <div fxLayout="row">
+                  <div fxFlex="100%" class="hints">
+                    <h6 class="hints">Client Name</h6>
+                    <ul>
+                      <li> {{ fileSubmission.get('screening.clientName').value ? fileSubmission.get('screening.clientName').value : 'N/A' }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%" class="hints">
+                    <h6 class="hints">General Instructions</h6>
+                    <ul>
+                      @for (ins of (screeningService?.caseFlagType === common?.NEWCASE ? common.manualClientDetails?.generalInstruction : caseSubmissionList?.generalInstruction); track $index) {
+                        <li>
+                          <span [innerHTML]="ins ? ins : 'N/A'"></span>
+                        </li>
+                      }
+                      @if (!(screeningService?.caseFlagType
+                        === common?.NEWCASE
+                        ?
+                        common.manualClientDetails?.generalInstruction?.length>
+                        0
+                        :
+                        caseSubmissionList?.generalInstruction?.length
+                        > 0)) {
+                        <li>
+                        N/A</li>
+                      }
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </mat-drawer>
+    <!-- Instruction button right -->
+    <div class="example-sidenav-content">
+      <button type="button" mat-stroked-button (click)="drawerToggle()" class="PViewBtn">
+        <div class="btninside">
+          <span>
+            <i class="icon-arrowright"></i>
+          </span>
+        </div>
+        <label>Instructions</label>
+      </button>
+    </div>
+  </mat-drawer-container>
+}
+
+
+
+
+
+
+
+
+
+
+
+<ng-template #viewInvoice>
+  <h1 mat-dialog-title>Invoice Details</h1>
+  <mat-dialog-content>
+    <div fxLayout="row" class="pt-15">
+      <div fxFlex="100%">
+        <kendo-pdf-export #pdf [paperSize]="'Letter'" [landscape]="true" [margin]="'0.25in'" [repeatHeaders]="true" [scale]="0.7" [avoidLinks]="true">
+          <kendo-pdf-export-margin [top]="'0.625in'" [bottom]="'0.5in'" [right]="'0.25in'" [left]="'0.25in'">
+          </kendo-pdf-export-margin>
+          <ng-template kendoPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+            <div class="page-footer-right">Page {{ pageNum }} of {{ totalPages }}
+            </div>
+          </ng-template>
+          <app-generate-invoice></app-generate-invoice>
+        </kendo-pdf-export>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="pdf?.saveAs('view
+            invoice')">
+    Download Invoice </button>
+    <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose()"> Close </button>
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #cancelOrder>
+  <h1 mat-dialog-title>Delete Order</h1>
+  <mat-dialog-content>
+    <div fxLayout="row" class="pt-15">
+      <div fxFlex="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Reason</mat-label>
+          <textarea fxFlex="100%" #reason [formControl]="cancelReason" required matInput placeholder="Reason" maxlength="1000">
+          </textarea>
+          <mat-hint class="f-13"> ({{reason?.value?.length}} /1000 max)
+          </mat-hint>
+          @if (cancelReason?.errors?.required) {
+            <mat-error>Reason is required
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="deleteOrder()"> Delete
+    Order</button>
+    <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose();cancelReason.reset()"> No </button>
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #dlgReject>
+  <!-- <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip" (click)="dialog.closeAll()">
+  <i class="material-icons">clear</i>
+</button> -->
+<form>
+  <h1 mat-dialog-title>PreQC Reject</h1>
+  <mat-dialog-content>
+    @if (rejectedCommentsList.length> 0) {
+      <div fxlayout="row">
+        <div fxflex="100%">
+          <h3 class="sub-header">Rejected comments history</h3>
+        </div>
+      </div>
+    }
+    @if (rejectedCommentsList?.length> 0) {
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          @for (rej of
+            rejectedCommentsList; track $index) {
+            <div class="history-view">
+              <div class="dt">{{rej.rejectedDate | date:'dd-MM-yyyy'}}</div>
+              <div class="uname">
+                <div class="user avatarBg1">{{rej.name[0]}}</div>
+                {{rej.name}}
+              </div>
+              <p> {{rej.comments}} </p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+    <div fxLayout="row" class="pt-15">
+      <div fxFlex="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Comments</mat-label>
+          <textarea fxFlex="100%" #rej [formControl]="rejectComments" required matInput placeholder="Comments" maxlength="1000">
+          </textarea>
+          <mat-hint class="f-13"> ({{rej.value.length}} /1000 max)
+          </mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" [disabled]="!rejectComments.valid" (click)="rejectScreeningFileSubmission()">
+    Reject </button>
+    <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose()"> Cancel </button>
+  </mat-dialog-actions>
+</form>
+</ng-template>
+<div class="loaclass" style="display: none;">
+  <h4 style="color: white;background-color: black; padding: 7px;">Declaration and Authorization</h4>
+  I hereby authorize Krya Screening Private Limited and its representative to verify information provided in my application for employment and this employee background verification form, and to conduct enquiries as may be necessary, at Krya’s
+  discretion. I authorize all persons who may have information relevant to this enquiry to disclose it to Krya Screening Private Limited or its representative.
+  <br>
+    <br> &#64;&#64;iagree I &#64;&#64;consentsignatore release all persons from liability on account of such disclosure.<br>
+    <br> This authorization and release, in original, faxed, photocopied form or e-mail transmission, shall be valid for this and any future reference. I confirm that the above information is correct to the best of my knowledge.
+    </div>
+    <ng-template #canGeneralIns>
+      <div class="confirm-pop">
+        <h1 mat-dialog-title>General Instructions</h1>
+        <mat-dialog-content> <b><i>Welcome <span style="color: #08BA53
+                        !important;">{{userData.firstName}}
+        </span> ,</i>
+      </b>
+      <p>On behalf of the company you are applying with, we &#64;
+        <b>{{fileSubmission.get('screening.clientName').value}}</b> request you to provide the following information for a background screening.
+      </p>
+      <p>To complete the online application,</p>
+      <p>Fill-in required fields in each step and click <b>"Next"</b> button to navigate to next step.</p>
+      <p>If TAB color remains in White, then the components are incomplete or not filled.</p>
+      <p>If TAB color changes to Orange, it indicates that your are entering or filling the details.</p>
+      <p>If TAB color changes to Green, then the component is completed and filled.
+      </p>
+      <p>On reaching the final step click <b>"Save & Submit"</b> button to complete the online Application.</p>
+      <p>To begin entering your information for the background screening, please click the <b>"Start"</b> button below.
+    </p>
+    <p>Once you click <b>"Save & Submit"</b>, you will not be able to edit or delete any information.</p>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+            <button (click)="dialogClose()" color="accent" class="mat-flat-button
+                mat-accent"> Start</button>
+  </mat-dialog-actions>
+</div>
+</ng-template>
+@if (verification.isFinalReport) {
+  <span hidden="true">
+    @if (pdfType === '1') {
+      <app-response-document></app-response-document>
+    }
+    @if (pdfType === '2') {
+      <app-generate-pdf></app-generate-pdf>
+    }
+  </span>
+}
+@if (tipsFlag) {
+  <div class="help-cont">
+    <h4>Access your menu faster</h4>
+    <p>Hover your mouse over the sidebar to show or hide the menu. Tap <span class="higlight"> <i
+    style="font-size: 13px;">INSTRUCTIONS</i> </span> to keep it expanded.
+  </p>
+  <div fxLayoutGap="8px" fxLayoutAlign="center end">
+    <button mat-flat-button color="primary" (click)="tipsFlag=false">Done</button>
+  </div>
+</div>
+}
+@if (tipsFlag) {
+  <div class="help-overlay"></div>
+}
+<!-- {{fileSubmission.value | json}}  -->
+
+<!-- <button (click)="viewScreeningComp.formEnableDisable()">Call child</button> -->
+<ng-template #downloadData>
+  <h1 mat-dialog-title>Download Preview</h1>
+  <mat-dialog-content>
+    <kendo-pdf-export #pdf [paperSize]="'Letter'" [landscape]="true" [margin]="'0.25in'" [repeatHeaders]="true" [scale]="0.7" [avoidLinks]="true">
+      <kendo-pdf-export-margin [top]="'0.625in'" [bottom]="'0.5in'" [right]="'0.25in'" [left]="'0.25in'">
+      </kendo-pdf-export-margin>
+      @if (downloadflag) {
+        <div fxLayoutAlign="center center"> <img src="assets/images/krya-Logo.png" height="55px">
+        </div>
+      }
+      <br>
+        <ng-template kendoPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages" *ngIf="downloadflag === true">
+          <div class="page-footer-left">
+            Generated by {{ userData.userName }} on {{ TodayDate | date: 'dd/MM/yyyy h:mm:ss a' }}
+          </div>
+          <div class="page-footer-right">Page {{ pageNum }} of {{ totalPages }}</div>
+        </ng-template>
+        <app-client-app-screening-review [screeningDetails]="screeningDetails" [inviteflag]=screeningService.invitationFlag>
+        </app-client-app-screening-review>
+      </kendo-pdf-export>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-flat-button color="warn" (click)="downloadSupportingDoc();pdf.saveAs(this.pdfname)">Download</button>
+      <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose()"> Cancel</button>
+    </mat-dialog-actions>
+  </ng-template>
+  <ng-template #alertTemplate>
+    <h1 mat-dialog-title>Components Status</h1>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15">
+              <img src="assets/images/alert-warning.gif">
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">There are pending components and fields to fill. Want to continue to fill. If yes, click "continue" or "Later!</h3>
+              <p class="text-sm" [innerHTML]="bodyText">
+                <!-- {{ bodyText }} -->
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-flat-button color="warn" (click)="getSubmissionFile();dialog.closeAll();">Continue</button>
+      <button mat-stroked-button [mat-dialog-close]="true" (click)="backToList()" style="color:black"> Later</button>
+    </mat-dialog-actions>
+  </ng-template>

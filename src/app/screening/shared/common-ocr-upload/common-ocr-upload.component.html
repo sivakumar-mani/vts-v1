@@ -1,0 +1,40 @@
+<!-- common-ocr-upload.component.html -->
+
+<!-- <div class="ocr-upload-wrapper">
+  
+  <button type="button" class="ocr-btn" (click)="fileInput.click()" title="Upload document for OCR">
+     Upload document for OCR
+    <i class="fa fa-file-text-o"> ⬆️</i>
+    
+  </button> -->
+<div>
+
+  <!-- Title -->
+  <h3 class="sub-header">
+    Upload a document to auto-fill the fields below
+  </h3>
+   <mat-label class="mat-hint-upload">
+    Acceptable file Formats : .pdf, .png, .jpg, .jpeg
+  </mat-label>
+
+  <!-- Icon / Not found -->
+  <!-- <div class="upload-icon-box">
+    <mat-icon class="file-icon">insert_drive_file</mat-icon>
+    <div class="not-found-text">not found</div>
+  </div> -->
+
+  <!-- Upload Button -->
+   <div>
+  <button mat-raised-button
+        color="primary"
+        type="button"
+        (click)="fileInput.click()">
+  <mat-icon class="btn-icon">cloud_upload</mat-icon>
+  Upload
+</button>
+
+  <!-- Actual file input -->
+  <input type="file" #fileInput hidden [accept]="accept" [multiple]="false" (change)="onFileChange($event)" />
+  </div>
+
+</div>

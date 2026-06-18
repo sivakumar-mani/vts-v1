@@ -1,0 +1,206 @@
+================================================================================
+       ANGULAR 20 → 21 UPGRADE SUMMARY
+       Project: VTS (Verification Tracking System)
+       Date: 16-Jun-2026
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1: PACKAGES UPDATED (package.json)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ANGULAR CORE PACKAGES - Updated to v21]
+  @angular/animations             v20  →  ^21.2.17
+  @angular/cdk                    v20  →  ^21.2.14
+  @angular/common                 v20  →  ^21.2.17
+  @angular/core                   v20  →  ^21.2.17
+  @angular/forms                  v20  →  ^21.2.17
+  @angular/google-maps            v20  →  ^21.0.0
+  @angular/localize               v20  →  ^21.2.17
+  @angular/material               v20  →  ^21.2.14
+  @angular/platform-browser       v20  →  ^21.2.17
+  @angular/platform-browser-dynamic v20 → ^21.2.17
+  @angular/router                 v20  →  ^21.2.17
+
+[ANGULAR DEV PACKAGES - Updated to v21]
+  @angular/cli                    v20  →  ^21.2.15
+  @angular/compiler               v20  →  ^21.2.17
+  @angular/compiler-cli           v20  →  ^21.2.17
+  @angular/language-service       v20  →  ^21.2.17
+  @angular-devkit/build-angular   v20  →  ^21.2.15
+  @angular-devkit/core            v20  →  ^21.2.15
+  @angular-devkit/schematics      v20  →  ^21.2.15
+  @angular/build                  v20  →  ^21.2.15
+
+[TYPESCRIPT - Updated]
+  typescript                      v5.8  →  ~5.9.3
+
+[KENDO UI PACKAGES - Updated v16 → v24]
+  @progress/kendo-angular-buttons        v16  →  ^24.0.0
+  @progress/kendo-angular-common         v16  →  ^24.0.0
+  @progress/kendo-angular-dateinputs     v16  →  ^24.0.0
+  @progress/kendo-angular-dialog         v16  →  ^24.0.0
+  @progress/kendo-angular-dropdowns      v16  →  ^24.0.0
+  @progress/kendo-angular-excel-export   v16  →  ^24.0.0
+  @progress/kendo-angular-grid           v16  →  ^24.0.0
+  @progress/kendo-angular-icons          v16  →  ^24.0.0
+  @progress/kendo-angular-inputs         v16  →  ^24.0.0
+  @progress/kendo-angular-intl           v16  →  ^24.0.0
+  @progress/kendo-angular-l10n           v16  →  ^24.0.0
+  @progress/kendo-angular-label          v16  →  ^24.0.0
+  @progress/kendo-angular-layout         v16  →  ^24.0.0
+  @progress/kendo-angular-navigation     v16  →  ^24.0.0
+  @progress/kendo-angular-pdf-export     v16  →  ^24.0.0
+  @progress/kendo-angular-popup          v16  →  ^24.0.0
+  @progress/kendo-angular-progressbar    v16  →  ^24.0.0
+  @progress/kendo-angular-treeview       v16  →  ^24.0.0
+  @progress/kendo-angular-utils          v16  →  ^24.0.0
+
+[NEW KENDO PACKAGES ADDED - Required by Kendo Grid v24]
+  @progress/kendo-angular-pager          NEW  →  ^24.0.0
+  @progress/kendo-angular-toolbar        NEW  →  ^24.0.0
+  @progress/kendo-angular-menu           NEW  →  ^24.0.0
+  @progress/kendo-angular-conversational-ui NEW → ^24.0.0
+  @progress/kendo-angular-indicators     NEW  →  ^24.0.0
+  @progress/kendo-angular-upload         NEW  →  ^24.0.0
+
+[OTHER PACKAGES - Updated]
+  @danielmoncada/angular-datetime-picker v20  →  ^21.0.0
+  @ngbracket/ngx-layout                  v20  →  ^21.0.0
+  angular-oauth2-oidc                    v20  →  ^21.0.0
+  ngx-countdown                          v20  →  ^21.0.0
+  ngx-spinner                            v20  →  ^21.0.0
+
+[PACKAGES NOT UPDATED - Kept as-is]
+  angular-oauth2-oidc-jwks       (max version 20.0.0 - no v21 available)
+  @swimlane/ngx-charts            (no Angular 21 compatible version)
+  bn-ng-idle                      (REPLACED with custom IdleService - see below)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2: FILES CHANGED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[1] package.json
+    - All package versions updated as listed above
+
+[2] src/app/app.module.ts
+    - CountdownModule → CountdownComponent
+      (ngx-countdown v21 removed NgModule; now standalone component)
+    - import changed: bn-ng-idle → custom IdleService
+
+[3] src/app/app.component.ts
+    - onBeforeUnload() → onBeforeUnload($event?: BeforeUnloadEvent)
+      (TypeScript strict: HostListener passes event but method had no param)
+    - import changed: bn-ng-idle → custom IdleService
+
+[4] src/app/common-methods/utils/file-download.utils.ts
+    - byteArrayToBlob() function fixed for TypeScript 5.9
+      Old: new Blob([byteArray], ...)
+      New: new Blob([byteArray.slice().buffer as ArrayBuffer], ...)
+      (TypeScript 5.9 made Uint8Array generic; Blob requires ArrayBuffer not ArrayBufferLike)
+
+[5] src/app/client-entry/package-creation-detail/package-creation-detail.component.html
+    - @for loop: getformgroup() → getformgroup().controls
+      (UntypedFormArray is not directly iterable; must use .controls)
+
+[6] src/app/verification/review/review.component.html
+    - Line 723: @if () { → @if (contactDet.get('contactPerson')?.errors) {
+      (Migration left empty condition; restored correct validation expression)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3: NEW FILE CREATED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[NEW] src/app/common-methods/services/idle.service.ts
+    - Created to replace bn-ng-idle package
+    - Reason: bn-ng-idle (v0.0.2) uses ViewEngine format with deprecated
+      'defineInjectable' API which was removed in Angular 21
+    - New IdleService has same API: startWatching(), stopTimer(), resetTimer()
+    - Used in app.component.ts via: BnNgIdleService alias
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4: HTML TEMPLATE FILES FIXED (Migration Bug - @for track expression)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The Angular migration tool (ng update) generated broken @for track expressions.
+Two types of bugs were fixed:
+
+BUG TYPE 1: Missing ) before { in track expression
+  Wrong:   @for (item of list; track $index {
+  Fixed:   @for (item of list; track $index) {
+  Total fixes: 12 occurrences
+
+  Files fixed:
+  [A] src/app/screening/client-app-submission/client-app-submission.component.html
+      (1 fix)
+  [B] src/app/screening/client-app-submission/client-app-screening-component/
+          client-app-screening-component.component.html
+      (1 fix)
+  [C] src/app/screening/direct-app-submission/direct-app-submission.component.html
+      (1 fix)
+  [D] src/app/screening/client-app-submission/client-app-candidate-details/
+          client-app-candidate-details.component.html
+      (4 fixes)
+  [E] src/app/screening/direct-app-submission/direct-app-candidate-details/
+          direct-app-candidate-details.component.html
+      (5 fixes)
+
+BUG TYPE 2: Track expression had collection expression duplicated after $index
+  Wrong:   @for (ins of (collection); track $index === condition ? list1 : list2); let ind = $index) {
+  Fixed:   @for (ins of (collection); track $index) {
+
+  Files fixed:
+  [F] src/app/screening/client-app-submission/client-app-submission.component.html
+      (1 fix - line 323-332)
+
+BUG TYPE 3: track VARNAME of COLLECTION (multi-line broken track)
+  Wrong:   @for (item of collection; track item of\n    collection) {
+  Fixed:   @for (item of collection; track $index) {
+  Total fixes: 19 occurrences in 8 files (fixed in earlier session)
+
+  Files fixed:
+  - insufficiencyclearance.component.html         (1 fix)
+  - client-app-screening-component.component.html (1 fix)
+  - client-app-client-details.component.html      (1 fix)
+  - client-app-submission.component.html          (2 fixes)
+  - direct-app-submission.component.html          (1 fix)
+  - client-app-candidate-details.component.html   (5 fixes)
+  - client-app-document-upload.component.html     (2 fixes)
+  - direct-app-candidate-details.component.html   (6 fixes)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5: BUILD RESULT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  BUILD STATUS: SUCCESS ✓
+  Output location: D:\version13upgradeui\vts\dist\Vts
+
+  Bundles generated:
+    main bundle (app root)
+    master-module
+    screening-module
+    client-entry-module
+    verification-module
+    case-module
+    reports-module
+    quality-check-module
+    invoice-module
+    automation-module
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6: SUMMARY COUNT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Total packages updated:        41
+  New packages added:             6  (Kendo v24 new dependencies)
+  TypeScript version updated:     1  (5.8 → 5.9)
+  New file created:               1  (idle.service.ts)
+  TypeScript files changed:       2  (app.module.ts, app.component.ts, file-download.utils.ts)
+  HTML template files fixed:     12  (template migration bug fixes)
+  Total @for track fixes:        31  (across all HTML files)
+
+================================================================================

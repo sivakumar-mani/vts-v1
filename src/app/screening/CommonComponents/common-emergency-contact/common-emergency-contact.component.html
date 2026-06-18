@@ -1,0 +1,108 @@
+<form [formGroup]="mainForm" autocomplete="off" role="presentation">
+  <app-common-base-info [mainForm]="mainForm" [compBaseDetails]="compBaseDetails" [formgroupName]="'screeningComponentInfo'" (emitNotappChange)="notApplicable($event)" [showNotApplicable]="showNotApplicable">
+  </app-common-base-info>
+  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+    <div fxFlex="100%">
+      <h3 class="sub-header">Emergency Contact Verifiaction Details</h3>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%" [formGroupName]="formgroupName" fxLayoutGap="30px">
+      <div fxFlex="33.33%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Contact Person Name</mat-label>
+          <input matInput placeholder="Contact Person Name" formControlName="contactPersonName" required />
+          @if (!!mainForm?.get(formgroupName)?.get('contactPersonName')?.errors?.required) {
+            <mat-error>
+              Contact person name is required
+            </mat-error>
+          }
+
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Contact Phone No</mat-label>
+          <input matInput type="tel" formControlName="contactNumber" placeholder="Contact Phone No" appNumberOnly [PhoneNumber]="false" autocomplete="off" role="presentation" minlength="10" maxlength="14" />
+          @if (!!mainForm.get(formgroupName + '.contactNumber')?.errors?.minlength) {
+            <mat-error>
+            Enter atleast 10 numbers </mat-error>
+          }
+          @if (!!mainForm.get(formgroupName + '.contactNumber')?.errors?.required) {
+            <mat-error>
+            Contact phone no is required</mat-error>
+          }
+          @if (!!mainForm.get(formgroupName + '.contactNumber')?.errors?.pattern) {
+            <mat-error>
+            Enter valid contact phone no </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutGap="20px" class="mb-10">
+    <div fxFlex="100%">
+      <app-common-custom-fields [mainForm]="mainForm" [formArrName]="'componentCustomFields'"></app-common-custom-fields>
+    </div>
+  </div>
+  @if ((mainForm?.get('miscQuestion')?.value?.length ===0 || !mainForm?.get('miscQuestion')) && userData.applicationId !== 3) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <a class="text-sm mb-15" (click)="createMisc()" [ngClass]="!!mainForm?.get(formgroupName+'.contactPersonName').disabled?'page-btn disabled':''">
+        <i class="icon-plus-circle mr-5"></i> Click here to add miscellaneous fields</a>
+      </div>
+    }
+    @if (mainForm?.get('miscQuestion')&& userData.applicationId !== 3) {
+      <div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <app-common-ques-ans [mainForm]="mainForm" [formArrName]="'miscQuestion'" [miscType]="'textarea'"></app-common-ques-ans>
+          </div>
+        </div>
+      </div>
+    }
+    @if (!fileBtn) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroupName]="'screeningComponentInfo'">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Remarks</mat-label>
+            <textarea #remark formControlName="remark" maxlength="1000" matInput placeholder="Remarks"> </textarea>
+            <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
+          </mat-form-field>
+        </div>
+        @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length) {
+          <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroupName]="'screeningComponentInfo'">
+            <mat-label class="lbl">Choose</mat-label>
+            <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise Insufficiency</mat-checkbox>
+          </div>
+        }
+      </div>
+    }
+
+    @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <div class="alert alert-info" role="alert">
+            <h4>Insufficiency Clearance Remarks: </h4>
+            @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+              <span>
+                {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+              }
+            </div>
+          </div>
+        </div>
+      }
+      @if (showInSuff) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <app-common-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm" [compBaseDetails]="mainForm.get('screeningComponentInfo').value" [formgroupName]="'screeningInsufficiency'">
+            </app-common-raise-insufficiency>
+          </div>
+        </div>
+      }
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <app-client-app-document-upload [fileBtn]="fileBtn" [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'" [dupScreeningDoc]="screeningComponent.componentDocument" [validationFlag]="false">
+          </app-client-app-document-upload>
+        </div>
+      </div>
+    </form>

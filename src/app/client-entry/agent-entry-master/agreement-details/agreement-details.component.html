@@ -1,0 +1,241 @@
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <form appScrollToError [formGroup]="agentEntryMasterService.agreementDetailsForm" autocomplete="off">
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Agreement Availability</mat-label>
+              <mat-select placeholder="Select Availability" (selectionChange)="applyValidation($event.value)"
+                formControlName="agreementAvailability"> @for (agreementAvailability of agreementAvailability; track agreementAvailability; let i = $index) {
+                <span
+                  >
+                  <mat-option [value]="agreementAvailability.value">
+                    <!-- i!==0 -->
+                  {{agreementAvailability.mode}} </mat-option>
+                </span>
+              } </mat-select>
+              @if (agentEntryMasterService.agreementDetailsForm?.get('agreementAvailability')?.errors?.required) {
+                <mat-error
+                  >
+                  Agreement Availability is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          @if (agentEntryMasterService.agreementDetailsForm.get('agreementAvailability').value==true) {
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%"
+              >
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Type of Agreement</mat-label>
+                <mat-select placeholder="Select Type Of Agreement" formControlName="typeOfAgreement"
+                  (selectionChange)="typeOfAgreement($event.value)">
+                  <!-- <mat-option>--Select Type of Agreement--</mat-option> -->
+                  @for (typeOfAgreement of agreementDetails?.typeOfAgreement; track typeOfAgreement; let i = $index) {
+                    <mat-option
+                    [value]="typeOfAgreement.lookUpId"> {{typeOfAgreement.lookUpName}} </mat-option>
+                  }
+                </mat-select>
+                @if (agentEntryMasterService.agreementDetailsForm?.get('typeOfAgreement')?.errors?.required) {
+                  <mat-error>
+                    Type of agreement is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          @if (agentEntryMasterService.agreementDetailsForm.get('agreementAvailability').value==true &&
+            agentEntryMasterService.agreementDetailsForm.get('typeOfAgreement').value && typeOfAgreementName === commonService.OTHERS) {
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%"
+              >
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Others</mat-label>
+                <input formControlName="remarks" autocomplete="off" role="presentation" matInput placeholder="Others"
+                  maxlength="50">
+                @if (agentEntryMasterService.agreementDetailsForm?.get('remarks')?.errors?.required) {
+                  <mat-error>
+                    Others is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          @if (agentEntryMasterService.agreementDetailsForm.get('agreementAvailability').value==true) {
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%"
+              >
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Date Of Agreement</mat-label>
+                <input matInput [matDatepicker]="picker1" mat-autofocus="true" appNumberOnly [NumberOnlyWithslash]="false"
+                  formControlName="dateOfAgreement" preventDragdrop preventCutCopyPaste placeholder="Date Of Agreement"
+                  (focus)="picker1.open();openDate(picker1)" (click)="openDate(picker1)">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+                @if (agentEntryMasterService.agreementDetailsForm?.get('dateOfAgreement')?.errors?.required) {
+                  <mat-error>
+                    Date of agreement is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+        </div>
+        @if (agentEntryMasterService.agreementDetailsForm.get('agreementAvailability').value==false) {
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+            >
+            <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Reason for unavailability</mat-label>
+                <textarea #reason formControlName="reasonForNonAvailability" maxlength="200" matInput placeholder="Reason for unavailability"> </textarea>
+                @if (agentEntryMasterService.agreementDetailsForm?.get('reasonForNonAvailability')?.errors?.required) {
+                  <mat-error >
+                    Reason for unavailability is required
+                  </mat-error>
+                }
+                <mat-hint>({{reason.value.length}}/200Max)</mat-hint>
+              </mat-form-field>
+            </div>
+            @if (agentEntryMasterService.agreementDetailsForm.get('agreementAvailability').value==false) {
+              <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-15">
+                <!--  -->
+                <mat-label class="lbl">Approval Status:
+                  @if (!agentEntryMasterService.agreementnoflag === true) {
+                    <div class="status pending">
+                      <span>Pending</span>
+                    </div>
+                  }
+                  @if (agentEntryMasterService.agreementnoflag === true) {
+                    <div class="status approved">
+                      <span>Approved</span>
+                    </div>
+                  }
+                </mat-label>
+              </div>
+            }
+          </div>
+        }
+        @if (agentEntryMasterService.agreementDetailsForm.get('agreementAvailability').value==true) {
+          <div>
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Validity</mat-label>
+                  <input formControlName="validity" type="text" maxlength="20" autocomplete="off" role="presentation"
+                    matInput placeholder="Validity">
+                  @if (agentEntryMasterService.agreementDetailsForm?.get('validity')?.errors?.required) {
+                    <mat-error>
+                      Validity is required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Auto Renewal</mat-label>
+                  <mat-select placeholder="Auto Renewal" formControlName="autoRenewel"
+                    (selectionChange)="renewalChange($event.value)"> @for (autoRenewal of agreementAvailability; track autoRenewal; let i = $index) {
+                    <span
+                      >
+                      <mat-option [value]="autoRenewal.value">{{autoRenewal.mode}}</mat-option>
+                    </span>
+                  } </mat-select>
+                  @if (agentEntryMasterService.agreementDetailsForm?.get('autoRenewel')?.errors?.required) {
+                    <mat-error>
+                      Auto Renewal is required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              @if ((agentEntryMasterService.agreementDetailsForm.get('autoRenewel').value == true)) {
+                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  >
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Auto Renewal Period</mat-label>
+                    <input type="text" maxlength="50" formControlName="autoRenewelPeriod" matInput
+                      placeholder="Auto Renewal Period">
+                    @if (agentEntryMasterService.agreementDetailsForm?.get('autoRenewelPeriod')?.errors?.required) {
+                      <mat-error
+                        >
+                        Auto Renewal Period is required
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Date Of Expiry</mat-label>
+                  <input mat-autofocus="true" preventCutCopyPaste preventDragdrop placeholder="Date of Expiry"
+                    [disabled]="!agentEntryMasterService.agreementDetailsForm?.get('dateOfAgreement').value" appNumberOnly
+                    [NumberOnlyWithslash]="false" formControlName="dateOfExpiry" matInput [matDatepicker]="picker2"
+                    [readonly] ="!agentEntryMasterService.agreementDetailsForm?.get('dateOfAgreement').value"
+                    [min]="agentEntryMasterService.agreementDetailsForm.get('dateOfAgreement').value"
+                    (focus)="picker2.open();openDate(picker2)" (click)="openDate(picker2)">
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                  @if (agentEntryMasterService.agreementDetailsForm?.get('dateOfExpiry')?.errors?.required) {
+                    <mat-error>
+                      Date of expiry is required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Reminder for Renewal - Prior to Expiry Date </mat-label>
+                  <mat-select placeholder="Reminder for Renewal - Prior to Expiry Date" formControlName="reminder"
+                    (selectionChange)="reminderChange($event.value)">
+                    <!-- <mat-option>--Select Reminder to Renewal Prior--</mat-option> -->
+                    @for (reminderforRenewal of agreementDetails?.reminderforRenewal; track reminderforRenewal; let i = $index) {
+                      <mat-option
+                        [value]="reminderforRenewal.lookUpId"> {{reminderforRenewal.lookUpName}}
+                      </mat-option>
+                    }
+                  </mat-select>
+                  @if (agentEntryMasterService.agreementDetailsForm?.get('reminder')?.errors?.required) {
+                    <mat-error>
+                      Reminder for Renewal - Prior to Expiry Date is required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        }
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <mat-label class="lbl pb-5">Upload supporting documents / Email if any :</mat-label>
+            <div class="file-upload">
+              <i class="material-icons">cloud_upload</i>
+              <span>Browse here...</span>
+              <input type="file" #fileInput multiple (change)='openUploadDoc($event)'
+                formControlName="supportingDocument">
+            </div>
+            <div class="file-names mt-10">
+              @for (document of agentEntryMasterService.agreementDocumentList; track document; let i = $index) {
+                <div class="file-upload-files"
+                  > @if (document.fileName) {
+                  <a
+                    (click)="downloadFile(document,document.fileName,document.agreementDocId)"
+                  routerLinkActive="active-link">{{document.fileName}}</a>
+                }
+                <button type="button" class="close" aria-label="Close" (click)="removeDocument(i)">
+                  <span aria-hidden="true">&times;</span> </button>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+        <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+          <button mat-flat-button color="primary" type="button" (click)='previousStep.emit();'>Previous</button>
+          <button mat-flat-button color="primary" type="button"
+            (click)='detail();agentEntryMasterService.agreementDetailsForm.valid? nextStep.emit() : true'>Next
+          </button>
+        </mat-card-actions>
+
+      </mat-card-content>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,161 @@
+<app-breadcrumb [routePath]="'Configure / Employer / Employer Re-Verify'" [toolTip]="'Move To FR'" [btnResetTbl]="true"
+    (eventResetTbl)="resetTable()" [btnSave]="true" (eventSave)="moveToFR(selectedEmpList)"></app-breadcrumb>
+<mat-card>
+    <div fxLayout="row">
+        <mat-card-header fxFlex="100%">
+            <div fxFlex="100%">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                    fxLayoutGap="10px">
+                    <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                        fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                        <mat-card-title>
+                            <h1 class="header-title">Employer Re-Verify</h1>
+                        </mat-card-title>
+                    </div>
+                    <span fxFlex></span>
+                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                        fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                        <div class="tbl-commonsearch">
+                            <mat-form-field fxFlex="100%">
+                                <mat-label></mat-label>
+                                <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                                <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                                    autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')"
+                                    (keypress)="dt?.reset();dt?.filterGlobal($event.target.value, 'contains');" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-card-header>
+    </div>
+    <mat-card-content>
+        <div class="content-area">
+            <div fxLayout="row">
+                <div fxFlex="100%">
+                    
+                <p-table
+  #dt
+  [columns]="displayedColumns"
+  [value]="oneYearEmployerList"
+  [scrollable]="true"
+  [(selection)]="selectedEmpList"
+  [rows]="itemperpage"
+  [resizableColumns]="true"
+  [reorderableColumns]="true"
+  [paginator]="true">
+
+  <!-- ================= COLGROUP ================= -->
+  <ng-template pTemplate="colgroup" let-colGroupCols>
+    <colgroup>
+      <col style="width:80px" />
+      <col *ngFor="let col of colGroupCols" />
+    </colgroup>
+  </ng-template>
+
+  <!-- ================= HEADER ================= -->
+  <ng-template pTemplate="header" let-headerCols>
+    <tr>
+      <th pReorderableColumn pResizableColumn
+          matTooltip="Select All"
+          matTooltipClass="accent-tooltip">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+
+      <th *ngFor="let col of headerCols"
+          [ngSwitch]="col.field"
+          pReorderableColumn
+          pResizableColumn>
+
+        <div class="thname"
+             matTooltip="{{ col.header }}"
+             matTooltipClass="accent-tooltip">
+          {{ col.header }}
+        </div>
+
+        <span [pSortableColumn]="col.field">
+          <p-sortIcon
+            [field]="col.field"
+            ariaLabel="Activate to sort"
+            ariaLabelDesc="Activate to sort in descending order"
+            ariaLabelAsc="Activate to sort in ascending order">
+          </p-sortIcon>
+        </span>
+
+        <!-- 🔽 search icons & menus BELOW UNCHANGED 🔽 -->
+        <!-- all ngSwitchCase blocks still use `col` -->
+      </th>
+    </tr>
+  </ng-template>
+
+  <!-- ================= BODY ================= -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-index="rowIndex"
+    let-bodyCols="columns">
+
+    <tr>
+      <td>
+        <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+      </td>
+
+      <td *ngFor="let col of bodyCols">
+        <span
+          [matTooltip]="rowData[col.field]
+            ? (col.field === 'createdDate'
+                ? (common.getTimezoneOffset(rowData[col.field], false)
+                    | date : 'dd/MM/yyyy')
+                : rowData[col.field])
+            : 'N/A'"
+          matTooltipClass="accent-tooltip">
+
+          {{
+            rowData[col.field]
+              ? (col.field === 'createdDate'
+                  ? (common.getTimezoneOffset(rowData[col.field], false)
+                      | date : 'dd/MM/yyyy')
+                  : rowData[col.field])
+              : 'N/A'
+          }}
+        </span>
+      </td>
+    </tr>
+
+  </ng-template>
+
+</p-table>
+                    <div [ngClass]="{'empty-record': oneYearEmployerList?.length === 0}" class="cus-paginator"
+                        fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                        fxLayoutGap.xs="20px grid">
+                        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                            fxLayoutAlign="start center"> Showing {{ dt?.totalRecords < 1 ? 0 : dt?.first + 1 }} - {{
+                                dt?.totalRecords> 0
+                                ? dt?.rows + dt?.first <= dt?.totalRecords ? dt?.rows + dt?.first : dt?.totalRecords : 0
+                                    }} of {{ dt?.totalRecords }} record(s) |&nbsp;<a (click)="showall()">Show All</a>
+                        </div>
+                        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                            fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                            fxLayoutAlign.xs="start center"> <a
+                                [ngClass]="dt?.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                                    dt?.onPageChange({ first: dt?.first - dt?.rows, rows: dt?.rows });
+                                    navigateNxtPrevPage(dt?.first + dt?.rows, dt?.rows)"> <i
+                                    class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2"
+                                fxHide.xs>Go to
+                                Page<span class="input-num">
+                                    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5"
+                                        appNumberOnly [NumberOnly]="false"
+                                        (keyup.enter)="navigatePage(pageNo.value, dt?.rows)" />
+                                </span></span> <span class="mr-2" fxHide.xs> of
+                                {{ getTotalPages(dt?.totalRecords, dt?.rows) }}</span> <a
+                                [ngClass]=" dt?.rows + dt?.first >= dt?.totalRecords? 'page-btn disabled': 'page-btn'"
+                                (click)="dt?.onPageChange({ first: dt?.first + dt?.rows, rows: dt?.rows });
+                                    navigateNxtPrevPage(dt?.first + dt?.rows, dt?.rows)"><i
+                                    class="icon-control-end ml-5"></i></a> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

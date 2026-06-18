@@ -1,0 +1,265 @@
+<app-breadcrumb [btnReset]="false" [routePath]="routePath" [btnExcelExport]="true" (eventReset)="resetForm()"
+(eventExcelExport)="exportExcel()"></app-breadcrumb>
+<div fxLayout="row" class="advSearch" [formGroup]="employmentReportForm" autocomplete="off">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="200px">
+            <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='clientNameControl'>
+            </app-auto-complete>
+          </div>
+          <div fxFlex="200px" fxLayoutGap="10px">
+            <mat-form-field fxFlex="100%">
+              <mat-label>From Date</mat-label>
+              <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date" formControlName="fromdate"
+                (focus)="sampledatePicker.open()" (click)="sampledatePicker.open()"/>
+              <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #sampledatePicker></mat-datepicker>
+            </mat-form-field>
+            <!-- <mat-form-field fxFlex="100%">
+            <mat-label>From Date & Time</mat-label>
+            <input matInput formControlName="fromDate" placeholder="From Date" [owlDateTimeTrigger]="from"
+              [owlDateTime]="from">
+            <mat-datepicker-toggle [owlDateTimeTrigger]="from" matSuffix></mat-datepicker-toggle>
+            <owl-date-time [pickerMode]="'popup'" #from></owl-date-time>
+          </mat-form-field> -->
+        </div>
+        <div fxFlex="200px">
+          <mat-form-field fxFlex="100%">
+            <mat-label>To Date</mat-label>
+            <input matInput [matDatepicker]="sampledatePicker1" placeholder="To Date" formControlName="todate"
+              (focus)="sampledatePicker1.open()" (click)="sampledatePicker1.open()"/>
+            <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+            <mat-datepicker #sampledatePicker1></mat-datepicker>
+          </mat-form-field>
+          <!-- <mat-form-field fxFlex="100%">
+          <mat-label>To Date & Time</mat-label>
+          <input matInput formControlName="toDate" placeholder="To Date" [owlDateTimeTrigger]="to"
+            [owlDateTime]="to">
+          <mat-datepicker-toggle [owlDateTimeTrigger]="to" matSuffix></mat-datepicker-toggle>
+          <owl-date-time [pickerMode]="'popup'" #to></owl-date-time>
+        </mat-form-field> -->
+      </div>
+      <div fxFlex="100px">
+        <mat-label class="lbl">120 Days</mat-label>
+        <mat-checkbox (change)='monthlyChange($event.checked)' formControlName="monthly"></mat-checkbox>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <a (click)="searchValue()">Search</a><span>|</span>
+    <a routerLink="/dashboard/reports/employeementReport" (click)="resetForm()"> Reset</a><span>|</span>
+    <a (click)='SearchCriFilter = !SearchCriFilter'>
+      {{ SearchCriFilter?'Show Less':'Show More'}}&nbsp;<i
+    class="icon-chevron-{{ SearchCriFilter?'up':'down' }}"></i></a> </div>
+  </div>
+  @if (SearchCriFilter) {
+    <div fxLayout="row" class="advSearchshow">
+      <div class="advSearch-forms">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayoutGap="20px" [formGroup]="employmentReportForm">
+              <div fxFlex="200px">
+                <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='statusControl'>
+                </app-auto-complete>
+              </div>
+              <div fxFlex="200px">
+                <app-auto-complete (propValueEvent)="getPropertyValue($event)" [selectProperties]='componentControl'>
+                </app-auto-complete>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="100%" class="advSearch-btn">
+        <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+      </div>
+    </div>
+  }
+</div>
+
+<div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                  fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="80%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">Employment Report Form</h1>
+                  </div>
+                  <span fxFlex></span>
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                    fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input matInput class="form-control" placeholder="Search here..." [(ngModel)]="searchText">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <kendo-grid [kendoGridBinding]="employmentReportList | filter:searchText" [reorderable]="true"
+                [pageable]="true" [sortable]="true" [groupable]="true" [pageSize]="10"
+                style="width: 100%; min-height: 10px;" [columnMenu]="{ filter: true }">
+                @for (report of displayColumns; track report) {
+                  <kendo-grid-column [field]="report.field" [title]="report.header" [width]="180"
+                    [headerStyle]="{'background-color': '#58595C','color': '#fff','line-height': '2em'}"
+                    [style]="{'background-color': '#ffffff','color': '#333333'}">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                    {{ dataItem[report.field] ? dataItem[report.field] : 'N/A' }}                    </ng-template>
+                  </kendo-grid-column>
+                }
+                <kendo-grid-messages noRecords="No Data Found">
+                </kendo-grid-messages>
+              </kendo-grid>
+              <!-- <pre>{{employmentReportList |json}} </pre> -->
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<!-- <div fxLayout="row" class="srchPad">
+<div fxFlex="100%">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h1 class="header-title">Employment Report</h1>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <div fxLayout="row" class="sortrow">
+            <div fxFlex="100%" fxLayoutAlign="end center">
+              <ul>
+                <li><span class="text-dull"> Showing {{(itemPerPage*page)-itemPerPage+1}} -
+                  {{(itemPerPage*page)>=employmentReportList?.length?(employmentReportList?.length):itemPerPage*page}}
+                  of
+                </span>
+                <b>{{employmentReportList?.length}} record(s)</b></li> |
+                <li><b>Sort By:</b> <a [ngClass]="column==='CandidateName'?'active':''"
+                (click)="sortBy('CandidateName')">Candidate
+              Name</a>
+                            <i [ngClass]="{'icon-sort': column != 'CandidateName', 
+                                                              'icon-sort-asc': (column == 'CandidateName' && !isDesc), 
+                                                              'icon-sort-desc': (column == 'CandidateName' && isDesc) }"
+                aria-hidden="true">
+              </i>
+              <a [ngClass]="column==='clientReferenceNo'?'active':''"
+              (click)="sortBy('clientReferenceNo')">Reference No</a>
+                            <i [ngClass]="{'icon-sort': column != 'clientReferenceNo', 
+                                                                'icon-sort-asc': (column == 'clientReferenceNo' && !isDesc), 
+                                                                'icon-sort-desc': (column == 'clientReferenceNo' && isDesc) }"
+              aria-hidden="true"> </i>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div fxLayout="row">
+        <div fxFlex="100%">
+                <div fxLayout="row" class="listrow" *ngFor="let report of employmentReportList
+                    | sort: {property: column, direction: direction}
+                     | paginate: { itemsPerPage: itemPerPage, currentPage: page };let i = index;">
+            <div fxFlex="100%">
+              <div  fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+                <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-card-header>
+                    <div mat-card-avatar class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                    {{ report?.firstName.slice(0, 1)}}{{ report?.lastName.slice(0, 1)}} </div>
+                    <mat-card-title class="cname">
+                      {{report?.firstName + ' ' +  report?.middleName + ' ' + report?.lastName }}
+                    </mat-card-title>
+                    <mat-card-subtitle class="cdesg mb-0">{{report?.clientReferenceNo }}</mat-card-subtitle>
+                  </mat-card-header>
+                </div>
+                <div  fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <p>
+                    <label>Client Name:</label>
+                    <em>{{report?.clientName}}</em> </p>
+                    <p>
+                      <label>Screening Status:</label>
+                      <em>{{report?.screeningStatus}}</em> </p>
+                      <p>
+                        <label>verification No:</label>
+                        <em>{{report?.verificationID}}</em> </p>
+                        <p>
+                          <label>EmployeeId:</label>
+                          <em>{{report?.employeeId}}</em> </p>
+                        </div>
+                        <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="100%">
+                          <p>
+                            <label>Designation:</label>
+                            <em>{{report?.designation}}</em> </p>
+                            <p>
+                              <label>From Date:</label>
+                              <em>{{report?.fromDate | date: "dd/MM/yyyy  hh:mm:ss a"}}</em> </p>
+                              <p>
+                                <label>To Date:</label>
+                                <em>{{report?.toDate | date: "dd/MM/yyyy  hh:mm:ss a"}}</em> </p>
+                                <p>
+                                  <label>Salary:</label>
+                                  <em>{{report?.ctc}}</em> </p>
+                                </div>
+                                <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%">
+                                  <p>
+                                    <label>Account Manager:</label>
+                                    <em>{{report?.clientAccountManager}}</em> </p>
+                                    <p>
+                                      <label>Component Name:</label>
+                                      <em>{{report?.compName}}</em>
+                                    </p>
+                                    <p>
+                                      <label>Component ReOpen Date:</label>
+                                      <em>{{report?.componentReOpenDate | date: 'dd/MM/yyyy h:mm a'}}</em> </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+                          <div fxLayout="row">
+                            <div class="cus-paginator">
+                              <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                                <pagination-controls (pageChange)="getPage($event)"></pagination-controls>
+                              </span>
+                              <span class="gotopagbg ml-2">Go to Page<span class="input-num">
+                                <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly preventDragdrop
+                                  preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+                              </span></span>
+                              <span class="gotopagbg ml-2">Items / page<span class="input-num">
+                                <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4" appNumberOnly preventDragdrop
+                                  preventCutCopyPaste autocomplete="off" [NumberOnly]="false" (blur)="preventInfinite()">
+                              </span> </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </div> -->

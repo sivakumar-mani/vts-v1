@@ -1,0 +1,24 @@
+.error-msg{
+color: red;
+}
+.success-msg{
+color:blue;
+}
+.red {
+    color: red !important;
+}
+.green {
+    color: green !important;
+}
+.detail-hover span {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px; /* Adjust width as needed */
+  }
+  
+  .detail-hover:hover span {
+    white-space: normal;
+    max-width: none; /* Expand text on hover */
+  }

@@ -1,0 +1,157 @@
+<app-breadcrumb [routePath]="'Invoice / UnBilled Case List'" [btnExportDisabled]="!screenAuth?.exportFlag"
+  [btnExcelExport]="unBilledInvoiceList?.length > 0"
+  (eventExcelExport)="ExcelFlag = true;exportExcel()"></app-breadcrumb>
+<div fxLayout="row" class="advSearch" autocomplete="off">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="250px">
+            <mat-form-field fxFlex="100%">
+              <mat-label>Select Client</mat-label>
+              <mat-select [formControl]="clientId" placeholder="Select Client" required>
+                <mat-option>Select Client</mat-option>
+                <mat-option *ngFor="let agent of agentvalue" [value]="agent.clientId">
+                  {{ agent.clientName }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="clientId?.errors?.required">
+                Client is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="250px">
+            <mat-form-field fxFlex="100%">
+              <mat-label>From Date</mat-label>
+              <input matInput [matDatepicker]="sampledatePicker" [max]="commonService?.getMaxDate()"
+                placeholder="From Date" [formControl]="fromDate" (focus)="sampledatePicker?.open()"
+                (click)="sampledatePicker?.open()" required />
+              <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #sampledatePicker></mat-datepicker>
+              <mat-error *ngIf="fromDate?.errors?.required">From Date is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="250px">
+            <mat-form-field fxFlex="100%">
+              <mat-label>To Date</mat-label>
+              <input matInput [matDatepicker]="sampledatePicker1" [max]="commonService?.getMaxDate()"
+                placeholder="To Date" [formControl]="toDate" (focus)="sampledatePicker1?.open()"
+                (click)="sampledatePicker1?.open()" [min]="fromDate?.value" required />
+              <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+              <mat-datepicker #sampledatePicker1></mat-datepicker>
+              <mat-error *ngIf="toDate?.errors?.required">To Date is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="100px">
+            <mat-label class="lbl">Monthly</mat-label>
+            <mat-checkbox (change)='monthlyChange($event.checked)' [formControl]="monthly"></mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="100%" class="advSearch-btn">
+    <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <a (click)="GetUnBilledList()">Invoice Case List</a><span>|</span>
+      <a (click)="resetList()">Reset</a>
+    </div>
+  </div>
+</div>
+<div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                  fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="80%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">Un Bill Generated Case List</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.xs="10px grid">
+          <div fxFlex="100%">
+
+            <p-table #dt [columns]="displayColumns" [totalRecords]="totalpages" [value]="unBilledInvoiceList"
+              [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true" scrollHeight=""
+              [paginator]="true" [lazy]="true" [rows]="itemperpage" columnResizeMode="expand"
+              (onLazyLoad)="UnBilledInvoice($event)">
+
+              <!-- ===== COLGROUP ===== -->
+              <ng-template pTemplate="colgroup" let-colGroupCols>
+                <colgroup>
+                  <col *ngFor="let col of colGroupCols" style="width:100px" />
+                </colgroup>
+              </ng-template>
+
+              <!-- ===== HEADER ===== -->
+              <ng-template pTemplate="header" let-headerCols>
+                <tr>
+                  <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn>
+
+                    <span [pSortableColumn]="col.field">
+                      <div class="action-name">{{ col.header }}</div>
+                      <p-sortIcon (click)="currentPage = 1" matTooltip="Sorting" matTooltipClass="accent-tooltip"
+                        ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                        ariaLabelAsc="Activate to sort in ascending order">
+                      </p-sortIcon>
+                    </span>
+
+                  </th>
+                </tr>
+              </ng-template>
+
+              <!-- ===== BODY ===== -->
+              <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+
+                <tr>
+                  <td *ngFor="let col of bodyCols">
+                    {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                  </td>
+                </tr>
+
+              </ng-template>
+
+            </p-table>
+            <!-- <ng-container *ngTemplateOutlet="paginantorGrid"></ng-container> -->
+            <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+              fxLayoutGap.xs="20px grid">
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords>
+                  0
+                  ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
+                    dt.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a></div>
+              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center"> <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'"
+                  (click)="
+                  dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                  navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go
+                  to Page<span class="input-num">
+                    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                  </span></span> <span class="mr-2" fxHide.xs>of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
+                  [ngClass]="dt.rows + dt.first >= dt.totalRecords
+                    ? 'page-btn disabled'
+                    : 'page-btn'"
+                  (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows }); navigateNxtPrevPage(dt.first + dt.rows, dt.rows) ">
+                  Next <i class="icon-control-end ml-5"></i></a> </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

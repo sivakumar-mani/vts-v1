@@ -1,0 +1,35 @@
+@font-face {
+  font-family: 'component-font';
+  src: url('../fonts/component-font.eot?x6t4h1');
+  src: url('../fonts/component-font.eot?x6t4h1#iefix') format('embedded-opentype'),
+    url('../fonts/component-font.ttf?x6t4h1') format('truetype'),
+    url('../fonts/component-font.woff?x6t4h1') format('woff'),
+    url('../fonts/component-font.svg?x6t4h1#component-font') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.icon-Credit-overseas:before {
+  content: "\e900";
+}
+
+.icon-criminal-search-overseas:before {
+  content: "\e901";
+}
+
+.icon-federal-district-search:before {
+  content: "\e902";
+}
+
+.icon-motor-vehicle-record:before {
+  content: "\e903";
+}
+
+.icon-national-criminal-database:before {
+  content: "\e904";
+}
+
+.icon-national-criminal-locator:before {
+  content: "\e905";
+}

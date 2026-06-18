@@ -1,0 +1,448 @@
+﻿<app-breadcrumb [btnAdd]="orgnzFlags.btnAdd" [btnSave]="orgnzFlags.btnSave" [btnBack]="orgnzFlags.btnBack"
+  [btnReset]="orgnzFlags.btnReset" [btnResetTbl]="orgnzFlags.btnResetTbl" (eventAdd)="addOrganization()"
+  [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag" (eventBack)=" closeForm()"
+  (eventSave)="saveOrgInfoComponents()" [toolTip]="orgnzFlags.toolTip" (eventReset)=" resetForm()"
+  (eventResetTbl)="resetTable()"></app-breadcrumb>
+<div fxLayout="row" fxLayoutGap="20px">
+  <div fxFlex="100%">
+    <mat-card>
+      <div fxLayout="row">
+        <mat-card-header fxFlex="100%">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+              fxLayoutGap="10px">
+              <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                <mat-card-title>
+                  <h1 class="header-title">Organization Information</h1>
+                </mat-card-title>
+              </div>
+              <span fxFlex></span>
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                <div class="tbl-commonsearch" *ngIf="!showFlag">
+                  <mat-form-field fxFlex="100%">
+                    <mat-label></mat-label>
+                    <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                    <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                      autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-header>
+      </div>
+      <mat-card-content>
+        <div *ngIf="showFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+          fxLayout.xs="column" fxLayoutGap="20px grid">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <form [formGroup]="organizationFormGroup" autocomplete="off" id="ngForm">
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <app-auto-complete [selectProperties]='clientControls'
+                    (propValueEvent)="chkClientName()"></app-auto-complete>
+                  <mat-error *ngIf="organizationFormGroup?.get('clientId')?.errors?.incorrect"> Client name is already
+                    exist. </mat-error>
+                </div>
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Organization Name</mat-label>
+                    <input type="text" maxlength="70" formControlName="organizationName" matInput
+                      oninput="this.value = this.value.toUpperCase()" placeholder="Organization Name" autocomplete="off"
+                      role="presentation" (change)="chkOrgName()" required>
+                    <mat-error *ngIf="!!organizationFormGroup?.get('organizationName')?.errors?.required"> Organization
+                      name is required </mat-error>
+                    <mat-error *ngIf="organizationFormGroup?.get('organizationName')?.errors?.incorrect"> Organization
+                      name is already exist. </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Organization URL</mat-label>
+                    <input type="text" maxlength="100" formControlName="organizationUrl" matInput
+                      placeholder="Organization URL" autocomplete="off" role="presentation" required>
+                    <mat-error *ngIf="!!organizationFormGroup?.get('organizationUrl')?.errors?.required"> Organization
+                      URL is required </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Website Name</mat-label>
+                    <input type="text" maxlength="100" formControlName="webSiteName" matInput placeholder="Website Name"
+                      autocomplete="off" role="presentation" required>
+                    <mat-icon matSuffix><i class="icon-globe"></i></mat-icon>
+                    <mat-error *ngIf="!!organizationFormGroup?.get('webSiteName')?.errors?.required"> Website
+                      name is required </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Email1</mat-label>
+                    <input type="text" maxlength="70" formControlName="email1" matInput placeholder="Email1"
+                      autocomplete="off" role="presentation" required>
+                    <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+                    <mat-error *ngIf="organizationFormGroup?.get('email1')?.errors?.required"> Email1 id is required.
+                    </mat-error>
+                    <mat-error *ngIf="organizationFormGroup.get('email1')?.errors?.pattern"> Please
+                      enter valid email. </mat-error>
+                    <mat-error *ngIf="organizationFormGroup?.get('email1')?.errors?.incorrect"> Email id already exist.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Email2</mat-label>
+                    <input type="text" maxlength="70" formControlName="email2" matInput placeholder="Email2"
+                      autocomplete="off" role="presentation">
+                    <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+                    <mat-error *ngIf="organizationFormGroup.get('email2')?.errors?.pattern"> Please
+                      enter valid email. </mat-error>
+                    <mat-error *ngIf="organizationFormGroup?.get('email2')?.errors?.incorrect"> Email id already exist.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>CIN Number</mat-label>
+                    <input type="text" maxlength="25" formControlName="cinNo" (change)="checkValidation('cin')" matInput
+                      oninput="this.value = this.value.toUpperCase()" placeholder="CIN Number" autocomplete="off"
+                      role="presentation" required>
+                    <mat-hint>EX:U99999XX9999XXX999999</mat-hint>
+                    <mat-error *ngIf="!!organizationFormGroup?.get('cinNo')?.errors?.required"> CIN Number is required
+                    </mat-error>
+                    <mat-error *ngIf="organizationFormGroup.get('cinNo')?.errors?.pattern"> Please
+                      enter valid CIN Number. </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>PAN Number</mat-label>
+                    <input type="text" maxlength="10" formControlName="panNo" (change)="checkValidation('pan')" matInput
+                      oninput="this.value = this.value.toUpperCase()" placeholder="PAN Number" autocomplete="off"
+                      role="presentation" required>
+                    <mat-hint>EX:XXXXX9999X</mat-hint>
+                    <mat-error *ngIf="!!organizationFormGroup?.get('panNo')?.errors?.required"> PAN Number is required
+                    </mat-error>
+                    <mat-error *ngIf="organizationFormGroup.get('panNo')?.errors?.pattern"> Please
+                      enter valid PAN Number. </mat-error>
+                    <mat-error *ngIf="organizationFormGroup?.get('panNo')?.errors?.incorrect"> PAN
+                      Number already exist. </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>GST Number</mat-label>
+                    <input type="text" maxlength="20" formControlName="gstNo" (change)="checkValidation('gst')" matInput
+                      oninput="this.value = this.value.toUpperCase()" placeholder="GST Number" autocomplete="off"
+                      role="presentation" required>
+                    <mat-hint>EX:99XXXXX9999X9X9</mat-hint>
+                    <mat-error *ngIf="!!organizationFormGroup?.get('gstNo')?.errors?.required"> GST Number is required
+                    </mat-error>
+                    <mat-error *ngIf="organizationFormGroup.get('gstNo')?.errors?.pattern"> Please
+                      enter valid GST Number. </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                    <mat-label>Fax No</mat-label>
+                    <input type="text" maxlength="20" formControlName="faxNo" matInput
+                      oninput="this.value = this.value.toUpperCase()" placeholder="Fax No" autocomplete="off"
+                      role="presentation">
+                    <mat-icon matSuffix><i class="icon-printer"></i></mat-icon>
+                    <mat-error *ngIf="organizationFormGroup.get('faxNo')?.errors?.pattern"> Please
+                      enter valid Fax No. </mat-error>
+                    <mat-error *ngIf="organizationFormGroup?.get('faxNo')?.errors?.minlength"> Fax No is Not valid for
+                      min length. </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="100%">
+                  <h3 class="sub-header">Document Details</h3>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <div fxLayout="row">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Select Document Type</mat-label>
+                        <mat-select placeholder="Select Type" formControlName="docType"
+                          (selectionChange)="reminderChange($event.value,$event)">
+                          <mat-option *ngFor="let typ of imgType;let i=index;" [value]="typ.value"
+                            [disabled]="typ.isDisable">{{typ.value}} </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row" *ngIf="signatureDrpDwn">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Signature Type</mat-label>
+                        <mat-select placeholder="Signature Type" formControlName="signatureLookUpId"
+                          (selectionChange)="reminderSignChange($event.value,$event)">
+                          <mat-option *ngFor="let lkp of signatureTypeList;let i=index;" [value]="lkp.lookUpId"
+                            [disabled]="lkp.disabled"> {{lkp.lookUpName}} </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div fxFlex="66.6%" fxFlex.lg="66.6%" fxFlex.md="66.6%" fxFlex.sm="100%" fxFlex.xs="100%">
+
+                  <!-- Start -->
+                  <div fxFlex="100%" class="file-container">
+                    <div *ngIf="!signatureDrpDwn">
+                      <mat-label class="lbl pb-5">Upload Logo Images</mat-label>
+                      <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                          here...</span>
+                        <input type="file" #fileInput (change)='openUploadDoc($event,"document")'
+                          formControlName="supportingDocument" accept="image/x-png,image/gif,image/jpeg">
+                      </div>
+                    </div>
+                    <div *ngIf="signatureDrpDwn">
+                      <mat-label class="lbl pb-5">Upload Signature Images</mat-label>
+                      <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                          here...</span>
+                        <input type="file" #fileInput (change)='openUploadDoc($event,"signature")'
+                          formControlName="signatureDocument" accept="image/x-png,image/gif,image/jpeg">
+                      </div>
+                    </div>
+                    <div class="file-names mt-10">
+                      <div class="file-upload-files" *ngFor="let document of fileArray;let i=index">
+                        <mat-label class="text-semi-bold "> {{document.fileType+' : ' }} </mat-label>
+                        <a *ngIf="document.fileName" (click)="downloadFile(document,document.fileName,document.docId)"
+                          routerLinkActive="active-link">{{document.fileName}}</a> <span *ngIf="!document.fileName"
+                          class="red text-semi-bold">{{document.isReq}}</span>
+                        <button type="button" class="close" aria-label="Close" (click)="removeDocument(i)"
+                          [disabled]="isView"> <span aria-hidden="true">&times;</span></button>
+                      </div>
+                      <div *ngIf="signatureDrpDwnDtl">
+                        <div class="file-upload-files" *ngFor="let document of signatureArray;let i=index">
+                          <mat-label class="text-semi-bold "> {{document.signatureType+' : '}} </mat-label>
+                          <a *ngIf="document.fileName"
+                            (click)="downloadFile(document,document.fileName,document.signatureDocId)"
+                            routerLinkActive="active-link">{{document.fileName}}</a> <span *ngIf="!document.fileName"
+                            class="red text-semi-bold">{{document.isReq}}</span>
+                          <button type="button" class="close" aria-label="Close" (click)="removeSignDocument(i)"
+                            [disabled]="isView"> <span aria-hidden="true">&times;</span></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End -->
+
+                  <!-- <div *ngIf="!signatureDrpDwn">
+                                        <mat-label class="lbl pb-5">Upload Logo Images</mat-label>
+                                        <div class="file-upload">
+                                            <i class="material-icons">cloud_upload</i>
+                                            <span>Browse here...</span>
+                                            <input type="file" #fileInput (change)='openUploadDoc($event,"document")' formControlName="supportingDocument" accept="image/x-png,image/gif,image/jpeg">
+                                        </div>
+                                    </div> -->
+
+                  <!-- <div *ngIf="signatureDrpDwn">
+                                        <mat-label class="lbl pb-5">Upload Signature Images</mat-label>
+                                        <div class="file-upload">
+                                            <i class="material-icons">cloud_upload</i>
+                                            <span>Browse here...</span>
+                                            <input type="file" #fileInput (change)='openUploadDoc($event,"signature")' formControlName="signatureDocument" accept="image/x-png,image/gif,image/jpeg">
+                                        </div>
+                                    </div> -->
+
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="100%">
+                  <h3 class="sub-header">Address Details</h3>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px grid">
+                <div fxFlex="100%">
+                  <app-address [addressformgrp]="organizationFormGroup" [addressList]="addList"> </app-address>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Grid Content Coding -->
+
+        <div *ngIf="!showFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+          fxLayout.xs="column" fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+          <p-table
+  #dt
+  [columns]="displayedColumns"
+  [value]="orgComponentList"
+  [scrollable]="true"
+  scrollHeight=""
+  [rows]="itemperpage"
+  [resizableColumns]="true"
+  [reorderableColumns]="true"
+  [paginator]="true"
+  frozenWidth="100px"
+  [frozenColumns]="frozenCols">
+
+  <!-- ===== COLGROUP ===== -->
+  <ng-template pTemplate="colgroup" let-colGroupCols>
+    <colgroup>
+      <col *ngFor="let col of colGroupCols" style="width:200px" />
+    </colgroup>
+  </ng-template>
+
+  <!-- ===== HEADER ===== -->
+  <ng-template pTemplate="header" let-headerCols>
+    <tr>
+      <th *ngFor="let col of headerCols"
+          [ngSwitch]="col.field"
+          pReorderableColumn
+          pResizableColumn>
+
+        <span [pSortableColumn]="col.field">
+          <div class="thname">{{ col.header }}</div>
+
+          <p-sortIcon
+            *ngIf="col.field !== 'action'"
+            ariaLabel="Activate to sort"
+            ariaLabelDesc="Activate to sort in descending order"
+            matTooltip="Sorting"
+            matTooltipClass="accent-tooltip"
+            ariaLabelAsc="Activate to sort in ascending order">
+          </p-sortIcon>
+        </span>
+
+      </th>
+    </tr>
+  </ng-template>
+
+  <!-- ===== BODY ===== -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-index="rowIndex"
+    let-bodyCols="columns">
+
+    <tr [pReorderableRow]="index">
+      <td *ngFor="let col of bodyCols"
+          [ngSwitch]="col.field"
+          [ngClass]="{ 'desg-bg': col.field === 'action' }">
+
+        <div *ngSwitchCase="'clientName'">{{ rowData.clientName }}</div>
+        <div *ngSwitchCase="'organizationName'">{{ rowData.organizationName }}</div>
+        <div *ngSwitchCase="'cinNo'">{{ rowData.cinNo }}</div>
+        <div *ngSwitchCase="'panNo'">{{ rowData.panNo }}</div>
+
+        <!-- ACTION -->
+        <div *ngIf="col.field === 'action'" fxLayout="row" class="desg-icon">
+          <div fxFlex="100%" fxLayoutGap="10px">
+
+            <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+              <i class="material-icons-outlined"
+                 matTooltip="Edit"
+                 matTooltipClass="accent-tooltip"
+                 (click)="editDetail(rowData,'edit')">
+                edit
+              </i>
+            </mat-icon>
+
+            <mat-icon
+              [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''"
+              matTooltip="Delete"
+              matTooltipClass="accent-tooltip">
+              <i class="material-icons-outlined"
+                 (click)="openConfirmDialog(rowData)">
+                delete
+              </i>
+            </mat-icon>
+
+            <mat-icon
+              [ngClass]="screenAuth.viewFlag === false ? 'page-btn disabled' : ''"
+              matTooltip="View"
+              matTooltipClass="accent-tooltip">
+              <i class="material-icons-outlined"
+                 (click)="editDetail(rowData,'view')">
+                visibility
+              </i>
+            </mat-icon>
+
+          </div>
+        </div>
+
+      </td>
+    </tr>
+
+  </ng-template>
+
+</p-table>
+            <div fxLayout="row wrap" fxLayoutGap="20px grid" class="cus-paginator" fxLayoutGap="0px grid"
+              fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid"
+              [ngClass]="{'empty-record': orgComponentList?.length == 0}">
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="start center"> Showing {{ dt.totalRecords
+                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                  <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s)
+                    |&nbsp;<a (click)="showall()">Show All</a>
+              </div>
+              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center"> <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'"
+                  (click)="
+                                dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                                navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                              "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2"
+                  fxHide.xs>Go to
+                  Page<span class="input-num">
+                    <input type="number" #pageNo min="1" [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                  </span></span> <span class="mr-2" fxHide.xs> of
+                  {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a [ngClass]="
+                                dt.rows + dt.first >= dt.totalRecords
+                                  ? 'page-btn disabled'
+                                  : 'page-btn'
+                              " (click)="
+                                dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                                navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                              "><i class="icon-control-end ml-5"></i></a> </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<ng-template #deleteConfirmation>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">Confirmation !</h3>
+            <p class="text-sm">Are you sure you want to <b>delete</b> thi records?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-stroked-button (click)="dialogRef.close()">No, Keep it</button>
+    <button mat-flat-button color="warn" (click)="deleteOrgnztn()">Yes, Delete it</button>
+  </mat-dialog-actions>
+</ng-template>

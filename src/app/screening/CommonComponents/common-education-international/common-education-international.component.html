@@ -1,0 +1,644 @@
+<form [formGroup]="mainForm" class="form-center" autocomplete="off" role="presentation">
+  @if (mainForm!=undefined) {
+    <div>
+      <app-common-base-info [showNotApplicable]="showNotApplicable" [mainForm]="mainForm"
+        [compBaseDetails]="compBaseDetails" [formgroupName]="'screeningComponentInfo'"
+        (emitNotappChange)="notApplicable($event)" (emitNotappChange)="notApplicable($event)">
+      </app-common-base-info>
+      <div [formGroupName]="formgroupName">
+        <div fxlayout="row">
+          <div fxflex="80%">
+            <h3 class="sub-header">Institute/College Name Address Details</h3>
+          </div>
+          @if (predata?.length>0) {
+            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%"
+              fxFlex.xs="100%" Class="mb-25">
+              <a (click)="openDialogdata()">Pre Data</a>
+            </div>
+          }
+        </div>
+        @if (!screeningService.instypflag) {
+          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px   grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="90%">
+                <mat-label>Institution Type</mat-label>
+                <mat-select formControlName="universityTypeLookupId" required placeholder="Institution Type"
+                  (selectionChange)="Institutiontype($event.value)">
+                  @for (collegetype of Institution; track collegetype) {
+                    <mat-option [value]="collegetype.lookUpId"> {{
+                    collegetype.lookUpName }} </mat-option>
+                  }
+                </mat-select>
+                @if (!!mainForm?.get(formgroupName)?.get('universityTypeLookupId')?.errors?.required) {
+                  <mat-error
+                    >
+                    Institution Type is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            @if (insttype === 'Others' ) {
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                >
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Education Category Name</mat-label>
+                  <input formControlName="educationCategoryName" #educationCategoryName autocomplete="off"
+                    role="presentation" type="text" matInput placeholder="Education Category Name">
+                </mat-form-field>
+              </div>
+            }
+          </div>
+        }
+        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+          fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          @if (false) {
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+              >
+              <mat-form-field appearance="outline" fxFlex="97.5%">
+                <mat-label>University/Board</mat-label>
+                <input required matInput placeholder="Institution" formControlName="institutionId" />
+              </mat-form-field>
+            </div>
+          }
+          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="97.5%">
+              <mat-label>University/Board</mat-label>
+              <input required matInput #Instn placeholder="University/Board" formControlName="institutionName"
+                maxlength="100" (click)="Instn.select()" [matAutocomplete]="auto"
+                (focus)="setInstnItems(Instn.value)" (keyup)="instnkeyUpFunction($event,Instn.value)"
+                autocomplete="off" role="presentation"
+                (input)="setInstnItems(Instn.value);assignvalue(Instn.value)"
+                (blur)="changeInstitution();Insvalidation($event,Instn.value)" />
+              <div matSuffix fxLayout="row">
+              </div>
+              <mat-hint class="note">
+                <b>Note:</b> Click “Add your University / Board” to enter the University or board not listed
+                in the drop-down or if the location of the University is new or different
+              </mat-hint>
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayInstnFn">
+                <cdk-virtual-scroll-viewport class="autocomplete-test-viewport" itemSize="50"
+                  minBufferPx="500" maxBufferPx="750">
+                  <table class="autocomp" cellpadding="0" cellspacing="1">
+                    @if (filterInstnList.length>0) {
+                      <thead>
+                        <tr class="autocomp-disable">
+                          <th>Institute Name | Country | State | District </th>
+                        </tr>
+                      </thead>
+                    }
+                    <tbody>
+                      <tr class="autocomp-record" *cdkVirtualFor="let option of filterInstnList"
+                        (click)="setInstnName(option.empInsId,option.address.addressId)">
+                        <mat-option [value]="option.name"
+                          (onSelectionChange)="setInstnName(option.empInsId,option.address.addressId)">
+                          <td><span [innerHTML]="getName(option) | highlight:Instn.value">
+                          </span></td>
+                        </mat-option>
+                      </tr>
+                      @if (filterInstnList.length===0) {
+                        <tr>
+                          <mat-option value="">
+                            <td colspan="4">
+                              <a (click)="openAddNewMasterData()">Add Your University / Board</a>
+                            </td>
+                          </mat-option>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </cdk-virtual-scroll-viewport>
+              </mat-autocomplete>
+              @if (!!mainForm?.get(formgroupName)?.get('institutionName')?.errors?.required) {
+                <mat-error>
+                  Click “Add your University / Board” to enter the University or board not listed in the
+                  drop-down or if the location of the University is new or different
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="97.5%">
+              <mat-label>Institute/College Name</mat-label>
+              <input matInput #Inst placeholder="Institute/College Name" formControlName="instituteName"
+                maxlength="150" (click)="Inst.select()" [matAutocomplete]="auto1"
+                (focus)="setInstItems(Inst.value)" (keyup)="instkeyUpFunction($event,Inst.value)"
+                autocomplete="off" role="presentation" (input)="setInstItems(Inst.value)"
+                (blur)="getInstName(Inst.value);" [required]="userData?.applicationId !== 1" />
+              <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayInstFn">
+                @for (inst of filterInstList; track inst) {
+                  <mat-option [value]="inst.instituteName"
+                    class="autocom-option autocom-tr" (onSelectionChange)="setInstName(inst.instituteId)">
+                    <span [innerHTML]="inst.instituteName | highlight: Inst.value"></span>
+                  </mat-option>
+                }
+              </mat-autocomplete>
+              <mat-hint>({{ Inst.value.length }}/150 Max)</mat-hint>
+              @if (!!mainForm?.get(formgroupName)?.get('instituteName')?.errors?.required) {
+                <mat-error>
+                  Institute/College Name is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        @if (addcontrolflag && ((isFakeEducation && isSuspectFlag) || (isSuspectFlag && mainForm?.get(formgroupName)?.get('isVerified')?.value != null))) {
+          <div
+            style="display: flex;flex-direction: column;">
+            <p class="sub-header1">Client Suspect / Blacklist</p>
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-radio-group required formControlName="isClientSuspectFlag"
+                style="display: inline-flex; flex-direction: row;" fxLayoutGap="20px">
+                <mat-radio-button [value]="true">Yes</mat-radio-button>
+                <mat-radio-button [value]="false">No</mat-radio-button>
+              </mat-radio-group>
+              @if (mainForm?.get(formgroupName)?.get('isClientSuspectFlag')?.errors?.required
+                && mainForm?.get(formgroupName)?.get('isClientSuspectFlag')?.touched) {
+                <mat-error>
+                  Client Suspect / Blacklist is required
+                </mat-error>
+              }
+            </div>
+          </div>
+        }
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            @if (addressWithoutForm?.addLine1?.length > 0) {
+              <h3 class="sub-header">University / Board Address:
+              </h3>
+            }
+            @if (addressWithoutForm?.addressId ==screeningService.defaultAddressId) {
+              <address>
+                Not Provided
+              </address>
+            }
+            @if (addressWithoutForm?.addressId !=screeningService.defaultAddressId) {
+              <address>
+                {{addressWithoutForm?.addLine1 ? addressWithoutForm?.addLine1 :
+                ''}}{{addressWithoutForm?.addLine2 ? (', ' + addressWithoutForm?.addLine2) : ''}}
+                {{addressWithoutForm?.addLine3 ? (', ' + addressWithoutForm?.addLine3) :
+                ''}}{{addressWithoutForm?.place ? (', ' + addressWithoutForm?.place) : ''}}
+                {{addressWithoutForm?.city ? (', ' + addressWithoutForm?.city) :
+                ''}}{{addressWithoutForm?.district ? (' ' + addressWithoutForm?.district) : ''}}
+                <br>{{addressWithoutForm?.state ? addressWithoutForm?.state : ''}}{{addressWithoutForm?.country
+                  ? (', ' + addressWithoutForm?.country) : ''}}
+                  {{addressWithoutForm?.postalCode ? (' - ' + addressWithoutForm?.postalCode) : ''}}
+                </address>
+              }
+            </div>
+          </div>
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+            <div fxFlex="100%">
+              <h3 class="sub-header">Education Details</h3>
+            </div>
+          </div>
+          @if (common.educationType.length>0 && !screeningService.eduCatflag) {
+            <span class="eduview">
+              <mat-radio-group formControlName="educationTypeLookupId" aria-label="Select an option"
+                fxLayoutGap="20px">
+                @for (flagtype of common.educationType; track flagtype) {
+                  <mat-radio-button [value]="flagtype.lookUpId" name="i"
+                    (input)="educationDetailName(flagtype.lookUpId)" (change)="checkevent(flagtype.lookUpId);"
+                    (click)="educationDetailName(flagtype.lookUpId)" fxLayoutGap="20px">{{ flagtype.lookUpName}}
+                  </mat-radio-button>
+                }
+              </mat-radio-group>&nbsp;&nbsp;&nbsp;
+              @if (edutype === 'Other Certification Course') {
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+                  fxLayoutGap="20px">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Other certification course</mat-label>
+                    <input formControlName="otherCertificationCourse" #otherCertificationCourse autocomplete="off"
+                      role="presentation" type="text" matInput placeholder="Other certification Course">
+                  </mat-form-field>
+                </div>
+              }
+            </span>
+          }
+          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Registration/Roll/Seat Number</mat-label>
+                <input matInput placeholder="Registration/Roll/Seat Number" formControlName="registrationNumber"
+                  maxlength="60" [required]="applicationId === 3" />
+                @if (!!mainForm?.get(formgroupName)?.get('registrationNumber')?.errors?.required) {
+                  <mat-error>
+                    Registration/Roll/Seat number is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Degree</mat-label>
+                <input matInput #Degree placeholder="Degree" oninput="this.value = this.value.toUpperCase()"
+                  formControlName="degree" maxlength="100" (click)="Degree.select()"
+                  [matAutocomplete]="auto1degree" (keyup)="degreekeyUpFunction($event,Degree.value)"
+                  autocomplete="off" role="presentation" (blur)="setDegreeName(Degree.value)"
+                  [required]="applicationId === 3" />
+                <mat-autocomplete #auto1degree="matAutocomplete">
+                  @for (deg of degreeMas; track deg) {
+                    <mat-option [value]="deg.degree"
+                      class="autocom-option autocom-tr">
+                      <span [innerHTML]="deg.degree | highlight: Degree.value"></span>
+                    </mat-option>
+                  }
+                </mat-autocomplete>
+                <mat-hint>({{ Degree.value.length }}/100 Max)</mat-hint>
+                @if (!!mainForm?.get(formgroupName)?.get('degree')?.errors?.required) {
+                  <mat-error>
+                    Degree is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Major</mat-label>
+                <input matInput #MaJorID placeholder="Major" oninput="this.value = this.value.toUpperCase()"
+                  formControlName="major" maxlength="100" (click)="MaJorID.select()"
+                  [matAutocomplete]="auto1Major" (keyup)="instkeyUpFunction($event,MaJorID.value)"
+                  autocomplete="off" role="presentation" (blur)="getDegreeMajorNameNew(MaJorID.value)" />
+                <mat-autocomplete #auto1Major="matAutocomplete">
+                  @for (deg of majorFilterList; track deg) {
+                    <mat-option [value]="deg.major"
+                      class="autocom-option autocom-tr" (onSelectionChange)="setMajorName(deg.major)">
+                      <span [innerHTML]="deg.major | highlight: MaJorID.value"></span>
+                    </mat-option>
+                  }
+                </mat-autocomplete>
+                <mat-hint>({{ MaJorID.value.length }}/100 Max)</mat-hint>
+                @if (!!mainForm?.get(formgroupName)?.get('major')?.errors?.incorrect) {
+                  <mat-error>
+                    Please Fill Degree.
+                  </mat-error>
+                }
+                @if (!!mainForm?.get(formgroupName)?.get('major')?.errors?.required) {
+                  <mat-error>
+                    Major is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Course start Date</mat-label>
+                <span matSuffix class="suff-lbtn"
+                  [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                  matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a mat-flat-button
+                (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'courseStart');">NA</a></span>
+                <input matInput placeholder="Course start Date" formControlName="courseStart" maxlength="60"
+                  #coursestart (input)="upperCase(coursestart.value,'courseStart')" (keyup)="dateCalca();"
+                  (focus)="naFlag !== true ? startCourse.open():''"
+                  (click)="naFlag !== true ?startCourse.open():''" [required]="applicationId === 3" />
+                <input matInput hidden [max]="common?.maxDate"
+                  (dateChange)="handleDateChange($event,'courseStart');dateCalca();"
+                  [matDatepicker]="startCourse">
+                <mat-datepicker-toggle matSuffix [for]="startCourse"></mat-datepicker-toggle>
+                <mat-datepicker #startCourse></mat-datepicker>
+                <mat-hint>(Eg. Course start Date or Period, Enter date as (01/JAN/2021 or 01/01/2021 or
+                JAN/2017) or Not Provided.).,01st January 2019 should be typed as 01/JAN/2021.)</mat-hint>
+                @if (!!mainForm?.get(formgroupName)?.get('courseStart')?.errors?.required) {
+                  <mat-error>
+                    Course start Date is required
+                  </mat-error>
+                }
+                @if (!!mainForm?.get(formgroupName)?.get('courseStart')?.errors?.date?.invalidPattern) {
+                  <mat-error
+                    >
+                    Course start Date is invalid. (Eg.((01/JAN/2021 or 01/01/2021 or JAN/2017)).,01st January
+                    2019 should be typed as 01/JAN/2021.))
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Course Completion</mat-label>
+                <span matSuffix class="suff-lbtn"
+                  [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                  matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a mat-flat-button
+                (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'courseCompletion');">NA</a></span>
+                <input matInput placeholder="Course Completion" formControlName="courseCompletion"
+                  maxlength="60" [min]="mainForm?.get(formgroupName)?.get('courseStart').value"
+                  (input)="upperCase(courseCompte.value,'courseCompletion')" #courseCompte
+                  (keyup)="dateCalca()" (focus)="naFlag !== true ? course.open():''"
+                  (click)="naFlag !== true ? course.open():''" [required]="applicationId === 3" />
+                <input matInput hidden [min]="mainForm?.get(formgroupName)?.get('courseStart').value"
+                  (dateChange)="handleDateChange($event,'courseCompletion');dateCalca()"
+                  [matDatepicker]="course">
+                <mat-datepicker-toggle matSuffix [for]="course"></mat-datepicker-toggle>
+                <mat-datepicker #course></mat-datepicker>
+                <mat-hint>(Eg. Course Completion Date or Period, Enter date as (01/JAN/2021 or 01/01/2021 or
+                JAN/2017) or Not Provided.).,01st January 2019 should be typed as 01/JAN/2021.)</mat-hint>
+                @if (!!mainForm?.get(formgroupName)?.get('courseCompletion')?.errors?.required) {
+                  <mat-error>
+                    Course completion is required
+                  </mat-error>
+                }
+                @if (!!mainForm?.get(formgroupName)?.get('courseCompletion')?.errors?.date?.invalidPattern) {
+                  <mat-error
+                    >
+                    Course completion is invalid. (Eg.(01/JAN/2021 or 01/01/2021 or JAN/2017) or Not
+                    Provided.).,01st January 2019 should be typed as 01/JAN/2021.)
+                  </mat-error>
+                }
+                @if (!!mainForm?.get(formgroupName)?.get('courseCompletion')?.errors?.date?.overLap) {
+                  <mat-error
+                    >
+                    Course completion should be lesser than previous course completion date
+                  </mat-error>
+                }
+                @if (!!mainForm?.get(formgroupName)?.get('courseCompletion')?.errors?.comparison) {
+                  <mat-error>
+                    Course completion date should be greater than Course start Date
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Certificate Issue</mat-label>
+                <span matSuffix class="suff-lbtn"
+                  [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                  matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a mat-flat-button
+                (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'certificateIssue')">NA</a></span>
+                <input matInput placeholder="Certificate Issue" formControlName="certificateIssue"
+                  maxlength="60" [min]="mainForm?.get(formgroupName)?.get('courseCompletion').value"
+                  (input)="upperCase(certificateIssue.value,'certificateIssue')" #certificateIssue
+                  (focus)="naFlag !== true ? Certificate.open():''"
+                  (click)="naFlag !== true ? Certificate.open():''" (keyup)="dateCalc()"
+                  [required]="applicationId === 3" />
+                <input matInput hidden (dateChange)="handleDateChange($event,'certificateIssue');dateCalc()"
+                  [min]="mainForm?.get(formgroupName)?.get('courseCompletion').value"
+                  [matDatepicker]="Certificate">
+                <mat-datepicker-toggle matSuffix [for]="Certificate"></mat-datepicker-toggle>
+                <mat-datepicker #Certificate></mat-datepicker>
+                <mat-hint>(Eg. Certificate Issue Date or Period, Enter date as (01/JAN/2021 or 01/01/2021 or
+                  JAN/2017 or 2022) or Not Provided.).,01st January 2019 should be typed as
+                01/JAN/2021.)</mat-hint>
+                @if (!!mainForm?.get(formgroupName)?.get('certificateIssue')?.errors?.required) {
+                  <mat-error>
+                    Certificate issue is required
+                  </mat-error>
+                }
+                @if (!!mainForm?.get(formgroupName)?.get('certificateIssue')?.errors?.date?.invalidPattern) {
+                  <mat-error
+                    >
+                    Certificate issue is invalid. (Eg.(01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022) or Not
+                    Provided.).,01st January 2019 should be typed as 01/JAN/2021.)
+                  </mat-error>
+                }
+                @if (!!mainForm?.get(formgroupName)?.get('certificateIssue')?.errors?.comparison) {
+                  <mat-error>
+                    Certificate issue date should be greater than course completion date
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            @if (anReasonShow) {
+              <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%"
+                fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Reason For Not Provided</mat-label>
+                  <mat-select formControlName="npReasonLookupId" placeholder="Select Date Type" required
+                    (selectionChange)="reasonName($event.value)">
+                    @for (date of npReasonList; track date) {
+                      <mat-option [value]="date.lookUpId"> {{ date.lookUpName }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                  @if (!!mainForm?.get(formgroupName)?.get('npReasonLookupId')?.errors?.required) {
+                    <mat-error>
+                    Not applicable reason is required </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            }
+            @if (otherReasonShow) {
+              <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%"
+                fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Other Reason Remarks</mat-label>
+                  <textarea [required]="requiredFlag === true? true :  false" #remarks matInput
+                  formControlName="npRemarks" placeholder="Remarks" maxlength="400" rows="2"></textarea>
+                  <mat-hint>({{ remarks.value.length }}/400 Max)</mat-hint>
+                  @if (!!mainForm?.get(formgroupName)?.get('npRemarks')?.errors?.required) {
+                    <mat-error> Other
+                    reason remarks is required </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            }
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                @if (pursuinglable) {
+                  <mat-label>Previous GPA/CGPA/Percentage</mat-label>
+                }
+                @if (!pursuinglable) {
+                  <mat-label>GPA/CGPA/Percentage</mat-label>
+                }
+                <input matInput
+                  [placeholder]="pursuinglable?'Previous GPA/CGPA/Percentage':'GPA/CGPA/Percentage'"
+                  formControlName="gpa" maxlength="4" appNumberOnly [NumberOnlyWithDot]="false"
+                  [required]="applicationId === 3" />
+                @if (!!mainForm?.get(formgroupName)?.get('gpa')?.errors?.required && !pursuinglable) {
+                  <mat-error
+                    >
+                  GPA/CGPA/Percentage is required</mat-error>
+                }
+                @if (!!mainForm?.get(formgroupName)?.get('gpa')?.errors?.required && pursuinglable) {
+                  <mat-error
+                    >
+                    Previous GPA/CGPA/Percentage is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            @if (ctsFlag) {
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Year of Passing</mat-label>
+                  <span matSuffix class="suff-lbtn"
+                    [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                    matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a mat-flat-button
+                  (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'yearOfPassing');">NA</a></span>
+                  <input matInput placeholder="Year of Passing" formControlName="yearOfPassing" maxlength="60"
+                    [min]="mainForm?.get(formgroupName)?.get('courseStart').value"
+                    (input)="upperCase(yearOfPassing.value,'yearOfPassing')" #yearOfPassing
+                    (keyup)="dateCalcyear()" (focus)="naFlag !== true ? yearOfPassing.open():''"
+                    (click)="naFlag !== true ? yearOfPassing.open():''" [required]="applicationId === 3" />
+                  <input matInput hidden [min]="mainForm?.get(formgroupName)?.get('courseStart').value"
+                    (dateChange)="handleDateChange($event,'yearOfPassing');dateCalcyear()"
+                    [matDatepicker]="yearOfPassing">
+                  <mat-datepicker-toggle matSuffix [for]="yearOfPassing"></mat-datepicker-toggle>
+                  <mat-datepicker #yearOfPassing></mat-datepicker>
+                  <mat-hint>(Eg. Year of Passing Date or Period, Enter date as (01/JAN/2021 or 01/01/2021 or
+                  JAN/2017) or Not Provided.).,01st January 2019 should be typed as 01/JAN/2021.)</mat-hint>
+                  @if (!!mainForm?.get(formgroupName)?.get('yearOfPassing')?.errors?.required) {
+                    <mat-error>
+                      Year of Passing is required
+                    </mat-error>
+                  }
+                  @if (!!mainForm?.get(formgroupName)?.get('yearOfPassing')?.errors?.date?.invalidPattern) {
+                    <mat-error
+                      >
+                      Year of Passing is invalid. (Eg.(01/JAN/2021 or 01/01/2021 or JAN/2017) or Not
+                      Provided.).,01st January 2019 should be typed as 01/JAN/2021.)
+                    </mat-error>
+                  }
+                  @if (!!mainForm?.get(formgroupName)?.get('yearOfPassing')?.errors?.comparison) {
+                    <mat-error>
+                      Year of Passing date should be greater than Course start Date
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            }
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+            fxLayout.xs="column" fxLayoutGap="20px grid">
+            @if (userData.applicationId === 3) {
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%"
+                fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Name as per Certtificate</mat-label>
+                  <input matInput formControlName="nameAsPerProof" placeholder="Name as per Certtificate"
+                    maxlength="60" />
+                  <mat-hint>Name should be as per ID proof</mat-hint>
+                </mat-form-field>
+              </div>
+            }
+          </div>
+          <div fxLayout="row" fxLayoutGap="0px" class="mb-10">
+            <div fxFlex="100%">
+              <app-custom-fields [mainForm]="mainForm"
+              [formArrName]="'componentCustomFields'"></app-custom-fields>
+            </div>
+          </div>
+          @if ((mainForm?.get('miscQuestion')?.value?.length === 0 || !mainForm?.get('miscQuestion')) && userData.applicationId !== 3) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="20px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px"
+              >
+              <a class="text-sm mb-15" (click)="createMisc()"
+                [ngClass]="!!mainForm?.get(formgroupName+'.registrationNumber')?.disabled?'page-btn disabled':''">
+                <i class="icon-plus-circle mr-5"></i> Click here to add miscellaneous fields</a>
+              </div>
+            }
+            @if (mainForm?.get('miscQuestion') && userData.applicationId !== 3) {
+              <div>
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="100%">
+                    <app-ques-ans [mainForm]="mainForm" [formArrName]="'miscQuestion'" [miscType]="'textarea'"
+                      [miscHint]="miscHint">
+                    </app-ques-ans>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+          @if (!fileBtn) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
+              <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
+                [formGroupName]="'screeningComponentInfo'">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Remarks</mat-label>
+                  <textarea #remark formControlName="remark" maxlength="1000" matInput
+                  placeholder="Remarks"> </textarea>
+                  <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
+                </mat-form-field>
+              </div>
+              @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length) {
+                <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  [formGroupName]="'screeningComponentInfo'"
+                  >
+                  <mat-label class="lbl">Choose</mat-label>
+                  <mat-checkbox (change)="showInsuff($event)" formControlName="insuffRaisedFlag">Raise
+                  Insufficiency</mat-checkbox>
+                </div>
+              }
+            </div>
+          }
+          @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+              >
+              <div fxFlex="100%">
+                <div class="alert alert-info" role="alert">
+                  <h4>Insufficiency Clearance Remarks: </h4>
+                  @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+                    <span
+                      >
+                      {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+            @if (userData.applicationId === 1 ) {
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+                >
+                @if (showInSuff) {
+                  <div fxFlex="100%">
+                    <app-common-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm"
+                      [compBaseDetails]="mainForm.get('screeningComponentInfo').value"
+                      [formgroupName]="'screeningInsufficiency'">
+                    </app-common-raise-insufficiency>
+                  </div>
+                }
+              </div>
+            }
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="100%">
+                <app-client-app-document-upload [fileBtn]="fileBtn" [mainForm]="mainForm"
+                  [formgroupName]="'screeningComponentInfo'" [dupScreeningDoc]="screeningComponent.componentDocument"
+                  [validationFlag]="nFlag !== true && userData.applicationId === 3 ? true : false"
+                [docHint]="pursuinglable?'Please Upload all year marksheets till previous year':'Please Upload your Education Related Documents like degree Marksheets'"></app-client-app-document-upload>
+              </div>
+            </div>
+          </div>
+        }
+      </form>
+      <ng-template #dlgAddNew>
+        <app-add-new>
+
+        </app-add-new>
+      </ng-template>
+      <ng-template #FakeIns>
+        <mat-dialog-content>
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                src="assets/images/alert-warning.gif"></div>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center center">
+                <div fxFlex="100%" class="text-center">
+                  <h3 class="m-0">The entered university name is not found in our database, please click "Okay" to
+                  add your university details, or click "Cancel" to try again.</h3>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-dialog-content>
+
+        <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+          <button mat-flat-button (click)="dialog.closeAll();validatetype('okay')">Okay</button>
+          <button mat-flat-button color="warn" (click)="dialog.closeAll();validatetype('cancel')">Cancel</button>
+
+        </mat-dialog-actions>
+      </ng-template>

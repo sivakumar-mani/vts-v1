@@ -1,0 +1,212 @@
+<div class="FullBody">
+
+  <mat-card style="margin-bottom: 20px; background: #fff;">
+
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <button fxLayoutAlign="end center" type="submit" mat-icon-button matTooltip="Save" class="save-submit-button">
+          <div class="icon-text-wrapper">
+            <i class="icon-save" (click)="AddDirectAppInsuffSumitted()" style="font-size: 17px;"></i>
+            <span style="font-size: 9px;">SAVE & SUBMIT</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+  </mat-card>
+
+  <div class="HeaderBg">
+    <div class="HContBody">
+      <div fxLayout="row" fxFlex="100%">
+        <div fxFlex="100%">
+          <div class="LogTxt">
+            <a href="#aaa" routerLink="/" class="link">
+              <div class="Logo lnd-logo kryalogo">
+                <i class="icon-K-transparent"></i>
+              </div>
+              <div class="logo-lett">
+                <div class="logo-txt">Krya Screening Private Limited</div>
+                <!-- <div class="logo-sol">Screening Made Smart</div> -->
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ContBody">
+    <div fxFlex="100%">
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <h1 style="font-size: 17px;" class="sub-header">Candidate Insufficiency</h1>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <h2><span class="highlight">Insuff</span>ciency Request</h2>
+          <h3>level - ({{ this.InsufLevel }})</h3>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <mat-card-content>
+            <p style="font-size: 12px;">
+              <span style="color: #888;">Required type: </span>
+              <span>{{ this.RequiredType }}</span>
+            </p>
+            <p style="font-size: 12px; width: 50%; display: inline-block;">
+              <span style="color: #888;">Information Comments: </span>
+              <span>{{ this.InsuffRemark }}</span>
+            </p>
+          </mat-card-content>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex.lg="60%" fxFlex.md="60%">
+          <form [formGroup]="remarkForm" autocomplete="off">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Remarks</mat-label>
+              <textarea #remark formControlName="Remark" maxlength="5000" matInput placeholder="Remarks"></textarea>
+              <mat-hint>({{remark.value.length}}/5000 Max)</mat-hint>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <mat-label class="lbl">Attached Documents</mat-label>
+            <div class="file-upload">
+              <i class="material-icons">cloud_upload</i>
+              <span>Browse here...</span>
+              <input type="file" #fileInput (change)="openUploadDoc($event);allowSameFileUpload($event);" />
+            </div>
+            @if (this.clearInsuffContent.insuffDocument?.length !== 0) {
+              <div class="file-names mt-10">
+                @for ( op of this.clearInsuffContent.insuffDocument ; track  op; let docIndex = $index) {
+                  <div
+                    class="file-upload-files"> <a routerLinkActive="active-link" matTooltip="op.fileName"
+                  matTooltipClass="accent-tooltip"> {{op.fileName}}</a>
+                  <button type="button" class="close" aria-label="Close" (click)="removeDocument(docIndex)">
+                    <span aria-hidden="true">&times;</span> </button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <mat-hint> * Max of 150 verification Id’s were requested to upload at a time
+          and Max file size 5MB
+        </mat-hint>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- <div >
+  <mat-card class="custom-card">
+    <mat-card-header>
+      <mat-card-title><span class="highlight">Insuff</span>ciency Request</mat-card-title>
+      <mat-card-subtitle style="font-size: 17px;">level - ({{ this.InsufLevel }})</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p style="font-size: 12px;">
+        <span style="color: #888;">Required type: </span>
+        <span>{{ this.RequiredType }}</span>
+      </p>
+      <p style="font-size: 12px; width: 50%; display: inline-block;">
+        <span style="color: #888;">Information Comments: </span>
+        <span>{{ this.InsuffRemark }}</span>
+      </p>
+    </mat-card-content>
+
+    <div fxLayout="row">
+      <div fxFlex.lg="60%" fxFlex.md="60%">
+        <form [formGroup]="remarkForm" autocomplete="off">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Remarks</mat-label>
+            <textarea #remark formControlName="Remark" maxlength="5000" matInput placeholder="Remarks"></textarea>
+            <mat-hint>({{remark.value.length}}/5000 Max)</mat-hint>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+
+
+    <div class="row pt-20">
+      <form>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <mat-label class="lbl">Attached Documents</mat-label>
+            <div class="file-upload">
+              <i class="material-icons">cloud_upload</i>
+              <span>Browse here...</span>
+              <input type="file" #fileInput (change)="openUploadDoc($event);allowSameFileUpload($event);" />
+            </div>
+            <div *ngIf="this.clearInsuffContent.insuffDocument?.length !== 0" class="file-names mt-10">
+              <div *ngFor=" let op of this.clearInsuffContent.insuffDocument ;let docIndex = index"
+                class="file-upload-files"> <a routerLinkActive="active-link" matTooltip="op.fileName"
+              matTooltipClass="accent-tooltip"> {{op.fileName}}</a>
+              <button type="button" class="close" aria-label="Close" (click)="removeDocument(docIndex)">
+                <span aria-hidden="true">&times;</span> </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <mat-hint> * Max of 150 verification Id’s were requested to upload at a time
+          and Max file size 5MB
+        </mat-hint>
+
+      </form>
+    </div>
+  </mat-card>
+</div> -->
+
+</div>
+<ng-template #sucessAlert>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15">
+            <img src="assets/images/alert-warning.gif">
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">{{headerText}} !</h3>
+            <p class="text-sm" style="font-size:14px !important">{{bodyText}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+    <button mat-stroked-button style="background-color: #f52626e1; color: #fff;" (click)="dialogClose()">Close</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #filesSizePopUp>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">{{ headerText}} </h3>
+            <p class="text-sm">{{ messageText1 }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+    <button mat-flat-button style="background-color: #4812d1; color: #fff;"  (click)="dialog.closeAll();"> Okay </button>
+  </mat-dialog-actions>
+</ng-template>

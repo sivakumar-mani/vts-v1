@@ -1,0 +1,616 @@
+<div [formGroup]="addressformgrp">
+  <div [formGroupName]="formgroupName">
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="100%">
+        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+          <mat-label>Zip Code/PIN Code</mat-label>
+          <input preventCutCopyPaste maxlength="8" #zipInput matInput placeholder="Zip Code/PIN Code"
+            minlength="3" formControlName="postalCode" autocomplete="off" role="presentation"
+            (blur)="getAddressDetailByZipCode(true)" [matAutocomplete]="autoZipCode"
+            (keyup)="zipCodeKeyupFunction($event, zipInput.value)" (input)="zipCodeItems(zipInput.value)"
+            (focus)="zipCodeItems(zipInput.value)" (click)="zipInput.select()" autocomplete="off"
+            role="presentation" />
+          <!-- <input appNumberOnly [NumberOnly]="false" maxlength="8" #zipInput matInput placeholder="Zip Code"
+          minlength="5" formControlName="postalCode" autocomplete="off" role="presentation" (change)="zipCodeChange()"
+          (blur)="getAddressDetailByZipCode(true)" [matAutocomplete]="autoZipCode"
+          (keyup)="zipCodeKeyupFunction($event, zipInput.value)" (input)="zipCodeItems(zipInput.value)"
+          (focus)="zipCodeItems(zipInput.value)" (click)="zipInput.select()" autocomplete="off" role="presentation"
+          [required]="addressformgrp?.get(formgroupName+'.postalCode')?.errors?.required" />
+                      <mat-error *ngIf="!!addressformgrp?.get(formgroupName+'.postalCode')?.errors?.minlength || 
+          !!addressformgrp?.get(formgroupName+'.postalCode')?.errors?.pattern">Please enter valid zip code </mat-error> -->
+        @if (!!addressformgrp?.get(formgroupName+'.postalCode')?.errors?.required) {
+          <mat-error> Zip Code is
+          required </mat-error>
+        }
+        <mat-autocomplete #autoZipCode="matAutocomplete">
+          @for (pl of zipCodefilterlist; track pl) {
+            <mat-option [value]="pl.postalCode"
+              class="autocom-option autocom-tr">
+              <span [innerHTML]="pl.postalCode | highlight: zipInput.value"></span>
+            </mat-option>
+          }
+          <!-- <mat-option *ngIf="zipCodefilterlist.length == 0">
+          <div class="no-record"><span>No Data Found</span></div>
+        </mat-option> -->
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+      <mat-label>Address Line 1 ( Door No, street Name)</mat-label>
+      <input type="text" #AL1Input matInput placeholder="Address Line1 (Door No, street Name)"
+        maxlength="100" formControlName="addLine1" autocomplete="off" role="presentation"
+        [required]="addressformgrp?.get(formgroupName+'.addLine1')?.errors?.required" />
+      @if (!!addressformgrp?.get(formgroupName+'.addLine1')?.errors?.required) {
+        <mat-error> Address Line1
+          is required
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+      <mat-label>Address Line 2</mat-label>
+      <input type="text" matInput placeholder="Address Line2" formControlName="addLine2"
+        autocomplete="off" maxlength="100" #AL2Input role="presentation" />
+      @if (!!addressformgrp?.get(formgroupName+'.addLine2')?.errors?.required) {
+        <mat-error> Address Line2
+          required
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+      <mat-label>Landmark</mat-label>
+      <input type="text" #AL3input matInput placeholder="Landmark" formControlName="addLine3"
+        autocomplete="off" maxlength="100" role="presentation" />
+      @if (!!addressformgrp?.get(formgroupName+'.addLine3')?.errors?.required) {
+        <mat-error> Landmark
+          required
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+      <mat-label>Country</mat-label>
+      <input type="text" matInput placeholder="Select Country" formControlName="countryId"
+        [matAutocomplete]="autocountry" #countryInput (focus)="countryItems(countryInput.value)"
+        (keyup)="countryKeyupFunction($event, countryInput.value)"
+        (input)="countryItems(countryInput.value)" (click)="countryInput.select()" autocomplete="off"
+        role="presentation" (blur)="checkValidValues()"
+        [required]="addressformgrp?.get(formgroupName+'.countryId')?.errors?.required" />
+      @if (!!addressformgrp?.get(formgroupName+'.countryId')?.errors?.required) {
+        <mat-error> Country is
+        required </mat-error>
+      }
+      @if (!!addressformgrp?.get(formgroupName+'.countryId')?.errors?.incorrect) {
+        <mat-error>This is not
+        a valid value</mat-error>
+      }
+      <mat-autocomplete #autocountry="matAutocomplete" [displayWith]="displayCountryFn"
+        (optionSelected)="selectcountry()">
+        @for (country of countryfilterlist; track country) {
+          <mat-option [value]="country.countryId"
+            class="autocom-option autocom-tr"> <span
+          [innerHTML]="country.country | highlight: countryInput.value"></span> </mat-option>
+        }
+        @if (countryfilterlist?.length == 0) {
+          <mat-option>
+            <div class="no-record"><span>No Data Found</span></div>
+          </mat-option>
+        }
+        <!-- <mat-option *ngIf="countryfilterlist.length == 0">
+        <div class="no-record"><a (click)="openAddNewMasterData('countryName', 'Country')">Add new cityh</a></div>
+      </mat-option> -->
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
+<div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+    <mat-label>State</mat-label>
+    <input type="text" matInput placeholder="Select State" formControlName="stateId"
+      [matAutocomplete]="autostate" #stateInput (focus)="stateItems(stateInput.value)"
+      (keyup)="stateKeyupFunction($event, stateInput.value)" (input)="stateItems(stateInput.value)"
+      (click)="stateInput.select()" autocomplete="off" role="presentation" (blur)="checkValidState()"
+      [required]="addressformgrp?.get(formgroupName+'.stateId')?.errors?.required" />
+    @if (!!addressformgrp?.get(formgroupName+'.stateId')?.errors?.required) {
+      <mat-error> State is
+        required
+      </mat-error>
+    }
+    @if (!!addressformgrp?.get(formgroupName+'.stateId')?.errors?.incorrect) {
+      <mat-error>This is not a
+      valid value</mat-error>
+    }
+    <mat-autocomplete #autostate="matAutocomplete" [displayWith]="displayStateFn"
+      (optionSelected)="selectState(true)">
+      @for (state of statefilterlist; track state) {
+        <mat-option [value]="state.stateId"
+          class="autocom-option autocom-tr">
+          <span [innerHTML]="state.stateName | highlight: stateInput.value"></span>
+        </mat-option>
+      }
+      @if (statefilterlist?.length == 0) {
+        <mat-option>
+          <div class="no-record"><span>No Data Found</span></div>
+        </mat-option>
+      }
+      <!-- <mat-option *ngIf="districtfilterlist.length == 0">
+      <div class="no-record"><a (click)="openAddNewMasterData('stateName', 'State')">Add new cityh</a></div>
+    </mat-option> -->
+  </mat-autocomplete>
+</mat-form-field>
+</div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label>District/City</mat-label>
+      <input type="text" matInput placeholder="Select District/City" formControlName="districtId"
+        [matAutocomplete]="autodistrict" #districtInput (focus)="districtItems(districtInput.value)"
+        (keyup)="districtKeyupFunction($event, districtInput.value)"
+        (input)="districtItems(districtInput.value)" (click)="districtInput.select()" autocomplete="off"
+        role="presentation" (blur)="checkValidDistrict()" maxlength="75" />
+      <mat-autocomplete #autodistrict="matAutocomplete" [displayWith]="displayDistrictFn"
+        (optionSelected)="selectDistrict(true)">
+        <!-- <mat-option>
+        <div class="no-record"><a (click)="openAddNewMasterData('districtName', 'District/City')">Add new District/City</a>
+      </div>
+    </mat-option> -->
+    @for (district of districtfilterlist; track district) {
+      <mat-option [value]="district.districtId"
+        class="autocom-option autocom-tr"> <span
+      [innerHTML]="district.districtName | highlight: districtInput.value"></span>
+    </mat-option>
+  }
+  <!-- <mat-option *ngIf="districtfilterlist.length == 0">
+  <div class="no-record"><span>No Data Found</span></div>
+</mat-option> -->
+@if (districtfilterlist?.length == 0) {
+  <mat-option>
+    <div class="no-record"><a
+      (click)="openAddNewMasterData('districtName', 'District/City')">Add new
+    District/City</a>
+  </div>
+</mat-option>
+}
+</mat-autocomplete>
+</mat-form-field>
+</div>
+<div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+    <mat-label>Place/Location/Area</mat-label>
+    <input type="text" matInput placeholder="Select Place/Location/Area" formControlName="cityId"
+      [matAutocomplete]="autocity" #cInput (focus)="cityItems(cInput.value)"
+      (keyup)="cityKeyupFunction($event, cInput.value)" (input)="cityItems(cInput.value)"
+      (click)="cInput.select()" autocomplete="off" role="presentation"
+      (blur)="checkValidCity(cInput.value)" maxlength="75" />
+    <mat-autocomplete #autocity="matAutocomplete" [displayWith]="displaycityFn"
+      (optionSelected)="selectCity(true)">
+
+      @for (city of cityfilterlist; track city) {
+        <mat-option [value]="city.cityId"
+          class="autocom-option autocom-tr">
+          <span [innerHTML]="city.cityName | highlight: cInput.value"></span>
+        </mat-option>
+      }
+      @if (cityfilterlist?.length == 0) {
+        <mat-option>
+          <div class="no-record"><a
+            (click)="openAddNewMasterData('cityName', 'Place/Location/Area')">Add new
+          Place/Location/Area</a></div>
+        </mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
+<div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%">
+  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+    <mat-label>Village/Town</mat-label>
+    <input type="text" matInput placeholder="Select Village/Town" formControlName="locationId"
+      [matAutocomplete]="autoPlace" #pInput (focus)="placeItems(pInput.value)"
+      (keyup)="placeKeyupFunction($event, pInput.value)" (input)="placeItems(pInput.value)"
+      (click)="pInput.select()" autocomplete="off" role="presentation" (blur)="checkValidPlace()"
+      maxlength="75" />
+    <mat-autocomplete #autoPlace="matAutocomplete" [displayWith]="displayPlaceFn"
+      (optionSelected)="selectPlace()">
+      <!-- <mat-option>
+      <div class="no-record"><a (click)="openAddNewMasterData('locationName', 'Village/Town')">Add new Village/Town</a></div>
+    </mat-option>  -->
+    @for (pl of placefilterlist; track pl) {
+      <mat-option [value]="pl.locationId"
+        class="autocom-option autocom-tr">
+        <span [innerHTML]="pl.locationName | highlight: pInput.value"></span>
+      </mat-option>
+    }
+    @if (placefilterlist?.length == 0) {
+      <mat-option>
+        <div class="no-record"><a (click)="openAddNewMasterData('locationName', 'Village/Town')">Add
+        new Village/Town</a></div>
+      </mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>
+</div>
+</div>
+@if ( ssn ? common.isAdditionalPos : common.addressflag!=false &&dateFlag()) {
+  <div>
+    @for (addres of addressPos(); track addres; let i = $index; let first = $first; let last = $last) {
+      <div formArrayName="addressPos"
+        >
+        <div fxLayout="row wrap" [formGroupName]="i" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+          fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          @if (!isCriminalDB) {
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+              >
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Period of Stay From</mat-label>
+                @if (userdata.applicationId !==3) {
+                  <span matSuffix class="suff-lbtn"
+                    [ngClass]="addressformgrp?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                    matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a
+                    mat-flat-button
+                  (click)="naFlag= true;common.setNotProvide(addressformgrp?.get(formgroupName + '.addressPos')?.at(i),'periodOfStay')">NA</a></span>
+                }
+                <input matInput placeholder="Period of Stay From" formControlName="periodOfStay" #stayfrm
+                  (focus)="naFlag !== true ? PeriodOfStay.open():''"
+                  (input)="upperCase(stayfrm.value,'periodOfStay', i);" (blur)="checkDobValidation(stayfrm.value,'periodOfStay', i);" />
+                <input matInput hidden [max]="maxDateValue" (dateChange)="handleDateChange($event,'periodOfStay', i);"
+                  [matDatepicker]="PeriodOfStay" [min]="posFromDate">
+                <mat-datepicker-toggle
+                  [ngClass]="addressformgrp?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                matSuffix [for]="PeriodOfStay"></mat-datepicker-toggle>
+                <mat-datepicker #PeriodOfStay></mat-datepicker>
+                @if (userdata.applicationId !==3) {
+                  <mat-hint class="f-13">(E.g. Enter date as
+                    (01/JAN/2021 or 01/01/2021 or JAN/2017) or 2022 or SINCE BIRTH or Not Provided),01st
+                    January
+                    2021 should be
+                    typed
+                    as 01/JAN/2021.
+                  </mat-hint>
+                }
+                @if (userdata.applicationId ===3) {
+                  <mat-hint class="f-13">(E.g. Enter date as
+                    (01/JAN/2021 or 01/01/2021 or JAN/2017) or 2022 or SINCE BIRTH),01st January 2021 should
+                    be
+                    typed
+                    as 01/JAN/2021.
+                  </mat-hint>
+                }
+                @if (!!addressformgrp?.get(formgroupName + '.addressPos')?.controls[i]?.get('periodOfStay')?.errors?.required) {
+                  <mat-error
+                    >
+                  Period of stay from is required </mat-error>
+                }
+                @if (!!addressformgrp?.get(formgroupName + '.addressPos')?.controls[i]?.get('periodOfStay')?.errors?.date?.invalidPattern) {
+                  <mat-error
+                    >
+                    {{userdata.applicationId === 3 ?
+                    "(E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or SINCE BIRTH),01st
+                    January
+                    2021 should be
+                    typed as 01/JAN/2021." : "(E.g. Enter date as
+                    (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or SINCE BIRTH or Not Provided ),01st
+                    January
+                    2021 should be typed
+                    as 01/JAN/2021."}}
+                  </mat-error>
+                }
+                @if (!!addressformgrp?.get( formgroupName + '.addressPos')?.controls[i]?.get('periodOfStay')?.errors?.incorrect && userdata.applicationId === 3) {
+                  <mat-error
+                    >
+                    Period of stay from is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 or
+                    JAN/2017 or
+                    2022 or SINCE
+                  BIRTH),01st January 2021 should be typed as 01/JAN/2021. </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          @if (!isCriminalDB) {
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+              >
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Period of Stay To</mat-label>
+                @if (userdata.applicationId !==3) {
+                  <span matSuffix class="suff-lbtn"
+                    [ngClass]="addressformgrp?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                    matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a
+                    mat-flat-button
+                  (click)="common.setNotProvide(addressformgrp?.get(formgroupName + '.addressPos')?.controls[i],'periodOfStayTo')">NA</a></span>
+                }
+                <input #stayto matInput placeholder="Period of Stay To" formControlName="periodOfStayTo"
+                  (focus)="naFlag !== true ?PeriodOfStayTo.open():''"
+                  (input)="upperCase(stayto.value,'periodOfStayTo', i);" />
+                <input matInput hidden [max]="maxDateValue" (dateChange)="handleDateChange($event,'periodOfStayTo', i);"
+                  [matDatepicker]="PeriodOfStayTo">
+                <mat-datepicker-toggle
+                  [ngClass]="addressformgrp?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                matSuffix [for]="PeriodOfStayTo"></mat-datepicker-toggle>
+                <mat-datepicker #PeriodOfStayTo></mat-datepicker>
+                <!-- <input type="text" matInput placeholder="Period of Stay To" autocomplete="off" maxlength="75" role="presentation"
+                formControlName="periodOfStayTo" /> -->
+                @if (userdata.applicationId !==3) {
+                  <mat-hint class="f-13">(Eg. Enter date as
+                    (01/JAN/2021 or 01/01/2021 or JAN/2017) or 2022 or TILL DATE or Not Provided),01st
+                    January
+                    2021
+                    should be typed
+                    as 01/JAN/2021.
+                  </mat-hint>
+                }
+                @if (userdata.applicationId ===3) {
+                  <mat-hint class="f-13">(Eg. Enter date as
+                    (01/JAN/2021 or 01/01/2021 or JAN/2017) or 2022 or TILL DATE),01st January 2021 should
+                    be
+                    typed
+                    as 01/JAN/2021.
+                  </mat-hint>
+                }
+                @if (!!addressformgrp?.get(formgroupName + '.addressPos')?.controls[i]?.get('periodOfStayTo')?.errors?.date?.invalidPattern) {
+                  <mat-error
+                    >
+                    {{userdata.applicationId === 3 ?
+                    "(E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or TILL DATE),01st
+                    January
+                    2021 should be
+                    typed as 01/JAN/2021." : "(E.g. Enter date as
+                    (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or TILL DATE or Not Provided),01st
+                    January
+                    2021
+                    should be typed as
+                    01/JAN/2021."}}
+                  </mat-error>
+                }
+                @if (!!addressformgrp?.get( formgroupName + '.addressPos')?.controls[i]?.get('periodOfStayTo')?.errors?.incorrect && userdata.applicationId === 3) {
+                  <mat-error
+                    >
+                    Period of stay to is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017
+                    or
+                    2022
+                    or TILL DATE),01st
+                  January 2021 should be typed as 01/JAN/2021. </mat-error>
+                }
+                @if (!!addressformgrp?.get(formgroupName + '.addressPos')?.controls[i]?.get('periodOfStayTo')?.errors?.comparison) {
+                  <mat-error
+                    >
+                    Period of stay to date should be greater than Period of stay from date
+                  </mat-error>
+                }
+                @if (!!addressformgrp?.get(formgroupName + '.addressPos')?.controls[i]?.get('periodOfStayTo')?.errors?.required) {
+                  <mat-error
+                    >
+                  Period of stay to is required </mat-error>
+                }
+                @if (addressformgrp?.get(formgroupName + '.addressPos')?.controls[i]?.get('periodOfStayTo')?.hasError('matDatepickerMax')) {
+                  <mat-error>
+                    Future dates are not allowed for this client.
+                  </mat-error>
+                }
+                @if (addressformgrp?.get(formgroupName + '.addressPos')?.controls[i]?.get('periodOfStayTo')?.hasError('matDatepickerMax')) {
+                  <mat-error>
+                    Future dates are not allowed.
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          @if (AddFlag!=false) {
+            <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="25%" fxFlex.xs="100%"
+              >
+              <mat-label>&nbsp;</mat-label>
+              <div class="adrem text-left" fxLayoutGap="8px">
+                @if (last) {
+                  <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                    (click)="addPos()"
+                    [ngClass]="addressformgrp?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'">
+                    <i class="icon-plus-circle"></i> </button>
+                  }
+                  @if (last) {
+                    <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                      (click)="removePos(i)"
+                      [ngClass]="addressformgrp?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'">
+                      <i class="icon-x-circle"></i> </button>
+                    }
+                  </div>
+                </div>
+              }
+              @if (addressformgrp?.get('addressPos')?.controls[i]?.get('periodOfStay')?.value &&
+                addressformgrp?.get('addressPos')?.controls[i]?.get('periodOfStayTo')?.value) {
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-label>Total Duration</mat-label>
+                  <br />
+                  <b>{{common?.getDateCaluculationDiff(
+                    addressformgrp?.get('addressPos')?.controls[i]?.get('periodOfStay')?.value ,
+                    addressformgrp?.get('addressPos')?.controls[i]?.get('periodOfStayTo')?.value,
+                    addressformgrp?.get(formgroupName + '.dob').value
+                  )}}</b>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+    <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="50%" fxLayoutGap="20px" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Country</mat-label>
+            <input type="text" matInput placeholder="Select Country" formControlName="countryId"
+              [matAutocomplete]="autocountry" #countryInput (focus)="countryItems(countryInput.value)"
+              (keyup)="countryKeyupFunction($event, countryInput.value)" (input)="countryItems(countryInput.value)"
+              (click)="countryInput.select()" autocomplete="off" role="presentation" (blur)="checkValidValues()" required/>
+            <mat-error *ngIf="!!addressformgrp?.get('address.countryId')?.errors?.required"> Country is
+            required </mat-error>
+            <mat-error *ngIf="!!addressformgrp?.get('address.countryId')?.errors?.incorrect">This is not
+            a valid value</mat-error>
+            <mat-autocomplete #autocountry="matAutocomplete" [displayWith]="displayCountryFn"
+              (optionSelected)="selectcountry()">
+              <mat-option [value]="country.countryId" *ngFor="let country of countryfilterlist"
+                class="autocom-option autocom-tr"> <span
+              [innerHTML]="country.country | highlight: countryInput.value"></span> </mat-option>
+              <mat-option *ngIf="countryfilterlist?.length == 0">
+                <div class="no-record"><span>No Data Found</span></div>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>State</mat-label>
+            <input type="text" matInput placeholder="Select State" formControlName="stateId"
+              [matAutocomplete]="autostate" #stateInput (focus)="stateItems(stateInput.value)"
+              (keyup)="stateKeyupFunction($event, stateInput.value)" (input)="stateItems(stateInput.value)"
+              (click)="stateInput.select()" autocomplete="off" role="presentation" (blur)="checkValidState()" required />
+            <mat-error *ngIf="!!addressformgrp?.get('address.stateId')?.errors?.required"> State is required </mat-error>
+            <mat-error *ngIf="!!addressformgrp?.get('address.stateId')?.errors?.incorrect">This is not
+            a valid value</mat-error>
+            <mat-autocomplete #autostate="matAutocomplete" [displayWith]="displayStateFn"
+              (optionSelected)="selectState()">
+              <mat-option [value]="state.stateId" *ngFor="let state of statefilterlist" class="autocom-option autocom-tr"> <span [innerHTML]="state.stateName | highlight: stateInput.value"></span> </mat-option>
+              <mat-option *ngIf="statefilterlist?.length == 0">
+                <div class="no-record"><span>No Data Found</span></div>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div> -->
+</div>
+</div>
+<ng-template #addressTemplate>
+  <mat-card-header>
+    <mat-card-title>
+      <h1 class="header-title">Exist Address Details - <b>
+      {{addressformgrp?.get(formgroupName+'.postalCode')?.value}}</b></h1>
+    </mat-card-title>
+  </mat-card-header>
+
+  <p-table
+    #dtable
+    [columns]="addressColumns"
+    [value]="addressDetailList"
+    [scrollable]="true"
+    scrollHeight=""
+    [paginator]="true"
+    [rows]="itemperpage"
+    [resizableColumns]="true"
+    [reorderableColumns]="true">
+
+    <!-- ===== COLGROUP ===== -->
+    <ng-template pTemplate="colgroup" let-colGroupCols>
+      <colgroup>
+      @for (col of colGroupCols; track col) {
+        <col
+          [style.width]="col.field === 'sno' ? '10px' : '30px'" />
+      }
+    </colgroup>
+  </ng-template>
+
+  <!-- ===== HEADER ===== -->
+  <ng-template pTemplate="header" let-headerCols>
+    <tr>
+      @for (col of headerCols; track col) {
+        <th
+          [style.width]="col.field === 'sno' ? '10px' : '30px'">
+          <div>{{ col.header }}</div>
+        </th>
+      }
+    </tr>
+  </ng-template>
+
+  <!-- ===== BODY ===== -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-index="rowIndex"
+    let-bodyCols="columns">
+
+    <tr>
+      @for (col of bodyCols; track col) {
+        <td matTooltipClass="accent-tooltip">
+          @if (col.field === 'sno') {
+            <div>
+              {{ index + 1 }}
+            </div>
+          }
+          @if (col.field !== 'sno') {
+            <div>
+              {{ rowData[col.field] }}
+            </div>
+          }
+        </td>
+      }
+    </tr>
+
+  </ng-template>
+
+</p-table>
+
+<div class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+  fxLayoutGap.xs="20px grid">
+  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+    fxLayoutAlign="start center"> Showing {{ dtable.totalRecords < 1 ? 0 : dtable.first + 1 }} - {{
+    dtable.totalRecords> 0
+    ? dtable.rows + dtable.first <= dtable.totalRecords ? dtable.rows + dtable.first : dtable.totalRecords :
+    0 }} of {{ dtable.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a>
+  </div>
+  <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center"
+    fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+            <a [ngClass]="dtable.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                          dtable.onPageChange({ first: dtable.first - dtable.rows, rows: dtable.rows });
+                              navigateNxtPrevPage(dtable.first + dtable.rows, dtable.rows)"> <i
+    class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go
+    to
+    Page<span class="input-num">
+    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dtable.rows)" />
+  </span></span> <span class="mr-2" fxHide.xs> of
+{{ getTotalPages(dtable.totalRecords, dtable.rows) }}</span>
+            <a [ngClass]="dtable.rows + dtable.first >= dtable.totalRecords? 'page-btn disabled': 'page-btn'" (click)="dtable.onPageChange({ first: dtable.first + dtable.rows, rows: dtable.rows });
+                              navigateNxtPrevPage(dtable.first + dtable.rows, dtable.rows)"><i
+class="icon-control-end ml-5"></i></a>
+</div>
+</div>
+
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+  <button mat-flat-button color="warn" (click)="validatePincode('no')">Cancel</button>
+  <button mat-flat-button color="accent" (click)="validatePincode('yes')">Yes, update it</button>
+</mat-dialog-actions>
+</ng-template>
+<ng-template #PincodePopUp>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+          src="assets/images/alert-warning.gif"></div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h4 class="m-0">{{ Message}}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="ok()">OK</button>
+
+  </mat-dialog-actions>
+</ng-template>

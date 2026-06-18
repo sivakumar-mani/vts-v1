@@ -1,0 +1,148 @@
+<!-- <div  fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" class="raise-bg" ngClass.sm ="mt-15" ngClass.xs ="mt-15">
+<div fxFlex="100%"> -->
+
+  <form [formGroup]='mainForm'>
+
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid">
+      <div fxFlex="100%">
+        <h3 class="sub-header">Raise Insufficiency</h3>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+      <div fxFlex="100%" [formGroupName]="formgroupName">
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Screening Status</mat-label>
+              <mat-select required placeholder="Screening Status" formControlName="screeningStatusId" (selectionChange)="screeningStatusList($event.value)">
+                @for (status of statusList; track status) {
+                  <mat-option [value]="status.statusId">{{status.screeningStatus}}
+                  </mat-option>
+                }
+              </mat-select>
+              @if (!!mainForm?.get(formgroupName+'.screeningStatusId')?.errors?.required) {
+                <mat-error>Screening Status is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Raised Date</mat-label>
+              <input matInput [matDatepicker]="picker" placeholder="Raised Date" autocomplete="off" role="presentation" formControlName="raisedDate" [max]="maxdate" (focus)="picker.open()" (click)="picker.open()" />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              @if (!!mainForm?.get(formgroupName+'.raisedDate')?.errors?.required) {
+                <mat-error> Raised date is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="45%" fxFlex.lg="45%" fxFlex.md="45%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="60%">
+              <mat-label>Insufficiency Level</mat-label>
+              <mat-select placeholder="Insufficiency Level" formControlName="levelLookupId">
+                <!-- <mat-option>Insufficiency Level</mat-option> -->
+                @for (level of levelList; track level) {
+                  <mat-option [disabled]="(mainForm.get('compRef.currentEmployerFlag')?.value === true && (level.lookUpName === 'CE' || level.lookUpName === 'Level-1')) ? false : true" [value]="level.lookUpId">{{level.lookUpName}}</mat-option>
+                }
+              </mat-select>
+              @if (!!mainForm?.get(formgroupName+'.levelLookupId')?.errors?.required) {
+                <mat-error> Insufficiency level is required </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" class="mb-10">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-radio-group formControlName="requiredLookupId" aria-label="Select an option" fxLayoutGap="20px">
+              <mat-label class="lbl">Required Type</mat-label>
+              @for (opt of insuffReqType; track opt; let optionsIndex = $index) {
+                <mat-radio-button (change)="getRequiredType(opt.lookUpName)" [value]="opt.lookUpId">
+                {{opt.lookUpName}} </mat-radio-button>
+              }
+              @if (!!mainForm?.get(formgroupName+'.requiredLookupId')?.errors?.required &&
+                !!mainForm?.get(formgroupName+'.requiredLookupId')?.touched) {
+                <mat-error> Select atleast one required type </mat-error>
+              }
+            </mat-radio-group>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid">
+          <div fxFlex="100%">
+            @if (showInsuffDoc) {
+              <h3 class="sub-header">Insufficiency Documents</h3>
+            }
+          </div>
+        </div>
+        @if (showInsuffDoc) {
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-selection-list formControlName="insuffDocument" (selectionChange)="addInsufDesc()" class="pt-0" [compareWith]="compare">
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
+                  @for (insuf of insuffDocArr; track insuf) {
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%" class="raise">
+                      <mat-list-option checkboxPosition="before" [selected]="selectedDoctID.includes(insuf.insuffDocId)" [value]="insuf">
+                        {{insuf.description}}
+                      </mat-list-option>
+                    </div>
+                  }
+                </div>
+              </mat-selection-list>
+            </div>
+          </div>
+        }
+        @if (showInsuffDoc) {
+          <div fxLayout="row wrap" fxLayoutGap="0px grid" class="mt-10" Class="mb-25">
+            <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <a class="text-sm mb-5" (click)="openDocDialog()" class="text-sm" [ngClass]="!!mainForm?.get(formgroupName+'.requiredLookupId').disabled?'page-btn disabled':''">
+                <i class="icon-plus-circle"></i> Click here to add another Insufficiency Documents</a>
+              </div>
+            </div>
+          }
+          @for (item of inSuffRemarks(); track item; let i = $index) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" formArrayName="insuffDetail"
+              class="mt-15">
+              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroupName]="i">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Insufficiency Remarks</mat-label>
+                  <textarea required #rej matInput formControlName="comments" placeholder="Insufficiency Remarks" maxlength="1000" col cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="3" [readOnly]="isDocReq()" cdkAutosizeMaxRows="6" (blur)="remarkblur(item, rej.value)"
+                  (click)="remarkblur(item, rej.value)"></textarea>
+                  <mat-hint class="f-13">({{rej.value.length}} /1000 max) </mat-hint>
+                  @if (!!item?.get('comments')?.errors?.required) {
+                    <mat-error>
+                    Insufficiency remarks is required </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </form>
+
+  <!-- </div>
+</div> -->
+
+
+<ng-template #docAdd>
+  <form>
+    <h1 mat-dialog-title>Insufficiency Document</h1>
+    <mat-dialog-content>
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Insufficiency Document Name</mat-label>
+            <input matInput #doc matInput autocomplete="off" [formControl]="docName" placeholder="Insufficiency Document Name" role="presentation" maxlength="100">
+            <mat-hint class="f-13"> ({{doc.value.length}} /100 max) </mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-flat-button color="primary" [disabled]="!docName.valid" (click)="saveInsuffDoc()"> Save </button>
+      <button mat-flat-button color="warn" (click)="dialogRef.close()"> Close </button>
+    </mat-dialog-actions>
+  </form>
+</ng-template>
+<!-- {{mainForm.value|json}} -->

@@ -1,0 +1,54 @@
+<form [formGroup]="mainForm">
+
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+    fxLayoutGap="20px grid">
+    @for (item of getMiscFormGroup(); track item; let i = $index) {
+      <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+        [formArrayName]="formArrName">
+        <div [formGroupName]="i">
+          @switch (item.get('fieldType')?.value) {
+            @case ('TextBox') {
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>{{item.get('fieldName')?.value}}</mat-label>
+                <input matInput placeholder="{{item.get('fieldName')?.value}}" formControlName="fieldValue"
+                  maxlength="500" />
+                @if (!!item.get('fieldValue')?.errors?.required) {
+                  <mat-error>
+                    {{item.get('fieldName')?.value}} is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            }
+            @case ('TextArea') {
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>{{item.get('fieldName')?.value}}</mat-label>
+                <textarea matInput placeholder="{{item.get('fieldName')?.value}}" formControlName="fieldValue"
+                maxlength="500"></textarea>
+                @if (!!item.get('fieldValue')?.errors?.required) {
+                  <mat-error>
+                    {{item.get('fieldName')?.value}} is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            }
+            @case ('Date') {
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>{{item.get('fieldName')?.value}}</mat-label>
+                <input matInput [matDatepicker]="picker2" placeholder="{{item.get('fieldName')?.value}}"
+                  formControlName="fieldValue" (focus)="picker2.open()" (click)="picker2.open()" />
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+                @if (!!item.get('fieldValue')?.errors?.required) {
+                  <mat-error>
+                    {{item.get('fieldName')?.value}} is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+</form>

@@ -1,0 +1,214 @@
+<form [formGroup]="mainForm" autocomplete="off" role="presentation">
+  @if (mainForm!=undefined) {
+    <div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <app-common-base-info [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'" [compBaseDetails]="compBaseDetails" (emitNotappChange)="notApplicable($event)" [showNotApplicable]="showNotApplicable"> </app-common-base-info>
+        </div>
+      </div>
+      <div [formGroupName]="formgroupName">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+          <div fxFlex="100%">
+            <h3 class="sub-header">Bank Statement Details</h3>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="33.33%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Employer Name</mat-label>
+              <input formControlName="employerName" type="text" matInput placeholder="Employer Name" required maxlength="150">
+              @if (!!mainForm?.get(formgroupName)?.get('employerName')?.errors?.required) {
+                <mat-error> Employer name is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>From Date</mat-label>
+              @if (userData.applicationId !==3) {
+                <span matSuffix class="suff-lbtn" [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'" matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a mat-flat-button
+                (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'fromDate');touchValidation(frmdate.value,'fromDate')">NA</a></span>
+              }
+              <input matInput placeholder="From Date" formControlName="fromDate" #frmdate (focus)="naFlag !== true ? fromDate.open(): ''" (click)="naFlag !== true ? fromDate.open(): ''" (input)="upperCase(frmdate.value,'fromDate');touchValidation(frmdate.value,'fromDate')"
+                (keyup)="notProvidevalidation(frmdate.value)" required />
+              <input matInput hidden (dateChange)="handleDateChange($event,'fromDate')" [matDatepicker]="fromDate">
+              <mat-datepicker-toggle [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'" matSuffix [for]="fromDate"></mat-datepicker-toggle>
+              <mat-datepicker #fromDate></mat-datepicker>
+              @if (userData.applicationId !==3) {
+                <mat-hint class="f-13"> Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or Not Provided),01st January 2019 should be typed as 01/JAN/2021) </mat-hint>
+              }
+              @if (userData.applicationId ===3) {
+                <mat-hint class="f-13"> Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022),01st January 2019 should be typed as 01/JAN/2021) </mat-hint>
+              }
+              @if (!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.date?.invalidPattern) {
+                <mat-error>
+                  {{userData.applicationId === 3 ? "From date is invalid (E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022),01st January 2021 should be typed as 01/JAN/2021." : "From date is invalid (E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017
+                  or 2022 or Not Provided),01st January 2021 should be typed as 01/JAN/2021."}}
+                </mat-error>
+              }
+              @if (!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.required) {
+                <mat-error>
+                  Form Date is required
+                </mat-error>
+              }
+              @if (!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.incorrect && userData.applicationId === 3) {
+                <mat-error>
+                From date is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022),01st January 2021 should be typed as 01/JAN/2021. </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>To Date</mat-label>
+              @if (userData.applicationId !==3) {
+                <span matSuffix class="suff-lbtn" [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'" matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a mat-flat-button
+                (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'toDate')">NA</a></span>
+              }
+              <input matInput placeholder="To Date" formControlName="toDate" #todate (input)="upperCase(todate.value,'toDate');touchValidation(todate.value,'toDate');notProvide(todate.value)" required (focus)="naFlag !== true ? todate.open(): ''" (click)="naFlag !== true ? todate.open(): ''"
+                />
+              <input matInput hidden (dateChange)="handleDateChange($event,'toDate')" [matDatepicker]="toDate">
+              <mat-datepicker-toggle [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'" matSuffix [for]="toDate"></mat-datepicker-toggle>
+              <mat-datepicker #toDate></mat-datepicker>
+              @if (userData.applicationId !==3) {
+                <mat-hint class="f-13"> Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022 or Not Provided),01st January 2019 should be typed as 01/JAN/2021) </mat-hint>
+              }
+              @if (userData.applicationId ===3) {
+                <mat-hint class="f-13"> Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022),01st January 2019 should be typed as 01/JAN/2021) </mat-hint>
+              }
+              @if (!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.date?.invalidPattern) {
+                <mat-error>
+                  {{userData.applicationId === 3 ? "To date is invalid (E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022),01st January 2021 should be typed as 01/JAN/2021." : "To date is invalid (E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017
+                  or 2022 or Not Provided),01st January 2021 should be typed as 01/JAN/2021."}}
+                </mat-error>
+              }
+              @if (!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.required) {
+                <mat-error>
+                  To Date is required
+                </mat-error>
+              }
+              @if (!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.incorrect && userData.applicationId === 3) {
+                <mat-error>
+                To date is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or 2022),01st January 2021 should be typed as 01/JAN/2021. </mat-error>
+              }
+              @if (!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.comparison) {
+                <mat-error>
+                  To date should be greater than from date
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="33.33%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Bank Name</mat-label>
+              <input formControlName="bankName" type="text" matInput placeholder="Bank Name" maxlength="100">
+              @if (!!mainForm?.get(formgroupName)?.get('bankName')?.errors?.required) {
+                <mat-error> Bank name is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Branch Name</mat-label>
+              <input formControlName="branchName" type="text" matInput placeholder="Branch Name" maxlength="100">
+              @if (!!mainForm?.get(formgroupName)?.get('branchName')?.errors?.required) {
+                <mat-error> Branch name is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Account No</mat-label>
+              <input formControlName="accountNo" type="text" matInput placeholder="Account No" maxlength="20">
+              @if (!!mainForm?.get(formgroupName)?.get('accountNo')?.errors?.required) {
+                <mat-error>Account no is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Statement From</mat-label>
+              <input matInput [matDatepicker]="picker" onkeypress="return false;" onkeyup="return false;" placeholder="Statement From" autocomplete="off" role="presentation" formControlName="statementFrom"  [max]="maxDate" (focus)="picker.open()" (click)="picker.open()"
+                />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              @if (!!mainForm.get(formgroupName + '.statementFrom')?.errors?.required) {
+                <mat-error>
+                Statement from is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Statement To</mat-label>
+              <input matInput [matDatepicker]="picker1" onkeypress="return false;" onkeyup="return false;" placeholder="Statement To" autocomplete="off" role="presentation" formControlName="statementTo" [min]="mainForm.get(formgroupName + '.statementFrom').value" [max]="maxDate"
+                (focus)="picker1.open()" (click)="picker1.open()" />
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+              @if (!!mainForm.get(formgroupName + '.statementTo')?.errors?.required) {
+                <mat-error>
+                Statement to is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="20px" class="mb-10">
+        <div fxFlex="100%">
+          <app-custom-fields [mainForm]="mainForm" [formArrName]="'componentCustomFields'"></app-custom-fields>
+        </div>
+      </div>
+      @if (!fileBtn) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
+          <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroupName]="'screeningComponentInfo'">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Remarks</mat-label>
+              <textarea #remark formControlName="remark" maxlength="1000" matInput placeholder="Remarks"> </textarea>
+              <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
+            </mat-form-field>
+          </div>
+          @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length) {
+            <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroupName]="'screeningComponentInfo'">
+              <mat-label class="lbl">Choose</mat-label>
+              <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise Insufficiency</mat-checkbox>
+            </div>
+          }
+        </div>
+      }
+      @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <div class="alert alert-info" role="alert">
+              <h4>Insufficiency Clearance Remarks: </h4>
+              @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+                <span>
+                  {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+                }
+              </div>
+            </div>
+          </div>
+        }
+        @if (mainForm?.get('screeningComponentInfo')?.get('insuffRaisedFlag').value === true && userData.applicationId === 1) {
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+              <app-common-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm" [compBaseDetails]="mainForm.get('screeningComponentInfo').value" [formgroupName]="'screeningInsufficiency'">
+              </app-common-raise-insufficiency>
+            </div>
+          </div>
+        }
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <app-client-app-document-upload [fileBtn]="fileBtn" [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'" [dupScreeningDoc]="screeningComponent.componentDocument" [validationFlag]="nFlag !== true && userData.applicationId === 3 ? true : false">
+            </app-client-app-document-upload>
+          </div>
+        </div>
+      </div>
+    }
+  </form>

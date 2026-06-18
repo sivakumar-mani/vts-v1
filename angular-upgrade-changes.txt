@@ -1,0 +1,231 @@
+================================================================================
+           ANGULAR UPGRADE CHANGES - VTS PROJECT
+================================================================================
+
+================================================================================
+ ANGULAR 15 TO 16 UPGRADE - FILES CHANGED (DONE IN THIS SESSION)
+================================================================================
+
+TOTAL FILES CHANGED: 13
+
+--------------------------------------------------------------------------------
+1. CONFIG FILES (3 files)
+--------------------------------------------------------------------------------
+
+FILE: package.json
+CHANGES:
+  - @angular/* packages        : ^15.2.9  --> ^16.2.12
+  - @angular/cdk, material     : ^15.2.9  --> ^16.2.14
+  - @angular-devkit/*, cli     : ^15.2.9  --> ^16.2.14
+  - zone.js                    : ~0.12.0  --> ~0.13.3
+  - @angular/flex-layout       : REMOVED  (deprecated)
+  - @ngbracket/ngx-layout      : ADDED    ^16.0.0 (replacement)
+  - @progress/kendo-angular-*  : ^11.x    --> ^12.0.0
+  - @progress/kendo-angular-utils : ADDED ^12.0.0 (new in Kendo v12)
+  - primeng                    : ^15.4.1  --> ^16.9.1
+  - primeicons                 : ^5.0.0   --> ^6.0.1
+  - angular-oauth2-oidc        : ^15.0.1  --> ^16.0.0
+  - angular-oauth2-oidc-jwks   : ^15.0.1  --> ^16.0.0
+  - ngx-spinner                : ^15.0.1  --> ^16.0.2
+  - ngx-countdown              : ^15.0.0  --> ^16.0.0
+  - ngx-image-compress         : ^15.1.5  --> ^15.1.6 (no v16 exists)
+  - ngx-image-cropper          : ^6.0.0   --> ^7.0.1
+  - @danielmoncada/angular-datetime-picker : ^15.0.0 --> ^16.0.0
+  - typescript                 : ~4.9.5   --> ~5.0.4
+  - @types/node                : ^12.11.1 --> ^18.0.0
+  - codelyzer                  : REMOVED  (TSLint removed in Angular 16)
+  - tslint                     : REMOVED  (TSLint removed in Angular 16)
+  - npm run lint script        : updated to show ESLint migration note
+
+FILE: angular.json
+CHANGES:
+  - polyfills : "src/polyfills.ts" --> ["zone.js", "src/polyfills.ts"]
+  - defaultProject             : REMOVED  (deprecated in Angular 16)
+  - lint builder (tslint)      : REMOVED  (tslint builder removed in CLI 16)
+  - e2e lint builder (tslint)  : REMOVED
+
+FILE: tsconfig.json
+CHANGES:
+  - target : "es2020" --> "ES2022"
+
+--------------------------------------------------------------------------------
+2. MODULE FILES - flex-layout import change (6 files)
+--------------------------------------------------------------------------------
+
+FILE: src/app/app.module.ts
+  - import { FlexLayoutModule } from '@angular/flex-layout'
+  + import { FlexLayoutModule } from '@ngbracket/ngx-layout'
+
+FILE: src/app/case/case.module.ts
+  - import { FlexLayoutModule } from '@angular/flex-layout'
+  + import { FlexLayoutModule } from '@ngbracket/ngx-layout'
+
+FILE: src/app/master/master.module.ts
+  - import { FlexLayoutModule } from '@angular/flex-layout'
+  + import { FlexLayoutModule } from '@ngbracket/ngx-layout'
+
+FILE: src/app/common-methods/modules/shared.module.ts
+  - import { FlexLayoutModule } from '@angular/flex-layout'
+  + import { FlexLayoutModule } from '@ngbracket/ngx-layout'
+
+FILE: src/app/screening/screening.module.ts
+  - import { FlexLayoutModule } from '@angular/flex-layout'
+  + import { FlexLayoutModule } from '@ngbracket/ngx-layout'
+
+FILE: src/app/client-entry/client-entry.module.ts
+  - import { FlexLayoutModule } from '@angular/flex-layout'
+  + import { FlexLayoutModule } from '@ngbracket/ngx-layout'
+
+--------------------------------------------------------------------------------
+3. SERVICE FILES - flex-layout import change (2 files)
+--------------------------------------------------------------------------------
+
+FILE: src/app/common-methods/services/screening.service.ts
+  - import { validateBasis } from '@angular/flex-layout'
+  + import { validateBasis } from '@ngbracket/ngx-layout'
+
+FILE: src/app/screening/abroad-file-submission/abroad-file-submission.component.ts
+  - import { validateBasis } from '@angular/flex-layout'
+  + import { validateBasis } from '@ngbracket/ngx-layout'
+
+--------------------------------------------------------------------------------
+4. BUG FIX FILES (2 files)
+--------------------------------------------------------------------------------
+
+FILE: src/app/verification/verification-details/verification-details.component.ts
+  REASON : @types/node v18 does not export 'domain' from 'process'
+  - import { debug } from 'console';   --> REMOVED (unused import)
+  - import { domain } from 'process';  --> REMOVED (unused import)
+
+FILE: src/app/common-methods/models/dynamic-data.ts
+  REASON : TypeScript 5.0 TS2612 - subclass cannot redeclare base class
+           property without initializer
+  - type: string;         (in Textbox class)
+  + declare type: string; (in Textbox class)
+
+
+================================================================================
+ ANGULAR 14 TO 15 UPGRADE - TYPICAL FILES THAT CHANGE
+================================================================================
+
+NOTE: This upgrade was NOT done in this session.
+      Project was already at Angular 15 when session started.
+      Below is the general list of files that typically change.
+
+--------------------------------------------------------------------------------
+1. CONFIG FILES
+--------------------------------------------------------------------------------
+
+FILE: package.json
+CHANGES:
+  - @angular/*                 : ^14.x    --> ^15.x
+  - @angular-devkit/*, cli     : ^14.x    --> ^15.x
+  - zone.js                    : ~0.11.x  --> ~0.12.0
+  - typescript                 : ~4.7.x   --> ~4.9.x
+  - @progress/kendo-angular-*  : ^10.x    --> ^11.x
+  - primeng                    : ^14.x    --> ^15.x
+  - primeicons                 : ^4.x     --> ^5.0.0
+  - angular-oauth2-oidc        : ^14.x    --> ^15.x
+  - ngx-spinner                : ^14.x    --> ^15.x
+  - @angular/flex-layout       : ^14.x    --> ^15.0.0-beta.42
+
+FILE: angular.json
+CHANGES:
+  - Build configuration adjustments
+  - AOT is default (no change needed if already true)
+
+FILE: tsconfig.json
+CHANGES:
+  - TypeScript target may need update
+  - useDefineForClassFields setting may be needed
+
+FILE: src/polyfills.ts
+CHANGES:
+  - import 'zone.js' must be explicit (not commented out)
+
+--------------------------------------------------------------------------------
+2. ANGULAR MATERIAL MDC MIGRATION (Biggest change in 14 -> 15)
+--------------------------------------------------------------------------------
+
+Angular 15 migrated ALL Material components to MDC-based implementation.
+CSS class names changed throughout.
+
+FILE: src/styles.css
+  - .mat-button       --> .mat-mdc-button
+  - .mat-input-element --> .mat-mdc-input-element
+  - .mat-form-field   --> .mat-mdc-form-field
+  - .mat-dialog-*     --> .mat-mdc-dialog-*
+  - .mat-table        --> .mat-mdc-table
+  - .mat-row          --> .mat-mdc-row
+  - .mat-cell         --> .mat-mdc-cell
+  - .mat-header-cell  --> .mat-mdc-header-cell
+  (and many more...)
+
+FILES: All *.component.css / *.component.scss
+  - Any file using Material CSS class names needs update
+
+FILE: src/app/common-methods/modules/material.module.ts
+  - Some import paths may change
+
+--------------------------------------------------------------------------------
+3. MODULE FILES - Legacy Material imports
+--------------------------------------------------------------------------------
+
+In Angular 15, old Material components got 'Legacy' prefix.
+Any file using these needs update:
+
+  MatButton          --> MatLegacyButton  OR new MDC MatButton
+  MatInput           --> MatLegacyInput   OR new MDC MatInput
+  MatSelect          --> MatLegacySelect  OR new MDC MatSelect
+  MatTable           --> MatLegacyTable   OR new MDC MatTable
+  MatDialog          --> MatLegacyDialog  OR new MDC MatDialog
+  MatTooltip         --> MatLegacyTooltip OR new MDC MatTooltip
+  MatCheckbox        --> MatLegacyCheckbox OR new MDC MatCheckbox
+  MatRadioButton     --> MatLegacyRadioButton OR new MDC version
+  MatSlideToggle     --> MatLegacySlideToggle OR new MDC version
+
+--------------------------------------------------------------------------------
+4. BREAKING CHANGE FILES
+--------------------------------------------------------------------------------
+
+FILES using routerLink:
+  - routerLink with undefined value now disables the link in Angular 15
+  - Check all [routerLink]="someVariable" bindings
+
+FILES using DATE_PIPE_DEFAULT_TIMEZONE:
+  - Token was renamed - update injection tokens
+
+--------------------------------------------------------------------------------
+5. FLEX LAYOUT
+--------------------------------------------------------------------------------
+
+Module files using FlexLayoutModule:
+  - @angular/flex-layout version ^14.x --> ^15.0.0-beta.42
+
+================================================================================
+ SUMMARY COMPARISON
+================================================================================
+
++------------------+----------------------------------+----------------------+
+| Upgrade          | Biggest Change                   | Files Changed        |
++------------------+----------------------------------+----------------------+
+| Angular 14 -> 15 | Material MDC migration           | Many component CSS   |
+|                  | (CSS class names changed)        | + module files       |
++------------------+----------------------------------+----------------------+
+| Angular 15 -> 16 | flex-layout deprecated,          | 13 files             |
+|                  | Kendo v12, TypeScript 5.0        | (done in session)    |
++------------------+----------------------------------+----------------------+
+
+================================================================================
+ POST UPGRADE STEPS
+================================================================================
+
+Angular 15 -> 16 (completed):
+  [DONE] npm install --legacy-peer-deps
+  [DONE] Build successful
+  [TODO] Run: ng add @angular-eslint/schematics  (to replace TSLint with ESLint)
+  [TODO] Upgrade Node.js to v18 LTS or v20 LTS   (current: v16.20.2)
+
+================================================================================
+                         END OF FILE
+================================================================================

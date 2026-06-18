@@ -1,0 +1,324 @@
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <form appScrollToError [formGroup]="agreementForm" autocomplete="off">
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"
+          fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Agreement Availability</mat-label>
+              <mat-select placeholder="Select Availability"
+                (selectionChange)="agreementAvailabilityChange($event?.value)"
+                formControlName="agreementAvailabilityFlag">
+                <mat-option [value]="true">Yes</mat-option>
+                <mat-option [value]="false">No</mat-option>
+              </mat-select>
+              @if (agreementForm?.get('agreementAvailabilityFlag')?.errors?.required) {
+                <mat-error>
+                  Agreement Availability is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          @if (agreementForm?.get('agreementAvailabilityFlag').value==true) {
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%"
+              >
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Type of Agreement</mat-label>
+                <mat-select placeholder="Select Type Of Agreement" formControlName="typeOfAgreement"
+                  (selectionChange)="typeOfAgreementChange($event.value)">
+                  @for (typeOfAgreement of bindData?.typeOfAgreement; track typeOfAgreement) {
+                    <mat-option
+                    [value]="typeOfAgreement?.lookUpId"> {{typeOfAgreement?.lookUpName}} </mat-option>
+                  }
+                </mat-select>
+                @if (agreementForm?.get('typeOfAgreement')?.errors?.required) {
+                  <mat-error>
+                    Type of agreement is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          @if (agreementForm?.get('agreementAvailabilityFlag').value==true &&
+            agreementForm?.get('typeOfAgreement')?.value && (commonService?.getNameById(bindData?.typeOfAgreement, 'lookUpId', 'lookUpName',
+            agreementForm?.get('typeOfAgreement')?.value)?.toLowerCase() === commonService?.OTHERS?.toLowerCase())) {
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%"
+              >
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Others</mat-label>
+                <input formControlName="remarks" autocomplete="off" role="presentation" matInput
+                  placeholder="Others" maxlength="50">
+                @if (agreementForm?.get('remarks')?.errors?.required) {
+                  <mat-error>
+                    Others is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          @if (agreementForm?.get('agreementAvailabilityFlag')?.value==true) {
+            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%"
+              >
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Date Of Agreement</mat-label>
+                <input matInput [matDatepicker]="picker1" mat-autofocus="true" appNumberOnly
+                  [NumberOnlyWithslash]="false" formControlName="dateOfAgreement" preventDragdrop
+                  preventCutCopyPaste placeholder="Date Of Agreement" (focus)="picker1?.open()"
+                  (click)="picker1?.open()">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+                @if (agreementForm?.get('dateOfAgreement')?.errors?.required) {
+                  <mat-error>
+                    Date of agreement is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+        </div>
+        @if (agreementForm?.get('agreementAvailabilityFlag').value==false) {
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"
+            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+            >
+            <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Reason for unavailability</mat-label>
+                <textarea #reason formControlName="reasonofNonAvailability" maxlength="200" matInput
+                placeholder="Reason for unavailability"> </textarea>
+                @if (agreementForm?.get('reasonofNonAvailability')?.errors?.required) {
+                  <mat-error>
+                    Reason for unavailability is required
+                  </mat-error>
+                }
+                <mat-hint>({{reason?.value?.length}}/200Max)</mat-hint>
+              </mat-form-field>
+            </div>
+            @if (agreementForm?.get('agreementAvailabilityFlag').value==false) {
+              <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-15"
+                >
+                <mat-label class="lbl">Approval Status:
+                  @if (!agreementForm?.value?.agreementApprovalFlag === true) {
+                    <div class="status pending">
+                      <span>Pending</span>
+                    </div>
+                  }
+                  @if (agreementForm?.value?.agreementApprovalFlag === true) {
+                    <div class="status approved">
+                      <span>Approved</span>
+                    </div>
+                  }
+                </mat-label>
+              </div>
+            }
+          </div>
+        }
+        @if (agreementForm?.get('agreementAvailabilityFlag')?.value==true) {
+          <div>
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"
+              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+              fxLayoutGap.xs="0px grid">
+              <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Validity</mat-label>
+                  <input formControlName="validity" type="text" maxlength="20" autocomplete="off"
+                    role="presentation" matInput placeholder="Validity">
+                  @if (agreementForm?.get('validity')?.errors?.required) {
+                    <mat-error>
+                      Validity is required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Auto Renewal</mat-label>
+                  <mat-select placeholder="Auto Renewal" formControlName="autoRenewal"
+                    (selectionChange)="renewalChange($event.value)">
+                    <mat-option [value]="true">Yes</mat-option>
+                    <mat-option [value]="false">No</mat-option>
+                  </mat-select>
+                  @if (agreementForm?.get('autoRenewal')?.errors?.required) {
+                    <mat-error>
+                      Auto Renewal is required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              @if ((agreementForm?.get('autoRenewal')?.value == true)) {
+                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  >
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Auto Renewal Period</mat-label>
+                    <input type="text" maxlength="50" formControlName="autoRenewalPeriod" matInput
+                      placeholder="Auto Renewal Period">
+                    @if (agreementForm?.get('autoRenewalPeriod')?.errors?.required) {
+                      <mat-error>
+                        Auto Renewal Period is required
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"
+              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+              fxLayoutGap.xs="0px grid">
+              <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Date Of Expiry</mat-label>
+                  <input mat-autofocus="true" preventCutCopyPaste preventDragdrop
+                    placeholder="Date of Expiry"
+                    [disabled]="!agreementForm?.get('dateOfAgreement')?.value" appNumberOnly
+                    [NumberOnlyWithslash]="false" formControlName="dateOfExpiry" matInput
+                    [matDatepicker]="picker2" [readonly]="!agreementForm?.get('dateOfAgreement')?.value"
+                    [min]="agreementForm?.get('dateOfAgreement')?.value" (focus)="picker2?.open()"
+                    (click)="picker2?.open()">
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                  @if (agreementForm?.get('dateOfExpiry')?.errors?.required) {
+                    <mat-error>
+                      Date of expiry is required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Reminder for Renewal - Prior to Expiry Date </mat-label>
+                  <mat-select placeholder="Reminder for Renewal - Prior to Expiry Date"
+                    formControlName="reminder">
+                    @for (reminderforRenewal of bindData?.reminderforRenewal; track reminderforRenewal) {
+                      <mat-option
+                        [value]="reminderforRenewal?.lookUpId"> {{reminderforRenewal?.lookUpName}}
+                      </mat-option>
+                    }
+                  </mat-select>
+                  @if (agreementForm?.get('reminder')?.errors?.required) {
+                    <mat-error>
+                      Reminder for Renewal - Prior to Expiry Date is required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        }
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <mat-label class="lbl pb-5">Upload supporting documents / Email if any :</mat-label>
+            <div class="file-upload">
+              <i class="material-icons">cloud_upload</i>
+              <span>Browse here...</span>
+              <input type="file" #fileInput multiple (change)='openUploadDoc($event)'
+                formControlName="supportingDocument">
+            </div>
+            <div class="file-names mt-10">
+              @for (document of mainForm?.controls?.clientAgreementDocument?.value; track document; let i = $index) {
+                <div class="file-upload-files" matTooltip="{{document?.fileName}}"
+                  matTooltipClass="accent-tooltip"
+                  >
+                  @if (document?.fileName) {
+                    <a
+                      (click)="preview(document)"
+                    routerLinkActive="active-link">{{document?.fileName}}</a>
+                  }
+                  <button type="button" class="close" aria-label="Close" (click)="removeDocument(i)">
+                    <span aria-hidden="true">&times;</span> </button>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </form>
+    </div>
+  </div>
+  <!-- <preview> -->
+  <ng-template #pdfDialog>
+    <div class=" confirm-pop">
+      <button mat-icon-button class="closed" [mat-dialog-close]="true">
+        <mat-icon class="close-icon" color="warn">close</mat-icon>
+      </button>
+      <h1 mat-dialog-title>Pdf Viewer</h1>
+      <br>
+        <mat-dialog-content>
+          <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+              <pdf-viewer [src]="url" [render-text]="true" [original-size]="true" [show-borders]="true" [zoom]="zoomval"
+              [zoom-scale]="'page-height'" [rotation]="rvalue" [fit-to-page]="true"></pdf-viewer>
+            </div>
+          </div>
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+          <button mat-icon-button matTooltip="Download Pdf" (click)="pdftool('download')" matTooltipClass="accent-tooltip">
+            <mat-icon>cloud_download</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Rotate right" (click)="pdftool('right')" matTooltipClass="accent-tooltip">
+            <mat-icon>rotate_right</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Rotate left" (click)="pdftool('left')" matTooltipClass="accent-tooltip">
+            <mat-icon>rotate_left</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Zoom In" (click)="pdftool('zoomin')" matTooltipClass="accent-tooltip">
+            <mat-icon>zoom_in</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Zoom Out" (click)="pdftool('zoomout')" matTooltipClass="accent-tooltip">
+            <mat-icon>zoom_out</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Reset" (click)="pdftool('reset')" matTooltipClass="accent-tooltip">
+            <mat-icon>settings_backup_restore</mat-icon>
+          </button>
+        </mat-dialog-actions>
+      </div>
+    </ng-template>
+
+
+
+    <ng-template #imgprDialog>
+      <div class=" confirm-pop">
+        <button mat-icon-button class="closed" [mat-dialog-close]="true">
+          <mat-icon class="close-icon" color="warn">close</mat-icon>
+        </button>
+        <h1 mat-dialog-title>Image Viewer</h1>
+        <br>
+          <mat-dialog-content>
+            <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="100%" >
+
+                <img  id ="imgpre" [@rotatedState]='state'  [src]='imageSource' >
+
+              </div>
+            </div>
+          </mat-dialog-content>
+          <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+            <button mat-icon-button matTooltip="Download Image" (click)="pdftool('download')" matTooltipClass="accent-tooltip">
+              <mat-icon>cloud_download</mat-icon>
+            </button>
+            <button  mat-icon-button matTooltip="Rotate Left" (click)="rotateimg('left')" matTooltipClass="accent-tooltip">
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Rotate Right" (click)="rotateimg('right')" matTooltipClass="accent-tooltip">
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Rotate Up" (click)="rotateimg('up')" matTooltipClass="accent-tooltip">
+              <mat-icon>arrow_upward</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Rotate Down" (click)="rotateimg('down')" matTooltipClass="accent-tooltip">
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Zoom In" (click)="zoomin()" matTooltipClass="accent-tooltip">
+              <mat-icon>zoom_in</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Zoom Out" (click)="zoomout()" matTooltipClass="accent-tooltip">
+              <mat-icon>zoom_out</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Reset" (click)="rotateimg('reset')" matTooltipClass="accent-tooltip">
+              <mat-icon>settings_backup_restore</mat-icon>
+            </button>
+          </mat-dialog-actions>
+        </div>
+      </ng-template>

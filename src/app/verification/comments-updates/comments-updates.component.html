@@ -1,0 +1,348 @@
+﻿<div fxLayout="row">
+  <div fxFlex="100%">
+    <!-- <mat-card-header>
+    <mat-card-title>
+      <h1 class="header-title"> <span class="StprH">Step :{{userData.applicationId !== 2 ? 5 : 4}}</span>Comments & Follow Up</h1>
+    </mat-card-title>
+  </mat-card-header> -->
+  <!-- <app-header [verificationForm]="verificationForm"></app-header> -->
+  <mat-card-content>
+    @if (userData.teamName === 'AddressTeam') {
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="10px"
+        >
+        <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%" fxLayoutGap="12px"
+          fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+          <div fxFlex="55%" fxFlex.lg="55%" fxFlex.md="55%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+              <mat-label>Audit By</mat-label>
+              <mat-select [formControl]="verificationForm.controls.verificationScreeningDet.controls.auditUserId"
+                placeholder="Audit By">
+                @for (person of verificationForm.value.verificationTransBindDet?.persons; track person) {
+                  <mat-option
+                    [value]="person.userId">
+                  {{person.name}}</mat-option>
+                }
+              </mat-select>
+              @if (verificationForm.controls.verificationScreeningDet.controls.auditUserId?.errors?.required) {
+                <mat-error
+                  >Audit
+                By is required </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="55%" fxFlex.lg="55%" fxFlex.md="55%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+              <mat-label>Audit Status</mat-label>
+              <mat-select
+                [formControl]="verificationForm.controls.verificationScreeningDet.controls.auditStatusLookupId"
+                placeholder="Audit Status">
+                @for (audit of verificationForm.value.verificationTransBindDet?.auditStatus; track audit) {
+                  <mat-option
+                  [value]="audit.lookUpId">{{audit.lookUpName}}</mat-option>
+                }
+              </mat-select>
+              @if (verificationForm.controls.verificationScreeningDet.controls.auditStatusLookupId?.errors?.required) {
+                <mat-error
+                  >Audit
+                Status is required </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <span fxFlex></span>
+        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+          fxLayoutAlign="end center" fxLayoutAlign.sm="end center" fxLayoutGap="5px">
+          <button [ngClass]="screenAuth.addFlag===false || (verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection')?'page-btn disabled':''" mat-icon-button class="in-btn"
+            matTooltip="Save" (click)="auditSave()" matTooltipClass="accent-tooltip"> <i class="icon-save"></i>
+          </button>
+          @if (respFlag === true && verificationForm.controls.verificationScreeningDet.controls.auditStatusLookupId.value >0 &&
+            verificationForm.controls.verificationScreeningDet.controls.auditUserId.value > 0) {
+            <button [ngClass]="screenAuth.editFlag===false || (verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection')?'page-btn disabled':''" mat-icon-button class="in-btn"
+              matTooltip="Change" (click)="auditChange()" matTooltipClass="accent-tooltip">
+              <i class="material-icons-outlined">edit</i> </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- <div fxLayout="row" fxLayoutGap="12px" *ngIf="userData.teamName === 'AddressTeam'" fxLayoutAlign="start center" class="mb-10">
+      <div fxFlex="27%" fxFlex.lg="27%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+          <mat-label>Audit By</mat-label>
+          <mat-select [formControl]="verificationForm.controls.verificationScreeningDet.controls.auditUserId" placeholder="Audit By" >
+            <mat-option  *ngFor="let person of verificationForm.value.verificationTransBindDet?.persons" [value]="person.userId">
+            {{person.name}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="verificationForm.controls.verificationScreeningDet.controls.auditUserId?.errors?.required">Audit By is required </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="27%" fxFlex.lg="27%" fxFlex.md="27%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field fxFlex="100%" appearance="outline" >
+          <mat-label>Audit Status</mat-label>
+          <mat-select [formControl]="verificationForm.controls.verificationScreeningDet.controls.auditStatusLookupId" placeholder="Audit Status">
+            <mat-option *ngFor="let audit of verificationForm.value.verificationTransBindDet?.auditStatus"
+            [value]="audit.lookUpId">{{audit.lookUpName}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="verificationForm.controls.verificationScreeningDet.controls.auditStatusLookupId?.errors?.required">Audit Status is required </mat-error>
+        </mat-form-field>
+      </div>
+
+    </div> -->
+    <form [formGroup]="commentsFollowUpForm" autocomplete="off">
+      @if (verificationService?.tempData?.verificationScreeningDet?.workFlowName !=='QC') {
+        <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="end center" class="mb-10"
+          >
+          <button [ngClass]="screenAuth.addFlag===false || (verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection')?'page-btn disabled':''" mat-icon-button class="in-btn"
+            matTooltip="{{commentsFollowUpForm?.get('transactionId')?.value > 0 ? 'Update' :'Save'}}"
+            (click)="saveCommentsFollowUp()" matTooltipClass="accent-tooltip"> <i class="icon-save"></i> </button>
+            <button mat-icon-button class="in-btn" matTooltip="Refresh" (click)="resetForm()"
+              matTooltipClass="accent-tooltip"> <i class="icon-refreshsb"></i> </button>
+            </div>
+          }
+          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+            fxLayout.xs="column" fxLayoutGap="20px grid">
+            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Comments</mat-label>
+                <textarea #comments matInput placeholder="Comments" formControlName="comments" rows="4" cols="3"
+                maxlength="5000" style="height: 93px;"></textarea>
+                <mat-hint>({{comments.value.length}}/5000)</mat-hint>
+                @if (!!commentsFollowUpForm?.get('comments')?.errors?.required) {
+                  <mat-error>Comments is
+                  required</mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+              @if (userData.applicationId !== 2 && commonService.VE === false) {
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                  fxLayout.xs="column" fxLayoutGap="20px grid"
+                  >
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Call Back</mat-label>
+                      <input matInput formControlName="callBack" placeholder="DD/MM/YYYY, HH:MM AM"
+                        [owlDateTimeTrigger]="callback" [owlDateTime]="callback" [min]="minDate"
+                        readonly="commentsFollowUpForm?.get('transactionId').value > 0" [max]="maxDate">
+                        <mat-datepicker-toggle [owlDateTimeTrigger]="callback" matSuffix></mat-datepicker-toggle>
+                        <owl-date-time [pickerMode]="'popup'" #callback></owl-date-time>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Expected Date Closure</mat-label>
+                        <input matInput formControlName="expectedDateClosure" placeholder="DD/MM/YYYY, HH:MM AM"
+                          [owlDateTimeTrigger]="expDate" [owlDateTime]="expDate" [min]="minDate"
+                          readonly="commentsFollowUpForm?.get('transactionId').value > 0">
+                          <mat-datepicker-toggle [owlDateTimeTrigger]="expDate" matSuffix></mat-datepicker-toggle>
+                          <owl-date-time [pickerMode]="'popup'" #expDate></owl-date-time>
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0">
+                <!-- *ngIf="verificationForm?.get('verificationScreeningDet.clientName')?.value === commonService.A_CHECK ||
+                 verificationForm?.get('verificationScreeningDet.clientName')?.value === commonService.NET_FORCE" -->
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>Call Duration(Mins)</mat-label>
+                          <input matInput formControlName="callDuration" appNumberOnly [NumberOnly]="false"
+                            (blur)="bindCost($event.target.value)" placeholder="Call Duration(Mins)" preventCutCopyPaste
+                            preventDragdrop maxlength="8">
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Total Call Cost</mat-label>
+                            <input matInput placeholder="Total Call Cost" formControlName="callCharge" readonly>
+                          </mat-form-field>
+                        </div>
+                        @if (commentsFollowUpForm?.get('updatedToClientFlag').value === true) {
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+                            >
+                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                              <mat-label>Updated to Client</mat-label>
+                              <input matInput formControlName="updatedToClient" placeholder="DD/MM/YYYY, HH:MM AM"
+                                [owlDateTimeTrigger]="updatedtoclient" [owlDateTime]="updatedtoclient" readonly="true">
+                                <owl-date-time [pickerMode]="'popup'" #updatedtoclient></owl-date-time>
+                              </mat-form-field>
+                            </div>
+                          }
+                          @if (commentsFollowUpForm?.get('lastCalledFlag').value === true) {
+                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="pb-0"
+                              >
+                              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                <mat-label>Last Called</mat-label>
+                                <input matInput formControlName="lastCalled" [owlDateTimeTrigger]="lastcalled"
+                                  placeholder="DD/MM/YYYY, HH:MM AM" [owlDateTime]="lastcalled" readonly="true">
+                                  <owl-date-time [pickerMode]="'popup'" #lastcalled></owl-date-time>
+                                </mat-form-field>
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    </div>
+                    @if (userData.applicationId !== 2 && commonService.VE === false) {
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                        fxLayout.xs="column" fxLayoutGap="20px grid"
+                        >
+                        <div fxFlex="50%" fxFlex.lg="50%" fxLayoutGap="20px" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-label class="lbl">Choose</mat-label>
+                          @if (verificationService.tempData.verificationScreeningDet.clientUpdateFlag === true) {
+                            <mat-checkbox formControlName="updatedToClientFlag"
+                            (change)="bindLastCalled($event.checked, 'Updated')">Updated to Client</mat-checkbox>
+                          }
+                          <mat-checkbox formControlName="lastCalledFlag" (change)="bindLastCalled($event.checked, 'Last')">Last
+                          Called</mat-checkbox>
+                          <!-- <mat-checkbox formControlName="receivedClientUpdateFlag" *ngIf="verificationService.tempData.verificationScreeningDet.clientUpdateFlag === true"
+                        (change)="bindLastCalled($event.checked, 'Received')">Received Client Update</mat-checkbox> -->
+                        @if (verificationService.tempData.verificationScreeningDet.clientNotificationFlag === true) {
+                          <mat-checkbox formControlName="sendNotificationToClient"
+                            >Sent
+                          Notification to Client</mat-checkbox>
+                        }
+            <!-- <mat-checkbox formControlName="dismissal" *ngIf="!(verificationForm?.get('verificationScreeningDet.clientNotificationFlag')?.value !== true
+            && verificationForm?.get('verificationScreeningDet.clientUpdateFlag')?.value !== true)">Dismissal</mat-checkbox> -->
+                      <!-- <mat-checkbox formControlName="clientNotificationFlag"
+                    *ngIf="verificationForm?.get('verificationScreeningDet.clientNotificationFlag')?.value === true">Client Notification to send</mat-checkbox> -->
+                    <!-- <mat-checkbox formControlName="clientUpdateFlag"
+                  *ngIf="verificationForm?.get('verificationScreeningDet.clientUpdateFlag')?.value === true">Client Updates to send</mat-checkbox> -->
+                </div>
+              </div>
+            }
+          </form>
+          <div fxLayout="row" class="mt-15">
+            <div fxFlex="100%">
+              <h5 class="sub-header">Comments</h5>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="100%">
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+                fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid" class="sortrow">
+                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="end center">
+                  <ul>
+                    <li><span class="text-dull">Showing {{(itemPerPage*page)-itemPerPage+1}} -
+                      {{(page)>=commentsData?.length?(commentsData?.length):(filterLength*page)}}
+                    of </span> <b>{{commentsData?.length}}
+                  record(s)</b></li>
+                  <li><b>Sort By:</b> <a [ngClass]="column==='enteredBy'?'active':''"
+                    (click)="sortBy('enteredBy')">Entered By</a> <i [ngClass]="{'icon-sort': column != 'enteredBy',
+                                         'icon-sort-asc': (column == 'enteredBy' && !isDesc),
+                                         'icon-sort-desc': (column == 'enteredBy' && isDesc) }" aria-hidden="true"></i>
+            </li>
+            <li>
+
+              <button [ngClass]="screenAuth?.exportFlag===false?'page-btn disabled':''" mat-icon-button
+                class="in-btn" matTooltip="Excel Export" matTooltipClass="accent-tooltip" (click)="excelExport()">
+                <i class="icon-excel"></i></button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            @for (com of commentsData| sort: {property: column, direction: direction}
+              | paginate: { itemsPerPage: itemPerPage, currentPage: page }; track com; let c = $count; let j = $index) {
+              <div fxLayout="row" [class]="getFilterLen(c)">
+                <div fxFlex="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="10px grid" fxLayoutGap.sm="10px grid" fxLayoutGap.xs="10px grid">
+                    <div fxFlex="23%" fxFlex.lg="23%" fxFlex.md="23%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <a>
+                        <mat-card-header>
+                          <div mat-card-avatar class="avatar avatarBg{{(j%6)+1}} cursor-pointer"> {{
+                          com?.enteredBy?com.enteredBy.slice(0, 1):"Candidate".slice(0, 1)}} </div>
+                          <mat-card-title class="cname cursor-pointer">
+                          {{com?.enteredBy?com.enteredBy:"Candidate"}}</mat-card-title>
+                        </mat-card-header>
+                      </a>
+                    </div>
+                    <div fxFlex="32%" fxFlex.lg="32%" fxFlex.md="32%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <p>
+                        <label>Date of Comments:</label>
+                        <em>{{com?.statusDate ? (commonService.getTimezoneOffset(com?.statusDate, false) | date :
+                        'dd/MM/yyyy hh:mm a') : 'N/A'}}</em>
+                      </p>
+                      @if (com.caseFlag !== true && com?.expectedDateClosure) {
+                        <p>
+                          <label>Expected Date Closure:</label>
+                          <!-- <em>{{com?.expectedDateClosure ? (com?.expectedDateClosure | date : 'dd/MM/yyyy hh:mm a') : 'N/A'}}</em> -->
+                          <em>{{com?.expectedDateClosure ? (commonService.getTimezoneOffset(com?.expectedDateClosure,
+                          false) | date : 'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}</em>
+                        </p>
+                      }
+                    </div>
+                    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      @if (com.caseFlag !== true && com?.updatedToClient) {
+                        <p>
+                          <label>Updated to Client:</label>
+                          <!-- <em>{{com?.updatedToClient ? (com?.updatedToClient | date : 'dd/MM/yyyy hh:mm a') : 'N/A'}}</em> -->
+                          <em>{{com?.updatedToClient ? (commonService.getTimezoneOffset(com?.updatedToClient) | date :
+                          'dd/MM/yyyy hh:mm a') : 'N/A'}}</em>
+                        </p>
+                      }
+                      @if (com.caseFlag !== true && com?.callBack) {
+                        <p>
+                          <label>Call Back Date & Time:</label>
+                          <em>{{com?.callBack ? (commonService.getTimezoneOffset(com?.callBack, false) | date :
+                          'dd/MM/yyyy hh:mm:ss a') : 'N/A'}}</em>
+                          <!-- <em>{{com?.callBack ? (com?.callBack | date : 'dd/MM/yyyy hh:mm a') : 'N/A'}}</em> -->
+                        </p>
+                      }
+                      @if (com.caseFlag !== true && com?.lastCalled) {
+                        <p>
+                          <label>Last Called Date & Time:</label>
+                          <!-- <em>{{com?.lastCalled ? (com?.lastCalled | date : 'dd/MM/yyyy hh:mm a') : 'N/A' }}</em> -->
+                          <em>{{com?.lastCalled ? (commonService.getTimezoneOffset(com?.lastCalled, false) | date :
+                          'dd/MM/yyyy hh:mm a') : 'N/A' }}</em>
+                        </p>
+                      }
+                    </div>
+                    <!--  Cmd By Megala  05/01/2024 - Need to remove delete function | Live environment Issue  -->
+                    <!-- <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center" *ngIf="com.caseFlag !== true && com.caseFlag === null && verificationService?.tempData?.verificationScreeningDet?.workFlowName !=='QC'">
+                    <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="end center" class="mb-10">
+                      <button mat-icon-button class="in-btn" matTooltip="Edit" matTooltipClass="accent-tooltip" (click)="editCommentsFollowUp(com)" [ngClass]="(userData.applicationId === 2 || commonService.modifyAdditionalFeeFlag == true) ? 'page-btn disabled' : ''"> <i class="material-icons-outlined">edit</i></button>
+                      <button mat-icon-button class="in-btn" matTooltip="Delete" matTooltipClass="accent-tooltip" (click)="openDialog(com)" [ngClass]="(userData.applicationId === 2 || commonService.modifyAdditionalFeeFlag == true) ? 'page-btn disabled' : ''"> <i class="material-icons-outlined">delete</i></button>
+                    </div>
+                  </div> -->
+                </div>
+              <!-- </div>
+              <div fxLayout="row"> -->
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"
+                  fxLayout.xs="column" fxLayoutGap="0 grid" fxLayoutGap.sm="0 grid" fxLayoutGap.xs="0 grid">
+                  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <p class="m-0">
+                      <label>Comments:</label>
+                      <em>{{com?.comments ? com?.comments : 'N/A'}}</em>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutAlign.sm="start start"
+        fxLayoutAlign.xs="start start" class="cus-paginator">
+        <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="54%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end end"
+          fxLayoutAlign.md="start start" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"
+          class="dev-paginator">
+          <pagination-controls (pageChange)="getPage($event)"></pagination-controls>
+        </div>
+        <div fxHide.xs fxFlex="30%" fxFlex.lg="30%" fxFlex.md="46%" fxFlex.sm="100%" fxFlex.xs="100%"
+          fxLayoutAlign="end end" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"> <span
+          class="gotopagbg ml-2">Go to Page<span class="input-num">
+          <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly preventDragdrop
+            preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+          </span> </span> <span class="gotopagbg ml-2">Items / page<span class="input-num">
+          <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4" appNumberOnly preventDragdrop
+            preventCutCopyPaste autocomplete="off" [NumberOnly]="false" (blur)="preventInfinite()">
+          </span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-card-content>
+</div>
+</div>

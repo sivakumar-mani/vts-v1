@@ -1,0 +1,431 @@
+﻿<app-breadcrumb [btnAdd]="breadcrumbFlag.btnAdd" [btnSave]="breadcrumbFlag.btnSave"
+  [btnSaveDisabled]="breadcrumbFlag.btnSaveDisabled" [btnBack]="breadcrumbFlag.btnBack"
+  [btnReset]="breadcrumbFlag.btnReset" [btnResetTbl]="breadcrumbFlag.btnResetTbl" (eventAdd)="openContactRemarksForm()"
+  [routePath]="routePath" (eventBack)="closeContactRemarksForm()" (eventSave)="saveContactRemarksDetail()"
+  [btnAddDisabled]="!screenAuth.addFlag"
+  [toolTip]="breadcrumbFlag.toolTip" (eventReset)="resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
+  <!-- [btnAddDisabled]="!screenAuth.addFlag" -->
+
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="cloumn" fxLayout.xs="cloumn"
+  fxLayoutGap="20px grid">
+  <div fxFlex="100%">
+
+    <mat-card>
+
+      <div fxLayout="row">
+        <mat-card-header fxFlex="100%">
+            <div fxFlex="100%">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="10px">
+                      <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%" fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                        <mat-card-title>
+                          <h1 class="header-title">Contact Remarks</h1>
+                        </mat-card-title>
+                      </div>
+                      <span fxFlex></span>
+                      <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                        <div class="tbl-commonsearch" *ngIf="!showContactRemarksDetail">
+                            <mat-form-field fxFlex="100%">
+                            <mat-label></mat-label>
+                            <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                            <input #global matInput size="50" placeholder="Search..." autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                            </mat-form-field>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </mat-card-header>
+    </div> 
+      <mat-card-content>
+        <div class="row" *ngIf="!showContactRemarksDetail">
+          <div fxFlex="75%" fxFlex.lg="75%" fxFlex.md="75%" fxFlex.sm="75%" fxFlex.xs="75%">
+          <mat-radio-group [formControl]="statusFrmCtrl" aria-label="Select an option" fxLayoutGap="20px" (change)="statusFrmChange($event.value)">
+          <mat-radio-button [value]="false" (click)="showpg()">Color Status Type</mat-radio-button>
+          &nbsp;
+          <mat-radio-button [value]="true" (click)="showpg()">Confirmation Status Type<span class="info-text"></span> </mat-radio-button>
+        </mat-radio-group>
+        </div>
+        </div>
+        <br/>
+        <div *ngIf="showContactRemarksDetail" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+          fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid">
+          <div fxFlex="100%">
+            <form [formGroup]="contactRemarkFormgroup" autocomplete="off" id="ngForm" autocomplete="off">
+              <div class="row">
+              <div fxFlex="75%" fxFlex.lg="75%" fxFlex.md="75%" fxFlex.sm="75%" fxFlex.xs="75%">
+              <mat-radio-group formControlName="statusFlag" aria-label="Select an option" fxLayoutGap="20px" (change)="statusChange($event.value)">
+              <mat-radio-button [value]="false">Color Status Type</mat-radio-button>
+              &nbsp;
+              <mat-radio-button [value]="true">Confirmation Status Type<span class="info-text"></span> </mat-radio-button>
+            </mat-radio-group>
+            </div>
+            </div>
+            <br/>
+            <!-- <pre>{{contactRemarkFormgroup.value | json}}</pre>  -->
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
+                fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%" *ngIf = "contactRemarkFormgroup.get('statusFlag').value === false">
+                  <app-auto-complete [selectProperties]='clientControl'required (selectionChange)="bindtNames($event,'client')"></app-auto-complete>
+                </div>
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <app-auto-complete [selectProperties]='clientVendorsControl' (selectionChange)="bindtNames($event,'comp')"> </app-auto-complete>
+                </div>
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%" *ngIf = "contactRemarkFormgroup.get('statusFlag').value === false">
+                  <app-auto-complete [selectProperties]='statusColorControl' (selectionChange)="bindtNames($event,'color')"></app-auto-complete>
+                </div>
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%" *ngIf = "contactRemarkFormgroup.get('statusFlag').value === true">
+                  <app-auto-complete [selectProperties]='confirmationTypeCtrl' (selectionChange)="bindtNames($event,'confirm')"></app-auto-complete>
+                </div>
+              </div>
+              <div formArrayName="contactRemarkTrans"  *ngFor="let item of getformgroup(); let i = index">
+              <div class="row wrap" [formGroupName]="i"  fxLayoutGap="20px grid">
+                <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="65%" fxFlex.xs="55%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput #remarksIp type="text" placeholder="Remarks" formControlName="remarks" maxlength="320"
+                      autocomplete="off" role="presentation" required (blur)="isExist(remarksIp.value)"></textarea>
+                    <mat-error *ngIf="item.get('remarks')?.errors?.required">
+                      Remarks is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" *ngIf = "contactRemarkFormgroup.get('statusFlag').value === false">
+                  <mat-form-field appearance="outline" fxFlex="100%" *ngIf="confirmTypeList.length >0">
+                    <mat-label>Status Type</mat-label>
+                    <input matInput placeholder="Status Type" formControlName="screeningStatusId" #code maxlength="100"
+                      (click)="code.select()" [matAutocomplete]="auto1" (focus)="setCodeItems(code.value)"
+                      (keyup)="codekeyUpFunction($event,code.value)" (input)="setCodeItems(code.value)" maxlength="100" />
+                    <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayCodeFn" (optionSelected)="bindtNames($event.option.value,'status')">
+                      <mat-option *ngFor="let code of filterConfirmTypeList" [value]="code.screeningStatusId">
+                        <span [innerHTML]="code.statusName| highlight: code.value">
+                        </span>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="25%" fxFlex.xs="100%">
+                  <mat-label class="lbl">Is Active</mat-label>
+                  <mat-checkbox formControlName="active">Active</mat-checkbox>
+                </div>
+                <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="25%" fxFlex.xs="100%" *ngIf = "contactRemarkFormgroup.get('statusFlag').value === false">
+                  <mat-label>&nbsp;</mat-label>
+                  <div class="adrem text-left" fxLayoutGap="8px">
+                    <button  *ngIf="editFlag === false ? (i === rowCount-1) : rowCount > 0" type="button" mat-button color="primary" matTooltip="Add"
+                      matTooltipClass="accent-tooltip" (click) = "addControl()"> <i class="icon-plus-circle"></i> </button>
+                      <button type="button" *ngIf="rowCount > 1"  
+                    mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                    (click) = "removeControl(i, item)"> <i class="icon-x-circle"></i> </button>
+                  </div> 
+                </div>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+
+
+        <div *ngIf="!showContactRemarksDetail" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+          fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+            <p-table #dt [columns]="contactRemarksDisplayColumns" [value]="contactList" [scrollable]="true" 
+              scrollHeight="" [rows]="itemperpage" [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true"
+              [scrollable]="true" dataKey="contactRemarkId">
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col style="width: 50px;" *ngIf="statusFrmCtrl.value === false"/>
+                  <col style="width: 100px;" />
+                  <col *ngFor="let col of columns" style="min-width:200px" />
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header" let-columns let-rowData>
+                <tr>
+                 <th class="action" *ngIf="statusFrmCtrl.value === false"></th>
+                  <th class="action"> Action </th>
+                  <th *ngFor="let col of columns" pReorderableColumn pResizableColumn [ngSwitch]="col.field">
+                  <div class="thname" matTooltip="{{col.header}}"
+                  matTooltipClass="accent-tooltip"> {{col.header}} </div>
+                     <span [pSortableColumn]="col.field"> <p-sortIcon ariaLabel="Activate to sort" [field]="col.field"
+                        ariaLabelDesc="Activate to sort in descending order" matTooltip="Sorting"
+                        matTooltipClass="accent-tooltip" ariaLabelAsc="Activate to sort in ascending order">
+                      </p-sortIcon></span>
+                      <span class="ico-fieldsearch"> 
+                        <i *ngSwitchCase="'clientName'" class="icon-search2" matTooltip="Search"
+                        matTooltipClass="accent-tooltip" (click)="clientTrigger.openMenu()"></i>
+                        <i *ngSwitchCase="'colorStatusName'" class="icon-search2" matTooltip="Search"
+                        matTooltipClass="accent-tooltip" (click)="colorTrigger.openMenu()"></i>
+                        <i *ngSwitchCase="'compName'" class="icon-search2" matTooltip="Search"
+                        matTooltipClass="accent-tooltip" (click)="compTrigger.openMenu()"></i>
+                      </span>
+                      <span *ngSwitchCase="'clientName'">
+                        <div matTooltip="Client Name" matTooltipClass="accent-tooltip" #clientTrigger="matMenuTrigger"
+                          [matMenuTriggerFor]="clientTCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                          class="txtborder-bot"> </div>
+                        <mat-menu #clientTCtrl class="pos-top">
+                          <div fxLayout="row">
+                            <div fxFlex="100%" class="p-10 tbl-fillddl">
+                              <mat-form-field (click)="$event.stopPropagation()">
+                                <input type="text" #clientCtl matInput [matAutocomplete]="autoclient"
+                                  placeholder="Client Name" autocomplete="off" role="presentation"
+                                  (click)="clientCtl.select()" [formControl]="clientCtrl"
+                                  (change)="dt.filter($event.target.value,col.field,'contains')"
+                                  (blur)="dt.filter($event.target.value,col.field,'contains')"
+                                  (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                                  (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                              </mat-form-field>
+                              <mat-autocomplete #autoclient="matAutocomplete">
+                                <mat-option (onSelectionChange)="clientTrigger.closeMenu()"
+                                  *ngFor="let option of clientOptions | async" [value]="option"> <span
+                                    [innerHTML]="option"></span> </mat-option>
+                              </mat-autocomplete>
+                            </div>
+                          </div>
+                          <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                                *ngIf="clientCtl.value" (click)="dt.filter('', col.field, 'contains');clientCtl.setValue('')"
+                                class="text-sm">Reset</a> </div>
+                          </div>
+                        </mat-menu>
+                      </span>
+                      <span *ngSwitchCase="'colorStatusName'">
+                        <div matTooltip="Color Status Name" matTooltipClass="accent-tooltip" #colorTrigger="matMenuTrigger"
+                          [matMenuTriggerFor]="csCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                          class="txtborder-bot"> </div>
+                        <mat-menu #csCtrl class="pos-top">
+                          <div fxLayout="row">
+                            <div fxFlex="100%" class="p-10 tbl-fillddl">
+                              <mat-form-field (click)="$event.stopPropagation()">
+                                <input type="text" #csCtl matInput [matAutocomplete]="autocolor"
+                                  placeholder="Color Status Name" autocomplete="off" role="presentation"
+                                  (click)="csCtl.select()" [formControl]="colorCtrl"
+                                  (change)="dt.filter($event.target.value,col.field,'contains')"
+                                  (blur)="dt.filter($event.target.value,col.field,'contains')"
+                                  (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                                  (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                              </mat-form-field>
+                              <mat-autocomplete #autocolor="matAutocomplete">
+                                <mat-option (onSelectionChange)="colorTrigger.closeMenu()"
+                                  *ngFor="let option of colorOptions | async" [value]="option"> <span
+                                    [innerHTML]="option"></span> </mat-option>
+                              </mat-autocomplete>
+                            </div>
+                          </div>
+                          <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                                *ngIf="csCtl.value" (click)="dt.filter('', col.field, 'contains');csCtl.setValue('')"
+                                class="text-sm">Reset</a> </div>
+                          </div>
+                        </mat-menu>
+                      </span>
+                      <span *ngSwitchCase="'compName'">
+                        <div matTooltip="Component Name" matTooltipClass="accent-tooltip" #compTrigger="matMenuTrigger"
+                          [matMenuTriggerFor]="cmCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                          class="txtborder-bot"> </div>
+                        <mat-menu #cmCtrl class="pos-top">
+                          <div fxLayout="row">
+                            <div fxFlex="100%" class="p-10 tbl-fillddl">
+                              <mat-form-field (click)="$event.stopPropagation()">
+                                <input type="text" #cmCtl matInput [matAutocomplete]="autocomp"
+                                  placeholder="Component Name" autocomplete="off" role="presentation"
+                                  (click)="cmCtl.select()" [formControl]="compCtrl"
+                                  (change)="dt.filter($event.target.value,col.field,'contains')"
+                                  (blur)="dt.filter($event.target.value,col.field,'contains')"
+                                  (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                                  (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                              </mat-form-field>
+                              <mat-autocomplete #autocomp="matAutocomplete">
+                                <mat-option (onSelectionChange)="compTrigger.closeMenu()"
+                                  *ngFor="let option of compOptions | async" [value]="option"> <span
+                                    [innerHTML]="option"></span> </mat-option>
+                              </mat-autocomplete>
+                            </div>
+                          </div>
+                          <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                                *ngIf="cmCtl.value" (click)="dt.filter('', col.field, 'contains');cmCtl.setValue('')"
+                                class="text-sm">Reset</a> </div>
+                          </div>
+                        </mat-menu>
+                      </span>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
+                <tr [pReorderableRow]="index" >
+                  <td *ngIf="rowData?.statusFlag !== true" class="desg-bg"><div class="desg-icon"><a href="#" [pRowToggler]="rowData">
+                    <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i></a></div></td>
+                <td class="desg-bg">
+                  <div fxLayout="row" class="desg-icon">
+                    <div fxFlex="100%" fxLayoutGap="10px">
+                      <!-- [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''" -->
+                      <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : '' ">
+                        <i class="material-icons-outlined" matTooltipClass="accent-tooltip" matTooltip="Edit"
+                          (click)="editContactRemarksDetail(rowData.contactRemarkId, rowData)">edit</i>
+                      </mat-icon>
+                      <mat-icon [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : '' ">
+                        <i class="material-icons-outlined" matTooltipClass="accent-tooltip" matTooltip="Delete"
+                          (click)="openDialog(rowData.contactRemarkId)">delete</i>
+                      </mat-icon>
+                    </div>
+                  </div>
+                </td>
+                  <td *ngFor="let col of columns" [ngSwitch]="col.field"
+                    [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                    <div *ngSwitchCase="'compName'">{{ rowData.compName ? rowData.compName : 'N/A' }}</div>
+                    <div *ngSwitchCase="'colorStatusName'">{{ rowData.colorStatusName ? rowData.colorStatusName: 'N/A' }}</div>
+                    <div *ngSwitchCase="'clientName'">{{ rowData.clientName ? rowData.clientName: 'N/A' }}</div>
+                    <div *ngSwitchCase="'statusName'">{{ rowData.statusName ? rowData.statusName: 'N/A' }}</div>
+                    <div *ngSwitchCase="'remarks'">{{ rowData.remarks ? rowData.remarks: 'N/A' }}</div>
+                  </td>
+                </tr>
+              </ng-template>
+
+        <ng-template *ngIf="statusFrmCtrl.value !== true" pTemplate="rowexpansion" let-moduleRowData let-columns="columns">
+          <tr>
+            <td [attr.colspan]="5">
+              <div class="p-grid p-fluid">
+                <p-table #dt1 [columns]="remarksListColumn" [value]="moduleRowData.contactRemarkTrans" class="inn-table"
+                  [responsive]="true">
+                  <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns" pReorderableColumn pResizableColumn [ngSwitch]="col.field">
+              <span matTooltip="{{col.header}}" matTooltipClass="accent-tooltip">{{ col.header }} </span>
+              <span [pSortableColumn]="col.field"><p-sortIcon ariaLabel="Activate to sort" [field]="col.field"
+                        ariaLabelDesc="Activate to sort in descending order" matTooltip="Sorting"
+                        matTooltipClass="accent-tooltip" ariaLabelAsc="Activate to sort in ascending order">
+                      </p-sortIcon></span>
+                      <span class="ico-fieldsearch"> 
+                        <i *ngSwitchCase="'remarks'" class="icon-search2" matTooltip="Search"
+                        matTooltipClass="accent-tooltip" (click)="remarksTrigger.openMenu()"></i>
+                        <i *ngSwitchCase="'statusName'" class="icon-search2" matTooltip="Search"
+                        matTooltipClass="accent-tooltip" (click)="statusTrigger.openMenu()"></i>
+                      </span>
+                      <span *ngSwitchCase="'remarks'">
+                        <div matTooltip="Remarks" matTooltipClass="accent-tooltip" #remarksTrigger="matMenuTrigger"
+                          [matMenuTriggerFor]="remarksControl" fxLayout="row" fxLayoutAlign="space-between center"
+                          class="txtborder-bot"> </div>
+                        <mat-menu #remarksControl class="pos-top">
+                          <div fxLayout="row">
+                            <div fxFlex="100%" class="p-10 tbl-fillddl">
+                              <mat-form-field (click)="$event.stopPropagation()">
+                                <input type="text" #remarksCtl matInput [matAutocomplete]="autoremarks"
+                                  placeholder="Remarks" autocomplete="off" role="presentation"
+                                  (click)="remarksCtl.select()" [formControl]="remarksCtrl"
+                                  (change)="dt1.filter($event.target.value,col.field,'contains')"
+                                  (blur)="dt1.filter($event.target.value,col.field,'contains')"
+                                  (focusin)="dt1.filter($event.target.value,col.field,'contains')"
+                                  (keyup)="dt1.filter($event.target.value,col.field,'contains')" />
+                              </mat-form-field>
+                              <mat-autocomplete #autoremarks="matAutocomplete">
+                                <mat-option (onSelectionChange)="remarksTrigger.closeMenu()"
+                                  *ngFor="let option of remarksOptions | async" [value]="option"> <span
+                                    [innerHTML]="option"></span> </mat-option>
+                              </mat-autocomplete>
+                            </div>
+                          </div>
+                          <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                                *ngIf="remarksCtl.value" (click)="dt1.filter('', col.field, 'contains');remarksCtl.setValue('')"
+                                class="text-sm">Reset</a> </div>
+                          </div>
+                        </mat-menu>
+                      </span> 
+                      <span *ngSwitchCase="'statusName'">
+                        <div matTooltip="Status Name" matTooltipClass="accent-tooltip" #statusTrigger="matMenuTrigger"
+                          [matMenuTriggerFor]="statusControl" fxLayout="row" fxLayoutAlign="space-between center"
+                          class="txtborder-bot"> </div>
+                        <mat-menu #statusControl class="pos-top">
+                          <div fxLayout="row">
+                            <div fxFlex="100%" class="p-10 tbl-fillddl">
+                              <mat-form-field (click)="$event.stopPropagation()">
+                                <input type="text" #statusCtl matInput [matAutocomplete]="autostatus"
+                                  placeholder="Status Name" autocomplete="off" role="presentation"
+                                  (click)="statusCtl.select()" [formControl]="statusCtrl"
+                                  (change)="dt1.filter($event.target.value,col.field,'contains')"
+                                  (blur)="dt1.filter($event.target.value,col.field,'contains')"
+                                  (focusin)="dt1.filter($event.target.value,col.field,'contains')"
+                                  (keyup)="dt1.filter($event.target.value,col.field,'contains')" />
+                              </mat-form-field>
+                              <mat-autocomplete #autostatus="matAutocomplete">
+                                <mat-option (onSelectionChange)="statusTrigger.closeMenu()"
+                                  *ngFor="let option of statusOptions | async" [value]="option"> <span
+                                    [innerHTML]="option"></span> </mat-option>
+                              </mat-autocomplete>
+                            </div>
+                          </div>
+                          <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                                *ngIf="statusCtl.value" (click)="dt1.filter('', col.field, 'contains');statusCtl.setValue('')"
+                                class="text-sm">Reset</a> </div>
+                          </div>
+                        </mat-menu>
+                      </span> 
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-screenRowData let-columns="columns">
+          <tr>
+            <td *ngFor="let col of columns">
+              <span *ngIf="col.field !== 'active'"> {{screenRowData[col.field]}}</span>
+              <span *ngIf="col.field === 'active'">
+                <div fxLayout="row" class="tbl-icon">
+                  <div fxFlex="100%" fxLayoutGap="10px">
+                    <span *ngIf="screenRowData.active === true" class="istrue">
+                      <i class="material-icons" matTooltipClass="accent-tooltip" matTooltip="Active">thumb_up</i>
+                    </span>
+                    <span *ngIf="screenRowData.active === false" class="isfalse">
+                      <i class="material-icons" matTooltipClass="accent-tooltip" matTooltip="In-Active">thumb_down</i>
+                    </span>
+                  </div>
+                </div>
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      </div>
+      </td>
+      </tr>
+      </ng-template>
+            </p-table>
+
+            <div [ngClass]="contactList?.length == 0? 'empty-record':''" fxLayout="row wrap" class="cus-paginator"
+              fxLayoutGap="0px grid"  fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="start center">
+                Showing {{ dt.totalRecords
+                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                    <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of
+                {{ dt.totalRecords }} record(s)| &nbsp;<a (click)="showall()">Show All</a>  </div>
+              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center">
+                <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+            dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+            navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+          ">
+                  <i class="icon-control-start mr-5"></i></a>
+                <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                    <input type="number" #pageNo [(ngModel)]="currentPage" min="1" maxlength="5" appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" /> </span></span>
+                <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                <a [ngClass]="
+            dt.rows + dt.first >= dt.totalRecords
+              ? 'page-btn disabled'
+              : 'page-btn'
+          " (click)="
+            dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+            navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+          "><i class="icon-control-end ml-5"></i></a>
+              </div>
+
+            </div>
+          </div>
+          <!-- </div> -->
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

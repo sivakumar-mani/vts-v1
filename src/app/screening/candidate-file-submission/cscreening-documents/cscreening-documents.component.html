@@ -1,0 +1,246 @@
+<div fxLayout="row wrap" fxLayoutGap="0px grid">
+  <div fxFlex="100%">
+    <form [formGroup]="mainForm">
+      @if (header != 'recievedInfo' && header != 'response' && header != 'false' && header != 'component') {
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+          <div fxFlex="100%">
+            <h3 class="sub-header">{{header}}</h3>
+          </div>
+        </div>
+      }
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" [formGroupName]="formgroupName">
+        @if (header === 'response') {
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Response Document</mat-label>
+              <mat-select [formControl]="responseConfirmation" placeholder="Select Confirmation Type" (selectionChange)="confirmType($event.value)">
+                <mat-option>Select Confirmation Type</mat-option>
+                @for (type of responseConfirmationType; track type) {
+                  <mat-option [value]="type.lookUpId"> {{ type.lookUpName }} </mat-option>
+                }
+              </mat-select>
+              @if (!!responseConfirmation?.invalid) {
+                <mat-error> Response Confirmation Document is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        }
+        @if (header === 'response' && verification.tempData.ctsflag) {
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Mode of Verification</mat-label>
+              <mat-select [formControl]="modeofConfirmation" required placeholder="Select Mode of Verification" (selectionChange)="confirmType1($event.value)">
+                <mat-option>Select Mode of Verification</mat-option>
+                @for (type of verificationMode; track type) {
+                  <mat-option [value]="type.lookUpId"> {{ type.lookUpName }} </mat-option>
+                }
+              </mat-select>
+              <mat-hint>This field is just to update the mode of confirmation received which will get reflected in the report.</mat-hint>
+              @if (!!modeofConfirmation?.invalid) {
+                <mat-error> Mode of Verification is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        }
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" [formGroupName]="formgroupName">
+        @if (showDocType) {
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Document Type</mat-label>
+              <mat-select [formControl]="documentType" placeholder="Select Document Type">
+                <mat-option>Select Document Type</mat-option>
+                @for (type of doctType; track type) {
+                  <mat-option [value]="type.lookUpId"> {{ type.lookUpName }} </mat-option>
+                }
+              </mat-select>
+              @if (!!documentType?.invalid) {
+                <mat-error>Document type is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        }
+      </div>
+      @if (header==='LOA Document') {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" class="mb-15">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <a routerLinkActive="active-link" class="text-sm" (click)="downloadloa()" matTooltip="Download LOA" matTooltipClass="accent-tooltip"> <i class="icon-file-text mr-5"></i>Download Authorization Form</a>
+          </div>
+        </div>
+      }
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" [ngClass]="fileBtn?'page-btn disabled':''">
+        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-label class="lbl">Attach Documents</mat-label>
+          <mat-label class="mat-hint-upload"> {{header==='response' ||header === 'Annexure Upload'?'Acceptable file Formats : .png, .jpg, .JPG, .jpeg, .gif, .bmp':'Acceptable file Formats : .eml, .pst, .txt, .pdf, .docx, .doc, .xps, .xlsx, .xls, .xlsb, .xlsm,.png, .jpg, .jpeg,
+          .gif, .psd, .tiff, .eps, .raw, .msg'}} </mat-label>
+          <mat-label class="mat-hint-upload">Maximum file size should not exceed 5 MB</mat-label>
+          @if ( common.componentName === common.EDUCATION && common.showHint) {
+            <mat-label class="mat-hint-upload">Please upload 1 to 5 or 1 to 7 semester mark sheets</mat-label>
+          }
+          <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse here...</span>
+          <input type="file" #fileInput (change)="uploaddoc($event);allowSameFileUpload($event)" [multiple]="header==='response'? false:true" title="Attach Document" [required]="validationFlag === true ? true : false" [accept]="header==='response'|| header === 'Annexure Upload'?'image/*': '.xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf'"
+            />
+        </div>
+        @if (validationFlag === true && frmArray.length === 0) {
+          <mat-error>
+          Document is required </mat-error>
+        }
+        @if (userData.applicationId === 3) {
+          <mat-label class="mat-hint-upload">{{docHint}} </mat-label>
+        }
+        @if (header === 'response') {
+          <div class="file-names">
+            <div cdkDropList [cdkDropListData]="getDocVlaue()" (cdkDropListDropped)="drop($event)">
+              <mat-hint style="font-size: 12px;">Note : Re-order is available</mat-hint><br/>
+              <!-- <div *ngFor="let docu of addressdocument;let i=index">
+              <span class="file-upload-files" *ngFor="let col of docu.document; let in = index">
+                <span>Digital Mode</span>
+                <a routerLinkActive="active-link" (click)="downloadFile(col, col.fileName, col.docId)">
+                {{col.fileName}}</a>
+              </span>
+            </div> -->
+            @for (document of getDocVlaue(); track document; let i = $index) {
+              <div class="file-upload-files" cdkDrag>
+                <a (click)="downloadDoc(document)" routerLinkActive="active-link" [matTooltip]="document.fileName" matTooltipClass="accent-tooltip"> @if (showDocType) {
+                  <span style="color: #8a8b8d">{{getDocTypeName(document.docTypeId)}}</span>
+                  } @if (header === 'response') {
+                  <span style="color: #8a8b8d">{{getResConfName(document)}}</span>
+                } {{document.fileName}}</a>
+                @if (((!showDocumentRemove && (document.screeningDocId === 0) || (showDocumentRemove)) && (!document.insuffDocFlag))) {
+                  <button type="button" class="close" aria-label="Close" (click)="removeDocument(document,i)"> <span
+                  aria-hidden="true">&times;</span> </button>
+                }</div>
+              }
+            </div>
+          </div>
+        }
+        @if (!(header === 'response')) {
+          <div class="file-names">
+            @for (document of getDocVlaue(); track document; let i = $index) {
+              <div class="file-upload-files">
+                @if (document.fileName) {
+                  <a (click)="preview(document)" routerLinkActive="active-link" [matTooltip]="document.fileName" matTooltipClass="accent-tooltip"> @if (showDocType) {
+                    <span style="color: #8a8b8d">{{getDocTypeName(document.docTypeId)}}</span>
+                    } @if (header === 'response') {
+                    <span style="color: #8a8b8d">{{getResConfName(document)}}</span>
+                    } {{document.fileName}}
+                  </a>
+                }
+                @if (((!showDocumentRemove && (document.screeningDocId === 0) || (showDocumentRemove)) && (!document.insuffDocFlag))) {
+                  <button type="button" class="close" aria-label="Close" (click)="removeDocument(document,i)"> <span
+                  aria-hidden="true">&times;</span> </button>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </form>
+</div>
+</div>
+<ng-template #imgDialog>
+  <div class="confirm-pop">
+    <h1 mat-dialog-title>Image Cropper</h1>
+    <mat-dialog-content>
+      <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <image-cropper [imageBase64]="imageChangedEvent" [maintainAspectRatio]="false" [aspectRatio]="4 / 3" format="png" [transform]="cropperTransform" (imageCropped)="imageCropped($event)"></image-cropper>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+      <button mat-icon-button matTooltip="Rotate right" (click)="rotate('right')" matTooltipClass="accent-tooltip"> <i
+      class="icon-rotate-cw"></i></button>
+      <button mat-icon-button matTooltip="Rotate left" (click)="rotate('left')" matTooltipClass="accent-tooltip"> <i
+      class="icon-rotate-ccw"></i></button>
+      <button mat-icon-button matTooltip="Flip horizontal" (click)="rotate('flipHorizontal')" matTooltipClass="accent-tooltip"> <i class="icon-fliphorizontal"></i></button>
+      <button mat-icon-button matTooltip="Flip vertical" (click)="rotate('flipVertical')" matTooltipClass="accent-tooltip"> <i class="icon-flipvertical"></i></button>
+      <button (click)="closeDialog('crop')" color="accent" class="mat-flat-button mat-accent"> Crop Image</button>
+      <button mat-stroked-button (click)="closeDialog('close')">Cancel</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+<ng-template #pdfDialog>
+  <div class=" confirm-pop">
+    <button mat-icon-button class="closed" [mat-dialog-close]="true">
+      <mat-icon class="close-icon" color="warn">close</mat-icon>
+    </button>
+    <h1 mat-dialog-title>Pdf Viewer</h1>
+    <br>
+      <mat-dialog-content>
+        <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <pdf-viewer [src]="url" [render-text]="true" [original-size]="true" [show-borders]="true" [zoom]="zoomval" [zoom-scale]="'page-height'" [rotation]="rvalue" [fit-to-page]="true"></pdf-viewer>
+          </div>
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+        <button mat-icon-button matTooltip="Download Pdf" (click)="pdftool('download')" matTooltipClass="accent-tooltip">
+          <mat-icon>cloud_download</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Rotate right" (click)="pdftool('right')" matTooltipClass="accent-tooltip">
+          <mat-icon>rotate_right</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Rotate left" (click)="pdftool('left')" matTooltipClass="accent-tooltip">
+          <mat-icon>rotate_left</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Zoom In" (click)="pdftool('zoomin')" matTooltipClass="accent-tooltip">
+          <mat-icon>zoom_in</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Zoom Out" (click)="pdftool('zoomout')" matTooltipClass="accent-tooltip">
+          <mat-icon>zoom_out</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Reset" (click)="pdftool('reset')" matTooltipClass="accent-tooltip">
+          <mat-icon>settings_backup_restore</mat-icon>
+        </button>
+      </mat-dialog-actions>
+    </div>
+  </ng-template>
+
+
+
+  <ng-template #imgprDialog>
+    <div class=" confirm-pop">
+      <button mat-icon-button class="closed" [mat-dialog-close]="true">
+        <mat-icon class="close-icon" color="warn">close</mat-icon>
+      </button>
+      <h1 mat-dialog-title>Image Viewer</h1>
+      <br>
+        <mat-dialog-content>
+          <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+
+              <img id="imgpre" [@rotatedState]='state' [src]='imageSource'>
+
+            </div>
+          </div>
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+          <button mat-icon-button matTooltip="Download Image" (click)="pdftool('download')" matTooltipClass="accent-tooltip">
+            <mat-icon>cloud_download</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Rotate Left" (click)="rotateimg('left')" matTooltipClass="accent-tooltip">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Rotate Right" (click)="rotateimg('right')" matTooltipClass="accent-tooltip">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Rotate Up" (click)="rotateimg('up')" matTooltipClass="accent-tooltip">
+            <mat-icon>arrow_upward</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Rotate Down" (click)="rotateimg('down')" matTooltipClass="accent-tooltip">
+            <mat-icon>arrow_downward</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Zoom In" (click)="zoomin()" matTooltipClass="accent-tooltip">
+            <mat-icon>zoom_in</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Zoom Out" (click)="zoomout()" matTooltipClass="accent-tooltip">
+            <mat-icon>zoom_out</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Reset" (click)="rotateimg('reset')" matTooltipClass="accent-tooltip">
+            <mat-icon>settings_backup_restore</mat-icon>
+          </button>
+        </mat-dialog-actions>
+      </div>
+    </ng-template>

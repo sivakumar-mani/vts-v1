@@ -1,0 +1,196 @@
+<div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+  <div fxFlex="100%">
+    <mat-card-content>
+      <form [formGroup]="instructionForm" autocomplete="off">
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+              <mat-label>Instruction Type</mat-label>
+              <mat-select formControlName="instructionTypeId" placeholder="Select Instruction Type"
+                (selectionChange)="instructionChange($event.value)">
+                @for (
+                  instructionType of bindData?.instructionType; track
+                  instructionType; let i = $index) {
+                  <span>
+                    <mat-option [value]="instructionType?.lookUpId"> {{ instructionType?.lookUpName }}
+                    </mat-option>
+                  </span>
+                } </mat-select>
+                @if (instructionForm?.get('instructionTypeId')?.errors?.required) {
+                  <mat-error>
+                  Instruction Type is required </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+              @if (!(commonService.getNameById(bindData?.instructionType,
+                'lookUpId', 'lookUpName', instructionForm?.get('instructionTypeId')?.value)?.toLowerCase() === commonService.GEN_INS.toLowerCase())) {
+                <mat-form-field fxFlex="100%" appearance="outline"
+                  >
+                  <mat-label>Component</mat-label>
+                  <mat-select formControlName="componentId" placeholder="Select Component">
+                    @for (component of compList; track component) {
+                      <mat-option
+                        [value]="component?.serviceId">
+                      {{ component?.rptType }} </mat-option>
+                    }
+                  </mat-select>
+                  @if (instructionForm?.get('componentId')?.errors?.required) {
+                    <mat-error>
+                    Component is required </mat-error>
+                  }
+                </mat-form-field>
+              }
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <angular-editor #editor formControlName="instruction" (keypress)="textChanged($event, editor)">
+              </angular-editor>
+              <mat-hint fxLayoutAlign="end end" class="f-13">
+                ({{checkLength(editor) ? checkLength(editor) : 0}})
+              </mat-hint>
+              @if (instructionForm?.get('instruction')?.errors?.required && instructionForm?.
+                get('instruction')?.touched) {
+                <mat-error>Instruction is required </mat-error>
+              }
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <div class="adrem" fxLayoutGap="8px">
+                <button mat-button color="primary" matTooltip="{{index > -1 ? 'Update' : 'Add'}}"
+                  matTooltipClass="accent-tooltip" (click)="AddInstruction()"> <i
+                class="icon-plus-circle"></i> </button>
+                <button mat-button color="warn" matTooltip="Clear" matTooltipClass="accent-tooltip"
+                  (click)="resetInstruction()"> <i class="icon-x-circle"></i> </button>
+                </div>
+              </div>
+            </div>
+          </form>
+          @if (mainForm?.value?.clientInstruction?.length > 0) {
+            <div>
+              <div fxLayout="row" class="mt-15">
+                <div fxFlex="100%">
+                  <h5 class="sub-header">Instructions</h5>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid"
+                    class="sortrow">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutAlign="end center">
+                      <ul>
+                        <li><span class="text-dull">
+                          Showing {{(itemPerPage*page)-itemPerPage+1}} -
+                          {{(page)>=mainForm?.value?.clientInstruction?.length?(mainForm?.value?.clientInstruction?.length):(filterLength*page)}}
+                          of
+                        </span>
+                        <b>{{mainForm?.value?.clientInstruction?.length}}
+                        record(s)</b></li>
+                        <!-- <li><b>Sort By:</b> <a [ngClass]="column==='instructionTypeId'?'active':''"
+                      (click)="sortBy('instructionTypeId')">Instruction Type By</a>
+                                        <i [ngClass]="{'icon-sort': column != 'instructionTypeId', 
+                                               'icon-sort-asc': (column == 'instructionTypeId' && !isDesc), 
+                                               'icon-sort-desc': (column == 'instructionTypeId' && isDesc) }"
+                        aria-hidden="true">
+                      </i>
+                    </li> -->
+                  </ul>
+                </div>
+              </div>
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <!-- | sort: {property: column, direction: direction} -->
+                  @for (ins of mainForm?.value?.clientInstruction
+                    | paginate: { itemsPerPage: itemPerPage, currentPage: page }; track ins; let c = $count; let ind = $index; let j = $index) {
+                    <div fxLayout="row" [class]="getFilterLen(c)">
+                      <div fxFlex="100%">
+                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+                          fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px grid"
+                          fxLayoutGap.sm="10px grid" fxLayoutGap.xs="10px grid">
+                          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%"
+                            fxFlex.xs="100%">
+                            <p>
+                              <label>Client Name:</label>
+                              <em>{{mainForm?.getRawValue()?.clientEntry?.clientName}}</em>
+                            </p>
+                          </div>
+                          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%"
+                            fxFlex.xs="100%">
+                            <p>
+                              <label>Instruction Type:</label>
+                              <em>{{commonService.getNameById(bindData?.instructionType,
+                                'lookUpId', 'lookUpName', ins?.instructionTypeId) ? commonService.getNameById(bindData?.instructionType,
+                              'lookUpId', 'lookUpName', ins?.instructionTypeId) :'N/A'}}</em>
+                            </p>
+                          </div>
+                          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%"
+                            fxFlex.xs="100%">
+                            <p>
+                              <label>Component:</label>
+                              <em>{{commonService.getNameById(bindData?.component,
+                                'serviceId', 'rptType', ins?.componentId) ? commonService.getNameById(bindData?.component,
+                              'serviceId', 'rptType', ins?.componentId) :'N/A'}}</em> </p>
+                              <p>
+                              </div>
+                              <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="100%"
+                                fxFlex.xs="100%" fxLayoutAlign.sm="start center"
+                                fxLayoutAlign.xs="start center">
+                                <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="end center"
+                                  class="mb-10">
+                                  <button mat-icon-button class="in-btn" matTooltip="Edit"
+                                    matTooltipClass="accent-tooltip"
+                                    (click)="editInstruction(ins, ind)"><i
+                                  class="material-icons-outlined">edit</i></button>
+                                  <button mat-icon-button class="in-btn" matTooltip="Delete"
+                                    matTooltipClass="accent-tooltip" (click)="openDialog(ind)"><i
+                                  class="material-icons-outlined">delete</i></button>
+                                </div>
+                              </div>
+                            </div>
+                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+                              fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0 grid"
+                              fxLayoutGap.sm="0 grid" fxLayoutGap.xs="0 grid">
+                              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                                fxFlex.xs="100%">
+                                <p class="m-0">
+                                  <label>Instruction:</label>
+                                  <em innerHtml={{ins?.instruction}}></em>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    class="cus-paginator" fxLayoutGap="20px">
+                    <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                      <pagination-controls class="cus-paginator" (pageChange)="getPage($event)">
+                      </pagination-controls>
+                    </span>
+                    <span fxhide.xs class="gotopagbg ml-2">Go to Page<span class="input-num" fxhide.xs>
+                      <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly
+                        preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+                    </span></span>
+                    <span fxhide.xs class="gotopagbg ml-2">Items / page<span fxhide.xs class="input-num">
+                      <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4" appNumberOnly
+                        preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false"
+                        (blur)="preventInfinite()">
+                    </span> </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </mat-card-content>
+    </div>
+  </div>

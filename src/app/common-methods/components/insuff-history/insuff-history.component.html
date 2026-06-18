@@ -1,0 +1,127 @@
+@if (isInsuffScreen && this.screeningCompId > 0) {
+  <button mat-icon-button class="in-btn" matTooltip="History" matTooltipClass="accent-tooltip" (click)="openHistory()"> <i class="icon-eyeline"></i></button>
+}
+@if (!isInsuffScreen) {
+  <a class="text-sm text-cap" matTooltip="Insufficiency History" matTooltipClass="accent-tooltip" (click)="openHistory()">Insufficiency&nbsp;History</a>
+}
+<ng-template #history>
+  <h1 mat-dialog-title>Insufficiency History</h1>
+  <mat-dialog-content>
+    @for (history of historyData; track history; let i = $index) {
+      <div fxLayout="row" fxLayoutGap="0px" class="border-dashed">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <h3 class="text-light m-0 pb-5">{{i+1}}).Insufficiency {{history?.insuffLevel}}</h3>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="20px" class="lbl-res">
+            <div fxFlex="50%">
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="start start">
+                  <p>
+                    <label>Insufficiency Status:</label>
+                    <em class="green">{{history?.insuffStatus}}</em> </p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%" fxLayoutAlign="start start">
+                    <p>
+                      <label>Functional Entity:</label>
+                      <em class="green">{{history?.functionalEntity}}</em> </p>
+                    </div>
+                  </div>
+                </div>
+                <div fxFlex="50%">
+                  <div fxLayout="row">
+                    <div fxFlex="100%" fxLayoutAlign="end end">
+                      <p>
+                        <label>Raised Date & Time:</label>
+                        <em>{{common.getTimezoneOffset(history?.raisedDate, false) | date : 'dd/MM/yyyy  hh:mm:ss a'}}</em>
+                      </p>
+                    </div>
+                  </div>
+                  @if (history?.clearedDate) {
+                    <div fxLayout="row">
+                      <div fxFlex="100%" fxLayoutAlign="end end">
+                        <p>
+                          <label>{{history?.insuffStatus}} Date & Time:</label>
+                          <em>{{common.getTimezoneOffset(history?.clearedDate, false) | date : 'dd/MM/yyyy  hh:mm:ss a'}}</em>
+                        </p>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div fxLayout="row" class="lbl-res">
+                <div fxFlex="100%">
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="60%">
+                      <h4>Required Type</h4>
+                    </div>
+                    <div fxFlex="40%">
+                      <h4>Status</h4>
+                    </div>
+                  </div>
+                  @for (his of history?.insuffDetail; track his) {
+                    <div fxLayout="row" fxLayoutGap="20px">
+                      <div fxFlex="60%">
+                        <div class="history-view">
+                          <div class="dt">{{common.getTimezoneOffset(his?.insuffDate, false) | date : 'dd/MM/yyyy hh:mm:ss a'}}
+                          </div>
+                          <p>
+                            <label>Required Type:</label>
+                            <em>{{history?.insuffReqType}}</em></p>
+                            <p>
+                              @for (hist of history?.insuffDocument; track hist; let i = $index; let la = $last) {
+                                <em>
+                                  @if (hist?.docName && his?.insuffStatus !== common.RAISED && his?.insuffDetailId === hist?.insuffDetailId) {
+                                    <span
+                                      >
+                                      &nbsp;&#9679;&nbsp; {{hist?.description}} -
+                                      <a
+                                      (click)="downloadDoc(hist?.screeningDocId)">{{hist?.docName}}</a><br />
+                                    </span>
+                                  }
+                                </em>
+                              }
+                            </p>
+                            @if (his?.Document) {
+                              <p>
+                                <label>{{his?.insuffStatus !== common.RAISED ? 'Comments :' : 'Document Comments :'}}</label>
+                                <em>{{ his?.Document }}</em></p>
+                              }
+                              @if (his?.Information) {
+                                <p>
+                                  <label>{{his?.insuffStatus !== common.RAISED ? 'Comments :' : 'Information Comments :'}}</label>
+                                  <em>{{ his?.Information }}</em></p>
+                                }
+                              </div>
+                            </div>
+                            <div fxFlex="40%">
+                              <div class="history-view">
+                                <div class="dt green text-cap">{{his?.insuffStatus}} </div>
+                                <p><label>{{his?.insuffStatus}} by :</label>
+                                <em>{{his?.insuffRaisedBy}}</em></p>
+                                <p><label></label></p>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+              @if (historyData?.length === 0) {
+                <div fxLayout="row" fxLayoutGap="0px">
+                  <div fxFlex="100%" class="text-center" fxLayoutAlign="center center">
+                    <div class="no-record"><span>No History Found</span></div>
+                  </div>
+                </div>
+              }
+            </mat-dialog-content>
+            <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end center">
+              <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+            </mat-dialog-actions>
+          </ng-template>

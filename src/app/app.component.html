@@ -1,0 +1,27 @@
+<!--
+
+**********************    Old Loading Progress:-  *****************
+
+
+<mat-progress-bar *ngIf="show" mode="indeterminate"></mat-progress-bar>
+
+
+
+-->
+
+
+<!-- <div class="loading" *ngIf="show">Loading&#8230;</div> -->
+
+
+
+<!-- Loading progress start -->
+@if (show) {
+  <ngx-spinner bdOpacity = 0.9 bdColor = "rgba(0,0,0,0)" size = "medium" color = "#fff" type = "ball-clip-rotate-pulse" [fullScreen] = "true">
+  </ngx-spinner>
+}
+
+<!-- Loading progress End -->
+<router-outlet></router-outlet>
+@if (show) {
+  <div class="cdk-overlay-backdrop cdk-overlay-trans-backdrop cdk-overlay-backdrop-showing loading"></div>
+}

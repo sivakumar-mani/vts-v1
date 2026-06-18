@@ -1,0 +1,659 @@
+================================================================================
+         VTS APPLICATION - ANGULAR 14 TO ANGULAR 15 MIGRATION REPORT
+================================================================================
+
+Framework  : Angular 14  -->  Angular 15
+Build      : Production Build Reference Guide
+Note       : This report covers all changes required for Angular 14 → 15 upgrade
+             for a project using Angular Material, PrimeNG, Kendo UI, ngx-layout
+================================================================================
+
+
+================================================================================
+SECTION 1 : PACKAGE VERSION UPDATES (package.json)
+================================================================================
+
+  ANGULAR CORE PACKAGES
+  ----------------------
+  @angular/animations          : ^14.x.x  -->  ^15.0.0
+  @angular/cdk                 : ^14.x.x  -->  ^15.0.0
+  @angular/common              : ^14.x.x  -->  ^15.0.0
+  @angular/compiler            : ^14.x.x  -->  ^15.0.0
+  @angular/core                : ^14.x.x  -->  ^15.0.0
+  @angular/forms               : ^14.x.x  -->  ^15.0.0
+  @angular/material            : ^14.x.x  -->  ^15.0.0
+  @angular/platform-browser    : ^14.x.x  -->  ^15.0.0
+  @angular/router              : ^14.x.x  -->  ^15.0.0
+  @angular/localize            : ^14.x.x  -->  ^15.0.0
+  @angular/google-maps         : ^14.x.x  -->  ^15.0.0
+
+  ANGULAR DEV PACKAGES
+  ---------------------
+  @angular-devkit/build-angular: ^14.x.x  -->  ^15.0.0
+  @angular-devkit/core         : ^14.x.x  -->  ^15.0.0
+  @angular-devkit/schematics   : ^14.x.x  -->  ^15.0.0
+  @angular/cli                 : ^14.x.x  -->  ^15.0.0
+  @angular/compiler-cli        : ^14.x.x  -->  ^15.0.0
+  @angular/language-service    : ^14.x.x  -->  ^15.0.0
+
+  RUNTIME DEPENDENCY UPDATES
+  ---------------------------
+  zone.js                      : ~0.11.x  -->  ~0.12.x
+  rxjs                         : ~7.5.0   -->  ~7.5.0  (no change needed)
+
+  THIRD-PARTY PACKAGES UPDATED
+  -----------------------------
+  angular-oauth2-oidc          : ^14.x.x  -->  ^15.0.0
+  @danielmoncada/angular-datetime-picker : ^14.x.x  -->  ^15.0.0
+  ngx-spinner                  : ^14.x.x  -->  ^15.0.0
+  ngx-countdown                : ^14.x.x  -->  ^15.0.0
+  primeng                      : ^14.x.x  -->  ^15.x.x
+
+  FLEX-LAYOUT MIGRATION (IMPORTANT)
+  ----------------------------------
+  @angular/flex-layout         : REMOVED (deprecated by Angular team)
+  @ngbracket/ngx-layout        : ADDED ^15.0.0
+  NOTE: @ngbracket/ngx-layout is the community-maintained fork of
+        @angular/flex-layout. All imports change:
+        FROM:  import { FlexLayoutModule } from '@angular/flex-layout'
+        TO:    import { FlexLayoutModule } from '@ngbracket/ngx-layout'
+
+  KENDO UI PACKAGES UPDATED (^10.x → ^11.x)
+  -------------------------------------------
+  @progress/kendo-angular-buttons       : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-charts        : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-common        : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-dateinputs    : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-dropdowns     : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-excel-export  : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-grid          : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-icons         : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-inputs        : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-intl          : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-label         : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-layout        : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-pdf-export    : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-popup         : ^10.x  -->  ^11.0.0
+  @progress/kendo-angular-treeview      : ^10.x  -->  ^11.0.0
+  @progress/kendo-theme-default         : stays as-is (theme is framework-independent)
+
+  NODE.js & TYPESCRIPT REQUIREMENTS
+  -----------------------------------
+  Node.js (minimum)            : 14.15.x  -->  14.20.x / 16.13.x / 18.10.x
+  TypeScript                   : ~4.7.x   -->  ~4.8.x
+                                  (TypeScript 5.x NOT supported for Angular 15)
+
+
+================================================================================
+SECTION 2 : CONFIG FILE CHANGES
+================================================================================
+
+  FILE: tsconfig.json
+  -------------------
+  CHANGE 1: target update
+    "target": "ES2017"  -->  "target": "ES2022"
+    REASON: Angular 15 defaults to ES2022 output for modern browsers
+
+  CHANGE 2: useDefineForClassFields (add if not present)
+    ADD: "useDefineForClassFields": false
+    REASON: Prevents TypeScript 4.8 from using defineProperty semantics
+            that break Angular decorators with ES2022 target
+
+  CHANGE 3: lib update (if present)
+    "lib": ["ES2017", "dom"]  -->  "lib": ["ES2022", "dom"]
+
+  FILE: angular.json
+  ------------------
+  CHANGE 1: namedChunks (new default in v15)
+    In build options, add if missing:
+    "namedChunks": false  (for production)
+    "namedChunks": true   (for development)
+
+  CHANGE 2: budgets (component style limit)
+    Angular 15 enforces stricter budgets for component styles
+    Check: "maximumError": "6kb" for componentStyles budget
+
+  NOTE: browserTarget is still used in Angular 15
+        (browserTarget → buildTarget rename only happens in Angular 18)
+
+  FILE: package.json scripts
+  ---------------------------
+  No change needed - same build/serve commands
+
+
+================================================================================
+SECTION 3 : ANGULAR MATERIAL 15 - MDC MIGRATION (BIGGEST CHANGE!)
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  Angular Material 15 internally migrated ALL components to MDC
+  (Material Design Components for Web - Google's official MDC library).
+
+  This changes:
+    - Inner HTML structure of Material components
+    - CSS class names used internally
+    - Density/sizing system
+    - Ripple behavior
+
+  TWO OPTIONS AVAILABLE:
+  ----------------------
+  OPTION A: Use Legacy APIs (Quick Fix - Deprecated)
+    - Import MatLegacy* modules instead of Mat* modules
+    - Everything looks/works same as Angular 14
+    - BUT: These will be removed in Angular 17!
+    - RECOMMENDED only for quick migration
+
+  OPTION B: Migrate to MDC Components (Permanent Fix)
+    - Use the new MDC-based components
+    - CSS customizations may break (inner HTML structure changed)
+    - Use ng update schematics to auto-migrate
+
+  MODULE RENAMES FOR LEGACY OPTION:
+  -----------------------------------
+  OLD (Angular 14)                    NEW LEGACY (Angular 15)
+  --------------------------------    --------------------------------
+  MatButtonModule                -->  MatLegacyButtonModule
+  MatInputModule                 -->  MatLegacyInputModule
+  MatFormFieldModule             -->  MatLegacyFormFieldModule
+  MatSelectModule                -->  MatLegacySelectModule
+  MatOptionModule                -->  MatLegacyOptionModule
+  MatCheckboxModule              -->  MatLegacyCheckboxModule
+  MatRadioModule                 -->  MatLegacyRadioModule
+  MatAutocompleteModule          -->  MatLegacyAutocompleteModule
+  MatChipsModule                 -->  MatLegacyChipsModule
+  MatMenuModule                  -->  MatLegacyMenuModule
+  MatListModule                  -->  MatLegacyListModule
+  MatTableModule                 -->  MatLegacyTableModule
+  MatPaginatorModule             -->  MatLegacyPaginatorModule
+  MatProgressBarModule           -->  MatLegacyProgressBarModule
+  MatProgressSpinnerModule       -->  MatLegacyProgressSpinnerModule
+  MatSlideToggleModule           -->  MatLegacySlideToggleModule
+  MatSliderModule                -->  MatLegacySliderModule
+  MatSnackBarModule              -->  MatLegacySnackBarModule
+  MatTabsModule                  -->  MatLegacyTabsModule
+  MatTooltipModule               -->  MatLegacyTooltipModule
+  MatDialogModule                -->  MatLegacyDialogModule
+  MatCardModule                  -->  MatLegacyCardModule (stays as is mostly)
+
+  IMPORT PATH CHANGES:
+  --------------------
+  OLD:  import { MatButtonModule } from '@angular/material/button'
+  NEW:  import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button'
+
+  FILES AFFECTED (All .module.ts files that import Material modules):
+  -------------------------------------------------------------------
+  - src/app/app.module.ts
+  - src/app/master/master.module.ts
+  - src/app/screening/screening.module.ts
+  - src/app/client-entry/client-entry.module.ts
+  - src/app/verification/verification.module.ts
+  - src/app/case/case.module.ts
+  - src/app/quality-check/quality-check.module.ts
+  - src/app/reports/reports.module.ts
+  - src/app/invoice/invoice.module.ts
+  - src/app/automation/automation.module.ts
+  - src/app/common-methods/common-methods.module.ts
+  - src/app/shared/shared.module.ts  (if exists)
+  - All feature module files
+
+  CSS IMPACT (styles.css & component .css files):
+  ------------------------------------------------
+  If custom CSS targets internal Material class names, it will BREAK:
+
+  Angular 14 classes (no longer work as before):
+    .mat-form-field-wrapper     --> .mat-mdc-form-field-flex
+    .mat-form-field-flex        --> .mat-mdc-text-field-wrapper
+    .mat-input-element          --> .mat-mdc-input-element
+    .mat-select-value           --> .mat-mdc-select-value
+    .mat-option                 --> .mat-mdc-option
+    .mat-button-wrapper         --> .mdc-button__label
+    .mat-checkbox-inner-container --> .mdc-checkbox
+    .mat-radio-outer-circle     --> .mdc-radio__outer-circle
+
+  FIX: If using Legacy option - keep old CSS class names (they still apply)
+       If using MDC option - update all custom CSS overrides to new class names
+
+
+================================================================================
+SECTION 4 : TYPED REACTIVE FORMS (Important for .ts files)
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  Angular 14 introduced Typed Reactive Forms as the DEFAULT.
+  Any FormControl/FormGroup/FormArray now requires type parameters.
+
+  IF MIGRATING FROM Angular 13 → 14 → 15:
+  - If proper `ng update` was run in v14, forms are already updated to
+    UntypedFormControl / UntypedFormGroup / UntypedFormArray
+  - If not updated, v15 will show TypeScript errors
+
+  CHANGES NEEDED IN TypeScript files:
+  ------------------------------------
+  IF getting type errors, replace with Untyped versions:
+
+  OLD (Angular 13 style)           NEW (Angular 15 compatible)
+  ----------------------------     ----------------------------
+  FormControl                  --> UntypedFormControl
+  FormGroup                    --> UntypedFormGroup
+  FormArray                    --> UntypedFormArray
+  FormBuilder                  --> UntypedFormBuilder
+
+  IMPORT CHANGE:
+  FROM: import { FormControl, FormGroup, FormBuilder } from '@angular/forms'
+  TO:   import { UntypedFormControl, UntypedFormGroup,
+                  UntypedFormBuilder } from '@angular/forms'
+
+  FILES AFFECTED: ALL TypeScript component files that use Reactive Forms
+  -----------------------------------------------------------------------
+  Typically affects:
+  - All files in src/app/master/**/*.component.ts
+  - All files in src/app/screening/**/*.component.ts
+  - All files in src/app/client-entry/**/*.component.ts
+  - All files in src/app/verification/**/*.component.ts
+  - All files in src/app/case/**/*.component.ts
+  - All files in src/app/quality-check/**/*.component.ts
+  - All service files that construct forms
+
+  NOTE: VTS project already uses UntypedFormControl (seen in verification-details.component.ts)
+        so this may already be handled.
+
+
+================================================================================
+SECTION 5 : FLEX-LAYOUT MIGRATION (All HTML and Module files)
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  @angular/flex-layout was deprecated by Angular team.
+  Community fork: @ngbracket/ngx-layout takes over.
+
+  MODULE FILE CHANGES:
+  --------------------
+  OLD IMPORT:
+    import { FlexLayoutModule } from '@angular/flex-layout'
+
+  NEW IMPORT:
+    import { FlexLayoutModule } from '@ngbracket/ngx-layout'
+
+  FILES AFFECTED (All module .ts files that import FlexLayoutModule):
+  -------------------------------------------------------------------
+  - src/app/app.module.ts
+  - src/app/master/master.module.ts
+  - src/app/screening/screening.module.ts
+  - src/app/client-entry/client-entry.module.ts
+  - src/app/verification/verification.module.ts
+  - src/app/case/case.module.ts
+  - src/app/quality-check/quality-check.module.ts
+  - src/app/reports/reports.module.ts
+  - src/app/invoice/invoice.module.ts
+  - src/app/automation/automation.module.ts
+  - src/app/common-methods/common-methods.module.ts
+  + any other module that uses fxLayout/fxFlex directives
+
+  HTML TEMPLATE IMPACT:
+  ---------------------
+  No HTML changes needed!
+  fxLayout, fxFlex, fxLayoutGap, fxLayoutAlign directives
+  continue to work exactly the same way.
+  Only the module import path changes.
+
+
+================================================================================
+SECTION 6 : ROUTER CHANGES (Angular 15 New Features)
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  Angular 15 introduced functional router guards (replaces class-based guards).
+  Class-based guards still work but new functional style is recommended.
+
+  OLD STYLE (Angular 14 - Class-based guard):
+  -------------------------------------------
+  @Injectable({ providedIn: 'root' })
+  export class AuthGuard implements CanActivate {
+    canActivate(route, state): boolean { ... }
+  }
+
+  NEW STYLE (Angular 15 - Functional guard):
+  ------------------------------------------
+  export const authGuard: CanActivateFn = (route, state) => {
+    const authService = inject(AuthService);
+    return authService.isLoggedIn();
+  }
+
+  FILES AFFECTED:
+  ---------------
+  - src/app/auth/can-activate.guard.ts  (or similar guard file)
+  - src/app/app-routing.module.ts
+
+  NOTE: Class-based guards still work in Angular 15.
+        Migration to functional guards is OPTIONAL in v15.
+
+  ROUTER OUTLET CHANGES:
+  ----------------------
+  No HTML changes needed for existing <router-outlet> tags.
+
+
+================================================================================
+SECTION 7 : ANGULAR 15 NEW APIs (Optional - Not Breaking)
+================================================================================
+
+  1. NgOptimizedImage Directive (New):
+     ----------------------------------
+     NEW directive from @angular/common for optimized image loading.
+     OPTIONAL - doesn't break existing <img> tags.
+
+     OLD:  <img src="logo.png" width="200" height="100">
+     NEW:  <img ngSrc="logo.png" width="200" height="100">
+     (Need to import NgOptimizedImage from @angular/common in module)
+
+  2. Standalone Components (Became Stable in v15):
+     -----------------------------------------------
+     Can now create components without NgModule.
+     @Component({ standalone: true, imports: [...] })
+     OPTIONAL - existing NgModule pattern still fully supported.
+
+  3. inject() Function (Enhanced):
+     --------------------------------
+     Can now use inject() in component constructors and functions.
+     OPTIONAL - constructor injection still works.
+
+  4. provideRouter() / provideHttpClient():
+     -----------------------------------------
+     New functional providers for standalone apps.
+     OPTIONAL for NgModule-based apps.
+
+  5. Title Strategy:
+     -----------------
+     Router can automatically set page <title> from route data.
+     Add 'title' property to route definitions.
+     OPTIONAL feature.
+
+
+================================================================================
+SECTION 8 : PRIMENG 14 → 15 CHANGES
+================================================================================
+
+  PACKAGE VERSION:
+  ----------------
+  primeng                 : ^14.x.x  -->  ^15.x.x
+  primeicons              : ^5.x.x   -->  ^6.x.x  (or keep existing)
+
+  STYLES UPDATE (styles.css):
+  ----------------------------
+  Angular 15 + PrimeNG 15 compatible themes available.
+  OLD:  @import "../node_modules/primeng/resources/themes/lara-light-blue/theme.css";
+  NEW:  Same path works in PrimeNG 15 (lara themes still available)
+
+  CSS FILE:
+  ---------
+  OLD:  @import "../node_modules/primeng/resources/primeng.min.css";
+  NEW:  Same - no change needed
+
+  COMPONENT CHANGES:
+  ------------------
+  p-table          : No major breaking changes
+  p-calendar       : No major breaking changes
+  p-dropdown       : No major breaking changes
+  p-chips          : Still present (removed only in PrimeNG 18!)
+  p-toast          : No major breaking changes
+
+  NOTE: PrimeNG 15 mostly adds Angular 15 compatibility.
+        Existing p-table, p-calendar, p-chips components work as before.
+
+
+================================================================================
+SECTION 9 : KENDO UI v10 → v11 SPECIFIC CHANGES
+================================================================================
+
+  PACKAGE CHANGE:
+  ---------------
+  All @progress/kendo-angular-* : ^10.x  -->  ^11.0.0
+
+  BREAKING CHANGES IN KENDO v11:
+  --------------------------------
+  1. KendoGridModule - 'trackBy' input renamed to 'kendoGridTrackBy'
+     OLD:  [trackBy]="trackByFn"
+     NEW:  [kendoGridTrackBy]="trackByFn"
+
+  2. DateInputs - 'format' property type changed
+     Some date format strings may need updating.
+
+  3. Icons - kendo-svg-icons package now required separately
+     ADD to package.json:  "@progress/kendo-svg-icons": "^1.0.0"
+
+  4. Grid column menus - CSS class changes
+     .k-column-menu  -->  .k-grid-column-menu (in custom CSS)
+
+  FILES AFFECTED:
+  ---------------
+  Any .html template using:
+  - kendo-grid with trackBy
+  - kendo-datepicker / kendo-daterange / kendo-timepicker format props
+  - Custom CSS targeting Kendo internal classes
+
+  FILES TO CHECK:
+  ---------------
+  - src/app/reports/**/*.component.html  (reports use Kendo Grid heavily)
+  - src/app/verification/**/*.component.html
+  - src/app/invoice/**/*.component.html
+  - src/app/master/**/*.component.html
+
+
+================================================================================
+SECTION 10 : TYPESCRIPT 4.8 BREAKING CHANGES
+================================================================================
+
+  TYPE INFERENCE IMPROVEMENTS:
+  -----------------------------
+  TypeScript 4.8 has improved type narrowing which may cause NEW errors
+  in code that previously compiled without issues.
+
+  COMMON ISSUES:
+  --------------
+  1. Infer improvements - some previously valid type casts may fail
+     FIX: Add explicit type annotation or use 'as' cast
+
+  2. --strictFunctionTypes - function parameter types more strict
+     FIX: Update callback signatures to match expected types
+
+  3. Improved binding patterns narrowing
+     FIX: Explicit type for destructured parameters
+
+  FILES THAT COMMONLY NEED CHANGES:
+  ----------------------------------
+  - Service files with HTTP response handling
+  - Files using complex generics
+  - Files with Observable pipe operators and type inference
+
+
+================================================================================
+SECTION 11 : COMMON ERRORS AND FIXES
+================================================================================
+
+  ERROR 1: "Can't resolve '@angular/flex-layout'"
+  -------------------------------------------------
+  CAUSE : @angular/flex-layout removed from dependencies
+  FIX   : npm install @ngbracket/ngx-layout@^15.0.0
+          Update all module imports to @ngbracket/ngx-layout
+
+  ERROR 2: "Module not found: MatLegacyButtonModule"
+  ---------------------------------------------------
+  CAUSE : Angular Material 15 moved legacy components to new paths
+  FIX   : Change import from '@angular/material/button'
+          to '@angular/material/legacy-button'
+          (or use MDC version directly)
+
+  ERROR 3: "Property 'value' does not exist on type 'AbstractControl'"
+  --------------------------------------------------------------------
+  CAUSE : Typed Forms - TypeScript now strictly checks form control types
+  FIX   : Change FormControl → UntypedFormControl
+          Change FormGroup → UntypedFormGroup
+          Change FormBuilder → UntypedFormBuilder
+
+  ERROR 4: "zone.js version mismatch"
+  ------------------------------------
+  CAUSE : Old zone.js ~0.11.x not compatible with Angular 15
+  FIX   : Update zone.js to ~0.12.x in package.json
+
+  ERROR 5: "CanActivate interface no longer exists"
+  --------------------------------------------------
+  CAUSE : Angular 15 moved guard interfaces to separate location
+  FIX   : Change from implements CanActivate
+          to implements CanActivateFn
+          OR use functional guard approach
+
+  ERROR 6: Mat component CSS broken (outline, borders, colors wrong)
+  -------------------------------------------------------------------
+  CAUSE : MDC migration changed inner HTML structure
+  FIX   : Either use MatLegacy* modules
+          OR update custom CSS overrides to MDC class names
+
+
+================================================================================
+SECTION 12 : MIGRATION STEPS (Step-by-Step)
+================================================================================
+
+  STEP 1: Backup current project
+  --------------------------------
+  git checkout -b feature/angular-15-upgrade
+
+  STEP 2: Update package.json versions
+  --------------------------------------
+  Update all @angular/* packages to ^15.0.0
+  Update zone.js to ~0.12.x
+  Replace @angular/flex-layout with @ngbracket/ngx-layout@^15.0.0
+  Update Kendo packages to ^11.0.0
+  Update PrimeNG to ^15.0.0
+  Update TypeScript to ~4.8.x
+
+  STEP 3: Run npm install
+  ------------------------
+  npm install --legacy-peer-deps
+
+  STEP 4: Run Angular migration schematics
+  -----------------------------------------
+  npx ng update @angular/core@15 @angular/cli@15
+  npx ng update @angular/material@15
+
+  NOTE: ng update @angular/material automatically offers to migrate
+        components to either MDC or Legacy APIs.
+        Select "Use Legacy APIs" for fastest migration path.
+
+  STEP 5: Update flex-layout imports
+  ------------------------------------
+  Find all files:   grep -r "@angular/flex-layout" src/
+  Replace with:     @ngbracket/ngx-layout
+
+  STEP 6: Fix TypeScript errors
+  ------------------------------
+  npm run build
+  Fix each TypeScript error shown
+
+  STEP 7: Fix Template errors
+  ----------------------------
+  Check all HTML templates for breaking changes
+  Fix Material MDC-related template issues
+
+  STEP 8: Test build
+  -------------------
+  npm run build:prod
+
+
+================================================================================
+SECTION 13 : FILES THAT WILL DEFINITELY CHANGE
+================================================================================
+
+  ALWAYS CHANGE (Every Angular 14 → 15 project):
+  ------------------------------------------------
+  package.json                              (version bumps)
+  tsconfig.json                             (useDefineForClassFields, lib, target)
+  angular.json                              (minor updates)
+
+  CHANGE IF USING FLEX-LAYOUT:
+  -----------------------------
+  src/app/app.module.ts                     (import path change)
+  src/app/master/master.module.ts
+  src/app/screening/screening.module.ts
+  src/app/client-entry/client-entry.module.ts
+  src/app/verification/verification.module.ts
+  src/app/case/case.module.ts
+  src/app/quality-check/quality-check.module.ts
+  src/app/reports/reports.module.ts
+  src/app/invoice/invoice.module.ts
+  + All other modules using FlexLayoutModule
+
+  CHANGE IF USING ANGULAR MATERIAL (Legacy approach):
+  -----------------------------------------------------
+  All .module.ts files that import Angular Material modules
+  (rename Mat* → MatLegacy* or use ng update schematic)
+
+  CHANGE IF USING CLASS-BASED ROUTE GUARDS:
+  -------------------------------------------
+  src/app/auth/can-activate.guard.ts  (or equivalent)
+  src/app/app-routing.module.ts
+
+
+================================================================================
+SECTION 14 : WHAT DOES NOT CHANGE (Angular 14 → 15)
+================================================================================
+
+  HTML TEMPLATES     : fxLayout, fxFlex, fxLayoutGap directives  (no change)
+  HTML TEMPLATES     : *ngIf, *ngFor, *ngSwitch                   (no change)
+  HTML TEMPLATES     : p-table, p-calendar, p-chips (PrimeNG)     (no change)
+  HTML TEMPLATES     : mat-card, mat-toolbar, mat-icon            (no change)
+  HTML TEMPLATES     : [(ngModel)] two-way binding                (no change)
+  HTML TEMPLATES     : Angular Router <router-outlet>             (no change)
+  TypeScript Files   : Services (if no form usage)                (no change)
+  TypeScript Files   : Interceptor (HTTP interceptor)             (no change)
+  TypeScript Files   : Models/Interfaces                          (no change)
+  Config Files       : config.json (runtime API config)           (no change)
+  Config Files       : src/assets/** (all assets)                 (no change)
+  Styles             : styles.css (mostly, check Material CSS)    (minimal)
+
+
+================================================================================
+SECTION 15 : COMPARISON - Angular 14 vs 15 vs 16 vs 17 vs 18
+================================================================================
+
+  VERSION  | BIGGEST CHANGE                          | DIFFICULTY
+  ---------|---------------------------------------- |------------
+  v14→v15  | Material MDC Migration, flex-layout fork | HIGH
+           | Functional Router Guards                 |
+           | Typed Forms enforcement                  |
+  v15→v16  | Required signals API (new concept)      | MEDIUM
+           | DestroyRef service                       |
+           | NgModules mostly unchanged               |
+  v16→v17  | New @if @for @switch template syntax    | MEDIUM
+           | Deferrable views (@defer)                |
+           | Built-in control flow (replaces *ngIf)  |
+  v17→v18  | browserTarget → buildTarget (angular.json) | LOW-MEDIUM
+           | Stricter HTML parser (no Â chars)       |
+           | ViewChild static: true fix (inside *ngIf)|
+           | [(twoWay)] on negated expressions fixed  |
+
+
+================================================================================
+SUMMARY - ANGULAR 14 → 15 TOTAL CHANGES EXPECTED
+================================================================================
+
+  package.json                    : 1 file   (version upgrades - 30+ packages)
+  tsconfig.json                   : 1 file   (target, lib, useDefineForClassFields)
+  angular.json                    : 1 file   (minor updates)
+  Module files (flex-layout)      : ~12 files (import path change)
+  Module files (Material Legacy)  : ~12 files (MatLegacy* rename)
+  TypeScript files (forms)        : ~50+ files (UntypedFormControl etc.)
+  Route guard files               : ~2-3 files (optional functional guards)
+  CSS files                       : ~5-10 files (if MDC migration done)
+  -----------------------------------------------------------------------
+  ESTIMATED TOTAL                 : ~80-100 files changed
+
+  NOTE: If using 'ng update' schematics, most of these changes are
+        automated by Angular CLI migration tools.
+
+
+================================================================================
+END OF REPORT
+================================================================================

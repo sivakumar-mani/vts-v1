@@ -1,0 +1,1391 @@
+﻿<div fxLayout="row">
+  <div fxFlex="100%">
+    <form id='ngForm' [formGroup]="clientForm" autocomplete="off">
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <!-- //Added By Megala - for VTS2-2025-CRT-0253 (Entity Selection) -->
+          <div fxFlex="3%" fxFlex.lg="30%" fxFlex.md="28%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+              <mat-label>Entity Selection
+              </mat-label>
+              <mat-select formControlName="companyId" placeholder="Select Entity" required>
+
+                @for (id of entitySelection; track id; let i = $index) {
+                  <mat-option [value]="id.companyId"> {{
+                    id.companyName }}
+                  </mat-option>
+                }
+              </mat-select>
+              @if (clientForm?.get('companyId')?.errors?.required) {
+                <mat-error> Entity selection is
+                required </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- //Ended By Megha - for VTS2-2025-CRT-0253 (Entity Selection) -->
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="48%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+              <mat-label>Client Name</mat-label>
+              <input type="text" maxlength="100" formControlName="clientName" #cName matInput
+                placeholder="Client Name"
+                (blur)="checkName(cName.value, 'clientName', 'checkClientName')" autocomplete="off"
+                role="presentation" required>
+              @if (clientForm?.get('clientName')?.errors?.required) {
+                <mat-error> Client Name is required
+                </mat-error>
+              }
+              @if (clientForm?.get('clientName')?.errors?.incorrect) {
+                <mat-error> The Client Name was
+                already exist </mat-error>
+              }
+              @if (clientForm?.get('clientName')?.errors?.minlength) {
+                <mat-error> The Client Name is not
+                valid </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="21%" fxFlex.sm="100%" fxFlex.xs="100%"
+            ngClass.sm="mb-15" ngClass.xs="mb-15">
+            <mat-label class="lbl">Site</mat-label>
+            <mat-checkbox formControlName="siteCreationFlag"
+              [disabled]="clientForm?.get('clientId')?.value > 0" (change)="checkSite($event?.checked)">
+              Client has site
+            </mat-checkbox>
+          </div>
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="31%" fxFlex.sm="100%" fxFlex.xs="100%"
+            ngClass.sm="mb-15" ngClass.xs="mb-15">
+            <mat-radio-group formControlName="indianClientFlag" aria-label="Select an option"
+              [disabled]="clientForm?.get('clientId')?.value > 0" fxLayoutGap="20px"
+              (change)="onTypeChange($event?.value)"
+              matTooltip="Do you want required field for Applicant Id Column Name,Ref No Prefix,Retention Policy Days"
+              matTooltipClass="accent-tooltip">
+              <mat-label class="lbl">Do you want required field?</mat-label>
+              <mat-radio-button [value]="true">Yes</mat-radio-button>
+              <mat-radio-button [value]="false">No</mat-radio-button>
+            </mat-radio-group>
+            @if (clientForm?.get('indianClientFlag')?.errors?.required) {
+              <mat-error> Select one</mat-error>
+            }
+          </div>
+        </div>
+        <!-- ajiht -->
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <h3 class="sub-header">Custom LOA for Direct App cases</h3>
+          </div>
+        </div>
+        <div formGroupName="ClientCustomLoa">
+          <mat-radio-group formControlName="hasCustomLoa" aria-label="Select an option" fxLayoutGap="20px"
+            (change)="onLoaChange($event?.value)" matTooltip="Dynamic LOA for Direct App cases "
+            matTooltipClass="accent-tooltip">
+            <mat-label class="lbl">Do you want enable custom LOA?</mat-label>
+            <mat-radio-button [value]="true">Yes</mat-radio-button>
+            <mat-radio-button [value]="false">No</mat-radio-button>
+          </mat-radio-group>
+
+        </div>
+
+        @if (this.clientForm.get('ClientCustomLoa.hasCustomLoa')?.value === true) {
+          <div style="margin-top: 20px" fxLayout="row"
+            >
+            <div fxFlex="100%">
+              <mat-label class="lbl">Upload Document</mat-label>
+              <mat-label class="mat-hint-upload">Acceptable file Formats : .doc, .docx </mat-label>
+              <div class="file-upload">
+                <i class="material-icons">cloud_upload</i>
+                <span>Browse here...</span>
+                <input type="file" #fileInput (click)="fileInput.value = null"
+                  (change)="openUploadDoc($event)" />
+              </div>
+              @if (this.clientForm.get('ClientCustomLoa.hasCustomLoa')?.value === true && this.customLOAForm.controls.customLoaDocument.get('fileName').value === null) {
+                <mat-error
+                  >
+                Document is required </mat-error>
+              }
+              @if (this.customLOAForm.controls.customLoaDocument.get('fileName').value !== null) {
+                <div class="file-names mt-10"
+                  >
+                  <div class="file-upload-files"> <a
+                    (click)="downloadDoc(this.customLOAForm.controls.customLoaDocument?.value)"
+                    routerLinkActive="active-link">{{
+                  this.customLOAForm.controls.customLoaDocument.get('fileName').value}}</a>
+                  <button type="button" class="close" aria-label="Close" (click)="removeDocument()">
+                    <span aria-hidden="true">&times;</span> </button>
+                  </div>
+                </div>
+              }
+              <!-- <div class="file-names mt-10" *ngIf="bulkUploadDoc?.name">
+              <div class="file-upload-files"> <a
+              routerLinkActive="active-link">{{bulkUploadDoc?.name}}</a>
+              <button type="button" class="close" aria-label="Close" (click)="removeDocument()">
+                <span aria-hidden="true">&times;</span> </button>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      }
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <h3 class="sub-header">Address Details</h3>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <app-address #addressComp [addressList]="address" (eventValidation)="setCode($event)"
+            [addressformgrp]="clientForm">
+          </app-address>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <h3 class="sub-header">Contact Details</h3>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+            <mat-label>Billing Person Name</mat-label>
+            <input formControlName="contactPerson" maxlength="75" autocomplete="off" role="presentation"
+              matInput placeholder="Billing Person Name" required>
+            @if (clientForm?.get('contactPerson')?.errors?.required) {
+              <mat-error> Billing Person Name
+              is required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          @for (item of getContactFormgroup(); track item; let i = $index) {
+            <div formArrayName="clientContact">
+              @if (i === 1) {
+                <mat-form-field fxFlex="100%" appearance="outline" [formGroupName]="i" floatLabel="always">
+                  <mat-label>Phone Number</mat-label>
+                  <input formControlName="lookUpValue" autocomplete="off" #mobnum preventDragdrop
+                    role="presentation" type="text" matInput appNumberOnly [NumericValue]="false"
+                    maxlength="14" minlength="10" placeholder="Phone Number">
+                  <mat-icon matSuffix><i class="material-icons-outlined"> phone </i></mat-icon>
+                  @if (item?.get('lookUpValue')?.errors?.minlength || item?.get('lookUpValue')?.errors?.pattern) {
+                    <mat-error
+                      >
+                    Phone Number is Invalid </mat-error>
+                  }
+                </mat-form-field>
+              }
+            </div>
+          }
+        </div>
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <div fxLayout="row" fxLayoutGap="10px grid">
+            <div fxFlex="30%">
+              <app-auto-complete [selectProperties]="codeControls"></app-auto-complete>
+            </div>
+            @for (item of getContactFormgroup(); track item; let i = $index) {
+              <div fxFlex="70%" formArrayName="clientContact"
+                >
+                @if (i === 0) {
+                  <mat-form-field fxFlex="100%" appearance="outline" [formGroupName]="i" floatLabel="always">
+                    <mat-label>Mobile Number</mat-label>
+                    <input formControlName="lookUpValue" type="text" #phnnum preventDragdrop
+                      autocomplete="off" role="presentation" appNumberOnly [NumericValue]="false"
+                      maxlength="14" minlength="10" matInput placeholder="Mobile Number" required>
+                    <mat-icon matSuffix><i class="material-icons-outlined"> phone_iphone </i></mat-icon>
+                    @if (item?.get('lookUpValue')?.errors?.required) {
+                      <mat-error> Mobile number is
+                      required </mat-error>
+                    }
+                    @if (item?.get('lookUpValue')?.errors?.pattern || item?.get('lookUpValue')?.errors?.minlength) {
+                      <mat-error
+                        >
+                      Mobile Number is Invalid</mat-error>
+                    }
+                  </mat-form-field>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          @for (item of getContactFormgroup(); track item; let i = $index) {
+            <div formArrayName="clientContact">
+              @if (i === 2) {
+                <mat-form-field fxFlex="100%" appearance="outline" [formGroupName]="i" floatLabel="always">
+                  <mat-label>Email Id</mat-label>
+                  <input formControlName="lookUpValue" maxlength="50" autocomplete="off"
+                    role="presentation" type="email" matInput placeholder="Email Id" required>
+                  <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+                  @if (item?.get('lookUpValue')?.errors?.required) {
+                    <mat-error> Email id is required
+                    </mat-error>
+                  }
+                  @if (item?.get('lookUpValue')?.errors?.pattern) {
+                    <mat-error> Enter Valid Email
+                    </mat-error>
+                  }
+                </mat-form-field>
+              }
+            </div>
+          }
+        </div>
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          @for (item of getContactFormgroup(); track item; let i = $index) {
+            <div formArrayName="clientContact">
+              @if (i === 3) {
+                <mat-form-field fxFlex="100%" appearance="outline" [formGroupName]="i" floatLabel="always">
+                  <mat-label>Website</mat-label>
+                  <input type="text" maxlength="50" formControlName="lookUpValue" matInput
+                    placeholder="Website" autocomplete="off" role="presentation">
+                  <mat-icon matSuffix><i class="icon-globe"></i></mat-icon>
+                  <!-- required -->
+                  <!-- <mat-error *ngIf="item?.get('lookUpValue')?.errors?.required"> Website
+                is required </mat-error> -->
+              </mat-form-field>
+            }
+          </div>
+        }
+      </div>
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        @for (item of getContactFormgroup(); track item; let i = $index) {
+          <div formArrayName="clientContact">
+            @if (i === 4) {
+              <mat-form-field fxFlex="100%" appearance="outline" [formGroupName]="i" floatLabel="always">
+                <mat-label>Fax</mat-label>
+                <input type="text" maxlength="50" formControlName="lookUpValue" matInput
+                  placeholder="Fax" autocomplete="off" role="presentation">
+                <mat-icon matSuffix><i class="icon-printer"></i></mat-icon>
+                <!-- required -->
+                <!-- <mat-error *ngIf="item?.get('lookUpValue')?.errors?.required"> Fax
+              is required </mat-error> -->
+            </mat-form-field>
+          }
+        </div>
+      }
+    </div>
+  </div>
+  <!-- 10/09/2023 - added by Vignesh M - New Requirement This field has to be created in the client creation page and same has to be shown in the report  -->
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%">
+      <h3 class="sub-header">Sales Details</h3>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+        <mat-label>Sales Person Name</mat-label>
+        <input formControlName="salesPerson" maxlength="75" autocomplete="off" role="presentation"
+          matInput placeholder="Billing Person Name" required>
+        @if (clientForm?.get('salesPerson')?.errors?.required) {
+          <mat-error> Sales Person Name
+          is required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%">
+      <h3 class="sub-header">Billing Details</h3>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+        <mat-label>Select Billing Cycle</mat-label>
+        <mat-select formControlName="bcId" placeholder="Select Billing Cycle" required>
+          @for (billingCycle of bindData?.billingCycle; track billingCycle) {
+            <mat-option
+            [value]="billingCycle?.lookUpId"> {{billingCycle?.lookUpName}} </mat-option>
+          }
+        </mat-select>
+        @if (clientForm?.get('bcId')?.errors?.required) {
+          <mat-error> Billing cycle is required
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+        <mat-label>Select Billing Rule</mat-label>
+        <mat-select formControlName="ruleId" placeholder="Select Billing Rule" required>
+          @for (billingRule of bindData?.billingRule; track billingRule) {
+            <mat-option
+            [value]="billingRule?.lookUpId"> {{billingRule?.lookUpName}} </mat-option>
+          }
+        </mat-select>
+        @if (clientForm?.get('ruleId')?.errors?.required) {
+          <mat-error> Billing rule is required
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+        <mat-label>Select Billing Type</mat-label>
+        <mat-select formControlName="billingTypeId" placeholder="Select Billing Type"
+          (selectionChange)="selectTitle($event.value)" required>
+          @for (billingType of bindData?.billingType; track billingType) {
+            <mat-option
+              [value]="billingType?.lookUpId"
+              [disabled]="!this.clientForm.get('siteCreationFlag').value === true && (!billingType?.lookUpName?.toLowerCase()?.includes('client'))">
+            {{billingType?.lookUpName}} </mat-option>
+          }
+        </mat-select>
+        @if (clientForm?.get('billingTypeId')?.errors?.required) {
+          <mat-error> Billing type is
+          required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+  </div>
+  <!-- Add by Megala-->
+  @if (commonService.invoiceDtFlag) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+      >
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+          <mat-label>Select Invoice Title</mat-label>
+          <mat-select formControlName="invoiceTitleLookupId" placeholder="Select Invoice Title">
+            @for (invoiceTitle of bindData?.invoiceTitle; track invoiceTitle) {
+              <mat-option
+                [value]="invoiceTitle?.lookUpId">
+              {{invoiceTitle?.lookUpName}} </mat-option>
+            }
+          </mat-select>
+          @if (clientForm?.get('invoiceTitleLookupId')?.errors?.required) {
+            <mat-error> Invoice Title
+              is
+            required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+        fxLayoutGap="20px">
+        <mat-checkbox formControlName="enableLutFlag">Enable LUT details</mat-checkbox>
+      </div>
+      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+        fxLayoutGap="20px">
+        <mat-checkbox formControlName="serviceTaxFlag">GST Flag</mat-checkbox>
+      </div>
+    </div>
+  }
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    @if (clientForm?.get('siteCreationFlag')?.value === false) {
+      <div fxFlex="33.33%" fxFlex.lg="33.33%"
+        fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+          <mat-label>GST No</mat-label>
+          <input class="text-upp" formControlName="cgstin" autocomplete="off" role="presentation"
+            type="text" maxlength="15" matInput placeholder="GST No"
+            [required]="clientForm?.get('cgstin')?.errors?.required">
+          @if (clientForm?.get('cgstin')?.errors?.required) {
+            <mat-error> GST No is required
+            </mat-error>
+          }
+          @if (clientForm?.get('cgstin')?.errors?.minlength) {
+            <mat-error> Enter atleast 15 characters
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%">
+      <h3 class="sub-header">PDF report title</h3>
+    </div>
+  </div>
+  <div>
+    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+      <mat-label>Final Report Title Name</mat-label>
+      <!-- <mat-error *ngIf="emailConfigForm.get('templateSubject').invalid">
+      Subject is required
+    </mat-error> -->
+    <textarea maxlength="1000" formControlName="finalReportTitle" matInput
+    placeholder="Final Report Title Name"> </textarea>
+  </mat-form-field>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="100%">
+    <h3 class="sub-header">Additional Details</h3>
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-label class="lbl">Reference Number Format</mat-label>
+    <mat-checkbox formControlName="formatFlag" (change)="formatChange($event?.checked)">Do you want
+    Reference Number Format?</mat-checkbox>
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-label class="lbl">Active</mat-label>
+    <mat-checkbox formControlName="active">Is Active</mat-checkbox>
+  </div>
+  <!-- ngClass.sm="mb-15" ngClass.xs="mb-15" -->
+  <!-- <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"></div> -->
+</div><br>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label>Applicant ID Column Name</mat-label>
+      <input formControlName="applicantIdColumnName" maxlength="50" type="text" minlength="3"
+        preventDragdrop preventCutCopyPaste appNumberOnly [patternCheck]="false"
+        autocomplete="off" role="presentation" matInput placeholder="Applicant ID Column Name"
+        [required]="clientForm?.get('applicantIdColumnName')?.errors?.required">
+      @if (clientForm?.get('applicantIdColumnName')?.errors?.required) {
+        <mat-error> Applicant ID
+        column name is required </mat-error>
+      }
+      @if (clientForm?.get('applicantIdColumnName')?.errors?.minlength) {
+        <mat-error> Enter
+        atleast 3 characters </mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label>Select Final Report Type</mat-label>
+      <mat-select formControlName="finalReportTypeId" placeholder="Select Final Report Type"
+        required> @for (finalReportType of bindData?.finalReportType; track finalReportType) {
+        <span>
+          <mat-option [value]="finalReportType?.lookUpId"> {{finalReportType?.lookUpName}}
+          </mat-option>
+        </span>
+      } </mat-select>
+      @if (clientForm?.get('finalReportTypeId')?.errors?.required) {
+        <mat-error> Final Report Type
+        is required </mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label>Retention Policy Days</mat-label>
+      <input formControlName="dataRetentionPolicyDays" type="text" preventDragdrop
+        preventCutCopyPaste autocomplete="off" role="presentation" appNumberOnly
+        [PhoneNumber]="false" maxlength="3" matInput placeholder="Retention Policy Days"
+        [required]="clientForm?.get('dataRetentionPolicyDays')?.errors?.required">
+      @if (clientForm?.get('dataRetentionPolicyDays')?.errors?.required) {
+        <mat-error> Retention
+        Policy Days is required </mat-error>
+      }
+      @if (clientForm?.get('dataRetentionPolicyDays')?.errors?.min) {
+        <mat-error> Retention Policy
+        Days are greater than or equal to 90</mat-error>
+      }
+    </mat-form-field>
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  @if (clientForm?.get('indianClientFlag')?.value === true) {
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+      >
+      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+        <mat-label>PAN Number</mat-label>
+        <input formControlName="pan" autocomplete="off" role="presentation" #panValue maxlength="10"
+          type="text" matInput placeholder="PAN Number"
+          (keyup)="panValue.value = panValue.value.toUpperCase()">
+        <mat-hint class="f-13">Ex:ABCDE1234F</mat-hint>
+        @if (!clientForm?.get('pan')?.valid) {
+          <mat-error> Pan Number is not valid Ex:ABCDE1234F
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  }
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label> GST Number </mat-label> <!-- Service Tax Number -->
+      <input class="text-upp" formControlName="serviceTaxNo" type="text" maxlength="15"
+        autocomplete="off" role="presentation" matInput placeholder="GST Number">
+      @if (clientForm?.get('serviceTaxNo')?.errors?.minlength) {
+        <mat-error> Enter atleast 15
+        characters </mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label>Ref Number Prefix</mat-label>
+      <input class="text-upp" autocomplete="off" inputfocus role="presentation" preventDragdrop
+        [required]="clientForm?.get('refNo')?.errors?.required" preventCutCopyPaste
+        formControlName="refNo" #cRefNo maxlength="10" appNumberOnly matInput
+        [patternText]="false" placeholder="Ref Number Prefix"
+        (blur)="checkName(cRefNo?.value, 'refNo', 'checkClientRefPrefixNo')">
+      @if (clientForm?.get('formatFlag')?.value === true) {
+        <mat-hint class="f-13">Eg:XXXXX-XXX-
+        </mat-hint>
+      }
+      @if (clientForm?.get('refNo')?.errors?.required) {
+        <mat-error> Ref Number Prefix is required
+        </mat-error>
+      }
+      @if (clientForm?.get('refNo')?.errors?.incorrect) {
+        <mat-error> The Ref Number Prefix was
+        already exist</mat-error>
+      }
+      @if (clientForm?.get('refNo')?.errors?.pattern &&
+        clientForm?.get('formatFlag')?.value === true) {
+        <mat-error>Ref Number is invalid Eg:XXXXX-XXX-</mat-error>
+      }
+    </mat-form-field>
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="50px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div formArrayName="clientSettings" fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
+    fxFlex.xs="100%" fxLayoutGap="20px">
+    <mat-label class="lbl">Client Settings</mat-label>
+    @for (client of getClientSettings().controls; track client; let i = $index) {
+      <ng-container [formGroupName]="i"
+        >
+        @if (clientForm.get('clientSettings')?.controls[i]?.get('isVisible').value ) {
+          <mat-checkbox
+            [disabled]="getIsDisable(clientForm.get('clientSettings')?.controls[i]?.get('configLookupId')?.value)"
+            [checked]="clientForm.get('clientSettings')?.controls[i]?.get('isActive').value"
+          (change)="changeCheck($event, i, clientForm.get('clientSettings')?.controls[i]?.get('configLookupId')?.value)">{{clientForm.get('clientSettings')?.controls[i]?.get('lookUpName')?.value}}</mat-checkbox>
+        }
+      </ng-container>
+    }
+  </div>
+</div>
+<!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+fxLayoutGap="50px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+<div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+  fxLayoutGap="20px">
+  <mat-label class="lbl">Client Settings</mat-label>
+  <mat-checkbox formControlName="annexureLinkFlag">Annexure link</mat-checkbox>
+  <mat-checkbox formControlName="refNoManuallyFlag">Assign reference number manually
+  </mat-checkbox>
+  <mat-checkbox formControlName="paymentFlag">Payment In Verification</mat-checkbox>
+  <mat-checkbox formControlName="clientNotificationFlag">Notification send to Client
+  </mat-checkbox>
+  <mat-checkbox formControlName="clientUpdateFlag">Update & Receive to Client</mat-checkbox>
+  <mat-checkbox
+    [disabled]="(bindData?.defaultClientId) && (bindData?.defaultClientId !== clientForm?.get('clientId')?.value)"
+  formControlName="defaultFlag">Display Default Address and Logo in Report</mat-checkbox>
+  <mat-checkbox formControlName="displaySiteNameFlag">Display site name in report</mat-checkbox>
+  <mat-checkbox formControlName="chargeCodeFlag">Charge code</mat-checkbox>
+  <mat-checkbox formControlName="caseCountryFlag">Case Country</mat-checkbox>
+  <mat-checkbox formControlName="caseTypeFlag">Case Type</mat-checkbox>
+  <mat-checkbox formControlName="forResearchByPassFlag">For Research By-Pass</mat-checkbox>
+  <mat-checkbox formControlName="caseByPassFlag"
+  (change)="caseOrScope($event?.checked, 'scopeByPassFlag')">Case By-Pass</mat-checkbox>
+  <mat-checkbox *ngIf="clientForm?.get('caseByPassFlag').value === true"
+  formControlName="clientScreeningIdFlag">Client ScreeningId</mat-checkbox>
+  <mat-checkbox formControlName="scopeByPassFlag"
+  (change)="caseOrScope($event?.checked, 'caseByPassFlag')">Scope By-Pass</mat-checkbox>
+  <mat-checkbox formControlName="iqcByPassFlag">Iqc By-Pass</mat-checkbox>
+  <mat-checkbox formControlName="caseDatesFlag">Case Creation Date's </mat-checkbox>
+  <mat-checkbox formControlName="calendarDaysTATFlag">Calendar Days Tat</mat-checkbox>
+  <mat-checkbox formControlName="reOpenTATFlag">Re-Open Tat</mat-checkbox>
+  <mat-checkbox formControlName="optionToCreateInvitation">Direct App Invitation</mat-checkbox>
+  <mat-checkbox *ngIf="clientForm?.get('optionToCreateInvitation').value === true"
+  formControlName="daValidationFlag">Validation Applicable for DA</mat-checkbox>
+  <mat-checkbox formControlName="approvalLimitFlag"
+    *ngIf="clientForm?.get('optionToCreateInvitation')?.value === true">Approval For Invitation
+  </mat-checkbox>
+  <mat-checkbox *ngIf="clientForm?.get('optionToCreateInvitation')?.value === true"
+  formControlName="downloadBGVFlag">Auto Download BGV </mat-checkbox>
+  <mat-checkbox *ngIf="clientForm?.get('optionToCreateInvitation')?.value === true"
+  formControlName="downloadDocumentFlag">Documents Download</mat-checkbox>
+  <mat-checkbox formControlName="contactRemarkFlag">Contact Remarks</mat-checkbox>
+  <mat-checkbox formControlName="manualGenerationFlag">Manual Generation Invoice Number
+  </mat-checkbox>
+  <mat-checkbox formControlName="interimReportFlag">Interim Report Send Mail</mat-checkbox>
+  <mat-checkbox formControlName="ctsFlag">CTS</mat-checkbox>
+  <mat-checkbox formControlName="directAppAddressFlag">Add all Employment additional address to
+  PCC3E component</mat-checkbox>
+  <mat-checkbox formControlName="pdfReportNameChangeFlag">Pdf Report Name Change Control
+  </mat-checkbox>
+  <mat-checkbox formControlName="deReopenFlag">Re-Open Case Should Go to DE</mat-checkbox>
+  <mat-checkbox formControlName="tATCrossInsuffAutomationFlag">Enable TAT cross insufficiency
+  automation</mat-checkbox>
+  <mat-checkbox formControlName="removeEducationCategoryFlag">Remove Education Type</mat-checkbox>
+  <mat-checkbox formControlName="removeInstitutionTypeFlag">Remove Institution
+  Category</mat-checkbox>
+  <mat-checkbox formControlName="cinFlag">Remove CIN</mat-checkbox>
+  <mat-checkbox formControlName="rocCodeFlag">Remove ROC Code</mat-checkbox>
+  <mat-checkbox formControlName="incoporateDateFlag">Remove Date of Incorporation</mat-checkbox>
+  <mat-checkbox formControlName="ssnFlag">Enable SSN</mat-checkbox>
+  <mat-checkbox formControlName="removeContactDetailsFlag">Remove Contact Details for
+  JCR</mat-checkbox>
+  <mat-checkbox formControlName="onlineVerificationJcrflag">Add Online Verification For
+  JCR</mat-checkbox>
+  <mat-checkbox formControlName="enbMultiJcrFlag">Enable Multiple Court Checks For
+  JCR</mat-checkbox>
+  <mat-checkbox formControlName="showClientSuspectFlag">Enable Client Suspect /
+  Blacklist</mat-checkbox>
+  <mat-checkbox formControlName="iQCApprovedDateInFLTFlag">Add IQC approved date in file level
+  tracker</mat-checkbox>
+</div>
+</div> -->
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="100%">
+    <h3 class="sub-header">Insufficiency Workflow Mapping</h3>
+  </div>
+</div>
+
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+  <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label> Insufficiency Type</mat-label>
+      <mat-select formControlName="insufficiencyTypeId" placeholder="Select Insufficiency Type">
+        @for (insufficiencyType of insufficiencyData; track insufficiencyType) {
+          <mat-option
+            [value]="insufficiencyType?.lookUpId">{{insufficiencyType?.insufficiencyTypeName}}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <!-- <app-auto-complete [selectProperties]="componentControls" (selectionChange)="componentDetailChange($event)"></app-auto-complete> -->
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label>Select Component</mat-label>
+      <mat-select formControlName="insuffComponent" multiple placeholder="Select Component">
+        <!-- <mat-select-trigger>
+        {{InsuffFormGroup?.get('componentId')?.value ?
+        ((InsuffFormGroup?.get('componentId')?.value[0]?.compName +
+        (InsuffFormGroup?.get('componentId')?.value?.subCompFlag === true ?
+        ( '(' +
+        InsuffFormGroup?.get('componentId')?.value[0]?.packageSubComponent[0]?.subCompName
+        + ')') :
+        '')) + ((InsuffFormGroup?.get('componentId')?.value[1]?.compName &&
+        InsuffFormGroup?.get('componentId')?.value?.length === 2) ? (',' +
+        (InsuffFormGroup?.get('componentId')?.value[1]?.compName +
+        (InsuffFormGroup?.get('componentId')?.value[1]?.subCompFlag
+        === true ?
+        ( '(' +
+        InsuffFormGroup?.get('componentId')?.value[1]?.packageSubComponent[0]?.subCompName
+        + ')') :
+        ''))) : '')) : ''}}
+        <span *ngIf="InsuffFormGroup?.get('componentId')?.value?.length > 2">
+          (+{{InsuffFormGroup?.get('componentId')?.value?.length - 1}}
+          {{InsuffFormGroup?.get('componentId')?.value?.length === 2 ? 'other'
+          : 'others'}})
+        </span>
+      </mat-select-trigger> -->
+      @for (packComp of packAndCompList; track packComp) {
+        <span>
+          @if (packComp.subCompFlag) {
+            <mat-optgroup [label]="packComp.compName">
+              @for (subComp of packComp.packageSubComponent; track subComp) {
+                <mat-option
+                  [value]="setSubCompValue(InsuffFormGroup?.get('compId')?.value, packComp, subComp)">
+                {{packComp.compName + '-' +subComp.subCompName}}</mat-option>
+              }
+            </mat-optgroup>
+          }
+          @if (!packComp.subCompFlag) {
+            <mat-option [value]="packComp"> {{packComp.compName}}
+            </mat-option>
+          }
+        </span>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+<!-- <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+<mat-form-field *ngIf="iscomponentDescList" appearance="outline" fxFlex="100%" floatLabel="always">
+  <mat-label>Sub Component</mat-label>
+  <mat-select (selectionChange)="componentChange($event.value)" matNativeControl
+    placeholder="Select Component Desc" formControlName="subcompId">
+    <mat-option *ngFor="let componentDesc of componentDescList; let i = index"
+    [value]="componentDesc.subComponentId"> {{ componentDesc.subReportType }} </mat-option>
+  </mat-select>
+  <mat-error
+  *ngIf="insufficiency?.get('subcompId')?.errors?.required"> Component desc is required </mat-error>
+</mat-form-field>
+<mat-form-field *ngIf="!iscomponentDescList" appearance="outline" fxFlex="100%" floatLabel="always">
+  <mat-label>Component Desc</mat-label>
+  <input disabled matInput formControlName="subcompId" autocomplete="off"
+    role="presentation" placeholder="Sub Component Desc" />
+  <mat-error
+  *ngIf="insufficiency?.get('subcompId')?.errors?.required"> Component desc is required </mat-error>
+</mat-form-field>
+</div>  -->
+<div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%">
+  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+    <mat-label>Workflow</mat-label>
+    <mat-select formControlName="WorkFlowLookUpId" placeholder="Select Workflow Type">
+      @for (workFlowType of workFlowData; track workFlowType) {
+        <mat-option
+          [value]="workFlowType?.lookUpId">{{workFlowType?.workFlowName }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div fxFlex="12%" fxFlex.lg="12%" fxFlex.md="12%" fxFlex.sm="100%" fxFlex.xs="100%">
+  <mat-label>&nbsp;</mat-label>
+  <div class="adrem" fxLayoutGap="8px">
+    <button mat-button color="primary" matTooltip="{{index > -1 ? 'Update' : 'Add'}}"
+      matTooltipClass="accent-tooltip" (click)="addComponent()"> <i
+    class="icon-plus-circle"></i> </button>
+    <button mat-button color="warn" matTooltip="Reset" matTooltipClass="accent-tooltip"
+      (click)="resetComponent()"> <i class="icon-x-circle"></i> </button>
+    </div>
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="20px grid" class="pt-15">
+  <div fxFlex="100%">
+    <p-table #dt [columns]="columnName"
+      [value]="mainForm?.get('insufficiencyWorkFlowMappingVm')?.value" [scrollable]="true"
+      [paginator]="true" [rows]="10" [resizableColumns]="true" [reorderableColumns]="true"
+      columnResizeMode="expand">
+
+      <!-- ================= COLGROUP ================= -->
+      <ng-template pTemplate="colgroup" let-colGroupCols>
+        <colgroup>
+        <col style="width:40px" />
+        <col style="width:100px" />
+        @for (col of colGroupCols; track col) {
+          <col style="min-width:200px" />
+        }
+      </colgroup>
+    </ng-template>
+
+    <!-- ================= HEADER ================= -->
+    <ng-template pTemplate="header" let-headerCols>
+      <tr>
+        <th class="action"></th>
+        <th class="action">Action</th>
+
+        @for (col of headerCols; track col) {
+          <th
+            [ngClass]="{ 'text-center action': col?.field === 'action' }" pReorderableColumn
+            pResizableColumn>
+            <div class="thname" matTooltip="{{ col?.header }}"
+              matTooltipClass="accent-tooltip">
+              {{ col?.header }}
+            </div>
+            <span [pSortableColumn]="col?.field">
+              @if (col?.field !== 'expand' && col?.field !== 'action') {
+                <p-sortIcon
+                  [field]="col?.field" ariaLabel="Activate to sort"
+                  ariaLabelDesc="Activate to sort in descending order"
+                  ariaLabelAsc="Activate to sort in ascending order">
+                </p-sortIcon>
+              }
+            </span>
+          </th>
+        }
+      </tr>
+    </ng-template>
+
+    <!-- ================= BODY ================= -->
+    <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-expanded="expanded"
+      let-bodyCols="columns">
+
+      @if (rowData?.deleteFlag === false) {
+        <tr>
+          <!-- EMPTY COLUMN -->
+          <td class="action"></td>
+          <!-- ACTION -->
+          <td class="action">
+            <div fxLayout="row" class="tbl-icon">
+              <div fxFlex="100%" fxLayoutGap="10px">
+                <mat-icon>
+                  <i class="material-icons-outlined" matTooltip="Delete"
+                    matTooltipClass="accent-tooltip" (click)="deleteInsuff(index)">
+                    delete
+                  </i>
+                </mat-icon>
+              </div>
+            </div>
+          </td>
+          <!-- DATA COLUMNS -->
+          @for (col of bodyCols; track col) {
+            <td
+              matTooltipClass="accent-tooltip">
+              @switch (col?.field) {
+                @case ('insuffTypeName') {
+                  <span>
+                    {{ rowData?.insuffTypeName }}
+                  </span>
+                }
+                @case ('compName') {
+                  <span>
+                    {{ rowData?.compName }}
+                  </span>
+                }
+                @case ('subCompName') {
+                  <span>
+                    {{ rowData?.subCompName ? rowData?.subCompName : 'N/A' }}
+                  </span>
+                }
+                @case ('workFlowLookUpName') {
+                  <span>
+                    {{ rowData?.workFlowLookUpName }}
+                  </span>
+                }
+              }
+            </td>
+          }
+        </tr>
+      }
+
+    </ng-template>
+
+  </p-table>
+  <div [ngClass]="{'empty-record': mainForm?.get('insufficiencyWorkFlowMappingVm')?.value.length === 0}"
+    class="cus-paginator" fxLayout="row wrap" fxLayoutGap="10px grid">
+    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+      fxLayoutAlign="start center"> Showing
+      {{ dt?.totalRecords < 1 ? 0 : dt?.first + 1 }} - {{ dt?.totalRecords> 0 ? dt?.rows +
+      dt?.first <= dt?.totalRecords ? dt?.rows + dt?.first : dt?.totalRecords : 0 }} of {{
+    dt?.totalRecords }} record(s) </div>
+    <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%"
+      fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.md="end center"
+      fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                                            <a [ngClass]="dt?.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                                    dt?.onPageChange({
+                              first: dt?.first - dt?.rows,
+                              rows: dt?.rows
+                            });
+                            navigateNxtPrevPage(dt?.first + dt?.rows, dt?.rows)
+                          "> <i class="icon-control-start mr-5"></i> </a> <span class="gotopagbg mr-2 ml-2"
+        fxHide.xs>Go to Page<span class="input-num">
+        <input type="number" min="1" #pageNo [value]="currentPage"
+          maxlength="5" appNumberOnly [NumberOnly]="false"
+          (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+      </span></span> <span class="mr-2" fxHide.xs> of
+    {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                                            <a [ngClass]="
+                                    dt?.rows + dt?.first >= dt?.totalRecords
+                              ? 'page-btn disabled'
+                              : 'page-btn'
+                          " (click)="
+                          dt?.onPageChange({
+                              first: dt?.first + dt?.rows,
+                              rows: dt?.rows
+                            });
+                            navigateNxtPrevPage(dt?.first + dt?.rows, dt?.rows)
+                          "><i class="icon-control-end ml-5"></i></a>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+  fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+  class="mt-10">
+  <div fxFlex="100%">
+    <h3 class="sub-header">Client Colour Status Details</h3>
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+  fxLayoutGap.xs="0px grid">
+  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <span class="p-float-label">
+      <p-multiSelect fxFlex="100%" [options]="bindData?.colorStatus"
+        formControlName="clientColorStatus" optionLabel="lookUpName"
+        filterPlaceHolder="Select Client Color Status"
+        selectedItemsLabel="{0} Client Color Status selected"
+        [style]="{XminWidth: '250px', width:'70%'}"
+        defaultLabel="Select Client Color Status" [showHeader]="true">
+      </p-multiSelect>
+      <label class="lbl-float">Client Color Status</label><br />
+      @if (clientForm?.get('clientColorStatus')?.errors?.required && clientForm?.
+        get('clientColorStatus')?.touched) {
+        <mat-error> Client Color Status is required. </mat-error>
+      }
+    </span>
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label>Previous Ref Number</mat-label>
+      <input type="text" autocomplete="off" role="presentation" preventDragdrop
+        preventCutCopyPaste formControlName="previousRefNo" #pRefNo maxlength="5"
+        appNumberOnly [NumericValue]="false" matInput placeholder="Previous Ref Number">
+      @if (clientForm?.get('previousRefNo')?.errors?.minlength) {
+        <mat-error> Enter only five
+        digit number</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label>Previous Direct App Ref Number</mat-label>
+      <input type="text" autocomplete="off" role="presentation" preventDragdrop
+        preventCutCopyPaste formControlName="previousDirectRefNo" #previousRefNo
+        maxlength="5" appNumberOnly [NumericValue]="false" matInput
+        placeholder="Previous Direct App Ref Number">
+      @if (clientForm?.get('previousDirectRefNo')?.errors?.minlength) {
+        <mat-error> Enter only
+        five digit number</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <!-- <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%"
+  fxLayoutGap="20px" ngClass.sm="mb-15" ngClass.xs="mb-15">
+  <mat-label class="lbl">Contact Remarks</mat-label>
+  <mat-checkbox formControlName="contactRemarkFlag">Contact Remarks</mat-checkbox>
+</div>
+<div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%"></div> -->
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+  fxLayoutGap.xs="0px grid">
+  <div fxFlex="100%">
+    <h3 class="sub-header">Document Details</h3>
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+  fxLayoutGap.xs="0px grid">
+  <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <div fxLayout="row">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Select Document Type</mat-label>
+          <mat-select placeholder="Document Type" formControlName="docType"
+            (selectionChange)="supDocTypeChange($event)">
+            @for (type of bindData?.logoType; track type) {
+              <mat-option
+                [value]="type?.lookUpId">
+              {{type?.lookUpName}} </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    @if (commonService.getNameById(bindData?.logoType, 'lookUpId', 'lookUpName', clientForm?.get('docType')?.value)?.includes('Signature')) {
+      <div fxLayout="row"
+        >
+        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Select Signature Type</mat-label>
+            <mat-select placeholder="Signature Type" formControlName="signatureLookUpId">
+              @for (sign of bindData?.signatureType; track sign) {
+                <mat-option
+                  [value]="sign?.lookUpId">
+                {{sign?.lookUpName}} </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    }
+  </div>
+  <div fxFlex="66.6%" fxFlex.lg="66.6%" fxFlex.md="66.6%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <div fxFlex="100%" class="file-container">
+      <mat-label class="lbl pb-5">Upload Logo Images</mat-label>
+      <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+    here...</span>
+    <input type="file" #fileInput (click)="fileInput.value = null"
+      (change)="openLogoDoc($event, clientForm?.get('docType')?.value)"
+      formControlName="supportingDocument" accept="image/x-png,image/gif,image/jpeg">
+    </div>
+    <div class="file-names mt-10">
+      @for (document of clientForm?.controls?.clientLogo?.value; track document; let i = $index) {
+        <div class="file-upload-files"
+          >
+        <mat-label class="text-semi-bold ">
+          {{(document?.isSignature === false ?
+          commonService?.getNameById(bindData?.logoType, 'lookUpId', 'lookUpName',
+          document?.logoLookupId) : (commonService?.getNameById(bindData?.logoType,
+          'lookUpId', 'lookUpName', document?.logoLookupId) + ' - ' +
+          commonService?.getNameById(bindData?.signatureType,
+          'lookUpId', 'lookUpName', document?.signatureLookupId))) + ' : ' }}
+        </mat-label>
+        @if (document.fileName) {
+          <a (click)="preview(document)"
+          routerLinkActive="active-link">{{document?.fileName}}</a>
+        }
+        <button type="button" class="close" aria-label="Close"
+          (click)="removeLogoDoc(i)">
+          <span aria-hidden="true">&times;</span></button>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+  fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+  class="mt-10">
+  <div fxFlex="100%">
+    <h3 class="sub-header">Details of Krya Screening Private Limited</h3>
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+  fxLayoutGap.xs="0px grid">
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <app-auto-complete [selectProperties]="accManagerControls"> </app-auto-complete>
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    @for (item of getOwnerFormgroup(); track item; let i = $index) {
+      <div formArrayName="ownerContact">
+        @if (i === 0) {
+          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always" [formGroupName]="i">
+            <mat-label>TO Email ID</mat-label>
+            <input formControlName="lookUpValue" maxlength="50" autocomplete="off"
+              role="presentation" type="email" matInput placeholder="To Email ID" required>
+            <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+            @if (item?.get('lookUpValue')?.errors?.required) {
+              <mat-error> To Email ID is
+                required
+              </mat-error>
+            }
+            @if (item?.get('lookUpValue')?.errors?.pattern) {
+              <mat-error> Enter Valid Email
+              </mat-error>
+            }
+          </mat-form-field>
+        }
+      </div>
+    }
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    @for (item of getOwnerFormgroup(); track item; let i = $index) {
+      <div formArrayName="ownerContact">
+        @if (i === 1) {
+          <mat-form-field fxFlex="100%" floatLabel="always" appearance="outline" [formGroupName]="i" floatLabel="always">
+            <mat-label>CC Email ID</mat-label>
+            <input formControlName="lookUpValue" maxlength="50" autocomplete="off"
+              role="presentation" type="email" matInput placeholder="CC Email ID" required>
+            <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+            @if (item?.get('lookUpValue')?.errors?.required) {
+              <mat-error> CC Email ID is
+                required
+              </mat-error>
+            }
+            @if (item?.get('lookUpValue')?.errors?.pattern) {
+              <mat-error> Enter Valid Email
+              </mat-error>
+            }
+          </mat-form-field>
+        }
+      </div>
+    }
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+  fxLayoutGap.xs="0px grid">
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    @for (item of getOwnerFormgroup(); track item; let i = $index) {
+      <div formArrayName="ownerContact">
+        @if (i === 2) {
+          <mat-form-field fxFlex="100%" floatLabel="always" appearance="outline" [formGroupName]="i">
+            <mat-label>CAM Mobile Number</mat-label>
+            <input formControlName="lookUpValue" type="text" #phnnum preventDragdrop
+              autocomplete="off" role="presentation" appNumberOnly [NumericValue]="false"
+              maxlength="14" minlength="10" matInput placeholder="CAM Mobile Number" required>
+            <mat-icon matSuffix><i class="material-icons-outlined"> phone_iphone </i></mat-icon>
+            @if (item?.get('lookUpValue')?.errors?.required) {
+              <mat-error> CAM Mobile number is
+              required </mat-error>
+            }
+            @if (item?.get('lookUpValue')?.errors?.pattern || item?.get('lookUpValue')?.errors?.minlength) {
+              <mat-error
+                >
+              CAM Mobile Number is Invalid</mat-error>
+            }
+          </mat-form-field>
+        }
+      </div>
+    }
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label>Client TAT</mat-label>
+      <input formControlName="tatCount" autocomplete="off" role="presentation" type="text"
+        preventDragdrop required preventCutCopyPaste appNumberOnly [PhoneNumber]="false"
+        maxlength="2" matInput placeholder="Client TAT">
+      @if (clientForm?.get('tatCount')?.errors?.required) {
+        <mat-error> Client TAT is required
+        </mat-error>
+      }
+      @if (clientForm?.get('tatCount')?.errors?.max) {
+        <mat-error>
+        Client TAT should be less than or equal to 30 </mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+      <mat-label>CE-Hold TAT</mat-label>
+      <input formControlName="ceHoldTAT" autocomplete="off" role="presentation" type="text"
+        preventDragdrop preventCutCopyPaste appNumberOnly [PhoneNumber]="false"
+        maxlength="2" matInput placeholder="CE-Hold TAT">
+      @if (clientForm?.get('ceHoldTAT')?.errors?.required) {
+        <mat-error> CE-Hold TAT is
+          required
+        </mat-error>
+      }
+      @if (clientForm?.get('ceHoldTAT')?.errors?.max) {
+        <mat-error>
+        CE-Hold TAT should be less than or equal to 20 </mat-error>
+      }
+    </mat-form-field>
+  </div>
+</div>
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+  fxLayoutGap.xs="0px grid">
+  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+    fxLayoutGap="20px">
+    <mat-checkbox formControlName="clientStatus">Client on Hold</mat-checkbox>
+  </div>
+</div>
+<div>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid"
+    fxLayoutGap.xs="0px grid" class="mt-10">
+    <div fxFlex="100%">
+      <h3 class="sub-header">Cancellation Rule</h3>
+    </div>
+  </div>
+  @if (clientForm?.get('cancelDetails')?.value?.length === 0 ||clientForm?.get('cancelDetails')?.value === null || (cancelrmdata!=null && cancelrmdata.length===0)) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+      fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px"
+      >
+      <a class="text-sm mb-15" (click)="createCrule()">
+        <i class="icon-plus-circle mr-5"></i> Click here to add Cancellation Rule</a>
+      </div>
+    }
+    @if (clientForm?.get('cancelDetails')?.value?.length > 0) {
+      <div>
+        @for (group of cancelDetails(); track group; let i = $index; let first = $first; let last = $last) {
+          <div formArrayName="cancelDetails"
+            >
+            <span fxFlex></span>
+            <div fxLayout="row wrap" [formGroupName]="i" fxLayout.lg="row" fxLayout.md="row"
+              fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+              fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              @if (clientForm?.get('cancelDetails')?.controls[i]?.get('active').value == true) {
+                <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  >
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>From Condition</mat-label>
+                    <mat-select formControlName="fromLookupId"
+                      placeholder="Select From Condition" required>
+                      @for (fromC of commonService.fromConditionList; track fromC) {
+                        <mat-option
+                        [value]="fromC.lookUpId"> {{ fromC.lookUpDesc }} </mat-option>
+                      }
+                    </mat-select>
+                    @if (clientForm?.get('cancelDetails')?.controls[i]?.get('fromLookupId').errors?.required) {
+                      <mat-error
+                        >
+                      From condition is required </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+              @if (clientForm?.get('cancelDetails')?.controls[i]?.get('active').value == true) {
+                <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  >
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>From Hours</mat-label>
+                    <input min="0" matInput placeholder="From Hours" formControlName="fromHours"
+                      maxlength="3" appNumberOnly [NumberOnly]="false"
+                      (keyup)="canValidation('fromHours',i,clientForm?.get('cancelDetails')?.controls[i]?.get('fromHours')?.value)"
+                      required />
+                    <mat-icon matSuffix><i class="icon-clock"></i></mat-icon>
+                    @if (clientForm?.get('cancelDetails')?.controls[i]?.get('fromHours').errors?.required) {
+                      <mat-error
+                        >
+                      From hours is required </mat-error>
+                    }
+                    @if (clientForm?.get('cancelDetails')?.controls[i]?.get('fromHours')?.errors?.pattern) {
+                      <mat-error
+                        >
+                      From hours is Invalid </mat-error>
+                    }
+                    @if (clientForm?.get('cancelDetails')?.controls[i]?.get('fromHours')?.errors?.incorrect) {
+                      <mat-error
+                        >
+                      From hours is greater than previous To hours</mat-error>
+                    }
+                    @if (clientForm?.get('cancelDetails')?.controls[i]?.get('fromHours')?.errors?.comparison) {
+                      <mat-error
+                        >
+                      From hours is less than To hours</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+              @if (clientForm?.get('cancelDetails')?.controls[i]?.get('active').value == true) {
+                <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  >
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>To Condition</mat-label>
+                    <mat-select formControlName="toLookupId" placeholder="Select To Condition"
+                      required>
+                      @for (toC of commonService.toConditionList; track toC) {
+                        <mat-option
+                        [value]="toC.lookUpId"> {{ toC.lookUpDesc }} </mat-option>
+                      }
+                    </mat-select>
+                    @if (clientForm?.get('cancelDetails')?.controls[i]?.get('toLookupId').errors?.required) {
+                      <mat-error
+                        >
+                      To condition is required </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+              @if (clientForm?.get('cancelDetails')?.controls[i]?.get('active').value == true) {
+                <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  >
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>To Hours</mat-label>
+                    <input min="0" matInput appNumberOnly [NumberOnly]="false"
+                      placeholder="To Hours" formControlName="toHours" maxlength="3"
+                      appNumberOnly [NumberOnly]="false"
+                      (input)="canValidation('toHours',i,clientForm?.get('cancelDetails')?.controls[i]?.get('toHours')?.value)"
+                      required />
+                    <mat-icon matSuffix><i class="icon-clock"></i></mat-icon>
+                    @if (clientForm?.get('cancelDetails')?.controls[i]?.get('toHours').errors?.required) {
+                      <mat-error
+                        >
+                      To hours is required </mat-error>
+                    }
+                    @if (clientForm?.get('cancelDetails')?.controls[i]?.get('toHours')?.errors?.pattern) {
+                      <mat-error
+                        >
+                      To hours is Invalid </mat-error>
+                    }
+                    @if (clientForm?.get('cancelDetails')?.controls[i]?.get('toHours')?.errors?.incorrect) {
+                      <mat-error
+                        >
+                      To hours is greater than From hours </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+              @if (clientForm?.get('cancelDetails')?.controls[i]?.get('active').value == true) {
+                <div fxFlex="13%" fxFlex.lg="13%" fxFlex.md="13%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  >
+                  <mat-form-field appearance="outline">
+                    <mat-label>Percentage Of Cancellation </mat-label>
+                    <input min="0" appNumberOnly [NumberOnlyWithDot]="false" matInput
+                      placeholder="Enter in %" formControlName="percentage" maxlength="3"
+                      max="100"
+                      (input)="canValidation('percentage',i,clientForm?.get('cancelDetails')?.controls[i]?.get('percentage')?.value)"
+                      required />
+                    @if (!!clientForm?.get('cancelDetails')?.controls[i]?.get('percentage').errors?.required) {
+                      <mat-error
+                        >
+                      Percentage of cancellation is required </mat-error>
+                    }
+                    @if (!!clientForm?.get('cancelDetails')?.controls[i]?.get('percentage')?.errors?.comparision) {
+                      <mat-error
+                        >
+                      Percentage should be less than or equal to 100 </mat-error>
+                    }
+                    @if (!!clientForm?.get('cancelDetails')?.controls[i]?.get('percentage')?.errors?.incorrect) {
+                      <mat-error
+                        >
+                      Percentage should be greater than previous one </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+              @if (clientForm?.get('cancelDetails')?.controls[i]?.get('active').value == true) {
+                <div fxFlex="12%" fxFlex.lg="12%" fxFlex.md="12%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  >
+                  <mat-label>&nbsp;</mat-label>
+                  <div class="adrem" fxLayoutGap="8px">
+                    <button mat-button color="primary" matTooltip="Add"
+                      matTooltipClass="accent-tooltip" (click)="addcrule()"> <i
+                    class="icon-plus-circle"></i> </button>
+                    <button mat-button color="warn" matTooltip="Remove"
+                      matTooltipClass="accent-tooltip"
+                      (click)="removecrule(i,clientForm?.get('cancelDetails')?.controls[i]?.get('cancelRuleId')?.value)">
+                      <i class="icon-x-circle"></i> </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+  </mat-card-content>
+</form>
+</div>
+</div>
+<ng-template #imgprDialog>
+  <div class=" confirm-pop">
+    <button mat-icon-button class="closed" [mat-dialog-close]="true">
+      <mat-icon class="close-icon" color="warn">close</mat-icon>
+    </button>
+    <h1 mat-dialog-title>Image Viewer</h1>
+    <br>
+      <mat-dialog-content>
+        <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+
+            <img id="imgpre" [@rotatedState]='state' [src]='imageSource'>
+
+          </div>
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+        <button mat-icon-button matTooltip="Download Image" (click)="downloadimg()"
+          matTooltipClass="accent-tooltip">
+          <mat-icon>cloud_download</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Rotate Left" (click)="rotateimg('left')"
+          matTooltipClass="accent-tooltip">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Rotate Right" (click)="rotateimg('right')"
+          matTooltipClass="accent-tooltip">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Rotate Up" (click)="rotateimg('up')" matTooltipClass="accent-tooltip">
+          <mat-icon>arrow_upward</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Rotate Down" (click)="rotateimg('down')"
+          matTooltipClass="accent-tooltip">
+          <mat-icon>arrow_downward</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Zoom In" (click)="zoomin()" matTooltipClass="accent-tooltip">
+          <mat-icon>zoom_in</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Zoom Out" (click)="zoomout()" matTooltipClass="accent-tooltip">
+          <mat-icon>zoom_out</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Reset" (click)="rotateimg('reset')" matTooltipClass="accent-tooltip">
+          <mat-icon>settings_backup_restore</mat-icon>
+        </button>
+      </mat-dialog-actions>
+    </div>
+  </ng-template>

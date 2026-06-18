@@ -1,0 +1,72 @@
+<app-breadcrumb [routePath]="routePath"> </app-breadcrumb>
+<div class="content-area">
+   
+<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+fxLayoutGap="15px grid" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px grid">   
+<div fxFlex="77%" fxFlex.lg="77%" fxFlex.md="68%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <div fxLayout="row">
+        <div fxFlex="100%">
+          <h1 class="welcome">Welcome to Verification Tracking System Dashboard!</h1>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+        fxLayoutGap="grid" fxLayoutGap.sm="0px grid" class="DbBg">
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%" class="list">
+      <a>
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-referencecheck icolorTwo"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count">{{finalQCCount}}</span> <span class="name">Final QC</span> </div>
+        </div>
+      </a> </div>
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%" class="list">
+      <a>
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-individualqc icolorFour"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count">{{individualCount}}</span> <span class="name">Individual QC</span> </div>
+        </div>
+      </a> </div>
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%" class="list">
+      <a>
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-approved icolorTwo"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count"> {{iqcApprovedCount}}</span> <span class="name">Individual QC Approved</span> </div>
+        </div>
+      </a> </div>
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%" class="list">
+      <a>
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-qcreject icolorThree"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count">{{iqcRejectedCount}}</span> <span class="name">Individual QC Rejected</span> </div>
+        </div>
+      </a> </div>
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%" class="list">
+      <a>
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-approved icolorOne"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count">{{fqcApprovedCount}}</span> <span class="name">Final QC Approved</span> </div>
+        </div>
+      </a> </div>
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%" class="list"
+      >
+      <a>
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-qcreject icolorFour"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count">{{fqcRejectedCount}}</span> <span class="name">Final QC Rejected</span> </div>
+        </div>
+      </a> </div>
+</div>
+</div>
+</div>
+</div>

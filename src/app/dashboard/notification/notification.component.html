@@ -1,0 +1,263 @@
+﻿<app-breadcrumb [routePath]="'Notification'" [btnExcelExport]="notificationList?.length > 0" (eventExcelExport)="exportToExcel()"></app-breadcrumb>
+<div fxLayout="row" class="advSearch">
+  <form autocomplete="off">
+    <div class="advSearch-forms">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row" fxLayoutGap="0px">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="180px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>From Date</mat-label>
+                <input matInput [formControl]="fromDate" [matDatepicker]="fromdatePicker" placeholder="From Date" (focus)="fromdatePicker.open()" />
+                <mat-datepicker-toggle matSuffix [for]="fromdatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #fromdatePicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxFlex="180px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>To Date</mat-label>
+                <input matInput [formControl]="toDate" [matDatepicker]="todatePicker" placeholder="To Date"
+                  [max]="maxDate" (focus)="todatePicker.open()"/>
+                  <mat-datepicker-toggle matSuffix [for]="todatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #todatePicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="100%" class="advSearch-btn">
+        <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <a (click)="getNotificationList()">Search</a>
+          <span>|</span>
+          <a (click)="resetFilterSort('reset')">Reset</a>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- <div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">Notification History</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" class="sortrow">
+          <div fxFlex="100%" fxLayoutAlign="end center" fxLayoutGap="20px">
+            <ul>
+              <li><span class="text-dull"> Showing
+                {{(itemPerPage*page)-itemPerPage+1}} -
+                {{count}}
+                of </span> <b>{{notificationList?.length}} record(s)</b></li>
+                |
+                <li><b>Sort By:</b>
+                <a [ngClass]="column==='createDate'?'active':''" (click)="sortBy('createDate')">Date</a>
+
+                                <i [ngClass]="{'icon-sort': column != 'createDate', 
+                                                               'icon-sort-asc': (column == 'createDate' && !isDesc), 
+                                                               'icon-sort-desc': (column == 'createDate' && isDesc) }"
+                  aria-hidden="true">
+                </i>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+                        <div fxLayout="row" fxLayoutGap="20px" class="listrow" *ngFor="let notify of notificationList 
+                        | 
+                search: [{key:'clientName', value:''},
+                {key:'clientReferenceNo', value: ''},
+                 {key:'candidateFullName', value: ''}]
+                
+                
+              | sort: {property: column, direction: direction}
+              | paginate: { itemsPerPage: itemPerPage, currentPage: page };
+                let i=index; let count = count">
+              <div fxFlex="100%" [class]="getcount(count)">
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <div fxFlex="75%"> <a>
+                    <mat-card-header>
+                      <div mat-card-avatar class="avatar avatarBg{{(i%6)+1}} cursor-pointer">
+                        {{ notify?.notificationHeader?.slice(0, 1)}}{{ notify?.notificationHeader?.slice(0, 1)}}
+                      </div>
+                      <mat-card-title class="cname"> {{notify?.notificationHeader }}
+                      </mat-card-title>
+                    </mat-card-header>
+                  </a> </div>
+                  <div fxFlex="75%" style="text-align: right;" class="notifi-icons"> <span
+                    class="text-muted"><i class="icon-calendartime"></i>
+                  {{notify.createDate|date:"dd/MM/yyyy hh:mm"}}</span> <span
+                  [ngClass]="{'text-muted unread': notify.readFlag===false, 'text-muted': notify.readFlag===true}"
+                  *ngIf="notify.readFlag"><i class="icon-check icolorThree"></i> Read </span>
+                  <span class="text-muted unread" *ngIf="notify.followFlag"><i
+                  class="icon-eye"></i> Follow</span> <span class="text-muted unread"
+                  *ngIf="notify.archiveFlag"><i class="icon-layers"></i> Archive</span> </div>
+                  <div>
+
+                  </div>
+                </div>
+
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <div fxFlex="100%">
+                    <p>
+                      <label>Notification Content:</label>
+                      <em>{{ notify?.notificationContent }}</em> </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="row">
+
+            <div class="cus-paginator" *ngIf="notificationList?.length>0">
+
+              <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                <pagination-controls class="cus-paginator" (pageChange)="getPage($event)">
+                </pagination-controls>
+              </span> <span class="gotopagbg mr-2 ml-2">Items / page<span class="input-num">
+              <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4" appNumberOnly
+                preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+              </span></span> <span class="gotopagbg mr-2 ml-2">Go to Page<span class="input-num">
+              <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly
+                preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+                </span></span> <span class="mr-2">Of {{ getTotalPage() }}</span> </div>
+
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div> -->
+
+    <div fxLayout="row" class="srchPad">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px">
+          <div fxFlex="100%" class="dt-viewBg">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px"
+              fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="35%" fxFlex.xs="100%" class="border-right">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                  <div fxFlex="100%">
+                    <h4>Notification <span fxFlex></span>
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                      <mat-icon>filter_list</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="sortBy('createDate')">
+                        <mat-icon>
+                        <i [ngClass]="{'icon-sort': column != 'createDate', 'icon-sort-asc': (column == 'createDate' && !isDesc),
+                        'icon-sort-desc': (column == 'createDate' && isDesc) }" aria-hidden="true"> </i>
+                        </mat-icon>
+                        <span>Sort</span>
+                      </button>
+                      <button mat-menu-item (click)="filterOrSortBy(null)">
+                        <mat-icon>messages</mat-icon>
+                        <span>All</span>
+                      </button>
+                      <button mat-menu-item (click)="filterOrSortBy(true)">
+                        <mat-icon>voicemail</mat-icon>
+                        <span>Read</span>
+                      </button>
+                      <button mat-menu-item (click)="filterOrSortBy(false)">
+                        <mat-icon>notifications_off</mat-icon>
+                        <span>Unread</span>
+                      </button>
+                    </mat-menu>
+                  </h4>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                <div fxFlex="100%">
+                  <div class="dt-list-scrollbar" style="overflow:auto">
+                    @for (notify of notificationList | sort: {property: column, direction: direction}; track notify; let i = $index; let count = $count) {
+                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                        fxLayoutGap="0px"
+                        >
+                        <div fxFlex="100%"
+                          [ngClass]="notify.notificationId === selectedNotification?.notificationId? 'dt-list active':'dt-list'">
+                          <div class="team-details" (click)="updateNotification(notify);selectedNotification = notify">
+                            <div class="teamAvtar avatarBg{{(i%6)+1}} cursor-pointer"> <i class="icon-bell"></i> </div>
+                            <div class="teamL-Detail">
+                              <h5>{{notify?.notificationHeader}}</h5>
+                              <p> {{notify?.notificationContent }} </p>
+                              <span class="text-muted mr-5"><i class="icon-calendartime"></i>
+                              {{common.getTimezoneOffset(notify.createDate, false)  |date:"dd/MM/yyyy hh:mm"}}
+                            </span>
+                            @if (notify.readFlag) {
+                              <span
+                                [ngClass]="{'text-muted unread': notify.readFlag===false, 'text-muted': notify.readFlag===true}"
+                                ><i class="icon-check icolorThree"></i> Read
+                              </span>
+                            }
+                            @if (notify.followFlag) {
+                              <span class="text-muted unread  ml-5 mr-5"><i class="icon-eye"></i>
+                            Follow</span>
+                          }
+                          @if (notify.archiveFlag) {
+                            <span class="text-muted unread"><i class="icon-layers"></i>
+                          Archive</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="55%" fxFlex.xs="100%"
+      *ngIf="selectedNotification !== undefined && selectedNotification !== null && selectedNotification !== ''">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px" class="teamdata-link">
+        <div fxFlex="100%" class="team-view">
+          <div class="team-details">
+            <div class="teamAvtar avatarBg3"> <i class="icon-bell"></i> </div>
+            <div class="teamL-Detail">
+              <h5>{{selectedNotification?.notificationHeader}}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        class="teamdata-view">
+        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <p>{{selectedNotification?.notificationContent}} </p>
+            </div>
+          </div>
+          <span [innerHTML]="selectedNotification?.bodyContent"></span>
+        </div>
+      </div>
+    </div> -->
+    @if (selectedNotification !== undefined && selectedNotification !== null && selectedNotification !== '') {
+      <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="65%" fxFlex.xs="100%"
+        >
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px" class="teamdata-link">
+          <div fxFlex="100%" class="team-view">
+            <div class="team-details">
+              <div class="teamL-Detail">
+                <h5>{{selectedNotification?.notificationHeader}}<span class="date">{{common.getTimezoneOffset(selectedNotification.createDate, false) | date:"dd/MM/yyyy hh:mm"}}</span></h5>
+                <p>{{selectedNotification?.notificationContent}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="row wrap" class="teamdata-view">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <span [innerHTML]="selectedNotification?.bodyContent"></span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+</div>
+</div>
+</div>

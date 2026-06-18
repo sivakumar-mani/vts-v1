@@ -1,0 +1,221 @@
+@if (commonservice.DELETECONFIRMATION == action || commonservice.APPROVE == action || commonservice.CANDIDATECONFIRM === action) {
+  <div>
+    <!-- <h1 mat-dialog-title>{{ headerText }}</h1>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15">
+              <i [ngClass]="commonservice.DELETECONFIRMATION == action ? 'icon-x-circle fs-5x': 'icon-check-circle fs-5x'"></i>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="75%" class="text-center m-auto">
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content> -->
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-danger.gif"> </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">{{ headerText }} !</h3>
+              <p class="text-sm" [innerHTML]="bodyText"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    @if (commonservice.CANDIDATECONFIRM !== action) {
+      <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="delete(action)">
+          {{ headerText === 'Agent Cancellation Rule' || 'Site' ? 'Continue' : 'Yes, Delete it' }}
+        </button>
+        <button mat-stroked-button [mat-dialog-close]="true" (click)="dialog.closeAll()">
+          {{ headerText === 'Agent Cancellation Rule' || 'Site' ? 'Cancel' : 'No, Keep it' }}
+        </button>
+      </mat-dialog-actions >
+    }
+    @if (commonservice.CANDIDATECONFIRM === action) {
+      <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
+        <button mat-flat-button color="accent" name="Ok" (click)="stayCan()">
+          Stay
+        </button>
+        <button mat-stroked-button name="Ok" (click)="closeAllCan()">
+          Ok
+        </button>
+      </mat-dialog-actions>
+    }
+  </div>
+}
+
+<!-- Start  -->
+
+@if (commonservice.ALERT == action) {
+  <div>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15">
+              <img src="assets/images/alert-warning.gif">
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">Alert !</h3>
+              <p class="text-sm" [innerHTML]="bodyText">
+                <!-- {{ bodyText }} -->
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+      <button mat-flat-button color="warn" (click)="dialog.closeAll()" name="Ok">Ok</button>
+    </mat-dialog-actions>
+  </div>
+}
+
+
+
+<!-- End -->
+
+@if (commonservice.ALERTBULK == actionbulk) {
+  <div>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15">
+              <img src="assets/images/alert-warning.gif">
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">Alert !</h3>
+              <p class="text-sm" [innerHTML]="bodyText"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+      <button mat-flat-button color="warn"    (click)="dialogRef.close(false)">Cancel</button>  <!-- ← returns false -->
+      <button mat-flat-button color="primary" (click)="dialogRef.close(true)">Proceed</button>        <!-- ← returns true -->
+    </mat-dialog-actions>
+  </div>
+}
+
+
+@if (action == commonservice.OPEN_NAVIGATE ) {
+  <div >
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-success.gif"> </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">{{ headerText }} !</h3>
+              <p class="text-sm">{{ bodyText }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+      <button mat-flat-button color="accent" (click)="navigate()">
+        Yes, Continue
+      </button>
+      <button mat-stroked-button [mat-dialog-close]="true" (click)="openCancellation()">
+        No
+      </button>
+    </mat-dialog-actions>
+  </div>
+}
+@if (action === commonservice.OPEN_NNAVIGATE) {
+  <div >
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-success.gif"> </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">{{ headerText }} !</h3>
+              <p class="text-sm">{{ bodyText }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+      <button mat-stroked-button [mat-dialog-close]="true" (click)="openCancellation()">
+        Okay
+      </button>
+    </mat-dialog-actions>
+  </div>
+}
+@if (commonservice.SESSIONOUT == action) {
+  <div class="session-out">
+    <!-- <h1 mat-dialog-title>{{ headerText }}</h1> -->
+    <mat-dialog-content>
+      <div class="timerbg">
+        <img src="assets/images/timeup.gif" alt="Time Up">
+        <p class="ooops">OOOPS!!! <span class="small">YOU ARE RUNNING OUT OF TIME</span></p>
+      </div>
+      <div fxLayout="row">
+        @if (btnstay) {
+          <div fxFlex="100%">
+            <p>Your session will expire as soon press <strong>Stay</strong> to remain logged in or press
+            <strong>Ok</strong> to log off. If you are logged off any changes will be lost.</p>
+          </div>
+        }
+        @if (!btnstay) {
+          <div fxFlex="100%">
+            <p>Your session will expire as soon press
+              <strong>Ok</strong> to log off. If you are logged off any changes will be lost.</p>
+            </div>
+          }
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
+        @if (btnstay) {
+          <button mat-flat-button color="accent" name="Ok" (click)="stay()">
+            Stay
+          </button>
+        }
+        <button mat-stroked-button name="Ok" (click)="closeAll()">
+          Ok
+        </button>
+      </mat-dialog-actions>
+      <!-- <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+      <button mat-stroked-button>Ok</button>
+      <button mat-flat-button color="warn">Cancel</button>
+    </mat-dialog-actions> -->
+  </div>
+}
+
+@if (commonservice.CHANGEPASSWORD == action) {
+  <div class="confirm-pop">
+    <h1 mat-dialog-title>{{ headerText }}</h1>
+    <!-- <mat-dialog-content>
+    <p>{{ bodyText }}</p>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+    <button mat-flat-button color="warn" name="Ok" (click)="closeAll()">
+      Ok
+    </button>
+  </mat-dialog-actions> -->
+</div>
+}
+

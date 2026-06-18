@@ -1,0 +1,421 @@
+================================================================================
+        VTS APPLICATION - ANGULAR 18 TO ANGULAR 19 MIGRATION
+                     COMPLETE CHANGES SUMMARY
+================================================================================
+Project    : VTS (Verification Tracking System)
+Migration  : Angular 18 --> Angular 19
+Build Tool : Webpack (old) --> ESBuild / Vite (new)
+================================================================================
+
+
+================================================================================
+SECTION 1 : PACKAGE VERSIONS UPDATED (package.json)
+================================================================================
+
+  1.1  ANGULAR CORE PACKAGES
+  --------------------------
+  Package                              Old Version     New Version
+  ------------------------------       -----------     -----------
+  @angular/animations                  ^18.0.0         ^19.0.0
+  @angular/cdk                         ^18.0.0         ^19.0.0
+  @angular/common                      ^18.0.0         ^19.0.0
+  @angular/core                        ^18.0.0         ^19.0.0
+  @angular/forms                       ^18.0.0         ^19.0.0
+  @angular/google-maps                 ^18.0.0         ^19.0.0
+  @angular/localize                    ^18.0.0         ^19.0.0
+  @angular/material                    ^18.0.0         ^19.0.0
+  @angular/platform-browser            ^18.0.0         ^19.0.0
+  @angular/platform-browser-dynamic   ^18.0.0         ^19.0.0
+  @angular/router                      ^18.0.0         ^19.0.0
+
+  1.2  ANGULAR DEV PACKAGES
+  -------------------------
+  Package                              Old Version     New Version
+  ------------------------------       -----------     -----------
+  @angular-devkit/build-angular        ^18.0.0         ^19.0.0
+  @angular-devkit/core                 ^18.0.0         ^19.0.0
+  @angular-devkit/schematics           ^18.0.0         ^19.0.0
+  @angular/build                       (not present)   ^19.0.0   <-- NEW PACKAGE ADDED
+  @angular/cli                         ^18.0.0         ^19.0.0
+  @angular/compiler                    ^18.0.0         ^19.0.0
+  @angular/compiler-cli                ^18.0.0         ^19.0.0
+  @angular/language-service            ^18.0.0         ^19.0.0
+
+  1.3  RUNTIME & TYPESCRIPT
+  -------------------------
+  Package                              Old Version     New Version
+  ------------------------------       -----------     -----------
+  zone.js                              ~0.14.3         ~0.15.0
+  typescript                           ~5.4.2          ~5.6.2
+  @types/node                          ^18.0.0         ^20.0.0
+
+  1.4  KENDO UI PACKAGES (ALL UPDATED)
+  ------------------------------------
+  Package                              Old Version     New Version
+  ------------------------------       -----------     -----------
+  @progress/kendo-angular-buttons      ^14.0.0         ^16.0.0
+  @progress/kendo-angular-common       ^14.0.0         ^16.0.0
+  @progress/kendo-angular-dateinputs   ^14.0.0         ^16.0.0
+  @progress/kendo-angular-dialog       ^14.0.0         ^16.0.0
+  @progress/kendo-angular-dropdowns    ^14.0.0         ^16.0.0
+  @progress/kendo-angular-excel-export ^14.0.0         ^16.0.0
+  @progress/kendo-angular-grid         ^14.0.0         ^16.0.0
+  @progress/kendo-angular-icons        ^14.0.0         ^16.0.0
+  @progress/kendo-angular-inputs       ^14.0.0         ^16.0.0
+  @progress/kendo-angular-intl         ^14.0.0         ^16.0.0
+  @progress/kendo-angular-l10n         ^14.0.0         ^16.0.0
+  @progress/kendo-angular-label        ^14.0.0         ^16.0.0
+  @progress/kendo-angular-layout       ^14.0.0         ^16.0.0
+  @progress/kendo-angular-progressbar  ^14.0.0         ^16.0.0
+  @progress/kendo-angular-navigation   ^14.0.0         ^16.0.0
+  @progress/kendo-angular-pdf-export   ^14.0.0         ^16.0.0
+  @progress/kendo-angular-popup        ^14.0.0         ^16.0.0
+  @progress/kendo-angular-treeview     ^14.0.0         ^16.0.0
+  @progress/kendo-angular-utils        ^14.0.0         ^16.0.0
+
+  1.5  THIRD-PARTY PACKAGES
+  -------------------------
+  Package                              Old Version     New Version
+  ------------------------------       -----------     -----------
+  angular-oauth2-oidc                  ^18.0.0         ^19.0.0
+  angular-oauth2-oidc-jwks             ^17.0.2         ^20.0.0   (v19 doesn't exist)
+  @danielmoncada/angular-datetime-picker ^18.0.0       ^19.0.0
+  @ngbracket/ngx-layout                ^18.0.0         ^19.0.0
+  ngx-spinner                          ^18.0.0         ^19.0.0
+  ngx-countdown                        ^18.0.0         ^19.0.0
+
+  1.6  PACKAGES NOT CHANGED
+  -------------------------
+  primeng                              ^17.18.0        ^17.18.0  (kept - needs --legacy-peer-deps)
+  primeicons                           ^7.0.0          ^7.0.0    (no change)
+  rxjs                                 ^7.8.0          ^7.8.0    (no change)
+
+
+================================================================================
+SECTION 2 : CONFIG FILE CHANGES
+================================================================================
+
+  2.1  angular.json  (CRITICAL - BUILDER CHANGED)
+  ------------------------------------------------
+  OLD builder (Angular 18 - REMOVED in Angular 19):
+    "builder": "@angular-devkit/build-angular:browser"
+    "options": {
+      "main": "src/main.ts",
+      "outputPath": "dist/Vts",
+      "vendorChunk": true,
+      "buildOptimizer": false,
+      "namedChunks": true
+    }
+
+  NEW builder (Angular 19 - ESBuild/Vite):
+    "builder": "@angular-devkit/build-angular:application"
+    "options": {
+      "browser": "src/main.ts",           <-- renamed from "main"
+      "outputPath": { "base": "dist/Vts", "browser": "" },
+      (vendorChunk REMOVED - not supported)
+      (buildOptimizer REMOVED - not supported)
+      (namedChunks REMOVED - not supported)
+    }
+
+  2.2  tsconfig.json
+  ------------------
+  CHANGED:
+    "moduleResolution": "node"      -->  "moduleResolution": "bundler"
+
+  ADDED:
+    "allowSyntheticDefaultImports": true
+    "esModuleInterop": true
+
+  2.3  tsconfig.app.json
+  ----------------------
+  ADDED:
+    "allowSyntheticDefaultImports": true
+    "esModuleInterop": true
+
+
+================================================================================
+SECTION 3 : SOURCE CODE CHANGES
+================================================================================
+
+  3.1  standalone: false ADDED TO 370 COMPONENT FILES
+  -----------------------------------------------------
+  Angular 19 changed the default: standalone now defaults to TRUE.
+  All existing non-standalone components/directives/pipes need explicit
+  "standalone: false" - otherwise Angular 19 treats them as standalone.
+
+  BEFORE (Angular 18):
+    @Component({
+      selector: 'app-foo',
+      templateUrl: './foo.component.html'
+    })
+
+  AFTER (Angular 19):
+    @Component({
+      standalone: false,              <-- ADDED
+      selector: 'app-foo',
+      templateUrl: './foo.component.html'
+    })
+
+  Total files updated: 370 files
+  (All @Component, @Directive, @Pipe decorators across src/app/)
+
+  3.2  PIPE FILES MISSED BY AUTO-MIGRATION (Fixed separately)
+  ------------------------------------------------------------
+  File 1: src/app/common-methods/pipes/filter.pipe.ts
+    BEFORE: @Pipe({ name: 'filter' })
+    AFTER:  @Pipe({ standalone: false, name: 'filter' })
+
+  File 2: src/app/common-methods/pipes/highlightpipe.ts
+    BEFORE: @Pipe({ name: 'highlight' })
+    AFTER:  @Pipe({ standalone: false, name: 'highlight' })
+
+  3.3  styles.css - CSS IMPORT FIX (~ prefix removed)
+  ----------------------------------------------------
+  ESBuild does NOT support Webpack-style ~ prefix in CSS imports.
+
+  File: src/styles.css
+    BEFORE: @import "~@angular/material/prebuilt-themes/indigo-pink.css"
+    AFTER:  @import "@angular/material/prebuilt-themes/indigo-pink.css"
+
+    BEFORE: @import "~@danielmoncada/angular-datetime-picker/assets/style/picker.min.css"
+    AFTER:  @import "@danielmoncada/angular-datetime-picker/assets/style/picker.min.css"
+
+  3.4  TypeScript TS2872 FIXES (Always-truthy string expressions)
+  ---------------------------------------------------------------
+  TypeScript 5.6 made these a hard ERROR (were warnings before).
+
+  File: src/app/common-methods/services/common.service.ts  (Lines 1678, 1682)
+    BEFORE: ('dd/MMM/yyyy' || 'MM/yyyy')
+    AFTER:  'dd/MMM/yyyy'
+
+  File: src/app/common-methods/services/verification.service.ts  (Line 37)
+    BEFORE: reportType = 'preview' || 'download'
+    AFTER:  reportType = 'preview'
+
+  File: src/app/dashboard/dashboard.component.ts  (Line 509)
+    BEFORE: } else if ('read') {
+    AFTER:  } else if (action === 'read') {
+
+  File: src/app/verification/review/review.component.ts  (Lines 3008, 3108)
+    BEFORE: getFinalReprt(reportType = "preview" || "download")
+    AFTER:  getFinalReprt(reportType = "preview")
+
+    BEFORE: getFinalReprtBasedOnConfig(reportType = "preview" || "download")
+    AFTER:  getFinalReprtBasedOnConfig(reportType = "preview")
+
+  3.5  CSS SEMICOLON FIX
+  ----------------------
+  File: src/app/client-entry/agent-entry-master/agent-entry-master.component.css
+    BEFORE: @import "../../stepper.css"
+    AFTER:  @import "../../stepper.css";
+
+  3.6  MOMENT.JS IMPORT FIX (25 Files)
+  -------------------------------------
+  ESBuild warns: "import * as moment" (namespace) cannot be called as function.
+  Fix: Changed to default import style + added allowSyntheticDefaultImports.
+
+  BEFORE: import * as moment from 'moment';
+  AFTER:  import moment from 'moment';
+
+  Files Changed:
+  1.  src/app/case/casehistory/casehistory.component.ts
+  2.  src/app/case/crtcase-creation/crtcase-creation.component.ts
+  3.  src/app/case/stop-check/stop-check.component.ts
+  4.  src/app/common-methods/components/invitation-manage/invitation-manage.component.ts
+  5.  src/app/common-methods/services/common.service.ts
+  6.  src/app/reports/file-level-tracker-mis/file-level-tracker-mis.component.ts
+  7.  src/app/screening/candidate-file-submission/candidate-file-submission.component.ts
+  8.  src/app/screening/client-app-submission/client-app-screening-review/client-app-screening-review.component.ts
+  9.  src/app/screening/client-file-submission/screeing-review/screeing-review.component.ts
+  10. src/app/screening/client-file-submission/client-file-submission.component.ts
+  11. src/app/screening/CommonComponents/common-current-employment/common-current-employment.component.ts
+  12. src/app/screening/CommonComponents/common-emloyement/common-emloyement.component.ts
+  13. src/app/screening/CommonComponents/common-emphr-empsup/common-emphr-empsup.component.ts
+  14. src/app/screening/CommonComponents/common-employment-international/common-employment-international.component.ts
+  15. src/app/screening/CommonComponents/common-previous-employment/common-previous-employment.component.ts
+  16. src/app/screening/direct-app-submission/direct-app-screening-review/direct-app-screening-review.component.ts
+  17. src/app/screening/direct-app-submission/direct-app-submission.component.ts
+  18. src/app/screening/DynamicComponents/current-employment/current-employment.component.ts
+  19. src/app/screening/DynamicComponents/emphr-empsup/emphr-empsup.component.ts
+  20. src/app/screening/DynamicComponents/employment/employment.component.ts
+  21. src/app/screening/DynamicComponents/previous-employment/previous-employment.component.ts
+  22. src/app/verification/comments-updates/comments-updates.component.ts
+  23. src/app/verification/Employer-Follow-Up-Email/employer-follow-up-email.component.ts
+  24. src/app/verification/techm-response-document/techm-response-document.component.ts
+  25. src/app/verification/verification-details/verification-details.component.ts
+
+  3.7  JSZIP IMPORT FIX (1 File)
+  --------------------------------
+  BEFORE: import * as JSZip from 'jszip';
+  AFTER:  import JSZip from 'jszip';
+
+  File: src/app/reports/reportTracker/jcr-filedownload/jcr-filedownload.component.ts
+
+  3.8  MOMENT DATEPICKER PATTERN FIX (1 File)
+  -------------------------------------------
+  Angular Material DatePicker was using old _rollupMoment pattern.
+  With esModuleInterop enabled, this pattern causes type errors.
+
+  File: src/app/reports/reportTracker/dynamic-report-component/dynamic-report-component.component.ts
+
+  BEFORE:
+    import { Moment } from 'moment';
+    import * as _moment from 'moment';
+    import * as _rollupMoment from 'moment';
+    const moment = _rollupMoment || _moment;
+
+  AFTER:
+    import moment, { Moment } from 'moment';
+
+
+================================================================================
+SECTION 4 : COMPLETE FILE CHANGE LIST
+================================================================================
+
+  CONFIG FILES (4 files):
+  ------------------------
+  1.  package.json
+  2.  angular.json
+  3.  tsconfig.json
+  4.  tsconfig.app.json
+
+  STYLE FILES (2 files):
+  ----------------------
+  5.  src/styles.css
+  6.  src/app/client-entry/agent-entry-master/agent-entry-master.component.css
+
+  TYPESCRIPT - TypeScript Error Fixes (6 files):
+  -----------------------------------------------
+  7.  src/app/common-methods/services/common.service.ts
+  8.  src/app/common-methods/services/verification.service.ts
+  9.  src/app/dashboard/dashboard.component.ts
+  10. src/app/verification/review/review.component.ts
+  11. src/app/common-methods/pipes/filter.pipe.ts
+  12. src/app/common-methods/pipes/highlightpipe.ts
+
+  MOMENT.JS IMPORT FIX (25 files):
+  ----------------------------------
+  13. src/app/case/casehistory/casehistory.component.ts
+  14. src/app/case/crtcase-creation/crtcase-creation.component.ts
+  15. src/app/case/stop-check/stop-check.component.ts
+  16. src/app/common-methods/components/invitation-manage/invitation-manage.component.ts
+  17. src/app/reports/file-level-tracker-mis/file-level-tracker-mis.component.ts
+  18. src/app/screening/candidate-file-submission/candidate-file-submission.component.ts
+  19. src/app/screening/client-app-submission/client-app-screening-review/client-app-screening-review.component.ts
+  20. src/app/screening/client-file-submission/screeing-review/screeing-review.component.ts
+  21. src/app/screening/client-file-submission/client-file-submission.component.ts
+  22. src/app/screening/CommonComponents/common-current-employment/common-current-employment.component.ts
+  23. src/app/screening/CommonComponents/common-emloyement/common-emloyement.component.ts
+  24. src/app/screening/CommonComponents/common-emphr-empsup/common-emphr-empsup.component.ts
+  25. src/app/screening/CommonComponents/common-employment-international/common-employment-international.component.ts
+  26. src/app/screening/CommonComponents/common-previous-employment/common-previous-employment.component.ts
+  27. src/app/screening/direct-app-submission/direct-app-screening-review/direct-app-screening-review.component.ts
+  28. src/app/screening/direct-app-submission/direct-app-submission.component.ts
+  29. src/app/screening/DynamicComponents/current-employment/current-employment.component.ts
+  30. src/app/screening/DynamicComponents/emphr-empsup/emphr-empsup.component.ts
+  31. src/app/screening/DynamicComponents/employment/employment.component.ts
+  32. src/app/screening/DynamicComponents/previous-employment/previous-employment.component.ts
+  33. src/app/verification/comments-updates/comments-updates.component.ts
+  34. src/app/verification/Employer-Follow-Up-Email/employer-follow-up-email.component.ts
+  35. src/app/verification/techm-response-document/techm-response-document.component.ts
+  36. src/app/verification/verification-details/verification-details.component.ts
+
+  JSZIP + DATEPICKER PATTERN FIX (2 files):
+  ------------------------------------------
+  37. src/app/reports/reportTracker/jcr-filedownload/jcr-filedownload.component.ts
+  38. src/app/reports/reportTracker/dynamic-report-component/dynamic-report-component.component.ts
+
+  standalone: false ADDED (370 files):
+  -------------------------------------
+  All component, directive, pipe .ts files across src/app/
+  (Too many to list individually - all @Component/@Directive/@Pipe files)
+
+  -----------------------------------------------------------------------
+  TOTAL FILES CHANGED     : ~408 files
+  Config files            :   4
+  Style files             :   2
+  TypeScript error fixes  :   6
+  Moment.js import fixes  :  25
+  JSZip + DatePicker fix  :   2
+  standalone: false       : 370 (auto-migrated)
+  -----------------------------------------------------------------------
+
+
+================================================================================
+SECTION 5 : WHY EACH CHANGE WAS NEEDED
+================================================================================
+
+  CHANGE                        WHY
+  --------------------------    ------------------------------------------------
+  Browser builder removed       Angular 19 removed old Webpack builder.
+                                Must use application builder (ESBuild/Vite)
+
+  standalone: false             Angular 19 changed default: standalone = true.
+                                All old NgModule components need explicit false.
+
+  zone.js 0.14 → 0.15          Angular 19 requires zone.js 0.15 minimum.
+
+  TypeScript 5.4 → 5.6          Angular 19 requires TypeScript 5.5 or 5.6.
+
+  moduleResolution: bundler     ESBuild uses bundler resolution. "node" is
+                                deprecated in TS 5.6 with ESBuild projects.
+
+  allowSyntheticDefaultImports  Needed for default import of CommonJS modules
+  + esModuleInterop             like moment.js and jszip.
+
+  ~ removed from CSS imports    ~ prefix was Webpack-only feature.
+                                ESBuild does not support it.
+
+  'string' || 'string' fixed    TypeScript 5.6 made always-truthy string
+                                literals a hard error (TS2872).
+
+  moment import fixed           ESBuild treats namespace imports differently.
+  (import * as → import)        Default import is the correct way with
+                                esModuleInterop enabled.
+
+
+================================================================================
+SECTION 6 : BUILD & INSTALL COMMANDS
+================================================================================
+
+  INSTALL:
+  --------
+  npm install --legacy-peer-deps
+  (--legacy-peer-deps needed because primeng ^17 expects Angular ^17)
+
+  DEVELOPMENT BUILD:
+  ------------------
+  npm run build
+
+  PRODUCTION BUILD:
+  -----------------
+  npm run build:prod
+
+  DEV SERVER:
+  -----------
+  npm start
+
+  FINAL BUILD RESULT:
+  -------------------
+  Status  : SUCCESS - No Errors, No Warnings
+  Output  : D:\version13upgradeui\vts\dist\Vts
+  Time    : ~81-150 seconds (ESBuild is faster than Webpack)
+
+
+================================================================================
+SECTION 7 : VS CODE IDE ERROR FIX
+================================================================================
+
+  If VS Code shows TS1259 error even after build succeeds:
+
+  STEP 1: Press Ctrl + Shift + P
+  STEP 2: Type: TypeScript: Restart TS Server
+  STEP 3: Press Enter
+
+  This restarts the TypeScript language server and picks up
+  the new tsconfig.json settings.
+
+
+================================================================================
+END OF MIGRATION CHANGES SUMMARY
+================================================================================

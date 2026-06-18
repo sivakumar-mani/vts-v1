@@ -1,0 +1,28 @@
+.ocr-upload-container{
+  margin-top: 10px;
+}
+
+.upload-title{
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.upload-format{
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.upload-section{
+  display: flex;
+  align-items: center;
+}
+
+.upload-btn{
+  width: 220px;
+  height: 40px;
+  font-size: 15px;
+}
+
+.upload-btn mat-icon{
+  margin-right: 6px;
+}

@@ -1,0 +1,15 @@
+.select-test-viewport {
+    height: 192px;
+    width: 200px;
+    border: 1px solid black;
+}
+
+
+.autocomplete-test-viewport {
+    height: 200px;
+    border: 1px solid black;
+}
+
+.autocomplete-item {
+    height: 50px;
+}

@@ -1,0 +1,196 @@
+/* @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i&display=swap');
+
+.add_all {
+    position: relative !important;
+    left: initial !important;
+    top: initial !important;
+    bottom: initial !important;
+    z-index: 0 !important;
+    width: 100%;
+    height: 100px;
+} */
+/* 
+.header2 {
+    display: none !important;
+}
+
+.height_remove {
+    display: none !important;
+    height: 100px;
+}
+
+.heading {
+    margin: 0px;
+    font-weight: 500;
+    font-size: 17px;
+    text-transform: uppercase;
+    padding: 10px;
+    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+.headingInitialCap span {
+    font-weight: 600;
+    font-size: 25px;
+    letter-spacing: 0.8px;
+    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.report-text {
+    color: #000000;
+    line-height: 1.5em;
+    font-family: Roboto, Calibri, "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.th-header,
+tr .columns th {
+    background: #cdcece none repeat scroll 0 0;
+    padding: 6px 8px;
+    border: 1px solid #bcbdbe;
+    font-size: 13px;
+    font-weight: 600;
+    vertical-align: middle;
+    text-align: center;
+    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+.txtLeft {
+    text-align: left;
+}
+
+.columns th {
+    background: #dedede;
+} */
+/* 
+.general {
+    border: 1px solid #bcbdbe;
+    font-weight: normal;
+    font-size: 13px;
+    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+.tdStyle,
+.columns td {
+    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    border: 1px solid #bcbdbe;
+    padding: 6px 8px;
+    font-weight: normal;
+    font-size: 13px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.confidential {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    display: block;
+}
+
+.educationTd {
+    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    border: 1px solid #bcbdbe;
+    padding: 6px 8px;
+    font-weight: normal;
+    font-size: 13px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.single-line {
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+}
+
+.confidentialSpan {
+    font-size: 12px;
+    font-weight: 400;
+    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+.disclaimerH3 {
+    font-weight: 600;
+    font-size: 13px;
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    padding: 0;
+
+}
+
+.footerLine {
+    width: 32%;
+    border-top: 2px solid #000000;
+    border-width: 2px;
+    margin: 0px auto;
+}
+
+.disclaimer {
+    text-transform: uppercase;
+    border: 1px solid #bcbdbe;
+    padding: 8px 10px;
+    background: #cdcece;
+    font-size: 13px;
+    font-weight: 600;
+    vertical-align: center;
+    text-align: center;
+    line-height: 1.5em;
+    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+.page-break-after {
+    page-break-after: always;
+    margin: 0;
+    padding: 0;
+}
+
+.page-break-inside {
+    page-break-inside: auto;
+    padding: 0;
+    margin: 0;
+}
+
+.p-20-0 {
+    padding: 20px 0;
+}
+
+.tablestyle {
+    width: 100%;
+    border: 1px solid #bcbdbe;
+    border-collapse: collapse;
+}
+
+
+.summary-h1 {
+    padding: 10px 0;
+    margin: 0;
+    font-size: 18px;
+    text-align: center;
+    font-weight: 600;
+    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+} */
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i&display=swap');
+
+.add_all
+{
+    position: relative !important;
+    left: initial !important;
+    top: initial !important;
+    bottom:initial !important;
+    z-index: 0 !important;
+}
+.header2
+{
+    display: none !important;
+}
+.height_remove
+{
+    display: none !important;
+}

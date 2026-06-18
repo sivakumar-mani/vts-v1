@@ -1,0 +1,369 @@
+<app-breadcrumb [routePath]="(verification.commonCasesFlag === true ? 'Pending' : 
+(verification.commonCasesFlag === false && isSubmittedCase) ? 'Submitted' :
+verification.commonCasesFlag === false
+? 'Completed' : 'Client') + ' Cases'" [btnBack]="true" (eventBack)="this.router.navigate(['dashboard/home'])"></app-breadcrumb>
+<!-- kendo start -->
+<!-- <div class="content-area">
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card>
+      <div fxLayout="row">
+        <mat-card-header fxFlex="100%">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+              fxLayoutGap="10px">
+              <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="60%" fxFlex.xs="100%"
+                fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                <mat-card-title>
+                  <h1 class="header-title">Client Cases</h1>
+                </mat-card-title>
+              </div>
+              <span fxFlex></span>
+              <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="40%" fxFlex.xs="100%" fxHide.xs
+                fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                <div class="tbl-commonsearch">
+                  <mat-form-field fxFlex="100%">
+                    <mat-label></mat-label>
+                    <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                    <input matInput placeholder="Search here..." type="text" kendoTextBox
+                      autocomplete="off" [(ngModel)]="searchText"
+                      (input)="onFilter($event.target.value)" />
+                    <button mat-button *ngIf="searchText" matSuffix mat-icon-button
+                      aria-label="Clear" (click)="searchText = '';onFilter(searchText)">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-header>
+      </div>
+      <mat-card-content>
+        <kendo-grid [data]="data" selectable="true" [reorderable]="true" [skip]="skip" [pageable]="true"
+          (pageChange)="pageChange($event)" [sortable]="true" [groupable]="true" [pageSize]="itemPerPage"
+          style="width: 100%;" [columnMenu]="{ filter: true }" [resizable]="true">
+          <ng-container *ngFor="let group of columnsToDisplay">
+            <kendo-grid-column [field]="group" [title]="getHeader(group)" [width]="180"
+              [headerStyle]="{'background-color': '#58595C','color': '#fff','line-height': '2em'}"
+              [style]="{'background-color': '#ffffff','color': '#333333'}">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span [innerHtml]="(dataItem[group] ? (group.includes('Date') ?
+             (common?.getTimezoneOffset(dataItem[group], false) | date:
+            'dd/MM/yyyy hh:mm:ss a') : dataItem[group]) : 'N/A')"></span>
+              </ng-template>
+            </kendo-grid-column>
+          </ng-container>
+          <ng-template kendoGridDetailTemplate let-dataItem>
+            <mat-card style="width: 100%">
+              <mat-card-content>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <h1 style="font-size: 14px;" class="header-title">Checks</h1>
+                    <div fxLayout="row" class="listrow" *ngFor="let empj of dataItem.verificationDet;let j=index">
+                      <div *ngIf="empj?.subCheckFlag === true" matTooltip="Sub Check" matTooltipClass="accent-tooltip"
+                      class="SubCheck"></div>
+                      <div fxFlex="100%">
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <div fxFlex="17%">
+                            <a>
+                              <mat-card-header>
+                                <mat-card-title class="cname cursor-pointer" style="width: 100%"
+                                  matTooltip="{{empj?.componentName}}{{empj.subCompName ? ' - ' + empj.subCompName : '' }}"
+                                  matTooltipClass="accent-tooltip"
+                                  (click)="selectVerification(empj.screeningCompId, empj.functionalEntity)">
+                                  {{ empj?.componentName }}{{empj.subCompName ? ' - ' + empj.subCompName : '' }}
+                                </mat-card-title>
+                              </mat-card-header>
+                            </a>
+                          </div>
+                          <div fxFlex="21%">
+                            <p>
+                              <label>Component Status:</label>
+                              <em>{{empj?.componentStatus ? empj?.componentStatus : 'N/A'}}</em>
+                            </p>
+                          </div>
+                          <div fxFlex="15%">
+                            <p>
+                              <label>Verification Id:</label>
+                              <em>{{empj?.manualFileSubmissionFlag === true ? empj?.clientScreeningId :
+                              empj?.verificationId}}</em>
+                            </p>
+                          </div>
+                          <div fxFlex="17%">
+                            <p>
+                              <label>Call Back Date:</label>
+                              <em>{{empj?.callbackDate ? (empj?.callbackDate | date : 'dd/MM/yyyy') : 'N/A'}}</em>
+                            </p>
+                          </div>
+                          <div fxFlex="30%">
+                            <p>
+                              <label>Vendor:</label>
+                              <em>{{empj?.vendorName ? empj?.vendorName : 'N/A'}}</em>
+                            </p>
+                          </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <div fxFlex="17%">
+                            <i class="icon-tatpending dc-ico"></i>
+                            <span class="dc-dn">{{empj?.inProgressDays}}</span><span
+                            class="dc-sub">days<br>Over</span>
+                          </div>
+                          <div fxFlex="85%">
+                            <p>
+                              <label>Functional Entity:</label>
+                              <em>{{empj?.functionalEntity ? empj?.functionalEntity : 'N/A'}}</em>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </ng-template>
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="7">
+            </kendo-pager-numeric-buttons>
+            <kendo-pager-info></kendo-pager-info>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <a (click)="showall()">Show All</a>
+          </ng-template>
+          <kendo-grid-messages noRecords="No Data Found"></kendo-grid-messages>
+        </kendo-grid>
+        <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 50, 100]" [showFirstLastButtons]="true">
+        </mat-paginator>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+</div> -->
+<!-- kendo end -->
+<div class="content-area">
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      <mat-card>
+        <div fxLayout="row">
+          <mat-card-header fxFlex="100%">
+            <div fxFlex="100%">
+              <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" style="width: 100%;">
+                <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="60%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                  <mat-card-title>
+                    {{
+                    verification.commonCasesFlag === true ? 'Pending' :
+                    (verification.commonCasesFlag === false && isSubmittedCase) ? 'Submitted' :
+                    verification.commonCasesFlag === false ? 'Completed' : 'Client'
+                    }} Cases
+                  </mat-card-title>
+                </div>
+
+                @if (userData.applicationId == 2) {
+                  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" >
+                    <div class="filter-user-wrapper">
+                      <mat-icon class="filter-icon">filter_list</mat-icon>
+                      <span class="filter-label">Filter by User</span>
+                      <mat-select class="user-filter-select" [(ngModel)]="selectedUsers" multiple
+                        placeholder="Filter by User" (ngModelChange)="applyUserFilter()">
+                        <mat-option value="all" (click)="toggleSelectAll()">All Users</mat-option>
+                        <mat-divider></mat-divider>
+                        @for (user of userList; track user) {
+                          <mat-option [value]="user.userId">
+                            {{ user.userName }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </div>
+                  </div>
+                }
+                <span fxFlex></span>
+                <div fxFlex="40%" fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.xs="start center" style="padding-right: 16px;">
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-header>
+        </div>
+        <mat-card-content>
+          <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort class="mat-elevation-z8">
+            @for (column of columnsToDisplay; track column) {
+              <ng-container matColumnDef="{{column}}">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> <strong>{{getHeader(column)}}</strong> </th>
+                <td mat-cell *matCellDef="let element">@if (column !== 'candidateName' && column !== 'packageName') {
+                  <span> {{column.includes('Date')
+                    ? (common.getTimezoneOffset(element[column], false) | date : 'dd/MM/yyyy') : (column === 'caseStatus'
+                    ?
+                    (element.caseStatus ? element.caseStatus :
+                    verification.commonCasesFlag === true ? 'Pending' :
+                    isSubmittedCase ? 'Submitted' :
+                  'Completed') : (column === 'priority' ? getPriorityDisplay(element[column]) : element[column]))}}</span>
+                }
+                @if (column == 'candidateName') {
+                  <span>
+                    @if (!isSubmittedCase) {
+                      <a>{{element.candidateName}}</a>
+                    }
+                    @if (isSubmittedCase) {
+                      <span>{{element.candidateName}}</span>
+                    }
+                  </span>
+                }
+                @if (column === 'packageName') {
+                  <span>
+                    @if (element.packageName) {
+                      <a class="cursor-pointer"
+                        [matMenuTriggerFor]="packageMenu"
+                        [matMenuTriggerData]="{ element: element }"
+                        (click)="$event.stopPropagation()">
+                        {{ element.packageName }}
+                      </a>
+                    } @else {
+                      N/A
+                    }
+                  </span>
+                }
+              </td>
+            </ng-container>
+          }
+          <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+              @if (verificationDet?.length > 0) {
+                <div class="example-element-detail"
+                  [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                  <mat-card style="width: 100%">
+                    <mat-card-content>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <h1 style="font-size: 14px;" class="header-title">Checks</h1>
+                          @for (empj of verificationDet; track empj; let j = $index) {
+                            <div fxLayout="row" class="listrow">
+                              @if (empj?.subCheckFlag === true) {
+                                <div matTooltip="Sub Check"
+                                matTooltipClass="accent-tooltip" class="SubCheck"></div>
+                              }
+                              <div fxFlex="100%">
+                                <div fxLayout="row" fxLayoutGap="20px">
+                                  <div fxFlex="22%">
+                                    <a>
+                                      <mat-card-header>
+                                        <mat-card-title class="cname cursor-pointer" style="width: 100%"
+                                          matTooltip="{{empj?.componentName}}{{empj.subCompName ? ' - ' + empj.subCompName : '' }}"
+                                          matTooltipClass="accent-tooltip"
+                                          (click)="selectVerification(empj.screeningCompId, empj.functionalEntity)">
+                                          {{ empj?.componentName }}{{empj.subCompName ? ' - ' + empj.subCompName : '' }}{{empj.subCompName ? '' : ' - ' + empj.compIndex }}
+                                        </mat-card-title>
+                                        <mat-card-subtitle class="cdesg mb-10">{{empj?.manualFileSubmissionFlag === true ?
+                                          empj?.clientScreeningId :
+                                        empj?.verificationId}}</mat-card-subtitle>
+                                      </mat-card-header>
+                                    </a>
+                                  </div>
+                                  <div fxFlex="22%">
+                                    <p>
+                                      <label>Component Status:</label>
+                                      <em>{{empj?.componentStatus ? empj?.componentStatus : 'N/A'}}</em>
+                                    </p>
+                                  </div>
+                                  <!-- <div fxFlex="15%">
+                                  <p>
+                                    <label>Verification Id:</label>
+                                    <em>{{empj?.manualFileSubmissionFlag === true ? empj?.clientScreeningId :
+                                    empj?.verificationId}}</em>
+                                  </p>
+                                </div> -->
+                                <!-- <div fxFlex="18%">
+                                <p>
+                                  <label>Call Back Date:</label>
+                                  <em>{{empj?.callbackDate ? (common.getTimezoneOffset(empj?.callbackDate, false) |
+                                  date : 'dd/MM/yyyy') : 'N/A'}}</em>
+                                </p>
+                              </div> -->
+                              <div fxFlex="22%">
+                                <p>
+                                  <label>Vendor:</label>
+                                  <em>{{empj?.vendorName ? empj?.vendorName : 'N/A'}}</em>
+                                </p>
+                              </div>
+                              <div fxFlex="34%">
+                                <p>
+                                  <label>Functional Entity:</label>
+                                  <em>{{empj?.functionalEntity ? empj?.functionalEntity : 'N/A'}}</em>
+                                </p>
+                              </div>
+                            </div>
+                            <div fxLayout="row" fxLayoutGap="20px">
+                              <div fxFlex="17%">
+                                <!-- <i class="icon-tatpending dc-ico"></i>
+                                <span class="dc-dn">{{empj?.inProgressDays}}</span><span
+                                class="dc-sub">days<br>Over</span> -->
+                              </div>
+                              <!-- <div fxFlex="85%">
+                              <p>
+                                <label>Functional Entity:</label>
+                                <em>{{empj?.functionalEntity ? empj?.functionalEntity : 'N/A'}}</em>
+                              </p>
+                            </div> -->
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        }
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+      [class.example-expanded-row]="expandedElement === element"
+      (click)="expandedElement = expandedElement === element ? null : element; loadVerificationDetails(element)">
+    </tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No Record Found</td>
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+  </table>
+  <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 50, 100]" [showFirstLastButtons]="true">
+  </mat-paginator>
+</mat-card-content>
+</mat-card>
+</div>
+</div>
+</div>
+<mat-menu #packageMenu="matMenu" class="package-components-menu">
+  <ng-template matMenuContent let-element="element">
+    <div style="padding: 8px 16px; background-color: #58595C; color: #fff;">
+      <strong>Package Components</strong>
+    </div>
+    <mat-divider></mat-divider>
+
+    @if (element.packageComponent) {
+      @for (comp of getPackageComponents(element.packageComponent); track comp) {
+        <div
+          mat-menu-item disableRipple
+          style="pointer-events: none; color: #333;">
+          <mat-icon style="color: #58595C; font-size: 18px; margin-right: 8px;">check_circle_outline</mat-icon>
+          <span>{{ comp.trim() }}</span>
+        </div>
+      }
+    }
+
+    @if (!element.packageComponent) {
+      <div
+        mat-menu-item disableRipple style="pointer-events: none; color: #999;">
+        No components found
+      </div>
+    }
+  </ng-template>
+</mat-menu>

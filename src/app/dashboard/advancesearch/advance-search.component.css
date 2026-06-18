@@ -1,0 +1,10 @@
+﻿.mat-mdc-text-field-wrapper {
+    position: unset !important;
+}
+.mat-mdc-text-field-wrapper {
+    position: unset !important;
+}
+
+::ng-deep .search_select_custom .p-multiselect-header{
+    min-width:300px !important;
+}

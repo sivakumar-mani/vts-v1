@@ -1,0 +1,845 @@
+<div class="BgColor">
+  <div class="FullBody">
+    <div class="HeaderBg">
+      <div class="HContBody">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm='row' fxLayout.xs="column" fxFlex="100%"
+          fxLayoutGap="20px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0px" fxLayoutAlign="center center">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="70%" fxFlex.xs="100%">
+            <div class="LogTxt"> <a href="#aaa" routerLink="/" class="link">
+              <div class="Logo lnd-logo"><i class="icon-acheck"></i></div>
+              <div class="logo-lett">
+                <div class="logo-txt">Krya Screening Private Limited</div>
+                <!-- <div class="logo-sol">Screening Made Smart</div> -->
+              </div>
+            </a> </div>
+          </div>
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="30%" fxHide.xs fxLayoutGap="20px"
+            fxLayoutAlign="end center">
+            <!-- <a href="#" routerLink="/Selectpackage-addtional-check" class="lhelp" matTooltip="Get Started" matTooltipClass="accent-tooltip">Get Started</a> -->
+            <a routerLink="/canidateregistraion" class="lhelp" matTooltip="Sign Up"
+            matTooltipClass="accent-tooltip">Sign Up</a>
+            <a class="lhelp" matTooltip="Help" matTooltipClass="accent-tooltip">
+              <mat-icon> <i class="material-icons-outlined">help_outline</i> </mat-icon>
+              <span>Help</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="landBanner">
+      <div class="ContBody">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <h1 class="PricingHead">Select a Package to screen your Candidate</h1>
+            <p class="text-center pb-20">You’ll be able to select add-on check options on the next page.</p>
+          </div>
+        </div>
+        <div div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="80%">
+
+            <div class="PriceCont" fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+              fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0 grid" fxLayoutGap.sm="0px grid"
+              fxLayoutGap.xs="0px grid" fxLayoutAlign="center start">
+              @for (pack of defaultPackList; track pack; let i = $index) {
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex.xs="100%"
+                  class="PriceBox">
+                  <div class="pricingTier">
+                    <div class="pricing-tier-top-wrap">
+                      <div class="PricingTierHeaderBlock">
+                        <div class="PricingTierHeaderBlock-name">{{pack?.packageName}}</div>
+                        <div class="PricingTierHeaderBlock-limits">{{pack?.tatDays}} {{(pack?.tatDays > 1) ? 'Days' :
+                        'Day'}} </div>
+                        <div class="PricingTierHeaderBlock-price">₹ {{pack?.fees}}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="pricing-tier-toggle-body">
+                      <div class="PricingTierHeaderBlock-fees">Components:</div>
+                      <div class="ListsBlock">
+                        @for (packComp of pack?.packComp; track packComp) {
+                          <div>
+                            @if (packComp?.subComponent?.length == 0) {
+                              <p>{{packComp?.componentName}} -
+                              {{packComp?.noOfComp}}</p>
+                            }
+                            @for (ps of packComp?.subComponent; track ps) {
+                              <p>{{packComp?.componentName}} -
+                              {{ps?.subComponentName}} - {{ps?.noOfComp}}</p>
+                            }
+                          </div>
+                        }
+                      </div>
+                    </div>
+                    <div class="pricing-tier-foot">
+                      <a routerLink="/purchase/addtionalchecks" (click)="selectPack(pack?.packageId)"><button
+                      mat-flat-button type="submit" color="primary" fxFlex="100%">Get Started</button></a>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div fxLayout="row" class="d-none">
+              <div fxFlex="100%">
+                <h2 class="Price-title">All Screening Services, Including Add-Ons</h2>
+                <div>
+                  <mat-accordion class="PricingAccord" multi>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>IDENTITY CHECKS</mat-panel-title>
+                        <mat-panel-description fxLayoutAlign="end center">INSTANT</mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Social Security Number Trace</div>
+                            <div class="PricingHeaderBlock-subtitle">Included in Basic, Standard, and Premium Checks
+                            </div>
+                          </div>
+                          <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                            legal name given as well as returns a list of counties where the candidate has lived,
+                            worked, or conducted financial transactions. This trace also finds alias names that the
+                          candidate has used, including maiden names.</p>
+                        </div>
+                      </div>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Identity Verification</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                          </div>
+                          <p>Trusted background check results start with trusted inputs. Identity verification uses
+                            knowledge-based authentication questions and one-time passcodes to verified phone numbers to
+                            assess whether the legal name, date of birth, and address provided are the candidate’s own.
+                          </p>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>CRIMINAL RECORDS SEARCH</mat-panel-title>
+                        <mat-panel-description fxLayoutAlign="end center">1-3 BUSINESS DAYS</mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search </div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias </div>
+                          </div>
+                          <p>Search criminal records databases from all 50 states, including digitized records from
+                            Department of Corrections, Administrative Office of the Courts and county court records.
+                            **Database coverage varies by state.
+                            Add an Alias Names Search to expand the search for criminal records beyond the candidate’s
+                            legal name, to include any additional candidate-provided names. This search can also use
+                          aliases returned during the SSN Trace.</p>
+                        </div>
+                      </div>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">County Criminal Court Search – 7 Years – Up to
+                            3 Counties</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | Pricing starts at
+                            $14.99</div>
+                          </div>
+                          <p>Use our national network of professional court runners to search at the county level for
+                            the most targeted, up-to-date and accurate information, particularly for counties where the
+                            records have not been digitized. Searches up to 3 counties based on the results of the SSN
+                            Trace. If the SSN Trace does not return 3 associated counties, we automatically check the
+                            candidate’s current county, based on the address they provided. *Additional county court
+                            fees may apply.
+                          </p>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>CIVIL RECORDS SEARCH</mat-panel-title>
+                        <mat-panel-description fxLayoutAlign="end center">1-7 BUSINESS DAYS</mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias</div>
+                          </div>
+                          <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                            legal name given as well as returns a list of counties where the candidate has lived,
+                            worked, or conducted financial transactions. This trace also finds alias names that the
+                          candidate has used, including maiden names.</p>
+                        </div>
+                      </div>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Upper Civil Court Records Search – 7 Years – Up to 3
+                            Counties</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                          </div>
+                          <p>Civil records, such as small claims and minor disputes, found in lower courts typically
+                            involve a lower monetary claim than those in upper courts. You may be eligible increase the
+                            search scope to the past 10 years if the candidate’s salary will be $75,000+ and if the
+                            employer, candidate, and job location are not located in one of the following states: CA,
+                            NM, MA, MT. Use our national network of professional court runners to search at the county
+                            level for the most targeted, up-to-date and accurate information, particularly for counties
+                            where the records have not been digitized. Searches up to 3 counties based on the results of
+                            the SSN Trace. If the SSN Trace does not return 3 associated counties, we automatically
+                            check the candidate’s current county, based on the address they provided. *Additional county
+                            court fees may
+                          </p>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="row" class="d-none">
+              <div fxFlex="100%">
+                <h2 class="Price-title">Add-Ons Only</h2>
+                <div>
+                  <mat-accordion class="PricingAccord" multi>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>ONGOING ALERTS</mat-panel-title>
+                        <mat-panel-description fxLayoutAlign="end center">MONTHLY MONITORING</mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Social Security Number Trace</div>
+                            <div class="PricingHeaderBlock-subtitle">Included in Basic, Standard, and Premium Checks
+                            </div>
+                          </div>
+                          <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                            legal name given as well as returns a list of counties where the candidate has lived,
+                            worked, or conducted financial transactions. This trace also finds alias names that the
+                          candidate has used, including maiden names.</p>
+                        </div>
+                      </div>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Identity Verification</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                          </div>
+                          <p>Trusted background check results start with trusted inputs. Identity verification uses
+                            knowledge-based authentication questions and one-time passcodes to verified phone numbers to
+                            assess whether the legal name, date of birth, and address provided are the candidate’s own.
+                          </p>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>VERIFICATIONS</mat-panel-title>
+                        <mat-panel-description fxLayoutAlign="end center">DEPENDS</mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search </div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias </div>
+                          </div>
+                          <p>Search criminal records databases from all 50 states, including digitized records from
+                            Department of Corrections, Administrative Office of the Courts and county court records.
+                            **Database coverage varies by state.
+                            Add an Alias Names Search to expand the search for criminal records beyond the candidate’s
+                            legal name, to include any additional candidate-provided names. This search can also use
+                          aliases returned during the SSN Trace.</p>
+                        </div>
+                      </div>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">County Criminal Court Search – 7 Years – Up to
+                            3Counties</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | Pricing starts at
+                            $14.99</div>
+                          </div>
+                          <p>Use our national network of professional court runners to search at the county level for
+                            the most targeted, up-to-date and accurate information, particularly for counties where the
+                            records have not been digitized. Searches up to 3 counties based on the results of the SSN
+                            Trace. If the SSN Trace does not return 3 associated counties, we automatically check the
+                            candidate’s current county, based on the address they provided. *Additional county court
+                            fees may apply.
+                          </p>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>MOTOR VEHICLE RECORDS CHECK</mat-panel-title>
+                        <mat-panel-description fxLayoutAlign="end center">1 BUSINESS DAY</mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias</div>
+                          </div>
+                          <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                            legal name given as well as returns a list of counties where the candidate has lived,
+                            worked, or conducted financial transactions. This trace also finds alias names that the
+                          candidate has used, including maiden names.</p>
+                        </div>
+                      </div>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Upper Civil Court Records Search – 7 Years – Up to 3
+                            Counties</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                          </div>
+                          <p>Civil records, such as small claims and minor disputes, found in lower courts typically
+                            involve a lower monetary claim than those in upper courts. You may be eligible increase the
+                            search scope to the past 10 years if the candidate’s salary will be $75,000+ and if the
+                            employer, candidate, and job location are not located in one of the following states: CA,
+                            NM, MA, MT. Use our national network of professional court runners to search at the county
+                            level for the most targeted, up-to-date and accurate information, particularly for counties
+                            where the records have not been digitized. Searches up to 3 counties based on the results of
+                            the SSN Trace. If the SSN Trace does not return 3 associated counties, we automatically
+                            check the candidate’s current county, based on the address they provided. *Additional county
+                            court fees may
+                          </p>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>EMPLOYMENT CREDIT REPORT</mat-panel-title>
+                        <mat-panel-description fxLayoutAlign="end center">1 BUSINESS DAY</mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias</div>
+                          </div>
+                          <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                            legal name given as well as returns a list of counties where the candidate has lived,
+                            worked, or conducted financial transactions. This trace also finds alias names that the
+                          candidate has used, including maiden names.</p>
+                        </div>
+                      </div>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Upper Civil Court Records Search – 7 Years – Up to 3
+                            Counties</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                          </div>
+                          <p>Civil records, such as small claims and minor disputes, found in lower courts typically
+                            involve a lower monetary claim than those in upper courts. You may be eligible increase the
+                            search scope to the past 10 years if the candidate’s salary will be $75,000+ and if the
+                            employer, candidate, and job location are not located in one of the following states: CA,
+                            NM, MA, MT. Use our national network of professional court runners to search at the county
+                            level for the most targeted, up-to-date and accurate information, particularly for counties
+                            where the records have not been digitized. Searches up to 3 counties based on the results of
+                            the SSN Trace. If the SSN Trace does not return 3 associated counties, we automatically
+                            check the candidate’s current county, based on the address they provided. *Additional county
+                            court fees may
+                          </p>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>DRUG SCREENING</mat-panel-title>
+                        <mat-panel-description fxLayoutAlign="end center">1 BUSINESS DAY</mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias</div>
+                          </div>
+                          <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                            legal name given as well as returns a list of counties where the candidate has lived,
+                            worked, or conducted financial transactions. This trace also finds alias names that the
+                          candidate has used, including maiden names.</p>
+                        </div>
+                      </div>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="PricingHeaderBlock">
+                            <div class="PricingHeaderBlock-title ">Upper Civil Court Records Search – 7 Years – Up to 3
+                            Counties</div>
+                            <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                          </div>
+                          <p>Civil records, such as small claims and minor disputes, found in lower courts typically
+                            involve a lower monetary claim than those in upper courts. You may be eligible increase the
+                            search scope to the past 10 years if the candidate’s salary will be $75,000+ and if the
+                            employer, candidate, and job location are not located in one of the following states: CA,
+                            NM, MA, MT. Use our national network of professional court runners to search at the county
+                            level for the most targeted, up-to-date and accurate information, particularly for counties
+                            where the records have not been digitized. Searches up to 3 counties based on the results of
+                            the SSN Trace. If the SSN Trace does not return 3 associated counties, we automatically
+                            check the candidate’s current county, based on the address they provided. *Additional county
+                            court fees may
+                          </p>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer><strong>Verification Tracking System.</strong> Copyright © Krya Screening Private Limited. All rights reserved. <a
+  routerLink="/privacy" target="_blank">Privacy Policies</a></footer>
+</div>
+</div>
+
+
+
+<!--
+<div class="BgColor">
+  <div class="FullBody">
+    <div class="HeaderBg">
+      <div class="HContBody">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm='row' fxLayout.xs="column" fxFlex="100%"
+          fxLayoutGap="20px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0px" fxLayoutAlign="center center">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="70%" fxFlex.xs="100%">
+            <div class="LogTxt"> <a href="#aaa" routerLink="/" class="link">
+              <div class="Logo lnd-logo"><i class="icon-acheck"></i></div>
+              <div class="logo-lett">
+                <div class="logo-txt">Krya Screening Private Limited</div>
+                <div class="logo-sol">Screening Made Smart</div>
+              </div>
+            </a> </div>
+          </div>
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="30%" fxHide.xs fxLayoutGap="20px"
+            fxLayoutAlign="end center">
+            <a href="#" routerLink="/Selectpackage-addtional-check" class="lhelp" matTooltip="Pricing"
+            matTooltipClass="accent-tooltip">Pricing</a>
+            <a href="#" routerLink="/login" class="lhelp" matTooltip="Sign Up" matTooltipClass="accent-tooltip">Sign
+            Up</a>
+            <a class="lhelp" matTooltip="Help" matTooltipClass="accent-tooltip">
+              <mat-icon> <i class="material-icons-outlined">help_outline</i> </mat-icon>
+              <span>Help</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="landBanner">
+      <div class="ContBody">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <h1 class="PricingHead">Select a Package to screen your Candidate</h1>
+            <p class="text-center pb-20">You’ll be able to select add-on check options on the next page.</p>
+          </div>
+        </div>
+        <div div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="80%">
+            <div fxLayout="row">
+              <div class="PriceCont">
+                <div fxFlex="33.33%" class="PriceBox">
+                  <div class="pricingTier">
+                    <div class="pricing-tier-top-wrap">
+                      <div class="PricingTierHeaderBlock" style="min-height: 290px;">
+                        <div class="PricingTierHeaderBlock-name" style="min-height: 29px;">Basic</div>
+                        <div class="PricingTierHeaderBlock-value-proposition" style="min-height: 90px;">Fast Criminal
+                        Checks, Limited To Digitized Records Only</div>
+                        <div class="PricingTierHeaderBlock-limits">1 Business Day</div>
+                        <div class="PricingTierHeaderBlock-price">$29.99<span>each</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pricing-tier-toggle-body">
+                    <div class="PricingTierHeaderBlock-fees" style="min-height: 26px;">Plus One-Time Setup Fee</div>
+                    <div class="ListsBlock">
+                      <ul>
+                        <li>Social Security Number Trace</li>
+                        <li>Nationwide Criminal Databases Search**</li>
+                        <li>Sex Offender Registry Search</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="pricing-tier-foot">
+                    <button mat-flat-button type="submit" color="primary" fxFlex="100%">Select Basic</button>
+                  </div>
+                </div>
+              </div>
+              <div fxFlex="33.33%" class="PriceBox">
+                <div class="pricingTier TileBlock">
+                  <div class="pricing-tier-top-wrap">
+                    <div class="PricingTierHeaderBlock" style="min-height: 290px;">
+                      <div class="PricingTierHeaderBlock-name" style="min-height: 29px;">Standard</div>
+                      <div class="PricingTierHeaderBlock-value-proposition" style="min-height: 90px;">More
+                      Comprehensive & Up-To-Date Criminal Records</div>
+                      <div class="PricingTierHeaderBlock-limits">1-2 Business Days</div>
+                      <div class="PricingTierHeaderBlock-price">$54.99<span>each</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="pricing-tier-toggle-body">
+                  <div class="PricingTierHeaderBlock-fees" style="min-height: 26px;">Plus One-Time Setup Fee</div>
+                  <div class="ListsBlock">
+                    <ul>
+                      <li>Social Security Number Trace</li>
+                      <li>Nationwide Criminal Databases Search**</li>
+                      <li>Sex Offender Registry Search</li>
+                      <li>Domestic Watch List Search</li>
+                      <li>County Criminal Court Search – 7 Years, up to 3 Counties*</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="pricing-tier-foot">
+                  <button mat-flat-button type="submit" color="primary" fxFlex="100%">Select Standard</button>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="33.33%" class="PriceBox">
+              <div class="pricingTier">
+                <div class="pricing-tier-top-wrap">
+                  <div class="PricingTierHeaderBlock" style="min-height: 290px;">
+                    <div class="PricingTierHeaderBlock-name" style="min-height: 29px;">Premium</div>
+                    <div class="PricingTierHeaderBlock-value-proposition" style="min-height: 90px;">Complete
+                      Criminal & Professional
+                    Record Checks</div>
+                    <div class="PricingTierHeaderBlock-limits">2-4 Business Days</div>
+                    <div class="PricingTierHeaderBlock-price">$79.99<span>each</span>
+                  </div>
+                </div>
+              </div>
+              <div class="pricing-tier-toggle-body">
+                <div class="PricingTierHeaderBlock-fees" style="min-height: 26px;">Plus One-Time Setup Fee</div>
+                <div class="ListsBlock">
+                  <ul>
+                    <li>Social Security Number Trace</li>
+                    <li>Nationwide Criminal Databases Search**</li>
+                    <li>Sex Offender Registry Search</li>
+                    <li>Domestic Watch List Search</li>
+                    <li>County Criminal Court Search – 7 Years, up to 3 Counties*</li>
+                    <li>1 Education Verification*</li>
+                    <li>1 Employment Verification*</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="pricing-tier-foot">
+                <button mat-flat-button type="submit" color="primary" fxFlex="100%">Select Premium</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <h2 class="Price-title">All Screening Services, Including Add-Ons</h2>
+          <div>
+            <mat-accordion class="PricingAccord" multi>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>IDENTITY CHECKS</mat-panel-title>
+                  <mat-panel-description fxLayoutAlign="end center">INSTANT</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Social Security Number Trace</div>
+                      <div class="PricingHeaderBlock-subtitle">Included in Basic, Standard, and Premium Checks
+                      </div>
+                    </div>
+                    <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                      legal name given as well as returns a list of counties where the candidate has lived,
+                      worked, or conducted financial transactions. This trace also finds alias names that the
+                    candidate has used, including maiden names.</p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Identity Verification</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                    </div>
+                    <p>Trusted background check results start with trusted inputs. Identity verification uses
+                      knowledge-based authentication questions and one-time passcodes to verified phone numbers to
+                      assess whether the legal name, date of birth, and address provided are the candidate’s own.
+                    </p>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>CRIMINAL RECORDS SEARCH</mat-panel-title>
+                  <mat-panel-description fxLayoutAlign="end center">1-3 BUSINESS DAYS</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search </div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias </div>
+                    </div>
+                    <p>Search criminal records databases from all 50 states, including digitized records from
+                      Department of Corrections, Administrative Office of the Courts and county court records.
+                      **Database coverage varies by state.
+                      Add an Alias Names Search to expand the search for criminal records beyond the candidate’s
+                      legal name, to include any additional candidate-provided names. This search can also use
+                    aliases returned during the SSN Trace.</p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">County Criminal Court Search – 7 Years – Up to
+                      3Counties</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | Pricing starts at
+                      $14.99</div>
+                    </div>
+                    <p>Use our national network of professional court runners to search at the county level for
+                      the most targeted, up-to-date and accurate information, particularly for counties where the
+                      records have not been digitized. Searches up to 3 counties based on the results of the SSN
+                      Trace. If the SSN Trace does not return 3 associated counties, we automatically check the
+                      candidate’s current county, based on the address they provided. *Additional county court
+                      fees may apply.
+                    </p>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>CIVIL RECORDS SEARCH</mat-panel-title>
+                  <mat-panel-description fxLayoutAlign="end center">1-7 BUSINESS DAYS</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias</div>
+                    </div>
+                    <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                      legal name given as well as returns a list of counties where the candidate has lived,
+                      worked, or conducted financial transactions. This trace also finds alias names that the
+                    candidate has used, including maiden names.</p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Upper Civil Court Records Search – 7 Years – Up to 3
+                      Counties</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                    </div>
+                    <p>Civil records, such as small claims and minor disputes, found in lower courts typically
+                      involve a lower monetary claim than those in upper courts. You may be eligible increase the
+                      search scope to the past 10 years if the candidate’s salary will be $75,000+ and if the
+                      employer, candidate, and job location are not located in one of the following states: CA,
+                      NM, MA, MT. Use our national network of professional court runners to search at the county
+                      level for the most targeted, up-to-date and accurate information, particularly for counties
+                      where the records have not been digitized. Searches up to 3 counties based on the results of
+                      the SSN Trace. If the SSN Trace does not return 3 associated counties, we automatically
+                      check the candidate’s current county, based on the address they provided. *Additional county
+                      court fees may
+                    </p>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <h2 class="Price-title">Add-Ons Only</h2>
+          <div>
+            <mat-accordion class="PricingAccord" multi>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>ONGOING ALERTS</mat-panel-title>
+                  <mat-panel-description fxLayoutAlign="end center">MONTHLY MONITORING</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Social Security Number Trace</div>
+                      <div class="PricingHeaderBlock-subtitle">Included in Basic, Standard, and Premium Checks
+                      </div>
+                    </div>
+                    <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                      legal name given as well as returns a list of counties where the candidate has lived,
+                      worked, or conducted financial transactions. This trace also finds alias names that the
+                    candidate has used, including maiden names.</p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Identity Verification</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                    </div>
+                    <p>Trusted background check results start with trusted inputs. Identity verification uses
+                      knowledge-based authentication questions and one-time passcodes to verified phone numbers to
+                      assess whether the legal name, date of birth, and address provided are the candidate’s own.
+                    </p>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>VERIFICATIONS</mat-panel-title>
+                  <mat-panel-description fxLayoutAlign="end center">DEPENDS</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search </div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias </div>
+                    </div>
+                    <p>Search criminal records databases from all 50 states, including digitized records from
+                      Department of Corrections, Administrative Office of the Courts and county court records.
+                      **Database coverage varies by state.
+                      Add an Alias Names Search to expand the search for criminal records beyond the candidate’s
+                      legal name, to include any additional candidate-provided names. This search can also use
+                    aliases returned during the SSN Trace.</p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">County Criminal Court Search – 7 Years – Up to
+                      3Counties</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | Pricing starts at
+                      $14.99</div>
+                    </div>
+                    <p>Use our national network of professional court runners to search at the county level for
+                      the most targeted, up-to-date and accurate information, particularly for counties where the
+                      records have not been digitized. Searches up to 3 counties based on the results of the SSN
+                      Trace. If the SSN Trace does not return 3 associated counties, we automatically check the
+                      candidate’s current county, based on the address they provided. *Additional county court
+                      fees may apply.
+                    </p>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>MOTOR VEHICLE RECORDS CHECK</mat-panel-title>
+                  <mat-panel-description fxLayoutAlign="end center">1 BUSINESS DAY</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias</div>
+                    </div>
+                    <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                      legal name given as well as returns a list of counties where the candidate has lived,
+                      worked, or conducted financial transactions. This trace also finds alias names that the
+                    candidate has used, including maiden names.</p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Upper Civil Court Records Search – 7 Years – Up to 3
+                      Counties</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                    </div>
+                    <p>Civil records, such as small claims and minor disputes, found in lower courts typically
+                      involve a lower monetary claim than those in upper courts. You may be eligible increase the
+                      search scope to the past 10 years if the candidate’s salary will be $75,000+ and if the
+                      employer, candidate, and job location are not located in one of the following states: CA,
+                      NM, MA, MT. Use our national network of professional court runners to search at the county
+                      level for the most targeted, up-to-date and accurate information, particularly for counties
+                      where the records have not been digitized. Searches up to 3 counties based on the results of
+                      the SSN Trace. If the SSN Trace does not return 3 associated counties, we automatically
+                      check the candidate’s current county, based on the address they provided. *Additional county
+                      court fees may
+                    </p>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>EMPLOYMENT CREDIT REPORT</mat-panel-title>
+                  <mat-panel-description fxLayoutAlign="end center">1 BUSINESS DAY</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias</div>
+                    </div>
+                    <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                      legal name given as well as returns a list of counties where the candidate has lived,
+                      worked, or conducted financial transactions. This trace also finds alias names that the
+                    candidate has used, including maiden names.</p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Upper Civil Court Records Search – 7 Years – Up to 3
+                      Counties</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                    </div>
+                    <p>Civil records, such as small claims and minor disputes, found in lower courts typically
+                      involve a lower monetary claim than those in upper courts. You may be eligible increase the
+                      search scope to the past 10 years if the candidate’s salary will be $75,000+ and if the
+                      employer, candidate, and job location are not located in one of the following states: CA,
+                      NM, MA, MT. Use our national network of professional court runners to search at the county
+                      level for the most targeted, up-to-date and accurate information, particularly for counties
+                      where the records have not been digitized. Searches up to 3 counties based on the results of
+                      the SSN Trace. If the SSN Trace does not return 3 associated counties, we automatically
+                      check the candidate’s current county, based on the address they provided. *Additional county
+                      court fees may
+                    </p>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>DRUG SCREENING</mat-panel-title>
+                  <mat-panel-description fxLayoutAlign="end center">1 BUSINESS DAY</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Nationwide Criminal Databases Search</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Alias Names Search | $9.99 per alias</div>
+                    </div>
+                    <p>Verifies that a candidate’s Social Security number is valid and is associated with the
+                      legal name given as well as returns a list of counties where the candidate has lived,
+                      worked, or conducted financial transactions. This trace also finds alias names that the
+                    candidate has used, including maiden names.</p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <div class="PricingHeaderBlock">
+                      <div class="PricingHeaderBlock-title ">Upper Civil Court Records Search – 7 Years – Up to 3
+                      Counties</div>
+                      <div class="PricingHeaderBlock-subtitle">Add-on Only | $4.99</div>
+                    </div>
+                    <p>Civil records, such as small claims and minor disputes, found in lower courts typically
+                      involve a lower monetary claim than those in upper courts. You may be eligible increase the
+                      search scope to the past 10 years if the candidate’s salary will be $75,000+ and if the
+                      employer, candidate, and job location are not located in one of the following states: CA,
+                      NM, MA, MT. Use our national network of professional court runners to search at the county
+                      level for the most targeted, up-to-date and accurate information, particularly for counties
+                      where the records have not been digitized. Searches up to 3 counties based on the results of
+                      the SSN Trace. If the SSN Trace does not return 3 associated counties, we automatically
+                      check the candidate’s current county, based on the address they provided. *Additional county
+                      court fees may
+                    </p>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<footer><strong>Verification Tracking System.</strong> Copyright © Krya Screening Private Limited. All rights reserved. <a
+routerLink="/privacy" target="_blank">Privacy Policies</a></footer>
+</div>
+</div>
+-->

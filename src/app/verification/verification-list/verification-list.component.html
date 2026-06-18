@@ -1,0 +1,728 @@
+<app-breadcrumb
+  [routePath]="routePath"
+  [btnSearch]="searchPage === false ? (modifyAdditionalFeeFlag !== true && modifyComponentFeeFlag !== true) ? true : false : false"
+  [btnAddUpload]="btnAddUpload"
+  [btnReAssign]="btnReAssign"
+  [btnBack]="true && !searchPage"
+  [btnExportDisabled]="!screenAuth?.exportFlag"
+  [btnExcelExport]="verificationList?.length > 0"
+  (eventBack)="closeSearch()"
+  (eventReAssign)="openOrginalOwerdialog()"
+  (eventAddUpload)="showBulk()"
+  (eventExcelExport)="downloadExcel()"
+  [btnAddUploadDisabled]="!screenAuth?.addFlag"
+    (eventSearch)="reOpenSearchFlag 
+        ? router.navigate(['dashboard/verification/reopensearch']) 
+        : modifyAdditionalFeeFlag 
+            ? router.navigate(['dashboard/verification/modifyadditionalfee']) 
+            : router.navigate(['dashboard/verification/modifycomponentfee'])">
+  <!-- FIX: eventSearch was using || short-circuit which always navigated to reopensearch.
+  Now uses proper conditional (ternary) so only the correct route is triggered.
+  FIX: screenAuth?.addFlag — added safe navigation to prevent crash if screenAuth is null on load. -->
+</app-breadcrumb>
+
+<!-- Bulk Upload Section -->
+@if (showBulkUpload) {
+  <div class="content-area">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">{{commonService.screenName}}</h1>
+        </mat-card-title>
+      </mat-card-header>
+      @if (userData?.applicationId !== 1 && menuData?.screenName === 'Candidate document upload') {
+        <mat-hint>
+          <!-- FIX: added safe navigation on userData and menuData -->
+          Note: Maximum file size of each document should not exceed 5 MB, overall file size should not exceed 150 MB.
+        </mat-hint>
+      }
+      <app-bulk-export-import
+        [empIns]="false"
+        [screenType]="screenType"
+        (backEvent)="navigateURL()"
+        [verSt]="true"
+        [isFake]="false">
+      </app-bulk-export-import>
+    </mat-card>
+  </div>
+}
+
+<!-- Advanced Search / Filter Bar (hidden for bulk, modify-fee screens) -->
+@if (!showBulkUpload && modifyComponentFeeFlag !== true && modifyAdditionalFeeFlag !== true) {
+  <div>
+    @if (searchPage === false) {
+      <div fxLayout="row" class="advSearch">
+        <div class="advSearch-forms">
+          <form autocomplete="off" [formGroup]="VerificationSearchForm">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="100%">
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <!-- Assigned / Not Assigned radio toggle (team leads only) -->
+                  @if (getFlag()) {
+                    <div fxFlex="130px">
+                      <mat-radio-group fxLayoutGap="20px" [formControl]="assignControl"
+                        (change)="selectTab($event.value)">
+                        <mat-radio-button value="Not Assigned" (click)="showpg()">Not Assigned</mat-radio-button>
+                        <mat-radio-button value="Assigned" (click)="showpg()">Assigned</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  }
+                  <!-- Client Ref No -->
+                  <div fxFlex="170px">
+                    <mat-form-field appearance="outline" fxFlex="100%">
+                      <mat-label>Client Ref No.</mat-label>
+                      <input matInput placeholder="Client Ref No." formControlName="clientRefNo" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <!-- Client Name -->
+                  <div fxFlex="170px">
+                    <mat-form-field appearance="outline" fxFlex="100%">
+                      <mat-label>Client Name</mat-label>
+                      <input matInput placeholder="Client Name" formControlName="clientName" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <!-- Candidate Name (standard view) -->
+                  @if (!btnReAssign) {
+                    <div fxFlex="170px">
+                      <mat-form-field appearance="outline" fxFlex="100%">
+                        <mat-label>Candidate Name</mat-label>
+                        <input matInput placeholder="Candidate Name" formControlName="candidateFullName" type="text" />
+                      </mat-form-field>
+                    </div>
+                  }
+                  <!-- Component Name (standard view) -->
+                  @if (!btnReAssign) {
+                    <div fxFlex="170px">
+                      <mat-form-field appearance="outline" fxFlex="100%">
+                        <mat-label>Component Name</mat-label>
+                        <input matInput placeholder="Component Name" formControlName="componentName" type="text" />
+                      </mat-form-field>
+                    </div>
+                  }
+                  <!-- Screening Owner (reassign view) -->
+                  @if (btnReAssign) {
+                    <div fxFlex="170px">
+                      <mat-form-field appearance="outline" fxFlex="100%">
+                        <mat-label>Screening Owner</mat-label>
+                        <input matInput placeholder="Screening Owner" formControlName="screeningOwnerName" type="text" />
+                      </mat-form-field>
+                    </div>
+                  }
+                  <!-- Reassigned Owner (reassign view) -->
+                  @if (btnReAssign) {
+                    <div fxFlex="170px">
+                      <mat-form-field appearance="outline" fxFlex="100%">
+                        <mat-label>Reassigned Owner</mat-label>
+                        <input matInput placeholder="Reassigned Owner" formControlName="screeningRegOwnerName" type="text" />
+                      </mat-form-field>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- Search / Reset / Show More actions -->
+        <div fxFlex="100%" class="advSearch-btn">
+          <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <a (click)="search()">Search</a>
+            <span>|</span>
+            <a (click)="resetFilterSort('reset')">Reset</a>
+            <span>|</span>
+            <a (click)="SearchCriFilter = !SearchCriFilter">
+              {{ SearchCriFilter ? 'Show Less' : 'Show More' }}&nbsp;
+              <i class="icon-chevron-{{ SearchCriFilter ? 'up' : 'down' }}"></i>
+            </a>
+          </div>
+        </div>
+        <!-- Advanced / "Show More" filter row -->
+        @if (SearchCriFilter) {
+          <div fxLayout="row" class="advSearchshow">
+            <div class="advSearch-forms">
+              <form autocomplete="off" [formGroup]="VerificationSearchForm">
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="100%">
+                    <div fxLayout="row" fxLayoutGap="20px">
+                      <!-- Candidate Name (reassign view — moved to Show More) -->
+                      @if (btnReAssign) {
+                        <div fxFlex="170px">
+                          <mat-form-field appearance="outline" fxFlex="100%">
+                            <mat-label>Candidate Name</mat-label>
+                            <input matInput placeholder="Candidate Name" formControlName="candidateFullName" type="text" />
+                          </mat-form-field>
+                        </div>
+                      }
+                      <!-- Component Name (reassign view — moved to Show More) -->
+                      @if (btnReAssign) {
+                        <div fxFlex="170px">
+                          <mat-form-field appearance="outline" fxFlex="100%">
+                            <mat-label>Component Name</mat-label>
+                            <input matInput placeholder="Component Name" formControlName="componentName" type="text" />
+                          </mat-form-field>
+                        </div>
+                      }
+                      <!-- Verification Id -->
+                      <div fxFlex="170px">
+                        <mat-form-field appearance="outline" fxFlex="100%">
+                          <mat-label>Verification Id</mat-label>
+                          <input matInput placeholder="Verification Id" formControlName="verificationId" type="text" />
+                        </mat-form-field>
+                      </div>
+                      <!-- Screening Owner -->
+                      <div fxFlex="170px">
+                        <mat-form-field appearance="outline" fxFlex="100%">
+                          <mat-label>Screening Owner</mat-label>
+                          <input matInput placeholder="Screening Owner" formControlName="screeningOwnerName" type="text" />
+                        </mat-form-field>
+                      </div>
+                      <!-- Vendor Name -->
+                      <div fxFlex="170px">
+                        <mat-form-field appearance="outline" fxFlex="100%">
+                          <mat-label>Vendor Name</mat-label>
+                          <input matInput placeholder="Vendor Name" formControlName="vendorName" type="text" />
+                        </mat-form-field>
+                      </div>
+                      <!-- Component Status -->
+                      <div fxFlex="170px">
+                        <mat-form-field appearance="outline" fxFlex="100%">
+                          <mat-label>Component Status</mat-label>
+                          <input matInput placeholder="Component Status" formControlName="componentStatus" type="text" />
+                        </mat-form-field>
+                      </div>
+                      <!-- Screening Priority -->
+                      <div fxFlex="170px">
+                        <mat-form-field appearance="outline" fxFlex="100%">
+                          <mat-label>Screening Priority</mat-label>
+                          <input matInput placeholder="Screening Priority" formControlName="prioritylookupId" type="text" />
+                        </mat-form-field>
+                      </div>
+                      <!-- Screening Id -->
+                      <div fxFlex="170px">
+                        <mat-form-field appearance="outline" fxFlex="100%">
+                          <mat-label>Screening Id</mat-label>
+                          <input matInput placeholder="Screening Id" formControlName="screeningId" type="text" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div fxFlex="100%" class="advSearch-btn">
+              <div class="FloatR" fxLayoutAlign="start center">&nbsp;</div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+}
+
+<!-- Main Content Card -->
+@if (!showBulkUpload) {
+  <div class="content-area">
+    <div fxLayout="row" [ngClass]="searchPage === true ? '' : 'srchPad'">
+      <div fxFlex="100%">
+        <mat-card>
+          <!-- Card Header -->
+          <mat-card-header>
+            <mat-card-title>
+              @if (commonService.redcaseFlag !== true && commonService.reassigned !== true && commonService.modifyAdditionalFeeFlag !== true && commonService.modifyComponentFeeFlag !== true) {
+                <h1
+                class="header-title">Verification Transaction</h1>
+              }
+              @if (commonService.redcaseFlag === true && commonService.reassigned !== true) {
+                <h1
+                class="header-title">Red Case Approval</h1>
+              }
+              @if (commonService.redcaseFlag !== true && commonService.reassigned === true) {
+                <h1
+                class="header-title">Reassigned Checks</h1>
+              }
+              @if (commonService.modifyAdditionalFeeFlag === true) {
+                <h1
+                class="header-title">Modify Additional Fee</h1>
+              }
+              @if (commonService.modifyComponentFeeFlag === true) {
+                <h1
+                class="header-title">Modify Component Fee</h1>
+              }
+            </mat-card-title>
+          </mat-card-header>
+          <!-- Search Page (Ref No / Verification Id lookup) -->
+          @if (searchPage === true) {
+            <mat-card-content>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="20px grid">
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="60%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Client Ref No / Verification Id</mat-label>
+                    <input matInput #clear [formControl]="verifyId" maxlength="20"
+                      placeholder="Client Ref No / Verification Id">
+                      @if (!verifyId.value) {
+                        <mat-error>Client Ref No / Verification Id is required</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                  <div fxLayoutGap="20px" class="mb-20">
+                    <button mat-flat-button color="primary" (click)="searchFunc()">Search</button>
+                  </div>
+                </div>
+              </mat-card-content>
+            }
+            <!-- List Page -->
+            @if (searchPage === false) {
+              <mat-card-content>
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="100%">
+                    <!-- Active search filter tags -->
+                    @if (isSearch === true) {
+                      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"
+                        fxLayout.xs="column" fxLayoutGap="0px grid">
+                      @if (searchValueArr?.length > 0) {
+                        <div fxFlex="100%">
+                          <b class="text-sm mr-10 text-semi-bold text-dull">Search results for:</b>
+                          @for (s of searchValueArr; track s; let in = $index) {
+                            <span class="tag">
+                              {{s.value}}
+                              <a class="close" (click)="removeSearchValue(s.propertyName, in)">×</a>
+                            </span>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+                  <!-- Sort / record count / assign bar -->
+                  @if (verificationList?.length > 0) {
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"
+                      fxLayout.xs="column" fxLayoutGap="0px grid" class="sortrow"
+                      >
+                      <!-- Select All (team leads) -->
+                      @if (getFlag()) {
+                        <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="10%" fxFlex.xs="100%"
+                          class="mt-5">
+                          <mat-checkbox [formControl]="selectall" (change)="selectAll($event)">
+                            Select All
+                          </mat-checkbox>
+                        </div>
+                      }
+                      <span fxFlex></span>
+                      <div fxFlex="90%" fxFlex.lg="90%" fxFlex.md="90%" fxFlex.sm="100%" fxFlex.xs="100%"
+                        fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                        fxLayoutAlign.xs="start start">
+                        <!-- Record count + sort links -->
+                        <div fxFlex="88%" fxFlex.lg="88%" fxFlex.md="88%" fxFlex.sm="100%" fxFlex.xs="100%"
+                          fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                          fxLayoutAlign.xs="start start">
+                          <ul class="pl-0">
+                            <!-- Server-side paged count -->
+                            @if (!reOpenSearchFlag && !modifyAdditionalFeeFlag && !modifyComponentFeeFlag) {
+                              <li>
+                                <span class="text-dull">Showing
+                                  {{(verificationList?.length > 0 ? ((userData.pageSize * userData.page) - userData.pageSize + 1) : 0)}} -
+                                  {{((userData.pageSize * userData.page) >= shieveTotalCount) ? shieveTotalCount : (userData.pageSize * userData.page)}}
+                                  of
+                                </span>
+                                <b>{{shieveTotalCount}} record(s)</b>
+                              </li>
+                            }
+                            <!-- Client-side paged count (fee screens) -->
+                            @if (reOpenSearchFlag || modifyAdditionalFeeFlag || modifyComponentFeeFlag) {
+                              <li>
+                                <span class="text-dull">Showing
+                                  {{(itemPerPage * page) - itemPerPage + 1}} -
+                                  {{(itemPerPage * page) >= verificationList.length && filterFlag !== true
+                                  ? verificationList?.length
+                                  : filterLength * page}}
+                                  of
+                                </span>
+                                <b>{{verificationList?.length}} record(s)</b>
+                              </li>
+                            }
+                            <li>
+                              <span>|</span>
+                              <a (click)="shieveShowall()">Show All</a>
+                              <span>|</span>
+                            </li>
+                            <li>
+                              <b>Sort By:</b>
+                              <!-- Candidate Name sort -->
+                              <a [ngClass]="column === 'candidateFullName' ? 'active' : ''"
+                              (click)="sortBy('candidateFullName')">Candidate Name</a>
+                                                <i [ngClass]="{
+                                                    'icon-sort': column !== 'candidateFullName',
+                                                    'icon-sort-asc': column === 'candidateFullName' && !isDesc,
+                                                    'icon-sort-desc': column === 'candidateFullName' && isDesc
+                                                }" aria-hidden="true"></i>
+                              <!-- Call Back Date sort (specific flags only) -->
+                              @if (commonService.commonVeFlag === 'pendingChecks' || verificationService.veType === 'Not Assigned' || verificationService.veType === 'Assigned' || commonService.reassigned === true) {
+                                <a [ngClass]="column === 'callbackDate' ? 'active' : ''"
+                                  (click)="sortBy('callbackDate')"
+                                  >
+                                  Call Back Date
+                                </a>
+                              }
+                              <!-- FIX: veType string comparisons — removed erroneous parentheses -->
+                              @if (commonService.commonVeFlag === 'pendingChecks' || verificationService.veType === 'Not Assigned' || verificationService.veType === 'Assigned' || commonService.reassigned === true) {
+                                <i
+                                                    [ngClass]="{
+                                                        'icon-sort': column !== 'callbackDate',
+                                                        'icon-sort-asc': column === 'callbackDate' && !isDesc,
+                                                        'icon-sort-desc': column === 'callbackDate' && isDesc
+                                                    }" aria-hidden="true"></i>
+                              }
+                              <!-- TAT sort -->
+                              <a [ngClass]="column === 'tatStatus' ? 'active' : ''"
+                              (click)="sortBy('tatStatus')">TAT</a>
+                                                <i [ngClass]="{
+                                                    'icon-sort': column !== 'tatStatus',
+                                                    'icon-sort-asc': column === 'tatStatus' && !isDesc,
+                                                    'icon-sort-desc': column === 'tatStatus' && isDesc
+                                                }" aria-hidden="true"></i>
+                              <!-- Verification ID sort -->
+                              <a [ngClass]="column === 'verificationId' ? 'active' : ''"
+                              (click)="sortBy('verificationId')">Verification ID</a>
+                                                <i [ngClass]="{
+                                                    'icon-sort': column !== 'verificationId',
+                                                    'icon-sort-asc': column === 'verificationId' && !isDesc,
+                                                    'icon-sort-desc': column === 'verificationId' && isDesc
+                                                }" aria-hidden="true"></i>
+                            </li>
+                          </ul>
+                        </div>
+                        <!-- Assign / Re-Assign button (team leads) -->
+                        @if (getFlag()) {
+                          <div fxFlex="12%" fxFlex.lg="12%" fxFlex.md="12%" fxFlex.sm="100%" fxFlex.xs="100%"
+                            fxLayoutAlign="end center" fxLayoutAlign.sm="start start"
+                            fxLayoutAlign.xs="start start">
+                            @if (assignControl.value === 'Not Assigned') {
+                              <button mat-flat-button color="warn"
+                              (click)="opendialog()">Assign</button>
+                            }
+                            @if (assignControl.value === 'Assigned') {
+                              <button mat-flat-button color="warn"
+                              (click)="opendialog()">Re-Assign</button>
+                            }
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                  <!-- Verification List Rows -->
+                  @for (empj of verificationList
+                    | sort: { property: column, direction: direction }
+                    | paginate: { itemsPerPage: shievePageSize, currentPage: shievePageNo, totalItems: shieveTotalCount }; track empj; let c = $count; let j = $index) {
+                    <div fxLayout="row" [class]="getFilterLen(c)"
+                      >
+                      @if (empj?.subCheckFlag === true) {
+                        <div matTooltip="Sub Check"
+                        matTooltipClass="accent-tooltip" class="SubCheck"></div>
+                      }
+                      <div fxFlex="100%">
+                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+                          fxLayout.sm="row wrap" fxLayout.xs="column"
+                          fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+                          <!-- Checkbox + Priority icon (team leads) -->
+                          @if (getFlag()) {
+                            <div fxFlex="3%" fxFlex.lg="3%" fxFlex.md="4%" fxFlex.sm="10%" fxFlex.xs="100%"
+                              >
+                              @if (isSearch === true) {
+                                <mat-checkbox class="Xverifi-checkbox"
+                                  [checked]="empj.assignedOwner"
+                                  (change)="assignOwner($event, empj)">
+                                </mat-checkbox>
+                              }
+                              <i matTooltip="{{empj?.priorityLookupName ? empj?.priorityLookupName : 'N/A'}}"
+                                matTooltipClass="accent-tooltip"
+                                                [ngClass]="empj?.priorityLookupName?.toLowerCase() === commonService.NORMAL.toLowerCase() ? 'icon-status csatus Normal' :
+                                                    empj?.priorityLookupName?.toLowerCase() === commonService.HIGH.toLowerCase() ? 'icon-status csatus High' :
+                                                    empj?.priorityLookupName?.toLowerCase() === commonService.DELTA.toLowerCase() ? 'icon-status csatus Delta' :
+                                                    empj?.priorityLookupName?.toLowerCase() === commonService.MEDIUM.toLowerCase() ? 'icon-status csatus Medium' :
+                                                    empj?.priorityLookupName?.toLowerCase() === commonService.VERIZON.toLowerCase() ? 'icon-status csatus Verizon' :
+                                                    'icon-status csatus Delta'">
+                              </i>
+                            </div>
+                          }
+                          <!-- Candidate avatar + name + id -->
+                          <div fxFlex="16%" fxFlex.lg="18%" fxFlex.md="19%" fxFlex.sm="40%" fxFlex.xs="100%">
+                            <a>
+                              <mat-card-header>
+                                <div mat-card-avatar
+                                  class="avatar avatarBg{{(j % 6) + 1}} cursor-pointer"
+                                  [routerLink]="['/dashboard/verification/verificationDetail']"
+                                  (click)="selectVerification(empj.screeningCompId); commonService.funcEntity = empj.functionalEntity">
+                                  {{empj?.candidateFirstName?.slice(0, 1)}}{{empj?.candidateLastName?.slice(0, 1)}}
+                                </div>
+                                <mat-card-title class="cname cursor-pointer"
+                                  matTooltip="{{empj?.candidateFirstName}} {{empj?.candidateMiddleName}} {{empj?.candidateLastName}}"
+                                  matTooltipClass="accent-tooltip"
+                                  [routerLink]="['/dashboard/verification/verificationDetail']"
+                                  (click)="selectVerification(empj.screeningCompId); commonService.funcEntity = empj.functionalEntity">
+                                  {{empj?.candidateFirstName}} {{empj?.candidateMiddleName}} {{empj?.candidateLastName}}
+                                </mat-card-title>
+                                <mat-card-subtitle class="cdesg mb-5 cursor-pointer"
+                                  [routerLink]="['/dashboard/verification/verificationDetail']"
+                                  (click)="selectVerification(empj?.screeningCompId); commonService.funcEntity = empj.functionalEntity">
+                                  {{empj?.manualFileSubmissionFlag === true ? empj?.clientScreeningId : empj?.verificationId}}
+                                </mat-card-subtitle>
+                                <mat-card-subtitle class="mb-0 inproges">
+                                  <i class="icon-tatpending dc-ico"></i>
+                                  <span class="dc-dn">{{empj?.inProgressDays}}</span>
+                                  <span class="dc-sub">days<br>Over</span>
+                                </mat-card-subtitle>
+                                <mat-card-subtitle class="mb-0 inproges">
+                                  @if (empj?.tatStatus === 'BT') {
+                                    <span class="red">{{empj?.tatStatus}}</span>
+                                  }
+                                  @if (empj?.tatStatus === 'WT') {
+                                    <span>{{empj?.tatStatus}}</span>
+                                  }
+                                  <!-- FIX: changed == to === for strict equality -->
+                                </mat-card-subtitle>
+                              </mat-card-header>
+                            </a>
+                          </div>
+                          <!-- Client / Site / Case / IQC / FQC -->
+                          <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+                            <p><label>Client:</label><em>{{empj?.clientName}}</em></p>
+                            <p><label>Site Name:</label><em>{{empj?.siteName ? empj?.siteName : 'N/A'}}</em></p>
+                            <p><label>Case Status:</label><em>{{empj?.caseStatus ? empj?.caseStatus : 'N/A'}}</em></p>
+                            @if (userData?.applicationId === 1 && !empj?.callbackDate) {
+                              <p>
+                                <label>IQC Status:</label>
+                                <em>{{empj?.iqcStatus ? empj?.iqcStatus : 'N/A'}}</em>
+                              </p>
+                            }
+                            @if (userData?.applicationId === 1 && !empj?.callbackDate) {
+                              <p>
+                                <label>FQC Status:</label>
+                                <em>{{empj?.fqcStatus ? empj?.fqcStatus : 'N/A'}}</em>
+                              </p>
+                            }
+                          </div>
+                          <!-- Ref No / Owner / Initiation Date / DE Submitted / CAM -->
+                          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+                            <p>
+                              <label>{{empj?.manualFileSubmissionFlag === true ? 'Transaction Id:' : 'Client Ref No.:'}}</label>
+                              <em>{{empj?.clientRefNo}}</em>
+                            </p>
+                            @if (userData?.applicationId === 1 && commonService.reassigned !== true) {
+                              <p>
+                                <label>Screening Owner:</label>
+                                <em>{{empj?.screeningOwnerName ? empj?.screeningOwnerName : 'N/A'}}</em>
+                              </p>
+                            }
+                            @if (userData?.applicationId === 1 && commonService.reassigned === true) {
+                              <p>
+                                <label>Screening Owner:</label>
+                                <em>{{empj?.orginalScreeningOwnerName ? empj?.orginalScreeningOwnerName : 'N/A'}}</em>
+                              </p>
+                            }
+                            @if (commonService.reassigned) {
+                              <p>
+                                <label>Reassigned Owner:</label>
+                                <em>{{empj?.reAssignScreeningOwnerName ? empj?.reAssignScreeningOwnerName : 'N/A'}}</em>
+                              </p>
+                            }
+                            @if (userData?.applicationId === 1 && empj?.componentStatus === commonService.FOR_RE && empj?.manualFileSubmissionFlag !== true) {
+                              <p>
+                                <label>ForResearch Owner:</label>
+                                <em>{{empj?.frOwnerFN ? empj?.frOwnerFN : 'N/A'}}</em>
+                              </p>
+                            }
+                            <p>
+                              <label>Case Initiation Date:</label>
+                              <em>{{empj?.requestDate ? (empj?.requestDate | date : 'dd/MMM/yyyy') : 'N/A'}}</em>
+                            </p>
+                            @if (userData?.applicationId === 1) {
+                              <p>
+                                <label>{{empj?.qcStatus === 'Rejected' ? 'QC By:' : 'DE Submitted By'}}</label>
+                                <em>{{empj?.qcStatus === 'Rejected' ? empj?.fqcByFN : empj?.createdName}}</em>
+                              </p>
+                            }
+                            @if (commonService.camRejection) {
+                              <p>
+                                <label>CAM Approval Status:</label>
+                                <em>{{empj?.camApprovalStatus ? empj?.camApprovalStatus : 'N/A'}}</em>
+                              </p>
+                            }
+                          </div>
+                          <!-- Vendor / Callback / Component Status / Component Name -->
+                          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="27%" fxFlex.sm="50%" fxFlex.xs="100%">
+                            <p><label>Vendor:</label><em>{{empj?.vendorName ? empj?.vendorName : 'N/A'}}</em></p>
+                            <p>
+                              <label>Call Back Date:</label>
+                              <em>{{empj?.callbackDate ? (commonService.getTimezoneOffset(empj?.callbackDate, false) | date : 'dd/MM/yyyy') : 'N/A'}}</em>
+                            </p>
+                            <p><label>Component Status:</label><em>{{empj?.componentStatus ? empj?.componentStatus : 'N/A'}}</em></p>
+                            <p>
+                              <label>Component:</label>
+                              <em class="cn-chip">{{empj?.componentName}}</em>
+                            </p>
+                          </div>
+                        </div><!-- end row wrap -->
+                        <!-- Functional Entity row -->
+                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+                          fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid">
+                          <div fxFlex="100%">
+                            @if (empj?.componentName?.includes('Employment (HR)') || empj?.componentName?.includes('Education') || empj?.componentName?.includes('SSN Trace') || empj?.componentName?.includes('Current Employment') || empj?.componentName?.includes('Previous Employment')) {
+                              <p>
+                                <!-- FIX: added ?. safe nav on componentName.includes() to prevent crash if componentName is null -->
+                                <label>Functional Entity:</label>
+                                @if (empj?.functionalEntity !== null && empj?.functionalEntity !== 'Fresher') {
+                                  <em>
+                                    <span [ngStyle]="empj?.researchResultName === 'Suspicious' && empj?.manualFileSubmissionFlag !== true ? {'color': 'red'} : {}">
+                                      {{empj?.functionalEntity?.split(',')[0]}}
+                                    </span>
+                                  </em>
+                                } @else {
+                                  {{empj?.functionalEntity && empj?.functionalEntity === 'Fresher' ? empj?.functionalEntity : 'N/A'}}
+                                }
+                              </p>
+                            } @else {
+                              <p>
+                                <label>Functional Entity:</label>
+                                <em>{{empj?.functionalEntity ? empj?.functionalEntity : 'N/A'}}</em>
+                              </p>
+                            }
+                          </div>
+                        </div>
+                      </div><!-- end fxFlex 100% -->
+                    </div>
+                    }<!-- end *ngFor -->
+                    <!-- No Record Found -->
+                    @if (verificationList?.length === 0) {
+                      <div>
+                        <!-- FIX: changed == 0 to === 0 and added ?. safe nav -->
+                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                          fxLayout.xs="column" fxLayoutGap="0px">
+                          <div fxFlex="100%" class="pt-15">
+                            <div class="no-record text-center">
+                              <span>No Record Found</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                    <!-- Pagination controls -->
+                    @if (verificationList?.length > 0) {
+                      <div
+                        fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+                        fxLayout.sm="column" fxLayout.xs="column"
+                        fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid"
+                        fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"
+                        class="cus-paginator">
+                        <div fxFlex="76%" fxFlex.lg="76%" fxFlex.md="54%" fxFlex.sm="100%" fxFlex.xs="100%"
+                          fxLayoutAlign="end end" fxLayoutAlign.md="start start"
+                          fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"
+                          class="text-right dev-paginator">
+                          <pagination-controls (pageChange)="shievePagination($event)"></pagination-controls>
+                        </div>
+                        <div fxHide.xs fxFlex="24%" fxFlex.lg="24%" fxFlex.md="46%" fxFlex.sm="100%"
+                          fxFlex.xs="100%" fxLayoutAlign="end end"
+                          fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+                          <span class="gotopagbg ml-2">Go to Page
+                            <span class="input-num">
+                              <input type="number" [(ngModel)]="shievePageNo" min="1" maxlength="4"
+                                appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                [NumberOnly]="false"
+                                (blur)="getVerificationSearchDetails()">
+                            </span>
+                          </span>
+                          <span class="gotopagbg ml-2">Items / page
+                            <span class="input-num">
+                              <input type="number" [(ngModel)]="shievePageSize" min="1" maxlength="4"
+                                appNumberOnly preventDragdrop preventCutCopyPaste autocomplete="off"
+                                [NumberOnly]="false"
+                                (blur)="Velimit()">
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                      }<!-- end pagination -->
+                    </div>
+                  </div>
+                </mat-card-content>
+              }
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Assign Owner Dialog -->
+    <ng-template #assignPopUp>
+      <h1 mat-dialog-title>Screening Owner
+        <div fxLayout="row" class="scrollCls">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+              <div fxFlex="100%">
+                <p class="text-sm text-dull text-ilatic mt-10 line-height">
+                  Assign the below Screening Owner to following Verification Reference no.:
+                  <span class="text-bold">{{screeningOwner?.value?.name}}</span>
+                </p>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+              <div fxFlex="100%">
+                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always" autocomplete="off" class="scr-own">
+                  <mat-label></mat-label>
+                  <mat-icon matPrefix>search</mat-icon>
+                  <input matInput placeholder="Find someone" [formControl]="filterOwnerName" type="text" pInputText>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </h1>
+      <mat-dialog-content class="scrollCls">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+            @for (ownerItem of owner | search: [{key: 'name', value: filterOwnerName?.value}]; track ownerItem; let i = $index) {
+              <div class="ownven-list" id="ownerDiv"
+                (click)="assignScrnOwner(ownerItem, i)">
+                <!-- FIX: renamed loop variable from 'owner' to 'ownerItem' to avoid shadowing the component property 'owner' -->
+                <div class="user avatarBg{{(i % 6) + 1}}">
+                  {{(ownerItem.name.split(' ').length - 1) > 0
+                  ? ownerItem.name.split(' ')[0].charAt(0).toUpperCase() + ownerItem.name.split(' ')[1].charAt(0).toUpperCase()
+                  : ownerItem.name.charAt(0).toUpperCase()}}
+                </div>
+                <span [ngClass]="ownerItem.lastLoginFlag === true ? 'pos act' : 'pos inact'">
+                  <i [ngClass]="ownerItem.lastLoginFlag === true ? 'icon-approv' : 'icon-reject'"></i>
+                </span>
+                <div class="ovname">{{ownerItem.name}}</div>
+              </div>
+            }
+          </div>
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+        <button mat-stroked-button (click)="dialogClose()">No</button>
+        <button mat-flat-button color="warn" (click)="submitOwner(screeningOwner.value)">Submit</button>
+      </mat-dialog-actions>
+    </ng-template>
+
+    <!-- Reassign to Original Owner Confirmation Dialog -->
+    <ng-template #assignOrgPopUp>
+      <mat-dialog-content>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <div fxLayout="row">
+              <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15">
+                <img src="assets/images/alert-warning.gif">
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center">
+              <div fxFlex="100%" class="text-center">
+                <h3 class="m-0">Confirmation !</h3>
+                <p class="text-sm">Are you sure you want to Re-Assign the <br> Case to Original Owner?</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="dialogClose()">No</button>
+        <button mat-flat-button color="accent" (click)="submitOrgOwner()">Yes</button>
+      </mat-dialog-actions>
+    </ng-template>

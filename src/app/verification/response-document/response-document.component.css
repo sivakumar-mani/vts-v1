@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i&display=swap');
+
+.add_all
+{
+    position: relative !important;
+    left: initial !important;
+    top: initial !important;
+    bottom:initial !important;
+    z-index: 0 !important;
+}
+.header2
+{
+    display: none !important;
+}
+.height_remove
+{
+    display: none !important;
+}

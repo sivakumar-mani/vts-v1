@@ -1,0 +1,388 @@
+<app-breadcrumb [btnSave]="(isVerification === true || masterService.viewFlag) ? false : true" [btnBack]="true"
+  [btnReset]="(isVerification === true || masterService.viewFlag) ? false : true" [routePath]='routePath'
+  (eventBack)="navigateURL()" (eventSave)="addUpdateEmployerInstution()" (eventReset)="resetFunction()"
+[toolTip]="authService.employerInstutionId > 0? 'Update':'Save'"> </app-breadcrumb>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title> @if (authService.empInsProf === common.SCRN_EMPLOYER_CREATION && !showBulkUpload) {
+      <span>
+        <h1 class="header-title">{{name}} Creation</h1>
+      </span>
+      } @if (authService.empInsProf === common.SCRN_INSTITUTION_CREATION && !showBulkUpload) {
+      <span>
+        <h1 class="header-title">{{name}} Creation</h1>
+      </span>
+      } @if (authService.empInsProf === common.SCRN_PROFESSIONAL_REFERENCE) {
+      <span>
+        <h1 class="header-title">{{name}} Creation</h1>
+      </span>
+      } @if (authService.empInsProf === common.SCRN_LICENSE_CREATION) {
+      <span>
+        <h1 class="header-title">{{name}} Creation</h1>
+      </span>
+      } @if (showBulkUpload) {
+      <span>
+        <h1 class="header-title">Genuine {{label}} - Import</h1>
+      </span>
+    } </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @if (showBulkUpload) {
+      <div class="content-area">
+        <app-bulk-export-import [empIns]="empIns" [verSt]="verSt" (backEvent)="navigateURL()" [isFake]="false"> </app-bulk-export-import>
+      </div>
+    }
+    @if (!showBulkUpload) {
+      <div class="content-area">
+        <form [formGroup]="employerInsutionFormGroup" autocomplete="off" role="presentation">
+          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <div fxLayout="row wrap" fxLayoutGap="20px grid" fxLayout.xs="column">
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>{{placeHolder}}</mat-label>
+                    <input matInput [placeholder]="placeHolder" #empInsProf formControlName="name"
+                      (select)="empInsProf.select()" [matAutocomplete]="auto" (focus)="setItems(empInsProf.value)"
+                      (keyup)="keyUpFunction($event,empInsProf.value)" (input)="setItems(empInsProf.value)"
+                      autocomplete="off" role="presentation" (blur)="checkValidEmpInsData(empInsProf.value, placeHolder)"
+                      required />
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayDataFn">
+                      @for (fake of genuineInsFilterList; track fake) {
+                        <mat-option [value]="fake.name" [disabled]="true"
+                          class="autocom-option autocom-tr"> <span
+                        [innerHTML]="fake.name | highlight: empInsProf.value"></span></mat-option>
+                      }
+                    </mat-autocomplete>
+                    <mat-hint>Seen in letter &amp; post</mat-hint>
+                    @if (!!employerInsutionFormGroup?.get('name')?.errors?.required) {
+                      <mat-error> {{placeHolder}} is
+                      required </mat-error>
+                    }
+                    @if (!!employerInsutionFormGroup?.get('name')?.errors?.incorrect) {
+                      <mat-error> {{placeHolder}} is
+                      already exist, Please try another one</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              @if (authService.empInsProf !== common.SCRN_LICENSE_CREATION) {
+                <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                    <app-phone-dynamic-control [contactForm]="employerInsutionFormGroup"
+                      [contactPhoneFilter]="contactPhoneFilter" [phoneFormArrayName]="'commonPhoneDet'"
+                    [commonContact]="phoneData"></app-phone-dynamic-control>
+                  </div>
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                    <app-email-dynamic-controls [contactForm]="employerInsutionFormGroup" [emailRequired]="false"
+                    [formArrayNanme]="'commonEmailDet'" [commonContact]="emailData" [emailType]="false"> </app-email-dynamic-controls>
+                  </div>
+                </div>
+              }
+              @if ((authService.empInsProf !== common.SCRN_PROFESSIONAL_REFERENCE)) {
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+                  >
+                  @if ((authService.empInsProf !== common.SCRN_LICENSE_CREATION)) {
+                    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"  >
+                      <mat-form-field appearance="outline" fxFlex="100%" fxFlex.sm="93%">
+                        <mat-label>Online URL</mat-label>
+                        <input matInput placeholder="Online URL" formControlName="onlineUrl" name="additionalInfoSub">
+                      </mat-form-field>
+                    </div>
+                  }
+                  @if ((authService.empInsProf !== common.SCRN_LICENSE_CREATION)) {
+                    <div fxFlex="28%" fxFlex.lg="28%" fxFlex.md="28%" fxFlex.sm="50%" fxFlex.xs="100%" >
+                      @if (authService.empInsProf !== common.SCRN_PROFESSIONAL_REFERENCE) {
+                        <mat-form-field appearance="outline" fxFlex="100%">
+                          <mat-label>Mode of Initiation</mat-label>
+                          <mat-select matNativeControl formControlName="modeId" name="modeOfInitiation"
+                            placeholder="Select Mode of Initiation">
+                            @for (initiationMode of modeofInitiation; track initiationMode) {
+                              <mat-option [value]="initiationMode.lookUpId"> {{ initiationMode.lookUpName }} </mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                      }
+                    </div>
+                  }
+                  <div fxFlex="37%" fxFlex.lg="37%" fxFlex.md="37%" fxFlex.sm="50%" fxFlex.xs="100%">
+                    @if (authService.empInsProf === common.SCRN_INSTITUTION_CREATION) {
+                      <mat-form-field appearance="outline" fxFlex="100%" fxFlex.sm="93%"
+                        >
+                        <mat-label>Institution Type</mat-label>
+                        <mat-select matNativeControl formControlName="institutionTypeId" name="institutionType"
+                          placeholder="Select Institution Type">
+                          @for (inst of institutionType; track inst) {
+                            <mat-option [value]="inst.lookUpId"> {{ inst.lookUpName }} </mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    }
+                  </div>
+                </div>
+              }
+              @if (authService.empInsProf !== common.SCRN_LICENSE_CREATION) {
+                <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Additional Info Main</mat-label>
+                      <textarea matInput placeholder="Additional Info Main" #mainMsg maxlength="200"
+                      formControlName="additionalInformation" name="additionalInfoMain"></textarea>
+                      <mat-hint class="f-13"> ({{mainMsg.value.length}} /200 max) </mat-hint>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Additional Info Sub</mat-label>
+                      <textarea matInput placeholder="Additional Info Sub" #subMsg maxlength="200"
+                      formControlName="additionalInformationSub" name="additionalInfoSub"></textarea>
+                      <mat-hint class="f-13"> ({{subMsg.value.length}} /200 max) </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+              }
+              @if (authService.empInsProf === common.SCRN_EMPLOYER_CREATION) {
+                <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>CIN</mat-label>
+                      <input matInput placeholder="CIN" formControlName="cin" maxlength="75">
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>ROC</mat-label>
+                      <input matInput placeholder="ROC" formControlName="roc" maxlength="75">
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Date Of Registration</mat-label>
+                      <input matInput [matDatepicker]="sampledatePicker" formControlName="dateOfRegistration"
+                        placeholder="Date Of Registration" (focus)="sampledatePicker.open()"/>
+                      <mat-datepicker-toggle matSuffix [for]="sampledatePicker">
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #sampledatePicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+          @if (authService.empInsProf !== common.SCRN_LICENSE_CREATION) {
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+              <div fxFlex="100%">
+                <h3 class="sub-header">Contact Details</h3>
+              </div>
+            </div>
+          }
+          @if (authService.empInsProf !== common.SCRN_LICENSE_CREATION) {
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="20px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Contact Person 1</mat-label>
+                  <input matInput placeholder="Contact Person 1" formControlName="contactPerson1" maxlength="75">
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Designation 1</mat-label>
+                  <input matInput placeholder="Designation 1" formControlName="designation1" maxlength="75">
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Department 1</mat-label>
+                  <input matInput placeholder="Department 1" formControlName="department1" maxlength="75">
+                </mat-form-field>
+              </div>
+            </div>
+          }
+          @if (authService.empInsProf !== common.SCRN_LICENSE_CREATION) {
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="20px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Contact Person 2</mat-label>
+                  <input matInput placeholder="Contact Person 2" formControlName="contactPerson2" maxlength="75">
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Designation 2</mat-label>
+                  <input matInput placeholder="Designation 2" formControlName="designation2" maxlength="75">
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Department 2</mat-label>
+                  <input matInput placeholder="Department 2" formControlName="department2" maxlength="75">
+                </mat-form-field>
+              </div>
+            </div>
+          }
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+            <div fxFlex="100%">
+              <h3 class="sub-header">Address Details</h3>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="0px">
+            <div fxFlex="100%">
+              <app-address [addressList]="address" [addressformgrp]="employerInsutionFormGroup"></app-address>
+            </div>
+          </div>
+        </form>
+      </div>
+    }
+  </mat-card-content>
+</mat-card>
+<ng-template #searchMasterScreen class="warning-digBox">
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">Existing Data Match Found</h3>
+            <span> @if (soundexEmpInsProfList?.length !== 0) {
+              <span>
+                <p class="text-sm"><b>These are the matching {{name}} list</b></p>
+                <div class="mt-15">
+                  <div fxFlex="100%">
+                    <p-table
+                      #dt
+                      [columns]="displayColumns"
+                      [value]="soundexEmpInsProfList"
+                      [scrollable]="true"
+                      [resizableColumns]="true"
+                      [reorderableColumns]="true"
+                      [paginator]="true"
+                      [rows]="10">
+                      <!-- ================= COLGROUP ================= -->
+                      <ng-template pTemplate="colgroup" let-colGroupCols>
+                        <colgroup>
+                        @for (col of colGroupCols; track col) {
+                          <col style="width:150px" />
+                        }
+                      </colgroup>
+                    </ng-template>
+                    <!-- ================= HEADER ================= -->
+                    <ng-template pTemplate="header" let-headerCols>
+                      <tr>
+                        @for (col of headerCols; track col) {
+                          <th
+                            [pSortableColumn]="col.field"
+                            pResizableColumn
+                            pReorderableColumn>
+                            <div class="thname"
+                              matTooltip="{{ col.header }}"
+                              matTooltipClass="accent-tooltip">
+                              {{ col.header }}
+                            </div>
+                            <p-sortIcon
+                              [field]="col.field"
+                              ariaLabel="Activate to sort"
+                              ariaLabelDesc="Activate to sort in descending order"
+                              ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                          </th>
+                        }
+                      </tr>
+                    </ng-template>
+                    <!-- ================= BODY ================= -->
+                    <ng-template
+                      pTemplate="body"
+                      let-rowData
+                      let-index="rowIndex"
+                      let-bodyCols="columns">
+                      <tr>
+                        @for (col of bodyCols; track col) {
+                          <td
+                            matTooltip="{{ rowData[col.field] }}"
+                            matTooltipClass="accent-tooltip"
+                            [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                            <!-- NORMAL FIELDS -->
+                            @if (col.field !== 'active') {
+                              <div>
+                                {{ rowData[col.field] }}
+                              </div>
+                            }
+                            <!-- ACTIVE FLAG -->
+                            @if (col.field === 'active') {
+                              <div>
+                                <div fxLayout="row" class="tbl-icon">
+                                  <div fxFlex="100%" fxLayoutGap="10px">
+                                    @if (rowData.active === true) {
+                                      <span class="istrue">
+                                        <i class="material-icons"
+                                          matTooltip="Active"
+                                          matTooltipClass="accent-tooltip">
+                                          thumb_up
+                                        </i>
+                                      </span>
+                                    }
+                                    @if (rowData.active === false) {
+                                      <span class="isfalse">
+                                        <i class="material-icons"
+                                          matTooltip="In-Active"
+                                          matTooltipClass="accent-tooltip">
+                                          thumb_down
+                                        </i>
+                                      </span>
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+                            }
+                          </td>
+                        }
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                  <div class="cus-paginator" [ngClass]="{'empty-record': soundexEmpInsProfList.length == 0}">
+                    <div fxLayout="">
+                      <div fxFlex="30%"> Showing {{ dt.totalRecords
+                        < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                        <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of
+                      {{ dt.totalRecords }} record(s) </div>
+                      <span fxFlex></span>
+                      <div fxFlex="50%" fxLayoutAlign="end center"> <a
+                            [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                                            navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                                          "> <i class="icicon-control-start mr-5"></i></a> <span
+                        class="gotopagbg mr-2 ml-2">Go
+                        to Page<span class="input-num">
+                        <input type="number" #pageNo min="1" [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                          [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                        </span></span> <span class="mr-2">Of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
+                            [ngClass]="
+                                            dt.rows + dt.first >= dt.totalRecords
+                                              ? 'page-btn disabled'
+                                              : 'page-btn'
+                                          " (click)="
+                                            dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                                            navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                                          "><i class="icon-control-end ml-5"></i></a> </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-sm">Do you want to get approve for - <b>{{searchName}}...?</b></p>
+              </span>
+            }
+            @if (soundexEmpInsProfList?.length === 0) {
+              <p class="text-sm">No existing data found do you want to get
+                approve for - <b>{{searchName}}...?</b></p>
+              }
+            </span> </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+      <button mat-flat-button color="accent" (click)="onSave()">Yes</button>
+      <button mat-flat-button color="warn" (click)="onCancel()">No</button>
+    </mat-dialog-actions>
+  </ng-template>

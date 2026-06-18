@@ -1,0 +1,148 @@
+<form [formGroup]="mainForm" autocomplete="off" role="presentation">
+  <app-common-base-info [mainForm]="mainForm" [compBaseDetails]="compBaseDetails" [formgroupName]="'screeningComponentInfo'" (emitNotappChange)="notApplicable($event)" [showNotApplicable]="showNotApplicable">
+  </app-common-base-info>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroupName]="formgroupName">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Address Check Type</mat-label>
+        <mat-select placeholder="Address Check Type" required formControlName="addressTypeCheckLookupId" (selectionChange)="addCheckChange(mainForm?.get(formgroupName+'.addressTypeCheckLookupId').value,true)">
+          @for (priority of screeningService.addressType; track priority) {
+            <mat-option [value]="priority.lookUpId" [disabled]="getcriminaldata(priority.lookUpId)">
+            {{priority.lookUpName}} </mat-option>
+          }
+        </mat-select>
+        @if (!!mainForm?.get(formgroupName+'.addressTypeCheckLookupId')?.errors?.required) {
+          <mat-error> Address check type is required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+      [formGroupName]="formgroupName">
+      <div fxFlex="100%">
+        @if (userData.applicationId === 3 && this.common.candidateCountryId !== 92) {
+          <div fxflex="100%"
+            >
+            <mat-label class="lbl">Any Government ID proof with full address</mat-label>
+            <mat-radio-group formControlName="isDirectAppDocReq" aria-label="Select an option"
+              fxLayoutGap="20px" (change)="CheckDoc($event)" required>
+              <mat-radio-button [value]="true" fxLayoutGap="20px">Yes</mat-radio-button>
+              <mat-radio-button [value]="false" fxLayoutGap="20px">No</mat-radio-button>
+            </mat-radio-group>
+            @if (mainForm?.get(formgroupName)?.get('isDirectAppDocReq')?.errors?.required
+              && mainForm?.get(formgroupName)?.get('isDirectAppDocReq')?.touched) {
+              <mat-error>
+                Please Select One Choice
+              </mat-error>
+            }
+          </div>
+        }
+      </div>
+    </div>
+    @if (sameCurrentadd===true && userData.applicationId ===3 ) {
+      <div [formGroupName]="formgroupName" fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%" Class="mb-25">
+        <mat-label class="lbl">As Same Address</mat-label>
+        <!-- [disabled]="checkBoxdis!=true " -->
+        <mat-checkbox formControlName="checkPermanentAddress" (change)="chengeAddress($event)">Permanent Address Same As Current Address?
+        </mat-checkbox>
+      </div>
+    }
+  </div>
+  @for (item of [].constructor(this.mainForm.get('criminalCheckCount').value); track item; let i = $index) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <h3 class="sub-header">Address {{i+1}}</h3>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" [formGroup]="getAddressForm(i)">
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroupName]="'address'+i">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Address Type</mat-label>
+              <mat-select placeholder="Address Type" formControlName="addressTypeLookupId" (selectionChange)="disableAddressType(i)">
+                @for (priority of addressTypeList[i]; track priority) {
+                  <mat-option [disabled]="i ===0 || priority.disabled" [value]="priority.lookUpId">
+                  {{priority.lookUpName}} </mat-option>
+                }
+              </mat-select>
+              @if (!!mainForm?.get(formgroupName+'.addressTypeLookupId')?.errors?.required) {
+                <mat-error>
+                Address type is required </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="100%">
+            <app-address [addressList]="address[i]" [compId]="mainForm?.value?.screeningComponentInfo?.compId" [addressformgrp]="getCompForm()" [formgroupName]="'address'+i">
+            </app-address>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  <div fxLayout="row" fxLayoutGap="20px" class="mb-10">
+    <div fxFlex="100%">
+      <app-common-custom-fields [mainForm]="mainForm" [formArrName]="'componentCustomFields'"></app-common-custom-fields>
+    </div>
+  </div>
+
+  @if ((mainForm?.get('miscQuestion')?.value?.length ===0 || !mainForm?.get('miscQuestion')) && userData.applicationId !== 3) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <a class="text-sm mb-15" (click)="createMisc()" [ngClass]="!!mainForm?.get('screeningComponentInfo').disabled?'page-btn disabled':''">
+        <i class="icon-plus-circle mr-5"></i> Click here to add miscellaneous fields</a>
+      </div>
+    }
+    @if (mainForm?.get('miscQuestion')&& userData.applicationId !== 3) {
+      <div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <app-common-ques-ans [mainForm]="mainForm" [formArrName]="'miscQuestion'" [miscHint]="miscHint" [miscType]="'textarea'">
+            </app-common-ques-ans>
+          </div>
+        </div>
+      </div>
+    }
+    @if (!fileBtn) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroupName]="'screeningComponentInfo'">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Remarks</mat-label>
+            <textarea #remark formControlName="remark" maxlength="1000" matInput placeholder="Remarks"> </textarea>
+            <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
+          </mat-form-field>
+        </div>
+        @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length) {
+          <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%" [formGroupName]="'screeningComponentInfo'">
+            <mat-label class="lbl">Choose</mat-label>
+            <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise Insufficiency</mat-checkbox>
+          </div>
+        }
+      </div>
+    }
+
+    @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <div class="alert alert-info" role="alert">
+            <h4>Insufficiency Clearance Remarks: </h4>
+            @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+              <span>
+                {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+              }
+            </div>
+          </div>
+        </div>
+      }
+      @if (showInSuff) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <app-common-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm" [compBaseDetails]="mainForm.get('screeningComponentInfo').value" [formgroupName]="'screeningInsufficiency'">
+            </app-common-raise-insufficiency>
+          </div>
+        </div>
+      }
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <app-client-app-document-upload [fileBtn]="fileBtn" [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'" [dupScreeningDoc]="screeningComponent.componentDocument" [validationFlag]="nFlag !== true"></app-client-app-document-upload>
+        </div>
+      </div>
+    </form>
+
+    <!-- {{mainForm.value | json}} -->

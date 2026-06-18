@@ -1,0 +1,520 @@
+<app-breadcrumb [routePath]='routePath' [btnBack]="btnBack" (eventBack)="backevent()" [btnResetTbl]="btnResetTbl"
+  (eventResetTbl)="resetTbl()" [btnExportDisabled] ="!screenAuth.exportFlag" [btnExcelExport]="btnExcelExport" (eventExcelExport)="exportAsExcelFile()"
+  [btnDownLoad]="btnDownLoad" (eventDownload)="pdf.saveAs(this.dataValue);downloadSupportingDoc()" [btnSend]="btnSend"
+  (eventSend)="saveStatus()"  (eventApprove)="saveStatus()"[toolTip]="toolTip">
+</app-breadcrumb>
+<mat-card>
+  <div fxLayout="row">
+    <mat-card-header fxFlex="100%">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+          fxLayoutGap="10px">
+          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+            fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+            <mat-card-title>
+              <h1 class="header-title">Manage Invitation</h1>
+            </mat-card-title>
+          </div>
+          <span fxFlex></span>
+          <div *ngIf="editClick" fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+            fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+            <div class="tbl-commonsearch">
+              <mat-form-field fxFlex="100%">
+                <mat-label></mat-label>
+                <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                <input #global matInput placeholder="Search here..." type="text" pInputText size="50" autocomplete="off"
+                (blur)="globalSearch(global.value)" [(ngModel)]="searchValue" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-header>
+  </div>
+  <div fxLayout="row">
+    <mat-card-content fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+        <div fxFlex="100%" *ngIf="editClick" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <p-table #dt [columns]="manageColumns" [totalRecords]="totalpages" [value]="manageInviteList" [scrollable]="true" scrollHeight=""
+            [paginator]="true" [rows]="itemPerPage" [resizableColumns]="true" columnResizeMode="expand" [lazy]="true" (onLazyLoad)="LoadHistory($event)"
+            [reorderableColumns]="true" frozenWidth="220px"
+            [frozenColumns]="frozenCols" [(selection)]="selectedList">
+            <ng-template pTemplate="colgroup" let-columns>
+              <colgroup>
+                <col *ngFor="let col of columns" style="width:200px"
+                  [style.width]="col.field === 'check'? '75px' : col.field !== 'componentName' ? '200px' : '550px'" />
+              </colgroup>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns let-rowData>
+              <tr>
+                <th *ngFor="let col of columns" pReorderableColumn [ngSwitch]="col.field">
+                  <span *ngIf="col.field === 'check' && headerFlag === true">
+                    <p-tableHeaderCheckbox #check (click)="selectedHead(check)"></p-tableHeaderCheckbox>
+                  </span>
+                  <div class="thname"> {{col.header}} </div>
+                  <span [pSortableColumn]="col.field">
+                    <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                      ariaLabelDesc="Activate to sort in descending order"
+                      ariaLabelAsc="Activate to sort in ascending order"> </p-sortIcon>
+                  </span>
+                  <!-- <span class="ico-fieldsearch">
+                    <i *ngSwitchCase="'invitationStatus'" class="icon-search2" matTooltip="Search"
+                      matTooltipClass="accent-tooltip" (click)="statusTrigger.openMenu()"></i>
+                    <i *ngSwitchCase="'clientReferenceNo'" class="icon-search2" matTooltip="Search"
+                      matTooltipClass="accent-tooltip" (click)="referencenumberTrigger.openMenu()"></i>
+                    <i *ngSwitchCase="'clientName'" class="icon-search2" matTooltip="Search"
+                      matTooltipClass="accent-tooltip" (click)="clientNameTrigger.openMenu()"></i>
+                    <i *ngSwitchCase="'firstName'" class="icon-search2" matTooltip="Search"
+                      matTooltipClass="accent-tooltip" (click)="candidateNameTrigger.openMenu()"></i>
+                    <i *ngSwitchCase="'invitationSendDate'" class="icon-search2" matTooltip="Search"
+                      matTooltipClass="accent-tooltip" (click)="caseInitiationTrigger.openMenu()"></i>
+                      <i *ngSwitchCase="'invitationExpiryDate'" class="icon-search2" matTooltip="Search"
+                      matTooltipClass="accent-tooltip" (click)="expiryTrigger.openMenu()"></i>
+                    <i *ngSwitchCase="'emailId'" class="icon-search2" matTooltip="Search"
+                      matTooltipClass="accent-tooltip" (click)="emailTrigger.openMenu()"></i></span> -->
+                  <span *ngSwitchCase="'clientReferenceNo'">
+                    <div matTooltip="client Reference Number" matTooltipClass="accent-tooltip"
+                      #referencenumberTrigger="matMenuTrigger" [matMenuTriggerFor]="clientReferenceNoCtrl"
+                      fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                    <mat-menu #clientReferenceNoCtrl class="pos-top">
+                      <div fxLayout="row">
+                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                          <mat-form-field (click)="$event.stopPropagation()">
+                            <input type="text" #clientReferenceNoCtl matInput [matAutocomplete]="autoclientReferenceNo"
+                              placeholder="client Reference Number" autocomplete="off" role="presentation"
+                              (click)="clientReferenceNoCtl.select()" [formControl]="referencenumberCtrl"
+                              (change)="dt.filter($event.target.value, col.field, 'contains')"
+                              (blur)="dt.filter($event.target.value, col.field, 'contains')"
+                              (focusin)="dt.filter($event.target.value, col.field, 'contains')"
+                              (keyup)="dt.filter($event.target.value, col.field, 'contains')" />
+                          </mat-form-field>
+                          <mat-autocomplete #autoclientReferenceNo="matAutocomplete">
+                            <mat-option (onSelectionChange)="referencenumberTrigger.closeMenu()"
+                              *ngFor="let option of (referencenumberFilteredOptions | async)" [value]="option"> <span
+                                [innerHTML]="option"></span> </mat-option>
+                          </mat-autocomplete>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                        <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                          <a *ngIf="clientReferenceNoCtl.value" (click)="
+                          dt.filter('', col.field, 'contains');" class="text-sm">Reset</a> </div>
+                      </div>
+                    </mat-menu>
+                  </span>
+                  <span *ngSwitchCase="'clientName'">
+                    <div matTooltip="client Name" matTooltipClass="accent-tooltip" #clientNameTrigger="matMenuTrigger"
+                      [matMenuTriggerFor]="clientnameCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                      class="txtborder-bot"></div>
+                    <mat-menu #clientnameCtrl class="pos-top">
+                      <div fxLayout="row">
+                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                          <mat-form-field (click)="$event.stopPropagation()">
+                            <input type="text" #clientnameCtl matInput [matAutocomplete]="autoclientName"
+                              placeholder="client Name" autocomplete="off" role="presentation"
+                              (click)="clientnameCtl.select()" [formControl]="clientNameCtrl"
+                              (change)="dt.filter($event.target.value, col.field, 'contains')"
+                              (blur)="dt.filter($event.target.value, col.field, 'contains')"
+                              (focusin)="dt.filter($event.target.value, col.field, 'contains')"
+                              (keyup)="dt.filter($event.target.value, col.field, 'contains')" />
+                          </mat-form-field>
+                          <mat-autocomplete #autoclientName="matAutocomplete">
+                            <mat-option (onSelectionChange)="clientNameTrigger.closeMenu()"
+                              *ngFor="let option of (clientNamesFilteredOptions | async)" [value]="option"> <span
+                                [innerHTML]="option"></span> </mat-option>
+                          </mat-autocomplete>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                        <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                          <a *ngIf="clientnameCtl.value" (click)="
+                            dt.filter('', col.field, 'contains');" class="text-sm">Reset</a> </div>
+                      </div>
+                    </mat-menu>
+                  </span>
+                  <span *ngSwitchCase="'emailId'">
+                    <div matTooltip="Email Id" matTooltipClass="accent-tooltip" #emailTrigger="matMenuTrigger"
+                      [matMenuTriggerFor]="emailCtrls" fxLayout="row" fxLayoutAlign="space-between center"
+                      class="txtborder-bot"></div>
+                    <mat-menu #emailCtrls class="pos-top">
+                      <div fxLayout="row">
+                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                          <mat-form-field (click)="$event.stopPropagation()">
+                            <input type="text" #emailCtl matInput [matAutocomplete]="autoEmail"
+                              placeholder="Email Id" autocomplete="off" role="presentation"
+                              (click)="emailCtl.select()" [formControl]="emailCtrl"
+                              (change)="dt.filter($event.target.value, col.field, 'contains')"
+                              (blur)="dt.filter($event.target.value, col.field, 'contains')"
+                              (focusin)="dt.filter($event.target.value, col.field, 'contains')"
+                              (keyup)="dt.filter($event.target.value, col.field, 'contains')" />
+                          </mat-form-field>
+                          <mat-autocomplete #autoEmail="matAutocomplete">
+                            <mat-option (onSelectionChange)="emailTrigger.closeMenu()"
+                              *ngFor="let option of (emailFilteredOptions | async)" [value]="option"> <span
+                                [innerHTML]="option"></span> </mat-option>
+                          </mat-autocomplete>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                        <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                          <a *ngIf="emailCtl.value" (click)="
+                            dt.filter('', col.field, 'contains');" class="text-sm">Reset</a> </div>
+                      </div>
+                    </mat-menu>
+                  </span>
+                  <span *ngSwitchCase="'firstName'">
+                    <div matTooltip="candidate Name" matTooltipClass="accent-tooltip"
+                      #candidateNameTrigger="matMenuTrigger" [matMenuTriggerFor]="candidatenameCtrl" fxLayout="row"
+                      fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                    <mat-menu #candidatenameCtrl class="pos-top">
+                      <div fxLayout="row">
+                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                          <mat-form-field (click)="$event.stopPropagation()">
+                            <input type="text" #candidatenameCtl matInput [matAutocomplete]="autocandidateName"
+                              placeholder="candidate Name" autocomplete="off" role="presentation"
+                              (click)="candidatenameCtl.select()" [formControl]="candidateNameCtrl"
+                              (change)="dt.filter($event.target.value, col.field, 'contains')"
+                              (blur)="dt.filter($event.target.value, col.field, 'contains')"
+                              (focusin)="dt.filter($event.target.value, col.field, 'contains')"
+                              (keyup)="dt.filter($event.target.value, col.field, 'contains')" />
+                          </mat-form-field>
+                          <mat-autocomplete #autocandidateName="matAutocomplete">
+                            <mat-option (onSelectionChange)="candidateNameTrigger.closeMenu()"
+                              *ngFor="let option of (candidateNameFilteredOptions | async)" [value]="option"> <span
+                                [innerHTML]="option"></span> </mat-option>
+                          </mat-autocomplete>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                        <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                          <a *ngIf="candidatenameCtl.value" (click)="
+                              dt.filter('', col.field, 'contains');" class="text-sm">Reset</a> </div>
+                      </div>
+                    </mat-menu>
+                  </span>
+                  <span *ngSwitchCase="'invitationStatus'">
+                    <div matTooltip="Status" matTooltipClass="accent-tooltip" #statusTrigger="matMenuTrigger"
+                      [matMenuTriggerFor]="statusnameCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                      class="txtborder-bot"></div>
+                    <mat-menu #statusnameCtrl class="pos-top">
+                      <div fxLayout="row">
+                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                          <mat-form-field (click)="$event.stopPropagation()">
+                            <input type="text" #statusnameCtl matInput [matAutocomplete]="autostatusName"
+                              placeholder="Status" autocomplete="off" role="presentation"
+                              (click)="statusnameCtl.select()" [formControl]="statusCtrl"
+                              (change)="dt.filter($event.target.value, col.field, 'contains')"
+                              (blur)="dt.filter($event.target.value, col.field, 'contains')"
+                              (focusin)="dt.filter($event.target.value, col.field, 'contains')"
+                              (keyup)="dt.filter($event.target.value, col.field, 'contains')" />
+                          </mat-form-field>
+                          <mat-autocomplete #autostatusName="matAutocomplete">
+                            <mat-option (onSelectionChange)="statusTrigger.closeMenu()"
+                              *ngFor="let option of statusFilteredOptions | async" [value]="option"> <span
+                                [innerHTML]="option"></span> </mat-option>
+                          </mat-autocomplete>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                        <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                          <a *ngIf="statusnameCtl.value" (click)="
+                                dt.filter('', col.field, 'contains');" class="text-sm">Reset</a> </div>
+                      </div>
+                    </mat-menu>
+                  </span>
+                  <span *ngSwitchCase="'invitationSendDate'">
+                    <div matTooltip="Invitation Send Date" matTooltipClass="accent-tooltip"
+                      #caseInitiationTrigger="matMenuTrigger" [matMenuTriggerFor]="caseReceivedDateCtrl" fxLayout="row"
+                      fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                    <mat-menu #caseReceivedDateCtrl class="pos-top">
+                      <div fxLayout="row">
+                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                          <mat-form-field>
+                            <input matInput [(ngModel)]='fromDateTime' [max]="toDateTime" placeholder="From Date & Time"
+                              [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1">
+                            <owl-date-time [pickerMode]="'popup'" #dt1></owl-date-time>
+                          </mat-form-field>
+                          <mat-form-field>
+                            <input matInput [(ngModel)]='toDateTime' [min]="fromDateTime" placeholder="To Date & Time"
+                              [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2">
+                            <owl-date-time [pickerMode]="'popup'" #dt2></owl-date-time>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                        <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm"
+                            *ngIf="fromDateTime!=='' && toDateTime!=='' "
+                            (click)="getRecordBydate(fromDateTime,toDateTime, 'send')">Search</a> <a
+                            class="text-sm">Cancel</a> <a class="text-sm" *ngIf="fromDateTime!=='' && toDateTime!=='' "
+                            (click)="resetDate()">Reset</a> </div>
+                      </div>
+                    </mat-menu>
+                  </span>
+                  <span *ngSwitchCase="'invitationExpiryDate'">
+                    <div matTooltip="Invitation Expiry Date" matTooltipClass="accent-tooltip"
+                      #expiryTrigger="matMenuTrigger" [matMenuTriggerFor]="expiryDateCtrl" fxLayout="row"
+                      fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                    <mat-menu #expiryDateCtrl class="pos-top">
+                      <div fxLayout="row">
+                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                          <mat-form-field>
+                            <input matInput [(ngModel)]='fromDateTime' [max]="toDateTime" placeholder="From Date & Time"
+                              [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1">
+                            <owl-date-time [pickerMode]="'popup'" #dt1></owl-date-time>
+                          </mat-form-field>
+                          <mat-form-field>
+                            <input matInput [(ngModel)]='toDateTime' [min]="fromDateTime" placeholder="To Date & Time"
+                              [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2">
+                            <owl-date-time [pickerMode]="'popup'" #dt2></owl-date-time>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                        <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm"
+                            *ngIf="fromDateTime!=='' && toDateTime!=='' "
+                            (click)="getRecordBydate(fromDateTime,toDateTime, 'expiry')">Search</a> <a
+                            class="text-sm">Cancel</a> <a class="text-sm" *ngIf="fromDateTime!=='' && toDateTime!=='' "
+                            (click)="resetDate()">Reset</a> </div>
+                      </div>
+                    </mat-menu>
+                  </span>
+                </th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+              <tr>
+                <td *ngFor="let col of columns; let i = index" [ngSwitch]="col.field"
+                  [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                  <div *ngSwitchCase="'clientReferenceNo'" matTooltip="{{rowData.clientReferenceNo}}" matTooltipClass="accent-tooltip"> {{rowData.clientReferenceNo}} </div>
+                  <div *ngSwitchCase="'applicationId'" matTooltip="{{rowData.applicationId}}" matTooltipClass="accent-tooltip"> {{rowData.applicationId}} </div>
+                  <div *ngSwitchCase="'clientName'" matTooltip="{{rowData.clientName}}" matTooltipClass="accent-tooltip"> {{rowData.clientName}} </div>
+                  <div *ngSwitchCase="'firstName'" matTooltip="{{rowData.firstName}}" matTooltipClass="accent-tooltip">
+                    {{rowData.firstName}} </div>
+                  <div *ngSwitchCase="'emailId'" matTooltip="{{rowData.emailId ? rowData.emailId : 'N/A'}}" matTooltipClass="accent-tooltip">
+                    {{rowData.emailId ? rowData.emailId : 'N/A'}} </div>
+					   <div *ngSwitchCase="'phoneNo'" matTooltip="{{rowData.phoneNo ? rowData.phoneNo : 'N/A'}}" matTooltipClass="accent-tooltip">
+                    {{rowData.phoneNo ? rowData.phoneNo : 'N/A'}} </div>
+				   <div *ngSwitchCase="'submittedDate'">
+                      {{rowData.submittedDate ? (common.getTimezoneOffset( rowData.submittedDate, false) |date : 'dd/MM/yyyy  hh:mm:ss a' ) : 'N/A'}}
+                    </div>
+                    <div *ngSwitchCase="'componentName'" matTooltip="{{rowData.componentName ? rowData.componentName : 'N/A'}}" matTooltipClass="accent-tooltip">
+                      {{rowData.componentName ? rowData.componentName : 'N/A'}} </div>
+					  	<div *ngSwitchCase="'packageName'" matTooltip="{{rowData.packageName ? rowData.packageName : 'N/A'}}" matTooltipClass="accent-tooltip">
+                    {{rowData.packageName ? rowData.packageName : 'N/A'}} </div>
+                    <div *ngSwitchCase="'userName'" matTooltip="{{rowData.userName ? rowData.userName : 'N/A'}}" matTooltipClass="accent-tooltip">
+                      {{rowData.userName ? rowData.userName : 'N/A'}} </div>
+                      <div *ngSwitchCase="'cancelUserName'" matTooltip="{{rowData.cancelUserName ? rowData.cancelUserName : 'N/A'}}" matTooltipClass="accent-tooltip">
+                        {{rowData.cancelUserName ? rowData.cancelUserName : 'N/A'}} </div>
+                  <div *ngSwitchCase="'invitationSendDate'">
+                    {{common.getTimezoneOffset(rowData.invitationSendDate, false) |date : 'dd/MM/yyyy  hh:mm:ss a'}}
+                  </div>
+                  <div *ngSwitchCase="'invitationExpiryDate'">
+                    {{common.getTimezoneOffset(rowData.invitationExpiryDate, false) | date : 'dd/MM/yyyy  hh:mm:ss a'}}
+                  </div>
+                  <div *ngSwitchCase="'dateOfJoining'">
+                    {{rowData.dateOfJoining ? (common.getTimezoneOffset(rowData.dateOfJoining, false) | date : 'dd/MM/yyyy') : 'N/A'}}
+                  </div>
+                  <div *ngSwitchCase="'invitationStatus'" matTooltip="{{rowData.invitationStatus}}" matTooltipClass="accent-tooltip"> {{rowData.invitationStatus}} </div>
+                  <div *ngIf='col.field === "action"' width='300px' fxLayout="row" class="desg-icon">
+                    <div fxFlex="100%" fxLayoutGap="10px">
+                      <mat-icon *ngIf='(rowData.invitationStatus === "Sent" || rowData.invitationStatus !== "Cancel Invitation" || rowData.invitationStatus === "Expired" || rowData.invitationStatus === "In Progress") &&
+                    (userData.subTeamName !== "DEPreQC")'>
+                        <i matTooltip='View' matTooltipClass="accent-tooltip"
+                          (click)="editInvitation(rowData,manageTemplate ,'View')"
+                          class="material-icons material-icons-outlined ">remove_red_eye</i> </mat-icon>
+                      <mat-icon  [ngClass]="screenAuth.approvalFlag === false  ? 'page-btn disabled': ''" *ngIf='(rowData.invitationStatus === "Approved" || rowData.invitationStatus === "Completed" || 
+                    rowData.invitationStatus === "Rejected" || rowData.invitationStatus === "OnHold" || 
+                    rowData.invitationStatus === "Stop"
+                    )'>
+                        <i matTooltip='View/Download' matTooltipClass="accent-tooltip"
+                          (click)="editInvitation(rowData, manageTemplate ,'View/Download');"
+                          class="material-icons material-icons-outlined">cloud_download</i> </mat-icon>
+                      <mat-icon  [ngClass]="screenAuth.approvalFlag === false  ? 'page-btn disabled': ''"
+                        *ngIf='(rowData.invitationStatus === "Completed" || rowData.invitationStatus === "OnHold") &&  userData.subTeamName !== "CRTScopeCreation"'>
+                        <i matTooltip='Approve' matTooltipClass="accent-tooltip"
+                          (click)="editInvitation(rowData,manageTemplate ,'Approve')"
+                          class="material-icons material-icons-outlined">check_circle_outline</i> </mat-icon>
+                      <!-- <mat-icon *ngIf='((rowData.invitationStatus === "Completed" && isStopped === false) || rowData.invitationStatus === "Stop") &&  userData.subTeamName !== "CRTScopeCreation"'><i class="icon-reject"
+                      matTooltipClass="accent-tooltip" matTooltip='Reject' (click)="editInvitation(rowData,rejectedComments ,'Rejected')"></i> </mat-icon> -->
+                      <mat-icon [ngClass]="screenAuth.editFlag === false  ? 'page-btn disabled': ''"
+                        *ngIf='(rowData.invitationStatus === "Completed" && isStopped === false && !rowData.invitationExpiryLookupName) && userData.subTeamName !== "CRTScopeCreation"'>
+                        <i class="material-icons-outlined" matTooltipClass="accent-tooltip" matTooltip='Stop'
+                          (click)="rsInvitation('Stop', rowData)">stop_circle</i> </mat-icon>
+                      <mat-icon  [ngClass]="screenAuth.editFlag === false  ? 'page-btn disabled': ''" *ngIf='(rowData.invitationStatus === "Stop")'><i class="icon-play"
+                          matTooltipClass="accent-tooltip" matTooltip='Resume'
+                          (click)="editInvitation(rowData,manageTemplate ,'Approve')"></i> </mat-icon>
+                      <!-- <mat-icon *ngIf='(rowData.invitationStatus === "Completed"  && isStopped === true)'><i class="icon-close"
+                      matTooltipClass="accent-tooltip" matTooltip='Cancel Internally' (click)="editInvitation(rowData, manageTemplate ,'Cancel')"></i> </mat-icon> -->
+
+                      <mat-icon [ngClass]="screenAuth.editFlag === false  ? 'page-btn disabled': ''"
+                        *ngIf='(rowData.invitationStatus === "Sent" && userData.subTeamName !== "DEPreQC") &&  userData.subTeamName !== "CRTScopeCreation"'>
+                        <i matTooltip='Resend' matTooltipClass="accent-tooltip"
+                          (click)="editInvitation(rowData,manageTemplate ,'Resend')" class="icon-action-redo"> </i>
+                      </mat-icon>
+                      <mat-icon  [ngClass]="screenAuth.editFlag === false  ? 'page-btn disabled': ''"
+                        *ngIf='(rowData.invitationStatus === "Expired") && userData.subTeamName !== "DEPreQC" &&  userData.subTeamName !== "CRTScopeCreation"'>
+                        <i matTooltip='Reopen' matTooltipClass="accent-tooltip"
+                          (click)="editInvitation(rowData, manageTemplate ,'Reopen')"
+                          class="material-icons material-icons-outlined">menu_open</i> </mat-icon>
+                      <mat-icon  [ngClass]="screenAuth.editFlag === false  ? 'page-btn disabled': ''" *ngIf='(rowData.invitationStatus === "Sent" || rowData.invitationStatus === "In Progress" || 
+                     rowData.invitationStatus === "Stop")
+                    && userData.subTeamName !== "DEPreQC" &&  userData.subTeamName !== "CRTScopeCreation"'>
+                        <i matTooltip='Cancel' matTooltipClass="accent-tooltip"
+                          (click)="editInvitation(rowData, manageTemplate ,'Cancel')"
+                          class="material-icons material-icons-outlined">cancel</i> </mat-icon>
+                      <mat-icon  *ngIf='(rowData.invitationStatus === "Approved" ||  rowData.invitationStatus === "Cancel Invitation" || rowData.invitationStatus === "Completed" || 
+                      rowData.invitationStatus === "In Progress" || rowData.invitationStatus === "Rejected" || rowData.invitationStatus === "OnHold" || rowData.invitationStatus === "Stop") && 
+                      userData.subTeamName !== "DEPreQC" &&   userData.subTeamName !== "CRTScopeCreation"'>
+                        <i matTooltip='Log' matTooltipClass="accent-tooltip"
+                          (click)="editInvitation(rowData,manageTemplate ,'Log')"
+                          class="material-icons material-icons-outlined">exit_to_app</i> </mat-icon>
+                    </div>
+                  </div>
+                  <span *ngIf="col.field === 'check' && ((((rowData.invitationStatus === 'Sent' && this.userData.subTeamName !== 'DEPreQC')) ||
+              ((rowData.invitationStatus === 'Expired') && this.userData.subTeamName !== 'DEPreQC' &&
+                this.userData.subTeamName !== 'CRTScopeCreation')))">
+                    <p-tableCheckbox #check [value]="rowData" (click)="selectedItem(check, rowData)"></p-tableCheckbox>
+                  </span>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+        
+          <div class="cus-paginator" [ngClass]="{'empty-record': manageInviteList.length == 0}" fxLayout="row wrap"
+            fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+
+            <ng-container *ngTemplateOutlet="paginantorGrid"></ng-container>
+            <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid"  fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} -
+                {{
+                dt.totalRecords > 0
+                ? dt.rows + dt.first <= dt.totalRecords
+                ? dt.rows + dt.first
+                : dt.totalRecords
+                : 0
+                }}
+                of {{ dt.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a></div>
+              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center"
+                fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center"> <a
+                  [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                      dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                      navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                    "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go
+                  to Page<span class="input-num">
+                    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                  </span></span> <span class="mr-2" fxHide.xs>of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
+                  [ngClass]="dt.rows + dt.first >= dt.totalRecords
+                        ? 'page-btn disabled'
+                        : 'page-btn'"
+                  (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows }); navigateNxtPrevPage(dt.first + dt.rows, dt.rows) ">
+                  Next <i class="icon-control-end ml-5"></i></a> </div>
+            </div> 
+          </div>
+        </div>
+      </div>
+      <kendo-pdf-export #pdf [paperSize]="'Letter'" [landscape]="true" [margin]="'0.25in'" [repeatHeaders]="true"
+        [scale]="0.7" [avoidLinks]="true">
+        <kendo-pdf-export-margin [top]="'0.625in'" [bottom]="'0.5in'" [right]="'0.25in'" [left]="'0.25in'">
+        </kendo-pdf-export-margin>
+        <div *ngIf="showcaseDetaile && !editClick" fxLayoutAlign="center center"> <img src="assets/images/krya-Logo.png"
+            height="55px">
+        </div>
+        <ng-template kendoPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages" *ngIf="editClick !== true">
+          <div class="page-footer-left">
+            Generated by {{ userData.userName }} on
+            {{ extractedDate | date: 'dd/MM/yyyy h:mm:ss a' }}
+          </div>
+          <div class="page-footer-right">Page {{ pageNum }} of {{ totalPages }}</div>
+        </ng-template>
+        <!-- <div class="content-header">
+                <div class="title">
+                  <h2>
+                    {{ reportTitle }}
+                  </h2>
+                </div>
+              </div>   -->
+        <app-screeing-review *ngIf="showcaseDetaile && !editClick" [screeningDetails]="screeningDetails"
+          [inviteflag]="editClick" [compBaseDetailslist]="compBaseDetailslist"></app-screeing-review>
+      </kendo-pdf-export>
+    </mat-card-content>
+  </div>
+</mat-card>
+
+<ng-template #manageTemplate>
+  <h1 mat-dialog-title>{{contentHeader}}</h1>
+  <div mat-dialog-content>
+    <div [innerHtml]='viewData' *ngIf="contentHeader === 'View'"> </div>
+    <div *ngIf="contentHeader === 'View/Download' || contentHeader === 'Log'">
+      <div fxLayout="row" *ngFor="let view of invitationAuditList
+          | paginate: { itemsPerPage: itemperpage, currentPage: page }; let j = index">
+        <div fxFlex="100%">
+          <div class="history-view">
+            <div class="dt">{{common.getTimezoneOffset(view.auditDate, false) | date: "dd/MM/yyyy hh:mm:ss a"}}</div>
+            <div class="uname">
+              {{view.invitationSection}}
+            </div>
+            <p *ngIf="view.invitationSection === 'Candidate Cancel'">Cancelled by : {{view.cancelUserName}}</p>
+            <p>{{view.invitationStatus}}</p>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="contentHeader === 'Resend'"> </div>
+      <div *ngIf="contentHeader === 'Reopen'"> </div>
+      <div *ngIf="contentHeader === 'Cancel'"> </div>
+    </div>
+  </div>
+
+  <div *ngIf="invitationAuditList?.length > 0" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap"
+    fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutAlign.sm="start start"
+    fxLayoutAlign.xs="start start" class="cus-paginator mb-15">
+
+    <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end end"
+      fxLayoutAlign.md="start start" fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start"
+      class="tex t-right dev-paginator">
+            <pagination-controls (pageChange)="getPage($event)"></pagination-controls>
+      |<span class="gotopagbg ml-2"><a (click) = "showallinvi()">Show All</a></span>|
+    </div>
+    <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="90%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end end"
+      fxLayoutAlign.sm="start start" fxLayoutAlign.xs="start start">
+      <span class="gotopagbg ml-2">Go to Page
+        <span class="input-num">
+          <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly preventDragdrop
+            preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+        </span>
+      </span>
+      <span class="gotopagbg ml-2">Items / page
+        <span class="input-num">
+          <input type="number" [(ngModel)]="itemperpage" min="1" maxlength="4" appNumberOnly preventDragdrop
+            preventCutCopyPaste autocomplete="off" [NumberOnly]="false" (blur)="preventInfinite()">
+        </span>
+      </span>
+         </div>
+  </div>
+  <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+    <button mat-flat-button color="warn" (click)="aftershowall()">Close</button>
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #rejectedComments>
+  <h1 mat-dialog-title>Rejected comments</h1>
+  <mat-dialog-content class="mat-dialog-conScroll">
+    <div fxLayout="row">
+      <mat-form-field appearance="outline" fxFlex="100%">
+        <mat-label>Remarks</mat-label>
+        <textarea matInput #remarksIp [formControl]="remarks" (focus)="remarksIp.select()" maxlength="1000"
+          (click)="remarksIp.select()" placeholder="Remarks"></textarea>
+        <mat-error *ngIf="remarks?.errors?.required || !remarks?.value">Remarks is required </mat-error>
+        <mat-hint class="f-13"> ({{ remarks.value.length }} /1000 max) </mat-hint>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="rejectSubmit(dataValue)">Reject</button>
+    <button mat-stroked-button (click)="dialog.closeAll()">Cancel</button>
+  </mat-dialog-actions>
+</ng-template>

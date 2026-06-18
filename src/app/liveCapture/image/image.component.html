@@ -1,0 +1,28 @@
+<div class="container mt-5">
+  <h2>Capture Image from Camera</h2>
+  <div>
+    <button (click)="checkPermission()">Check webcam permissions</button>
+    @if (status) {
+      <p>Status: {{status}} </p>
+    }
+  </div>
+  <div class="col-md-12">
+    <!-- <webcam [trigger]="invokeObservable" (imageCapture)="getSnapShot($event)"></webcam> -->
+  </div>
+  <div class="col-md-12">
+    <!-- <button class="btn btn-danger" (click)="captureImage()">
+    {{webcamImage ? 'Re-Capture' : 'Capture Image'}}
+  </button> -->
+</div>
+@if (webcamImage) {
+  <div class="col-12">
+    <div id="results">Your taken image manifests here...</div>
+    <img [src]="webcamImage.imageAsDataUrl" height="400px" />
+    <br>
+      <button (click)="proceed()">Proceed to Save</button>
+    </div>
+  }
+</div>
+<div>
+  <button (click)="openDialog()">View All Saved Images</button>
+</div>

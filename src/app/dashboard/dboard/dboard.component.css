@@ -1,0 +1,843 @@
+﻿.header-bg {
+  background: #0073B1;
+  height: 34px;
+  font-size: 12px;
+  font-weight: 400;
+  top: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+}
+.mat-toolbar-row, .mat-toolbar-single-row {
+  padding: 0 25px 0 0;
+}
+.toolbar-icons {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  right: 15px;
+  top: 5px;
+}
+.toolbar-icons button:hover, .toolbar-icons button:focus {
+  background: rgba(28, 34, 96, 0.09);
+}
+.toolbar-icons .mat-mdc-icon-button,
+.toolbar-icons .mat-mdc-icon-button {
+  padding: 0 !important;
+  min-width: 0;
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0;
+  line-height: 20px !important;
+  border-radius: 50%;
+}
+.toolbar-icons i {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+}
+.toolbar-user {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  right: 15px;
+  top: 3px;
+}
+.toolbar-user .mat-mdc-icon-button,
+.toolbar-user .mat-mdc-icon-button {
+  padding: 0 !important;
+  min-width: 0;
+  width: 28px !important;
+  height: 28px !important;
+  flex-shrink: 0;
+  line-height: 21px !important;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.user {
+  background: #08BA53;
+border-radius: 50%;
+color: #fff;
+cursor: pointer;
+font-size: 10px;
+font-weight: 500;
+height: 22px;
+line-height: 23px;
+margin-right: 10px !important;
+position: relative;
+text-align: center;
+top: 1px;
+width: 22px;
+}
+.user img {
+  height: 100%;
+  border-radius: 50%;
+}
+.page-container {
+  min-height: calc(100vh - 5px);
+  padding: 110px 25px 10px 25px;
+}
+footer {
+  bottom: 0;
+  display: block;
+  position: absolute;
+  padding: 15px 0 20px;
+  font-size: 11px;
+  color: #9b9b9d;
+  border-top: 1px dashed rgba(0, 0, 0, 0.2);
+  margin: 0 18px;
+  z-index: 95;
+}
+footer a {
+  color: #08BA53;
+}
+.drawer-height {
+  background: #0e4872;
+  border-radius: 0px;
+  border: 0px none;
+  display: flex !important;
+  flex-direction: row !important;
+  box-sizing: border-box !important;
+  min-height: calc(100vh - 0px);
+  position: fixed;
+  top: 0;
+  z-index: 99 !important;
+  margin: 0 !important;
+}
+.drawer-height button {
+  border-radius: 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 22px;
+  height: 68px;
+  width: 68px;
+}
+.LogRnd {
+  text-align: center;
+  vertical-align: middle;
+  padding: 15px 16px 20px;
+  cursor: pointer;
+  outline: none;
+}
+.LogRnd img {
+  height: 37px;
+}
+.side-icon-menu .mat-list-base {
+  padding-top: 10px;
+}
+.side-icon-menu .mat-list-base .mat-mdc-list-item .mat-mdc-list-item-content {
+  padding: 0 20px;
+}
+.side-icon-menu .mat-mdc-list-base .mat-mdc-list-item .mdc-list-item__content {
+  padding: 0 20px;
+}
+.side-icon-menu .mat-list.menu-icon .mat-icon, .side-icon-menu .mat-list.menu-icon .mat-icon i {
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+}
+.side-icon-menu .mat-list .mat-mdc-list-item:hover {
+  fill: #fff;
+  -ms-text-fill-color: #fff;
+  -webkit-text-fill-color: #fff;
+  -o-text-fill-color: #fff;
+  -moz-text-fill-color: #fff;
+}
+::ng-deep .side-icon-menu .menu-icon.mat-list-base .mat-mdc-list-item .mat-mdc-list-item-content {
+  padding: 0 22px !important;
+  display: initial !important;
+}
+/* Angular 16 MDC: icon+label are inside mdc-list-item__content (default ng-content slot) */
+::ng-deep .side-icon-menu .mat-mdc-list-item .mdc-list-item__content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+::ng-deep .side-icon-menu .menu-icon.mat-list-base .mat-mdc-list-item .mat-mdc-list-item-content .menu-name {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: "Calibri", Arial, Helvetica, sans-serif;
+  letter-spacing: 0px;
+  line-height: 1.2;
+  text-align: center;
+  width: 100%;
+  padding: 0 5px;
+}
+::ng-deep .side-icon-menu .menu-icon.mat-mdc-list-base .mat-mdc-list-item .mat-mdc-list-item-unscoped-content .menu-name,
+::ng-deep .side-icon-menu .menu-icon.mat-mdc-list-base .mat-mdc-list-item .mdc-list-item__content .menu-name {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: "Calibri", Arial, Helvetica, sans-serif;
+  letter-spacing: 0px;
+  line-height: 1.2;
+  text-align: center;
+  width: 100%;
+  padding: 0 5px;
+}
+::ng-deep .side-icon-menu .mat-list .mat-mdc-list-item:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(255, 255, 255, 0.84) !important;
+  cursor: pointer;
+}
+.side-icon-menu mat-list-item.active-sidenav {
+  background: rgba(255, 255, 255, 1);
+  position: relative;
+}
+.side-icon-menu .mat-list-base .mat-mdc-list-item,
+.side-icon-menu .mat-mdc-list-base .mat-mdc-list-item {
+  padding: 15px 0px !important;
+}
+.side-icon-menu mat-list.menu-icon .mat-mdc-list-item,
+.side-icon-menu mat-list.menu-icon .mat-mdc-list-item {
+  height: 70px !important;
+}
+
+/* Angular 16 MDC: icon rail list item — column flex for icon-above-label layout */
+::ng-deep .side-icon-menu .mat-mdc-list-item {
+  height: 65px !important;
+  min-height: 65px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 8px 0 !important;
+}
+/* .side-icon-menu mat-list-item.active-sidenav:after {
+    background-color: #f5b666;
+    position: absolute;
+    top: 0px;
+    right: 0;
+    bottom: 0px;
+    content: "";
+    width: 3px;
+} */
+.menu-sel {
+  background: rgba(88, 89, 92, 0.1);
+  color: #58595c !important;
+  font-weight: 700 !important;
+}
+.mat-card.drawer-height,
+.mat-mdc-card.drawer-height {
+  padding: 0px !important;
+  margin: 0px !important;
+  border-right: none !important;
+  border: 0px none !important;
+  box-shadow: none !important;
+  background: #0e4872 !important;
+  background-color: #0e4872 !important;
+  width: 70px;
+  min-height: calc(100vh - 0px);
+  position: fixed !important;
+  top: 0 !important;
+  z-index: 99 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  box-sizing: border-box !important;
+  border-radius: 0px !important;
+}
+.active-sidenav .menu-name, .active-sidenav .mat-icon i {
+  color: rgb(14, 72, 114) !important;
+  cursor: pointer;
+}
+.menuContainer {
+  background: rgba(255, 255, 255, 1);
+  font-size: 13px;
+  width: 220px;
+  padding: 0;
+  margin-left: 69px;
+  margin-top: 0;
+  position: fixed;
+}
+.menuContainer p {
+  color: rgba(255, 255, 255, 0.60);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 0 10px;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+}
+.LogTxt {
+  vertical-align: middle;
+  background: transparent;
+  margin-bottom: 20px;
+  text-align: left;
+  float: left;
+  outline: none !important;
+  cursor: pointer;
+}
+.LogTxt .Big {
+  font-family: Arial;
+  font-size: 21px;
+  font-weight: 600;
+  color: #58595c;
+  margin: 0;
+  line-height: 25px;
+  letter-spacing: -0.5px;
+  padding: 15px 15px 0 15px;
+  text-align: left;
+  outline: none;
+}
+.LogTxt .Small {
+  color: #58595c;
+  outline: none;
+  line-height: 1.5em;
+  font-family: Georgia;
+  font-weight: 600;
+  font-size: 10px;
+  font-style: italic;
+  margin: 0;
+  padding: 0px 25px;
+  text-align: center;
+  letter-spacing: 0;
+}
+.LogTxt img {
+  height: 42px;
+}
+.SMenu {
+  height: calc(40vh - -270px);
+}
+.SMenu a {
+  display: block;
+  padding: 8px 10px;
+  color: #cfdae3;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.SMenu a i {
+  margin-right: 5px;
+  display: inline-block;
+  font-size: 16px;
+  vertical-align: sub;
+}
+.SMenu a:hover {
+  background: rgb(11, 61, 97);
+  color: rgba(255, 255, 255, 0.89);
+  text-decoration: none;
+}
+mat-sidenav-content.sidenav-width {
+  overflow: hidden;
+}
+.mat-drawer-content {
+  padding-left: 69px !important;
+}
+/* User profile in top header */
+ul.usrset {
+  color: #353537;
+  margin: 0px;
+  padding: 0px;
+  font-size: 12px;
+  /* min-width: 200px;
+    max-width: 250px; */
+}
+ul.usrset li {
+  cursor: default;
+  list-style: none;
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, .08);
+}
+ul.usrset li:hover {
+  background: rgba(0, 0, 0, .04);
+}
+ul.usrset li a {
+  color: #58595c;
+  text-decoration: none;
+  width: 145px;
+  display: inline-block;
+}
+ul.usrset li span {
+  color: #858585;
+  display: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+ul.usrset li i {
+  font-size: 14px;
+  top: 3px;
+  position: relative;
+  margin-right: 10px;
+  font-weight: 600;
+}
+ul.usrset li:last-child {
+  border-bottom: none;
+}
+.teamName {
+  color: rgba(255, 255, 255, 0.78);
+  padding: 3px 16px !important;
+  font-size: 12px;
+  border: 1px solid rgba(255, 254, 254, 0.39);
+  border-radius: 50px;
+  display: inline-block;
+  margin: 5px 0 0 0;
+}
+.teamName i {
+  font-size: 16px;
+  font-weight: normal !important;
+}
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 8px solid #fff;
+  position: absolute;
+  right: 22px;
+  top: -5px;
+}
+::ng-deep .mat-menu-content:not(:empty) {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+.module-arr {
+  right: 5px !important;
+}
+.module-ddl {
+  margin: 0px;
+}
+.module-ddl .modules-icons {
+  padding: 15px 20px;
+  text-align: center;
+}
+.module-ddl .modules-icons a {
+  text-decoration: none !important;
+  filter: grayscale(100%);
+}
+.module-ddl .modules-icons a img {
+  vertical-align: middle;
+}
+.module-ddl .modules-icons a span {
+  font-size: 13px;
+  color: #58595c;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.module-ddl .modules-icons a:hover {
+  filter: grayscale(0);
+}
+/* Left Nav Menu */
+.SideNav {
+  background: transparent;
+  width: 250px;
+  display: block;
+}
+.SideNav mat-expansion-panel {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+.sub-menuitems {
+  display: inline-block;
+  width: 100%;
+}
+.sub-menuitems .meuns {
+  color: #58595c !important;
+}
+.sub-menuitems .mat-list {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+/* Angular 16 MDC: zero out mat-list padding — each item in *ngFor gets its own
+   <mat-list>, mdc-list default padding:8px 0 creates cumulative large gap */
+.sub-menuitems .mat-mdc-list {
+  padding: 0 !important;
+  margin: 0 !important;
+  --mdc-list-list-item-one-line-container-height: 45px;
+}
+.mat-accordion.sidenav-menu {
+  width: 220px;
+}
+.sidenav-menu .mat-expansion-panel-header {
+  padding: 5px 16px;
+  height: 45px !important;
+}
+.sidenav-menu .mat-expansion-panel-header-title {
+  font-size: 12px;
+  width: 184px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: pre-line !important;
+}
+.sidenav-menu .mat-expansion-panel-header-title {
+  margin-right: 5px;
+}
+.sidenav-menu .mat-expansion-indicator::after {
+  border-width: 0 1px 1px 0 !important;
+  color: #58595c !important;
+  vertical-align: middle;
+}
+.sidenav-menu .pagename-icon i {
+  color: #58595c;
+  vertical-align: middle;
+  padding-top: 10px;
+  font-size: 17px;
+  padding-right: 10px;
+}
+.sidenav-menu .mat-expansion-indicator::after {
+  border-width: 0 1px 1px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  color: #58595c !important;
+}
+.sub-menuitems .mat-list a .menus {
+  color: #353537;
+  padding: 0px 0px 0px 0px !important;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 45px !important;
+}
+::ng-deep .mat-sidenav .mat-drawer-inner-container,
+::ng-deep .menuContainer .mat-drawer-inner-container {
+  overflow: hidden !important;
+  position: relative !important;
+  height: 100% !important;
+}
+.atag-link .mat-mdc-list-item-content {
+  padding: 0px 10px;
+}
+.atag-link .mdc-list-item__content {
+  padding: 0px 10px;
+}
+.atag-link i.material-icons-outlined {
+  font-size: 17px;
+  color: #fff;
+  height: 0px;
+  padding-right: 10px;
+}
+.sub-menuitems .mat-list a:hover {
+  text-decoration: none;
+}
+.atag-link .mat-expansion-indicator::after {
+  border-width: 0 1px 1px 0 !important;
+  color: #fff !important;
+  vertical-align: middle;
+}
+.menu-header {
+  color: #8a8b8d;
+  font-size: 11px;
+  padding: 0 0 8px 0;
+  margin: 0 16px 10px;
+  text-transform: uppercase;
+  padding-top: 25px;
+  border-bottom: 1px dashed rgba(0, 0, 0, .2);
+}
+.sub-menuitems .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]).cdk-keyboard-focused, .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]).cdk-program-focused, .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
+  background: rgba(88, 89, 92, 0.1) !important;
+  color: #58595c !important;
+}
+.sub-menuitems .mat-mdc-list-item.menus.mat-mdc-list-item.ng-star-inserted:hover {
+  background: rgba(88, 89, 92, 0.1) !important;
+  color: #58595c !important;
+}
+.SideNav.sidenav-menu span.mat-expansion-indicator::after {
+  border-width: 0 1px 1px 0 !important;
+  color: #58595c !important;
+  vertical-align: middle !important;
+  transform: rotate(-47deg);
+  vertical-align: super;
+}
+.SideNav.sidenav-menu mat-list-item.child-listitem.mat-mdc-list-item.ng-star-inserted, .SideNav.sidenav-menu mat-list-item.child-ddl.mat-mdc-list-item.ng-star-inserted {
+  color: #58595c;
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: pre-line !important;
+  cursor: pointer;
+}
+.SideNav.sidenav-menu .child-ddl-first {
+  background: rgba(0, 0, 0, 0.2);
+}
+/* Sub menu  child list */ ::ng-deep span.menu-Childlist a .mat-mdc-list-item.menus .mat-mdc-list-item-content {
+  padding-left: 30px !important;
+}
+::ng-deep span.menu-Childlist a .mat-mdc-list-item.menus .mdc-list-item__content {
+  padding-left: 30px !important;
+}
+mat-expansion-panel.mat-expansion-panel.mat-expanded {
+  background: rgba(255, 255, 255, 0.1);
+}
+::ng-deep .SideNav.sidenav-menu .mat-expansion-panel-body {
+  padding: 0px 0px 0px 0px !important;
+}
+::ng-deep .sub-menuitems mat-list-item.menus.mat-mdc-list-item:hover {
+  background: rgba(88, 89, 92, 0.1) !important;
+  color: #58595c !important;
+}
+/*perfect-scrollbar for side nav menu starts*/
+.perfectscrol-wdthheigh {
+  max-width: 600px;
+  position: relative !important;
+  height: calc(100vh - 250px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+::ng-deep .sub-menuitems perfect-scrollbar > .ps.ps--active-y > .ps__rail-y {
+  top: 0 !important;
+  right: 0 !important;
+  left: auto !important;
+  width: 10px;
+  cursor: default;
+  transition: width 200ms linear, opacity 200ms linear, background-color 200ms linear;
+  background: rgba(0, 0, 0, 0.23);
+}
+::ng-deep .sub-menuitems .ps__rail-y:hover > .ps__thumb-y, .ps__rail-y:focus > .ps__thumb-y, .ps__rail-y.ps--clicking .ps__thumb-y {
+  background-color: rgba(255, 255, 255, 0.67);
+  width: 11px;
+}
+::ng-deep .sub-menuitems .ps__thumb-y {
+  background-color: rgba(255, 255, 255, 0.55);
+}
+::ng-deep .sub-menuitems .mat-expansion-indicator::after {
+  border: none;
+  content: "\e201" !important;
+  display: inline-block;
+  font-family: 'custmIcons', 'Line-Icons', 'screeningicon', 'Ico-font', 'insuffi' !important;
+  font-weight: 900;
+  padding: 3px;
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+  vertical-align: middle;
+}
+/*perfect-scrollbar for side nav menu ends*/
+
+/* Angular 16: perfect-scrollbar fallback via native CSS */
+perfect-scrollbar.perfectscrol-wdthheigh {
+  display: block !important;
+  position: relative !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: calc(100vh - 250px) !important;
+  max-height: calc(100vh - 250px) !important;
+}
+perfect-scrollbar.perfectscrol-notification {
+  display: block !important;
+  position: relative !important;
+  overflow-y: auto !important;
+  max-height: 320px !important;
+}
+perfect-scrollbar.perfectscrol-wdthheigh::-webkit-scrollbar { width: 5px; }
+perfect-scrollbar.perfectscrol-wdthheigh::-webkit-scrollbar-track { background: transparent; }
+perfect-scrollbar.perfectscrol-wdthheigh::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.18);
+  border-radius: 4px;
+}
+
+/* MDC list item layout — match Angular 14 mat-list-item-content appearance */
+::ng-deep .sub-menuitems .mat-mdc-list-item.menus .mdc-list-item__content {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  height: 100% !important;
+  padding: 0 16px !important;
+  overflow: hidden !important;
+}
+::ng-deep .sub-menuitems .mat-mdc-list-item.menus .mdc-list-item__primary-text {
+  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-size: 12px !important;
+  color: #353537 !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  flex: 1 !important;
+}
+::ng-deep .sub-menuitems .mat-mdc-list-item.menus {
+  height: 45px !important;
+  min-height: 45px !important;
+  max-height: 45px !important;
+}
+::ng-deep .sub-menuitems .mat-mdc-list-item.menus.mdc-list-item {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin: 0 !important;
+}
+::ng-deep .sub-menuitems .mat-mdc-list-item.menus:hover {
+  background: rgba(88, 89, 92, 0.1) !important;
+}
+::ng-deep .sub-menuitems a.active .mat-mdc-list-item.menus {
+  background: rgba(88, 89, 92, 0.1) !important;
+}
+::ng-deep .sub-menuitems a.active .mat-mdc-list-item.menus .mdc-list-item__primary-text {
+  color: #58595c !important;
+  font-weight: 700 !important;
+}
+
+.scrollToTop {
+  bottom: 17px;
+  position: fixed;
+  right: 25px;
+  z-index: 999;
+}
+.scrollToTop i {
+  background: #44269f none repeat scroll 0 0;
+  padding: 10px 5px;
+  border-radius: 50%;
+  color: #fff;
+  height: 40px;
+  font-size: 28px;
+  width: 40px;
+  text-align: center;
+  line-height: 22px;
+}
+.scrollToTop i:hover {
+  background: rgba(39, 91, 128, 0.72);
+}
+.mat-badge-medium .mat-badge-content {
+  font-size: 9px;
+  font-weight: 500;
+  min-height: 14px;
+  letter-spacing: -0.5px;
+  min-width: 14px;
+  border: 1px solid #0073B1;
+  height: auto;
+  width: auto;
+  line-height: initial;
+  padding: 2px 4px 3px 3px;
+}
+.mat-badge-medium.mat-badge-above .mat-badge-content {
+  top: 0px;
+}
+.mat-badge-medium.mat-badge-overlap.mat-badge-after .mat-badge-content {
+  right: -7px;
+}
+.noti.mat-list-base .mat-mdc-list-item.mat-2-line {
+  height: 56px !important;
+}
+.mat-list-base .mat-mdc-list-item .mat-line:nth-child(n+2) {
+  color: #58595C;
+  font-size: 12px;
+}
+.n-logo {
+  cursor: pointer;
+  outline: 0;
+  margin: 15px 0;
+  text-align: center;
+}
+.n-logo i {
+  color: #fff;
+  font-size: 52px;
+}
+.logo-lett {
+  float: left;
+  outline: none !important;
+  cursor: pointer;
+  margin: 23px 15px;
+}
+.logo-lett .big {
+  color: #58595c;
+  font-family: Arial;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 22px;
+  letter-spacing: 0;
+  margin: 0;
+  text-align: left;
+  width: 100%;
+}
+.logo-lett .small {
+  color: #58595c;
+  font-family: Georgia;
+  font-size: 11px;
+  font-style: italic;
+  letter-spacing: 0;
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0px 0;
+  text-align: center;
+  font-weight: bold;
+  width: 100%;
+}
+.u-bg {
+  bottom: 0px;
+  position: absolute;
+  background: rgba(0, 0, 0, .15);
+  display: block;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+  padding: 0;
+  text-align: center;
+}
+.u-detail {
+  background: #81A027;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 12px;
+  line-height: 32px;
+  height: 32px;
+  width: 32px;
+  text-align: center;
+  margin: 25px 18px 25px;
+}
+.side-user {
+  background: linear-gradient(-180deg, rgb(251, 176, 30), rgb(229, 2, 18), rgb(192, 6, 156));
+  margin: 0px;
+  text-align: center;
+  border: none !important;
+  padding: 20px 15px 25px !important;
+}
+.side-user:hover {
+  background: linear-gradient(-180deg, rgb(251, 176, 30), rgb(229, 2, 18), rgb(192, 6, 156)) !important;
+}
+.side-user .uicon {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 100px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 47px;
+  color: #08BA53;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  border: 1px solid rgb(255, 255, 255);
+  margin: 0 auto;
+}
+.side-user .udetail {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 10px 0 5px 0;
+}
+.side-user .udetail h4 {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  margin: 0 0 3px 0;
+  line-height: 1;
+}
+.side-user .udetail small {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1;
+}
+.llogin {
+  color: #8A8B8D;
+  font-size: 11px;
+  font-weight: 400;
+  margin: 0;
+  line-height: 18px;
+}
+.toggle-btn {
+  color: #fff;
+  font-size: 16px;
+  border-radius: 0;
+  cursor: pointer;
+  margin: 0 16px;
+  height: 34px;
+  width: 34px;
+  line-height: 1;
+}
+.appname {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  text-transform: uppercase;
+}

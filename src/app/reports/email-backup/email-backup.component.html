@@ -1,0 +1,267 @@
+<app-breadcrumb [btnExport]="false" [routePath]="routePath">
+</app-breadcrumb>
+
+<div fxLayout="row" class="advSearch">
+  <form autocomplete="off">
+    <div class="advSearch-forms">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
+        fxLayoutGap="0px">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="180px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>From Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date"
+                  (focus)="sampledatePicker.open()" (click)="sampledatePicker.open()"   [formControl]="fromdate" required readonly [max]="maxDate" autocomplete="off" />
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker></mat-datepicker>
+                <mat-error>From Date is required </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="180px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>To Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker1" placeholder="To Date"
+                  [formControl]="todate" required readonly [min]="fromdate.value" [max]="maxDate"
+                  autocomplete="off"  (focus)="sampledatePicker1.open()"  (click)="sampledatePicker1.open()"/>
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker1></mat-datepicker>
+                @if (!!fromdate.invalid) {
+                  <mat-error>From
+                    date should be greater than or equal to Date
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="100%" class="advSearch-btn">
+      <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+        <a (click)="searchValues()">Search</a>
+        <span>|</span>
+        <a (click)="resetfrom()">Reset</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div fxLayout="row" class="srchPad" fxLayoutGap="20px" fxlayout.lg="row" fxlayout.md="row" fxLayout.sm="column"
+  fxlayout.xs="column">
+  <mat-card style="width: 100%;">
+    <div fxLayout="row">
+      <mat-card-header fxFlex="100%" fxFlex.lg="100%" fxlayout.sm="100%" fxFlex.md="100%" fxFlex.xs="100%">
+        <div fxLayout="row" fxFlex="100%" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+          fxLayout.xs="column">
+          <div fxFlex="70%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <h1 class="header-title"> Email History</h1>
+          </div>
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="40%" fxFlex.xs="100%" fxHide.xs
+            fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+            <div fxLayoutAlign="end end">
+              <div class="tbl-commonsearch">
+                <mat-form-field fxFlex="100%">
+                  <mat-label></mat-label>
+                  <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                  <input #global matInput size="50" placeholder="Search here..." size="50" autocomplete="off"
+                    (blur)="globalSearch(global.value)" [(ngModel)]="searchValue"  />
+
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-header>
+    </div>
+
+
+
+    <div fxLayout="row">
+      <mat-card-content fxFlex="100%" fxFlex.lg="100%" fxlayout.sm="100%" fxFlex.md="100%" fxFlex.xs="100%">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <p-table
+              #dtHistory
+              [columns]="emailHistorycols"
+              [value]="emailHistorylist"
+              [scrollable]="true"
+              [lazy]="true"
+              scrollHeight=""
+              [paginator]="true"
+              [rows]="itemperpage"
+              [resizableColumns]="true"
+              [totalRecords]="totalpages"
+              [reorderableColumns]="true"
+              columnResizeMode="expand"
+              [frozenColumns]="frozenCols"
+              frozenWidth="100px"
+              (onLazyLoad)="LoadEmailHistory($event)">
+
+              <!-- ===== COLGROUP ===== -->
+              <ng-template pTemplate="colgroup" let-colGroupCols>
+                <colgroup>
+                @for (col of colGroupCols; track col) {
+                  <col style="min-width:150px" />
+                }
+              </colgroup>
+            </ng-template>
+
+            <!-- ===== HEADER ===== -->
+            <ng-template pTemplate="header" let-headerCols>
+              <tr>
+                @for (col of headerCols; track col) {
+                  <th
+                    [pSortableColumn]="col.field"
+                    pReorderableColumn>
+                    <div class="thname">{{ col.header }}</div>
+                    @if (col.field !== 'View') {
+                      <p-sortIcon
+                        [field]="col.field"
+                        ariaLabel="Activate to sort"
+                        ariaLabelDesc="Activate to sort in descending order"
+                        ariaLabelAsc="Activate to sort in ascending order">
+                      </p-sortIcon>
+                    }
+                  </th>
+                }
+              </tr>
+            </ng-template>
+
+            <!-- ===== BODY ===== -->
+            <ng-template
+              pTemplate="body"
+              let-rowData
+              let-index="rowIndex"
+              let-bodyCols="columns">
+
+              <tr>
+                @for (col of bodyCols; track col) {
+                  <td
+                    style="min-width:150px; max-width:250px">
+                    <!-- VIEW -->
+                    @if (col.field === 'View') {
+                      <div fxLayout="row" class="desg-icon">
+                        <div fxFlex="100%" fxLayoutGap="10px"
+                          style="width:50px; white-space: unset;">
+                          <mat-icon>
+                            <i
+                              matTooltip="View"
+                              matTooltipClass="accent-tooltip"
+                              class="material-icons material-icons-outlined"
+                              (click)="viewEmailContent(rowData)">
+                              remove_red_eye
+                            </i>
+                          </mat-icon>
+                        </div>
+                      </div>
+                    }
+                    <!-- NORMAL FIELDS -->
+                    @if (col.field !== 'View') {
+                      <span>
+                        {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                      </span>
+                    }
+                  </td>
+                }
+              </tr>
+            </ng-template>
+
+          </p-table>
+          <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+            fxLayoutGap.xs="20px grid">
+            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+              fxLayoutAlign="start center"> Showing
+              {{ dtHistory.totalRecords < 1 ? 0 : dtHistory.first + 1 }} -
+              {{
+              dtHistory.totalRecords > 0
+              ? dtHistory.rows + dtHistory.first <= dtHistory.totalRecords
+              ? dtHistory.rows + dtHistory.first
+              : dtHistory.totalRecords
+              : 0
+              }}
+              of {{ dtHistory.totalRecords }} record(s) |&nbsp;<a (click)="showall()">Show All</a> </div>
+              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center"> <a
+                                    [ngClass]="dtHistory.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                                    dtHistory.onPageChange({ first: dtHistory.first - dtHistory.rows, rows: dtHistory.rows });
+                                    navigateNxtPrevPage(dtHistory.first + dtHistory.rows, dtHistory.rows)
+                                  "> <i class="fa fa-long-arrow-left mr-2"></i>Previous</a> <span
+                class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5"
+                  appNumberOnly [NumberOnly]="false"
+                  (keyup.enter)="navigatePage(pageNo.value, dtHistory.rows)" />
+              </span></span> <span class="mr-2" fxHide.xs>of
+                                    {{ getTotalPages(dtHistory.totalRecords, dtHistory.rows) }}</span> <a [ngClass]="dtHistory.rows + dtHistory.first >= dtHistory.totalRecords
+                                      ? 'page-btn disabled'
+                                      : 'page-btn'"
+            (click)="dtHistory.onPageChange({ first: dtHistory.first + dtHistory.rows, rows: dtHistory.rows }); navigateNxtPrevPage(dtHistory.first + dtHistory.rows, dtHistory.rows) ">
+            Next<i class="fa fa-long-arrow-right ml-2"></i></a> </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </div>
+</mat-card>
+</div>
+
+
+
+<ng-template #viewMailContent>
+  <mat-dialog-content>
+    <h1 mat-dialog-title>Mail Content</h1>
+    <div fxLayout="row">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+        class="text-sm text-dull">
+        <p class="text-ilatic">Email will be sent to following mail id's <span class="text-bold">
+        {{selectRowData.clientName}}</span> </p>
+      </div>
+    </div>
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-label>TO : </mat-label>
+        @for (mail of [].constructor(selectRowData.toMail.length); track mail; let eve = $even; let i = $index) {
+          <span>
+            {{selectRowData.toMail[i]}}
+          </span>
+        }
+      </div>
+    </div>
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <div class="mail-list">
+          <mat-label>CC : </mat-label>
+          <mat-label>{{selectRowData.ccMail}}</mat-label>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <div class="mail-list">
+          <mat-label>BCC : </mat-label>
+          <mat-label>{{selectRowData.bccMail}}</mat-label>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <div class="mail-list">
+          <mat-label>SUBJECT : </mat-label>
+          <mat-label>{{selectRowData.mailSubject}}</mat-label>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <div class="mail-list" [innerHtml]="selectRowData.mailBody" #emailTemplate>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+    <button mat-flat-button color="warn" (click)="dialogClose()">Close</button>
+  </mat-dialog-actions>
+
+</ng-template>

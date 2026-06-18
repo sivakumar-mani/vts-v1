@@ -1,0 +1,13 @@
+ .existing-data{
+  background: #08BA53;
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.95);
+    text-align: center;
+    font-size: 11px;
+    cursor: default;
+    text-transform: uppercase;
+    line-height: 25px;
+    padding: 0 10px;
+    font-weight: 500;
+    display: inline-block;
+ }

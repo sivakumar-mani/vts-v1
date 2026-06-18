@@ -1,0 +1,28 @@
+.check {
+    height: 16px;
+    width: 16px;
+    line-height: 0;
+    margin: auto;
+    background: #08BA53
+}
+.scrollable-content {
+    max-height: 600px; 
+    overflow-y: auto;
+    border: 1px solid #ccc; 
+    padding: 10px; 
+}
+/* Increase font size of the label text */
+.larger-label {
+    font-size: 15px; 
+}
+
+/* Increase size of the checkbox */
+.larger-checkbox {
+    transform: scale(1.5); 
+    -webkit-transform: scale(1.5); 
+    -moz-transform: scale(1.5); 
+    -ms-transform: scale(1.5); 
+    -o-transform: scale(1.5); 
+    margin-right: 10px; 
+}
+

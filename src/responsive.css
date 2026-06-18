@@ -1,0 +1,374 @@
+﻿/* *************** Smartphones (portrait and landscape) *************** */
+/* For Pagination icon hide */
+@media only screen and (min-device-width : 320px) and (max-device-width : 350px) {
+  .appname {
+    display: none;
+  }
+  .mat-card{
+    padding: 15px 15px !important;
+  }
+  /* .cus-paginator .fa.fa-long-arrow-left, .cus-paginator .fa.fa-long-arrow-right{ */
+  .cus-paginator .icon-arrowleftthin, .cus-paginator .icon-arrowrightthin {
+    display: none;
+  }
+  .d-view .line div {
+    padding: 0px 11px;
+  }
+  .scroll {
+    overflow-y: scroll;
+  }
+  footer {
+    padding: 10px 15px 0px 15px !important;
+  }
+  .un-dt i:last-child {
+    margin-left: 0px !important;
+  }
+  h1.welcome {
+    line-height: 28px;
+  }
+  .btnTool {
+    padding: 40px 0 0px 70px !important;
+    width: 100% !important;
+  }
+  .page-container {
+    padding: 155px 25px 10px 25px !important;
+  }
+  .advSearch {
+    top: 110px !important;
+  }
+  .client-data span.docfldpath, .client-data p span {
+    width: 95% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+  .PView-box {
+    width: 215px !important;
+  }
+  .raise .mat-list-text {
+    width: 85% !important;
+  }
+  .sortrow ul li:first-child {
+    margin-left: 0px !important;
+  }
+  pagination-controls pagination-template .ngx-pagination {
+    padding-left: 0px !important;
+  }
+  .vtp-list {
+    padding-left: 0px !important;
+    border-left: 0px !important;
+  }
+  .review {
+    overflow-x: scroll !important;
+  }
+  .moreCompon {
+    width: 84% !important;
+  }
+  .header-title {
+    white-space: pre-line !important;
+  }
+  .client-data h3 {
+    white-space: nowrap !important;
+  }
+  .client-data p a {
+    width: 70px !important;
+  }
+}
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  .appname{
+    display: none;
+  }
+  .mat-card{
+    padding: 15px 15px !important;
+  }
+  .pos-top {
+    top: 27px !important;
+    right: -50px !important;
+    position: relative;
+  }
+  .mat-mdc-checkbox-layout .mat-mdc-checkbox-label {
+    white-space: pre-line;
+  }
+  body .p-datatable .p-datatable-tbody > tr > td, body .p-datatable .p-datatable-thead > tr > th {
+    width: 230px;
+  }
+  .d-view .line div {
+    padding: 0px 11px;
+  }
+  .scroll {
+    overflow-y: scroll;
+  }
+  .search-accor .mat-expansion-panel-body {
+    width: 257px !important;
+    top: 313px !important;
+    left: 119px !important;
+  }
+  .un-dt i:last-child {
+    margin-left: 0px !important;
+  }
+  footer {
+    padding: 10px 15px 0px 15px !important;
+  }
+  h1.welcome {
+    line-height: 28px;
+  }
+  .btnTool {
+    padding: 0px 0px 0px 70px !important;
+    width: 100% !important;
+  }
+  .page-container {
+    padding: 110px 15px 10px 15px !important;
+  }
+  .advSearch .advSearch-btn {
+    top: 95px !important;
+  }
+  .advSearch {
+    top: 250px !important;
+  }
+  .advSearchshow .advSearch-btn {
+    top: 219px !important;
+  }
+  .advSearch .advSearch-forms {
+    top: -125px !important;
+  }
+  .advSearchshow .advSearch-forms {
+    top: 125px !important;
+  }
+  .advSearch-btn a {
+    margin-top: -35px !important;
+  }
+  .advSearchshow {
+    top: 120px !important;
+  }
+  .srchPad {
+    padding-top:45px !important;
+  }
+  .db-accordion.mat-accordion .mat-expansion-panel-header-title i {
+    font-size: 18px !important;
+  }
+  .db-accordion.mat-accordion .mat-expansion-panel-header {
+    font-size: 14px;
+  }
+  .db-accordion.mat-accordion .mat-list-base .mat-mdc-list-item {
+    min-height: 36px !important;
+  }
+  .client-data span.docfldpath {
+    width: 80% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+  .PView-box {
+    width: 315px !important;
+  }
+  .raise .mat-list-text {
+    width: 85% !important;
+  }
+  .client-data p a {
+    width: 115px !important;
+  }
+  .sortrow ul li:first-child {
+    margin-left: 0px !important;
+  }
+  pagination-controls pagination-template .ngx-pagination {
+    padding-left: 0px !important;
+  }
+  .vtp-list {
+    padding-left: 0px !important;
+    border-left: 0px !important;
+  }
+  .mat-autocomplete-panel.mat-autocomplete-visible .mat-mdc-option {
+    line-height: 16px;
+    white-space: nowrap !important;
+  }
+  .review {
+    overflow-x: scroll !important;
+  }
+  .header-title {
+    white-space: pre-line !important;
+  }
+  .client-data h3 {
+    white-space: nowrap !important;
+  }
+  .otppop {
+    padding: 20px !important;
+    background: #188b14;
+    min-height: 180px;
+  }
+}
+@media only screen and (min-device-width : 320px) and (max-device-width : 768px) {
+  .breadcrumb {
+    display: none;
+  }
+}
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+  body .p-datatable .p-datatable-thead > tr > th, body .p-datatable .p-datatable-tbody > tr > td {
+    width: 230px;
+  }
+  .step .list a {
+    padding: 20px 10px 20px 10px !important;
+  }
+  .step .list a i {
+    right: 15px !important;
+    font-size: 18px !important;
+  }
+  .d-view .line div {
+    padding: 0px 11px;
+  }
+  .scroll {
+    overflow-y: scroll;
+  }
+  .d-view p em, .d-view em {
+    width: 95% !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+  }
+  .client-avatar {
+    width: 45px !important;
+    height: 45px !important;
+    margin-right: 10px !important;
+    line-height: 54px !important;
+  }
+  .client-avatar i {
+    font-size: 22px !important;
+  }
+  .perfectscrol-notification {
+    max-width: 600px;
+    height: calc(100vh - 230px) !important;
+  }
+  .perfectscrol-raiseinsuff {
+    height: calc(100vh - 400px) !important;
+  }
+  .client-data p a {
+    width: 165px !important;
+  }
+  /* .btnTool {
+		padding: 35px 0 15px 60px !important;
+	}
+	.advSearch .advSearch-btn {
+		top: 140px !important;
+	}
+	.page-container  {
+		padding: 165px 25px 10px 25px !important;
+	} */
+  .raise .mat-list-text {
+    width: 85% !important;
+  }
+  .mat-box {
+    max-height: calc(100vh - 0px) !important;
+  }
+  .rptDgnCompon-scrollbar {
+    height: calc(100vh - 541px) !important;
+  }
+  .rptDgnFRSR-scrollbar {
+    height: calc(100vh - 166px) !important;
+  }
+  .sortrow ul li:first-child {
+    margin-left: 0px !important;
+  }
+  pagination-controls pagination-template .ngx-pagination {
+    padding-left: 0px !important;
+  }
+  .vtp-list {
+    padding-left: 0px !important;
+    border-left: 0px !important;
+  }
+  .mat-autocomplete-panel.mat-autocomplete-visible .mat-mdc-option {
+    line-height: 16px;
+    white-space: nowrap !important;
+  }
+  .DbBg i {
+    font-size: 40px !important;
+  }
+  .moreCompon {
+    width: 92.5% !important;
+  }
+}
+@media only screen and (min-device-width : 1360px) and (max-device-width : 1366px) {
+  .intro {
+    padding-top: 95px !important;
+  }
+  .landBanner {
+    margin-bottom: 0px !important;
+  }
+  .perfectscrol-raiseinsuff {
+    height: calc(100vh - 505px) !important;
+  }
+  .mat-box {
+    max-height: calc(100vh - 0px) !important;
+  }
+  .rptDgnCompon-scrollbar {
+    height: calc(100vh - 541px) !important;
+  }
+  .rptDgnFRSR-scrollbar {
+    height: calc(100vh - 166px) !important;
+  }
+  .mat-autocomplete-panel.mat-autocomplete-visible .mat-mdc-option {
+    line-height: 16px;
+    white-space: nowrap !important;
+  }
+}
+@media only screen and (min-width : 1820px) {
+  .FullBody {
+    width: 80% !important;
+    margin: auto;
+    border-left: 1px solid #dedede;
+    border-right: 1px solid #dedede;
+  }
+}
+@media screen and (min-width: 1920px) {}
+/* 
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024) {
+
+}  
+
+*/
+/*
+@media only screen and (min-width : 1920px) {
+	.intro  h1 {
+		color: green !important;
+	}
+}
+@media only screen and (min-width : 1920px) {
+	.td-drag-talentcol-1 {
+		   width: 100%
+	   }
+
+	   .td-drag-talentcol-2 {
+		   width: auto;
+	   }
+@media screen and (min-width: 1900px)
+
+@media only screen and (min-device-width: 1600px) and (max-device-width: 1920px) {
+
+@media screen and (max-width: 1280px) {#gallery-1 img {width:375px;}} // for 1280px screens
+@media screen and (min-width: 1366px) and (max-width: 1439px){#gallery-1 img {width:375px;}} // for 1366px screens
+@media screen and (min-width: 1440px) and (max-width: 1599px) {#gallery-1 img {width:428px;}} // for 1440px screens
+@media screen and (min-width: 1600px) and (max-width: 1919px) {#gallery-1 img {width:434px;}} // for 1600px screens
+@media screen and (min-width: 1920px) {#gallery-1 img {width:540px;}} // for 1920px screens
+
+} */
+/* Only for Dashboard Search dropdown division  */
+@media screen and (min-width: 1400px) and (max-width: 1450px) {
+  /* .search-accor .mat-expansion-panel-body{
+		width: 756px !important;
+    	left: 258px !important;
+	} */
+}
+@media screen and (min-width: 1024px) and (max-width: 1030px) {
+  /* .search-accor .mat-expansion-panel-body{
+		width: 666px !important;
+    	top: 272px !important;
+    	left: 96px !important;
+	} */ ::ng-deep .raise .mat-list-text {
+    width: 85% !important;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 778px) {
+  /* .search-accor .mat-expansion-panel-body{
+		width: 413px !important;
+		top: 292px !important;
+		left: 96px !important;
+	} */
+}

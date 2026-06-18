@@ -1,0 +1,107 @@
+<app-breadcrumb [routePath]="'Invoice / Generate Invoice Client List'" [btnExportDisabled] ="!screenAuth?.exportFlag" [btnExcelExport]="invoiceList?.length > 0" (eventExcelExport)="exportExcel()"></app-breadcrumb>
+<div fxLayout="row" class="advSearch" autocomplete="off">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="400px">
+            <mat-radio-group [formControl]="dateType" aria-label="Select Date Type" fxLayoutGap="20px" (change)="onTypeChange($event?.value)">
+              <mat-label class="lbl">Date Type :</mat-label>
+              <mat-radio-button [value]="true" (click)="showpg()">Current Month</mat-radio-button>
+              <mat-radio-button [value]="false" (click)="showpg()">Previous Month</mat-radio-button>
+              <mat-radio-button [value]="null" (click)="showpg()">Custom Date</mat-radio-button>
+            </mat-radio-group>
+            @if (dateType?.errors?.required) {
+              <mat-error>Select Date Type</mat-error>
+            }
+          </div>
+          @if (dateType?.value === null) {
+            <div fxFlex="200px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>From Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker" [max]="commonService?.getMaxDate()" placeholder="From Date" [formControl]="fromDate" (focus)="sampledatePicker?.open()" (click)="sampledatePicker?.open()" required/>
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker></mat-datepicker>
+                @if (fromDate?.errors?.required) {
+                  <mat-error>From Date is required</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          @if (dateType?.value === null) {
+            <div fxFlex="200px">
+              <mat-form-field fxFlex="100%">
+                <mat-label>To Date</mat-label>
+                <input matInput [matDatepicker]="sampledatePicker1" [max]="commonService?.getMaxDate()" placeholder="To Date" [formControl]="toDate" (focus)="sampledatePicker1?.open()" (click)="sampledatePicker1?.open()" [min]="fromDate?.value" required/>
+                <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+                <mat-datepicker #sampledatePicker1></mat-datepicker>
+                @if (toDate?.errors?.required) {
+                  <mat-error>To Date is required</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="100%" class="advSearch-btn">
+    <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <a (click)="GetGenerateList(dateType?.value)">Invoice Client List</a><span>|</span>
+            <a (click)="dateType?.setValue(null);onTypeChange(dateType?.value);invoiceList = [];this.gridView = {
+                data:[],
+                total:0
+              };">Reset</a></div>
+    </div>
+  </div>
+  <div fxLayout="row" class="srchPad">
+    <div fxFlex="100%">
+      <mat-card>
+        <mat-card-header>
+          <div fxFlex="100%">
+            <mat-card-title>
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="10px grid">
+                    <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="80%" fxFlex.xs="100%" fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                      <h1 class="header-title">Generate Invoice Client List</h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card-title>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid">
+            <div fxFlex="100%">
+              <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                <div fxFlex="100%">
+                  <kendo-grid [data]="gridView" [skip]="skip" (pageChange)="pageChange($event)"  [reorderable]="true" [pageable]="true" [sortable]="true" [groupable]="true" [pageSize]="itemperpage" style="width: 100%;" [columnMenu]="{ filter: true }">
+                    @for (group of displayColumns; track group) {
+                      @if (group?.header !== 'S.No') {
+                        <kendo-grid-column [field]="group?.field" [title]="group?.header" [width]="180" [headerStyle]="{'background-color': '#58595C','color': '#fff','line-height': '2em'}" [style]="{'background-color': '#ffffff','color': '#333333'}">
+                          <ng-template kendoGridCellTemplate let-dataItem>
+                            {{ dataItem[group?.field] ? (group?.field === 'invoiceGeneratedOn' ? (commonService?. getTimezoneOffset(dataItem[group?.field], false) | date: 'dd/MM/yyyy') : dataItem[group?.field]) : 'N/A' }}
+                          </ng-template>
+                        </kendo-grid-column>
+                      }
+                    }
+                    <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+                      <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                      <kendo-pager-numeric-buttons [buttonCount]="buttonCount">
+                      </kendo-pager-numeric-buttons>
+                      <kendo-pager-info></kendo-pager-info>
+                      <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                      <a (click)="showall()">Show All</a>
+                    </ng-template>
+                    <kendo-grid-messages noRecords="No Data Found"></kendo-grid-messages>
+                  </kendo-grid>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>

@@ -1,0 +1,611 @@
+<div class="BgColor">
+  <div class="FullBody">
+    <div class="HeaderBg">
+      <div class="HContBody">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxFlex="100%"
+          fxLayoutGap="20px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0px" fxLayoutAlign="center center">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="70%" fxFlex.xs="100%">
+            <div class="LogTxt"> <a href="#aaa" routerLink="/" class="link">
+              <div class="Logo lnd-logo"><i class="icon-acheck"></i></div>
+              <div class="logo-lett">
+                <div class="logo-txt">Krya Screening Private Limited</div>
+                <!-- <div class="logo-sol">Screening Made Smart</div> -->
+              </div>
+            </a> </div>
+          </div>
+          <!-- <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="30%" fxHide.xs fxLayoutGap="20px"
+          fxLayoutAlign="end center"> <a href="#" routerLink="/Selectpackage-addtional-check" class="lhelp"
+        matTooltip="Pricing" matTooltipClass="accent-tooltip">Pricing</a> <a href="#" routerLink="/login"
+        class="lhelp" matTooltip="Sign Up" matTooltipClass="accent-tooltip">Sign
+      Up</a> <a class="lhelp" matTooltip="Help" matTooltipClass="accent-tooltip">
+      <mat-icon> <i class="material-icons-outlined">help_outline</i> </mat-icon>
+      <span>Help</span>
+    </a> </div> -->
+    <!-- // package screen hide start
+    /Selectpackage-addtional-check
+    // package screen hide end -->
+    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="30%" fxHide.xs fxLayoutGap="20px"
+      fxLayoutAlign="end center">
+      <!-- <a href="#" routerLink="/purchase/addtionalchecks" class="lhelp"
+    matTooltip="Get Started" matTooltipClass="accent-tooltip">Get Started</a> -->
+    <a routerLink="/canidateregistraion" class="lhelp" matTooltip="Sign Up" matTooltipClass="accent-tooltip">Sign
+    Up</a>
+    <a class="lhelp" matTooltip="Help" matTooltipClass="accent-tooltip">
+      <mat-icon> <i class="material-icons-outlined">help_outline</i> </mat-icon>
+      <span>Help</span>
+    </a> </div>
+  </div>
+</div>
+</div>
+<form #addForm="ngForm">
+  <div class="landBanner">
+    <div class="ContBody">
+      <!-- // package screen hide start -->
+      <!-- <div fxLayout="row">
+      <div fxFlex="100%">
+        <h1 class="PricingHead">Add Checks To Your Package</h1>
+        <p class="text-center pb-20">Select add-on checks with your selected plan</p>
+      </div>
+    </div> -->
+    <!-- // package screen hide end -->
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="80px">
+          <div fxFlex="70%">
+            <!-- // package screen hide start -->
+            <!-- <div fxLayout="row" class="ScreenGroup">
+            <div fxFlex="100%"> <span
+              *ngFor="let packComp of authService?.defaultSelectedPackageList[0]?.packComp;let pac = index">
+              <div fxLayout="row" class="ScrGrpRow" *ngIf='packComp?.subComponent?.length == 0'>
+                <div fxFlex="100%">
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="5%" fxLayoutAlign="center center">
+                      <mat-checkbox [ngModel]="true" [checked]="true" name="{{test5+pac}}" [disabled]="true"> </mat-checkbox>
+                    </div>
+                    <div fxFlex="90%">
+                      <i [ngClass]="(commonService.getIconsByComponent(packComp?.componentName) + ' SelPrice-icon')"></i>
+                      <div class="ScreenName">{{packComp?.componentName}} -
+                      {{packComp?.noOfComp}} </div>
+                      <div class="SpTag">₹ {{packComp?.msp}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </span> <span *ngFor="let packComp of authService?.defaultSelectedPackageList[0]?.packComp;let pacs = index">
+            <div fxLayout="row" class="ScrGrpRow" *ngFor="let ps of packComp?.subComponent;let pacss = index">
+              <div fxFlex="100%">
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <div fxFlex="5%" fxLayoutAlign="center center">
+                    <mat-checkbox [ngModel]="true" [checked]="true" name="{{test7+pacs+pacss}}"  [disabled]="true"> </mat-checkbox>
+                  </div>
+                  <div fxFlex="90%">
+                    <i [ngClass]="(commonService.getIconsByComponent(packComp?.componentName) + ' SelPrice-icon')"></i>
+                    <div class="ScreenName"> {{packComp?.componentName}} -
+                    {{ps?.subComponentName}} - {{ps?.noOfComp}} </div>
+                    <div class="SpTag">₹ {{packComp?.msp}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </span>
+        </div>
+      </div> -->
+      <!-- // package screen hide end -->
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <h3 class="titleSm">Add Checks</h3>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row" class="ScreenGroup p-15">
+            <div fxFlex="100%"> @for (comp of defaultCompList; track comp; let ix = $index) {
+              <span>
+                @if (comp?.packageSubComponent?.length === 0) {
+                  <div fxLayout="row wrap" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                    fxLayoutGap="20px grid">
+                    <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxLayout="row" fxLayoutGap="20px">
+                        <div fxFlex="5%" fxLayoutAlign="center center">
+                          <mat-checkbox [(ngModel)]="comp.checked" name="{{'compchk'+ix}}"
+                            (change)="additionalSelect($event, comp)">
+                          </mat-checkbox>
+                        </div>
+                        <div fxFlex="70%">
+                          <!-- <i [ngClass]="(commonService.getIconsByComponent(comp?.compName) + ' SelPrice-icon')"></i> -->
+                          <div class="ScreenName">{{comp?.compName}}</div>
+                        </div>
+                        <div fxFlex="25%"> <span class="input-num">
+                          <input required matInput maxlength="1" autocomplete="off" type="number"
+                            #pageNo="ngModel" [(ngModel)]="comp.noOfComponent" appNumberOnly
+                            [NumberOnly]="false" min="0"
+                            [pattern]="'([1-'+(comp?.maxNoOfComp ? comp?.maxNoOfComp : 9)+']{1})?'"
+                            [disabled]="!comp.checked" name="{{'test'+ix}}" />
+                          <!-- <mat-hint *ngIf="!pageNo.errors">Max no of Component - {{comp?.maxNoOfComp ? comp?.maxNoOfComp : 9}}</mat-hint> -->
+                        </span>
+                        <div class="SpTag">₹ {{comp?.price}}</div>
+                      </div>
+                    </div>
+                    @if (pageNo?.errors?.pattern) {
+                      <mat-error fxLayoutAlign="end start">Please enter valid
+                      number</mat-error>
+                    }
+                  </div>
+                </div>
+              }
+            </span>
+          }
+          @for (comps of defaultCompList; track comps; let ind = $index) {
+            <span>
+              @for (comp of comps?.packageSubComponent; track comp; let subin = $index) {
+                <div fxLayout="row wrap" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                  fxLayoutGap="20px grid">
+                  <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <div fxLayout="row" fxLayoutGap="20px">
+                      <div fxFlex="5%" fxLayoutAlign="center center">
+                        <mat-checkbox [(ngModel)]="comp.checked" (change)="additionalSelect($event, comp)"
+                          name="{{'subcompchk'+ind+subin}}">
+                        </mat-checkbox>
+                      </div>
+                      <div fxFlex="70%">
+                        <!-- <i [ngClass]="commonService.getIconsByComponent(comp?.compName)"></i> -->
+                        <div class="ScreenName">{{comps?.compName}} - {{comp?.subCompName}}</div>
+                      </div>
+                      <div fxFlex="25%"> <span class="input-num">
+                        <input required matInput maxlength="1" [disabled]="!comp.checked"
+                          autocomplete="off" type="number" #comanme="ngModel"
+                          [(ngModel)]="comp.noOfComponent" appNumberOnly [NumberOnly]="false" min="0"
+                          [pattern]="'([1-'+(comp?.maxNoOfComp ? comp?.maxNoOfComp : 9)+']{1})?'"
+                          name="{{'subcompname'+ind+subin}}" />
+                        <!-- <mat-hint *ngIf="!comanme.errors">Max no of Component - {{comp?.maxNoOfComp ? comp?.maxNoOfComp : 9}}</mat-hint> -->
+                      </span>
+                      <div class="SpTag">{{comp?.price | currency:'INR'}}</div>
+                    </div>
+                  </div>
+                  @if (comanme.dirty && comanme?.errors?.pattern) {
+                    <mat-error fxLayoutAlign="end start">
+                    Please enter valid number</mat-error>
+                  }
+                </div>
+              </div>
+            }
+          </span>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+<div fxFlex="30%">
+  <!-- // package screen hide start -->
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      <h3 class="titleSm">Billing</h3>
+    </div>
+  </div>
+  <!-- // package screen hide end -->
+  <div class="ScrSummary">
+    <!-- // package screen hide start -->
+    <!-- <h4>Order Summary</h4>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div class="Hline">
+          <p><b>Package</b> <span class="rate">₹ {{authService?.defaultSelectedPackageList[0]?.fees}}
+        </span> </p>
+      </div>
+      <div class="ListsBlock">
+        <div *ngFor="let packComp of authService?.defaultSelectedPackageList[0]?.packComp">
+          <p *ngIf='packComp?.subComponent?.length == 0'>{{packComp?.componentName}} -
+          {{packComp?.noOfComp}}</p>
+          <p *ngFor="let ps of packComp?.subComponent">{{packComp?.componentName}} -
+          {{ps?.subComponentName}} - {{ps?.noOfComp}}</p>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!-- // package screen hide end -->
+  @if (getCheckedComps()) {
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div class="Hline">
+          <p><b>Add-Ons</b> <span class="rate">₹ {{getTotalOfComps()}}</span> </p>
+        </div>
+        <div class="ListsBlock">
+          @for (comp of defaultCompList; track comp) {
+            <div>
+              @if (comp?.packageSubComponent?.length == 0 && comp?.checked === true) {
+                <p>
+                  {{comp?.compName}} <span class="multi_ico">×</span> {{comp?.noOfComponent}}</p>
+                }
+                @for (ps of comp?.packageSubComponent; track ps) {
+                  <span>
+                    @if (ps?.checked === true) {
+                      <p>{{comp?.compName}} - {{ps?.subCompName}} -
+                      {{ps?.noOfComponent}}</p>
+                    }
+                  </span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div class="Hline">
+          <p><b>Account Setup Fee</b> <span class="rate">₹ 0 </span> </p>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div class="Hline retail-total">
+          <!-- // package screen hide start -->
+          <!-- <p> Sub Total <span class="rate">₹ {{(authService?.defaultSelectedPackageList[0]?.fees +
+        getTotalOfComps())}} </span> </p> -->
+        <p> Sub Total <span class="rate">₹ {{getTotalOfComps()}} </span> </p>
+        <!-- // package screen hide end -->
+        <p> Tax (5%) <span class="rate">₹ {{getTotalTax()}}</span> </p>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row border-top">
+    <div fxFlex="100%">
+      <div class="Hline retail-total">
+        <p><b>Estimated Total </b> <span class="rate">₹
+        <!-- // package screen hide start -->
+        {{(getTotalOfComps() + getTotalTax())}}
+        <!-- {{(authService?.defaultSelectedPackageList[0]?.fees + getTotalOfComps() + getTotalTax())}} -->
+        <!-- // package screen hide end -->
+      </span> </p>
+    </div>
+    <div class="block pt-20"> <a (click)="goToRegistration()">
+      <button [disabled]="!addForm.valid" mat-flat-button type="submit" color="primary"
+      fxFlex="100%">Proceed to Checkout</button>
+    </a> </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</form>
+<footer><strong>Verification Tracking System.</strong> Copyright © Krya Screening Private Limited. All rights reserved. <a
+routerLink="/privacy" target="_blank">Privacy Policies</a></footer>
+</div>
+</div>
+
+
+<p-toast position="top-center"></p-toast>
+
+
+<!--HTML Design Starts-->
+<!-- <div class="BgColor">
+<div class="FullBody">
+  <div class="HeaderBg">
+    <div class="HContBody">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+        fxFlex="100%" fxLayoutGap="20px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0px"
+        fxLayoutAlign="center center">
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="70%" fxFlex.xs="100%">
+          <div class="LogTxt"> <a href="#aaa" routerLink="/" class="link">
+            <div class="Logo lnd-logo"><i class="icon-acheck"></i></div>
+            <div class="logo-lett">
+              <div class="logo-txt">Krya Screening Private Limited</div>
+              <div class="logo-sol">Screening Made Smart</div>
+            </div>
+          </a> </div>
+        </div>
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="30%" fxHide.xs fxLayoutGap="20px" fxLayoutAlign="end center"> <a href="#" routerLink="/Selectpackage-addtional-check" class="lhelp" matTooltip="Pricing" matTooltipClass="accent-tooltip">Pricing</a> <a routerLink="canidateregistraion" class="lhelp" matTooltip="Sign Up" matTooltipClass="accent-tooltip">Sign Up</a> <a class="lhelp" matTooltip="Help" matTooltipClass="accent-tooltip">
+        <mat-icon> <i class="material-icons-outlined">help_outline</i> </mat-icon>
+        <span>Help</span> </a> </div>
+      </div>
+    </div>
+  </div>
+  <div class="landBanner">
+    <div class="ContBody">
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <h1 class="PricingHead">Add Checks To Your Package</h1>
+          <p class="text-center pb-20">Select add-on checks with your selected plan</p>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex="80%">
+          <div fxLayout="row" fxLayoutGap="80px">
+            <div fxFlex="65%">
+              <div fxLayout="row" class="ScreenGroup">
+                <div fxFlex="100%">
+                  <div fxLayout="row" class="ScrGrpRow">
+                    <div fxFlex="100%">
+                      <div fxLayout="row" fxLayoutGap="20px">
+                        <div fxFlex="5%" fxLayoutAlign="center center">
+                          <mat-checkbox> </mat-checkbox>
+                        </div>
+                        <div fxFlex="90%"> <i class="icon-address SelPrice-icon"></i>
+                        <div class="ScreenName">Address</div>
+                        <div class="SpTag">$14.99</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="row" class="ScrGrpRow">
+                  <div fxFlex="100%">
+                    <div fxLayout="row" fxLayoutGap="20px">
+                      <div fxFlex="5%" fxLayoutAlign="center center">
+                        <mat-checkbox> </mat-checkbox>
+                      </div>
+                      <div fxFlex="90%"> <i class="icon-companyvisit SelPrice-icon"></i>
+                      <div class="ScreenName">Company visit</div>
+                      <div class="SpTag">$14.99</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row" class="ScrGrpRow">
+                <div fxFlex="100%">
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="5%" fxLayoutAlign="center center">
+                      <mat-checkbox> </mat-checkbox>
+                    </div>
+                    <div fxFlex="90%"> <i class="icon-education SelPrice-icon"></i>
+                    <div class="ScreenName">Education</div>
+                    <div class="SpTag">$14.99</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="row" class="ScrGrpRow">
+              <div fxFlex="100%">
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <div fxFlex="5%" fxLayoutAlign="center center">
+                    <mat-checkbox> </mat-checkbox>
+                  </div>
+                  <div fxFlex="90%"> <i class="icon-employement SelPrice-icon"></i>
+                  <div class="ScreenName">Employement</div>
+                  <div class="SpTag">$14.99</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <h3 class="titleSm">Additional Add-Ons Available</h3>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row" class="ScreenGroup">
+            <div fxFlex="100%">
+              <div fxLayout="row" class="ScrGrpRow">
+                <div fxFlex="100%">
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="5%" fxLayoutAlign="center center">
+                      <mat-checkbox> </mat-checkbox>
+                    </div>
+                    <div fxFlex="70%"><i class="icon-pancard SelPrice-icon"></i>
+                    <div class="ScreenName">PAN Card</div>
+                  </div>
+                  <div fxFlex="25%"> <span class="input-num">
+                    <input required matInput maxlength="2"
+                      autocomplete="off" type="number" #pageNo [(ngModel)]="currentPage"  appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                  </span>
+                  <div class="SpTag">$14.99</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="row" class="ScrGrpRow">
+            <div fxFlex="100%">
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="5%" fxLayoutAlign="center center">
+                  <mat-checkbox> </mat-checkbox>
+                </div>
+                <div fxFlex="70%"> <i class="icon-passport SelPrice-icon"></i>
+                <div class="ScreenName">Passport</div>
+              </div>
+              <div fxFlex="25%"> <span class="input-num">
+                <input required matInput maxlength="2"
+                  autocomplete="off" type="number" #pageNo [(ngModel)]="currentPage"  appNumberOnly
+                  [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+              </span>
+              <div class="SpTag">$14.99</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" class="ScrGrpRow">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="5%" fxLayoutAlign="center center">
+              <mat-checkbox> </mat-checkbox>
+            </div>
+            <div fxFlex="70%"> <i class="icon-education SelPrice-icon"></i>
+            <div class="ScreenName">Education</div>
+          </div>
+          <div fxFlex="25%"> <span class="input-num">
+            <input required matInput maxlength="2"
+              autocomplete="off" type="number" #pageNo [(ngModel)]="currentPage"  appNumberOnly
+              [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+          </span>
+          <div class="SpTag">$14.99</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" class="ScrGrpRow">
+    <div fxFlex="100%">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="5%" fxLayoutAlign="center center">
+          <mat-checkbox> </mat-checkbox>
+        </div>
+        <div fxFlex="70%"> <i class="icon-criminalcourt SelPrice-icon"></i>
+        <div class="ScreenName">criminal court</div>
+      </div>
+      <div fxFlex="25%"> <span class="input-num">
+        <input required matInput maxlength="2"
+          autocomplete="off" type="number" #pageNo [(ngModel)]="currentPage"  appNumberOnly
+          [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+      </span>
+      <div class="SpTag">$14.99</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+<div fxLayout="row" class="ScreenGroup p-15" style="margin-top: 25px;">
+  <div fxFlex="100%">
+    <div fxLayout="row wrap" fxLayout.md="row" fxLayout.sm="row"
+      fxLayout.xs="column" fxLayoutGap="20px grid">
+      <div fxFlex="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="50%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="5%" fxLayoutAlign="center center">
+            <mat-checkbox> </mat-checkbox>
+          </div>
+          <div fxFlex="90%"> <i class="icon-criminalcourt SelPrice-icon"></i>
+          <div class="ScreenName">criminal court</div>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="50%">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="5%" fxLayoutAlign="center center">
+          <mat-checkbox> </mat-checkbox>
+        </div>
+        <div fxFlex="90%"> <i class="icon-pancard SelPrice-icon"></i>
+        <div class="ScreenName">PAN Card</div>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="50%">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="5%" fxLayoutAlign="center center">
+        <mat-checkbox> </mat-checkbox>
+      </div>
+      <div fxFlex="90%"> <i class="icon-criminalcheck SelPrice-icon"></i>
+      <div class="ScreenName">Criminal check</div>
+    </div>
+  </div>
+</div>
+<div fxFlex="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="50%">
+  <div fxLayout="row" fxLayoutGap="20px">
+    <div fxFlex="5%" fxLayoutAlign="center center">
+      <mat-checkbox> </mat-checkbox>
+    </div>
+    <div fxFlex="90%"> <i class="icon-judiscourtrecord SelPrice-icon"></i>
+    <div class="ScreenName">Judis Court Record</div>
+  </div>
+</div>
+</div>
+<div fxFlex="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="50%">
+  <div fxLayout="row" fxLayoutGap="20px">
+    <div fxFlex="5%" fxLayoutAlign="center center">
+      <mat-checkbox> </mat-checkbox>
+    </div>
+    <div fxFlex="90%"> <i class="icon-bankstatement SelPrice-icon"></i>
+    <div class="ScreenName"> Bank statement</div>
+  </div>
+</div>
+</div>
+<div fxFlex="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="50%">
+  <div fxLayout="row" fxLayoutGap="20px">
+    <div fxFlex="5%" fxLayoutAlign="center center">
+      <mat-checkbox> </mat-checkbox>
+    </div>
+    <div fxFlex="90%"> <i class="icon-referencecheck SelPrice-icon"></i>
+    <div class="ScreenName">Reference Check</div>
+  </div>
+</div>
+</div>
+<div fxFlex="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="50%">
+  <div fxLayout="row" fxLayoutGap="20px">
+    <div fxFlex="5%" fxLayoutAlign="center center">
+      <mat-checkbox> </mat-checkbox>
+    </div>
+    <div fxFlex="90%"> <i class="icon-passport SelPrice-icon"></i>
+    <div class="ScreenName">Passport</div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div fxFlex="35%">
+  <div class="ScrSummary">
+    <h4>Order Summary</h4>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div class="Hline">
+          <p><b>Basic</b><a href="#">Edit</a> <span class="rate">$29.99 </span> </p>
+        </div>
+        <div class="ListsBlock">
+          <ul>
+            <li>Social Security Number Trace</li>
+            <li>Nationwide Criminal Databases Search**</li>
+            <li>Sex Offender Registry Search</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div class="Hline">
+          <p><b>Add-Ons</b> <span class="rate">$14.99</span> </p>
+        </div>
+        <div class="ListsBlock">
+          <ul>
+            <li>Social Security Number Trace</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div class="Hline">
+          <p><b>Account Setup Fee</b> <span class="rate">$49.99 </span> </p>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div class="Hline retail-total">
+          <p> Subtotal <span class="rate">$49.99 </span> </p>
+          <p> Sales Tax <span class="rate">Not Yet Calculated</span> </p>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row border-top">
+      <div fxFlex="100%">
+        <div class="Hline retail-total">
+          <p><b>Estimated Total </b> <span class="rate">$49.99 </span> </p>
+        </div>
+        <div class="block pt-20"> <a routerLink="/canidateregistraion">
+          <button mat-flat-button type="submit" color="primary"
+          fxFlex="100%">Proceed to Checkout</button>
+        </a> </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer><strong>Verification Tracking System.</strong> Copyright © Krya Screening Private Limited. All rights reserved. <a
+routerLink="/privacy" target="_blank">Privacy Policies</a></footer>
+</div>
+</div> -->
+<!--HTML Design Ends-->

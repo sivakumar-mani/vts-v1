@@ -1,0 +1,68 @@
+.teamL-Detail.Report h5 {
+    display: inline-block;
+    width: 65%;
+    margin: 0;
+    line-height: 1;
+    padding: 0;
+}
+
+.teamL-Detail.Report dt {
+    float: right;
+    color: #8a8b8d;
+    font-size: 11px;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+.ReportView {
+    background: #f8f8f8;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.ReportView .Rt {
+    background: #dedede;
+}
+
+.ReportView p {
+    margin: 15px;
+    color: #353537;
+    font-size: 14px;
+    font-weight: 300;
+    white-space: pre-line;
+    flex-direction: column;
+    box-sizing: border-box;
+    display: flex;
+    line-height: 1;
+}
+
+.ReportView p label {
+    color: #8A8B8D;
+    font-size: 11px;
+    font-weight: normal !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    text-transform: uppercase;
+    white-space: pre-line;
+    margin-bottom: 8px;
+}
+
+.ReportView .Rt ul {
+    list-style: none;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+.ReportView .Rt ul li {
+    display: inline-block;
+}
+
+.ReportView .Rt ul li:after {
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    color: #cdcece;
+    display: inline-block;
+    padding-right: .5rem;
+    padding-left: .5rem;
+}

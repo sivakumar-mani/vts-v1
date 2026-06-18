@@ -1,0 +1,21 @@
+@import "../../stepper.css";
+
+
+ 
+/* For Action button in Add Site (Add & Remove) */
+
+.action-btn{
+    width:12%;
+    float: left;
+    margin: 15px 0px 10px 0px;
+}
+.addremove-set{
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    padding: 25px 20px 5px 20px;
+    background: rgba(0, 0, 0, 0.01);
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 45px;
+    margin-top: 20px;
+}

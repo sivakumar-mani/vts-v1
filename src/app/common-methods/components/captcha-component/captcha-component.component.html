@@ -1,0 +1,32 @@
+<div fxLayout="row" fxLayoutGap="0pz">
+  <div fxFlex="100%">
+    <div fxLayout="row" fxLayoutGap="10px">
+      <div fxFlex="35%">
+        <img id="captchaId"  src="" alt="login Captcha" class="captcha-img" />
+      </div>
+      <div fxFlex="15%" class="captch-btn mt-5">
+        <button type='button' (click)='bindCaptcha()' mat-icon-button matTooltip="Refresh"
+          matTooltipClass="accent-tooltip"><i class="icon-refresh-cw"></i></button>
+        </div>
+        <div fxFlex="44%" fxLayoutAlign="end center">
+          <form Class="txt-captcha" name="form" fxLayout="row" (ngSubmit)="f.form.valid && validateCaptcha()"
+            #f="ngForm" novalidate fxFlex="100%" fxLayoutAlign="end center">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <input type="text" placeholder="Enter Captcha" matInput class="form-control" name="captchaIP"
+                [(ngModel)]="captchaValue.captchaInput" #captchaIP="ngModel" autocomplete = "off"
+                [ngClass]="{ 'is-invalid': f.submitted && captchaIP.invalid }" required />
+              @if (captchaIP.invalid) {
+                <mat-error color="warn" class="mt-15">
+                  @if (captchaIP['errors'].required && captchaValue.captchaInput !== captchaValue.captchaCode) {
+                    <span
+                      >
+                    Captcha invalid</span>
+                  }
+                </mat-error>
+              }
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

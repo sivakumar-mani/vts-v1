@@ -1,0 +1,8 @@
+<google-map [center]="{lat: lat, lng: lng}" [zoom]="12" width="100%" height="400px" (mapClick)="onChooseLocation($event)">
+  @if (locationChosen) {
+    <map-marker [position]="{lat: lat, lng: lng}"></map-marker>
+  }
+</google-map>
+
+<p>Current Latitude : {{lat}}</p>
+<p>Current Longitude : {{lng}}</p>

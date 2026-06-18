@@ -1,0 +1,518 @@
+<app-breadcrumb [btnUpload]="btnUpload" [btnDownLoad]="btnDownLoad" [showRoutePath]="false" [btnValidate]="btnValidate"
+  [btnBack]="true" [btnExport]="btnExport" (eventExport)="downloadDoc(docList)" (eventBack)="back()"
+  (eventValidate)="validateUploadFile(false)" (eventUpload)="uploadDialog(true)" (eventDownload)="downloadDocument()">
+</app-breadcrumb>
+
+
+
+
+<!-- <mat-card> -->
+<!-- <mat-card-header>
+    <mat-card-title>
+      <h1 class="header-title">{{header}} {{label}} - Import</h1>
+    </mat-card-title>
+    <span fxFlex></span>
+  </mat-card-header> -->
+<!-- <mat-card-content> -->
+<!-- <div fxLayout="row">
+      <div fxFlex="100%" class="pb-15">
+        <mat-radio-group fxLayoutGap="20px" [(ngModel)]='setOption' (change)="getEmployerInstitution(setOption)">
+          <mat-radio-button [value]="1">Employer</mat-radio-button>
+          <mat-radio-button [value]="2">Institution</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div> -->
+
+<div *ngIf="menuData?.screenName !== 'Candidate document upload'" class="row pt-20">
+  <form id="ngForm" [formGroup]='fakeInsForm'>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="50%" *ngIf='isFake'>
+        <app-auto-complete [selectProperties]='clientControls'></app-auto-complete>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <mat-label class="lbl">Attached Documents</mat-label>
+        <div class="file-upload">
+          <i class="material-icons">cloud_upload</i>
+          <span>Browse here...</span>
+          <input type="file" #fileInput (change)="openUploadDoc($event);allowSameFileUpload($event);" />
+        </div>
+        <div class="file-names mt-10" *ngIf="bulkUploadDoc?.name">
+          <div class="file-upload-files"> <a routerLinkActive="active-link" matTooltip="{{bulkUploadDoc?.name}}"
+              matTooltipClass="accent-tooltip">{{bulkUploadDoc?.name}}</a>
+            <button type="button" class="close" aria-label="Close" (click)="removeDocument()">
+              <span aria-hidden="true">&times;</span> </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <mat-hint *ngIf="screenType === 'addressTagging'"> * Max of 100 verification Id’s were requested to upload at a time
+      and Max file size 5MB
+      <br />* Status can be updated only to Pending from Open/ within Pending.
+    </mat-hint>
+
+  </form>
+</div>
+<!-- VTS2-2023-Sales-0100 - Document Upload and view document - By Naveen-->
+<div *ngIf="userData.applicationId === 2 && menuData?.screenName === 'Candidate document upload'" class="row pt-20">
+  <form id="ngForm" [formGroup]='fakeInsForm'>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="50%" *ngIf='isFake'>
+        <app-auto-complete [selectProperties]='clientControls'></app-auto-complete>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <mat-label class="lbl">Attached Documents</mat-label>
+        <div class="file-upload">
+          <i class="material-icons">cloud_upload</i>
+          <span>Browse here...</span>
+          <input type="file" #fileInput
+            (change)="openUploadDoc($event);getfileSizeValidation($event);allowSameFileUpload($event);" />
+        </div>
+        <div class="file-names mt-10" *ngIf="docName">
+          <div class="file-upload-files"> <a routerLinkActive="active-link" matTooltip="{{bulkUploadDoc?.name}}"
+              matTooltipClass="accent-tooltip">{{docName}}</a>
+            <!-- <button type="button" class="close" aria-label="Close" (click)="removeDocument()">
+                  <span aria-hidden="true">&times;</span> </button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <mat-hint *ngIf="screenType === 'addressTagging'"> * Max of 100 verification Id’s were requested to upload at a time
+      and Max file size 5MB
+      <br />* Status can be updated only to Pending from Open/ within Pending.
+    </mat-hint>
+
+  </form>
+</div>
+
+
+
+
+<div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="20px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px"
+  *ngIf="showGrid && menuData?.screenName !== 'Candidate document upload'" class="row pt-20">
+  <div fxFlex="100%">
+    <p-table #dt [columns]="displayedColumns" [value]="docErrorList" [resizableColumns]="true"
+      [reorderableColumns]="true" [scrollable]="true" [paginator]="true" [rows]="10">
+
+      <!-- COLGROUP -->
+      <ng-template pTemplate="colgroup" let-colgroupCols>
+        <colgroup>
+          <col *ngFor="let col of colgroupCols" style="width:150px" />
+        </colgroup>
+      </ng-template>
+
+      <!-- HEADER -->
+      <ng-template pTemplate="header" let-headerCols>
+        <tr>
+          <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn
+            [ngClass]="{ 'text-center': col.field === 'Action' }">
+
+            <span [pSortableColumn]="col.field">
+              <div class="thname">{{ col.header }}</div>
+              <p-sortIcon *ngIf="col.field !== 'actions'" [field]="col.field" matTooltip="Sort"
+                matTooltipClass="accent-tooltip">
+              </p-sortIcon>
+            </span>
+
+          </th>
+        </tr>
+      </ng-template>
+
+      <!-- BODY -->
+      <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+
+        <tr>
+          <td *ngFor="let col of bodyCols" [ngClass]="{ 'detail-hover': col.field === 'detail' }">
+
+            <span [ngClass]="rowData['status'] === 'Failure' ? 'error-msg' : 'success-msg'"
+              [attr.title]="col.field === 'detail' ? rowData[col.field] : null">
+              {{ rowData[col.field] }}
+            </span>
+
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- EMPTY MESSAGE -->
+      <ng-template pTemplate="emptymessage" let-emptyCols>
+        <tr *ngIf="docErrorList.length === 0">
+          <td [attr.colspan]="emptyCols.length">
+            <div class="no-record text-center">
+              <span>No Record Found</span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+
+    <div class="cus-paginator">
+      <div fxLayout="">
+        <div fxFlex="30%">
+          Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first <=
+              dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s) </div>
+              <span fxFlex></span>
+              <div fxFlex="50%" fxLayoutAlign="end center">
+                <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                    dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                    navigateNxtPrevPage(dt.first + dt.rows, dt.rows)">
+                  <i class="icon-control-start mr-5"></i></a>
+                <span class="gotopagbg mr-2 ml-2">Go to Page<span class="input-num">
+                    <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" /> </span></span>
+                <span class="mr-2">Of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                <a [ngClass]="
+                    dt.rows + dt.first >= dt.totalRecords
+                      ? 'page-btn disabled' : 'page-btn'" (click)="
+                    dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                    navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                  "><i class="icon-control-end ml-5"></i></a>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px"
+    *ngIf="userData.applicationId === 2 && menuData?.screenName === 'Candidate document upload'" class="row pt-20">
+    <div fxFlex="100%">
+      <p-table #dt [columns]="displayedColumns" [value]="docErrorList" [resizableColumns]="true"
+        [totalRecords]="totalpages" [reorderableColumns]="true" [scrollable]="true" [paginator]="true" [rows]="10"
+        [lazy]="true">
+
+        <!-- COLGROUP -->
+        <ng-template pTemplate="colgroup" let-colgroupCols>
+          <colgroup>
+            <col *ngFor="let col of colgroupCols" style="width:150px" />
+          </colgroup>
+        </ng-template>
+
+        <!-- HEADER -->
+        <ng-template pTemplate="header" let-headerCols>
+          <tr>
+            <th>File Name</th>
+            <th>File Size</th>
+            <th>Comments</th>
+            <th>Remove</th>
+          </tr>
+        </ng-template>
+
+        <!-- BODY -->
+        <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-expanded="expanded" let-bodyCols="columns">
+
+          <tr>
+            <td *ngFor="let col of bodyCols" [ngSwitch]="col.field"
+              [ngClass]="+rowData.fileSize > 10 ? 'red' : 'green'">
+
+              <span *ngSwitchCase="'fileName'">
+                {{ rowData.fileName }}
+              </span>
+
+              <span *ngSwitchCase="'fileSize'">
+                {{ rowData.fileSize }} MB
+              </span>
+
+              <span *ngSwitchCase="'comments'">
+                {{ rowData.comments }}
+              </span>
+
+              <span *ngSwitchCase="'remove'">
+                <div class="my-center-text">
+                  <button mat-icon-button matTooltip="Remove" (click)="reject(index, docErrorList)">
+                    <i class="icon-reject" style="color:red;"></i>
+                  </button>
+                </div>
+              </span>
+
+            </td>
+          </tr>
+        </ng-template>
+
+        <!-- EMPTY MESSAGE -->
+        <ng-template pTemplate="emptymessage" let-emptyCols>
+          <tr *ngIf="docErrorList.length === 0">
+            <td [attr.colspan]="emptyCols.length">
+              <div class="no-record text-center">
+                <span>No Record Found</span>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </div>
+  </div>
+  <div style="text-align: right;"
+    *ngIf="userData.applicationId === 2 && menuData?.screenName === 'Candidate document upload'&& docErrorList.length > 0">
+    <button mat-flat-button color="warn" (click)="cancel();">Cancel</button>&nbsp;
+    <button mat-flat-button color="primary" (click)="getValidDoc()">Continue</button>
+  </div>
+
+  <!-- </mat-card-content> -->
+  <!-- </mat-card> -->
+
+  <!-- VTS2-2023-Sales-0100 - Document Upload and view document - By Naveen-->
+  <div *ngIf="userData.applicationId === 1 && menuData?.screenName === 'Candidate document upload'" fxLayout="row">
+    <div fxFlex="100%">
+      <mat-card>
+        <mat-card-content>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid">
+            <div fxFlex="100%">
+              <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                <div fxFlex="100%" [formGroup]="candidateViewForm">
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                      <mat-label>From Date</mat-label>
+                      <input matInput [matDatepicker]="sampledatePicker" placeholder="From Date"
+                        formControlName="fromDate" />
+                      <mat-datepicker-toggle matSuffix [for]="sampledatePicker"></mat-datepicker-toggle>
+                      <mat-datepicker #sampledatePicker startView="multi-year"
+                        (monthSelected)="setMonthAndYearFrom($event, sampledatePicker)"></mat-datepicker>
+                    </mat-form-field>
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                      <mat-label>To Date</mat-label>
+                      <input matInput [matDatepicker]="sampledatePicker1" placeholder="To Date"
+                        formControlName="toDate" />
+                      <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"></mat-datepicker-toggle>
+                      <mat-datepicker #sampledatePicker1 startView="multi-year"
+                        (monthSelected)="setMonthAndYearTo($event, sampledatePicker1)"></mat-datepicker>
+                    </mat-form-field>
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                      <mat-label>File Name</mat-label>
+                      <input matInput placeholder="File Name" type="text" size="1000"
+                        (propValueEvent)="getPropertyValue($event)" formControlName="fileName">
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <div fxFlex="100%">
+                      <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+                        <a (click)="submitSearchValue()">Search</a>
+                        <span>|</span>
+                        <a (click)="resetForm();"> Reset</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div fxFlex="100%">
+                  <p-table #dtHistory [columns]="displayColumns" [value]="outputDataReportList"
+                    [resizableColumns]="true" [totalRecords]="totalpages" [reorderableColumns]="true"
+                    [scrollable]="true" [lazy]="true" [paginator]="true" [rows]="itemperpage"
+                    (onLazyLoad)="LoadHistory($event)">
+
+                    <!-- COLGROUP -->
+                    <ng-template pTemplate="colgroup" let-colgroupCols>
+                      <colgroup>
+                        <col *ngFor="let col of colgroupCols" style="width:200px" />
+                      </colgroup>
+                    </ng-template>
+
+                    <!-- HEADER -->
+                    <ng-template pTemplate="header" let-headerCols>
+                      <tr>
+                        <th>
+                          <div class="my-center-text">
+                            <mat-checkbox class="cust_spright" [checked]="isAllSelected"
+                              (change)="SelectAll($event.checked)">
+                            </mat-checkbox>
+                            &nbsp;<span>Select All</span>
+                          </div>
+                        </th>
+                        <th>Client Name</th>
+                        <th>File Name</th>
+                        <th>File Type</th>
+                        <th>Uploaded Date</th>
+                      </tr>
+                    </ng-template>
+
+                    <!-- BODY -->
+                    <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-expanded="expanded"
+                      let-bodyCols="columns">
+
+                      <tr>
+                        <td *ngFor="let col of bodyCols" [ngSwitch]="col.field">
+
+                          <span *ngSwitchCase="'isSelected'">
+                            <div class="my-center-text">
+                              <mat-checkbox [checked]="rowData.isSelected"
+                                (change)="changeWorkFlow(index, $event.checked, col.isSelected)">
+                              </mat-checkbox>
+                            </div>
+                          </span>
+
+                          <span *ngSwitchCase="'clientName'">{{ rowData.clientName }}</span>
+                          <span *ngSwitchCase="'fileName'">{{ rowData.fileName }}</span>
+                          <span *ngSwitchCase="'fileType'">{{ rowData.fileType }}</span>
+                          <span *ngSwitchCase="'createdDate'">{{ rowData.createdDate }}</span>
+
+                        </td>
+                      </tr>
+                    </ng-template>
+
+                    <!-- EMPTY MESSAGE -->
+                    <ng-template pTemplate="emptymessage" let-emptyCols>
+                      <tr *ngIf="outputDataReportList.length === 0">
+                        <td [attr.colspan]="emptyCols.length">
+                          <div class="no-record text-center">
+                            <span>No Record Found</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
+
+                  </p-table>
+                  <!-- <div *ngIf="outputDataReportList.length > 0 && totalpages >= 10"
+                              [ngClass]="{'empty-record': outputDataReportList?.length === 0}" class="cus-paginator" fxLayout="row wrap"
+                              fxLayoutGap="10px grid">
+                          
+                              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="start center">
+                                Showing {{ dtHistory.totalRecords
+                                < 1 ? 0 : dtHistory.first + 1 }} - {{ dtHistory.totalRecords> 0 ? dtHistory.rows
+                                  + dtHistory.first
+                                  <=dtHistory.totalRecords ? dtHistory.rows + dtHistory.first : dtHistory.totalRecords : 0 }} of {{
+                                    dtHistory.totalRecords }} record(s) &nbsp;<a *ngIf="totalpages >= 10 && !isShowAll"
+                                      (click)="showall()">{{ isShowAll != true ? '| Show All' :
+                                    ''}}</a>
+                              </div>
+                              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center"
+                                fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center"
+                                *ngIf="outputDataReportList.length > 0 && isShowAll != true">
+                                <a [ngClass]="dtHistory?.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                                                    dtHistory?.onPageChange({
+                                                      first: dtHistory?.first - dtHistory?.rows,
+                                                      rows: dtHistory?.rows
+                                                    });
+                                                    navigateNxtPrevPage1(dtHistory?.first + dtHistory?.rows, dtHistory?.rows)
+                                                  "> <i class="icon-control-start mr-5"></i> </a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go
+                                  to Page<span class="input-num">
+                                    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                                      [NumberOnly]="false" (keyup.enter)="navigatePage1(pageNo.value, dtHistory?.rows)" />
+                                  </span></span> <span class="mr-2" fxHide.xs> of
+                                  {{ getTotalPages1(dtHistory?.totalRecords, dtHistory?.rows) }}</span>
+                                <a [ngClass]="
+                                                    dtHistory?.rows + dtHistory?.first >= dtHistory?.totalRecords
+                                                      ? 'page-btn disabled'
+                                                      : 'page-btn'
+                                                  " (click)="
+                                                    dtHistory?.onPageChange({
+                                                      first: dtHistory?.first + dtHistory?.rows,
+                                                      rows: dtHistory?.rows
+                                                    });
+                                                    navigateNxtPrevPage1(dtHistory?.first + dtHistory?.rows, dtHistory?.rows)
+                                                  "><i class="icon-control-end ml-5"></i></a>
+                              </div>
+                            </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <ng-template #uploadConfirm>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">Confirmation !</h3>
+              <p class="text-sm">Are you sure want to update this records ?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+      <button mat-flat-button color="warn" (click)="validateUploadFile(false)">No, validate it</button>
+      <button mat-flat-button color="accent" (click)="validateUploadFile(btnType)">Yes, update it</button>
+    </mat-dialog-actions>
+
+  </ng-template>
+  <!-- VTS2-2023-Sales-0100 - Document Upload and view document - By Naveen-->
+  <ng-template #fileSizePopUp>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">{{ headerText}} </h3>
+              <p class="text-sm">{{ messageText1 }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-flat-button color="warn" (click)="dialog.closeAll();"> Okay </button>
+    </mat-dialog-actions>
+  </ng-template>
+  <ng-template #confirmUploadDoc>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">{{ headerText}} </h3>
+              <p class="text-sm">{{ messageText1 }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-flat-button color="warn" (click)="dialog.closeAll();"> No </button>
+      <button mat-flat-button color="accent" (click)="uploadDoc(pSize)">Yes</button>
+    </mat-dialog-actions>
+  </ng-template>
+  <ng-template #successAlert>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">{{ headerText}} </h3>
+              <p class="text-sm">{{ messageText1 }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-flat-button color="accent" (click)="cancel();dialog.closeAll();">Finish</button>
+    </mat-dialog-actions>
+  </ng-template>

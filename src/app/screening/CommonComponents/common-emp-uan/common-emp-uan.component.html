@@ -1,0 +1,206 @@
+<div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutGap="0px grid">
+  <div fxFlex="100%">
+
+    <form [formGroup]="mainForm" autocomplete="off" role="presentation">
+      @if (mainForm!=undefined) {
+        <div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+            <div fxFlex="100%">
+              <!-- Dont Delete this comm line :  Responsive design completed below component -->
+              @if (userData.applicationId === 1 || userData.applicationId === 2) {
+                <app-common-base-info
+                  [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'"
+                  [compBaseDetails]="compBaseDetails" (emitNotappChange)="notApplicable($event)"
+                  [showNotApplicable]="showNotApplicable">
+                </app-common-base-info>
+              }
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column">
+                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  [formGroupName]="formgroupName">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Full Name</mat-label>
+                    <input matInput type="text" mat-autofocus="true" placeholder="Full Name"
+                      formControlName="fullName" maxlength="100" />
+                    @if (!!mainForm.get(formgroupName +
+                      '.fullName')?.errors?.required) {
+                      <mat-error> Full name is required
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column">
+                <div fxFlex="100%">
+                  <h3 class="sub-header">Employment UAN Details</h3>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column">
+                <div fxFlex="100%">
+                  <label id="example-radio-group-label">UAN Availability</label>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column">
+                <div [formGroupName]="formgroupName" fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%"
+                  fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-radio-group required formControlName="uanAvailability"
+                    style="display: inline-flex; flex-direction: row;" fxLayoutGap="20px"
+                    (change)="clearValidation()">
+                    <mat-radio-button [value]=true>Yes</mat-radio-button>
+                    <mat-radio-button [value]=false>No</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div><br>
+              @if (mainForm.get(formgroupName + '.uanAvailability')?.value === true) {
+                <div
+                  fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                  fxLayoutGap.xs="0px grid">
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    [formGroupName]="formgroupName">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>UAN Number</mat-label>
+                      <input formControlName="uan" #uanValue autocomplete="off" role="presentation"
+                        maxlength="12" minlength="12" type="text"
+                        (keypress)="NumbersOnlyAllowed($event)" matInput placeholder="UAN Number"
+                        appNumberOnly [PhoneNumber]="false" required
+                        (keyup)="uanValue.value = uanValue.value.toUpperCase()">
+                      <mat-hint class="f-13">(UAN must be 12 digits)<br /></mat-hint>
+                      @if (!!mainForm?.get(formgroupName)?.get('uan')?.errors?.minlength) {
+                        <mat-error>
+                        UAN Number should contain 12 characters</mat-error>
+                      }
+                      @if (!!mainForm?.get(formgroupName)?.get('uan')?.errors?.required) {
+                        <mat-error>
+                          UAN Number is required
+                        </mat-error>
+                      }
+                      @if (!!mainForm?.get(formgroupName)?.get('uan')?.errors?.pattern &&
+                        !mainForm?.get(formgroupName)?.get('uan')?.errors?.minlength) {
+                        <mat-error>
+                          UAN Number is invalid
+                        </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+              }
+              <div fxLayout="row" fxLayoutGap="0px" class="mb-10">
+                <div fxFlex="100%">
+                  <app-custom-fields [mainForm]="mainForm"
+                  [formArrName]="'componentCustomFields'"></app-custom-fields>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                fLayoutGap.xs="0px grid">
+                @if (mainForm.get(formgroupName + '.uanAvailability')?.value === true) {
+                  <div fxFlex="67%"
+                    fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    [formGroupName]="'screeningComponentInfo'">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Remarks</mat-label>
+                      <textarea #remark formControlName="remark" maxlength="1000" matInput
+                      placeholder="Remarks"> </textarea> <!-- this form control name for the Remarks -->
+                      <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
+                    </mat-form-field>
+                  </div>
+                }
+                @if (mainForm.get(formgroupName + '.uanAvailability')?.value !== true) {
+                  <div fxFlex="67%"
+                    fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    [formGroupName]="formgroupName">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Please enter the reason for non-availability</mat-label>
+                      <textarea required #reason formControlName="remarks" minlength="15" maxlength="1000" matInput
+                                    matTooltip="{{15 > reason.value.length ? 'Enter the reason
+                                    description, not less than 15 characters' : ''}}"
+                        matTooltipClass="accent-tooltip" matTooltipPosition="above"
+                      matTooltipClass="my-custom-tooltip" placeholder="Enter the reason description, Not less than 15 characters"></textarea>  <!-- this form control name for the reason -->
+                      <!-- <mat-hint class="f-13">{{15 > reason.value.length ? 'Enter the reason
+                    description, not less than 15 characters' : ''}}<br /></mat-hint> -->
+                    @if (!!mainForm?.get(formgroupName)?.get('remarks')?.errors?.minlength) {
+                      <mat-error
+                        >
+                      Enter the reason description, not less than 15 characters</mat-error>
+                    }
+                    @if (!!mainForm?.get(formgroupName)?.get('remarks')?.errors?.required) {
+                      <mat-error>
+                        Reason is required
+                      </mat-error>
+                    }
+                    <mat-hint>({{reason.value.length}}/1000 Max)</mat-hint>
+                    <!-- || 15 > {{reason.value.length}} ? 'Must enter 15 characters' : ''-->
+                  </mat-form-field>
+                </div>
+              }
+              @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length) {
+                <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  [formGroupName]="'screeningComponentInfo'"
+                  >
+                  <mat-label class="lbl">Choose</mat-label>
+                  <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise
+                    Insufficiency
+                  </mat-checkbox>
+                </div>
+              }
+            </div>
+            @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                fxLayoutGap.xs="0px grid"
+                >
+                <div fxFlex="100%">
+                  <div class="alert alert-info" role="alert">
+                    <h4>Insufficiency Clearance Remarks: </h4>
+                    @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+                      <span
+                        >
+                        {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+          @if (showInSuff) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="100%">
+                <!-- Dont Delete this comm line :  Responsive design completed below component re-checked as on 14-04-2020 -->
+                <app-common-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm"
+                  [compBaseDetails]="mainForm.get('screeningComponentInfo').value"
+                  [formgroupName]="'screeningInsufficiency'">
+                </app-common-raise-insufficiency>
+              </div>
+            </div>
+          }
+          @if (screeningService.caseFlagType == common.INSUFFCLEARANCE) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="100%">
+                <!-- Dont Delete this comm line :  Responsive design completed below component re-checked as on 14-04-2020  -->
+                <app-client-app-document-upload [fileBtn]="fileBtn" [mainForm]="mainForm"
+                  [formgroupName]="'screeningComponentInfo'"
+                  [dupScreeningDoc]="screeningComponent.componentDocument"
+                  [validationFlag]="false">
+                </app-client-app-document-upload>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+    </form>
+  </div>
+</div>

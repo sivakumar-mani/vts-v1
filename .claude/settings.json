@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"d:\\\\version13upgradeui\\\\vts\\\\src\" -Recurse -Force -Depth 2 | Where-Object { $_.PSIsContainer } | Select-Object FullName | Sort-Object FullName)",
+      "Bash(npm uninstall *)",
+      "Bash(npm install *)",
+      "Bash(npx ng *)",
+      "Bash(ping -n 6 127.0.0.1)"
+    ]
+  }
+}

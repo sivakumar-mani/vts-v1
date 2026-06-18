@@ -1,0 +1,832 @@
+﻿<app-breadcrumb [btnAdd]="isHomePage" [btnAddDisabled]="!screenAuth.addFlag" [btnSave]="!isHomePage"
+  [btnBack]="!isHomePage" [btnReset]="false" [btnResetTbl]="isHomePage" (eventAdd)="addTeam()"
+  [routePath]='"Configure / User / Department Team"' (eventBack)="isHomePage = true;this.teamNames.setValue('');"
+  (eventSave)="saveTeam()" [toolTip]="teamFormGroup?.controls['teamId']?.value === 0 ? 'Save' : 'Update'"
+  (eventReset)="false" (eventResetTbl)="false">
+</app-breadcrumb>
+
+<!-- Department Details  -->
+@if (isHomePage) {
+  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px"
+    >
+    <div fxFlex="100%" class="dt-viewBg">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px"
+        fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
+        <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%" class="border-right">
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+            <div fxFlex="100%">
+              <h4>Team &nbsp;
+                <a style="color:aliceblue" (click)="sortBy('teamName')">
+                <i [ngClass]="{'icon-sort': column != 'teamName', 'icon-sort-asc': (column == 'teamName' && !isDesc),
+                                                                  'icon-sort-desc': (column == 'teamName' && isDesc) }"
+                    aria-hidden="true">
+                  </i></a>
+                  &nbsp;&nbsp;
+                  <mat-form-field>
+                    <mat-label></mat-label>
+                    <input matInput placeholder="Search here..." type="text" pInputText size="50" autocomplete="off"
+                      [formControl]="teamNames" />
+                    @if (teamNames.value) {
+                      <button mat-button matSuffix mat-icon-button aria-label="Clear"
+                        (click)="teamNames.setValue('')">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    }
+                  </mat-form-field>
+                </h4>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+              @if (1; as colorVariant) {
+                <div fxFlex="100%">
+                  <div class="dt-list-scrollbar" style="overflow:auto">
+                    @for (team of teamList
+                      | search: [{key:'teamName',value:teamNames?.value}]
+                      | sort: {property: column, direction: direction}; track team; let i = $index; let odd = $odd) {
+                      <div (click)='getTeamData(team ,i)' class="dt-list" [ngClass]="{'active': selectedTeamIndex === i}">
+                        <div class="more">
+                          <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action"
+                            matTooltipClass="accent-tooltip">
+                            <i class="icon-more-vertical"></i> </button>
+                            <mat-menu #menu="matMenu">
+                              <button [ngClass]=" screenAuth.editFlag === false ? 'page-btn disabled' : ''" mat-menu-item
+                                (click)="editTeam(team)">
+                                <mat-icon><i class="material-icons material-icons-outlined">edit</i></mat-icon>
+                                <span>Edit</span>
+                              </button>
+                      <button mat-menu-item (click)="openDialog(team,'team')" [ngClass]="
+                      screenAuth.deleteFlag === false ? 'page-btn disabled' : ''">
+                                <mat-icon><i class="material-icons material-icons-outlined">delete</i></mat-icon>
+                                <span>Delete</span>
+                              </button>
+                            </mat-menu>
+                          </div>
+                          <div class="team-details">
+                            <div class="teamAvtar avatarBg{{team.badgeValue}}" [ngClass]="{'active': selectedTeamIndex === i}">
+                              <i class="icon-team"></i>
+                            </div>
+                            <div class="teamL-Detail">
+                              <h5>{{team.teamName}}</h5>
+                              <p>{{team.teamDescription}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+            <div fxFlex="75%" fxFlex.lg="75%" fxFlex.md="75%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px">
+                <div fxFlex="100%" class="team-view">
+                  <div class="team-details">
+                    <div class="teamAvtar avatarBg{{selectedDisplayTeamValue.badgeValue}}"> <i class="icon-team"></i> </div>
+                    <div class="teamL-Detail">
+                      <h5>{{selectedDisplayTeamValue.teamName}}</h5>
+                      <p>{{selectedDisplayTeamValue.teamDescription}}.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="30px" class="teamdata-view">
+                <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="0px">
+                    <div fxFlex="100%">
+                      <h3 class="sub-header border-none">Team Details</h3>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" class="d-view">
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%" class="pb-0">
+                      <p><label>Team Name</label><span>{{selectedDisplayTeamValue.teamName}}</span></p>
+                      <p><label>Client</label>@for (sd of getClient(selectedDisplayTeamValue?.teamClient); track sd; let j = $index; let last = $last) {
+                      <span
+                        >{{sd.clientName}}
+                        @if (!last) {
+                          <span>,</span>
+                        }</span>
+                      }</p>
+                      <p><label>Status</label><span>Active</span></p>
+                      <p><label>Team Member</label><span>
+                      @for (tm of selectedDisplayTeamValue?.teamMember; track tm; let j = $index; let last = $last; let odd = $odd) {
+                        <div class="uname"
+                          >
+                          <div class="user avatarBg{{odd ? '1' : '2'}}">{{getCaps(tm.name)}}</div>
+                          {{tm.name}}
+                        </div>
+                      }
+                    </span></p>
+                  </div>
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%" class="pb-0">
+                    <p><label>Department Name</label><span>{{selectedDisplayTeamValue.deptName}}</span></p>
+                    <p><label>Role</label>
+                    @for (tor of selectedDisplayTeamValue?.teamOwnerRole; track tor; let j = $index; let last = $last) {
+                      <span>
+                        {{tor.roleName}} @if (!last) {
+                        <span>,</span>
+                      }</span>
+                    }
+                  </p>
+                  <p><label>Team Owner</label><span>
+                  @for (sd of selectedDisplayTeamValue?.teamOwner; track sd; let j = $index; let last = $last; let odd = $odd) {
+                    <div class="uname"
+                      >
+                      <div class="user avatarBg{{odd ? '3' : '4'}}">{{getCaps(sd.name)}}</div>{{sd.name}}
+                    </div>
+                  }
+                </span></p>
+              </div>
+              <div fxFlex="100%">
+                <p class="whitespace-preline">
+                  <label>Description</label>
+                  <span fxFlex="100%" class="tbl-result">{{selectedDisplayTeamValue.teamDescription}}.</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          @if (selectedDisplayTeamValue?.subTeam?.length > 0) {
+            <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%"
+              fxFlex.sm="100%" fxFlex.xs="100%">
+              <div fxLayout="row">
+                <div fxFlex="60%">
+                  <h3 class="sub-header border-none">Sub Team Details</h3>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-card-content>
+                    <mat-accordion class="db-accordion subteam-accordion">
+                      @for (sdstv of selectedDisplayTeamValue?.subTeam; track sdstv; let i = $index; let oddsdstv = $odd) {
+                        <mat-expansion-panel
+                          >
+                          <mat-expansion-panel-header>
+                            <div fxLayout="row" fxLayoutGap="20px" fxFlex="100%">
+                              <div fxFlex="100%">
+                                <mat-panel-title>{{sdstv.subTeamName}}</mat-panel-title>
+                              </div>
+                            </div>
+                          </mat-expansion-panel-header>
+                          <mat-card class="db-listdetails">
+                            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                              fxLayout.xs="column" fxLayoutGap="0px">
+                              <div fxFlex="100%">
+                                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                                  fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                  <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                    class="tbl-lblname"><label>Team Name:</label></div>
+                                    <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                    class="tbl-result">{{sdstv.teamName}}</div>
+                                  </div>
+                                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                                    fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                      class="tbl-lblname"><label>Dept. Name:</label></div>
+                                      <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                      class="tbl-result">{{sdstv.teamName}}</div>
+                                    </div>
+                                    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                                      fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                      <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                        class="tbl-lblname"><label>Client:</label></div>
+                                        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                          class="tbl-result">@for (stc of getClient(sdstv?.subTeamClient); track stc; let j = $index; let last = $last) {
+                                          <span
+                                            >
+                                            {{stc.clientName}} @if (!last) {
+                                            <span>,</span>
+                                          }
+                                        </span>
+                                      }</div>
+                                    </div>
+                                    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                                      fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                      <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                        class="tbl-lblname"><label>Role:</label></div>
+                                        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                        class="tbl-result">{{sdstv?.subTeamOwnerRole[0]?.roleName}}</div>
+                                      </div>
+                                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                                        fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                          class="tbl-lblname"><label>Team Owners:</label></div>
+                                          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                            class="tbl-result">
+                                            @for (sTO of sdstv?.subTeamOwner; track sTO; let oddsTO = $odd) {
+                                              <div class="uname mt-0 mb-10">
+                                                <div class="user avatarBg{{oddsTO ? 2 : 5}}">{{getCaps(sTO.name)}}</div>
+                                                {{sTO.name}}
+                                              </div>
+                                            }
+                                          </div>
+                                        </div>
+                                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                                          fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                            class="tbl-lblname"><label>Team Member:</label></div>
+                                            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                              class="tbl-result">
+                                              @for (subTeamMember of sdstv?.subTeamMember; track subTeamMember; let oddsubTeamMember = $odd) {
+                                                <div class="uname mt-0 mb-10"
+                                                  >
+                                                  <div class="user avatarBg{{oddsubTeamMember ? 1 : 3}}">
+                                                  {{getCaps(subTeamMember.name)}}</div>
+                                                  {{subTeamMember.name}}
+                                                </div>
+                                              }
+                                            </div>
+                                          </div>
+                                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                                            fxLayout.xs="column" fxLayoutGap="0px" class="mb-10">
+                                            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                              class="tbl-lblname"><label>Description:</label></div>
+                                              <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                              class="tbl-result">{{sdstv?.subTeamDescription}}.</div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </mat-card>
+                                    </mat-expansion-panel>
+                                  }
+                                </mat-accordion>
+                              </mat-card-content>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          @if (!isHomePage) {
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+              fxLayoutGap="0px">
+              <div fxFlex="100%">
+                <mat-card>
+                  <mat-card-header>
+                    <div fxFlex="100%">
+                      <mat-card-title>
+                        <div fxLayout="row">
+                          <div fxFlex="100%">
+                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                              fxLayoutGap="10px grid">
+                              <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="80%" fxFlex.xs="100%"
+                                fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                                <h1 class="header-title">Department Team</h1>
+                              </div>
+                              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="20%" fxFlex.xs="100%" fxHide.xs
+                                fxLayoutAlign="end center" fxLayoutAlign.sm="end center" fxLayoutAlign.xs="start center">
+                                <div class="tbl-commonsearch">
+                                  <button mat-flat-button color="accent" (click)="openSubTeamBar(subteamDialog,'add')">Create Sub
+                                  Team</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </mat-card-title>
+                    </div>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <form [formGroup]="teamFormGroup" autocomplete="off" id="ngForm">
+                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                        fxLayoutGap="40px" fxLayoutGap.sm="40px" fxLayoutGap.xs="40px">
+                        <div fxFlex="55%" fxFlex.lg="55%" fxFlex.md="55%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                              <app-auto-complete (selectionChange)="getDeptName($event);" [selectProperties]='deptNameControls'>
+                              </app-auto-complete>
+                            </div>
+                          </div>
+                          @if (selDeptName) {
+                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                              fxLayout.sm="column wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                              fxLayoutGap.xs="0px grid">
+                              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                <p class="text-sm text-ilatic mt-0">Add a Team for the above Selected:
+                                  <strong>{{selDeptName}}</strong>
+                                </p>
+                              </div>
+                            </div>
+                          }
+                          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                    <mat-label>Team Name</mat-label>
+                                    <input matInput #teamName formControlName="teamName" placeholder="Team Name" matInput
+                                      autocomplete="off" role="presentation" required>
+                                    @if (!!teamFormGroup?.get('teamName')?.errors?.required) {
+                                      <mat-error>
+                                        Team Name is required
+                                      </mat-error>
+                                    }
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                              <!-- <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                <div fxFlex="100%">
+                                  <span class="p-float-label" style="position: relative; display: block; width: 100%;">
+                                    <p-multiSelect [options]="teamClient" formControlName="teamClient" floatLabel="always"
+                                      optionLabel="clientName" filterPlaceHolder="Select Team Clients"
+                                      selectedItemsLabel="{0} Clients selected" [style]="{minWidth: '250px', width:'100%'}"
+                                      defaultLabel="Select Team Clients" [showHeader]="true">
+                                    </p-multiSelect>
+                                    <label class="lbl-float">Team Clients</label>
+                                    <mat-error *ngIf="!!teamFormGroup?.get('teamClient')?.errors?.required">
+                                      Team Client is required.
+                                    </mat-error>
+                                  </span>
+                                </div>
+                              </div>
+                            </div> -->
+                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                <div fxFlex="100%">
+                                  <!--
+                                  <span class="p-float-label p-floatlabel p-floatlabel-on" style="position: relative; display: block; width: 100%;">
+                                    <p-floatlabel class="w-full md:w-80" variant="on">
+                                      <p-multiSelect [options]="teamClient" formControlName="teamClient" floatLabel="always"
+                                        optionLabel="clientName" filterPlaceHolder="Select Team Clients"
+                                        selectedItemsLabel="{0} Clients selected" [style]="{minWidth: '250px', width:'100%'}"
+                                        defaultLabel="Select Team Clients" [showHeader]="true" class="p-floatlabel-on">
+                                      </p-multiSelect>
+                                      <label class="lbl-float">Team Clients</label>
+                                    </p-floatlabel>
+                                    <mat-error *ngIf="!!teamFormGroup?.get('teamClient')?.errors?.required">
+                                      Team Client is required.
+                                    </mat-error>
+                                  </span> -->
+                                  <span class="float-wrap">
+                                    <p-multiSelect inputId="teamClient" [options]="teamClient" formControlName="teamClient"
+                                      optionLabel="clientName" selectedItemsLabel="{0} Clients selected" [style]="{width:'100%'}"
+                                      defaultLabel="Select Team Clients">
+                                    </p-multiSelect>
+                                    <label for="teamClient">Team Clients</label>
+                                  </span>
+                                  @if (teamFormGroup?.get('teamClient')?.errors?.required) {
+                                    <mat-error>
+                                      Team Client is required.
+                                    </mat-error>
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                  <mat-label>Team Description</mat-label>
+                                  <textarea formControlName="teamDescription" #name matInput autocomplete="off"
+                                  placeholder="Team Description" role="presentation" maxlength="200" required></textarea>
+                                  <mat-hint class="f-13"> ({{name.value.length}} /200 max) </mat-hint>
+                                  @if (!!teamFormGroup?.get('teamDescription')?.errors?.required) {
+                                    <mat-error>
+                                      Team Description is required
+                                    </mat-error>
+                                  }
+                                </mat-form-field>
+                              </div>
+                            </div>
+                            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                              fxLayoutGap="20px" fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
+                              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                <mat-label class="lbl">Active</mat-label>
+                                <mat-checkbox formControlName="active">Is active</mat-checkbox>
+                              </div>
+                              @if (teamFormGroup?.get('teamName').value !=='DEPre-QC Team') {
+                                <div fxFlex="50%" fxFlex.lg="50%"
+                                  fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                  <mat-label class="lbl">Auto Assign</mat-label>
+                                  <mat-checkbox formControlName="autoAssignFlag">Auto Assign</mat-checkbox>
+                                </div>
+                              }
+                            </div>
+                          </div>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                          fxLayoutGap="20px grid" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <div fxFlex="100%">
+                              <span class="float-wrap">
+                                <p-multiSelect inputId="teamRole" [options]="teamRole" formControlName="teamRole"
+                                  optionLabel="roleName" filterPlaceHolder="Select Team Roles"
+                                  selectedItemsLabel="{0} Roles selected" [style]="{width:'100%'}"
+                                  defaultLabel="Select Team Roles" [showHeader]="true">
+                                </p-multiSelect>
+                                <label for="teamRole">Team Roles</label>
+                              </span>
+                              @if (teamFormGroup?.get('teamRole')?.errors?.required) {
+                                <mat-error>
+                                  Team Role is required.
+                                </mat-error>
+                              }
+                            </div>
+                          </div>
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"> </div>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                          fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <h3 class="sub-header">Team Owner &amp; Members</h3>
+                          </div>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                          fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <div fxFlex="100%">
+                              <span class="p-float-label" style="position: relative; display: block; width: 100%;">
+                                <p-multiSelect [options]="teamOwner" formControlName="teamOwner" optionLabel="name"
+                                  filterPlaceHolder="Select Team Owner" selectedItemsLabel="{0} Team Owners selected"
+                                  [style]="{minWidth: '250px', width:'100%'}" defaultLabel="Select Team Owner"
+                                  [showHeader]="true">
+                                </p-multiSelect>
+                                <label class="lbl-float">Team Owner</label>
+                                @if (!!teamFormGroup?.get('teamOwner')?.errors?.required) {
+                                  <mat-error>
+                                    Team Owner is required.
+                                  </mat-error>
+                                }
+                              </span>
+                            </div>
+                          </div>
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <div fxFlex="100%">
+                              <span class="p-float-label" style="position: relative; display: block; width: 100%;">
+                                <p-multiSelect [options]="teamRole" formControlName="teamOwnerRole" optionLabel="roleName"
+                                  filterPlaceHolder="Select Team Owner Roles" selectedItemsLabel="{0} Team Owners Roles selected"
+                                  [style]="{minWidth: '250px', width:'100%'}" defaultLabel="Select Team Owner Roles"
+                                  [showHeader]="true">
+                                </p-multiSelect>
+                                <label class="lbl-float">Team Owner Roles</label>
+                                @if (!!teamFormGroup?.get('teamOwnerRole')?.errors?.required) {
+                                  <mat-error>
+                                    Team Owner Role is required.
+                                  </mat-error>
+                                }
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                          fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <div fxFlex="100%">
+                              <span class="p-float-label" style="position: relative; display: block; width: 100%;">
+                                <p-multiSelect [options]="teamOwner" formControlName="teamMember" optionLabel="name"
+                                  filterPlaceHolder="Select Team Member" selectedItemsLabel="{0} Team Members selected"
+                                  [style]="{minWidth: '250px', width:'100%'}" defaultLabel="Select Team Member">
+                                </p-multiSelect>
+                                <label class="lbl-float">Team Member</label>
+                                @if (!!teamFormGroup?.get('teamMember')?.errors?.required) {
+                                  <mat-error>
+                                    Team Member is required.
+                                  </mat-error>
+                                }
+                              </span>
+                            </div>
+                          </div>
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"> </div>
+                        </div>
+                      </div>
+                      <div fxFlex="45%" fxFlex.lg="45%" fxFlex.md="45%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                          fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            @if (this.teamFormGroup?.controls["subTeam"]?.value?.length > 0) {
+                              <div fxLayout="row wrap"
+                                fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+                                fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                  <h1 class="header-title">Sub Team</h1>
+                                </div>
+                              </div>
+                            }
+                            @if (this.teamFormGroup?.controls["subTeam"]?.value?.length > 0) {
+                              <div fxLayout="row wrap"
+                                fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+                                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                @for (tufgc of teamFormGroup.controls["subTeam"].value; track tufgc; let i = $index; let oddsubTeam = $odd) {
+                                  <div
+                                    fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                    <div class="subteam">
+                                      <div fxLayout="row" fxLayoutGap="0px">
+                                        <div fxFlex="100%"> <span class="isactive">{{tufgc.active ? 'Active' : 'InActive'}}</span>
+                                        <span fxFlex></span>
+                                        <div class="more">
+                                          <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Action"
+                                            matTooltipClass="accent-tooltip"> <i class="icon-more-vertical"></i> </button>
+                                            <mat-menu #menu="matMenu">
+                                              <button (click)="openSubTeamBar(subteamDialog,'edit',tufgc,i);" mat-menu-item>
+                                                <mat-icon><i class="material-icons material-icons-outlined">edit</i></mat-icon>
+                                                <span>Edit SubTeam</span>
+                                              </button>
+                                              <button (click)="openDialog(tufgc,'subTeam', i)" mat-menu-item>
+                                                <mat-icon><i class="material-icons material-icons-outlined">delete</i></mat-icon>
+                                                <span>Delete SubTeam</span>
+                                              </button>
+                                            </mat-menu>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div fxLayout="row" fxLayoutGap="10px">
+                                        <div fxFlex="100%">
+                                          <div fxLayout="row" fxLayoutGap="10px">
+                                            <div fxFlex="100%">
+                                              <h2>{{tufgc.subTeamName}}</h2>
+                                              <p class="mb-5">{{tufgc.subTeamDescription}}</p>
+                                            </div>
+                                          </div>
+                                          <div fxLayout="row" fxLayoutGap="10px" class="mb-5">
+                                            <div fxFlex="100%" class="subteam-data">
+                                              <p>
+                                                <label>Client:</label>
+                                                @for (stc of getClient(tufgc?.subTeamClient); track stc; let j = $index; let last = $last) {
+                                                  <span
+                                                    >
+                                                    {{stc.clientName}} @if (!last) {
+                                                    <span>,</span>
+                                                  }
+                                                </span>
+                                              }
+                                            </p>
+                                            <p>
+                                              <label>Role:</label>
+                                              @for (str of tufgc?.subTeamRole; track str; let j = $index; let last = $last) {
+                                                <span
+                                                  matTooltip="{{str.roleName}}" matTooltipClass="accent-tooltip">
+                                                  {{str.roleName}} @if (!last) {
+                                                  <span>,</span>
+                                                }
+                                              </span>
+                                            }
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <div fxLayout="row" class="mb-10">
+                                        <div fxFlex="100%">
+                                          <p class="mb-5">Sub Team Owners</p>
+                                          @for (sto of tufgc?.subTeamOwner; track sto; let oddsto = $odd) {
+                                            <span matTooltip=" {{sto.name}}" matTooltipClass="accent-tooltip"
+                                              class="ubadge avatarBg{{oddsto ? '3' : '1'}}"
+                                              >
+                                              {{getCaps(sto.name)}}
+                                            </span>
+                                          }
+                                        </div>
+                                      </div>
+                                      <div fxLayout="row" class="mt-5">
+                                        <div fxFlex="100%">
+                                          <p class="mb-5">{{tufgc?.subTeamMember?.length}} Sub Team Users</p>
+                                          @for (stm of tufgc?.subTeamMember; track stm; let j = $index; let last = $last; let odd = $odd) {
+                                            <span matTooltip=" {{stm.name}}" matTooltipClass="accent-tooltip"
+                                              class="ubadge avatarBg{{odd ? '3' : '1'}}"
+                                              >
+                                              {{getCaps(stm.name)}}
+                                            </span>
+                                          }
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    }
+
+
+    <!-- Department Team Dialog -->
+    <ng-template #subteamDialog>
+      <h1 mat-dialog-title>Create Sub Team </h1>
+      <form appScrollToError [formGroup]="teamUsersFormGroup">
+        <mat-dialog-content>
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    @if (teamFormGroup?.get('teamName')?.value) {
+                      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%"
+                        fxFlex.sm="100%" fxFlex.xs="100%">
+                        <p class="text-sm text-ilatic mt-0">You are creating a Sub Team for the Team
+                          <strong>{{teamFormGroup?.get('teamName')?.value}}</strong>
+                        </p>
+                      </div>
+                    }
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                        fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Sub Team Name</mat-label>
+                            <input matInput #teamName formControlName="subTeamName" placeholder="Sub Team Name" matInput
+                              autocomplete="off" role="presentation" required>
+                            @if (!!teamUsersFormGroup?.get('subTeamName')?.errors?.required) {
+                              <mat-error>
+                                Sub Team Name is required
+                              </mat-error>
+                            }
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                        fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <!-- ✅ FIX 2: XminWidth → minWidth | mat-error moved inside span -->
+                          <div fxFlex="100%">
+                            <span class="p-float-label" style="position: relative; display: block; width: 100%;">
+                              <p-multiSelect [options]="teamClient" formControlName="subTeamClient" optionLabel="clientName"
+                                filterPlaceHolder="Select Client" selectedItemsLabel="{0} Clients selected"
+                                [style]="{minWidth: '250px', width:'100%'}" defaultLabel="Select Client">
+                              </p-multiSelect>
+                              <label class="lbl-float">Sub Team Clients</label>
+                              @if (!!teamUsersFormGroup?.get('subTeamClient')?.errors?.required) {
+                                <mat-error>
+                                  Client is required.
+                                </mat-error>
+                              }
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                        fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Sub Team Description</mat-label>
+                            <textarea matInput #teamName formControlName="subTeamDescription"
+                              placeholder="Sub Team Description" matInput autocomplete="off" maxlength="200"
+                            role="presentation" required></textarea>
+                            <mat-hint class="f-13"> ({{teamName.value.length}} /200 max) </mat-hint>
+                            @if (!!teamUsersFormGroup?.get('subTeamDescription')?.errors?.required) {
+                              <mat-error>
+                                Sub Team Description is required
+                              </mat-error>
+                            }
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                        fxLayoutGap="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px">
+                        <div fxFlex="10%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-label class="lbl">Active</mat-label>
+                          <mat-checkbox formControlName="active">Active</mat-checkbox>
+                        </div>
+                        @if (subteamname === 'For Research Employment India Team' || subteamname === 'For Research CTS Employment India Team') {
+                          <div
+                            fxFlex="10%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <mat-label class="lbl">Auto Assign</mat-label>
+                            <mat-checkbox formControlName="autoAssignFlag">Auto Assign</mat-checkbox>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxFlex="100%">
+                        <span class="p-float-label" style="position: relative; display: block; width: 100%;">
+                          <p-multiSelect [options]="teamRole" formControlName="subTeamRole" optionLabel="roleName"
+                            filterPlaceHolder="Select Role" selectedItemsLabel="{0} Roles selected"
+                            [style]="{minWidth: '250px', width:'100%'}" defaultLabel="Select Sub Team Role">
+                          </p-multiSelect>
+                          <label class="lbl-float">Sub Team Roles</label>
+                          @if (!!teamUsersFormGroup?.get('subTeamRole')?.errors?.required) {
+                            <mat-error>
+                              Sub Team Role is required.
+                            </mat-error>
+                          }
+                        </span>
+                      </div>
+                    </div>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      @if ((sysSubTeamLookId === 617 || sysSubTeamLookId === 0 || sysSubTeamLookId === null)) {
+                        <div
+                          fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                            <mat-label>Select system training subteam name </mat-label>
+                            <mat-select formControlName="systemValueLookupId"
+                              placeholder="Select system training subteam name" (selectionChange)="getSystemTeamName($event)"
+                              required>
+                              @for (systemTeamName of SubsystemTeamNames; track systemTeamName) {
+                                <mat-option [value]="systemTeamName.lookUpId">
+                                  {{systemTeamName.lookUpName}}
+                                </mat-option>
+                              }
+                            </mat-select>
+                            <mat-hint style="color:darkgrey"> Note: This is only for training Subteam. if you select this, you
+                            will not perform any sort of operations </mat-hint>
+                          </mat-form-field>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <h3 class="sub-header">Team Owner &amp; Members</h3>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <span class="p-float-label" style="position: relative; display: block; width: 100%;">
+                          <p-multiSelect [options]="subOwnerLists1" formControlName="subTeamOwner" optionLabel="name"
+                            filterPlaceHolder="Select Sub Team Owner" selectedItemsLabel="{0} Team Owners selected"
+                            [style]="{minWidth: '250px', width:'100%'}" defaultLabel="Select Sub Team Owner"
+                            [showHeader]="true">
+                          </p-multiSelect>
+                          <label class="lbl-float">Sub Team Owner</label>
+                          @if (teamUsersFormGroup?.get('subTeamOwner')?.errors?.required && teamUsersFormGroup?.get('subTeamOwner')?.touched) {
+                            <mat-error
+                              >
+                              Sub Team Owner is required.
+                            </mat-error>
+                          }
+                        </span>
+                      </div>
+                    </div>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxFlex="100%">
+                        <span class="p-float-label" style="position: relative; display: block; width: 100%;">
+                          <p-multiSelect [options]="subTeamOwnerRole" formControlName="subTeamOwnerRole"
+                            optionLabel="roleName" filterPlaceHolder="Select Role" selectedItemsLabel="{0} Roles selected"
+                            [style]="{minWidth: '250px', width:'100%'}" defaultLabel="Select Owner Role">
+                          </p-multiSelect>
+                          <label class="lbl-float">Sub Team Owner Roles</label>
+                          @if (!!teamUsersFormGroup?.get('subTeamOwnerRole')?.errors?.required) {
+                            <mat-error>
+                              Sub Team Owner Role is required.
+                            </mat-error>
+                          }
+                        </span>
+                      </div>
+                    </div>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxFlex="100%">
+                        <span class="p-float-label" style="position: relative; display: block; width: 100%;">
+                          <p-multiSelect [options]="teamOwner" formControlName="subTeamMember" optionLabel="name"
+                            filterPlaceHolder="Select sub team members" selectedItemsLabel="{0} Users selected"
+                            [style]="{minWidth: '250px', width:'100%'}" defaultLabel="Select sub team members">
+                          </p-multiSelect>
+                          <label class="lbl-float">Sub Team Members</label>
+                          @if (!!teamUsersFormGroup?.get('subTeamMember')?.errors?.required) {
+                            <mat-error>
+                              Sub Team Member is required.
+                            </mat-error>
+                          }
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+          <button mat-flat-button color="primary" type="submit"
+          (click)="saveSubTeamForm();subTeamEditIndex = -1;">Save</button>
+          <button mat-flat-button color="warn"
+          (click)="teamUsersFormGroup.reset();subTeamEditIndex = -1;dialog.closeAll();">Cancel</button>
+        </mat-dialog-actions>
+      </form>
+    </ng-template>

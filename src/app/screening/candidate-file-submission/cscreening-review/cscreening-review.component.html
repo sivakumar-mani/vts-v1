@@ -1,0 +1,453 @@
+﻿<div fxLayout="row" #review>
+  <div fxFlex="100%">
+    <mat-card-content>
+      @if (userData.applicationId !== 3 && inviteflag === true) {
+        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap" fxLayout.xs="column" fxLayoutGap="0px grid">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div class="client-details">
+              <div class="client-avatar" fxHide.sm fxHide.xs>
+                <i class="icon-referencecheck"></i>
+              </div>
+              <div class="client-data">
+                <h3 matTooltip="Client details" matTooltipClass="accent-tooltip">
+                {{screeningDetails.screening.clientName + ' - (' + screeningDetails.screening.clientRefNo+')'}} </h3>
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" fxLayoutWrap>
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <p>
+                      <label>Applicant ID:</label>
+                      <span>{{screeningDetails.screening.applicantId?
+                      screeningDetails.screening.applicantId:"N/A"}}</span> </p>
+                    </div>
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <p>
+                        <label>Case Received Date:</label>
+                        <span>{{screeningDetails.screening.caseReceivedDate?(common.getTimezoneOffset(screeningDetails.screening.caseReceivedDate, false) | date: "dd/MM/yyyy")
+                        :"N/A"}}</span> </p>
+                      </div>
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <p>
+                          <label>Case Initiation Date:</label>
+                          <span>{{screeningDetails.screening.caseInititationDate|date:'dd/MMM/yyyy'}}</span> </p>
+                        </div>
+                        @if (inviteflag === true) {
+                          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <p>
+                              <label>Case Status:</label>
+                              <span>{{caseStatusName? caseStatusName:"N/A"}}</span> </p>
+                            </div>
+                          }
+                          @if (inviteflag === true) {
+                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                              <p>
+                                <label>Case Priority:</label>
+                                <span>{{casePriorityName? casePriorityName:"N/A"}}</span> </p>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+                <div fxLayout="row" fxLayoutGap="0px">
+                  <div fxFlex="100%">
+                    <div class="candidate-details">
+                      <h2>Candidate Info</h2>
+                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" class="candidate-data">
+                        <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex="100%">
+                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="20px">
+                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex="100%">
+                              <h5>Candidate Detail</h5>
+                              <p>
+                                <label>First Name:</label>
+                                <span>{{screeningDetails.candidate.firstName? screeningDetails.candidate.firstName:"N/A"}}</span>
+                              </p>
+                              <p>
+                                <label>Middle Name:</label>
+                                <span>{{screeningDetails.candidate.middleName? screeningDetails.candidate.middleName: "N/A"}}</span>
+                              </p>
+                              <p>
+                                <label>Last Name:</label>
+                                <span>{{screeningDetails.candidate.lastName? screeningDetails.candidate.lastName: "N/A"}}</span>
+                              </p>
+                              <p>
+                                <label>Father Name:</label>
+                                <span>{{screeningDetails.candidate.fatherName? screeningDetails.candidate.fatherName: "N/A"}}</span>
+                              </p>
+                              <p>
+                                <label>Marital Status:</label>
+                                <span>{{maritalStatusValue? maritalStatusValue: "N/A"}}</span>
+                              </p>
+                              <p>
+                                <p>
+                                  <label>Spouse Name:</label>
+                                  <span>{{screeningDetails.candidate.spouseName?screeningDetails.candidate.spouseName:"N/A"}}</span>
+                                </p>
+                                <p>
+                                  <label>UAN Number:</label>
+                                  <span>{{screeningDetails.candidate.uan? screeningDetails.candidate.uan: "N/A"}}</span>
+                                </p>
+                                @if (screeningDetails.candidate.bestVisitAddress || userData.applicationId ===3) {
+                                  <p>
+                                    <label>Best time to Visit the Address:</label>
+                                    <span>{{screeningDetails.candidate.bestVisitAddress? screeningDetails.candidate.bestVisitAddress: "N/A"}}</span>
+                                  </p>
+                                }
+                              </div>
+                              @if (userData.applicationId !==3 && this.inviteflag) {
+                                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex="100%">
+                                  <h5>Report Source Detail</h5>
+                                  <p>
+                                    <label>First Name:</label>
+                                    <span>{{screeningDetails.candidate.aliasFirstName? screeningDetails.candidate.aliasFirstName: "N/A"}}</span>
+                                  </p>
+                                  <p>
+                                    <label>Middle Name:</label>
+                                    <span>{{screeningDetails.candidate.aliasMiddleName? screeningDetails.candidate.aliasMiddleName: "N/A" }}</span>
+                                  </p>
+                                  <p>
+                                    <label>Last Name:</label>
+                                    <span>{{screeningDetails.candidate.aliasLastName? screeningDetails.candidate.aliasLastName: "N/A"}}</span>
+                                  </p>
+                                </div>
+                              }
+
+                            </div>
+                          </div>
+                          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex="100%">
+                            <div class="vtp-list">
+                              <h5>Other Detail</h5>
+                              <p><i class="icon-calendar"></i><span>{{(screeningDetails.candidate.dob) ? (screeningDetails.candidate.dob) : "N/A"}}</span>
+                            </p>
+                            <p><i class="icon-phone1"></i><span>{{PhnNoCode? PhnNoCode: "N/A"}}</span>
+                          </p>
+                          <p><i class="icon-envelope"></i><span><a
+                        [href]="screeningDetails.candidate.email">{{screeningDetails.candidate.email? screeningDetails.candidate.email: "N/A"}}</a></span>
+                      </p>
+                      <p><i class="icon-phone1"></i><span>{{AlterPhnNoCode? AlterPhnNoCode: "N/A"}}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        @if (mainForm?.value?.document?.length > 0) {
+          <div fxLayout="row" fxLayoutGap="0px">
+            <div fxFlex="100%">
+              <div class="candidate-details">
+                <h2>BGV Documents</h2>
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <div fxLayout="row" fxLayoutGap="20px">
+                      <div fxFlex="100%">
+                        <div class="d-view">
+                          <div fxlayout="row">
+                            <div fxflex="100%">
+                              <h3>Document Types</h3>
+                            </div>
+                          </div>
+                          @if (userData.applicationId !== 3) {
+                            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                              @for (review of mainForm?.value?.document; track review; let index = $index) {
+                                <div fxFlex="33.33%">
+                                  <em><a (click)="downloadFile(review, review.fileName ,review.screeningDocId)">{{review.fileName? review.fileName: '--' }}</a></em>
+                                </div>
+                              }
+                            </div>
+                          }
+                          @if (userData.applicationId === 3) {
+                            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                              <div fxFlex="33.33%">
+                                <em><a (click)="downloadFile(mainForm?.value?.document[0], mainForm?.value?.document[0].fileName ,mainForm?.value?.document[0].screeningDocId)">{{mainForm?.value?.document[0].fileName? mainForm?.value?.document[0].fileName: '--' }}</a></em>
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+        <!-- Resp completed above line  Ref   -->
+
+
+
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <div class="candidate-details">
+              <h2>Components</h2>
+              <!-- <div class="d-view"> -->
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="100%">
+                      @for (comp of reviewValue; track comp; let j = $index) {
+                        <div class="d-view">
+                          <div fxlayout="row">
+                            <div fxflex="100%">
+                              <h3>{{comp.header}}</h3>
+                            </div>
+                          </div>
+                          @if (userData.applicationId !== 3 && inviteflag) {
+                            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                              <!-- {{comp.screeningCompInfo|json}} -->
+                              @for (review of comp.screeningCompInfo; track review; let index = $index) {
+                                <div fxFlex="33.33%">
+                                  <p>
+                                    <label>{{review.label}}</label>
+                                    <em>{{review.value? review.value: '--' }}</em> </p>
+                                  </div>
+                                }
+                              </div>
+                            }
+                            @if (userData.applicationId !==3 && inviteflag === true) {
+                              <div fxlayout="row">
+                                <div fxflex="100%">
+                                  <h4>Component Information</h4>
+                                </div>
+                              </div>
+                            }
+                            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                              @for (review of comp.compref; track review; let index = $index) {
+                                <div fxFlex="33.33%">
+                                  @if (review.type !== 'textArea') {
+                                    <p>
+                                      <label>{{review.label}}</label>
+                                      <em>{{ review.value ?(review.type ==="Date"? (common.getTimezoneOffset(review.value, false) | date: "dd/MMM/yyyy"):review.value?review.value:'--' ): "--" }}</em>
+                                    </p>
+                                  }
+                                </div>
+                              }
+                            </div>
+                            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="">
+                              @for (review of comp.compref; track review; let index = $index) {
+                                <div fxFlex="100%">
+                                  @if (review.type === 'textArea') {
+                                    <p>
+                                      <label>{{review.label}}</label>
+                                      <em>{{ review.value ? review.value: "--" }}</em>
+                                    </p>
+                                  }
+                                </div>
+                              }
+                            </div>
+                            @if (comp.addressPos?comp.addressPos.length:0> 0) {
+                              <div>
+                                <div fxlayout="row">
+                                  <div fxflex="100%">
+                                    <h4>Period Of Stay Details</h4>
+                                  </div>
+                                </div>
+                                <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                                  @for (review of comp.addressPos; track review; let index = $index) {
+                                    <div fxFlex="33.33%">
+                                      <p>
+                                        <label>{{review.label}}</label>
+                                        <em>{{review.value?review.value:'--'}}</em>
+                                      </p>
+                                    </div>
+                                  }
+                                </div>
+                              </div>
+                            }
+                            <!-- <div *ngIf="comp?.misc?.length> 0 && userData.applicationId !== 3">
+                            <div fxlayout="row">
+                              <div fxflex="100%">
+                                <h4>Miscellaneous Details</h4>
+                              </div>
+                            </div>
+                            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                              <div fxFlex="33.33%" *ngFor="let review of comp.misc; let index = index">
+                                <p *ngIf="common.SOCIAL_MEDIAID !== common.Socialcompid">
+                                  <label>{{review.label}}</label>
+                                  <em>{{review.value?review.value:'--'}}</em> </p>
+                                  <p *ngIf="common.SOCIAL_MEDIAID === common.Socialcompid">
+                                    <label>{{review.label}}</label>
+                                    <em>{{'--'}}</em> </p>
+                                  </div>
+                                </div>
+                              </div> -->
+                              @if (comp.insuff.length>0) {
+                                <div>
+                                  <div fxlayout="row">
+                                    <div fxflex="100%">
+                                      <h4>Raise Insufficiency</h4>
+                                    </div>
+                                  </div>
+                                  <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                                    @for (review of comp.insuff; track review; let index = $index) {
+                                      <div fxFlex="33.33%">
+                                        @if (review.type !== 'textArea') {
+                                          <p>
+                                            <label>{{review.label}}</label>
+                                            <em>{{ review.value ?(review.type ==="date"? (review.value | date: "dd/MMM/yyyy"):review.value?review.value:"--" ): "--" }}</em>
+                                          </p>
+                                        }
+                                      </div>
+                                    }
+                                  </div>
+                                  <div fxLayout="row wrap" fxLayoutGap="0 grid" class="">
+                                    @for (review of comp.insuff; track review; let index = $index) {
+                                      <div fxFlex="100%">
+                                        @if (review.type === 'textArea') {
+                                          <p>
+                                            <label>{{review.label}}</label>
+                                            <em>{{ review.value ? review.value: "--" }}</em>
+                                          </p>
+                                        }
+                                      </div>
+                                    }
+                                  </div>
+                                </div>
+                              }
+                              @if (comp.componentDocument.length>0) {
+                                <div>
+                                  <div fxlayout="row">
+                                    <div fxflex="100%">
+                                      <h4>Supporting Documents</h4>
+                                    </div>
+                                  </div>
+                                  <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                                    @for (doc of comp.componentDocument; track doc; let index = $index) {
+                                      <div fxFlex="33.33%">
+                                        <p>
+                                          <label>Document Name</label>
+                                          <em><a
+                                          (click)="downloadFile(doc.document, doc.fileName ,doc.screeningDocId)">{{doc.fileName}}</a></em>
+                                        </div>
+                                      }
+                                    </div>
+                                  </div>
+                                }
+                                @if (comp?.periodOfStayAddress?.length > 0) {
+                                  <div class="d-view">
+                                    <div fxLayout="row">
+                                      <div fxFlex="100%">
+                                        <h3>Stay Residential Address</h3>
+                                      </div>
+                                    </div>
+                                    <table mat-table [dataSource]="comp?.periodOfStayAddress" style="width: 100%">
+                                      <ng-container matColumnDef="address">
+                                        <th mat-header-cell *matHeaderCellDef>Address</th>
+                                        <td mat-cell *matCellDef="let element">{{element?.address?.addLine1 + (element?.address?.addLine2 ? element?.address?.addLine2 : '') + (element?.address?.addLine3 ? element?.address?.addLine3 : '')}}
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="country">
+                                        <th mat-header-cell *matHeaderCellDef>Country</th>
+                                        <td mat-cell *matCellDef="let element">{{element?.address?.country}}
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="state">
+                                        <th mat-header-cell *matHeaderCellDef>State</th>
+                                        <td mat-cell *matCellDef="let element">{{element?.address?.state}}
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="district">
+                                        <th mat-header-cell *matHeaderCellDef>District</th>
+                                        <td mat-cell *matCellDef="let element">{{element?.address?.district}}
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="city">
+                                        <th mat-header-cell *matHeaderCellDef>City</th>
+                                        <td mat-cell *matCellDef="let element">{{element?.address?.city ? element?.address?.city : '-'}}
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="place">
+                                        <th mat-header-cell *matHeaderCellDef>Place</th>
+                                        <td mat-cell *matCellDef="let element">{{element?.address?.place ? element?.address?.place : '-'}}
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="postalCode">
+                                        <th mat-header-cell *matHeaderCellDef>PostalCode</th>
+                                        <td mat-cell *matCellDef="let element">{{element?.address?.postalCode}}
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="periodOfStay">
+                                        <th mat-header-cell *matHeaderCellDef>Period Of Stay From</th>
+                                        <td mat-cell *matCellDef="let element">{{element?.periodOfStay}}
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="periodOfStayTo">
+                                        <th mat-header-cell *matHeaderCellDef>Period Of Stay To</th>
+                                        <td mat-cell *matCellDef="let element">{{element?.periodOfStayTo}}
+                                        </td>
+                                      </ng-container>
+                                      <tr mat-header-row *matHeaderRowDef="['address', 'country', 'state', 'district', 'city', 'place', 'postalCode', 'periodOfStay', 'periodOfStayTo']"></tr>
+                                      <tr mat-row *matRowDef="let row; columns: ['address', 'country', 'state', 'district', 'city', 'place', 'postalCode', 'periodOfStay', 'periodOfStayTo']"></tr>
+                                    </table>
+                                  </div>
+                                }
+                                <br/>
+                              </div>
+                            }
+                            @if (gapArray?.length > 0) {
+                              <div>
+                                @if (screeningDetails.gapReason?.length>0) {
+                                  <div class="d-view">
+                                    <div fxlayout="row">
+                                      <div fxflex="100%">
+                                        <h3>Gap Reason</h3>
+                                      </div>
+                                    </div>
+                                    @for (review of screeningDetails.gapReason; track review; let index = $index) {
+                                      <div>
+                                        <div fxlayout="row">
+                                          <div fxflex="100%">
+                                            <h4>{{review.gapTypeName !==undefined ? review.gapTypeName:review.lookUpName}}</h4>
+                                          </div>
+                                          <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                                            <div fxFlex="33.33%">
+                                              <p>
+                                                <label>{{review.gapTypeName !==undefined ? review.gapTypeName:review.lookUpName}}</label>
+                                                <em>{{ review.reasonFlag ?"Yes": "No" }}</em>
+                                              </p>
+                                            </div>
+                                            <div fxFlex="33.33%">
+                                              <p>
+                                                <label>Remarks</label>
+                                                <em>{{ review.remarks}}</em>
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <div>
+                                            @if (review.reasonDoument.length>0) {
+                                              <div fxlayout="row">
+                                                <div fxflex="100%">
+                                                  <h4>Supporting Documents</h4>
+                                                </div>
+                                              </div>
+                                            }
+                                            <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+                                              @for (doc of review.reasonDoument; track doc; let index = $index) {
+                                                <div fxFlex="33.33%">
+                                                  <p>
+                                                    <label>Document Name</label>
+                                                    <em><a
+                                                    (click)="downloadFile(doc.document, doc.fileName ,doc.screeningDocId, true)">{{doc.fileName}}</a></em>
+                                                  </div>
+                                                }
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      }
+                                    </div>
+                                  }
+                                </div>
+                              }
+                            <!-- </div> -->
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </div>
+        </div>

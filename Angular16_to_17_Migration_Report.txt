@@ -1,0 +1,988 @@
+================================================================================
+         VTS APPLICATION - ANGULAR 16 TO ANGULAR 17 MIGRATION REPORT
+================================================================================
+Framework  : Angular 16  -->  Angular 17
+Build      : Production Build Reference Guide
+Note       : This report covers all changes required for Angular 16 → 17 upgrade
+             for a project using Angular Material, PrimeNG, Kendo UI, ngx-layout
+================================================================================
+
+
+================================================================================
+SECTION 1 : PACKAGE VERSION UPDATES (package.json)
+================================================================================
+
+  ANGULAR CORE PACKAGES
+  ----------------------
+  @angular/animations          : ^16.0.0  -->  ^17.0.0
+  @angular/cdk                 : ^16.0.0  -->  ^17.0.0
+  @angular/common              : ^16.0.0  -->  ^17.0.0
+  @angular/compiler            : ^16.0.0  -->  ^17.0.0
+  @angular/core                : ^16.0.0  -->  ^17.0.0
+  @angular/forms               : ^16.0.0  -->  ^17.0.0
+  @angular/material            : ^16.0.0  -->  ^17.0.0
+  @angular/platform-browser    : ^16.0.0  -->  ^17.0.0
+  @angular/router              : ^16.0.0  -->  ^17.0.0
+  @angular/localize            : ^16.0.0  -->  ^17.0.0
+  @angular/google-maps         : ^16.0.0  -->  ^17.0.0
+
+  ANGULAR DEV PACKAGES
+  ---------------------
+  @angular-devkit/build-angular: ^16.0.0  -->  ^17.0.0
+  @angular-devkit/core         : ^16.0.0  -->  ^17.0.0
+  @angular-devkit/schematics   : ^16.0.0  -->  ^17.0.0
+  @angular/cli                 : ^16.0.0  -->  ^17.0.0
+  @angular/compiler-cli        : ^16.0.0  -->  ^17.0.0
+  @angular/language-service    : ^16.0.0  -->  ^17.0.0
+
+  RUNTIME DEPENDENCY UPDATES
+  ---------------------------
+  zone.js                      : ~0.13.x  -->  ~0.14.x
+  rxjs                         : ~7.8.0   -->  ~7.8.0   (no change needed)
+
+  THIRD-PARTY PACKAGES UPDATED
+  -----------------------------
+  angular-oauth2-oidc          : ^16.0.0  -->  ^17.0.0
+  @danielmoncada/angular-datetime-picker : ^16.0.0  -->  ^17.0.0
+  ngx-spinner                  : ^16.0.0  -->  ^17.0.0
+  ngx-countdown                : ^16.0.0  -->  ^17.0.0
+  @ngbracket/ngx-layout        : ^16.0.0  -->  ^17.0.0
+  primeng                      : ^16.x.x  -->  ^17.x.x
+  primeicons                   : ^6.x.x   -->  ^7.0.0
+
+  KENDO UI PACKAGES UPDATED (^12.x → ^13.x)
+  -------------------------------------------
+  @progress/kendo-angular-buttons       : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-charts        : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-common        : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-dateinputs    : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-dropdowns     : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-excel-export  : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-grid          : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-icons         : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-inputs        : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-intl          : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-label         : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-layout        : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-pdf-export    : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-popup         : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-treeview      : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-notification  : ^12.x  -->  ^13.0.0
+  @progress/kendo-angular-navigation    : ^12.x  -->  ^13.0.0
+  @progress/kendo-theme-default         : ^5.x   -->  ^6.x    (check latest)
+
+  NODE.js & TYPESCRIPT REQUIREMENTS
+  -----------------------------------
+  Node.js (minimum)            : 16.14.x  -->  18.13.x (REQUIRED - Node 16 dropped!)
+  TypeScript                   : ~5.0.x   -->  ~5.2.x
+  NOTE: Node.js 16 is NO LONGER supported in Angular 17.
+        Must upgrade Node.js to 18.13.x or 20.x before starting migration.
+
+
+================================================================================
+SECTION 2 : CONFIG FILE CHANGES
+================================================================================
+
+  FILE: tsconfig.json
+  -------------------
+  CHANGE 1: TypeScript version
+    "typescript": ~5.0.x  -->  ~5.2.x  (in package.json devDependencies)
+
+  CHANGE 2: useDefineForClassFields (keep)
+    "useDefineForClassFields": false  (still required - do not remove)
+
+  CHANGE 3: experimentalDecorators (keep)
+    "experimentalDecorators": true  (still required)
+
+  CHANGE 4: target (recommended update)
+    "target": "ES2022"  (no change needed - keep as is)
+
+  FILE: angular.json  (IMPORTANT CHANGES)
+  ----------------------------------------
+  CHANGE 1: New Application Builder (RECOMMENDED for Angular 17)
+
+    OLD builder (Angular 16):
+    "builder": "@angular-devkit/build-angular:browser"
+    "options": {
+      "main": "src/main.ts",          <-- 'main' keyword
+      "outputPath": "dist/vts",
+      ...
+    }
+
+    NEW builder (Angular 17):
+    "builder": "@angular-devkit/build-angular:application"
+    "options": {
+      "browser": "src/main.ts",       <-- 'browser' keyword (renamed from 'main')
+      "outputPath": "dist/vts",
+      ...
+    }
+
+    NOTE: Old "browser" builder still works in Angular 17 (deprecated, not removed).
+          Keep the old builder if you want no-risk migration.
+          Switch to "application" builder for faster builds with ESBuild/Vite.
+
+  CHANGE 2: budgets (update style budget)
+    componentStyles budget may need increase:
+    { "type": "anyComponentStyle", "maximumWarning": "6kb", "maximumError": "10kb" }
+
+  FILE: package.json scripts
+  ---------------------------
+  No change needed - same build/serve commands work
+
+
+================================================================================
+SECTION 3 : CRITICAL BREAKING CHANGE - MatLegacy* MODULES REMOVED!
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  Angular Material 17 COMPLETELY REMOVES all MatLegacy* modules.
+  These were deprecated in Angular Material 15 and kept through v16.
+  In Angular 17 - they are GONE. This will cause build errors!
+
+  ERROR YOU WILL SEE:
+  -------------------
+  error TS2305: Module '@angular/material/legacy-button' has no
+               exported member 'MatLegacyButtonModule'
+  (Same error for ALL legacy modules used)
+
+  FULL RENAME LIST - Legacy to MDC:
+  -----------------------------------
+  MODULE                             OLD IMPORT PATH                  NEW IMPORT PATH
+  ------------------                 --------------------------------  --------------------------------
+  MatLegacyButtonModule          --> MatButtonModule                  @angular/material/button
+  MatLegacyInputModule           --> MatInputModule                   @angular/material/input
+  MatLegacyFormFieldModule       --> MatFormFieldModule               @angular/material/form-field
+  MatLegacySelectModule          --> MatSelectModule                  @angular/material/select
+  MatLegacyOptionModule          --> MatOptionModule / MatCoreModule  @angular/material/core
+  MatLegacyCheckboxModule        --> MatCheckboxModule                @angular/material/checkbox
+  MatLegacyRadioModule           --> MatRadioModule                   @angular/material/radio
+  MatLegacyAutocompleteModule    --> MatAutocompleteModule            @angular/material/autocomplete
+  MatLegacyChipsModule           --> MatChipsModule                   @angular/material/chips
+  MatLegacyMenuModule            --> MatMenuModule                    @angular/material/menu
+  MatLegacyListModule            --> MatListModule                    @angular/material/list
+  MatLegacyTableModule           --> MatTableModule                   @angular/material/table
+  MatLegacyPaginatorModule       --> MatPaginatorModule               @angular/material/paginator
+  MatLegacyProgressBarModule     --> MatProgressBarModule             @angular/material/progress-bar
+  MatLegacyProgressSpinnerModule --> MatProgressSpinnerModule         @angular/material/progress-spinner
+  MatLegacySlideToggleModule     --> MatSlideToggleModule             @angular/material/slide-toggle
+  MatLegacySliderModule          --> MatSliderModule                  @angular/material/slider
+  MatLegacySnackBarModule        --> MatSnackBarModule                @angular/material/snack-bar
+  MatLegacyTabsModule            --> MatTabsModule                    @angular/material/tabs
+  MatLegacyTooltipModule         --> MatTooltipModule                 @angular/material/tooltip
+  MatLegacyDialogModule          --> MatDialogModule                  @angular/material/dialog
+  MatLegacyCardModule            --> MatCardModule                    @angular/material/card
+
+  IMPORT CHANGE EXAMPLE:
+  -----------------------
+  OLD: import { MatLegacyButtonModule as MatButtonModule }
+            from '@angular/material/legacy-button'
+  NEW: import { MatButtonModule }
+            from '@angular/material/button'
+
+  CSS CLASS CHANGES (after MDC migration):
+  -----------------------------------------
+  If your styles.css or component CSS overrides internal Material classes,
+  they need to be updated. MDC uses different internal class names:
+
+  OLD class (Legacy)              NEW class (MDC)
+  -------------------------       -------------------------
+  .mat-form-field-wrapper     --> .mat-mdc-form-field-flex
+  .mat-form-field-flex        --> .mat-mdc-text-field-wrapper
+  .mat-input-element          --> .mat-mdc-input-element
+  .mat-form-field-infix       --> .mat-mdc-form-field-infix
+  .mat-select-value           --> .mat-mdc-select-value
+  .mat-option                 --> .mat-mdc-option
+  .mat-button-wrapper         --> .mdc-button__label
+  .mat-checkbox-inner-container --> .mdc-checkbox
+  .mat-radio-outer-circle     --> .mdc-radio__outer-circle
+  .mat-tab-label              --> .mdc-tab
+  .mat-tab-body               --> .mat-mdc-tab-body
+  .mat-dialog-container       --> .mat-mdc-dialog-container
+  .mat-card-content           --> .mat-mdc-card-content
+  .mat-chip                   --> .mat-mdc-chip
+
+  FILES AFFECTED (All module .ts files - must update imports):
+  ------------------------------------------------------------
+  - src/app/app.module.ts
+  - src/app/master/master.module.ts
+  - src/app/screening/screening.module.ts
+  - src/app/client-entry/client-entry.module.ts
+  - src/app/verification/verification.module.ts
+  - src/app/case/case.module.ts
+  - src/app/quality-check/quality-check.module.ts
+  - src/app/reports/reports.module.ts
+  - src/app/invoice/invoice.module.ts
+  - src/app/automation/automation.module.ts
+  - src/app/common-methods/common-methods.module.ts
+  - src/app/shared/shared.module.ts (if exists)
+  + ALL other feature modules
+
+  ALSO CHECK CSS FILES:
+  ----------------------
+  - src/styles.css
+  - All component *.css / *.scss files with Material class overrides
+
+
+================================================================================
+SECTION 4 : NEW CONTROL FLOW SYNTAX (Replaces *ngIf, *ngFor, *ngSwitch)
+================================================================================
+
+  WHAT CHANGED:
+  -------------
+  Angular 17 introduces new BUILT-IN control flow syntax.
+  Old *ngIf, *ngFor, *ngSwitch still work (deprecated, not removed).
+  No immediate errors - but migration recommended for better performance.
+
+  1. @if REPLACES *ngIf:
+  ----------------------
+  OLD (still works but deprecated):
+    <div *ngIf="isVisible">Content</div>
+    <div *ngIf="user; else noUser">Hello {{ user.name }}</div>
+    <ng-template #noUser>No user found</ng-template>
+
+  NEW (@if):
+    @if (isVisible) {
+      <div>Content</div>
+    }
+
+    @if (user) {
+      <div>Hello {{ user.name }}</div>
+    } @else {
+      <div>No user found</div>
+    }
+
+    @if (status === 'active') {
+      <div>Active</div>
+    } @else if (status === 'pending') {
+      <div>Pending</div>
+    } @else {
+      <div>Inactive</div>
+    }
+
+  2. @for REPLACES *ngFor:
+  ------------------------
+  OLD (still works but deprecated):
+    <div *ngFor="let item of items; let i = index; trackBy: trackFn">
+      {{ i }} - {{ item.name }}
+    </div>
+
+  NEW (@for) - NOTE: 'track' is REQUIRED in @for!:
+    @for (item of items; track item.id) {
+      <div>{{ item.name }}</div>
+    } @empty {
+      <div>No items found</div>
+    }
+
+    @for (item of items; track item.id; let i = $index) {
+      <div>{{ i }} - {{ item.name }}</div>
+    }
+
+  IMPORTANT: @for REQUIRES track expression - cannot skip it!
+  OLD *ngFor track was optional. NEW @for track is MANDATORY.
+
+  AVAILABLE LOOP VARIABLES in @for:
+    $index   - current index
+    $first   - true if first item
+    $last    - true if last item
+    $even    - true if index is even
+    $odd     - true if index is odd
+    $count   - total count of items
+
+  3. @switch REPLACES *ngSwitch:
+  --------------------------------
+  OLD (still works but deprecated):
+    <div [ngSwitch]="status">
+      <span *ngSwitchCase="'active'">Active</span>
+      <span *ngSwitchCase="'pending'">Pending</span>
+      <span *ngSwitchDefault>Unknown</span>
+    </div>
+
+  NEW (@switch):
+    @switch (status) {
+      @case ('active') {
+        <span>Active</span>
+      }
+      @case ('pending') {
+        <span>Pending</span>
+      }
+      @default {
+        <span>Unknown</span>
+      }
+    }
+
+  4. @defer - NEW DEFERRABLE VIEWS:
+  ------------------------------------
+  NEW in Angular 17 - lazy load sections of the template:
+    @defer (on viewport) {
+      <heavy-component />
+    } @loading {
+      <div>Loading...</div>
+    } @error {
+      <div>Failed to load</div>
+    } @placeholder {
+      <div>Placeholder content</div>
+    }
+
+  AUTO-MIGRATION COMMAND:
+  ------------------------
+  Angular CLI provides automatic migration:
+  npx ng generate @angular/core:control-flow
+
+  This automatically converts all *ngIf, *ngFor, *ngSwitch
+  in your templates to the new @if, @for, @switch syntax.
+
+  FILES AFFECTED (if migrating - ALL HTML templates):
+  ---------------------------------------------------
+  Every .html file that uses *ngIf, *ngFor, *ngSwitch
+  (Potentially 200+ files in a large project like VTS)
+
+  NOTE: This migration is OPTIONAL in Angular 17.
+        Old directives still work - no build errors.
+        Only migrate when ready for the new syntax.
+
+
+================================================================================
+SECTION 5 : ZONE.JS 0.13 → 0.14 CHANGES
+================================================================================
+
+  UPDATE: zone.js to ~0.14.x in package.json
+
+  BREAKING CHANGES IN zone.js 0.14:
+  -----------------------------------
+  1. Import paths updated again:
+     CHECK polyfills.ts for any zone.js imports
+     zone.js/plugins/* paths remain same as in 0.13
+
+  2. Zoneless support improved (experimental):
+     Can now run Angular without zone.js (experimental)
+     Not recommended for production yet
+
+  FILES AFFECTED:
+  ---------------
+  - src/polyfills.ts  (check for zone.js version-specific imports)
+
+
+================================================================================
+SECTION 6 : ANGULAR 17 NEW FEATURES (Signals - Now Stable!)
+================================================================================
+
+  SIGNALS API (STABLE in Angular 17):
+  -------------------------------------
+  Signals were Developer Preview in v16. Now STABLE in v17.
+  OPTIONAL - existing RxJS/Observable pattern still works.
+
+  signal() - Create a reactive value:
+    import { signal } from '@angular/core'
+    count = signal(0)
+    this.count.set(1)
+    this.count.update(v => v + 1)
+    console.log(this.count())  // call it like a function to read
+
+  computed() - Derived value:
+    import { computed } from '@angular/core'
+    doubled = computed(() => this.count() * 2)
+
+  effect() - Side effects:
+    import { effect } from '@angular/core'
+    constructor() {
+      effect(() => console.log('count changed:', this.count()))
+    }
+
+  Signal-based Inputs (NEW in v17):
+    import { input } from '@angular/core'
+    name = input<string>()           // optional input
+    name = input.required<string>()  // required input
+
+  Signal-based ViewChild (NEW in v17):
+    import { viewChild } from '@angular/core'
+    myEl = viewChild<ElementRef>('myRef')
+
+  NOTE: These are additive features. No existing code breaks.
+
+
+================================================================================
+SECTION 7 : ANGULAR MATERIAL 17 - CSS DENSITY CHANGES
+================================================================================
+
+  FORM FIELD DENSITY:
+  --------------------
+  Angular Material 17 changes default density for form fields.
+
+  If form fields look too compact/too large after upgrade,
+  add this to styles.css:
+
+  /* Restore Angular 16-style form field size */
+  .mat-mdc-form-field {
+    --mat-form-field-container-height: 56px;
+    --mat-form-field-filled-label-display: block;
+  }
+
+  BUTTON HEIGHT CHANGES:
+  -----------------------
+  Angular Material 17 MDC buttons have slightly different default height.
+  If buttons look different after upgrade:
+
+  /* Restore button height if needed */
+  .mdc-button {
+    height: 36px;
+  }
+
+  CHECKBOX/RADIO SIZE:
+  --------------------
+  MDC checkbox and radio buttons are slightly larger than legacy.
+  If layout breaks due to size change:
+
+  /* Restore compact size if needed */
+  .mat-mdc-checkbox .mdc-checkbox {
+    transform: scale(0.8);
+  }
+
+
+================================================================================
+SECTION 8 : PRIMENG 16 → 17 CHANGES
+================================================================================
+
+  PACKAGE VERSION:
+  ----------------
+  primeng                 : ^16.x.x  -->  ^17.x.x
+  primeicons              : ^6.x.x   -->  ^7.0.0
+
+  PRIMENG 17 KEY CHANGES:
+  -------------------------
+  1. p-calendar REMOVED! (use p-datepicker)
+     ERROR: 'p-calendar' is not a known element
+     OLD:  <p-calendar [(ngModel)]="date" [showTime]="true">
+     NEW:  <p-datepicker [(ngModel)]="date" [showTime]="true">
+     MODULE:
+       OLD:  CalendarModule  from 'primeng/calendar'
+       NEW:  DatePickerModule from 'primeng/datepicker'
+
+  2. p-dropdown REMOVED! (use p-select)
+     ERROR: 'p-dropdown' is not a known element
+     OLD:  <p-dropdown [options]="items" [(ngModel)]="selected">
+     NEW:  <p-select [options]="items" [(ngModel)]="selected">
+     MODULE:
+       OLD:  DropdownModule  from 'primeng/dropdown'
+       NEW:  SelectModule    from 'primeng/select'
+
+  3. p-inputNumber - now uses p-inputnumber (lowercase 'n')
+     Check if component name changed in templates.
+
+  4. p-autoComplete → p-autocomplete (lowercase 'c')
+     Check templates for casing.
+
+  5. Overlay service changes:
+     OverlayService injection token path may change.
+
+  6. p-chips - STILL AVAILABLE in PrimeNG 17! (removed in v18 only)
+     No change needed for p-chips usage.
+
+  7. PrimeNG 17 new Aura theme is default in new projects.
+     Existing lara theme still works.
+     styles.css import path unchanged:
+       @import "primeng/resources/themes/lara-light-blue/theme.css"  (still valid)
+
+  8. CSS file path change (IMPORTANT!):
+     OLD: @import "primeng/resources/primeng.min.css"
+     NEW: This file may be removed in PrimeNG 17.
+          If build error, remove this import from styles.css.
+          PrimeNG 17 includes styles within the theme CSS.
+
+  FILES AFFECTED:
+  ---------------
+  All HTML templates using <p-calendar>  --> change to <p-datepicker>
+  All HTML templates using <p-dropdown>  --> change to <p-select>
+  All module .ts files importing CalendarModule  --> DatePickerModule
+  All module .ts files importing DropdownModule  --> SelectModule
+  src/styles.css  (check primeng.min.css import)
+
+
+================================================================================
+SECTION 9 : KENDO v12 → v13 SPECIFIC CHANGES
+================================================================================
+
+  PACKAGE CHANGE:
+  ---------------
+  All @progress/kendo-angular-* : ^12.x  -->  ^13.0.0
+
+  KENDO v13 KEY BREAKING CHANGES:
+  ---------------------------------
+  1. Grid: 'selectable' input type changed
+     OLD:  [selectable]="true"
+     NEW:  [selectable]="{ mode: 'single' }"  OR  [selectable]="{ mode: 'multiple' }"
+
+  2. DropDownList/ComboBox - 'virtual' scrolling property changed:
+     OLD:  [virtual]="true"
+     NEW:  [virtual]="{ itemHeight: 28 }"
+
+  3. DatePicker 'disabledDates' - function signature updated:
+     If using custom disabledDates function, check signature matches:
+     disabledDates: (date: Date) => boolean
+
+  4. Kendo Grid - 'resizable' column property:
+     OLD:  [resizable]="true" on column
+     NEW:  [resizable]="true" on kendo-grid (parent level)
+
+  5. Kendo Theme (v6):
+     @progress/kendo-theme-default : ^5.x  -->  ^6.x
+     If using custom SCSS Kendo theme variables, some variable names changed.
+
+  6. Kendo Grid PDF Export:
+     @progress/kendo-angular-pdf-export updated.
+     If using grid PDF export, check API for breaking changes.
+
+  7. Icon package:
+     @progress/kendo-svg-icons  :  may need version update
+     @progress/kendo-angular-icons : ^12.x  -->  ^13.0.0
+
+  FILES AFFECTED:
+  ---------------
+  - All HTML templates with kendo-grid using [selectable]
+  - All HTML templates with kendo-dropdownlist using [virtual]
+  - All HTML templates with kendo-datepicker using disabledDates
+  - src/app/reports/**/*.component.html
+  - src/app/master/**/*.component.html
+  - src/app/verification/**/*.component.html
+  - src/app/invoice/**/*.component.html
+
+
+================================================================================
+SECTION 10 : ANGULAR 17 - NEW APPLICATION BUILDER (Optional Migration)
+================================================================================
+
+  WHAT IS THE NEW BUILDER:
+  -------------------------
+  Angular 17 introduces "@angular-devkit/build-angular:application"
+  as the new default builder (replaces the old "browser" builder).
+  Uses ESBuild + Vite for much faster builds.
+
+  OLD builder still works in v17 - NO breaking change.
+  But for future versions (v18+), old builder is deprecated.
+
+  HOW TO SWITCH (angular.json changes):
+  ---------------------------------------
+
+  1. In architect.build section:
+     OLD:
+       "builder": "@angular-devkit/build-angular:browser",
+       "options": {
+         "main": "src/main.ts",
+         "polyfills": ["zone.js"],
+         ...
+       }
+
+     NEW:
+       "builder": "@angular-devkit/build-angular:application",
+       "options": {
+         "browser": "src/main.ts",       <-- 'main' renamed to 'browser'
+         "polyfills": ["zone.js"],
+         ...
+       }
+
+  2. In architect.serve section:
+     Keep as-is (serve builder auto-detects the build builder)
+
+  3. outputPath format changes with new builder:
+     OLD output:  dist/vts/
+     NEW output:  dist/vts/browser/  (new builder adds /browser subfolder)
+     FIX: Add "outputPath": { "base": "dist/vts", "browser": "" }
+          to keep flat output directory
+
+  BENEFIT OF NEW BUILDER:
+  -------------------------
+  Build time: Up to 67% faster than old builder
+  Bundle size: Slightly smaller due to ESBuild optimization
+
+  RECOMMENDATION: Keep old builder for risk-free migration.
+                  Switch to new builder in a separate step after migration.
+
+
+================================================================================
+SECTION 11 : TYPESCRIPT 5.2 CHANGES
+================================================================================
+
+  KEY TypeScript 5.2 CHANGES:
+  ----------------------------
+
+  1. 'using' declarations (new keyword for resource management):
+     const resource = using getResource()
+     Not relevant for Angular components - just awareness.
+
+  2. Improved inference for generic classes:
+     Some previously-valid type assertions may now fail.
+     FIX: Add explicit type annotations where needed.
+
+  3. Declaration file import changes:
+     TypeScript 5.2 improved import elision.
+     May affect some module barrel files.
+
+  4. 'override' keyword more strict:
+     If using 'override' on class methods, TypeScript 5.2
+     is stricter about correct usage.
+
+  KEEP IN tsconfig.json (still required):
+  ----------------------------------------
+  "experimentalDecorators": true
+  "useDefineForClassFields": false
+  "skipLibCheck": true
+
+
+================================================================================
+SECTION 12 : COMMON ERRORS AND FIXES
+================================================================================
+
+  ERROR 1: "Module '@angular/material/legacy-button' has no exported
+            member 'MatLegacyButtonModule'"
+  -------------------------------------------------------------------
+  CAUSE : All MatLegacy* modules removed in Angular 17
+  FIX   : Remove 'Legacy' from module name and update import path
+          MatLegacyButtonModule --> MatButtonModule
+          from '@angular/material/legacy-button' --> '@angular/material/button'
+  FILES : All .module.ts files with Material imports
+
+  ERROR 2: "'p-calendar' is not a known element"
+  -----------------------------------------------
+  CAUSE : p-calendar removed in PrimeNG 17
+  FIX   : Replace <p-calendar> with <p-datepicker>
+          Replace CalendarModule with DatePickerModule
+  FILES : All .html templates using p-calendar
+          All .module.ts importing CalendarModule
+
+  ERROR 3: "'p-dropdown' is not a known element"
+  -----------------------------------------------
+  CAUSE : p-dropdown removed in PrimeNG 17
+  FIX   : Replace <p-dropdown> with <p-select>
+          Replace DropdownModule with SelectModule
+  FILES : All .html templates using p-dropdown
+          All .module.ts importing DropdownModule
+
+  ERROR 4: "Cannot find module 'primeng/resources/primeng.min.css'"
+  ------------------------------------------------------------------
+  CAUSE : PrimeNG 17 removed legacy CSS resource files
+  FIX   : Remove this import from styles.css
+          @import "../node_modules/primeng/resources/primeng.min.css";
+  FILES : src/styles.css
+
+  ERROR 5: Node.js version error during build
+  --------------------------------------------
+  CAUSE : Angular 17 requires Node.js 18.13.x minimum
+          Node.js 16 is not supported
+  FIX   : Upgrade Node.js to v18 LTS or v20 LTS
+          nvm use 18  (if using nvm)
+
+  ERROR 6: zone.js import path error
+  -------------------------------------
+  CAUSE : zone.js ~0.14 may have import path changes
+  FIX   : Update zone.js import in polyfills.ts if needed
+  FILES : src/polyfills.ts
+
+  ERROR 7: Mat* component CSS broken (unexpected spacing/sizing)
+  ---------------------------------------------------------------
+  CAUSE : MDC components have different default sizing than Legacy
+  FIX   : Add CSS custom property overrides in styles.css
+          (see Section 7 above for specific overrides)
+  FILES : src/styles.css
+
+  ERROR 8: Kendo Grid selectable error
+  --------------------------------------
+  CAUSE : Kendo v13 changed [selectable] type from boolean to object
+  FIX   : Change [selectable]="true" to [selectable]="{ mode: 'single' }"
+  FILES : All HTML templates using kendo-grid with selection
+
+  ERROR 9: TypeScript "Property does not exist on type" errors (new)
+  -------------------------------------------------------------------
+  CAUSE : TypeScript 5.2 stricter type inference
+  FIX   : Add explicit type annotations or use optional chaining (?.)
+  FILES : Multiple .ts files (check build output)
+
+  ERROR 10: "'@if' / '@for' syntax not recognized" in templates
+  --------------------------------------------------------------
+  CAUSE : New control flow syntax requires specific Angular version check
+  FIX   : Ensure all @angular/* packages are exactly ^17.0.0
+          Old *ngIf still works - no need to migrate immediately
+  FILES : HTML templates (only if you chose to use new syntax)
+
+
+================================================================================
+SECTION 13 : MODULE FILES - WHAT CHANGES IN EVERY MODULE
+================================================================================
+
+  FOR EACH FEATURE MODULE (.module.ts), CHECK AND FIX:
+  -----------------------------------------------------
+  1. Replace ALL MatLegacy* imports with MDC equivalents
+  2. Update CalendarModule → DatePickerModule (PrimeNG)
+  3. Update DropdownModule → SelectModule (PrimeNG)
+  4. Kendo module imports remain the same (just version bump)
+
+  TYPICAL MODULE BEFORE/AFTER:
+  ----------------------------
+  BEFORE (Angular 16):
+  import { MatLegacyButtonModule as MatButtonModule }
+        from '@angular/material/legacy-button'
+  import { MatLegacyFormFieldModule as MatFormFieldModule }
+        from '@angular/material/legacy-form-field'
+  import { MatLegacyInputModule as MatInputModule }
+        from '@angular/material/legacy-input'
+  import { MatLegacySelectModule as MatSelectModule }
+        from '@angular/material/legacy-select'
+  import { CalendarModule }   from 'primeng/calendar'
+  import { DropdownModule }   from 'primeng/dropdown'
+
+  AFTER (Angular 17):
+  import { MatButtonModule }    from '@angular/material/button'
+  import { MatFormFieldModule } from '@angular/material/form-field'
+  import { MatInputModule }     from '@angular/material/input'
+  import { MatSelectModule }    from '@angular/material/select'
+  import { DatePickerModule }   from 'primeng/datepicker'
+  import { SelectModule }       from 'primeng/select'
+
+
+================================================================================
+SECTION 14 : HTML TEMPLATE CHANGES
+================================================================================
+
+  MANDATORY CHANGES (will cause build errors):
+  ---------------------------------------------
+  1. Replace <p-calendar> with <p-datepicker>
+  2. Replace <p-dropdown> with <p-select>
+
+  OPTIONAL CHANGES (deprecated but still work):
+  -----------------------------------------------
+  1. *ngIf  → @if
+  2. *ngFor → @for
+  3. *ngSwitch / *ngSwitchCase → @switch / @case
+
+  p-calendar REPLACEMENT EXAMPLE:
+  ---------------------------------
+  OLD:
+    <p-calendar [(ngModel)]="selectedDate"
+                [showTime]="true"
+                dateFormat="dd/mm/yy"
+                placeholder="Select Date">
+    </p-calendar>
+
+  NEW:
+    <p-datepicker [(ngModel)]="selectedDate"
+                  [showTime]="true"
+                  dateFormat="dd/mm/yy"
+                  placeholder="Select Date">
+    </p-datepicker>
+
+  p-dropdown REPLACEMENT EXAMPLE:
+  ---------------------------------
+  OLD:
+    <p-dropdown [options]="statusList"
+                [(ngModel)]="selectedStatus"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Status">
+    </p-dropdown>
+
+  NEW:
+    <p-select   [options]="statusList"
+                [(ngModel)]="selectedStatus"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Status">
+    </p-select>
+
+  SEARCH COMMANDS TO FIND ALL AFFECTED TEMPLATES:
+  -------------------------------------------------
+  Find p-calendar usage:   grep -r "p-calendar" src/
+  Find p-dropdown usage:   grep -r "p-dropdown" src/
+  Find CalendarModule:     grep -r "CalendarModule" src/
+  Find DropdownModule:     grep -r "DropdownModule" src/
+  Find MatLegacy imports:  grep -r "MatLegacy" src/
+
+
+================================================================================
+SECTION 15 : MIGRATION STEPS (Step-by-Step)
+================================================================================
+
+  STEP 0: Upgrade Node.js FIRST
+  --------------------------------
+  Angular 17 requires Node.js 18.13.x minimum.
+  Upgrade Node.js before any other steps.
+  Check: node --version  (must be 18.x or 20.x)
+
+  STEP 1: Backup current project
+  --------------------------------
+  git checkout -b feature/angular-17-upgrade
+
+  STEP 2: Update package.json versions
+  --------------------------------------
+  Update all @angular/* to ^17.0.0
+  Update zone.js to ~0.14.x
+  Update @ngbracket/ngx-layout to ^17.0.0
+  Update Kendo packages to ^13.0.0
+  Update PrimeNG to ^17.0.0
+  Update primeicons to ^7.0.0
+  Update TypeScript to ~5.2.x
+
+  STEP 3: Run npm install
+  ------------------------
+  npm install --legacy-peer-deps
+
+  STEP 4: Run Angular migration schematics
+  -----------------------------------------
+  npx ng update @angular/core@17 @angular/cli@17
+  npx ng update @angular/material@17
+
+  STEP 5: Fix MatLegacy* imports (BIGGEST TASK)
+  -----------------------------------------------
+  Search: grep -r "MatLegacy" src/
+  For each file found, rename MatLegacy* → Mat* and update import paths
+  (See full rename table in Section 3)
+
+  STEP 6: Fix PrimeNG component names
+  ------------------------------------
+  Search: grep -r "p-calendar\|CalendarModule" src/
+  Replace p-calendar → p-datepicker, CalendarModule → DatePickerModule
+
+  Search: grep -r "p-dropdown\|DropdownModule" src/
+  Replace p-dropdown → p-select, DropdownModule → SelectModule
+
+  STEP 7: Fix styles.css
+  -------------------------
+  Remove: @import "../node_modules/primeng/resources/primeng.min.css"
+  Add CSS custom property overrides for Material MDC if layout breaks
+
+  STEP 8: Build and fix remaining errors
+  ----------------------------------------
+  npm run build
+  Fix each error shown one by one
+
+  STEP 9: Fix CSS visual regressions
+  ------------------------------------
+  Open the app in browser
+  Check all pages for visual differences due to MDC components
+  Add CSS overrides in styles.css where needed
+
+  STEP 10: Test production build
+  --------------------------------
+  npm run build:prod
+
+
+================================================================================
+SECTION 16 : FILES THAT WILL DEFINITELY CHANGE
+================================================================================
+
+  ALWAYS CHANGE (Every Angular 16 → 17 project):
+  ------------------------------------------------
+  package.json                              (version bumps)
+  tsconfig.json                             (TS 5.2 compat)
+  angular.json                              (via ng update schematics)
+  src/styles.css                            (remove primeng.min.css import,
+                                             add MDC overrides if needed)
+
+  CHANGE FOR MatLegacy* REMOVAL:
+  --------------------------------
+  src/app/app.module.ts
+  src/app/master/master.module.ts
+  src/app/screening/screening.module.ts
+  src/app/client-entry/client-entry.module.ts
+  src/app/verification/verification.module.ts
+  src/app/case/case.module.ts
+  src/app/quality-check/quality-check.module.ts
+  src/app/reports/reports.module.ts
+  src/app/invoice/invoice.module.ts
+  src/app/automation/automation.module.ts
+  src/app/common-methods/common-methods.module.ts
+  + ALL other modules with Material imports
+
+  CHANGE FOR PrimeNG p-calendar → p-datepicker:
+  -----------------------------------------------
+  All HTML templates using <p-calendar>  (search and replace all)
+  All module .ts files importing CalendarModule
+
+  CHANGE FOR PrimeNG p-dropdown → p-select:
+  -------------------------------------------
+  All HTML templates using <p-dropdown>  (search and replace all)
+  All module .ts files importing DropdownModule
+
+  CHANGE FOR NODE.js UPGRADE:
+  ----------------------------
+  .nvmrc or .node-version file (if exists)
+
+
+================================================================================
+SECTION 17 : WHAT DOES NOT CHANGE (Angular 16 → 17)
+================================================================================
+
+  HTML TEMPLATES     : fxLayout, fxFlex, fxFlex.lg, fxFlex.xs   (no change)
+  HTML TEMPLATES     : *ngIf, *ngFor, *ngSwitch                  (still work)
+  HTML TEMPLATES     : p-table, p-chips, p-toast (PrimeNG)       (no change)
+  HTML TEMPLATES     : p-sortIcon, p-paginator in p-table        (no change)
+  HTML TEMPLATES     : mat-card, mat-toolbar, mat-icon           (no change)
+  HTML TEMPLATES     : mat-dialog, mat-datepicker                (no change)
+  HTML TEMPLATES     : kendo-grid template columns               (mostly)
+  HTML TEMPLATES     : [(ngModel)] two-way binding               (no change)
+  HTML TEMPLATES     : <router-outlet>                           (no change)
+  TypeScript Files   : UntypedFormControl / UntypedFormGroup     (no change)
+  TypeScript Files   : Services (HTTP, shared services)          (no change)
+  TypeScript Files   : HTTP Interceptor                          (no change)
+  TypeScript Files   : Models / Interfaces                       (no change)
+  TypeScript Files   : @ViewChild, @ViewChildren                 (no change)
+  TypeScript Files   : Signals (from v16 still work)             (no change)
+  Config Files       : config.json (API runtime config)          (no change)
+  Config Files       : src/assets/**                             (no change)
+  Guard Files        : CanActivate guards                        (no change)
+
+
+================================================================================
+SECTION 18 : VERSION COMPARISON TABLE (All Angular Migrations)
+================================================================================
+
+  VERSION  | BIGGEST CHANGE                                | EFFORT
+  ---------|-----------------------------------------------|----------
+  v14→v15  | Material MDC (Mat* → MatLegacy*)              | HIGH
+           | flex-layout → @ngbracket/ngx-layout           |
+           | Typed Forms (UntypedFormControl)               |
+  ---------|-----------------------------------------------|----------
+  v15→v16  | entryComponents REMOVED from NgModule         | MEDIUM
+           | ComponentFactoryResolver REMOVED               |
+           | CanLoad deprecated → CanMatch                 |
+           | TypeScript 5.x support added                  |
+  ---------|-----------------------------------------------|----------
+  v16→v17  | MatLegacy* REMOVED (mat module renames)       | HIGH
+           | p-calendar REMOVED (→ p-datepicker)           |
+           | p-dropdown REMOVED (→ p-select)               |
+           | New @if @for @switch syntax (optional)        |
+           | Node.js 16 dropped - must use Node 18+        |
+           | Signals API becomes stable                    |
+  ---------|-----------------------------------------------|----------
+  v17→v18  | browserTarget → buildTarget (angular.json)    | LOW-MEDIUM
+           | Stricter HTML parser (Â/NBSP chars error)     |
+           | ViewChild static:true fix (inside *ngIf)      |
+           | [(twoWay)] on negated expressions fixed        |
+
+
+================================================================================
+SUMMARY - ANGULAR 16 → 17 TOTAL CHANGES EXPECTED
+================================================================================
+
+  package.json                    : 1 file   (version upgrades - 30+ packages)
+  tsconfig.json                   : 1 file   (TS 5.2 compat)
+  angular.json                    : 1 file   (via ng update or manual)
+  src/styles.css                  : 1 file   (primeng.min.css + MDC overrides)
+  Module files (MatLegacy rename) : ~12-15 files (all feature modules)
+  HTML files (p-calendar → p-datepicker) : depends on usage (search grep)
+  HTML files (p-dropdown → p-select)     : depends on usage (search grep)
+  TypeScript files (TS 5.2 errors)       : ~5-15 files (build output)
+  Optional: HTML files (*ngIf → @if)     : 200+ files (if doing new syntax)
+  -----------------------------------------------------------------------
+  ESTIMATED TOTAL (mandatory only)   : ~40-60 files changed
+  ESTIMATED TOTAL (with syntax mig.) : ~250+ files changed
+
+  COMPARISON vs OTHER VERSIONS:
+  ------------------------------
+  v14→v15  : ~80-100 files  (MDC migration was the biggest)
+  v15→v16  : ~30-50  files  (entryComponents removal)
+  v16→v17  : ~40-60  files  (MatLegacy removal + PrimeNG component renames)
+  v17→v18  : ~229    files  (ViewChild + HTML parser + encoding fixes)
+
+
+================================================================================
+END OF REPORT
+================================================================================

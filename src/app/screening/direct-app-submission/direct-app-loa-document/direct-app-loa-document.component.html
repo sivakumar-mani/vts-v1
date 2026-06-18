@@ -1,0 +1,181 @@
+
+@if (screeningService.loaStaticFlag === false && screeningService.loaHtml !=null && screeningService.loaHtml !='' ) {
+  <div>
+    <div class="scrollable-content"   [innerHTML]="safeHtml" >
+    </div>
+    <div fxLayout="row"  fxLayoutAlign="space-between center" style="padding:20px 15px;">
+      <div>
+        <a color="primary" (click)="openDialog()">Click here to change Employee Name & Employee ID</a>
+      </div>
+      <div>
+        <div [formGroup]="mainForm">
+          <div [formGroupName]="formgroupName">
+            <input type="checkbox" id="agreeCheckbox" (change)="LoaChange($event)" formControlName="iagreeFlag"
+              class="larger-checkbox">
+            <label for="agreeCheckbox" class="larger-label">I agree to the above terms and conditions</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+@if (screeningService.loaStaticFlag === true) {
+  <div>
+    @if (['EConsent','ESignatureLOA'].includes(mainForm.get(formgroupName+'.consentLookupName').value)) {
+      <div>
+        <div [formGroup]="mainForm">
+          @if (userData.applicationId === 3) {
+<div fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px
+            grid">
+              <div fxflex="100%">
+                <h3 class="sub-header">Authorization Form</h3>
+              </div>
+            </div>
+          }
+          <div [formGroupName]="formgroupName">
+            <h4  style="color: white;background-color: black; padding: 7px;">
+            Declaration and Authorization</h4>
+            I hereby authorize Krya Screening Private Limited and its representative to verify information provided in my application for employment and this employee background verification form, and to conduct enquiries as may be necessary, at Krya’s
+            discretion. I authorize all persons who may have information relevant to this enquiry to disclose it to Krya Screening Private Limited or its representative.<br>
+            <input type="checkbox" (change)="agreeChange($event)" formControlName="iagreeFlag"> I
+            <mat-form-field>
+              <input matInput formControlName="consentSignature" autocomplete="off" role="presentation" readonly>
+            </mat-form-field>
+            release all persons from liability on account of such disclosure.<br> This authorization and release, in original, faxed, photocopied form or e-mail transmission, shall be valid for this and any future reference. I confirm that the above information
+            is correct to the best of my knowledge.
+            <br>
+              <br>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                  @if (mainForm.get(formgroupName + '.consentLookupName').value === 'EConsent') {
+                    <div>
+                      <mat-form-field>
+                        <b> <i><input matInput
+                        formControlName="consentSignature" readonly></i></b>
+                      </mat-form-field><br> Signature
+                    </div>
+                  }
+                  @if (mainForm.get(formgroupName + '.consentLookupName').value === 'ESignatureLOA') {
+                    <div>
+                      <!-- <label><strong>Upload Your Signature</strong></label> -->
+                      <!-- Upload button -->
+                      @if (!signatureUrl) {
+                        <button mat-flat-button color="primary" (click)="fileInput.click()">
+                          Upload Signature
+                        </button>
+                      }
+                      <!-- Hidden file input -->
+                      <input type="file" #fileInput accept="image/*" style="display: none" (change)="onSignatureSelected($event)" />
+                      <!-- Show uploaded signature -->
+                      @if (signatureUrl) {
+                        <div class="signature-preview">
+                          <img [src]="signatureUrl" alt="Signature"
+                            style="max-width: 250px; max-height: 120px; margin-top: 10px; border: 1px solid #ccc;" />
+                          <br> Signature
+                          </div>
+                        }
+                      </div>
+                    }
+                    <div>
+                      <mat-form-field>
+                        <b> <input matInput value="{{common.currentDateTime}}"
+                        readonly></b>
+                      </mat-form-field><br>Date & Time
+                    </div>
+                  </div>
+                  <br>
+                  </div>
+                </div>
+              </div>
+            } @else {
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <app-client-app-document-upload [header]="'LOA Document'" [mainForm]="mainForm" [formgroupName]="'document'" [doctType]="doctType" [dupScreeningDoc]="screeningDocument" [showDocType]="false">
+                  </app-client-app-document-upload>
+                </div>
+              </div>
+              @if (userData.applicationId===3) {
+                <div fxLayout="row" fxLayoutGap="20px" class="mb-10">
+                  <div fxFlex="100%">
+                    <span><strong>Note:-</strong> <mat-label> Please ensure that the
+                    uploaded
+                    Letter of Authorization is manually signed.
+                    Your verification process will be kept on hold in case if
+                    there is no
+                  manual signature</mat-label></span>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      }
+      <ng-template #physicalconsent>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <app-client-app-document-upload [header]="'LOA Document'" [mainForm]="mainForm" [formgroupName]="'document'" [doctType]="doctType" [dupScreeningDoc]="screeningDocument" [showDocType]="false">
+            </app-client-app-document-upload>
+          </div>
+        </div>
+        @if (userData.applicationId===3) {
+          <div fxLayout="row" fxLayoutGap="20px" class="mb-10">
+            <div fxFlex="100%">
+              <span><strong>Note:-</strong> <mat-label> Please ensure that the
+              uploaded
+              Letter of Authorization is manually signed.
+              Your verification process will be kept on hold in case if
+              there is no
+            manual signature</mat-label></span>
+          </div>
+        </div>
+      }
+    </ng-template>
+
+    <ng-template #empDialog>
+      <h1 mat-dialog-title>Employee Detail</h1>
+      <mat-dialog-content>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0"></h3>
+          </div>
+        </div>
+        <form  [formGroup]="empForm">
+          <div fxLayout="row" class="mb-10">
+            <div fxFlex="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Emp Name</mat-label>
+                <input formControlName="empName" type="text" matInput placeholder=" Please Enter Emp Name" autocomplete="off"
+                  maxlength="75" role="presentation"  required />
+                @if (!!empForm?.get('empName')?.errors?.required) {
+                  <mat-error>Emp Name is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+          </div>
+          <div fxLayout="row" class="mb-10">
+
+            <div fxFlex="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Emp ID</mat-label>
+                <input formControlName="empId" type="text" matInput placeholder=" Please Enter Emp ID" autocomplete="off" maxlength="75" role="presentation"
+                  required />
+                @if (!!empForm?.get('empId')?.errors?.required) {
+                  <mat-error>Emp ID is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </mat-dialog-content>
+      <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+        <button mat-flat-button color="warn" (click)="saveEmp()">
+          Save
+        </button>
+        <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose()">
+          Cancel
+        </button>
+
+      </mat-dialog-actions>
+    </ng-template>

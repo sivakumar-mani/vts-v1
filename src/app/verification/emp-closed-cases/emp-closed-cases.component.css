@@ -1,0 +1,64 @@
+.EmpClrCount {
+   border: 1px solid rgba(0,0,0,0.1);
+   color: rgb(255, 255, 255);
+   display: inline-block;
+   font-size: 12px;
+   line-height: 21px;
+   margin: 0 5px 5px 0 !important;
+   padding: 0 8px !important;
+}
+
+.eduSearch{
+   flex-direction: row;
+   box-sizing: border-box;
+   display: flex;
+   background: #e6f7ff;
+   /* position: fixed; */
+}
+.eduSearch-forms{
+   padding: 10px 10px;
+   flex-direction: row;
+   box-sizing: border-box;
+   display: flex;  
+   background: #e6f7ff;
+   /* position: fixed;
+   width: 100%; */
+}
+.eduSearch-btn{
+   /* padding: 10px 10px;
+   flex-direction: row;
+   box-sizing: border-box;
+   display: flex;  
+   background: #e6f7ff; */
+   flex: 1 1 100%;
+   box-sizing: border-box;
+   max-width: 100%;
+}
+.FloatR mt-15{
+      place-content: center flex-start;
+      align-items: center;
+      flex-direction: row;
+      box-sizing: border-box;
+      display: flex;
+ }
+ icon-search1 {
+   left: 6px !important;
+   position: relative;
+   line-height: 30px;
+ }
+ 
+ .sortfield{
+   flex-direction: row;
+    box-sizing: 
+    border-box; 
+    display: flex;
+ }
+ .sortrows{
+   flex-direction: row;
+    box-sizing: border-box;
+     display: flex; 
+     margin: 0px;
+ }
+
+
+ 

@@ -1,0 +1,2091 @@
+<app-breadcrumb [routePath]="routePath">
+</app-breadcrumb>
+<!-- <app-client-cases></app-client-cases><br/><br/> -->
+@if (master.searchList?.length === 0) {
+  <div class="content-area">
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="15px grid" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px grid">
+      <div fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <h1 class="welcome">Welcome to Verification Tracking System Dashboard!</h1>
+          </div>
+        </div>
+        <!-- <div fxLayout="row">
+        <div fxFlex="100%" class="un-dt"> <i class="icon-user"></i>{{ usermailId }} <i
+      class="icon-key"></i>Last seen on {{ lastLogIn | date: 'dd/MM/yyyy hh:mm:ss a' }} </div>
+    </div> -->
+    <!-- // Commanded -->
+    <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="15px" class="pb-15">
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="45%" fxFlex.xs="100%" *ngIf="((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EducationTeam' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))) && userData.applicationId !== 3">
+      <div class="GreenGrad Gbox">
+        <i class="icon-check-circle"></i>
+        <h4>Total Verification</h4>
+        <p>The total number of verifications for the VTS team is:</p>
+        <div class="mt-15"><a [routerLink]="['/dashboard/verification/verificationDetail']"><span
+        class="count">{{verificationCaseCount}}</span></a></div>
+      </div>
+    </div>
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="45%" fxFlex.xs="100%" *ngIf="((userData.teamName === 'CRTIndia' && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === null))
+        || (userData.teamName === 'CRTTechMahindra' && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === null))
+        || (userData.teamName === 'CRTAbroad' && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === null)) || userData.applicationId === 2) || ((userData.teamName === null || userData.teamName === 'SeniorManager') && userData.applicationId === 1)">
+      <div class="BlueGrad Gbox">
+        <i class="icon-casecreation"></i>
+        <h4>Case Creation</h4>
+        <p>Here you can create the cases. </p>
+        <div class="mt-15">
+          <button mat-flat-button color="accent" [routerLink]="['/dashboard/case/case-creation']">+
+          Create Case</button>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="33.33%">
+      <div class="RedGrad Gbox">
+        <i class="icon-wallet"></i>
+        <h4>Total Fee</h4>
+        <p>The Total Fee for the VTS team is:
+        </p>
+        <div class="mt-15"><span class="count">6213</span> <a class="more">more...</a></div>
+      </div>
+    </div>
+  </div> -->
+  @if (caseviFlag()) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <h3 class="sub-header"><a [ngClass]="(common.caseFlag)?'disabled':''"
+          (click)="getdashboardcnwise(false,false,false,true, false);">Case Details&nbsp;<i
+        class="icon-chevron-{{ common.caseFlag?'up':'down' }}"></i></a></h3>
+      </div>
+    </div>
+  }
+  @if (common.caseFlag) {
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+      fxLayout.xs="column" fxLayoutGap="grid" fxLayoutGap.sm="0px grid"
+      [ngClass]="{ 'DbBg' : getDiv('0DashBoard')}" id="0DashBoard">
+      @if (((((userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry') &&
+        (userData.subTeamName === 'DESubmission'||userData.subTeamName === 'TechM Submission Team' ||
+        userData.subTeamName === null)) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))||
+        (userData.teamName === 'CTS-SubmissionTeam'&&userData.subTeamName !== 'CTSDEPreQC')) &&
+        userData.applicationId === 1)) {
+        <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+          >
+          <a (click)="openCases()">
+            <div fxLayout="row">
+              <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-opencase icolorOne"></i> </div>
+              <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+                class="count">{{submissionCount}}</span> <span class="name">Open Cases</span> </div>
+              </div>
+            </a>
+          </div>
+        }
+        <!-- || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' -->
+        @if (((((userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry') && (userData.subTeamName === 'DESubmission' || userData.subTeamName === null )) ||
+          ((userData.teamName === null || userData.teamName === 'SeniorManager')) || userData.subTeamName === 'TechM Submission Team' ||(userData.teamName === 'CTS-SubmissionTeam' && userData.subTeamName === null)) && userData.applicationId === 1)) {
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+            >
+            <a (click)="openSubchecks()">
+              <div fxLayout="row">
+                <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                class="icon-opencase icolorOne"></i> </div>
+                <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+                  class="count">{{subcheckCount}}</span> <span class="name">Sub Checks</span> </div>
+                </div>
+              </a>
+            </div>
+          }
+          @if (((((userData.teamName === 'CRTIndia' && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === null))
+            || (userData.teamName === 'CRTTechMahindra' && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === null))
+            || (userData.teamName === 'CRTAbroad' && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === null))) ||
+            ((userData.teamName === null || userData.teamName === 'SeniorManager' || ((userData.teamName === 'CRTIndia' || userData.
+            teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' ||
+            userData.subTeamName === null))))|| userData.teamName === 'CTS-CRTTeam') && userData.applicationId === 1)) {
+            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+              >
+              <a (click)="openCreatedCases()">
+                <div fxLayout="row">
+                  <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                  class="icon-casecreation icolorFour"></i> </div>
+                  <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+                    class="count">{{caseCount}}</span> <span class="name">Case Creation</span> </div>
+                  </div>
+                </a>
+              </div>
+            }
+            <!-- //Added by megala SRS - VTS2-2024-CRT-0195 -->
+            @if (((((userData.teamName === 'CRTIndia' && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === null))
+              || (userData.teamName === 'CRTTechMahindra' && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === null))
+              || (userData.teamName === 'CRTAbroad' && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === null))) ||
+              ((userData.teamName === null || userData.teamName === 'SeniorManager' || ((userData.teamName === 'CRTIndia' || userData.
+              teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' ||
+              userData.subTeamName === null))))|| userData.teamName === 'CTS-CRTTeam') && userData.applicationId === 1)) {
+              <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+                >
+                <a (click)="openClosureAdvice()">
+                  <div fxLayout="row">
+                    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                    class="icon-casecreation icolorFour"></i> </div>
+                    <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+                      class="count">{{closureAdviceCnt}}</span> <span class="name">Closure Advice Approval</span> </div>
+                    </div>
+                  </a>
+                </div>
+              }
+              <!-- //ended by megala SRS - VTS2-2024-CRT-0195 -->
+              <!-- /FR -->
+              @if (isForResearchOtherLogin()&& userData.teamName !== 'CRTAbroad') {
+                <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+                  >
+                  <a
+                    (click)="openForResearchOtherLogin(empforResearchPendingCount, 'empResearch', 'For Research')">
+                    <div fxLayout="row">
+                      <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                      class="icon-verificationcases icolorThree"></i> </div>
+                      <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+                        <!-- <span
+                      class="count">{{getOtherLoginFrCount?.empForResearchPendingCount}}</span>  -->
+                      <span class="count">{{empforResearchPendingCount}}</span> <span class="name">Employer
+                    FR Pending</span> </div>
+                  </div>
+                </a>
+              </div>
+            }
+            @if (isForResearchOtherLogin()&& userData.teamName !== 'CRTAbroad') {
+              <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+                >
+                <a
+                  (click)="openForResearchOtherLogin(empClientSuspectCount, 'empResearch', 'Client Suspect')">
+                  <div fxLayout="row">
+                    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                    class="icon-verificationcases icolorThree"></i> </div>
+                    <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+                      <!-- <span
+                    class="count">{{getOtherLoginFrCount?.empClientSuspectCount}}</span>  -->
+                    <span class="count">{{empClientSuspectCount}}</span>
+                    <span class="name">Employer Client Suspect Pending</span> </div>
+                  </div>
+                </a>
+              </div>
+            }
+            @if (isForResearchOtherLogin()&& userData.teamName !== 'CRTAbroad') {
+              <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+                >
+                <a
+                  (click)="openForResearchOtherLogin(empUnderReviewCount, 'empResearch', 'Under Review')">
+                  <div fxLayout="row">
+                    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                    class="icon-verificationcases icolorThree"></i> </div>
+                    <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+                      <!-- <span
+                    class="count">{{getOtherLoginFrCount?.empUnderReviewCount}}</span> -->
+                    <span class="count">{{empUnderReviewCount}}</span>
+                    <span class="name">Employer FR Under Review</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          }
+          @if (isForResearchOtherLogin()&& userData.teamName !== 'CRTAbroad') {
+            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+              >
+              <a
+                (click)="openForResearchOtherLogin(empApprovalPendingCount, 'empResearch', 'Approval Pending')">
+                <div fxLayout="row">
+                  <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                  class="icon-verificationcases icolorThree"></i> </div>
+                  <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+                    <!-- <span
+                  class="count">{{getOtherLoginFrCount?.empApprovalPendingCount}}</span>  -->
+                  <span class="count">{{empApprovalPendingCount}}</span>
+                  <span class="name">Employer FR Approval Pending</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        }
+        @if (isForResearchOtherLogin()&& userData.teamName !== 'CRTAbroad') {
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+            >
+            <a
+              (click)="openForResearchOtherLogin(empRejectedCount, 'empResearch', 'Rejected')">
+              <div fxLayout="row">
+                <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                class="icon-verificationcases icolorThree"></i> </div>
+                <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <!-- <span
+                class="count">{{getOtherLoginFrCount?.empRejectedCount}}</span>  -->
+                <span class="count">{{empRejectedCount}}</span>
+                <span class="name">Employer FR Rejected</span> </div>
+              </div>
+            </a>
+          </div>
+        }
+        @if (isForResearchOtherLogin()&& userData.teamName !== 'CRTAbroad') {
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+            >
+            <a
+              (click)="openForResearchOtherLogin(eduforResearchPendingCount, 'insResearch', 'For Research')">
+              <div fxLayout="row">
+                <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                class="icon-verificationcases icolorThree"></i> </div>
+                <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <!-- <span
+                class="count">{{getOtherLoginFrCount?.insForResearchPendingCount}}</span> -->
+                <span class="count">{{eduforResearchPendingCount}}</span>
+                <span class="name">Institution FR Pending</span> </div>
+              </div>
+            </a>
+          </div>
+        }
+        @if (isForResearchOtherLogin()&& userData.teamName !== 'CRTAbroad') {
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+            >
+            <a
+              (click)="openForResearchOtherLogin(eduClientSuspectCount, 'insResearch', 'Client Suspect')">
+              <div fxLayout="row">
+                <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                class="icon-verificationcases icolorThree"></i> </div>
+                <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <!-- <span
+                class="count">{{getOtherLoginFrCount?.insClientSuspectCount}}</span>  -->
+                <span class="count">{{eduClientSuspectCount}}</span>
+                <span class="name">Institution Client Suspect Pending</span> </div>
+              </div>
+            </a>
+          </div>
+        }
+        <!-- <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list" *ngIf="isForResearchOtherLogin()">
+        <a (click)="openForResearchOtherLogin(getOtherLoginFrCount?.insUnderReviewCount, 'insResearch', 'Under Review')">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i class="icon-verificationcases icolorThree"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span class="count">{{getOtherLoginFrCount?.insUnderReviewCount}}</span> <span class="name">Institution FR Under Review</span> </div>
+          </div>
+        </a>
+      </div> -->
+      @if (isForResearchOtherLogin()&& userData.teamName !== 'CRTAbroad') {
+        <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+          >
+          <a
+            (click)="openForResearchOtherLogin(eduApprovalPendingCount, 'insResearch', 'Approval Pending')">
+            <div fxLayout="row">
+              <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-verificationcases icolorThree"></i> </div>
+              <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <!-- <span
+              class="count">{{getOtherLoginFrCount?.insApprovalPendingCount}}</span>  -->
+              <span class="count">{{eduApprovalPendingCount}}</span>
+              <span class="name">Institution FR Approval Pending</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    }
+    @if (isForResearchOtherLogin()&& userData.teamName !== 'CRTAbroad') {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a
+          (click)="openForResearchOtherLogin(eduRejectedCount, 'insResearch', 'Rejected')">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-verificationcases icolorThree"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+              <!-- <span
+            class="count">{{getOtherLoginFrCount?.insRejectedCount}}</span> -->
+            <span class="count">{{eduRejectedCount}}</span>
+            <span class="name">Institution FR Rejected</span> </div>
+          </div>
+        </a>
+      </div>
+    }
+    <!-- FR -->
+    @if (isForResearch(false)&& userData.teamName !== 'CRTAbroad') {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? openForResearch(eduforResearchPendingCount, 'For Research') : openForResearch(empforResearchPendingCount, 'For Research')">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-verificationcases icolorThree"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+              <!-- <span
+            class="count">{{forResearchPendingCount}}</span> <span class="name">For Research
+          Pending</span> -->
+          <span
+          class="count">{{(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? eduforResearchPendingCount : empforResearchPendingCount}}</span> <span class="name">For Research
+        Pending</span>
+      </div>
+    </div>
+  </a>
+</div>
+}
+@if (isForResearch(false)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? openForResearch(eduClientSuspectCount, 'Client Suspect') : openForResearch(empClientSuspectCount, 'Client Suspect')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verificationcases icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <!-- <span
+        class="count">{{empInsClientSuspectCount}}</span> <span class="name">Client Suspect
+      / Blacklist</span>  -->
+      <span
+      class="count">{{(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? eduClientSuspectCount : empClientSuspectCount}}</span> <span class="name">Client Suspect
+    / Blacklist</span>
+  </div>
+</div>
+</a>
+</div>
+}
+@if (isForResearch(false) && userData.teamName !== 'CRTAbroad'&&
+  (this.userData.teamName !== 'EducationTeam' && this.userData.teamName !== 'CTS-EducationTeam'
+  && this.userData.subTeamName !== 'ForResearchEducation' && this.userData.subTeamName !== 'For Research CTS institution India Team')) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? openForResearch(eduUnderReviewCount, 'Under Review') : openForResearch(empUnderReviewCount, 'Under Review')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verificationcases icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <!-- <span
+        class="count">{{empInsUnderReviewCount}}</span> <span class="name">For Research
+      Under Review</span>  -->
+      <span
+      class="count">{{(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? eduUnderReviewCount : empUnderReviewCount}}</span> <span class="name">For Research
+    Under Review</span>
+  </div>
+</div>
+</a>
+</div>
+}
+@if (isForResearch(false)&& userData.teamName !== 'CRTAbroad') {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? openForResearch(eduApprovalPendingCount, 'Approval Pending') : openForResearch(empApprovalPendingCount, 'Approval Pending')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verificationcases icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <!-- <span
+        class="count">{{empInsApprovalPendingCount}}</span> <span class="name">For Research
+        Approval
+      Pending</span> -->
+      <span
+      class="count">{{(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? eduApprovalPendingCount : empApprovalPendingCount}}</span> <span class="name">For Research
+      Approval
+    Pending</span>
+  </div>
+</div>
+</a>
+</div>
+}
+@if (isForResearch(false)&& userData.teamName !== 'CRTAbroad') {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? openForResearch(eduRejectedCount, 'Rejected') : openForResearch(empRejectedCount, 'Rejected')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verificationcases icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <!-- <span
+        class="count">{{empInsRejectedCount}}</span> <span class="name">For Research
+      Rejected</span>  -->
+      <span
+      class="count">{{(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? eduRejectedCount : empRejectedCount}}</span> <span class="name">For Research
+    Rejected</span>
+  </div>
+</div>
+</a>
+</div>
+}
+@if (isForResearch(false) && userData.teamName !== 'CRTAbroad') {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? openForResearch(eduVerifiedCount, 'Verified') : openForResearch(empVerifiedCount, 'Verified')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verificationcases icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <!-- <span
+        class="count">{{empInsResearchVerifiedCount }}</span> <span class="name">Verified
+      </span> -->
+      <span
+      class="count">{{(userData.teamName == verificationService.EducationTeam || userData.teamName == verificationService.CTSEducationTeam || userData.teamName == verificationService.ForResearchEducationTeam) ? eduVerifiedCount : empVerifiedCount}}</span> <span class="name">Verified
+    </span>
+  </div>
+</div>
+</a>
+</div>
+}
+@if ((userData.teamName === null && userData.applicationId !==2) || userData.teamName === 'EmploymentIndia' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'CTS-EmploymentTeam' ) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <!-- <a (click)="openForResearch(reverifyConcluded, 'ReVerify')"> -->
+    <a (click)="openForResearchOtherLogin(reverifyConcluded, 'empResearch', 'ReVerify')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verificationcases icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{reverifyConcluded }}</span> <span class="name">Reverify concluded employer
+      </span> </div>
+    </div>
+  </a>
+</div>
+}
+                <!-- *ngIf="(userData.teamName === 'CRTIndia' && (userData.subTeamName === 'CRTScopeCreation' ||  userData.subTeamName === null) && (userData.teamLeadFlag === true || userData.subTeamLeadFlag === true)
+                  || (userData.teamName === 'CRTTechMahindra' && (userData.subTeamName === 'CRTScopeCreation' || userData.subTeamName === null))
+                  || (userData.teamName === 'CRTAbroad' && (userData.subTeamName === 'CRTScopeCreation' || userData.subTeamName === null))) || ((userData.teamName === null || userData.teamName === 'SeniorManager') && userData.applicationId === 1)" -->
+@if ((((userData.teamName === 'CRTIndia'  && (userData.subTeamName === 'CRTScopeCreation' ||  userData.subTeamName === null) && (userData.teamLeadFlag === true ||
+  userData.subTeamLeadFlag === true)) || ((userData.teamName === null || userData.teamName === 'SeniorManager' || ((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null)))))&& userData.teamName !== 'CRTAbroad' && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openCreatedScopes('NotAssigned')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-scopenotassigned icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{scopeNotAssignedCount}}</span> <span class="name">Scope Not
+      Assigned</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if ((((userData.teamName === 'CRTIndia'&& (userData.subTeamName === 'CRTScopeCreation' || userData.subTeamName === null))
+  || ((userData.teamName === null || userData.teamName === 'SeniorManager' || ((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null))))) && userData.teamName !== 'CRTAbroad'&& userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openCreatedScopes('Assigned')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-scopeassigned icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{scopeAssignedCount}}</span> <span class="name">Scope Assigned</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if ((((userData.teamName === 'CRTIndia' && (userData.subTeamName === 'CRTScopeCreation' || userData.subTeamName === null))
+  || ((userData.teamName === null || userData.teamName === 'SeniorManager' || ((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null)))))&& userData.teamName !== 'CRTAbroad'&& userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openCreatedScopes('LOAApproved')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-scopeloaapproved icolorTwo"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{scopeLOAApprovedCount}}</span> <span class="name">Scope LOA
+      Approved</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if ((((((userData.teamName === 'CRTIndia'  && (userData.subTeamName === 'CRTScopeCreation' || userData.subTeamName === null))
+  || ((userData.teamName === null || userData.teamName === 'SeniorManager' || ((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null))))))) && userData.teamName !== 'CRTAbroad'&& userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openCreatedScopes('LOAPending')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-scopeloapending icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{scopeLOAPendingCount}}</span> <span class="name">Scope LOA
+      Pending</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if ((((userData.teamName === 'CRTIndia' && (userData.subTeamName === 'CRTScopeCreation' || userData.subTeamName === null))
+  || ((userData.teamName === null || userData.teamName === 'SeniorManager' || ((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null))))) && userData.teamName !== 'CRTAbroad'&& userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openScopeHistory()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-agreement_2 icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{scopeHistoryCount}}</span> <span class="name">Scope History </span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if ((((userData.teamName === 'CRTIndia'  && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null))
+  || ((userData.teamName === 'ApprovalManager') || ((userData.teamName === null || userData.teamName === 'SeniorManager')))
+  && userData.teamName !== 'CRTAbroad'&& userData.applicationId === 1))) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openCreatedLOA(loaPendingCount, 0)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-approved icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{loaPendingCount}}</span> <span class="name">LOA/BGV Pending</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if ((((userData.teamName === 'CRTIndia' && userData.teamName !== 'CRTAbroad'&& (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null))
+  || ((userData.teamName === 'ApprovalManager') || ((userData.teamName === null || userData.teamName === 'SeniorManager')))
+  && userData.applicationId === 1))) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openCreatedLOA(loaApprovedCount, 1)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-approved icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{loaApprovedCount}}</span> <span class="name">LOA/BGV Approved</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if (((userData.teamName === 'ApprovalManager') || ((userData.teamName === null || userData.teamName === 'SeniorManager')
+  && userData.teamName !== 'CRTAbroad'&& userData.applicationId === 1))) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openCreatedLOA(loaRejectCount, 2)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-approved icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{loaRejectCount}}</span> <span class="name">LOA/BGV Rejected</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if ((( userData.teamName === 'DEPre-QC'||((userData.teamName === 'CTS-SubmissionTeam'|| userData.teamName === 'DEPre-QC'  ) && userData.teamLeadFlag == true) || (userData.teamName === null || userData.teamName === 'SeniorManager') || userData.subTeamName === 'CTSDEPreQC' && userData.teamLeadFlag != true) && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openPreQCCases()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-preqccases icolorTwo"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{preQcCases}}</span> <span class="name">Pre-QC Checks</span> </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if (((((userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry') && (userData.subTeamName === 'DESubmission' || (userData.subTeamName === 'DEPreQC'&& userData.subTeamLeadFlag!=false) || userData.subTeamName === null)) || ((userData.teamName === null || userData.teamName === 'SeniorManager')) ||userData.subTeamName === 'TechM Submission Team' || userData.teamName === 'CTS-SubmissionTeam'&&((userData.subTeamName === null)||( userData.subTeamName === 'CTSDEPreQC'))) && userData.applicationId === 1)) {
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+      >
+      <a (click)="openPreQCReject()">
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+          class="icon-others icolorOne"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{preQcReject}}</span> <span class="name">Pre-QC Reject</span> </div>
+          </div>
+        </a>
+      </div>
+    }
+    @if ((((userData.teamName === 'DEPre-QC' && (userData.subTeamName === 'DESubmission' || (userData.subTeamName === 'DEPreQC') || userData.subTeamName === null)) || ((userData.teamName === null || userData.teamName === 'SeniorManager')) ||userData.subTeamName === 'TechM Submission Team' ) && userData.applicationId === 1)) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="openDASubchecks()">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-agreement_2 icolorFour"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+              <span class="count">{{dAsubcheckCount}}</span>
+              <span class="name">Direct App Sub Checks</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    }
+    @if (((((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null))
+      || ((userData.teamName === null || userData.teamName === 'SeniorManager' || userData.teamName === 'ApprovalManager')) || userData.teamName === 'CTS-CRTTeam') && userData.teamName !== 'CRTAbroad'&& userData.applicationId === 1)) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="openAgreementApprovalPending(true, clientAgreementApprovedCount)">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="33%" fxFlex.xs="100%"> <i
+            class="icon-insufficiency icolorThree"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="33%" fxFlex.xs="100%"> <span
+            class="count">{{clientAgreementApprovedCount}}</span> <span class="name">Agreement
+          Approval</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if (((((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null))
+  || ((userData.teamName === null || userData.teamName === 'SeniorManager' || userData.teamName === 'ApprovalManager')) || userData.teamName === 'CTS-CRTTeam') && userData.teamName !== 'CRTAbroad'&& userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openAgreementApprovalPending(false, clientAgreementPendingCount)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="33%" fxFlex.xs="100%"> <i
+        class="icon-insufficiency icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="33%" fxFlex.xs="100%"> <span
+        class="count">{{clientAgreementPendingCount}}</span> <span class="name">Agreement
+      Pending</span>
+    </div>
+  </div>
+</a>
+</div>
+}
+@if ((userData.teamName === 'ApprovalManager' || userData.teamName === 'ManagingDirector') || ((userData.teamName === null || userData.teamName === 'SeniorManager') && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openMspcount(focCount, true)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="33%" fxFlex.xs="100%"> <i
+        class="icon-insufficiency icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="33%" fxFlex.xs="100%"> <span
+          class="count">{{focCount}}</span> <span class="name">Free Of Cost</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if ((userData.teamName === 'ApprovalManager' || userData.teamName === 'ManagingDirector') || ((userData.teamName === null || userData.teamName === 'SeniorManager') && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openMspcount(mspApproved, null,mspstatusApprove)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-mspapproved icolorTwo"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{mspApproved}}</span> <span class="name">MSP Approved</span> </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if ((userData.teamName === 'ApprovalManager' || userData.teamName === 'ManagingDirector') || ((userData.teamName === null || userData.teamName === 'SeniorManager') && userData.applicationId === 1)) {
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+      >
+      <a (click)="openMspcount(mspPending, null,mspstatusPending)">
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+          class="icon-msppending icolorFour"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{mspPending}}</span> <span class="name">MSP Pending</span> </div>
+          </div>
+        </a>
+      </div>
+    }
+    @if ((userData.teamName === 'ApprovalManager' || userData.teamName === 'ManagingDirector') || ((userData.teamName === null || userData.teamName === 'SeniorManager') && userData.applicationId === 1)) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="openMspcount(mspRejected, null,mspstatusReject)">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-mspreject icolorOne"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count">{{mspRejected}}</span> <span class="name">MSP Reject</span> </div>
+            </div>
+          </a>
+        </div>
+      }
+      @if ((userData.teamName === 'ManagingDirector') && (userData.applicationId === 1)) {
+        <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+          >
+          <a (click)="openPackageApprovedcount()">
+            <div fxLayout="row">
+              <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-mspapproved icolorThree"></i> </div>
+              <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count">{{packFeeApprovedCount}}</span> <span class="name">Package
+            Approved</span> </div>
+          </div>
+        </a>
+      </div>
+    }
+    @if ((userData.teamName === 'ManagingDirector') && (userData.applicationId === 1)) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="openPackagePendingcount()">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-msppending icolorTwo"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{packFeeReviewCount}}</span> <span class="name">Package
+          Pending</span> </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if ((userData.teamName === 'ApprovalManager') || ((userData.teamName === null || userData.teamName === 'SeniorManager') && userData.applicationId === 1)) {
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+      >
+      <a (click)="openTatApprovedCount()">
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+          class="icon-tatapproved icolorFour"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{tatApproved}}</span> <span class="name">TAT Approved</span> </div>
+          </div>
+        </a>
+      </div>
+    }
+    @if ((userData.teamName === 'ApprovalManager') || ((userData.teamName === null || userData.teamName === 'SeniorManager') && userData.applicationId === 1)) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="openTatPendingCount()">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-tatpending icolorOne"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count">{{tatPending}}</span> <span class="name">TAT Pending</span> </div>
+            </div>
+          </a>
+        </div>
+      }
+      @if (((userData.teamName === 'ApprovalManager') || ((userData.teamName === null || userData.teamName === 'SeniorManager') && userData.applicationId === 1)) || ((userData.teamName === null || userData.teamName === 'SeniorManager') && userData.applicationId === 1)) {
+        <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+          >
+          <a (click)="openTatRejectCount()">
+            <div fxLayout="row">
+              <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-tatreject icolorThree"></i> </div>
+              <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+                class="count">{{tatRejected}}</span> <span class="name">TAT Reject</span> </div>
+              </div>
+            </a>
+          </div>
+        }
+        @if ((!common.isDEFlag && this.common.caseFlag && (((userData.teamName !== 'CRTAbroad' && userData.applicationId === 1) || ((userData.teamName === null || userData.teamName
+          === 'SeniorManager'))) && userData.teamName !== 'CRTAbroad'&& userData.teamName !=='InternationalQCTeam' && userData.teamName !== 'DEPre-QC' && userData.teamName !== 'EmploymentTechM' && userData.applicationId === 1 && userData.teamName !=='TechMDataEntry' && userData.teamName !=='InternationalDataEntry') || isCam())) {
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+            >
+            <a (click)="openNotApplicableCases()">
+              <div fxLayout="row">
+                <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                class="icon-cancelled icolorTwo"></i> </div>
+                <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+                  class="count">{{notApplicableFlagCount}}</span> <span class="name">Cancelled</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        }
+        @if ((!common.isDEFlag && this.common.caseFlag && (userData.teamName === null || userData.teamName === 'SeniorManager' || userData.teamName === 'CRTAbroad') && userData.applicationId === 1)) {
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+            >
+            <a (click)="opensubmissionHistory()">
+              <div fxLayout="row">
+                <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                class="icon-agreement_2 icolorFour"></i> </div>
+                <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+                class="count">{{submissionHistoryCount}}</span> <span class="name">Submission
+              History </span> </div>
+            </div>
+          </a>
+        </div>
+      }
+      @if ((!common.isDEFlag && this.common.caseFlag && (userData.teamName === null || userData.teamName === 'SeniorManager') && userData.applicationId === 1)) {
+        <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+          >
+          <a (click)="openPreQcSubmissionHistory(preQcSubmissionHistoryCount)">
+            <div fxLayout="row">
+              <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-preqccases icolorTwo"></i> </div>
+              <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count">{{preQcSubmissionHistoryCount}}</span> <span class="name">Pre-QC
+              Submission
+            History</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if ((((((userData.teamName === 'DEPre-QC' || userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry') && (userData.subTeamName === 'DESubmission' || userData.subTeamName === 'DEPreQC'|| userData.subTeamName === null)) && userData.applicationId === 1) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.subTeamName === 'TechM Submission Team' ||userData.teamName === 'CTS-SubmissionTeam') && userData.applicationId === 1)) {
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+      >
+      <a (click)="openVERejectcases()">
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+          class="icon-qcreject icolorThree"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{getComponentVERejectCount}}</span> <span class="name">Verification
+        Reject</span>
+      </div>
+    </div>
+  </a>
+</div>
+}
+@if ((((((userData.teamName === 'DEPre-QC' || userData.teamName === 'DataEntry' || userData.teamName === 'TechMDataEntry') && (userData.subTeamName === 'DESubmission' || userData.subTeamName === 'DEPreQC'|| userData.subTeamName === null)) && userData.applicationId === 1) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.subTeamName === 'TechM Submission Team' || userData.teamName === 'CTS-SubmissionTeam') && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openFRRejectcases()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-qcreject icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{getComponentFRRejectCount}}</span> <span class="name">For Research
+      Reject</span>
+    </div>
+  </div>
+</a>
+</div>
+}
+@if ((((((userData.teamName === 'DEPre-QC' || userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry') && (userData.subTeamName === 'DESubmission' || userData.subTeamName === 'DEPreQC'||
+  userData.subTeamName === null)) || (userData.teamName === null || userData.teamName ===
+  'SeniorManager')))|| userData.subTeamName === 'TechM Submission Team' ||userData.teamName === 'CTS-SubmissionTeam') && userData.applicationId === 1) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openReOpenChecks()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-qcreject icolorTwo"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{reOpenChecksCount}}</span> <span class="name">Re-Open Checks</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if (((((userData.subTeamName === 'CRTCAMTeam' || (userData.subTeamName === null && userData.teamName ==='CRTAbroad')) || (userData.teamName === 'CRTIndia' && userData.subTeamName === null) ||
+  (userData.teamName === 'CRT-Domestic' && userData.subTeamName === 'CRTScopeCreation'))) && userData.applicationId !== 3)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openStopCheckcases()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-qcreject icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{stopCheckCount}}</span> <span class="name">Stop Check</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if (userData.applicationId !== 3 && (userData.teamName === 'QCTeam' && userData.teamName !== 'CTS-QCTeam') && !isVerification()) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openAllCases()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verificationcases icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{allcasecount}}</span> <span class="name">All Cases</span> </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if (userData.applicationId === 2) {
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+      >
+      <a (click)="casesNavigate(pendingCasesClient, true)">
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+          class="icon-individualqc icolorFour"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{pendingCasesClient}}</span> <span class="name">Pending Cases</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if (userData.applicationId === 2) {
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+      >
+      <a (click)="casesNavigate(completedCasesClient, false)">
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+          class="icon-referencecheck icolorTwo"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{completedCasesClient}}</span> <span class="name">Completed
+        Cases</span> </div>
+      </div>
+    </a>
+  </div>
+}
+@if (!common.isDEFlag && this.common.caseFlag && userData.applicationId === 1 && (((( (userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.
+  teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === 'CRTScopeCreation' || userData.
+  subTeamName === null) ) || (userData.teamName === null || userData.teamName === 'SeniorManager'))) || userData.teamName === 'CTS-CRTTeam')) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="goToCaseHistory(caseHistorycount, true)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-casecreation icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <span class="count">{{caseHistorycount}}</span>
+          <span class="name">Case Creation Details</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if (userData.applicationId === 2) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="SubmittedCasesNavigate(submittedCasesClient, true)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-agreement_2 icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{submittedCasesClient}}</span> <span class="name">Submitted Cases</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+<!-- <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+                    *ngIf="userData.applicationId === 1 && (((((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.
+          teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === 'CRTScopeCreation' || userData.
+          subTeamName === null)) || (userData.teamName === null || userData.teamName === 'SeniorManager' || userData.teamName === 'DataEntry')))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-SubmissionTeam')">
+<a (click)="goToCaseHistory(caseHistorycount, true)">
+  <div fxLayout="row">
+    <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+    class="icon-casecreation icolorFour"></i> </div>
+    <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+      <span class="count">{{caseHistorycount}}</span>
+      <span class="name">Case Creation Details</span>
+    </div>
+  </div>
+</a>
+</div> -->
+@if (userData.applicationId === 1 && (((((userData.teamName === 'CRTIndia') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null)) || (userData.teamName === null
+  || userData.teamName === 'SeniorManager'))))) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="goToCaseHistory(directAppCaseHistoryCount, false)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-agreement_2 icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <span class="count">{{directAppCaseHistoryCount}}</span>
+          <span class="name">Direct App Cases</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+<!-- <ng-template [ngIf]="((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EducationTeam' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))) && userData.applicationId !== 3">
+<div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"  *ngFor="let item of priorityCount"> <a (click)="priorityNavigate(item)">
+  <div fxLayout="row">
+                      <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i [ngClass]="item?.name === 'normalCount' ? 'icon-normal icolorTwo' :
+                                        item?.name === 'highCount' ? 'icon-deltaandhighpriority icolorFour' :
+                                        item?.name === 'verizonCount' ? 'icon-verizonpriority icolorOne' :
+
+                                        item?.name === 'clientCmtdCasesCount' ? 'icon-clientcmtdcases icolorThree' :
+                                        'icon-clientcmtdcases icolorTwo'"></i> </div>
+    <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+    class="count">{{item?.value}}</span><span
+  class="name">{{item?.name === "normalCount" ? 'Normal' : item?.name === "highCount" ? 'Delta & High Priority' : item?.name === "verizonCount" ? 'Verizon Priority' :  item?.name === "clientCmtdCasesCount" ? 'Client Cmtd Cases' : ''}}</span>
+</div>
+</div>
+</a> </div>
+</ng-template> -->
+</div>
+}
+<!-- dashboard count functionality - By Naveen - Start -->
+@if (caseHistoryviFlag()) {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%">
+      <h3 class="sub-header"><a [ngClass]="(common.caseHistoryFlag)?'disabled':''"
+        (click)="getdashboardcnwise(false,false,false,false,true);">Case History Details&nbsp;<i
+      class="icon-chevron-{{ common.caseHistoryFlag?'up':'down' }}"></i></a></h3>
+    </div>
+  </div>
+}
+@if (common.caseHistoryFlag) {
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+    fxLayout.xs="column" fxLayoutGap="grid" fxLayoutGap.sm="0px grid"
+    [ngClass]="{ 'DbBg' : getDiv('0DashBoard')}" id="0DashBoard">
+    @if ((((((userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry') && (userData.subTeamName === 'DESubmission' || userData.subTeamName === 'DEPreQC'
+      || userData.subTeamName === null)) && userData.teamName !== 'CRTAbroad' && userData.applicationId === 1) || ((userData.teamName === null || userData.teamName
+      === 'SeniorManager'))|| userData.subTeamName === 'TechM Submission Team' ||userData.teamName === 'CTS-SubmissionTeam') && userData.teamName !== 'CRTAbroad'&& userData.applicationId === 1) || isCam()) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="openNotApplicableCases()">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-cancelled icolorTwo"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count">{{notApplicableFlagCount}}</span> <span class="name">Cancelled</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    }
+    @if ((((((userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry') && (userData.subTeamName === 'DEPreQC' || userData.subTeamName === 'DESubmission' || userData.subTeamName === null)) || (userData.teamName === null || userData.teamName === 'SeniorManager' || userData.teamName === 'CRTAbroad'))|| userData.subTeamName === 'TechM Submission Team' || (userData.teamName === 'CTS-SubmissionTeam'&& userData.subTeamName !== 'CTSDEPreQC')) && userData.applicationId === 1)) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="opensubmissionHistory()">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-agreement_2 icolorFour"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{submissionHistoryCount}}</span> <span class="name">Submission
+          History </span> </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if (((((userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry') && (userData.subTeamName === 'DEPreQC' || userData.subTeamName === null)) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-SubmissionTeam') && userData.applicationId === 1)) {
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+      >
+      <a (click)="openPreQcSubmissionHistory(preQcSubmissionHistoryCount)">
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+          class="icon-preqccases icolorTwo"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{preQcSubmissionHistoryCount}}</span> <span class="name">Pre-QC
+          Submission
+        History</span>
+      </div>
+    </div>
+  </a>
+</div>
+}
+@if (userData.applicationId === 1 && (((((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.
+  teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCaseCreation' || userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === 'CRTScopeCreation' || userData.
+  subTeamName === null)) || (userData.teamName === null || userData.teamName === 'SeniorManager' || userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry')))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-SubmissionTeam')) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="goToCaseHistory(caseHistorycount, true)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-casecreation icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <span class="count">{{caseHistorycount}}</span>
+          <span class="name">Case Creation Details</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+</div>
+}
+<!-- dashboard count functionality - By Naveen - End -->
+@if (inCountFlag() && userData.subTeamName !== 'CRTCaseCreation' && userData.subTeamName !== 'CRTScopeCreation') {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+    >
+    <div fxFlex="100%">
+      <h3 class="sub-header"><a [ngClass]="(common.insuffCountFlag)?'disabled':''"
+        (click)="getdashboardcnwise(true,false,false,false, false);">Insufficiency&nbsp;<i
+      class="icon-chevron-{{ common.insuffCountFlag?'up':'down' }}"></i></a></h3>
+    </div>
+  </div>
+}
+@if (common.insuffCountFlag) {
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+    fxLayout.xs="column" fxLayoutGap="grid" fxLayoutGap.sm="0px grid"
+    [ngClass]="{ 'DbBg mt-5' : getDiv('1DashBoard')}" id="1DashBoard">
+    @if ( ((((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null)) ||
+      ((userData.teamName === null || userData.teamName === 'SeniorManager')) || userData.teamName === 'CTS-CRTTeam') && userData.applicationId !== 3)) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="openinsuffRaiseCount()">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="33%" fxFlex.xs="100%"> <i
+            class="icon-insufficiency icolorThree"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="33%" fxFlex.xs="100%"> <span
+            class="count">{{getInsufficiencyCAMCount}}</span> <span class="name">Insufficiency
+          Pending</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if ((((( userData.teamName === 'DEPre-QC' || userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry') && (userData.subTeamName === 'DESubmission' || userData.subTeamName === 'DEPreQC' || userData.subTeamName === null)) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-SubmissionTeam'||userData.subTeamName === 'TechM Submission Team') && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openraiseInsufficiency()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-raiseinsufficiency icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{levelOneInsuffRaiseCount}}</span> <span class="name">Level 1
+      Insufficiency Raised</span>
+    </div>
+  </div>
+</a>
+</div>
+}
+@if (((( (userData.teamName === 'DEPre-QC' || userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry') && (userData.subTeamName === 'DESubmission' || userData.subTeamName === 'DEPreQC' || userData.subTeamName === null)) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-SubmissionTeam'||userData.subTeamName === 'TechM Submission Team') && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openinsuffClear()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-insufficiencyclearance icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{levelOneInsuffClearCount}}</span> <span class="name">Level 1
+      Insufficiency Cleared</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if (((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))|| userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' ||userData.teamName === 'CTS-CriminalTeam') && userData.applicationId !== 2) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openVerificationInsuffRaisedCount()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-insufficiencyraised icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{levelTwoInsuffRaiseCount}}</span> <span class="name">Level 2
+      Insufficiency Raised</span>
+    </div>
+  </div>
+</a>
+</div>
+}
+@if (((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam') || ((userData.teamName === null || userData.teamName === 'SeniorManager')))) || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam') && userData.applicationId !== 2) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openVerificationInsuffClearedCount()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-insufficiencycleared icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{levelTwoInsuffClearCount}}</span> <span class="name">Level 2
+      Insufficiency Cleared</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if (((((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null)) ||
+  ((userData.teamName === null || userData.teamName === 'SeniorManager')) || userData.teamName === 'CTS-CRTTeam') && userData.applicationId !== 3)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openCloseInsuffQueryAndAppPending(insuffAppPendingCount, false)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="33%" fxFlex.xs="100%"> <i
+        class="icon-insufficiency icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="33%" fxFlex.xs="100%"> <span
+        class="count">{{insuffAppPendingCount}}</span> <span class="name">Insufficiency
+      {{userData.applicationId === 2 ? 'Submitted' : 'Approval Pending'}} </span>
+    </div>
+  </div>
+</a>
+</div>
+}
+@if (((((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null)) ||
+  ((userData.teamName === null || userData.teamName === 'SeniorManager')) || userData.teamName === 'CTS-CRTTeam') && userData.applicationId !== 3)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openCloseInsuffQueryAndAppPending(automationInsuffCount, null)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="33%" fxFlex.xs="100%"> <i
+        class="icon-insufficiency icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="33%" fxFlex.xs="100%"> <span
+        class="count">{{automationInsuffCount}}</span> <span class="name">Close Insuff &
+      Query</span>
+    </div>
+  </div>
+</a>
+</div>
+}
+@if (((((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') && (userData.subTeamName === 'CRTCAMTeam' || userData.subTeamName === null)) ||
+  ((userData.teamName === null || userData.teamName === 'SeniorManager')) || userData.teamName === 'CTS-CRTTeam')&& userData.applicationId !== 3)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openinsuffClearCount()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="33%" fxFlex.xs="100%"> <i
+        class="icon-insufficiencyclearance icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="33%" fxFlex.xs="100%"> <span
+        class="count">{{getClearCAMCount}}</span> <span class="name">Insufficiency
+      Clearance</span> </div>
+    </div>
+  </a>
+</div>
+}
+<!-- *ngIf="((((userData.teamName !== 'CRTIndia') && (userData.teamName !=='CTS-CRTTeam') && (userData.subTeamName === 'DESubmission' || userData.subTeamName === 'DEPreQC' || userData.subTeamName === null)) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-SubmissionTeam'||userData.subTeamName === 'TechM Submission Team') && userData.applicationId === 1 && userData.teamLeadFlag === true)" -->
+@if (((((userData.teamName === 'DEPre-QC' ||  userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry') &&
+  (userData.subTeamName === 'DESubmission' || userData.subTeamName === 'DEPreQC' || userData.subTeamName === null)) ||
+  ((userData.teamName === null || userData.teamName === 'SeniorManager'))||
+  userData.teamName === 'CTS-SubmissionTeam'||userData.subTeamName === 'TechM Submission Team')
+  && userData.applicationId === 1 && (userData.teamLeadFlag === true|| userData.subTeamName === null))) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openTatCrossedInsufflist()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-insufficiencyclearance icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{TATCrossedInsuffCount}}</span> <span class="name">Level 1 TAT crossed
+      insufficiencies</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if (((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))|| userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' ||userData.teamName === 'CTS-CriminalTeam' && userData.applicationId === 1 && userData.teamLeadFlag === true)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openTatCrossedInsufflistLevelTwo()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-insufficiencyclearance icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{LevelTwoTATCrossedInsuffCount}}</span> <span class="name">Level 2 TAT crossed
+      insufficiencies</span> </div>
+    </div>
+  </a>
+</div>
+}
+</div>
+}
+<!-- </div> -->
+@if (veCountFlag() && userData.subTeamName !== 'CRTScopeCreation') {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+    >
+    <div fxFlex="100%">
+      <h3 class="sub-header"><a [ngClass]="(common.VeCountFlag)?'disabled':''"
+        (click)="getdashboardcnwise(false,true,false,false, false)">Verification&nbsp;<i
+      class="icon-chevron-{{ common.VeCountFlag?'up':'down' }}"></i></a></h3>
+    </div>
+  </div>
+}
+@if (common.VeCountFlag) {
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+    fxLayout.xs="column" fxLayoutGap="grid" fxLayoutGap.sm="0px grid"
+    [ngClass]="{ 'DbBg mt-5' : getDiv('2DashBoard')}" id="2DashBoard">
+    @if ( (((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'ForResearch' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' ||
+      userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.
+      teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') ||
+      ((userData.teamLeadFlag === true || userData.subTeamName ==null) && userData.teamName === 'CRTIndia')) || ((userData.teamName === null || userData.teamName === 'SeniorManager')))) || userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam') && userData.applicationId === 1) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="openVerificationCaseCount(verificationAssignedCaseCount, 'Assigned')">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-verificationcases icolorThree"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{verificationAssignedCaseCount}}</span> <span class="name">Assigned
+            Open
+          Checks</span> </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if ( (((((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName ===
+    'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName ===
+    'IdentityTeam') && (userData.teamLeadFlag === true || userData.subTeamLeadFlag === true)) || userData.teamName
+    === 'ForResearch' || userData.subTeamName === 'CRTCAMTeam' || userData.teamName === 'CRTTechMahindra' ||
+    userData.teamName === 'CRTAbroad') || ((userData.teamLeadFlag === true || userData.subTeamName ==null) && userData.teamName === 'CRTIndia')) || ((userData.teamName === null || userData.teamName === 'SeniorManager')))) || userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam') && userData.applicationId === 1) {
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+      >
+      <a (click)="openVerificationCaseCount(verificationNotAssignedCaseCount, 'Not Assigned')">
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+          class="icon-verificationcases icolorThree"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{verificationNotAssignedCaseCount}}</span> <span class="name">Not
+          Assigned
+        Checks</span> </div>
+      </div>
+    </a>
+  </div>
+}
+@if ( (((((userData.teamName === 'CRTIndia' && userData.subTeamName === null) ||  userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') || ((userData.teamName === null || userData.teamName === 'SeniorManager')))) || userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' ||userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam'|| userData.teamName === 'CTS-CriminalTeam')
+  && userData.applicationId === 1 && userData.teamName !== 'QCTeam') {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openReassignChecks()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verizonpriority icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{reAssignCaseCnt}}</span> <span class="name"> Reassigned
+      Checks</span>
+    </div>
+  </div>
+</a>
+</div>
+}
+<!-- //Added by megala SRS - VTS2-2024-CRT-0195 -->
+@if (  (((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'ForResearch' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' ||
+  userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.
+  teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') ||
+  ((userData.teamLeadFlag === true || userData.subTeamName ==null) && userData.teamName === 'CRTIndia')) || ((userData.teamName === null || userData.teamName === 'SeniorManager')))) || userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam') && userData.applicationId === 1) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openCAMRejectionChecks()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verizonpriority icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{camRejectionCnt}}</span> <span class="name"> CAM Rejection
+      </span>
+    </div>
+  </div>
+</a>
+</div>
+}
+<!-- //ended by megala SRS - VTS2-2024-CRT-0195 -->
+@if ( (((((userData.teamName === 'CRTIndia' && userData.subTeamName === null) ||  userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') || ((userData.teamName === null || userData.teamName === 'SeniorManager')))) || userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' ||userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam'|| userData.teamName === 'CTS-CriminalTeam')
+  && userData.applicationId === 1 && userData.teamName !== 'QCTeam') {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openpendingChecks()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verizonpriority icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{pendingChecks}}</span> <span class="name"> Pending Checks</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if ( (((((userData.teamName === 'CRTIndia' && userData.subTeamName === null) ||  userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam')
+  && userData.applicationId === 1 && (userData.teamName !== 'QCTeam' || userData.teamName !== 'CTS-QCTeam')) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="opensinglependingChecks()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verizonpriority icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{singlePendingChecks}}</span> <span class="name"> Single Check
+      Pending MIS</span>
+    </div>
+  </div>
+</a>
+</div>
+}
+@if ( ((((((userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') && userData.
+  subTeamName === null) || userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName ===
+  'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam'
+  || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam') || (userData.
+  teamName === null || userData.teamName === 'SeniorManager'))) || userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' ||
+  userData.teamName === 'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam')
+  && userData.applicationId === 1 && userData.teamName !== 'QCTeam') {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openVerificationSubchecks(subcheckVerificationCount)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-opencase icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{subcheckVerificationCount}}</span> <span class="name">Sub
+      Checks</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if ( ((((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || userData.teamName === 'CRTTechMahindra' || ((userData.teamLeadFlag === true || userData.subTeamName ==null) && (userData.teamName === 'CRTIndia' || userData.teamName === 'CRTAbroad'))) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))||userData.teamName === 'CTS-CRTTeam'))||userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' ||userData.teamName === 'CTS-CriminalTeam') && userData.applicationId === 1) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="getVerificationClosedDetails()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-agreement_2 icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{getVerificationCompletedCount}}</span> <span class="name">Closed
+      Checks</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if ( isVeReopenChecks()) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openmoveToPending()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-agreement_2 icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{veReOpenCount}}</span> <span class="name">Re-Open
+      Checks</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if ((userData.teamName === 'EducationTeam' || userData.teamName ==='EmploymentIndia') && (userData.teamLeadFlag === true || userData.subTeamLeadFlag === true)  && userData.applicationId === 1) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openRedCase(redCaseCnt)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verizonpriority icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{redCaseCnt}}</span> <span class="name">Red Case Approval</span>
+        </div>
+      </div>
+    </a>
+  </div>
+}
+@if ((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad'|| userData.teamName === 'CRT-Domestic' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === null ||userData.teamName === 'CRTIndia'||userData.teamName === 'CTS-CRTTeam' ||userData.teamName === 'CRTTechMahindra' || userData.teamName === 'SeniorManager')) || userData.teamName === 'CTS-EmploymentTeam') && userData.applicationId === 1) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openCurrentEmployement(currentEmpCnt)">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-verizonpriority icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{currentEmpCnt}}</span> <span class="name">Current Employment
+      </span> </div>
+    </div>
+  </a>
+</div>
+}
+@if ( ((((((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || ((userData.teamLeadFlag === true || userData.subTeamName ==null) && userData.teamName === 'CRTIndia') || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.subTeamName === 'CRTCAMTeam') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))|| userData.teamName === 'CTS-CRTTeam'))|| userData.teamName === 'CTS-CRTTeam'))||userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam') && userData.applicationId === 1) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="getClosedComponentDetails()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-closed icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{closeCancelledInternallyFlagCount}}</span> <span class="name">VE
+      Cancel</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if ( ((((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamLeadFlag === true || userData.subTeamName ==null) && userData.teamName === 'CRTIndia') || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))))||userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam'|| userData.teamName === 'CTS-CriminalTeam') && userData.applicationId === 1) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="getBTpopupDetails()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-agreement_2 icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{bTpopupcount}}</span> <span class="name">BT Checks</span> </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if ( ((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamLeadFlag === true || userData.subTeamName ==null) && userData.teamName === 'CRTIndia') || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))||userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam'|| userData.teamName === 'CTS-CriminalTeam') && userData.applicationId === 1) {
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+      >
+      <a (click)="getWTpopupDetails()">
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+          class="icon-agreement_2 icolorFour"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{wTpopupcount}}</span> <span class="name">WT Checks</span> </div>
+          </div>
+        </a>
+      </div>
+    }
+    @if ( ((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamLeadFlag === true || userData.subTeamName ==null) && userData.teamName === 'CRTIndia') || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam') && userData.applicationId === 1) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="getNTpopupDetails()">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-agreement_2 icolorFour"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+              class="count">{{nTpopupcount}}</span> <span class="name">NT Checks</span> </div>
+            </div>
+          </a>
+        </div>
+      }
+      @if ( ((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamLeadFlag === true || userData.subTeamName ==null) && userData.teamName === 'CRTIndia') || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam') && userData.applicationId === 1) {
+        <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+          >
+          <a (click)="getCTpopupDetails()">
+            <div fxLayout="row">
+              <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-agreement_2 icolorFour"></i> </div>
+              <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+                class="count">{{cTpopupcount}}</span> <span class="name">CT Checks</span> </div>
+              </div>
+            </a>
+          </div>
+        }
+        @if ( ((((userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EducationOverseas' || userData.teamName === 'CriminalTeam') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))|| userData.teamName === 'CTS-CriminalTeam') && userData.applicationId === 1) {
+          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+            >
+            <a (click)="GetClientCommentCases()">
+              <div fxLayout="row">
+                <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                class="icon-hours icolorThree"></i> </div>
+                <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+                class="count">{{this.getClientCommentCaseCount}}</span> <span class="name"> Client
+              Cmtd Cases</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    }
+    @if ( (((((userData.teamName === 'CRTIndia' && userData.subTeamName === null) || userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') || ((userData.teamName === null || userData.teamName === 'SeniorManager')))) || userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' ||
+      'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam')&& userData.teamName !== 'DataEntry' && userData.teamName !== 'InternationalDataEntry' && userData.teamName !== 'TechMDataEntry' && userData.subTeamName !== 'DEPreQC' && userData.teamName !== 'CTS-SubmissionTeam' && userData.subTeamName !== 'DEPreQC' && userData.teamName !== 'CTS-QCTeam' && userData.applicationId === 1) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="getSeventhdayDetails()">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-hours icolorThree"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{seventhdayReportCount}}</span> <span class="name"> 7th Day
+          Tracker</span> </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if ( ((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam'
+    || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam'
+    || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamLeadFlag === true || userData.subTeamName ==null) && userData.teamName === 'CRTIndia') || userData.teamName === 'CRTTechMahindra'
+    || userData.teamName === 'CRTAbroad') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))|| userData.teamName === 'CTS-CRTTeam'
+    || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' ||userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam'
+    || userData.teamName === 'CTS-CriminalTeam') && userData.applicationId === 1) {
+    @for (item of priorityLookup; track item) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        @if (item?.lookupName !== 'Normal') {
+          <a
+            (click)="priorityNavigate(item?.langId, item?.lookupId)">
+            <div fxLayout="row">
+              <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                                        [ngClass]="item?.lookupName === 'Normal' ? 'icon-normal icolorTwo' :
+                                        item?.lookupName === 'High' ? 'icon-deltaandhighpriority icolorFour' :
+                                        item?.lookupName === 'Verizon' ? 'icon-verizonpriority icolorOne' :
+                                        item?.lookupName === 'Medium' ? 'icon-clientcmtdcases icolorThree' :
+                                        'icon-clientcmtdcases icolorTwo'"></i> </div>
+              <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <span class="count">{{item?.langId}}</span>
+                <span class="name">{{item?.lookupName}}</span>
+                <!-- <span class="count">{{item?.value}}</span>
+                <span class="name">{{item?.name === "normalCount" ? 'Normal' : item?.name === "highCount" ? 'Delta & High Priority'
+                  : item?.name === "verizonCount" ? 'Verizon Priority' :  item?.name === "clientCmtdCasesCount" ? 'Client Cmtd Cases'
+                : ''}}</span> -->
+              </div>
+            </div>
+          </a>
+        }
+        @if (item?.lookupName === 'Normal') {
+          <a (click)="getNormalCountDetails()">
+            <div fxLayout="row">
+              <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+              class="icon-normal icolorTwo"></i> </div>
+              <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <span class="count">{{normalChecks}}</span> <span class="name"> Normal </span>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    }
+  }
+  @if (userData.applicationId === 2) {
+    @for (item of casePriorityLookup; track item) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="casePriorityNavigate(item?.langId, item?.lookupId)">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+                                        [ngClass]="item?.lookupName === 'Normal case' ? 'icon-normal icolorTwo' :
+                                        item?.lookupName === 'Pilot case' ? 'icon-deltaandhighpriority icolorFour' :
+                                        item?.lookupName === 'Priority case' ? 'icon-verizonpriority icolorOne' :
+                                        item?.lookupName === 'Rush case' ? 'icon-clientcmtdcases icolorThree' :
+                                        'icon-clientcmtdcases icolorTwo'"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%">
+              <span class="count">{{item?.langId}}</span>
+              <span class="name">{{item?.lookupName}}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    }
+  }
+</div>
+}
+@if (userData.subTeamName !== 'CRTCaseCreation' && userData.subTeamName !== 'CRTScopeCreation' &&userData.teamName !== 'ApprovalManager' && userData.teamName !== 'ManagingDirector' && userData.applicationId !== 2) {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+    >
+    <div fxFlex="100%">
+      <h3 class="sub-header"><a [ngClass]="(common.qcCountFlag)?'disabled':''"
+        (click)="getdashboardcnwise(false,false,true,false, false)">QC&nbsp;<i
+      class="icon-chevron-{{ common.qcCountFlag?'up':'down' }}"></i></a></h3>
+    </div>
+  </div>
+}
+@if (common.qcCountFlag) {
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+    fxLayout.xs="column" fxLayoutGap="grid" fxLayoutGap.sm="0px grid"
+    [ngClass]="{ 'DbBg mt-5' : getDiv('3DashBoard')}" id="3DashBoard">
+    @if ( ((((((userData.teamName === 'QCTeam' || userData.teamName === 'CTS-QCTeam') &&
+      (userData.subTeamName === 'JuniorExecutiveQC' || userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true ||userData.subTeamName === null ))
+      || userData.subTeamName === 'CRTCAMTeam' ||
+      ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null)
+      || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-CRTTeam'))
+      || userData.teamName === 'CTS-QCTeam' || userData.teamName==='TechMQCTeam') && userData.applicationId === 1)) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="openIndividualQC()">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-individualqc icolorFour"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{individualQcCount}}</span> <span class="name">Individual QC
+          Pending</span> </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if (((((userData.teamName === 'QCTeam' || userData.teamName === 'CTS-QCTeam') && (userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true ||userData.subTeamName === null)) || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-QCTeam'|| userData.teamName==='TechMQCTeam' || userData.teamName==='InternationalQCTeam') && userData.applicationId === 1 )) {
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+      >
+      <a (click)="openFinalQc()">
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+          class="icon-referencecheck icolorTwo"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{finalQcCount}}</span> <span class="name">Final QC Pending</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  }
+  @if (((((userData.teamName === 'QCTeam'|| userData.teamName === 'CTS-QCTeam') && (userData.subTeamName === 'JuniorExecutiveQC' || userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true ||userData.subTeamName === null)) || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-QCTeam'|| userData.teamName==='TechMQCTeam') && userData.applicationId === 1 && userData.teamName!=='InternationalQCTeam')) {
+    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+      >
+      <a (click)="openSubCheckQC(subCheckQcCount)">
+        <div fxLayout="row">
+          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+          class="icon-individualqc icolorFour"></i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{subCheckQcCount}}</span> <span class="name">Sub Checks</span> </div>
+          </div>
+        </a>
+      </div>
+    }
+    @if (((((userData.teamName === 'QCTeam' || userData.teamName === 'CTS-QCTeam') && (userData.subTeamName === 'JuniorExecutiveQC' || userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true ||userData.subTeamName === null)) || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null) || ((userData.teamName === null || userData.teamName === 'SeniorManager')) || userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-QCTeam'|| userData.teamName==='TechMQCTeam') && userData.applicationId === 1 && userData.teamName!=='InternationalQCTeam')) {
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+        >
+        <a (click)="openFinalComponent(iqcFinalCompCnt)">
+          <div fxLayout="row">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+            class="icon-individualqc icolorFour"></i> </div>
+            <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+            class="count">{{iqcFinalCompCnt}}</span> <span class="name">Final Component
+          List</span> </div>
+        </div>
+      </a>
+    </div>
+  }
+  <!-- <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list" *ngIf="((((userData.teamName === 'QCTeam' || userData.teamName === 'CTS-QCTeam') && (userData.subTeamName === 'JuniorExecutiveQC' || userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true)) || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null) || ((userData.teamName === null || userData.teamName === 'SeniorManager')) || userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-QCTeam') && userData.applicationId === 1)">
+  <a (click)="openFqcFinalCasePending(partialIQCCount, 'Pre-Final Cases')">
+    <div fxLayout="row">
+      <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i class="icon-individualqc icolorThree"></i> </div>
+      <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span class="count">{{partialIQCCount}}</span> <span class="name">Pre-Final Cases</span> </div>
+    </div>
+  </a>
+</div> -->
+@if (((((userData.teamName === 'QCTeam'|| userData.teamName === 'CTS-QCTeam') && (userData.subTeamName === 'JuniorExecutiveQC' || userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true ||userData.subTeamName === null)) || userData.subTeamName === 'CRTCAMTeam'|| ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-QCTeam'|| userData.teamName==='TechMQCTeam') && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a
+      (click)="openQCApprovedRejected(getIndividualQcApprovedTodayCount, 'Today Individual QC Approved')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-approved icolorTwo"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{getIndividualQcApprovedTodayCount}}</span>
+        <span class="name">Today
+        Individual QC Approved</span>
+      </div>
+    </div>
+  </a>
+</div>
+}
+@if (((((userData.teamName === 'QCTeam'||userData.teamName === 'CTS-QCTeam') && (userData.subTeamName === 'JuniorExecutiveQC' || userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true ||userData.subTeamName === null)) || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-QCTeam'|| userData.teamName==='TechMQCTeam') && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a
+      (click)="openQCApprovedRejected(getIndividualQcApprovedCount, 'Individual QC Approved')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-approved icolorTwo"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{getIndividualQcApprovedCount}}</span> <span
+        class="name">Individual
+      QC Approved</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if (((((userData.teamName === 'QCTeam'||userData.teamName === 'CTS-QCTeam') && (userData.subTeamName === 'JuniorExecutiveQC' || userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true ||userData.subTeamName === null)) || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-CRTTeam'|| userData.teamName === 'CTS-QCTeam'|| userData.teamName==='TechMQCTeam') && userData.applicationId === 1 && userData.teamName!=='InternationalQCTeam')) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a
+      (click)="openQCApprovedRejected(getIndividualQcRejectedCount, 'Individual QC Rejected')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-qcreject icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{getIndividualQcRejectedCount}}</span> <span
+        class="name">Individual
+      QC Rejected</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if (((((userData.teamName === 'QCTeam'||userData.teamName === 'CTS-QCTeam') && (userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true ||userData.subTeamName === null)) || userData.subTeamName === 'CRTCAMTeam'|| ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-QCTeam'|| userData.teamName==='TechMQCTeam'|| userData.teamName==='InternationalQCTeam') && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a
+      (click)="openQCApprovedRejected(getFinalQcApprovedTodayCount, 'Today Final QC Approved')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-approved icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{getFinalQcApprovedTodayCount}}</span> <span
+        class="name">Today
+        Final QC
+      Approved</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if ( ((((userData.teamName === 'QCTeam'||userData.teamName === 'CTS-QCTeam') && (userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true ||userData.subTeamName === null)) || userData.subTeamName === 'CRTCAMTeam'|| ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-CRTTeam'||userData.teamName === 'CTS-QCTeam'|| userData.teamName==='TechMQCTeam'|| userData.teamName==='InternationalQCTeam') && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a
+      (click)="openQCApprovedRejected(getFinalQcApprovedCount, 'Final QC Approved')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-approved icolorOne"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{getFinalQcApprovedCount}}</span> <span
+        class="name">Final QC
+      Approved</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if (((((((userData.teamName === 'QCTeam'||userData.teamName === 'CTS-QCTeam') && (userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true ||userData.subTeamName === null)) || userData.subTeamName === 'CRTCAMTeam' || ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-CRTTeam'||userData.teamName === 'CTS-QCTeam'|| userData.teamName==='TechMQCTeam'|| userData.teamName==='InternationalQCTeam'))) && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a
+      (click)="openQCApprovedRejected(getFinalQcRejectedCount, 'Final QC Rejected')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-qcreject icolorFour"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{getFinalQcRejectedCount}}</span> <span
+        class="name">Final QC
+      Rejected</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if ( ((((userData.teamName === 'QCTeam'||userData.teamName === 'CTS-QCTeam') && (userData.subTeamName === 'SeniorExecutiveQC' || userData.teamLeadFlag === true ||userData.subTeamName === null)) || userData.subTeamName === 'CRTCAMTeam'|| ((userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CRTIndia') && userData.subTeamName === null) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))|| userData.teamName === 'CTS-CRTTeam'||userData.teamName === 'CTS-QCTeam'|| userData.teamName==='TechMQCTeam'|| userData.teamName==='InternationalQCTeam') && userData.applicationId === 1)) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a
+      (click)="openQCApprovedRejected(getFinalReportNotSentCount, 'Final Report Not Sent')">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <i class="material-icons email-icon">mail_outline</i> </div>
+          <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{getFinalReportNotSentCount}}</span> <span
+          class="name">Final Report Not Sent
+        </span> </div>
+      </div>
+    </a>
+  </div>
+}
+@if ( ((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' || userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' || userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || (userData.teamLeadFlag === true && userData.teamName === 'CRTIndia') || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad') || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam' ||  this.userData.teamName
+  === 'EmploymentTechM' ||userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CTS-CRTTeam') && userData.applicationId === 1) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openQcRejectedVerificationCount()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-qcrejectedverification icolorTwo"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+        class="count">{{getComponentQcRejectCount}}</span> <span class="name">VE QC Rejected
+      Checks</span> </div>
+    </div>
+  </a>
+</div>
+}
+@if ( (((( (userData.teamName === 'DEPre-QC' || userData.teamName === 'DataEntry' || userData.teamName === 'InternationalDataEntry' || userData.teamName === 'TechMDataEntry')&& (userData.subTeamName === 'DESubmission' || userData.subTeamName === null || userData.
+  subTeamName === 'DEPreQC')) || (userData.teamName === null || userData.teamName === 'SeniorManager')))|| userData.teamName === 'CTS-SubmissionTeam' ||userData.subTeamName === 'TechM Submission Team' || userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad' || userData.teamName === 'CTS-CRTTeam') && userData.applicationId === 1) {
+  <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="33.33%" fxFlex.sm="33%" fxFlex.xs="100%" class="list"
+    >
+    <a (click)="openQCRejectcases()">
+      <div fxLayout="row">
+        <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%"> <i
+        class="icon-qcreject icolorThree"></i> </div>
+        <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="50%" fxFlex.xs="100%"> <span
+          class="count">{{qcRejectCount}}</span> <span class="name">DE QC Reject</span> </div>
+        </div>
+      </a>
+    </div>
+  }
+</div>
+}
+<div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+  fxLayout.xs="column" fxLayoutGap="0 grid" class="mt-15">
+  @if (userData.teamName === 'ManagingDirector' || userData.teamName === 'ApprovalManager' ||
+    userData.teamName === 'SeniorManager') {
+    <div fxFlex="100%">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <h1 class="header-title">Date Wise Details</h1>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div fxLayout="row">
+            <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <!-- <label>Slider Date Range&nbsp;&nbsp;:&nbsp;&nbsp; {{dateChange(pDateRange[0]) | date : 'dd/MM/yyyy'}} -
+            {{dateChange(pDateRange[1]) | date : 'dd/MM/yyyy'}}</label>
+            <label></label>
+            <p-slider [style]="{'width':'23em'}" class="pt-20" [(ngModel)]="pDateRange" [min]="1"
+            [max]="common.getMaxDate().getDate()" [range]="true" (onChange)="dateWiseCount()"></p-slider>
+            <br /> -->
+            <label>Calender Date Range&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+            <p-calendar [(ngModel)]="dateRange" selectionMode="range" placeholder="Date Range"
+              [showIcon]="true" dateFormat="dd.mm.yy" (onSelect)="dateWiseCount()"
+            [readonlyInput]="true" [maxDate]="maxDate" [numberOfMonths]="2"></p-calendar>
+            <ngx-charts-line-chart [view]="[1200, 600]" [scheme]="colorScheme"
+              [results]="dayWiseCount" [gradient]="gradient" [animations]='showAnnimation'
+              [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+              [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+              [xAxisLabel]="'Date'" [yAxisLabel]="'Day Wise Count'"
+              (select)="getDateGraphClick($event)">
+            </ngx-charts-line-chart>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+}
+@if (((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' ||
+  userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' ||
+  userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam' || (userData.teamLeadFlag === true && (userData.teamName === 'CRTIndia' || userData.teamName === 'CRTTechMahindra' || userData.teamName === 'CRTAbroad'))) || ((userData.teamName === null || userData.teamName === 'SeniorManager'))))|| userData.teamName === 'CTS-CRTTeam' || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam'|| userData.teamName === 'CTS-CriminalTeam')
+  && userData.applicationId === 1 && pendingStatusValueChart?.length > 0) {
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">Checks Status</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row">
+          <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <ngx-charts-pie-chart [results]="pendingStatusValueChart" [legend]="true"
+              [legendTitle]="'Component Wise Verification Status'" [view]="[1000,300]"
+              [labels]="true" [scheme]="colorScheme" [animations]='showAnnimation'
+              (select)='moveToPendingPieChart($event)'>
+            </ngx-charts-pie-chart>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+}
+@if (isGraph() && multiGraph?.length > 2) {
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">Case Details</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+          fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0 grid">
+          <!-- TAB Start -->
+          <mat-tab-group style="width:100%">
+            @if (multiGraph[1]?.length > 0) {
+              <mat-tab label="Case Status Details">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                  fxLayout.xs="column" fxLayoutGap="0 grid">
+                  <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <ngx-charts-advanced-pie-chart [view]="[700,400]"
+                      [scheme]="colorForStatus" [results]="multiGraph[1]"
+                      [gradient]="gradient"
+                      (select)="onSelectGraph($event, 'GetCaseStatusWiseCaseDetails')">
+                    </ngx-charts-advanced-pie-chart>
+                  </div>
+                </div>
+              </mat-tab>
+            }
+            @if (multiGraph[0]?.length > 0) {
+              <mat-tab label="Case Color Code Details">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                  fxLayout.xs="column" fxLayoutGap="0 grid">
+                  <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <ngx-charts-advanced-pie-chart [view]="[700,400]" [scheme]="colors"
+                      [results]="multiGraph[0]" [gradient]="gradient"
+                      (select)="onSelectGraph($event, 'GetColorCodeWiseCaseDetails')">
+                    </ngx-charts-advanced-pie-chart>
+                  </div>
+                </div>
+              </mat-tab>
+            }
+            @if (multiGraph[2]?.length > 0) {
+              <mat-tab label="Case WIP Details">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                  fxLayout.xs="column" fxLayoutGap="0 grid">
+                  <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <ngx-charts-advanced-pie-chart [view]="[700,400]" [scheme]="colorScheme"
+                      [results]="multiGraph[2]" [gradient]="gradient"
+                      (select)="onSelectGraph($event, 'GetWIPCases')">
+                    </ngx-charts-advanced-pie-chart>
+                  </div>
+                </div>
+              </mat-tab>
+            }
+          </mat-tab-group>
+          <!-- <p-tabView style="width:100%" [style]="{width:'100%'}">
+          <p-tabPanel header="Case Status Details" *ngIf="multiGraph[1]?.length > 0">
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0 grid">
+              <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <ngx-charts-advanced-pie-chart [view]="[700,400]" [scheme]="colorForStatus" [results]="multiGraph[1]"
+                  [gradient]="gradient" (select)="onSelectGraph($event, 'GetCaseStatusWiseCaseDetails')">
+                </ngx-charts-advanced-pie-chart>
+              </div>
+            </div>
+          </p-tabPanel>
+          <p-tabPanel header="Case Color Code Details" *ngIf="multiGraph[0]?.length > 0">
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0 grid">
+              <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <ngx-charts-advanced-pie-chart [view]="[700,400]" [scheme]="colors" [results]="multiGraph[0]"
+                  [gradient]="gradient" (select)="onSelectGraph($event, 'GetColorCodeWiseCaseDetails')">
+                </ngx-charts-advanced-pie-chart>
+              </div>
+            </div>
+          </p-tabPanel>
+          <p-tabPanel header="Case WIP Details" *ngIf="multiGraph[2]?.length > 0">
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0 grid">
+              <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <ngx-charts-advanced-pie-chart [view]="[700,400]" [scheme]="colorScheme" [results]="multiGraph[2]"
+                  [gradient]="gradient" (select)="onSelectGraph($event, 'GetWIPCases')">
+                </ngx-charts-advanced-pie-chart>
+              </div>
+            </div>
+          </p-tabPanel>
+        </p-tabView> -->
+        <!-- TAB End -->
+        <!-- GRAPH Start -->
+        <!-- <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="multiGraph[1]?.length > 0">
+        <h3 class="sub-header">Case Status Details</h3>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+          fxLayoutGap="0 grid">
+          <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <ngx-charts-advanced-pie-chart [view]="[700,400]" [scheme]="colorScheme" [results]="multiGraph[1]"
+              [gradient]="gradient" (select)="onSelectGraph($event, 'GetCaseStatusWiseCaseDetails')">
+            </ngx-charts-advanced-pie-chart>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="multiGraph[0]?.length > 0">
+        <h3 class="sub-header">Case Color Code Details</h3>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+          fxLayoutGap="0 grid">
+          <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <ngx-charts-advanced-pie-chart [view]="[700,400]" [scheme]="colors" [results]="multiGraph[0]"
+              [gradient]="gradient" (select)="onSelectGraph($event, 'GetColorCodeWiseCaseDetails')">
+            </ngx-charts-advanced-pie-chart>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="multiGraph[2]?.length > 0">
+        <h3 class="sub-header">Case WIP Details</h3>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+          fxLayoutGap="0 grid">
+          <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <ngx-charts-advanced-pie-chart [view]="[700,400]" [scheme]="colorScheme" [results]="multiGraph[2]"
+              [gradient]="gradient" (select)="onSelectGraph($event, 'GetWIPCases')">
+            </ngx-charts-advanced-pie-chart>
+          </div>
+        </div>
+      </div> -->
+      <!-- GRAPH End -->
+    </div>
+  </mat-card-content>
+</mat-card>
+</div>
+}
+@if (dashBoardData?.content?.length > 0) {
+  <div fxFlex="100%" class="d-none">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">{{dashBoardData.header}}&nbsp;Details</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+          fxLayout.xs="column" fxLayoutGap="0 grid">
+          <div fxFlex="100%">
+            <ngx-charts-bar-vertical
+              [view]="dashBoardData.content?.length > 5 ? [1024, 380] : [600, 300]"
+              [scheme]="colorScheme" [results]="dashBoardData.content" [gradient]="gradient"
+              [animations]='showAnnimation' (select)='moveToUrl($event)' [xAxis]="showXAxis"
+              [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+              [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel1"
+              [yAxisLabel]="dashBoardData.header + ' Count'">
+            </ngx-charts-bar-vertical>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+}
+@if (((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' ||
+  userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' ||
+  userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam') || ((userData.teamName === null || userData.teamName === 'SeniorManager')))) || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam' || userData.teamName === 'CTS-CriminalTeam')
+  && userData.applicationId !== 3 && pendingStatusValue?.length > 0) {
+  <div fxFlex="100%" class="d-none">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">Verification Status</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+          fxLayout.xs="column" fxLayoutGap="0 grid">
+          <div fxFlex="100%">
+            <ngx-charts-bar-vertical (select)='moveToPendingChart($event)'
+              [view]="LinechartSizeview" [scheme]="colorScheme"
+              [results]="pendingStatusValueChart" [gradient]="gradient"
+              [animations]='showAnnimation' [xAxis]="showXAxis" [yAxis]="showYAxis"
+              [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+              [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel1"
+            [yAxisLabel]="yAxisLabel1"> </ngx-charts-bar-vertical>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+}
+@if (((((userData.teamName === 'EmploymentIndia' || userData.teamName === 'EmploymentAbroad' || userData.teamName === 'EmploymentTechM' || userData.teamName === 'ForResearchEmploymentTeam' || userData.teamName === 'ForResearchEducationTeam' ||
+  userData.teamName === 'EducationTeam' || userData.teamName === 'EducationOverseas' || userData.teamName === 'AddressTeam' || userData.teamName === 'CriminalTeam' ||
+  userData.teamName === 'IdentityTeam' || userData.subTeamName === 'CRTCAMTeam') || ((userData.teamName === null || userData.teamName === 'SeniorManager')))) || userData.teamName === 'CTS-AddressTeam' || userData.teamName === 'CTS-EducationTeam' || userData.teamName === 'CTS-EmploymentTeam' || userData.teamName === 'CTS-IdentityTeam'|| userData.teamName === 'CTS-CriminalTeam') &&
+  userData.applicationId !== 3 && callbackValue?.length > 0) {
+  <div fxFlex="100%" class="d-none">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="header-title">Call Back</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <ngx-charts-bar-vertical (select)='moveToVerification($event)'
+              [view]="LinechartSizeview" [scheme]="colorScheme" [results]="callbackValue"
+              [gradient]="gradient" [animations]='showAnnimation' [xAxis]="showXAxis"
+              [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+              [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+              [yAxisLabel]="yAxisLabel">
+            </ngx-charts-bar-vertical>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+}
+</div>
+</div>
+<!-- Resp Design WIP as on 27-05-2020 -->
+</div>
+</div>
+}

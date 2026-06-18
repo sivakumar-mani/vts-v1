@@ -1,0 +1,1021 @@
+﻿<!-- <app-breadcrumb [btnBack]="btnBack" [btnSave]="true" (eventSave)="SaveInvoiceGeneration()"
+(eventBack)="this.invoiceService.enablePre = false">
+</app-breadcrumb> -->
+<!doctype html>
+<html>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i&display=swap');
+  </style>
+  <mat-card>
+
+    <head>
+      <meta charset="utf-8">
+      <title>Invoice</title>
+    </head>
+
+    <body id='content'>
+      <div
+        style="background: #fff; line-height: 1.5em; color: #000000; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+        <div id="firstHtmlHeader">
+          <div style="clear: both;min-height: 60px; width: 100%;">
+            <div style="width: 100%;">
+              <!-- <div style="width: 2%;float: right;text-align: left;"></div> -->
+              <div style="width: 20%;float: left;text-align: left;">
+                <!-- <img style="width: 90%;"
+                src="{{ verificationService.getCommonFileLogo(verificationService?.fileLogo, common.BANNER_LOGO_ONE, '') }}"
+                alt="Krya Screening Private Limited Logo" height="50px"> -->
+                <img style="width: 90%;"
+                  [src]="kryalogo"
+                  alt="KRYA Logo" height="50px">
+                </div>
+                <!-- Code changed by Vignesh M - Sprint 8 Invoice Points released in UAT - Need to format changes in Invoice titile -->
+                @if (invoiceService?.preInvoiceValue?.billingClientVm?.enableLutFlag === true) {
+                  <div
+                    style="border-radius: 0 0 50px 0;line-height: 60px;height: 60px;background: #0e4872;float: left;width:60%;">
+                  <div style="color: #fff;font-size: 15px;line-height: 30px;text-align: center;">
+                    {{invoiceTitle}}
+                  </div>
+                  @if (invoiceService?.preInvoiceValue?.billingClientVm?.enableLutFlag === true) {
+                    <div style="color: #fff;font-size: 9px;text-align: center;line-height: 10px;"
+                      >
+                      SUPPLY MEANT FOR EXPORT/SUPPLY TO SEZ UNIT OR SEZ DEVELOPER FOR AUTHORISED OPERATIONS UNDER BOND OR
+                      LETTER OF UNDERTAKING WITHOUT PAYMENT OF IGST
+                    </div>
+                  }
+                </div>
+              }
+              @if (invoiceService?.preInvoiceValue?.billingClientVm?.enableLutFlag === false) {
+                <div
+                  style="border-radius: 0 0 50px 0;line-height: 60px;height: 60px;background: #0e4872;float: left;width:60%;">
+                  <div style="color: #fff;font-size: 25px;text-align: center;">
+                    {{invoiceTitle}}
+                  </div>
+                </div>
+              }
+              <!-- <div style="width: 2%;float: right;text-align: right;"></div> -->
+              @if (invoiceService.preInvoiceValue.companyDetails?.companyName.toUpperCase() !== 'KRYA SOLUTIONS PRIVATE LIMITED') {
+                <div style="width: 20%;float: right;text-align: right;">
+                  <!-- <img
+                  src="{{ verificationService.getCommonFileLogo(verificationService?.fileLogo, common.NSR_LOGO_ONE, '') }}"
+                  alt="NSR Logo" height="50px"> -->
+                  <img [src]="verificationService.getCommonFileLogo(verificationService?.fileLogo, common.NSR_LOGO_ONE, '')"
+                    alt="NSR Logo" height="50px">
+                  <br>
+                    <label style="color: black;font-size: 8px;font-weight: bold;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;width: 100%;">
+                    NSR Empanelled Background Checker</label>
+                  </div>
+                }
+                <!-- <div style="width: 2%;float: right;text-align: right;"></div>
+                <div style="width: 28%;float: right;text-align: right;">
+                  <img
+                    src="{{ verificationService.getCommonFileLogo(verificationService?.fileLogo, common.BANNER_LOGO_ONE, '') }}"
+                    alt="Krya Screening Private Limited Logo" height="60px">
+                </div> -->
+              </div>
+            </div>
+            <div style="clear: both; width: 100%;">
+              <ul style="font-size: 12px; list-style: none; margin: 10px 0 25px 0; padding: 0;">
+                <li
+                  style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+                  GSTIN: <em
+                style="color: #000000; font-style: normal;font-weight: 500;margin-left: 5px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">{{invoiceService.preInvoiceValue.companyDetails.companyDetail.gstinNumber}}</em>
+              </li>
+              <li
+                style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+                State: <em
+                style="color: #000000; font-style: normal;font-weight: 500;margin-left: 5px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+                <!-- {{invoiceService?.preInvoiceValue?.billingClientVm?.address?.state}}  -->
+                Tamil Nadu
+              </em></li>
+              <li
+                style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+                Code: <em
+                style="color: #000000; font-style: normal;font-weight: 500;margin-left: 5px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+                <!-- {{invoiceService?.preInvoiceValue?.billingClientVm?.address?.stateCode}} -->
+                33
+              </em>
+            </li>
+            <li
+              style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+              PAN No.: <em
+            style="color: #000000; font-style: normal;font-weight: 500;margin-left: 5px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">{{invoiceService.preInvoiceValue.companyDetails.companyDetail.panNumber}}</em>
+          </li>
+          <li
+            style="color:#000000; display: inline-block;margin-right: 30px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+            CIN: {{invoiceService.preInvoiceValue.companyDetails.companyDetail.cinNumber}}
+          </li>
+          <li
+            style="color: #666666; display: inline-block;margin-right: 30px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+          (ORIGINAL FOR RECIPIENT)</li>
+        </ul>
+      </div>
+    </div>
+    <span id="htmlContent">
+      <div style="margin-top: 15px;">
+        <h3
+          style="font-size: 12px;line-height: 34px;margin: 0 0 0 0;font-weight: 500;text-transform: uppercase;padding: 0 10px;background: #ff8c00;color: #fff;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+        Additional Details</h3>
+
+        <div style="border-bottom: 1px solid #d1d1d1;display: inline-flex;width: 100%;">
+
+          <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px 0 0;width: 25%;">
+            <label
+              style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+              Invoice Number
+            </label>
+            @if (invoiceService?.preInvoiceValue?.manualInvoiceFlag !== true) {
+<em style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;
+                font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+                {{invoiceVal}}
+              </em>
+            }
+            @if (invoiceService?.preInvoiceValue?.manualInvoiceFlag === true) {
+<em style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;
+              font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;"
+                >
+                <input matInput type="text" pInputText maxlength="18" autocomplete="off" (blur)="checkInvoiceNumber()"
+                  [formControl]="invoiceService.manualInvoiveNo" />
+                @if (invoiceService?.manualInvoiveNo?.errors?.required) {
+                  <mat-error> Invoice Number is
+                  required</mat-error>
+                }
+                @if (invoiceService?.manualInvoiveNo?.errors?.incorrect) {
+                  <mat-error> Invoice Number was already
+                  exist</mat-error>
+                }
+                @if (invoiceService?.manualInvoiveNo?.errors?.pattern) {
+                  <mat-error>Invoice Number is invalid
+                  Eg:FY2022-23/V2000001</mat-error>
+                }
+              </em>
+            }
+          </div>
+          <!-- ***NOTE*** dont remove or change above input maxlength bcoz its used in invoice save method  -->
+          <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+            <label
+              style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">Invoice
+              Date
+            </label>
+            <em
+              style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+            {{currentDate | date : 'dd/MM/yyyy'}} </em>
+          </div>
+          <!-- cmd by Megala-->
+          <!-- <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+          <label
+            style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+          Reverse Charge (Y/N)</label>
+          <em
+          style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">No</em>
+        </div> -->
+
+        <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+          <label
+            style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+          Registration under MSME</label>
+          <em
+          style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">Yes</em>
+        </div>
+
+        <div style="margin: 8px 0;padding: 0 15px;width: 25%;">
+          <label
+            style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">State
+          &amp; Code</label>
+          <em
+            style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+            <!-- {{ invoiceService?.preInvoiceValue?.billingClientVm?.address?.state + '(' +
+            invoiceService?.preInvoiceValue?.billingClientVm?.address?.stateCode + ')'}}  -->
+            Tamil Nadu(33)
+          </em>
+        </div>
+      </div>
+
+      <!-- Additional details old -->
+      <!-- <div style="border-bottom: 1px solid #d1d1d1;display: inline-flex; width: 100%"
+      *ngIf="invoiceService?.preInvoiceValue?.billingClientVm?.serviceTaxFlag !== true">
+
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px 0 0;width: 25%;">
+        <label
+          style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+        Transport Mode</label>
+        <em
+        style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">N/A</em>
+      </div>
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label
+          style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">Vehicle
+        Number</label>
+        <em
+        style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">N/A</em>
+      </div>
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label
+          style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">Date
+        of Supply</label>
+        <em
+        style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">N/A</em>
+      </div>
+      <div style="margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label
+          style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">Place
+        of Supply</label>
+        <em
+        style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">N/A</em>
+      </div>
+    </div> -->
+
+    <!-- LUT SUBMISSION old one -->
+    <!-- <div style="border-bottom: 1px solid #d1d1d1;display: inline-flex; width: 100%"
+    *ngIf="invoiceService?.preInvoiceValue?.billingClientVm?.serviceTaxFlag === true">
+
+    <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px 0 0;width: 25%;">
+      <label
+        style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      Date Of LUT Submission</label>
+      <em
+      style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">N/A</em>
+    </div>
+    <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+      <label
+        style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">LUT
+      Application Reference No</label>
+      <em
+      style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">N/A</em>
+    </div>
+    <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+      <label
+        style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">LUT
+      Validity Period</label>
+      <em
+      style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">N/A</em>
+    </div>
+
+  </div> -->
+
+  <!-- Additional details-->
+  <!-- cmd by Megala -->
+  <!-- <div style="border-bottom: 1px solid #d1d1d1;display: inline-flex; width: 100%"
+  *ngIf="invoiceService?.preInvoiceValue?.billingClientVm?.serviceTaxFlag === true">
+
+  <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px 0 0;width: 25%;">
+    <label
+      style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Transport Mode</label>
+    <em
+    style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">N/A</em>
+  </div>
+  <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+    <label
+      style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">Vehicle
+    Number</label>
+    <em
+    style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">N/A</em>
+  </div>
+  <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+    <label
+      style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">Date
+    of Supply</label>
+    <em
+    style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">N/A</em>
+  </div>
+  <div style="margin: 8px 0;padding: 0 15px;width: 25%;">
+    <label
+      style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">Place
+    of Supply</label>
+    <em
+    style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">N/A</em>
+  </div>
+</div> -->
+
+<!-- LUT SUBMISSION -->
+<!-- Modified By Megala - 15/12/2023-->
+<!-- Before we viewed in ServiceTaxFlag , Now We viewed content based on EnbleLUtFlag-->
+@if ((invoiceService?.preInvoiceValue?.billingClientVm?.enableLutFlag === true)) {
+  <div style="border-bottom: 1px solid #d1d1d1;display: inline-flex; width: 100%"
+    >
+    <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px 0 0;width: 25%;">
+      <label
+        style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      Date Of LUT Submission</label>
+      <em
+      style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">31/03/2026</em>
+    </div>
+    @if (invoiceService.preInvoiceValue.companyDetails?.companyName.toUpperCase() !== 'KRYA SOLUTIONS PRIVATE LIMITED') {
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label
+          style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">LUT
+        Application Reference No</label>
+        <em
+        style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">AD330326106021W</em>
+      </div>
+    }
+    @if (invoiceService.preInvoiceValue.companyDetails?.companyName.toUpperCase() === 'KRYA SOLUTIONS PRIVATE LIMITED') {
+      <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+        <label
+          style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">LUT
+        Application Reference No</label>
+        <em
+        style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">AD3303261057938</em>
+      </div>
+    }
+    <div style="border-right: 1px solid #d1d1d1;margin: 8px 0;padding: 0 15px;width: 25%;">
+      <label
+        style="color: #666666;font-size: 11px;text-overflow: ellipsis;overflow: hidden;display: block;text-transform: uppercase;line-height: 1.5; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">LUT
+      Validity Period</label>
+      <em
+      style="font-style: normal;line-height: 1.25;font-size: 12px;white-space: initial;display: block;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">FY 2026 – 27</em>
+    </div>
+  </div>
+}
+
+</div>
+<!--display: inline-flex;-->
+@if (invoiceService?.preInvoiceValue?.billingClientVm) {
+  <div style="display: inline-flex;width: 100%; margin-top: 30px; margin-bottom: 30px;"
+    >
+    <div style="margin: 0 30px 0 0;width: 50%;">
+      <h3 style="font-size: 14px; font-weight: 600; margin: 0;">Bill To</h3>
+      <p style=" margin: 0 0 3px 0;display: flex;">
+        <label
+          style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">Billing
+        Name:</label>
+        @if (invoiceService.preInvoiceValue.billingClientVm.clientName === 'Individual Candidate') {
+          <span
+                style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">{{invoiceService.preInvoiceValue.billingCandidateVm.clientName}}</span>
+        }
+        @if (invoiceService.preInvoiceValue.billingClientVm.clientName !== 'Individual Candidate') {
+          <span
+                style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">{{invoiceService.preInvoiceValue.billingClientVm.clientName}}</span>
+        }
+      </p>
+      <p style=" margin: 0 0 3px 0;display: flex;">
+        <label
+        style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">Address:</label>
+        @if (invoiceService.preInvoiceValue.billingClientVm.clientName !== 'Individual Candidate') {
+<span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">{{invoiceService.preInvoiceValue.billingClientVm.address ?
+            invoiceService.preInvoiceValue.billingClientVm.address.addLine1 +
+            (invoiceService.preInvoiceValue.billingClientVm.address.addLine2 ? ',' +
+            invoiceService.preInvoiceValue.billingClientVm.address.addLine2 : '') +
+            (invoiceService.preInvoiceValue.billingClientVm.address.addLine3 ? ',' +
+            invoiceService.preInvoiceValue.billingClientVm.address.addLine3 : '') + ',' +
+            invoiceService.preInvoiceValue.billingClientVm.address.city + ',' +
+            invoiceService.preInvoiceValue.billingClientVm.address.state + '(' +
+            invoiceService?.preInvoiceValue?.billingClientVm?.address?.stateCode + ')' +',' +
+            invoiceService.preInvoiceValue.billingClientVm.address.country  + ',' +
+            invoiceService.preInvoiceValue.billingClientVm.address.postalCode : 'N/A'
+          }} </span>
+        }
+        @if (invoiceService.preInvoiceValue.billingClientVm.clientName === 'Individual Candidate') {
+<span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">{{invoiceService.preInvoiceValue.billingCandidateVm.address ?
+            invoiceService.preInvoiceValue.billingCandidateVm.address.addLine1 +
+            (invoiceService.preInvoiceValue.billingCandidateVm.address.addLine2 ? ', ' +
+            invoiceService.preInvoiceValue.billingCandidateVm.address.addLine2 : '') +
+            (invoiceService.preInvoiceValue.billingCandidateVm.address.addLine3 ? ', ' +
+            invoiceService.preInvoiceValue.billingCandidateVm.address.addLine3 : '') + ', ' +
+            invoiceService.preInvoiceValue.billingCandidateVm.address.city + ', ' +
+            invoiceService.preInvoiceValue.billingCandidateVm.address.state + '(' +
+            invoiceService?.preInvoiceValue?.billingCandidateVm?.address?.stateCode + ')' +', ' +
+            invoiceService.preInvoiceValue.billingCandidateVm.address.country  + ', ' +
+            invoiceService.preInvoiceValue.billingCandidateVm.address.postalCode : 'N/A'
+          }} </span>
+        }
+      </p>
+      <p style=" margin: 0 0 3px 0;display: flex;">
+        <label
+        style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">GSTIN:</label>
+              <span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">{{invoiceService.preInvoiceValue.billingClientVm.gstNo ?
+        invoiceService.preInvoiceValue.billingClientVm.gstNo : 'N/A'}}</span>
+      </p>
+      @if (invoiceService.preInvoiceValue.billingClientVm.clientName !== 'Individual Candidate') {
+        <p style=" margin: 0 0 3px 0;display: flex; ">
+          <label
+            style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">Billing
+          Person Name:</label>
+          <span
+                style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">{{invoiceService?.preInvoiceValue?.billingClientVm?.contactPerson ?
+          invoiceService?.preInvoiceValue?.billingClientVm?.contactPerson : 'N/A'}}</span>
+        </p>
+      }
+      @if (invoiceService.preInvoiceValue.billingClientVm.clientName !== 'Individual Candidate') {
+        <p style=" margin: 0 0 3px 0;display: flex; ">
+          <label
+            style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">Phone
+          No.:</label>
+              <span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">
+            {{invoiceService?.preInvoiceValue?.billingClientVm?.phoneNo ?
+            invoiceService?.preInvoiceValue?.billingClientVm?.phoneNo : (invoiceService?.preInvoiceValue?.
+            billingClientVm?.contact[1]?.lookUpValue ?
+            invoiceService?.preInvoiceValue?.billingClientVm?.contact[1]?.lookUpValue : 'N/A')}}
+          </span>
+        </p>
+      }
+      <p style=" margin: 0 0 3px 0;display: flex; ">
+        <label
+          style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">Mobile
+        No.:</label>
+        @if (invoiceService.preInvoiceValue.billingClientVm.clientName !== 'Individual Candidate') {
+          <span
+                style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+                color: #000000; font-size: 12px; font-weight: 500;">{{invoiceService?.preInvoiceValue?.billingClientVm?.mobileNo
+            ? (invoiceService?.preInvoiceValue?.
+            billingClientVm?.address?.phoneCode + ' ' + invoiceService?.preInvoiceValue?.billingClientVm?.mobileNo)
+            : (invoiceService?.preInvoiceValue?.
+            billingClientVm?.address?.phoneCode + ' ' +
+          invoiceService?.preInvoiceValue?.billingClientVm?.contact[0]?.lookUpValue)}}</span>
+        }
+        @if (invoiceService.preInvoiceValue.billingClientVm.clientName === 'Individual Candidate') {
+          <span
+                style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+                color: #000000; font-size: 12px; font-weight: 500;">{{invoiceService?.preInvoiceValue?.billingCandidateVm?.mobileNo}}</span>
+        }
+      </p>
+      <p style=" margin: 0 0 3px 0;display: flex; ">
+        <label
+          style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">Email
+        :</label>
+        @if (invoiceService.preInvoiceValue.billingClientVm.clientName !== 'Individual Candidate') {
+          <span
+                style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+            color: #000000; font-size: 12px; font-weight: 500;">{{invoiceService?.preInvoiceValue?.billingClientVm?.contactEmailId
+            ? invoiceService?.preInvoiceValue?.billingClientVm?.contactEmailId :
+          invoiceService?.preInvoiceValue?.billingClientVm?.contact[2]?.lookUpValue}}</span>
+        }
+        @if (invoiceService.preInvoiceValue.billingClientVm.clientName === 'Individual Candidate') {
+          <span
+                style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+            color: #000000; font-size: 12px; font-weight: 500;">{{invoiceService?.preInvoiceValue?.billingCandidateVm?.contactEmailId}}</span>
+        }
+      </p>
+      <p style=" margin: 0 0 3px 0;display: flex; ">
+        <label
+          style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">State
+        &amp; Code:</label>
+        @if (invoiceService.preInvoiceValue.billingClientVm.clientName !== 'Individual Candidate') {
+<span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">
+            {{ invoiceService?.preInvoiceValue?.billingClientVm?.address?.state + '(' +
+          invoiceService?.preInvoiceValue?.billingClientVm?.address?.stateCode + ')'}}</span>
+        }
+        @if (invoiceService.preInvoiceValue.billingClientVm.clientName === 'Individual Candidate') {
+<span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">
+            {{ invoiceService?.preInvoiceValue?.billingCandidateVm?.address?.state + '(' +
+          invoiceService?.preInvoiceValue?.billingCandidateVm?.address?.stateCode + ')'}}</span>
+        }
+      </p>
+      <!-- Cmd by megala -14/03/2024 for VTS2-2024-CRT-0183
+      We need to remove the same as the same information is available just above the table -->
+      <!-- <p style=" margin: 0 0 3px 0;display: flex; " *ngIf="invoiceService?.fromDate && invoiceService?.toDate">
+      <label
+        style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">
+      Duration: </label>
+              <span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;"> {{(invoiceService?.fromDate | date : 'dd/MM/yyyy')}} -
+      {{(invoiceService?.toDate | date : 'dd/MM/yyyy')}}</span>
+    </p> -->
+  </div>
+  <div style="margin: 0 30px 0 0px;width: 50%; display: none;">
+    <h3 style="font-size: 14px; font-weight: 600; margin: 0;">Ship To</h3>
+    <p style=" margin: 0 0 3px 0;display: flex; ">
+      <label
+      style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">Name:</label>
+              <span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">N/A</span>
+    </p>
+    <p style=" margin: 0 0 3px 0;display: flex; ">
+      <label
+      style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">Address:</label>
+              <span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">N/A</span>
+    </p>
+    <p style=" margin: 0 0 3px 0;display: flex; ">
+      <label
+      style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">GSTIN:</label>
+              <span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">N/A</span>
+    </p>
+    <p style=" margin: 0 0 3px 0;display: flex; ">
+      <label
+        style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">Phone
+      No.:</label>
+              <span style=" display: inline-block;: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">N/A</span>
+    </p>
+    <p style=" margin: 0 0 3px 0;display: flex; ">
+      <label
+        style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">Mobile
+      No.:</label>
+              <span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">N/A</span>
+    </p>
+    <p style=" margin: 0 0 3px 0;display: flex; ">
+      <label
+        style="display: inline-block;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;color: #666666;font-size: 12px;font-weight: normal;min-width: 130px;">State
+      &amp; Code:</label>
+              <span style=" font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;
+    color: #000000; font-size: 12px; font-weight: 500;">N/A</span>
+    </p>
+  </div>
+</div>
+}
+@if (invoiceService.preInvoiceValue.billingClientVm.clientName !== 'Individual Candidate') {
+  <h3
+    style="font-size: 14px;line-height: 34px;margin: 0 0 0 0;font-weight: 500;border: 1px solid #6e91aa !important;padding: 0 10px;background: #ffff !important;color: #030303 !important;text-align: center;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Invoice Period From {{common?.getTimezoneOffset(invoiceService?.fromDate, false) | date : 'dd-MMM-yyyy'}} to
+  {{common?.getTimezoneOffset(invoiceService?.toDate, false) | date : 'dd-MMM-yyyy'}}</h3>
+}
+@if (invoiceService.preInvoiceValue.billingClientVm.clientName === 'Individual Candidate') {
+  <h3
+    style="font-size: 14px;line-height: 34px;margin: 0 0 0 0;font-weight: 500;border: 1px solid #6e91aa !important;padding: 0 10px;background: #ffff !important;color: #030303 !important;text-align: center;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  Invoice Period for the Month of {{common?.getTimezoneOffset(invoiceService?.preInvoiceValue?.billingCandidateVm?.closedDate, false) | date : 'MMM-yyyy'}}</h3>
+}
+<div style="margin: 0px 0 10px 0;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0"
+    style="width: 100%; border: 1px solid #6e91aa; border-collapse: collapse;">
+    <tbody>
+      <tr>
+        <th rowspan="2" scope="col"
+          style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+        Sl.No.</th>
+        <th rowspan="2" align="left" scope="col"
+          style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+        Product Description</th>
+        <th rowspan="2" scope="col"
+          style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+        SAC Code</th>
+        <!-- <th rowspan="2" scope="col"
+        style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      UoM</th> -->
+      <th rowspan="2" scope="col"
+        style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      Qty</th>
+      <!-- //cmd by megala -for Additional column in invoice generation | UAT environment -16/04/2024 -->
+      <!-- <th rowspan="2" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Effective Date</th> -->
+    <th rowspan="2" align="right" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Rate</th>
+    <th rowspan="2" align="right" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Amount</th>
+    <th rowspan="2" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Addi.Fee</th>
+    <th rowspan="2" align="right" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Discount</th>
+    <th rowspan="2" align="right" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Taxable Value</th>
+    <th scope="col" colspan="2"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    CGST</th>
+    <th colspan="2" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    SGST</th>
+    <th colspan="2" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    IGST</th>
+    <th rowspan="2" align="right" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Total</th>
+  </tr>
+  <tr>
+    <th align="right" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Rate</th>
+    <th align="right" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Amount</th>
+    <th align="right" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Rate</th>
+    <th align="right" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Amount</th>
+    <th align="right" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Rate</th>
+    <th align="right" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Amount</th>
+  </tr>
+  @for (ipc of invoiceService?.preInvoiceValue?.compWiseCostVm; track ipc; let i = $index) {
+    <tr style="background: #f3f6f8;"
+      >
+      <td align="center"
+        style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      {{i+1}}</td>
+      <td align="left"
+        style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      {{ipc.componentName}}</td>
+      <td align="center"
+        style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      {{'998598'}}</td>
+      <!-- <td align="center"
+      style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    {{'Monthly'}}</td> -->
+    <td align="center"
+      style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    {{ipc.qty}}</td>
+    <!-- //cmd by megala -for Additional column in invoice generation | UAT environment -16/04/2024 -->
+    <!-- <td align="center"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{common?.getTimezoneOffset(ipc.effectiveDate, false) | date : 'dd-MM-yyyy'}}</td> -->
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    {{(ipc.ratePerCheck?ipc.ratePerCheck:ipc.rateTotal?ipc.qty?ipc.rateTotal/ipc.qty:0:0) | number :
+  '1.2-2'}}</td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{ipc.rateTotal | number : '1.2-2'}}</td>
+  <!-- VTS2-2023-CRT-0139 point no: 19 ==> add total addfee ==> by janani -->
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{ipc.additionalFee | number : '1.2-2'}}</td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{ipc.discount}} </td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{ipc.totalAmount | number : '1.2-2'}}</td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{ipc.cgstPercentage}} </td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{ipc.cgst| number : '1.2-2'}} </td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{ipc.sgstPercentage}} </td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{ipc.sgst | number : '1.2-2'}} </td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{ipc.igstPercentage}}</td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{ipc.igst | number : '1.2-2'}}</td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{ipc.grandTotal | number : '1.2-2'}}</td>
+</tr>
+}
+<tr style="background: #f3f6f8;">
+  <th colspan="3" align="left" scope="col"
+    style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  Total</th>
+
+  <td align="center"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{invoiceService.sumOffDatavalue?.qtyTotal}}</td>
+  <!-- //cmd by megala -for Additional column in invoice generation | UAT environment -16/04/2024 -->
+  <!-- <td align="right"
+  style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;"
+colspan="1"></td> -->
+<td align="right"
+  style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;"
+colspan="1"></td>
+<td align="right"
+  style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+{{invoiceService.sumOffDatavalue?.amountTotal| number : '1.2-2'}}</td>
+<td align="right"
+  style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{invoiceService.sumOffDatavalue?.caseAddFeeTotal| number : '1.2-2'}}
+</td>
+<td align="right"></td>
+<td align="right"
+  style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+{{invoiceService.sumOffDatavalue?.taxableValueTotal| number : '1.2-2'}}</td>
+<td align="right"></td>
+<td align="right"
+  style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+{{invoiceService.sumOffDatavalue?.cgstAmountTotal| number : '1.2-2'}}</td>
+<td align="right"></td>
+<td align="right"
+  style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+{{invoiceService.sumOffDatavalue?.sgstAmountTotal| number : '1.2-2'}}</td>
+<td align="right"
+  style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+</td>
+<td align="right"
+  style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+{{invoiceService.sumOffDatavalue?.igstAmountTotal| number : '1.2-2'}} </td>
+<td align="right"
+  style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+{{invoiceService.sumOffDatavalue?.grandTotal | number : '1.2-2'}}</td>
+</tr>
+<tr>
+  <!-- //Clospan changes by megala -for Additional column in invoice generation | UAT environment -16/04/2024 -->
+  <th colspan="11" align="left" scope="col"
+    style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  Total Invoice amount in words</th>
+  <th colspan="4" align="left" scope="col"
+    style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  Total Amount before Tax</th>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    <strong style="">{{invoiceService.sumOffDatavalue?.taxableValueTotal| number : '1.2-2'}}</strong>
+  </td>
+</tr>
+<!-- // Clospan changes by megala -for Additional column in invoice generation | UAT environment -16/04/2024 -->
+<tr style="background: #f3f6f8;">
+  <td colspan="11" rowspan="2" align="left"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  {{totalAmount}}</td>
+  <td colspan="4" align="left"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  Add : CGST</td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    <strong>{{invoiceService.sumOffDatavalue?.cgstAmountTotal| number : '1.2-2'}}</strong>
+  </td>
+</tr>
+<tr>
+  <td colspan="4" align="left"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  Add : SGST</td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    <strong>{{invoiceService.sumOffDatavalue?.sgstAmountTotal| number : '1.2-2'}}</strong>
+  </td>
+</tr>
+<!-- //Clospan changes by megala -for Additional column in invoice generation | UAT environment -16/04/2024 -->
+<tr style="background: #f3f6f8;">
+  <th colspan="6" scope="col" align="left"
+    style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  Bank Details-NEFT/RTGS</th>
+  <th colspan="5" scope="col" align="left"
+    style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  Cheque / DD</th>
+  <td colspan="4" align="left"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  Add : IGST</td>
+  <td align="right"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    <b>{{invoiceService.sumOffDatavalue?.igstAmountTotal| number : '1.2-2'}}</b>
+  </td>
+</tr>
+<tr>
+  <!-- //Clospan changes by megala -for Additional column in invoice generation | UAT environment -16/04/2024 -->
+  <td colspan="6" align="left"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    <div style="color: #666666; width: 90px; display: inline-block;">Bank Name:</div>
+    <div style="display: inline-block;">{{invoiceService.preInvoiceValue.companyDetails.companyDetail.bankName}}</div>
+  </td>
+  <td colspan="5" rowspan="4" align="left" valign="top"
+    style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Payment to be made in favour of<br>
+    <strong style="color: #000000;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;margin: 0 auto;text-align: center;text-transform: uppercase;">{{invoiceService.preInvoiceValue.companyDetails?.companyName}}</strong><br>
+    @if (invoiceService.preInvoiceValue.companyDetails?.companyName.toUpperCase() !== 'KRYA SOLUTIONS PRIVATE LIMITED') {
+      <b style="color: #000000;font-weight: 500;font-size: 9px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;margin: 0 auto; text-align: center;">(Formerly known as A CHECK GLOBAL SOLUTIONS PRIVATE LIMITED)</b>
+    }
+    <br>
+    </td>
+    <td colspan="4" align="left"
+      style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Total Tax Amount</td>
+    <td align="right"
+      style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      {{(invoiceService.sumOffDatavalue?.cgstAmountTotal +invoiceService.sumOffDatavalue?.sgstAmountTotal
+      +invoiceService.sumOffDatavalue?.igstAmountTotal ) | number : '1.2-2'}}
+    </td>
+  </tr>
+  <!-- //Clospan changes by megala -for Additional column in invoice generation | UAT environment -16/04/2024 -->
+  <tr style="background: #f3f6f8;">
+    <td colspan="6" align="left"
+      style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      <div style="color: #666666; width: 90px; display: inline-block;">Bank A/c No:</div>
+      <div style="display: inline-block;">{{invoiceService.preInvoiceValue.companyDetails.companyDetail.bankAccountNo}}</div>
+    </td>
+    <th colspan="4" align="left" scope="col"
+      style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    Total Amount after Tax:(R.Off)</th>
+    <td align="right"
+      style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      <strong>{{invoiceService.sumOffDatavalue?.grandTotal | number : '1.2-2'}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <!-- //Clospan changes by megala -for Additional column in invoice generation | UAT environment -16/04/2024 -->
+    <td colspan="6" align="left"
+      style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      <div style="color: #666666; width: 90px; display: inline-block;">Bank Branch:</div>
+      <div style="display: inline-block;">{{invoiceService.preInvoiceValue.companyDetails.companyDetail.bankBranch}}</div>
+    </td>
+    <td colspan="4" rowspan="2" align="left"
+      style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    </td>
+    <td align="right" rowspan="2"
+      style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+    </td>
+  </tr>
+  <!-- //Clospan changes by megala -for Additional column in invoice generation | UAT environment -16/04/2024 -->
+  <tr style="background: #f3f6f8;">
+    <td colspan="6" align="left"
+      style="border: 1px solid #6e91aa;padding: 5px; font-size: 12px; font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      <div style="color: #666666; width: 90px; display: inline-block;">Bank IFSC:</div>
+      <div style="display: inline-block;">{{invoiceService.preInvoiceValue.companyDetails.companyDetail.bankIFSC}}</div>
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<ng-container style="margin-top: 10px;width: 100%;page-break-inside: auto; page-break-after: avoid;">
+  <div
+    style="color:#666666; margin: 0 0 10px 0;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;text-align: right;page-break-inside: avoid;">
+    Certified that the particulars given above are true and correct<br>
+    For <b>M/s. {{invoiceService.preInvoiceValue.companyDetails?.companyName}}</b><br>
+    @if (invoiceService.preInvoiceValue.companyDetails?.companyName.toUpperCase() !== 'KRYA SOLUTIONS PRIVATE LIMITED') {
+      <b style="color: #000000;font-weight: 500;font-size: 9px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;margin: 0 auto; text-align: center;">(Formerly known as A CHECK GLOBAL SOLUTIONS PRIVATE LIMITED)</b>
+    }
+    <br>
+    </div>
+
+    <ng-container>
+      <div style="margin: 0;float: left;text-align: left;align-items: left;">
+        <img [src]="kryaSeal"
+          alt="KRYA Seal" height="90px">
+
+        <p
+          style="font-size: 12px;color: #000000;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+          Seal
+        </p>
+      </div>
+      <div style="margin: 0;text-align: right;float: right;align-items: right;"> <img
+        [src]="kryaSignature"
+        alt="Authorised signatory" height="90px">
+        <p
+          style="font-size: 12px;color: #000000;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+        Authorised signatory</p>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <div style="margin: 50px 0 10px 0;page-break-before: always;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0"
+      style="width: 100%; border: 1px solid #6e91aa; border-collapse: collapse;">
+      <!-- Added By Megala 14/03/2024 -VTS2-2024-CRT-0183
+      Need to add the removed title to the annexure section -->
+      <thead>
+        <tr>
+          <th colspan="11">
+            @if (invoiceService.preInvoiceValue.billingClientVm.clientName !== 'Individual Candidate') {
+              <h3
+                style="font-size: 14px;line-height: 34px;margin: 0 0 0 0;font-weight: 500;border: 1px solid #6e91aa !important;padding: 0 10px;background: #ffff !important;color: #030303 !important;text-align: center;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+                Invoice Period From {{common?.getTimezoneOffset(invoiceService?.fromDate, false) | date : 'dd-MMM-yyyy'}} to
+              {{common?.getTimezoneOffset(invoiceService?.toDate, false) | date : 'dd-MMM-yyyy'}}</h3>
+            }
+            @if (invoiceService.preInvoiceValue.billingClientVm.clientName === 'Individual Candidate') {
+              <h3
+                style="font-size: 14px;line-height: 34px;margin: 0 0 0 0;font-weight: 500;border: 1px solid #6e91aa !important;padding: 0 10px;background: #ffff !important;color: #030303 !important;text-align: center;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+              Invoice Period for the Month of {{common?.getTimezoneOffset(invoiceService?.preInvoiceValue?.billingCandidateVm?.closedDate, false) | date : 'MMM-yyyy'}}</h3>
+            }
+          </th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="col"
+              style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif; line-height: initial;">
+            Sl.No.</th>
+            <th align="left"
+              style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif; line-height: initial;"
+            scope="col">Case Ref. No.</th>
+            <th align="center"
+              style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif; line-height: initial;"
+            scope="col">PS No.</th>
+            <th align="left"
+              style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif; line-height: initial;"
+            scope="col">Candidate Name</th>
+            <th align="left"
+              style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif; line-height: initial;"
+            scope="col">Reference Name</th>
+            <th width="15%" align="center"
+              style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif; line-height: initial;"
+              scope="col">Components Detail <br>
+              <span style="font-size: 10px; font-weight: 400;"> </span>
+            </th>
+            <th align="left"
+              style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif; line-height: initial;"
+            scope="col">Report sent on</th>
+            <th width="15%" align="center"
+              style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif; line-height: initial;"
+              scope="col">Remarks<br>
+              <span style="font-size: 10px; font-weight: 400;">Package
+                Name[Package
+                Fee] +
+              Indv+ A.F(Additional Fee+...)</span>
+            </th>
+            <th align="right"
+              style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif; line-height: initial;"
+            scope="col">Rate Per Check (₹)</th>
+            <th align="right"
+              style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif; line-height: initial;"
+            scope="col">Add. Fee(₹)</th>
+            <th align="right"
+              style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif; line-height: initial;"
+            scope="col">Total Amount (₹)</th>
+          </tr>
+          @for (ipg of invoiceService?.preInvoiceValue?.getCaseCostVm; track ipg; let i = $index) {
+            <tr>
+              <td align="center" valign="top"
+                style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;line-height: initial;">
+              {{i+1}} </td>
+              <td align="left" valign="top"
+                style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;line-height: initial;">
+              {{ipg.caseRefNo}} </td>
+              <td align="center" valign="top"
+                style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;line-height: initial;">
+              {{ipg.applicantId ? ipg.applicantId : 'N/A'}} </td>
+              <td align="left" valign="top"
+                style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;line-height: initial;">
+              {{ipg.firstName + ' ' + ipg.middleName + ' ' +ipg.lastName }} </td>
+              <td align="left" valign="top"
+                style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;line-height: initial;">
+              {{'N/A'}} </td>
+              <td align="left" valign="top"
+                style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;line-height: initial;">
+                <span>{{ipg.componentDetails}}</span>
+                <!-- <span *ngFor='let comp of ipg.componentName;let compIndex = index'>
+              {{comp.componentName + '-' + comp.count}}, </span> -->
+            </td>
+            <td align="left" valign="top"
+              style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;line-height: initial;">
+              {{ipg.reportSentOn ? (common.getTimezoneOffset(ipg.reportSentOn,false) | date:'dd-MMM-yyyy') : 'N/A'}}
+            </td>
+            <td align="left" valign="top"
+              style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;line-height: initial;">
+            {{ipg.componentFeeData}} </td>
+            <td valign="top" align="right"
+              style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;line-height: initial;">
+            {{ ipg.ratePerCheck + ipg.packageAmount }} </td>
+            <td valign="top" align="right"
+              style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;line-height: initial;">
+            {{ipg.additionalFee}} </td>
+            <td valign="top" align="right"
+              style="border: 1px solid #6e91aa;padding: 5px;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;line-height: initial;">
+            {{ipg.totalAmount}} </td>
+          </tr>
+        }
+        <tr>
+          <th colspan="8" align="center" valign="top"
+            style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;"
+          scope="col">TOTAL AMOUNT (EXCLUDING SERVICE TAX)</th>
+          <th align="right" valign="top"
+            style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;"
+          scope="col">{{invoiceService.sumOffDatavalue.caseRateTotal}}</th>
+          <th align="right" valign="top"
+            style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;"
+          scope="col">{{invoiceService.sumOffDatavalue.caseAddFeeTotal}}</th>
+          <th align="right" valign="top"
+            style="border: 1px solid #6e91aa;padding: 4px;background: #abbfce;font-size: 12px;font-weight: 700;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;"
+          scope="col">{{invoiceService.sumOffDatavalue.caseGrandTotal}}</th>
+        </tr>
+      </tbody>
+    </table>
+    <div style="width:25%; margin:0 auto; margin-top:10px; text-align:center; display:block;">
+      <img [src]="kryaSeal"
+        alt="KRYA Seal" height="120px">
+      <p
+        style="font-size: 12px;color: #000000;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+        Seal
+      </p>
+    </div>
+  </div>
+
+</span>
+<div id="htmlFooter"
+  style="margin-top: 30px;text-align: center;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+  <div style="width: 100%;border-top: 2px solid #0e4872;padding: 8px 0;"></div>
+  <p
+    style="color: #000000;font-weight: 500;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;margin: 0 auto; text-align: center;">
+  [&#64;&#64;Paging]</p>
+  <p
+    style="color: #000000;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;margin: 0 auto;text-align: center;">
+    <b style="color: #000000;font-size: 12px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;margin: 0 auto;text-align: center;text-transform: uppercase;">{{invoiceService.preInvoiceValue.companyDetails?.companyName}}</b><br>
+    @if (invoiceService.preInvoiceValue.companyDetails?.companyName.toUpperCase() !== 'KRYA SOLUTIONS PRIVATE LIMITED') {
+      <b style="color: #000000;font-weight: 500;font-size: 9px;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;margin: 0 auto; text-align: center;">(Formerly known as A CHECK GLOBAL SOLUTIONS PRIVATE LIMITED)</b>
+    }
+    <br>
+      <b>Address:</b>{{invoiceService.preInvoiceValue.companyDetails.address ?
+      invoiceService.preInvoiceValue.companyDetails.address.addLine1 : 'N/A'
+      }}.<br>
+      Phone: {{invoiceService.preInvoiceValue.companyDetails.companyDetail.contactNumbers}} | Fax: {{invoiceService.preInvoiceValue.companyDetails.companyDetail.fax}} | <br>
+      Email: <a
+      href="mailto:verifications&#64;kryacheck.com"
+    style="color: #0072ff; text-decoration: none;">{{invoiceService.preInvoiceValue.companyDetails.companyDetail.contactEmail}}</a> </p>
+  </div>
+</div>
+</body>
+</mat-card>
+
+</html>

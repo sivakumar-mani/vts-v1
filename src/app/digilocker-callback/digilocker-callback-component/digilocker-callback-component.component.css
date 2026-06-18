@@ -1,0 +1,58 @@
+.FullBody {
+    background: #0e4872;
+  }
+  .HContBody {
+    background: #fff;
+    border-bottom: 1px solid #cacaca;
+    width: 75%;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 25px;
+  }
+  .HeaderBg a {
+    color: #353537;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+    float: right;
+    line-height: 50px;
+  }
+  .HeaderBg a i {
+    font-size: 18px;
+  }
+  .lnd-logo {
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .LogTxt img {
+    width: 52px;
+  }
+  .ContBody {
+    background: #fff;
+    width: 75%;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 25px 35px;
+  }
+  
+  .sub-header {
+    text-transform: uppercase;
+    margin: 5px 0 25px;
+  }
+  pre {
+    white-space: pre-wrap;   /* Wraps text onto new lines */
+    word-wrap: break-word;   /* Ensures long words break onto a new line */
+    font-size: 14px;         /* Adjust the font size for readability on small screens */
+    line-height: 1.5;        /* Improves readability */
+  }
+  /* For Krya logo */
+  .kryalogo i {
+    font-size: 42px !important;
+    color: #173962;
+  }
+  
+  @media (max-width: 600px) {
+    pre {
+      font-size: 12px;       /* Reduce font size for smaller screens */
+    }
+  }

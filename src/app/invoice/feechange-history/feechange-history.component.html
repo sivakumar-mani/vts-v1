@@ -1,0 +1,75 @@
+<a class="text-sm text-cap" (click)="openHistory()">View&nbsp;History</a>
+<ng-template #feehistory>
+  <h1 mat-dialog-title>History</h1>
+  <mat-dialog-content>
+    @for (history of feeChangeHistory; track history; let i = $index) {
+      <div fxLayout="row" fxLayoutGap="0px" class="border-dashed">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <h3 class="text-light m-0 pb-5">From {{history.originalCompCharge }} To {{history.updatedCompCharge}}</h3>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="20px" class="lbl-res">
+            <div fxFlex="50%">
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="start start">
+                  <p><label>Component:</label>
+                  <em>{{history.subCompName===null||history.subCompName===''?history.compName:history.subCompName }}</em></p>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="50%">
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="end end">
+                  <p>
+                    <label>Package:</label>
+                    <em>{{
+                      history.originalCompCharge==='Package'?history.originalCompCharge==='Package'&&history.updatedCompCharge==='Package'?history.packageName+' (to) '+history.updatedPackage:history.packageName:history.updatedPackage
+                    }}</em>
+                    <!-- <em>{{history.updatedPackage ? history.updatedPackage : 'N/A'}}</em> -->
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="20px" class="lbl-res">
+            <div fxFlex="50%">
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="start start">
+                  <p><label>User:</label>
+                  <em>{{history.firstName+' '+history.middleName+' '+history.lastName}}</em></p>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="50%">
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="end end">
+                  <p>
+                    <label>Date Time:</label>
+                    <em>{{history.created ? (common.getTimezoneOffset(history.created, false) | date: "dd-MM-yyyy h:mm a") : 'N/A'}}</em>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div fxLayout="row">
+          <div fxFlex="100%">
+            <p>From {{history.originalCompCharge }} To {{history.updatedCompCharge}}</p>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  }
+  @if (feeChangeHistory?.length === 0) {
+    <div fxLayout="row" fxLayoutGap="0px">
+      <div fxFlex="100%" class="text-center" fxLayoutAlign="center center">
+        <div class="no-record"><span>No History Found</span></div>
+      </div>
+    </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end center">
+  <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+</mat-dialog-actions>
+</ng-template>

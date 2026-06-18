@@ -1,0 +1,376 @@
+﻿@if (isQc === false) {
+  <span>@if (userData.applicationId !== 2 && userData.subTeamName !== commonService.COMMONSUBCAMTEAM && (userData.teamName !== commonService.COMMONTECHMTEAM
+    && userData.teamName !== commonService.COMMONABROADTEAM && userData.teamName !== commonService.COMMONCRTTEAM) && commonService.VE === false) {
+    <button mat-icon-button
+      matTooltip="View previously closed cases with color code" class="in-btn" matTooltipClass="accent-tooltip"
+      (click)="GetPreviousClosedcases(false)"> <i class="icon-eye-line"></i></button>
+    }</span>
+  }
+  @if (isQc) {
+    <span>
+      <p matTooltip="View previously closed cases with color code" matTooltipClass="accent-tooltip"
+        (click)="GetPreviousClosedcases(false)" style="color: #007AFF; white-space: nowrap;"> View previously closed cases with color code
+      </p>
+    </span>
+  }
+  <!-- <ng-template #view *ngIf="isQc === false">
+  <h1 mat-dialog-title>{{empEduName}}</h1>
+  <mat-dialog-content>
+    <div fxLayout="row" fxLayoutGap="30px">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="70%">
+            <div class="EmpClrCount Bg-six">Tot.count = {{viewList?.getPreviousClosedcasesVm?.length}}</div>
+            <div class="EmpClrCount Bg-four">Green = {{viewList?.greenCount}}</div>
+            <div class="EmpClrCount Bg-one">Red = {{viewList?.redCount}}</div>
+            <div class="EmpClrCount Bg-three">Ambar = {{viewList?.ambarCount}}</div>
+            <div class="EmpClrCount Bg-five">Others = {{viewList?.others}}</div>
+          </div>
+          <div fxFlex="30%" fxLayoutAlign="end center">
+            <mat-form-field fxFlex="100%">
+              <mat-label></mat-label>
+              <mat-icon matPrefix>search</mat-icon>
+              <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                [(ngModel)]="searchText" (keyup)="getSearchList($event.target.value)" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" class="sortrow">
+          <div fxFlex="40%">
+            <ul class="pl-0">
+              <li class="ml-0">
+                <span class="text-dull">{{empInsName}} </span>
+                <b>{{name}}</b>
+              </li>
+            </ul>
+          </div>
+          <div fxFlex="60%" fxLayoutAlign="end center">
+            <ul>
+              <li><span class="text-dull"> Showing {{(itemPerPage*page)-itemPerPage+1}} -
+                {{(itemPerPage*page)>=viewList?.getPreviousClosedcasesVm?.length?(viewList?.getPreviousClosedcasesVm?.length):itemPerPage*page}}
+                of
+              </span>
+              <b>{{viewList?.getPreviousClosedcasesVm?.length}} record(s)</b>
+              </li>|<a (click)="showall()"> Showall </a>
+              |<li><b>Sort By:</b> <a [ngClass]="column==='candidateName'?'active':''"
+              (click)="sortBy('candidateName')">Candidate
+            Name</a>
+                                    <i [ngClass]="{'icon-sort': column != 'candidateName', 
+                                                                         'icon-sort-asc': (column == 'candidateName' && !isDesc), 
+                                                                         'icon-sort-desc': (column == 'candidateName' && isDesc) }"
+              aria-hidden="true">
+            </i>
+            <a [ngClass]="column==='clientRefNo'?'active':''"
+            (click)="sortBy('clientRefNo')">Reference No</a>
+                                    <i [ngClass]="{'icon-sort': column != 'clientRefNo', 
+                                                                          'icon-sort-asc': (column == 'clientRefNo' && !isDesc), 
+                                                                          'icon-sort-desc': (column == 'clientRefNo' && isDesc) }"
+            aria-hidden="true"> </i>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+                            <div fxLayout="row" class="listrow" *ngFor="let case of viewList?.getPreviousClosedcasesVm 
+                                    | sort: {property: column, direction: direction}
+                                    | paginate: { itemsPerPage: itemPerPage, currentPage: page }; let j = index">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="20%">
+                <mat-card-header>
+                  <div mat-card-avatar class="avatar avatarBg{{(j%6)+1}} cursor-pointer">
+                    {{(case.candidateName.split(' ').length - 1) > 0 ?
+                    case.candidateName.split(' ')[0].charAt(0).toUpperCase() +
+                    case.candidateName.split(' ')[1].charAt(0).toUpperCase() :
+                    case.candidateName.charAt(0).toUpperCase()}}
+                  </div>
+                  <mat-card-title class="cname">
+                    {{case?.candidateName ? case?.candidateName : 'N/A'}}
+                  </mat-card-title>
+                  <mat-card-subtitle class="cdesg mb-0">
+                    {{case?.clientRefNo ? case?.clientRefNo : 'N/A'}}
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </div>
+              <div fxFlex="22%">
+                <p>
+                  <label>Client Name:</label>
+                  <em>{{case?.clientName ? case?.clientName : 'N/A'}}</em>
+                </p>
+                <p>
+                  <label>Verification Id:</label>
+                  <em>{{case?.screeningCompId ? case?.screeningCompId : 'N/A'}}</em>
+                </p>
+              </div>
+              <div fxFlex="29%">
+                <p>
+                  <label>Color Code:</label>
+                  <em>{{case?.colorCode ? case?.colorCode : 'N/A'}}</em>
+                </p>
+                <p>
+                  <label>Closed Date:</label>
+                  <em>{{case?.closedDate ? (case?.closedDate | date : 'dd/MM/yyyy') :
+                  'N/A'}}</em>
+                </p>
+              </div>
+              <div fxFlex="29%">
+                <p>
+                  <label>Case Owner:</label>
+                  <em>{{case?.caseOwner ? case?.caseOwner : 'N/A'}}</em>
+                </p>
+                <p>
+                  <label>Component Status:</label>
+                  <em>{{case?.componentStatus ? case?.componentStatus : 'N/A'}}</em>
+                </p>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="20%"></div>
+              <div fxFlex="80%">
+                <p>
+                  <label>Annexure:</label>
+                  <em *ngIf="case?.annexure?.length < 1">N/A</em>
+                  <em *ngFor="let annex of case?.annexure; let last = last;"> <a
+                    routerLinkActive="active-link" (click)="downloadDoc(annex?.docId)">
+                    {{annex?.fileName ? annex?.fileName : 'N/A'}}
+                    <span *ngIf="!last"> , </span>
+                  </a>
+                </em>
+              </p>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="100%">
+              <p>
+                <label>Verifier Remarks:</label>
+                <em>{{case?.verifierRemarks ? case?.verifierRemarks : 'N/A'}}</em>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row">
+    <div class="cus-paginator">
+      <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+        <pagination-controls class="cus-paginator" (pageChange)="getPage($event)">
+        </pagination-controls>
+      </span>
+      <span class="gotopagbg ml-2">Go to Page<span class="input-num">
+        <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly
+          preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+      </span></span>
+      <span class="gotopagbg ml-2">Items / page<span class="input-num">
+        <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4" appNumberOnly
+          preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false"
+          (blur)="preventInfinite()">
+      </span> </span>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+  <button mat-flat-button color="warn" (click)="closeall()">Close</button>
+</mat-dialog-actions>
+</ng-template> -->
+
+<ng-template #view >
+  <h1 mat-dialog-title>{{empEduName}}</h1>
+  <mat-dialog-content>
+    <div fxLayout="row" fxLayoutGap="30px">
+      <div fxFlex="100%">
+        <div fxLayout="row" style="padding-bottom: 10px;">
+          <div fxLayout="row" fxFlex="100%">
+            <div class="EmpClrCount Bg-six">Tot.count = {{viewList?.getPreviousClosedcasesVm?.length}}</div>
+            <div class="EmpClrCount Bg-four">Green = {{viewList?.greenCount}}</div>
+            <div class="EmpClrCount Bg-one">Red = {{viewList?.redCount}}</div>
+            <div class="EmpClrCount Bg-three">Amber = {{viewList?.ambarCount}}</div>
+            <div class="EmpClrCount Bg-five">Others = {{viewList?.others}}</div>
+            <div style="font-size: 13px ;margin-left: 20px;"  >{{empInsName}}<b> {{name}}</b></div>
+          </div>
+        </div>
+        <div fxLayout="row" class="eduSearch" autocomplete="off">
+          <div class="eduSearch-forms">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="175px">
+                <mat-form-field fxFlex="100%">
+                  <mat-label>Color Code</mat-label>
+                  <input matInput placeholder="Color Code" type="text" [(ngModel)]="searchValue1"
+                    size="80" autocomplete="off" />
+                  <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                </mat-form-field>
+
+              </div>
+              <div fxFlex="175px">
+                <mat-form-field fxFlex="100%">
+                  <mat-label>Component Status</mat-label>
+                  <input matInput placeholder="Component Status" type="text" [(ngModel)]="searchValue2"
+                    size="50" autocomplete="off" />
+                  <mat-icon matSuffix><i class="icon-search1"></i></mat-icon>
+                </mat-form-field>
+
+              </div>
+            </div>
+          </div>
+          <div fxFlex="100%" class="eduSearch-btn">
+            <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px" ng-reflect-fx-layout-align="start center">
+              <span style="margin-right: 10px;"><a (click)="getSearchLists(searchValue1,searchValue2)" >Search</a>
+              <span> &nbsp;&nbsp; | </span></span>
+              <span style="margin-right: 10px;"><a (click)="reset()">Reset</a></span>
+              <span> &nbsp;&nbsp;  </span>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="row" class="sortrow" fxLayoutAlign="end center">
+
+          <div fxFlex="100%" fxLayoutAlign="end center" >
+            <ul>
+              <li><span > Showing {{(itemPerPage*page)-itemPerPage+1}} -
+                {{(itemPerPage*page)>=viewList?.getPreviousClosedcasesVm?.length?(viewList?.getPreviousClosedcasesVm?.length):itemPerPage*page}}
+                of
+              </span>
+              <b>{{viewList?.getPreviousClosedcasesVm?.length}} record(s)</b>
+              </li>|<a (click)="showall()"> Showall </a>
+              |<li><b>Sort By:</b> <a [ngClass]="column==='closedDate'?'active':''"
+            (click)="sortBy('closedDate')">Closed Date</a>
+                                         <i [ngClass]="{'icon-sort': column != 'closedDate', 
+                                                                         'icon-sort-asc': (column == 'closedDate' && !isDesc), 
+                                                                         'icon-sort-desc': (column == 'closedDate' && isDesc) }"
+              aria-hidden="true">
+            </i>
+            <a [ngClass]="column==='clientRefNo'?'active':''"
+            (click)="sortBy('clientRefNo')">Reference No</a>
+                                    <i [ngClass]="{'icon-sort': column != 'clientRefNo', 
+                                                                          'icon-sort-asc': (column == 'clientRefNo' && !isDesc), 
+                                                                          'icon-sort-desc': (column == 'clientRefNo' && isDesc) }"
+            aria-hidden="true"> </i>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        @for (case of viewList?.getPreviousClosedcasesVm
+          | sort: {property: column, direction: direction}
+          | paginate: { itemsPerPage: itemPerPage, currentPage: page }; track case; let j = $index) {
+          <div fxLayout="row" class="listrow">
+            <div fxFlex="100%">
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="20%">
+                  <mat-card-header>
+                    <div mat-card-avatar class="avatar avatarBg{{(j%6)+1}} cursor-pointer">
+                      {{(case.candidateName.split(' ').length - 1) > 0 ?
+                      case.candidateName.split(' ')[0].charAt(0).toUpperCase() +
+                      case.candidateName.split(' ')[1].charAt(0).toUpperCase() :
+                      case.candidateName.charAt(0).toUpperCase()}}
+                    </div>
+                    <mat-card-title class="cname">
+                      {{case?.candidateName ? case?.candidateName : 'N/A'}}
+                    </mat-card-title>
+                    <mat-card-subtitle class="cdesg mb-0">
+                      {{case?.clientRefNo ? case?.clientRefNo : 'N/A'}}
+                    </mat-card-subtitle>
+                  </mat-card-header>
+                </div>
+                <div fxFlex="22%">
+                  <p>
+                    <label>Client Name:</label>
+                    <em>{{case?.clientName ? case?.clientName : 'N/A'}}</em>
+                  </p>
+                  <p>
+                    <label>Verification Id:</label>
+                    <em>{{case?.screeningCompId ? case?.screeningCompId : 'N/A'}}</em>
+                  </p>
+                </div>
+                <div fxFlex="29%">
+                  <p>
+                    <label>Color Code:</label>
+                    <em>{{case?.colorCode ? case?.colorCode : 'N/A'}}</em>
+                  </p>
+                  <p>
+                    <label>Closed Date:</label>
+                    <em>{{case?.closedDate ? (case?.closedDate | date : 'dd/MM/yyyy') :
+                    'N/A'}}</em>
+                  </p>
+                </div>
+                <div fxFlex="29%">
+                  <p>
+                    <label>Case Owner:</label>
+                    <em>{{case?.caseOwner ? case?.caseOwner : 'N/A'}}</em>
+                  </p>
+                  <p>
+                    <label>Component Status:</label>
+                    <em>{{case?.componentStatus ? case?.componentStatus : 'N/A'}}</em>
+                  </p>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="20%"></div>
+                <div fxFlex="80%">
+                  <p>
+                    <label>Annexure:</label>
+                    @if (case?.annexure?.length < 1) {
+                      <em>N/A</em>
+                    }
+                    @for (annex of case?.annexure; track annex; let last = $last) {
+                      <em> <a
+                        routerLinkActive="active-link" (click)="downloadDoc(annex?.docId)">
+                        {{annex?.fileName ? annex?.fileName : 'N/A'}}
+                        @if (!last) {
+                          <span> , </span>
+                        }
+                      </a>
+                    </em>
+                  }
+                </p>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="100%">
+                <p>
+                  <label>Verifier Remarks:</label>
+                  <em>{{case?.verifierRemarks ? case?.verifierRemarks : 'N/A'}}</em>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+  @if (viewList?.getPreviousClosedcasesVm.length == 0) {
+    <div>
+      <div class="no-record text-center">
+        <span>No Record Found</span>
+      </div>
+    </div>
+  }
+  <div fxLayout="row">
+    <div class="cus-paginator">
+      <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+        <pagination-controls class="cus-paginator" (pageChange)="getPage($event)">
+        </pagination-controls>
+      </span>
+      <span class="gotopagbg ml-2">Go to Page<span class="input-num">
+        <input type="number" [(ngModel)]="page" min="1" maxlength="4" appNumberOnly
+          preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+      </span></span>
+      <span class="gotopagbg ml-2">Items / page<span class="input-num">
+        <input type="number" [(ngModel)]="itemPerPage" min="1" maxlength="4" appNumberOnly
+          preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false"
+          (blur)="preventInfinite()">
+      </span> </span>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+  <button mat-flat-button color="warn" (click)="closeall()">Close</button>
+</mat-dialog-actions>
+</ng-template>

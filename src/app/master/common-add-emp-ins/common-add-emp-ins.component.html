@@ -1,0 +1,63 @@
+<form [formGroup]="researchQA?.researchFormGroup" autocomplete="off" id="ngForm">
+  @if (researchQA?.type === 'Question') {
+    <div>
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="50%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <mat-form-field fxFlex="100%" fxFlex.sm="95%" appearance="outline">
+            <mat-label>Question Name</mat-label>
+            <input formControlName="questionName"
+              autocomplete="off" role="presentation" matInput
+              placeholder="Question Name" required (input)="researchemit()"/>
+            @if (researchQA.researchFormGroup.get('questionName')?.errors?.required) {
+              <mat-error>Question Name is
+              required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+            <mat-label>Question With Url</mat-label>
+            <input formControlName="questionWithUrl"
+              autocomplete="off" role="presentation" matInput
+              placeholder="Question With Url" required (input)="researchemit()"/>
+            @if (researchQA.researchFormGroup.get('questionWithUrl')?.errors?.required) {
+              <mat-error>Question With Url is
+              required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%" ngClass.sm="">
+          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+            <mat-label>Verify Step</mat-label>
+            <input formControlName="verifyStep" appNumberOnly [NumberOnly]="false"  min="0" maxlength="2"
+              autocomplete="off" role="presentation" matInput
+              placeholder="Verify Step" required (input)="researchemit()"/>
+            @if (researchQA.researchFormGroup.get('verifyStep')?.errors?.required) {
+              <mat-error>Verify Step is
+              required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="60%" fxFlex.lg="60%"  fxFlex.md="60%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Description</mat-label>
+            <textarea matInput #descIp type="text" placeholder="Description" formControlName="description"
+              (focus)="descIp.select()" maxlength="1000" (input)="researchemit()" (click)="descIp.select()"
+            autocomplete="off" role="presentation"></textarea>
+            <mat-hint class="f-13"> ({{ descIp.value.length }} /1000 max) </mat-hint>
+          </mat-form-field>
+        </div>
+        <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="30%" fxFlex.xs="100%" ngClass.xs="mb-15">
+          <mat-label class="lbl">Attachment Request</mat-label>
+          <mat-checkbox formControlName="attachmentReqFlag" (change)="researchemit()">Attachment Request</mat-checkbox>
+        </div>
+        <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="20%" fxFlex.xs="100%" ngClass.xs="mb-15">
+          <mat-label class="lbl">Is Active</mat-label>
+          <mat-checkbox formControlName="active" (change)="researchemit()">Active</mat-checkbox>
+        </div>
+      </div>
+    </div>
+  }
+</form>

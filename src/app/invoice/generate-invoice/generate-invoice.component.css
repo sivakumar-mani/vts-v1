@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i&display=swap');
+.InHead-Bg{
+    background: #0e4872;
+    background: -moz-linear-gradient(left, #0e4872 0%, #015ea1 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, #0e4872), color-stop(100%, #015ea1));
+    background: -webkit-linear-gradient(left, #0e4872 0%, #015ea1 100%);
+    background: -o-linear-gradient(left, #0e4872 0%, #015ea1 100%);
+    background: -ms-linear-gradient(left, #0e4872 0%, #015ea1 100%);
+    background: linear-gradient(to right, #0e4872 0%, #015ea1 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0e4872', endColorstr='#015ea1', GradientType=1 );    
+    border-radius: 0 0 50px 0;
+    color: #fff;
+    font-size: 13px;
+    line-height: 55px;
+    height: 55px;       
+}
+.invoice-bg{
+    background: url(../../../assets/images/invoice-bg.png) repeat;
+}
+.InHead-Bg h1{
+    font-size: 24px;
+    margin: 0 25px 0 0;
+    font-weight: 300;
+    padding: 0;
+    text-align: end;
+    line-height: 50px;
+}
+.InComtxt{
+    color: #58595C;
+    font-size: 12px;
+    list-style: none;
+    margin: 10px 0 25px 0;
+    padding: 0;
+}
+.InComtxt li{
+    display: inline-block;
+    margin-right: 30px;
+}
+.InComtxt li em{
+    color: #232425;
+    font-style: normal;
+    font-weight: 500;
+    margin-left: 5px;
+}
+.InDetail {
+    font-size: 14px;
+    margin: 0 0 5px 0;
+}
+.InDetail h3{
+   
+    font-size: 12px;
+    line-height: 34px;
+    margin: 0 0 0 0;
+    font-weight: 500;
+    text-transform: uppercase;
+    
+    padding: 0 10px;
+    background: #ff8c00;
+    color: #fff;
+}
+.InDetail p label, .InDetail label{
+    color: #58595C;
+    font-size: 75%;
+    text-overflow: ellipsis;
+    overflow: hidden; 
+    display: block;
+    text-transform: uppercase;
+    line-height: 1.5;
+}
+.InDetail p em, .InDetail em {
+    font-style: normal;
+    line-height: 1.25;
+    font-size: 90%;
+    white-space: initial;
+    display: block;
+    font-weight: 700; 
+}
+.InDetail .line {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.InDetail .line div {
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    margin: 5px 0;
+    padding-right: 15px;
+}
+.InDetail .line div:last-child {
+    border-right: none medium;
+}
+.InDetail p {
+    margin: 5px 0 5px 0;
+    flex-direction: column;
+    box-sizing: border-box;
+    display: flex;
+    white-space: nowrap;
+}
+table.invoice {
+    width: 100%;
+    border: 1px solid #6e91aa;
+    border-collapse: collapse;
+    margin: 50px 0 10px 0;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, "Georgia", sans-serif;
+}
+table.invoice th {
+    border: 1px solid #6e91aa;
+    padding: 4px;
+    background: #abbfce;
+    font-size: 12px;
+    font-weight: 700;
+}
+table.invoice tr:nth-child(even){
+    background: #f3f6f8;
+}
+table.invoice td {
+    border: 1px solid #6e91aa;
+    padding: 5px;
+    font-weight: normal;
+    font-size: 13px;
+}
+.InFooter{
+    border-top: 2px solid #0e4872;
+    text-align: center;
+    font-size: 12px;
+    padding-top: 15px;
+}

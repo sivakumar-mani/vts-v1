@@ -1,0 +1,261 @@
+<form [formGroup]="mainForm" autocomplete="off" role="presentation">
+    <div *ngIf="mainForm!=undefined">
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+                <app-common-base-info [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'" [compBaseDetails]="compBaseDetails" (emitNotappChange)="notApplicable($event)" [showNotApplicable]="showNotApplicable">
+                </app-common-base-info>
+            </div>
+        </div>
+        <div *ngIf="invitationFlag !== true" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+            <div fxFlex="100%">
+                <h3 class="sub-header">CV validation Details</h3>
+            </div>
+        </div>
+        <!-- <div *ngIf="invitationFlag === true" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+            <div fxFlex="100%">
+                <h3 class="sub-header">Resume/CV</h3>
+            </div>
+        </div> -->
+        <!-- <div [formGroupName]="formarrayName" *ngIf="invitationFlag === true" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
+            <div [formArrayName]="item" *ngFor="let item of cvList; let i = index">
+                <div [formArrayName]="index" *ngFor="let particular of controls(item); let index = index; let count = count">
+                    <div [formGroupName]="i" fxLayout="row" fxLayoutGap="20px" *ngFor="let row of getparticularForm(particular); let i= index">
+                       <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                <mat-label>{{row.get('fieldName').value==='Name' ? "Name of the Applicant" : row.get('fieldName').value}}</mat-label>
+                                <input matInput [placeholder]="row.get('fieldName').value" formControlName="fieldValue" maxlength="120">
+                                <mat-error *ngIf="!!row.get('fieldValue')?.errors?.required">
+                                    {{row.get('fieldName')?.value}} is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        
+        <div [formGroupName]="formarrayName" *ngIf="invitationFlag !== true">
+            <div [formArrayName]="item" *ngFor="let item of cvList; let i = index">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+                    <div fxFlex="100%">
+                        <fieldset class="cvvali-fieldset">
+                            <legend>{{item}}:</legend>
+                            <div fxLayout="row" class="cvvali">
+                                <div fxFlex="100%">
+                                    <div fxLayout="row" fxLayoutGap="20px" class="cvvali">
+                                        <div fxFlex="25%" class="border-right pr-20 mb-15 border-bottom">
+                                            <p><strong>Particular</strong></p>
+                                        </div>
+                                        <div fxFlex="25%" class="mb-15 border-bottom">
+                                            <p><strong>CV/Resume</strong></p>
+                                        </div>
+                                        <div fxFlex="25%" class="mb-15 border-bottom">
+                                            <p><strong>BGV Forms</strong></p>
+                                        </div>
+                                        <div fxFlex="25%" class="mb-15 border-bottom">
+                                            <p><strong>Supporting Documents</strong></p>
+                                        </div>
+                                    </div>
+
+                                    <div [formArrayName]="index" *ngFor="let particular of controls(item); let index = index; let count = count">
+                                        <div [formGroupName]="i" fxLayout="row" fxLayoutGap="20px" *ngFor="let row of getparticularForm(particular); let i= index">
+
+                                            <div fxFlex="25%" class="border-right pr-20" [ngSwitch]="row.get('fieldType')?.value">
+                                                <div fxLayout="row">
+                                                    <div fxFlex="100%" class="mb-10">
+                                                        <p>&nbsp;</p>
+                                                    </div>
+                                                </div>
+                                                <div fxLayout="row">
+                                                    <div fxFlex="100%">
+                                                        <mat-form-field *ngSwitchCase="'TextBox'" appearance="outline" fxFlex="100%" floatLabel="always">
+                                                            <mat-label>{{row.get('fieldName').value}}</mat-label>
+                                                            <input matInput [placeholder]="row.get('fieldName').value" formControlName="fieldValue">
+                                                            <mat-error *ngIf="!!row.get('fieldValue')?.errors?.required">
+                                                                {{row.get('fieldName')?.value}} is required
+                                                            </mat-error>
+                                                        </mat-form-field>
+                                                        <mat-form-field *ngSwitchCase="'Date'" appearance="outline" fxFlex="100%" floatLabel="always">
+                                                            <mat-label>{{row.get('fieldName')?.value}}</mat-label>
+                                                            <input matInput [matDatepicker]="picker2" placeholder="{{row.get('fieldName')?.value}}" formControlName="fieldValue" (focus)="picker2.open()" (click)="picker2.open()" />
+                                                            <mat-datepicker-toggle matSuffix [for]="picker2">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #picker2></mat-datepicker>
+                                                            <mat-error *ngIf="!!row.get('fieldValue')?.errors?.required">
+                                                                {{row.get('fieldName')?.value}} is required
+                                                            </mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div fxFlex="25%">
+                                                <div fxLayout="row" fxLayoutGap="20px">
+                                                    <div fxFlex="100%">
+                                                        <div fxLayout="row" class="mb-15">
+                                                            <div fxFlex="100%">
+                                                                <mat-label class="lbl">Choose</mat-label>
+                                                                <mat-radio-group fxLayoutGap="20px" formControlName="cvFlag">
+                                                                    <mat-radio-button [value]=true>Yes
+                                                                    </mat-radio-button>
+                                                                    <mat-radio-button [value]=false>No</mat-radio-button>
+                                                                    <i *ngIf="row.get('cvFlag').value" class="material-icons csatus Priority text-bold">done</i>
+                                                                    <i *ngIf="!row.get('cvFlag').value" class="material-icons csatus Verizon text-bold">close</i>
+                                                                </mat-radio-group>
+                                                            </div>
+                                                        </div>
+                                                        <div fxLayout="row">
+                                                            <div fxFlex="100%">
+                                                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                    <mat-label>Comments</mat-label>
+                                                                    <input matInput placeholder="Comments" formControlName="cvRemarks">
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div fxFlex="25%">
+                                                <div fxLayout="row" fxLayoutGap="20px">
+                                                    <div fxFlex="100%">
+                                                        <div fxLayout="row" class="mb-15">
+                                                            <div fxFlex="100%">
+                                                                <mat-label class="lbl">Choose</mat-label>
+                                                                <mat-radio-group fxLayoutGap="20px"
+                                                                    formControlName="bgvFlag">
+                                                                    <mat-radio-button [value]=true>Yes
+                                                                    </mat-radio-button>
+                                                                    <mat-radio-button
+                                                                        [value]=false>No</mat-radio-button>
+                                                                    <i *ngIf="row.get('bgvFlag').value"
+                                                                        class="material-icons csatus Priority text-bold">done</i>
+                                                                    <i *ngIf="!row.get('bgvFlag').value"
+                                                                        class="material-icons csatus Verizon text-bold">close</i>
+                                                                </mat-radio-group>
+                                                            </div>
+                                                        </div>
+                                                        <div fxLayout="row">
+                                                            <div fxFlex="100%">
+                                                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                    <mat-label>Comments</mat-label>
+                                                                    <input matInput placeholder="Comments"
+                                                                        formControlName="bgvRemarks">
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div fxFlex="25%">
+                                                <div fxLayout="row" fxLayoutGap="20px">
+                                                    <div fxFlex="100%">
+                                                        <div fxLayout="row" class="mb-15">
+                                                            <div fxFlex="100%">
+                                                                <mat-label class="lbl">Choose</mat-label>
+                                                                <mat-radio-group fxLayoutGap="20px"
+                                                                    formControlName="supportDocFlag">
+                                                                    <mat-radio-button [value]=true>Yes
+                                                                    </mat-radio-button>
+                                                                    <mat-radio-button
+                                                                        [value]=false>No</mat-radio-button>
+                                                                    <i *ngIf="row.get('supportDocFlag').value"
+                                                                        class="material-icons csatus Priority text-bold">done</i>
+                                                                    <i *ngIf="!row.get('supportDocFlag').value"
+                                                                        class="material-icons csatus Verizon text-bold">close</i>
+                                                                </mat-radio-group>
+                                                            </div>
+                                                        </div>
+                                                        <div fxLayout="row">
+                                                            <div fxFlex="100%">
+                                                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                                    <mat-label>Comments</mat-label>
+                                                                    <input matInput placeholder="Comments"
+                                                                        formControlName="supportDocRemarks">
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="item !=='Header'" fxLayout="row" class="cvvali-footer">
+                                            <div fxFlex="100%" fxLayoutAlign="end center" fxLayoutGap="8px">
+                                                <button *ngIf="(index === count -1)" [ngClass]="fileBtn?'page-btn disabled':''" mat-flat-button color="primary" (click)="addnewComp(item, particular)">Add</button>
+                                                <button *ngIf="count >1" [ngClass]="fileBtn?'page-btn disabled':''" mat-flat-button color="warn" (click)="removeCV(index, item)">Delete</button>
+                                                <!-- <button mat-flat-button>Clear All</button> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="screeningService.invitationFlag !== true && invitationFlag !== true && !showInSuff"
+            fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayo.ut.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+            [formGroupName]="'screeningComponentInfo'">
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Select Status</mat-label>
+                    <mat-select placeholder="Select Status" formControlName="screeningStatusId"
+                        (selectionChange)="onSelectionChange($event.value)" [required]="!showInSuff">
+                        <mat-option *ngFor="let option of items" [value]="option.value">
+                            {{ option.label }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="!!mainForm?.get(screeningComponentInfo)?.get('screeningStatusId')?.errors?.required">Status
+                        is
+                        required</mat-error>
+
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
+            <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
+                [formGroupName]="'screeningComponentInfo'" *ngIf="!fileBtn">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Remarks</mat-label>
+                    <textarea #remark formControlName="remark" maxlength="1000" matInput
+                        placeholder="Remarks"> </textarea>
+                    <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
+                </mat-form-field>
+            </div>
+            <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                [formGroupName]="'screeningComponentInfo'"
+                *ngIf="!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length">
+                <mat-label class="lbl">Choose</mat-label>
+                <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise
+                    Insufficiency</mat-checkbox>
+            </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" *ngIf="mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0">
+            <div fxFlex="100%">
+                <div class="alert alert-info" role="alert">
+                    <h4>Insufficiency Clearance Remarks: </h4>
+                    <span *ngFor="let insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; let count = count; let i= index">
+            {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" *ngIf="showInSuff">
+            <div fxFlex="100%">
+                <app-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm" [compBaseDetails]="mainForm.get('screeningComponentInfo').value" [formgroupName]="'screeningInsufficiency'">
+                </app-raise-insufficiency>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+                <app-screening-documents [fileBtn]="fileBtn" [cVflag]="true" [mainForm]="mainForm" [formgroupName]="'screeningComponentInfo'" [dupScreeningDoc]="screeningComponent.componentDocument" [validationFlag]="nFlag !== true"></app-screening-documents>
+            </div>
+        </div>
+
+    </div>
+</form>
+<!-- {{mainForm.value|json}} -->

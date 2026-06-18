@@ -1,0 +1,129 @@
+﻿<div [formGroup]="contactForm">
+  <div [formGroupName]="contactformGroupName">
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Email ID</mat-label>
+          <input matInput type="email" placeholder="Email ID" formControlName="emailaddress" autocomplete="off"
+            role="presentation" />
+          <mat-icon matPrefix><i class="icon-mail"></i></mat-icon>
+          <button mat-icon-button matSuffix color="primary" [matTooltip]="(index===-1)?'Add':'Update'"
+            matTooltipClass="accent-tooltip" (click)="add($event)">
+            <mat-icon class="btn-inputIcon"><i class="icon-plus-circle"></i></mat-icon>
+          </button>
+          @if (contactForm?.get(contactformGroupName).get('emailaddress')?.errors?.required) {
+            <mat-error>
+            Email ID is required</mat-error>
+          }
+          @if (contactForm?.get(contactformGroupName).get('emailaddress')?.errors?.incorrect) {
+            <mat-error>
+            Please enter valid Email </mat-error>
+          }
+          @if (contactForm?.get(contactformGroupName).get('emailaddress')?.errors?.alreadyExist) {
+            <mat-error>
+            Email alreay exist, Please try another one</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+    @if (contactForm?.get(contactformGroupName)?.value?.contact?.length>0) {
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div class="add-data">
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              @for (contact of contactForm.get(contactformGroupName).value.contact; track contact; let i = $index) {
+                <div>
+                  <div class="add-title">
+                    <span>{{contact.contactData}}</span>
+                  </div>
+                  <div class="add-titleaction">
+                    <ul>
+                      <li><a (click)="editemail(i)">Edit</a></li>
+                      <li><a (click)="removecontrol(i)">Delete</a></li>
+                    </ul>
+                  </div>
+                </div>
+              }
+            </div>
+            <!-- <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <mat-chip-grid #chipList aria-label="Fruit selection">
+              <mat-chip-row [removable]="true"
+                *ngFor="let contact of contactForm.get('commonEmailDet').value.contact; let i = index">
+                <div class="add-title">
+                  <span>{{contact.contactData}}</span>
+                </div>
+                <div class="add-titleaction">
+                  <ul>
+                    <li><a (click)="editemail(i)">Edit</a></li>
+                    <li><a (click)="removecontrol(i)">Delete</a></li>
+                  </ul>
+                </div>
+              </mat-chip-row>
+            </mat-chip-grid>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+</div>
+
+
+
+
+
+<!-- <div [formGroup]="contactForm">
+<div [formArrayName]=formArrayName *ngFor="let item of getContactFormGroup(); let i = index">
+  <div [formGroupName]="i">
+    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px">
+      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Email Type</mat-label>
+          <mat-select matNativeControl formControlName="lookupId">
+            <mat-option value=''>----Select Email Type----</mat-option>
+            <mat-option *ngFor="let categories of emailtypeList" [value]="categories.lookUpId">
+            {{ categories.lookUpName }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="item?.get('lookupId')?.errors?.required">
+          Email Type is required</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Email ID</mat-label>
+          <input email="true" matInput type="email" formControlName="emailaddress" placeholder="Email ID"
+            autocomplete="off" role="presentation" [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
+            (matChipInputTokenEnd)="add($event,i)" />
+          <mat-error *ngIf="item.get('emailaddress')?.errors?.incorrect">
+          Please enter valid Email </mat-error>
+          <mat-error *ngIf="item.get('emailaddress')?.errors?.alreadyExist">
+          Email alreay exist, Please try another one </mat-error>
+          <mat-hint class="adrem">
+            <button mat-button color="primary" matTooltip="Add" *ngIf="(i === rowCount-1) && (contactFilter.length-1 !== i)"
+              matTooltipClass="accent-tooltip" (click)="addItem()"> <i class="icon-plus-circle"></i> </button>
+              <button type="reset" mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                (click)="removecontrol(i)" *ngIf="i!=rowCount + 1 && rowCount !== 1"> <i class="icon-x-circle"></i>
+              </button>
+            </mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px">
+        <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%">
+          <mat-chip-grid #chipList aria-label="Fruit selection">
+            <mat-chip-row *ngFor="let fruit of item.get('contact').value" [removable]="true"
+              (removed)="remove(fruit, i)">
+              {{fruit.contactData}}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip-row>
+          </mat-chip-grid>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div> -->

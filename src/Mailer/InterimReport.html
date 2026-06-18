@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Untitled Document</title>
+</head>
+
+<body>
+<div style="border: 1px solid #bcbdbe; color: #121212; font-family: Roboto, Helvetica, Arial, sans-serif; line-height: 1.75;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tbody>
+      <tr>
+        <td style="padding: 30px;"><div style="border: 1px solid #bcbdbe;background: #dedede;text-align: center;width: 100%;">
+            <h1 style="margin: 0px;font-weight: 500;font-size: 20px;text-transform: uppercase;padding: 20px;"> <span style="font-weight: 700;font-size:34px;letter-spacing: 0.8px;">I</span>nterim <span style="font-weight: 700;font-size:34px;letter-spacing: 0.8px;">R</span>eport</h1>
+          </div></td>
+      </tr>
+      <tr>
+        <td style="padding: 0 30px 30px 30px;"><div style="margin-bottom: 20px;">
+            <table style="width: 100%;border-radius: 3px;border: 1px solid #bcbdbe;
+    border-collapse: collapse;" cellpadding="0" cellspacing="0">
+              <tbody>
+                <tr>
+                  <th width="22%" style="border: 1px solid #bcbdbe; padding: 10px; background: #dedede; font-size: 15px; font-weight: 500; vertical-align: middle; text-align: left; line-height: 1.5em;">Name of Candidate</th>
+                  <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"
+              colspan="3"> {{
+                    finalReport.candidateDetail.firstName +
+                    " " +
+                    finalReport.candidateDetail.middleName +
+                    " " +
+                    finalReport.candidateDetail.lastName
+                    }} </td>
+                </tr>
+                <tr>
+                  <th style="border: 1px solid #bcbdbe; padding: 10px; background: #dedede; font-size: 15px; font-weight: 500; vertical-align: middle; text-align: left; line-height: 1.5em;"> Date Initiated</th>
+                  <td width="28%" style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"> {{
+                    finalReport.candidateDetail.dateInitiated
+                    ? (finalReport.candidateDetail.dateInitiated
+                    | date: "dd/MM/yyyy , h:mm a")
+                    : "N/A"
+                    }} </td>
+                  <th width="22%" style="border: 1px solid #bcbdbe; padding: 10px; background: #dedede; font-size: 15px; font-weight: 500; vertical-align: middle; text-align: left; line-height: 1.5em;">Reference No.</th>
+                  <td width="28%"  style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"> {{
+                    finalReport.candidateDetail.referenceNo
+                    ? finalReport.candidateDetail.referenceNo
+                    : "N/A"
+                    }} </td>
+                </tr>
+                <tr>
+                  <th style="border: 1px solid #bcbdbe; padding: 10px; background: #dedede; font-size: 15px; font-weight: 500; vertical-align: middle; text-align: left; line-height: 1.5em;"> Client</th>
+                  <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"> {{
+                    finalReport.candidateDetail.clientName
+                    ? finalReport.candidateDetail.clientName
+                    : "N/A"
+                    }} </td>
+                  <th style="border: 1px solid #bcbdbe; padding: 10px; background: #dedede; font-size: 15px; font-weight: 500; vertical-align: middle; text-align: left; line-height: 1.5em;"> Date of Report</th>
+                  <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"> {{
+                    finalReport.candidateDetail.dateOfReport
+                    ? (finalReport.candidateDetail.dateOfReport
+                    | date: "dd/MM/yyyy")
+                    : "N/A"
+                    }} </td>
+                </tr>
+                <tr>
+                  <th style="border: 1px solid #bcbdbe; padding: 10px; background: #dedede; font-size: 15px; font-weight: 500; vertical-align: middle; text-align: left; line-height: 1.5em;"> Applicant ID</th>
+                  <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"> {{
+                    finalReport.candidateDetail.applicantId
+                    ? finalReport.candidateDetail.applicantId : "N/A"
+                    }} </td>
+                  <th style="border: 1px solid #bcbdbe; padding: 10px; background: #dedede; font-size: 15px; font-weight: 500; vertical-align: middle; text-align: left; line-height: 1.5em;"> Date of Birth</th>
+                  <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"> {{
+                    finalReport.candidateDetail.dateOfBirth
+                    ? (finalReport.candidateDetail.dateOfBirth
+                    | date: "dd/MM/yyyy")
+                    : "N/A"
+                    }} </td>
+                </tr>
+                <tr>
+                  <th style="border: 1px solid #bcbdbe; padding: 10px; background: #dedede; font-size: 15px; font-weight: 500; vertical-align: middle; text-align: left; line-height: 1.5em;"> Package Type</th>
+                  <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"> {{
+                    finalReport.candidateDetail.packageType
+                    ? finalReport.candidateDetail.packageType
+                    : "N/A"
+                    }} </td>
+                  <th style="border: 1px solid #bcbdbe; padding: 10px; background: #dedede; font-size: 15px; font-weight: 500; vertical-align: middle; text-align: left; line-height: 1.5em;"> Color Code</th>
+                  <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"><span><strong style="color: #08BA53;text-transform: uppercase;text-align: center;font-weight: 500;"> {{
+                    finalReport.candidateDetail.colorCode
+                    ? finalReport.candidateDetail.colorCode
+                    : "N/A"
+                    }}</strong></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="border: 1px solid #bcbdbe;background: #efefef;padding: 10px;margin-bottom: 20px;">
+            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr>
+                  <td><div
+                style="background:#d50000; border: 1px solid rgba(0, 0, 0, 0.3); border-radius: 4px; height: 20px; float: left;  margin-right: 5px; width: 20px;"> </div>
+                    Major Discrepancy </td>
+                  <td><div
+                style="background:#f9be00; border: 1px solid rgba(0, 0, 0, 0.3); border-radius: 4px; height: 20px; float: left;  margin-right: 5px; width: 20px;"> </div>
+                    Minor Discrepancy </td>
+                  <td><div
+                style="background: #ff8c00; border: 1px solid rgba(0, 0, 0, 0.3); border-radius: 4px; height: 20px; float: left;  margin-right: 5px; width: 20px;"> </div>
+                    Inaccessible for verification/Unable to verify/Inputs Required </td>
+                  <td><div
+                style="background: #08BA53; border: 1px solid rgba(0, 0, 0, 0.3); border-radius: 4px; height: 20px; float: left;  margin-right: 5px; width: 20px;"> </div>
+                    Clear Report </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="margin: 20px 0;">
+            <h1 style="margin: 0px;font-weight: 500;font-size: 20px;padding: 0 20px;text-align: center;">Executive Summary</h1>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <table style="width: 100%; border-radius: 3px; border: 1px solid #bcbdbe; border-collapse: collapse;">
+              <tbody>
+                <tr>
+                  <th colspan="4" style="background: #cdcece none repeat scroll 0 0;border: 1px solid #bcbdbe;;font-size: 15px;font-weight: 600;	letter-spacing: 0.5px;min-height: 5px;padding: 13px 15px;text-align: center;text-transform: uppercase;"> {{ edcl.header }} </th>
+                </tr>
+                <tr>
+                  <th width="22%" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500;text-align: left; "> Type of Check</th>
+                  <th width="22%" scope="col" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500; line-height: 1.5em; text-align: center"> Verification Date</th>
+                  <th width="46%" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500; line-height: 1.5em;text-align: center" scope="col"> Berif Details </th>
+                  <th width="10%" scope="col" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500; line-height: 1.5em;text-align: center"> Status</th>
+                </tr>
+                <tr *ngFor="
+                        let edclComp of edcl.component;
+                        let edclCompindex = index
+                      ">
+                  <th scope="row" style="background: #dedede;border: 1px solid #bcbdbe;font-size: 15px;font-weight: 500;padding: 10px;text-align: left;"> {{
+                    edclComp.typeOfCheck ? edclComp.typeOfCheck : "N/A"
+                    }} </th>
+                  <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"> {{
+                    edclComp.verificationDate
+                    ? (edclComp.verificationDate | date: "dd/MM/yyyy")
+                    : "N/A"
+                    }} </td>
+                  <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"><span *ngFor="
+                            let val of edclComp['briefDetails'];
+                            let l = last
+                          "> {{ edclComp[val] }} <span *ngIf="!l">,</span> </span></td>
+                  <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: center;"><span [ngClass]="{'colorGreen':edclComp.status ==='Green' , 
+                      'colorYellow':edclComp.status ==='Yellow' ,
+                      'colorAmber':edclComp.status ==='Magenta',
+                      'colorRed':edclComp.status ==='Stop', 
+                      'colorOrange':edclComp.status ==='Orange'}"> {{ edclComp.status ? edclComp.status : "N/A" }}</span></td>
+                  <td *ngIf="
+                          edclComp['screeningCompId'] === null ||
+                          edclComp['status'] === null
+                        "> N/A </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="margin: 20px 0;">
+            <h1 style="margin: 0px;font-weight: 500;font-size: 20px;padding: 0 20px;text-align: center;">Summary Details</h1>
+          </div>
+          <div style="margin-bottom: 20px;"> <span *ngIf="summaryContentList.length > 0 && 1 !== 1">
+            <table *ngFor="let SCL of summaryContentList; let i = index" style="width: 100%; border-radius: 3px; border: 1px solid #bcbdbe; border-collapse: collapse;">
+              <tbody>
+                <tr>
+                  <th scope="row" colspan="3" style="background: #cdcece none repeat scroll 0 0;border: 1px solid #bcbdbe;;font-size: 15px;font-weight: 600; letter-spacing: 0.5px;min-height: 5px;padding: 13px 15px;text-align: center;text-transform: uppercase;"> {{ SCL.header }} </th>
+                </tr>
+                <tr *ngFor="let SCLC of SCL.content; let j = index">
+                  <th width="26%" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500;text-align: left;line-height: 1.5em; " scope="row">{{ SCLC.caption }}</th>
+                  <th width="37%" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500;text-align: center;line-height: 1.5em; " scope="row">{{ SCLC.reportVal }}</th>
+                  <th width="37%" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500;text-align: center;line-height: 1.5em; " scope="row">{{ SCLC.applicanttval }}</th>
+                </tr>
+              </tbody>
+            </table>
+            </span> <span *ngIf="summaryContentList.length > 0">
+            <table  *ngFor="let SCL of summaryContentList; let i = index" style="width: 100%; border-radius: 3px; border: 1px solid #bcbdbe; border-collapse: collapse;">
+              <tbody>
+                <tr>
+                  <th scope="row" colspan="3" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500;text-align: left;line-height: 1.5em; "> {{ SCL.header }} </th>
+                </tr>
+                <tr>
+                  <th width="26%" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500;text-align: left;line-height: 1.5em; " scope="row">Particulars</th>
+                  <th width="37%" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500;text-align: center;line-height: 1.5em; " scope="row">Application Details</th>
+                  <th width="37%" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500;text-align: center;line-height: 1.5em; " scope="row">Reported Details</th>
+                </tr>
+                <ng-container *ngIf="SCL.componentType !== 'companySiteVisit' || SCL.componentType !== 'socialMedia' || SCL.componentType !== 'employee' 
+                  || SCL.componentType !== 'referenceCheck'">
+                  <tr *ngFor="let SCLC of SCL.content; let j = index">
+                    <th scope="row" style="border: 1px solid #bcbdbe;padding: 10px;background: #dedede;font-size: 15px;font-weight: 500;text-align: left;line-height: 1.5em; "> {{ SCLC.caption ? SCLC.caption : "N/A" }} </th>
+                    <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"> {{ SCLC.applicanttVal ? SCLC.applicanttVal : "N/A" }} </td>
+                    <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;">{{ SCLC.reportVal ? SCLC.reportVal : "N/A" }}</td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="SCL.componentType === 'companySiteVisit'|| SCL.componentType !== 'socialMedia'  || SCL.componentType === 'employee' 
+                  || SCL.componentType === 'referenceCheck'">
+                  <tr *ngFor='let qn of SCL.miscRepQns; let i = index'>
+                    <th scope="row" style="background: #dedede;border: 1px solid #bcbdbe;font-size: 15px;font-weight: 500;padding: 10px;text-align: left;"> {{qn.miscQuestion}} </th>
+                    <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;"> {{SCL.miscAppQns[i].miscAnswer ? SCL.miscAppQns[i].miscAnswer : 'N/A'}} </td>
+                    <td style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left;">{{qn.miscAnswer}}</td>
+                  </tr>
+                </ng-container>
+                <tr> </tr>
+                <tr>
+                  <th scope="row" style="background: #dedede;border: 1px solid #bcbdbe;font-size: 15px;font-weight: 500;padding: 10px;text-align: left;">Remarks</th>
+                  <td colspan="2" style="border: 1px solid #bcbdbe;padding: 10px 15px;font-weight: normal;font-size: 14px;text-align: left; vertical-align: middle;">{{ SCL.remarks }}</td>
+                </tr>
+              </tbody>
+            </table>
+            </span>
+            <ng-container *ngIf="docContentList.length > 0">
+              <div class="cert" *ngFor="let dcl of docContentList; let i = index">
+                <h1  style="margin: 0px;font-weight: 500;font-size: 20px;padding: 0 20px;text-align: center;">Annexure {{i+1}}</h1>
+                <img id="image{{ i }}" src="" alt="" /> </div>
+            </ng-container>
+          </div>
+          <h3 style="font-weight: 700;font-size: 16px;text-align: center;margin: 20px;">End of Detailed Report</h3></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

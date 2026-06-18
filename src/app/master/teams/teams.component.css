@@ -1,0 +1,45 @@
+﻿/* 
+::ng-deep .p-float-label label {
+    top: -0.75rem !important;
+    font-size: 12px !important;
+    opacity: 1 !important;
+}
+ */
+
+ /* Force label to stay raised in PrimeNG v9 */
+/* .p-float-label.p-floatlabel-on > label {
+  top: -0.75em;
+  font-size: 12px;
+} */
+
+
+.float-wrap {
+  position: relative;
+  display: block;
+  margin-top: 8px;
+}
+
+.float-wrap label {
+  position: absolute;
+  top: -8px;
+  left: 8px;
+  font-size: 12px;
+  color: rgba(0,0,0,0.6);
+  background: #fff;
+  padding: 0 4px;
+}
+
+.float-wrap .p-multiselect {
+  width: 100% !important;
+  border: 1px solid rgba(0,0,0,0.38) !important;
+  border-radius: 4px !important;
+}
+
+.float-wrap .p-multiselect:hover {
+  border-color: #000 !important;
+}
+
+.float-wrap .p-multiselect.p-focus {
+  border: 2px solid #1976d2 !important;
+  box-shadow: none !important;
+}

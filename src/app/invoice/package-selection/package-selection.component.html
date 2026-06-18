@@ -1,0 +1,237 @@
+﻿<app-breadcrumb [routePath]="routePath" [btnSave]="breadcrumbFlags.btnSave" [btnSave]="breadcrumbFlags.btnSave"  [btnSaveDisabled]="!screenAuth.addFlag" (eventSave)="checkMatchpackcomp()" [toolTip]="breadcrumbFlags.toolTip">
+</app-breadcrumb>
+<div fxLayout="row" class="advSearch">
+  <div class="advSearch-forms">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <!--<div fxFlex="200px">
+          <mat-form-field fxFlex="100%">
+            <mat-label>Select Client</mat-label>
+            <mat-select [formControl]="clientId" placeholder="Select Client">
+              <mat-option>Select Client</mat-option>
+              <mat-option *ngFor="let agent of agentvalue" [value]="agent.clientId">
+                {{ agent.clientName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <app-auto-complete [selectProperties]='clientControls'> </app-auto-complete>
+
+        </div>-->
+        <div fxFlex="200px">
+          <div fxFlex="100%">
+            <mat-form-field fxFlex="100%">
+              <mat-label>Client Reference No. </mat-label>
+              <input maxlength="50" autocomplete="off" role="presentation" matInput [formControl]="clientRefNum" placeholder="Client Reference No.">
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- <div fxFlex="180px">
+        <mat-form-field fxFlex="100%">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="sampledatePicker" placeholder="Start Date" />
+          <mat-datepicker-toggle matSuffix [for]="sampledatePicker"> </mat-datepicker-toggle>
+          <mat-datepicker #sampledatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div fxFlex="180px">
+        <mat-form-field fxFlex="100%">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="sampledatePicker1" placeholder="End Date" />
+          <mat-datepicker-toggle matSuffix [for]="sampledatePicker1"> </mat-datepicker-toggle>
+          <mat-datepicker #sampledatePicker1></mat-datepicker>
+        </mat-form-field>
+      </div> -->
+    </div>
+  </div>
+</div>
+</div>
+<div fxFlex="100%" class="advSearch-btn">
+  <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <!-- <a (click)="searchInvoice()">Search</a><span>|</span> -->
+    <a (click)="searchInvoice()">Search</a>
+    <span>|</span><a (click)="resetInvoice()"> Reset</a>
+
+  </div>
+</div>
+
+</div>
+<div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+
+
+
+    <div fxLayout="row" fxLayoutGap="0px">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px">
+          <div fxFlex="100%" class="dt-viewBg">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px" fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
+              <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="45%" fxFlex.xs="100%" class="border-right">
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                  <div fxFlex="100%">
+                    <h4>Choose Package <span fxFlex></span>
+                  </h4>
+                </div>
+              </div>
+              @for (pack of packageInvoiceList; track pack; let i = $index) {
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                  <div fxFlex="100%">
+                    <div class="dt-list-scrollbar border-top" (click)="getRows(i);" style="overflow:auto">
+                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                        <div fxFlex="100%" [ngClass]="i === ind ? 'dt-list active' : 'dt-list'">
+                          <div class="team-details">
+                            <div class="teamL-Detail">
+                              <h5>{{pack.clientRefNo}}</h5>
+                              <div class="listrowlbl">
+                                <label>{{pack.clientApplicantId}}:</label>
+                                <em>{{pack.applicantId}}</em></div>
+                                <div class="listrowlbl">
+                                  <label>Client Name:</label>
+                                  <em>{{pack.clientName}}</em></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+                <div fxFlex="75%" fxFlex.lg="75%" fxFlex.md="75%" fxFlex.sm="100%" fxFlex.xs="100%">
+
+                  @for (packItem of packageInvoiceList; track packItem; let j = $index) {
+                    <div>
+                      @if (((ind === j))) {
+                        <div>
+                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+                            <div fxFlex="100%" class="choopacka-head">
+                              <div class="listrowlbl">
+                                <div fxFlex="50%" fxLayoutAlign="start center">
+                                  <label>Reference Number:</label>
+                                  <em>{{packItem.clientRefNo}}</em> </div>
+                                  <div fxFlex="50%" fxLayoutAlign="end center">
+                                    <label>{{packItem.clientApplicantId}}:</label>
+                                    <em>{{packItem.applicantId}}</em> </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px" class="teamdata-view">
+                                <div fxFlex="100%">
+                                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                    <div fxFlex="100%">
+                                      <h3 class="sub-header border-none">Screening Details</h3>
+                                    </div>
+                                  </div>
+                                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                    <div fxFlex="100%">
+                                      <mat-form-field fxFlex="30%">
+                                        <mat-select [formControl]="packageIdCtrl" placeholder="Select Package" (selectionChange)="changePackage($event.value,packItem.packageList)" >
+                                          <mat-option>Select Package</mat-option>
+                                          @for (packList of packItem.packageList; track packList) {
+                                            <mat-option [value]="packList.packageId">
+                                              {{ packList.packageName }}
+                                            </mat-option>
+                                          }
+                                        </mat-select>
+                                        @if (packageIdCtrl?.errors?.required) {
+                                          <mat-error>Package is required</mat-error>
+                                        }
+                                      </mat-form-field>
+                                      <div fxFlex="70%" fxLayoutAlign="end">
+                                        <app-feechange-history [clientRefNum]="packItem.clientRefNo">
+                                        </app-feechange-history>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  @if (packFlag === true) {
+                                    <div fxLayout="row" fxLayoutGap="20px">
+                                      <fieldset>
+                                        <legend>Package Components:</legend>
+                                        <mat-chip-grid>
+                                          @for (comp of packCompList; track comp; let i = $index) {
+                                            <mat-chip-row >
+                                              @if (comp.subComponent.length === 0) {
+                                                <span> {{ comp.componentName }} -
+                                                {{comp.noOfComp}}</span>
+                                              }
+                                              @if (comp.subComponent.length > 0) {
+                                                <span> {{ comp.componentName }} -
+                                                  @for (sub of comp.subComponent; track sub; let j = $index; let last = $last) {
+                                                    <span>
+                                                      {{sub.subComponentName}} - {{sub.noOfComp}}
+                                                    </span>
+                                                  }</span>
+                                                }
+                                              </mat-chip-row>
+                                            }
+                                          </mat-chip-grid>
+                                        </fieldset>
+                                      </div>
+                                    }
+                                    @for (screen of packItem.screeningDetail; track screen; let k = $index) {
+                                      <div>
+                                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px" fxFlex="100%">
+                                          <div fxFlex="100%">
+                                                            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="15px" class="scr-tbl" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                                    border-top: 1px solid rgba(0, 0, 0, 0.15);">
+                                              <div fxFlex="20%" class="scrntbl-verifiid">
+                                                <div class="scrntbl-verificationID"> <i class="icon-circle-fill"></i> {{packItem.acheckRef +''+ screen.screeningCompId}}</div>
+                                              </div>
+                                              <div fxFlex="50%" class="scrntbl-bodycontent">
+                                                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                                                  <div fxFlex="100%">
+                                                    <h3>{{screen.compName}}</h3>
+                                                  </div>
+                                                </div>
+                                                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" class="scrntbl-ul">
+                                                  <div fxFlex="100%">
+                                                    <ul>
+                                                      <li><i class="icon-basket-loaded"></i>{{screen.rptType}}</li>
+                                                      <li> <i class="icon-calendar-1"></i>{{((screen.receivedDate) ? (screen.receivedDate | date : 'dd/MM/yyyy') : 'N/A') }}
+                                                    </li>
+                                                    <li><i class="icon-globe"></i>{{screen.sourceCountry ? screen.sourceCountry: 'N/A'}}
+                                                  </li>
+                                                </ul>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div fxFlex="10%" class="scrntbl-check">
+                                            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+                                              <div fxFlex="100%" fxLayoutGap="20px">
+                                                <!-- <mat-checkbox (change)="asssignscmp($event, screen)">Allot</mat-checkbox> -->
+                                                @if (screen.rptType==='Individual') {
+                                                  <mat-checkbox (change)="asssignscmp($event, screen)">Allot</mat-checkbox>
+                                                }
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div fxFlex="20%" class="scrntbl-check" >
+                                            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+                                              <div fxFlex="100%" fxLayoutGap="20px">
+                                                @if (screen.rptType==='Package') {
+                                                  <mat-checkbox (change)="asssignPackcmp($event, screen)">Move to individual</mat-checkbox>
+                                                }
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>

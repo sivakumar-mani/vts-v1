@@ -1,0 +1,92 @@
+<mat-dialog-content>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div fxFlex="100%" class="text-center">
+      <h3 class="m-0">{{ headerText }}</h3>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+    fxLayoutGap="10px grid" [formGroup]="addressForm">
+    <div fxFlex="33.3%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Zip Code</mat-label>
+        <input preventCutCopyPaste type="text" matInput placeholder="Zip Code" autocomplete="off"
+          maxlength="75" role="presentation" formControlName="postalCode" required />
+        @if (!!addressForm?.get('postalCode')?.errors?.required) {
+          <mat-error> Zip Code is
+          required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.3%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Country</mat-label>
+        <input type="text" matInput placeholder="Country" autocomplete="off" maxlength="75" role="presentation"
+          formControlName="countryName" required />
+        @if (!!addressForm?.get('countryName')?.errors?.required) {
+          <mat-error> Country is
+          required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    @if (type === 'locationName' || type === 'cityName' || type === 'districtName' || type === 'stateName') {
+      <div fxFlex="33.3%"
+        >
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>State</mat-label>
+          <input type="text" matInput placeholder="State" autocomplete="off" maxlength="75" role="presentation"
+            formControlName="stateName" required />
+          @if (!!addressForm?.get('stateName')?.errors?.required) {
+            <mat-error> State is
+            required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+    <div fxFlex="33.3%"
+      >
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>District/City</mat-label>
+        <input type="text" matInput placeholder="District/City" autocomplete="off" maxlength="75" role="presentation"
+          formControlName="districtName" required />
+        @if (!!addressForm?.get('districtName')?.errors?.required) {
+          <mat-error> District is
+          required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.3%"
+      >
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Place/Location/Area</mat-label>
+        <input type="text" matInput placeholder="Place/Location/Area" autocomplete="off" maxlength="75" role="presentation"
+          formControlName="cityName" required />
+        @if (!!addressForm?.get('cityName')?.errors?.required) {
+          <mat-error> Place/Location/Area is
+          required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.3%" >
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Village/Town</mat-label>
+        <input type="text" matInput placeholder="Village/Town" autocomplete="off" maxlength="75" role="presentation"
+          formControlName="locationName" required />
+        @if (!!addressForm?.get('locationName')?.errors?.required) {
+          <mat-error> Village/Town is
+          required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+  <button mat-flat-button color="warn" (click)="saveAddress()">
+    Save
+  </button>
+  <button mat-stroked-button [mat-dialog-close]="true" (click)="dialog.closeAll()">
+    Cancel
+  </button>
+
+</mat-dialog-actions>
+
+<!-- {{addressForm.value|json}} -->

@@ -1,0 +1,1069 @@
+﻿<app-breadcrumb [btnAdd]="breadcrumbFlags.btnAdd" [btnSave]="breadcrumbFlags.btnSave"
+  [btnBack]="breadcrumbFlags.btnBack" [btnResetTbl]="breadcrumbFlags.btnResetTbl" (eventAdd)="addCaseCreation()"
+  [routePath]="routePath" [btnReset]="breadcrumbFlags.btnReset" [btnAddDisabled]="!screenAuth.addFlag"
+  [btnExcelExport]="btnExcelExport" [btnValidate]="btnValidate" (eventValidate)="validateUploadFile(false)" 
+  [btnExportDisabled]="!screenAuth.exportFlag" [btnExport]="btnExport" (eventExport)="getCaseImportTemplete(caseDetails?.scopeByPassFlag,caseDetails?.ctsFlag)" (eventBack)="closeForm();isMailIdSave= false;"
+  (eventSave)="saveCaseCreation()" [toolTip]="breadcrumbFlags.toolTip" (eventReset)="resetForm()"
+  (eventResetTbl)="userData.filters = '';resetTable()" [toolTip]="breadcrumbFlags.toolTip" [btnAddUpload]="btnAddUpload"
+  (eventAddUpload)="bulkUpload()" (eventExcelExport)="exportAsExcelFile()">
+</app-breadcrumb>
+<mat-card>
+  <div fxLayout="row">
+    <mat-card-header fxFlex="100%">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+          fxLayoutGap="10px">
+          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+            fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+            <mat-card-title>
+              <h1 class="header-title">Case Creation</h1>
+            </mat-card-title>
+          </div>
+          <span fxFlex></span>
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+            fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+            <div class="tbl-commonsearch" *ngIf="!showFlag">
+              <mat-form-field fxFlex="100%">
+                <mat-label></mat-label>
+                <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                <input #global matInput placeholder="Search here..." type="text" pInputText size="50" autocomplete="off"
+                   (blur)="globalSearch(global.value)" [(ngModel)]="searchValue" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-header>
+  </div>
+  <mat-card-content>
+    <div *ngIf="showFlag">
+      <form [formGroup]="caseCreationFormGroup" autocomplete="off" id="ngForm">
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="cloumn wrap"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <app-auto-complete (selectionChange)="getClientId($event); enableNoCases()"
+              [selectProperties]="clientControls"> </app-auto-complete>
+          </div>
+          <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+              fxLayout.xs="cloumn wrap" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Site Name</mat-label>
+                  <input matInput placeholder="Select Site Name" formControlName="siteNo"
+                    [matAutocomplete]="autoComponent" #compInput (focus)="siteItems(compInput.value)"
+                    (keyup)="siteKeyupFunction($event, compInput.value)" (input)="siteItems(compInput.value)"
+                    (click)="compInput.select()" (blur)="checkVal(compInput.value)" required />
+                  <mat-error *ngIf="caseCreationFormGroup?.get('siteNo')?.errors?.required"> Site Name required
+                  </mat-error>
+                  <mat-error *ngIf="caseCreationFormGroup?.get('siteNo')?.errors?.incorrect"> Site Name is not valid
+                  </mat-error>
+                  <mat-autocomplete #autoComponent="matAutocomplete" [displayWith]="displaySiteFn">
+                    <mat-option [value]="comp.siteId" *ngFor="let comp of sitefilterlist"
+                      class="autocom-option autocom-tr"> <span
+                        [innerHTML]="comp.siteNoWithsiteName | highlight: compInput.value"></span> </mat-option>
+                    <mat-option *ngIf="sitefilterlist.length == 0">
+                      <div class="no-record"><span>No Data Found</span></div>
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%" *ngIf="!uploadFlag">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>No. of Candidates</mat-label>
+                  <input formControlName="noOfCases" (blur)="caseCountCreate();isFocused = true" maxlength="2"
+                    appNumberOnly [NumberOnly]="false" autocomplete="off" role="presentation" matInput
+                    placeholder="No. of Candidates" required />
+                  <mat-error *ngIf="caseCreationFormGroup?.get('noOfCases')?.errors?.required">No. of Candidates is
+                    required </mat-error>
+                  <mat-error *ngIf="caseCreationFormGroup?.get('noOfCases')?.errors?.min">Min-1 </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+            <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%" class="mb-15"
+              *ngIf="userData.applicationId === 1 && uploadFlag && !caseDetails?.scopeByPassFlag === true && !caseDetails?.ctsFlag === true">
+              <mat-label class="lbl">Choose </mat-label>
+              <mat-checkbox formControlName="autoAssign">Auto assign to scope team members</mat-checkbox>
+            </div>
+
+            <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%" class="mb-15"
+              *ngIf="userData.applicationId === 1">
+              <mat-label class="lbl">Choose </mat-label>
+              <mat-checkbox formControlName="companySiteVisitFlag">Company Site Visit</mat-checkbox>
+            </div>
+          </div>
+          <div fxLayout="row" *ngIf="uploadFlag">
+            <div fxFlex="100%">
+              <mat-label class="lbl">Upload Document</mat-label>
+              <mat-label class="mat-hint-upload">Acceptable file Formats : xlsx, xls </mat-label>
+              <mat-label class="mat-hint-upload"><span class="red text-semi-bold">Note:&nbsp;</span>Reference number
+                will be generate based on the client creation settings.</mat-label>
+              <div class="file-upload">
+                <i class="material-icons">cloud_upload</i>
+                <span>Browse here...</span>
+                <input type="file" #fileInput (click)="fileInput.value = null" (change)="openUploadDoc($event)" />
+              </div>
+              <div class="file-names mt-10" *ngIf="bulkUploadDoc?.name">
+                <div class="file-upload-files"> <a routerLinkActive="active-link">{{bulkUploadDoc?.name}}</a>
+                  <button type="button" class="close" aria-label="Close" (click)="removeDocument()">
+                    <span aria-hidden="true">&times;</span> </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column"
+            fxLayout.xs="cloumn wrap" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+            *ngIf="!uploadFlag">
+            <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                <mat-label>Document Folder path</mat-label>
+                <input formControlName="docFolderPath" autocomplete="off" role="presentation" matInput
+                  placeholder="Document Folder path" required />
+                <mat-error *ngIf="caseCreationFormGroup?.get('docFolderPath')?.errors?.required">Document Folder path is
+                  required </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
+              *ngIf="userData.applicationId === 1">
+              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                fxLayout.xs="cloumn wrap" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Received Date & Time</mat-label>
+                    <input matInput formControlName="receivedDateTime" required [max]="currentDate"
+                      matTooltipClass="accent-tooltip"
+                      matTooltip="{{caseCreationFormGroup?.get('receivedDateTime')?.value| date : 'dd/MM/yyyy hh:mm a'}}"
+                      [owlDateTimeTrigger]="dateTime" [owlDateTime]="dateTime" placeholder="Received Date & Time">
+                    <mat-datepicker-toggle [owlDateTimeTrigger]="dateTime" matSuffix></mat-datepicker-toggle>
+                    <owl-date-time [pickerMode]="'popup'" #dateTime></owl-date-time>
+                    <mat-error>Received Date & Time is required </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%" *ngIf="userData.applicationId === 1">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Case Initiation Date</mat-label>
+                    <input matInput formControlName="caseInitiationDateTime" required 
+                         matTooltipClass="accent-tooltip" [min]="caseCreationFormGroup?.get('receivedDateTime').value"
+                      matTooltip="{{caseCreationFormGroup?.get('caseInitiationDateTime')?.value| date : 'dd/MM/yyyy hh:mm a'}}"
+                      [owlDateTimeTrigger]="dateTime" [owlDateTime]="dateTime" placeholder="Case Initiation Date">
+                    <mat-datepicker-toggle [owlDateTimeTrigger]="dateTime" matSuffix></mat-datepicker-toggle>
+                    <owl-date-time [pickerMode]="'popup'" #dateTime></owl-date-time>
+                    <mat-error>Case Initiation Date & Time is required </mat-error>
+                    <mat-error *ngIf="!!caseCreationFormGroup?.get('caseInitiationDateTime')?.invalid">Case initiation
+                      date should be greater than or equal to received date & time </mat-error>
+                  </mat-form-field>
+                </div>
+                <!-- <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%"
+                  *ngIf="userData.applicationId === 1">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Case Initiation Date</mat-label>
+                    <input matInput formControlName="caseInitiationDateTime" required
+                      matTooltip="{{caseCreationFormGroup?.get('caseInitiationDateTime')?.value| date : 'dd/MMM/yyyy hh:mm a'}}"
+                      [min]="caseCreationFormGroup?.get('receivedDateTime').value" (focus)="dateTime1.open()" (click)="dateTime1.open()"
+                      [matDatepicker]="dateTime1" placeholder="Case Initiation Date"
+                      matTooltipClass="accent-tooltip">
+                      <mat-datepicker-toggle matSuffix [for]="dateTime1"></mat-datepicker-toggle>
+                      <mat-datepicker #dateTime1></mat-datepicker>
+                    <mat-error *ngIf="!!caseCreationFormGroup?.get('caseInitiationDateTime')?.invalid">Case initiation
+                      date should be greater than or equal to received date & time </mat-error>
+                  </mat-form-field>
+                </div> -->
+              </div>
+            </div>
+            <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%" class="mb-15"
+              *ngIf="userData.applicationId === 1 && !caseDetails?.scopeByPassFlag === true && !caseDetails?.ctsFlag === true">
+              <mat-label class="lbl">Choose </mat-label>
+              <mat-checkbox formControlName="autoAssign">Auto assign to scope team members</mat-checkbox>
+            </div>
+            <!-- 
+            <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="userData.applicationId === 1">
+              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                fxLayout.xs="cloumn wrap" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Received Date & Time</mat-label>
+                  <input matInput formControlName="receivedDateTime" required [max]="currentDate"
+                      [owlDateTimeTrigger]="dateTime" [owlDateTime]="dateTime">
+                      <mat-datepicker-toggle [owlDateTimeTrigger]="dateTime" matSuffix></mat-datepicker-toggle>
+                    <owl-date-time [pickerMode]="'popup'" #dateTime></owl-date-time>
+                    <mat-error>Received Date & Time is required </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="50%" fxFlex.xs="100%" *ngIf="userData.applicationId === 1">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Case Inititation Date</mat-label>
+                    <input matInput formControlName="caseInitiationDateTime" required
+                      [min]="caseCreationFormGroup?.get('receivedDateTime').value" [owlDateTimeTrigger]="dateTime1"
+                      [owlDateTime]="dateTime1">
+                      <mat-datepicker-toggle [owlDateTimeTrigger]="dateTime1" matSuffix></mat-datepicker-toggle>
+                    <owl-date-time [pickerMode]="'popup'" #dateTime1></owl-date-time>
+                    <mat-error *ngIf="!!caseCreationFormGroup?.get('caseInitiationDateTime')?.invalid">Case initiation
+                      date
+                      should be greater than or equal to received date & time
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="25%" fxFlex.sm="50%" fxFlex.xs="100%" class="mb-20" *ngIf="userData.applicationId === 1">
+                  <mat-label class="lbl">Choose </mat-label>
+                  <mat-checkbox formControlName="autoAssign">Auto assign to scope team members</mat-checkbox>
+                </div>
+              </div>
+            </div> -->
+          </div>
+      </form> 
+      <span *ngIf="!!caseCreationFormGroup?.get('caseInitiationDateTime')?.invalid"> <br> </span>
+      <ng-template [ngTemplateOutlet]="pTableTemplate" *ngIf="!uploadFlag"></ng-template>
+    </div>
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.xs="10px grid" *ngIf="!showFlag">
+      <div fxFlex="100%">
+        <p-table #dt [columns]="filednames" [totalRecords]="totalpages" [value]="caseLists" [resizableColumns]="true" [reorderableColumns]="true"
+          [scrollable]="true" scrollHeight="" [paginator]="true"  [scrollable]="true" [lazy]="true" frozenWidth="100px" [rows]="itemperpage" (onLazyLoad)="LoadHistory($event)"
+          [frozenColumns]="frozenCols" columnResizeMode="expand">
+          <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+              <col *ngFor="let col of columns" style="width:200px" />
+            </colgroup>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns" [ngSwitch]="col.field" pReorderableColumn pResizableColumn
+                [ngClass]="{ 'actionrow': col.field === 'action' }">
+                <span [pSortableColumn]="col.field">
+                  <span class="desg-col" *ngIf='col.field == "action"'> <i class="icon-grid" *ngSwitchCase="'action'"
+                      matTooltip="Filter Columns" matTooltipClass="accent-tooltip"
+                      (click)='actionTrigger.openMenu()'></i> </span>
+                  <div class="action-name" [ngClass]="{ 'thname': col.field !== 'action' }">{{ col.header }}</div>
+                  <p-sortIcon *ngIf="col.field !== 'action'" (click)="currentPage = 1"
+                    matTooltip="Sorting" matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
+                    ariaLabelDesc="Activate to sort in descending order"
+                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                </span> 
+				
+				<!--<span class="ico-fieldsearch"> <i *ngSwitchCase="'candidateName'" class="icon-search2"
+                    matTooltip="Search" matTooltipClass="accent-tooltip" (click)="candidateNameTrigger.openMenu()"></i>
+                  <i *ngSwitchCase="'userName'" class="icon-search2" matTooltip="Search"
+                    matTooltipClass="accent-tooltip" (click)="userNameTrigger.openMenu()"></i> <i
+                    *ngSwitchCase="'clientReferenceNo'" class="icon-search2" matTooltip="Search"
+                    matTooltipClass="accent-tooltip" (click)="clientReferenceNoTrigger.openMenu()"></i> <i
+                    *ngSwitchCase="'clientName'" class="icon-search2" matTooltip="Search"
+                    matTooltipClass="accent-tooltip" (click)="clientNameTrigger.openMenu()"></i> <i
+                    *ngSwitchCase="'siteName'" class="icon-search2" matTooltip="Search" matTooltipClass="accent-tooltip"
+                    (click)="siteNameTrigger.openMenu()"></i> <i *ngSwitchCase="'applicantId'" class="icon-search2"
+                    matTooltip="Search" matTooltipClass="accent-tooltip" (click)="applicantIdTrigger.openMenu()"></i> <i
+                    *ngSwitchCase="'chargeCode'" class="icon-search2" matTooltip="Search"
+                    matTooltipClass="accent-tooltip" (click)="chargeCodeTrigger.openMenu()"></i> <i
+                    *ngSwitchCase="'caseInititationDate'" class="icon-search2" matTooltip="Search"
+                    matTooltipClass="accent-tooltip" (click)="caseInititationDateTrigger.openMenu()"></i> <i
+                    *ngSwitchCase="'caseReceivedDate'" class="icon-search2" matTooltip="Search"
+                    matTooltipClass="accent-tooltip" (click)="caseReceivedDateTrigger.openMenu()"></i> </span>-->
+                <span *ngSwitchCase="'action'">
+                  <div matTooltip="Client name" matTooltipClass="accent-tooltip" #actionTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="actionCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                    class="txtborder-bot"> </div>
+                  <mat-menu class="tbl-filtercolumn" #actionCtrl>
+                    <mat-card>
+                      <mat-card-content>
+                        <div fxLayout="row">
+                          <div fxFlex="100%">
+                            <div fxLayout="row" fxLayoutAlign="end end" clabss="pb-15">
+                              <div fxFlex="100%">
+                                <button mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
+                                  class="close"> <i class="material-icons" (click)='actionTrigger.closeMenu()'>clear</i>
+                                </button>
+                              </div>
+                            </div>
+                            <div fxLayout="row">
+                              <div fxFlex="100%">
+                                <div style="overflow:auto">
+                                  <mat-selection-list [(ngModel)]="filednames" #shoes class="row-design">
+                                    <mat-list-option [disabled]='dc.disabled' [value]='dc'
+                                      *ngFor="let dc of displayedColumns" (click)="$event.stopPropagation();">
+                                      {{dc.header}} </mat-list-option>
+                                  </mat-selection-list>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </mat-card-content>
+                    </mat-card>
+                  </mat-menu>
+                </span>
+                <span *ngSwitchCase="'candidateName'">
+                  <div matTooltip="Candidate Name" matTooltipClass="accent-tooltip"
+                    #candidateNameTrigger="matMenuTrigger" [matMenuTriggerFor]="candidateNameCtrl" fxLayout="row"
+                    fxLayoutAlign="space-between center" class="txtborder-bot"> </div>
+                  <mat-menu #candidateNameCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #candidateNameCtl matInput [matAutocomplete]="autocandidateName"
+                            placeholder="Candidate Name" autocomplete="off" role="presentation"
+                            (click)="candidateNameCtl.select()" [formControl]="candidateNameFormCtrl"
+                            (change)="dt.filter($event.target.value,col.field,'contains')"
+                            (blur)="dt.filter($event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                            (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                        </mat-form-field>
+                        <mat-autocomplete #autocandidateName="matAutocomplete">
+                          <mat-option (onSelectionChange)="candidateNameTrigger.closeMenu()"
+                            *ngFor="let option of candidateNameFilteredOptions | async" [value]="option"> <span
+                              [innerHTML]="option"></span> </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                          *ngIf="candidateNameCtl.value"
+                          (click)="dt.filter('', col.field, 'contains');candidateNameFormCtrl.setValue('')"
+                          class="text-sm">Reset</a> </div>
+                    </div>
+                  </mat-menu>
+                </span> <span *ngSwitchCase="'userName'">
+                  <div matTooltip="Submitted By" matTooltipClass="accent-tooltip" #userNameTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="userNameCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                    class="txtborder-bot"> </div>
+                  <mat-menu #userNameCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #userNameCtl matInput [matAutocomplete]="autouserName"
+                            placeholder="Submitted By" autocomplete="off" role="presentation"
+                            (click)="userNameCtl.select()" [formControl]="userNameFormCtrl"
+                            (change)="dt.filter($event.target.value,col.field,'contains')"
+                            (blur)="dt.filter($event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                            (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                        </mat-form-field>
+                        <mat-autocomplete #autouserName="matAutocomplete">
+                          <mat-option (onSelectionChange)="userNameTrigger.closeMenu()"
+                            *ngFor="let option of userNameFilteredOptions | async" [value]="option"> <span
+                              [innerHTML]="option"></span> </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                          *ngIf="userNameCtl.value"
+                          (click)="dt.filter('', col.field, 'contains');userNameFormCtrl.setValue('')"
+                          class="text-sm">Reset</a> </div>
+                    </div>
+                  </mat-menu>
+                </span> <span *ngSwitchCase="'clientReferenceNo'">
+                  <div matTooltip="Case Ref No." matTooltipClass="accent-tooltip"
+                    #clientReferenceNoTrigger="matMenuTrigger" [matMenuTriggerFor]="clientReferenceNoCtrl"
+                    fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"> </div>
+                  <mat-menu #clientReferenceNoCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #clientReferenceNoCtl matInput [matAutocomplete]="autoclientReferenceNo"
+                            placeholder="Case Ref No." autocomplete="off" role="presentation"
+                            (click)="clientReferenceNoCtl.select()" [formControl]="clientReferenceNoFormCtrl"
+                            (change)="dt.filter($event.target.value,col.field,'contains')"
+                            (blur)="dt.filter($event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                            (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                        </mat-form-field>
+                        <mat-autocomplete #autoclientReferenceNo="matAutocomplete">
+                          <mat-option (onSelectionChange)="clientReferenceNoTrigger.closeMenu()"
+                            *ngFor="let option of clientReferenceNoFilteredOptions | async" [value]="option"> <span
+                              [innerHTML]="option"></span> </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                          *ngIf="clientReferenceNoCtl.value"
+                          (click)="dt.filter('', col.field, 'contains');clientReferenceNoFormCtrl.setValue('')"
+                          class="text-sm">Reset</a> </div>
+                    </div>
+                  </mat-menu>
+                </span> <span *ngSwitchCase="'clientName'">
+                  <div matTooltip="Client Name" matTooltipClass="accent-tooltip" #clientNameTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="clientNameCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                    class="txtborder-bot"> </div>
+                  <mat-menu #clientNameCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #clientNameCtl matInput [matAutocomplete]="autoclientName"
+                            placeholder="Client Name" autocomplete="off" role="presentation"
+                            (click)="clientNameCtl.select()" [formControl]="clientNameFormCtrl"
+                            (change)="dt.filter($event.target.value,col.field,'contains')"
+                            (blur)="dt.filter($event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                            (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                        </mat-form-field>
+                        <mat-autocomplete #autoclientName="matAutocomplete">
+                          <mat-option (onSelectionChange)="clientNameTrigger.closeMenu()"
+                            *ngFor="let option of clientNameFilteredOptions | async" [value]="option"> <span
+                              [innerHTML]="option"></span> </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                          *ngIf="clientNameCtl.value"
+                          (click)="dt.filter('', col.field, 'contains');clientNameFormCtrl.setValue('')"
+                          class="text-sm">Reset</a> </div>
+                    </div>
+                  </mat-menu>
+                </span> <span *ngSwitchCase="'siteName'">
+                  <div matTooltip="Site Name" matTooltipClass="accent-tooltip" #siteNameTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="siteNameCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                    class="txtborder-bot"> </div>
+                  <mat-menu #siteNameCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #siteNameCtl matInput [matAutocomplete]="autositeName"
+                            placeholder="Site Name" autocomplete="off" role="presentation"
+                            (click)="siteNameCtl.select()" [formControl]="siteNameFormCtrl"
+                            (change)="dt.filter($event.target.value,col.field,'contains')"
+                            (blur)="dt.filter($event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                            (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                        </mat-form-field>
+                        <mat-autocomplete #autositeName="matAutocomplete">
+                          <mat-option (onSelectionChange)="siteNameTrigger.closeMenu()"
+                            *ngFor="let option of siteNameFilteredOptions | async" [value]="option"> <span
+                              [innerHTML]="option"></span> </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                          *ngIf="siteNameCtl.value"
+                          (click)="dt.filter('', col.field, 'contains');siteNameFormCtrl.setValue('')"
+                          class="text-sm">Reset</a> </div>
+                    </div>
+                  </mat-menu>
+                </span> <span *ngSwitchCase="'applicantId'">
+                  <div matTooltip="Applicant Id" matTooltipClass="accent-tooltip" #applicantIdTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="applicantIdCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                    class="txtborder-bot"> </div>
+                  <mat-menu #applicantIdCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #applicantIdCtl matInput [matAutocomplete]="autoapplicantId"
+                            placeholder="Applicant Id" autocomplete="off" role="presentation"
+                            (click)="applicantIdCtl.select()" [formControl]="applicantIdFormCtrl"
+                            (change)="dt.filter($event.target.value,col.field,'contains')"
+                            (blur)="dt.filter($event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                            (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                        </mat-form-field>
+                        <mat-autocomplete #autoapplicantId="matAutocomplete">
+                          <mat-option (onSelectionChange)="applicantIdTrigger.closeMenu()"
+                            *ngFor="let option of applicantIdFilteredOptions | async" [value]="option"> <span
+                              [innerHTML]="option"></span> </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                          *ngIf="applicantIdCtl.value"
+                          (click)="dt.filter('', col.field, 'contains');applicantIdFormCtrl.setValue('')"
+                          class="text-sm">Reset</a> </div>
+                    </div>
+                  </mat-menu>
+                </span> <span *ngSwitchCase="'chargeCode'">
+                  <div matTooltip="Charge Code" matTooltipClass="accent-tooltip" #chargeCodeTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="chargeCodeCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                    class="txtborder-bot"> </div>
+                  <mat-menu #chargeCodeCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field (click)="$event.stopPropagation()">
+                          <input type="text" #chargeCodeCtl matInput [matAutocomplete]="autochargeCode"
+                            placeholder="Charge Code" autocomplete="off" role="presentation"
+                            (click)="chargeCodeCtl.select()" [formControl]="chargeCodeFormCtrl"
+                            (change)="dt.filter($event.target.value,col.field,'contains')"
+                            (blur)="dt.filter($event.target.value,col.field,'contains')"
+                            (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                            (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                        </mat-form-field>
+                        <mat-autocomplete #autochargeCode="matAutocomplete">
+                          <mat-option (onSelectionChange)="chargeCodeTrigger.closeMenu()"
+                            *ngFor="let option of chargeCodeFilteredOptions | async" [value]="option"> <span
+                              [innerHTML]="option"></span> </mat-option>
+                        </mat-autocomplete>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a> <a
+                          *ngIf="chargeCodeCtl.value"
+                          (click)="dt.filter('', col.field, 'contains');chargeCodeFormCtrl.setValue('')"
+                          class="text-sm">Reset</a> </div>
+                    </div>
+                  </mat-menu>
+                </span> <span *ngSwitchCase="'caseInititationDate'">
+                  <div matTooltip="Case Inititation Date" matTooltipClass="accent-tooltip"
+                    #caseInititationDateTrigger="matMenuTrigger" [matMenuTriggerFor]="caseInititationDateCtrl"
+                    fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"> </div>
+                  <mat-menu #caseInititationDateCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field>
+                          <input matInput [matDatepicker]="picker" (focus)="picker.open()" [max]="toDate" (focus)="picker.open()"
+                            [(ngModel)]='fromDate' name='fromDate' placeholder="From Date">
+                          <mat-datepicker-toggle matSuffix [for]="picker"> </mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput [matDatepicker]="picker1" (focus)="picker1.open()" [min]="fromDate" (focus)="picker1.open()"
+                            [(ngModel)]='toDate' name='toDate' placeholder="To Date">
+                          <mat-datepicker-toggle matSuffix [for]="picker1"> </mat-datepicker-toggle>
+                          <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm"
+                          *ngIf="fromDate!=='' && toDate!=='' " (click)="getRecordBydate(fromDate,toDate)">Search</a> <a
+                          class="text-sm">Cancel</a> <a class="text-sm" *ngIf="fromDate!=='' && toDate!=='' "
+                          (click)="resetDate()">Reset</a> </div>
+                    </div>
+                  </mat-menu>
+                </span> <span *ngSwitchCase="'caseReceivedDate'">
+                  <div matTooltip="Case Received Date & Time" matTooltipClass="accent-tooltip"
+                    #caseReceivedDateTrigger="matMenuTrigger" [matMenuTriggerFor]="caseReceivedDateCtrl" fxLayout="row"
+                    fxLayoutAlign="space-between center" class="txtborder-bot"> </div>
+                  <mat-menu #caseReceivedDateCtrl class="pos-top">
+                    <div fxLayout="row">
+                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                        <mat-form-field>
+                          <input matInput [(ngModel)]='fromDateTime' [max]="toDateTime" placeholder="From Date & Time"
+                            [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1">
+                          <owl-date-time [pickerMode]="'popup'" #dt1></owl-date-time>
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput [(ngModel)]='toDateTime' [min]="fromDateTime" placeholder="To Date & Time"
+                            [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2">
+                          <owl-date-time [pickerMode]="'popup'" #dt2></owl-date-time>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm"
+                          *ngIf="fromDateTime!=='' && toDateTime!=='' "
+                          (click)="getRecordBydateTime(fromDateTime,toDateTime)">Search</a> <a
+                          class="text-sm">Cancel</a> <a class="text-sm" *ngIf="fromDateTime!=='' && toDateTime!=='' "
+                          (click)="resetDateTime()">Reset</a> </div>
+                    </div>
+                  </mat-menu>
+                </span> </th>
+            </tr>
+          </ng-template>
+          <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+              <td *ngFor="let col of columns" [ngClass]="{ 'desg-bg': col.field == 'action' }">
+                <div *ngIf="col.field === 'action'" fxLayout="row" class="desg-icon">
+                  <div fxFlex="100%" fxLayoutGap="10px">
+                    <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''"> <i
+                        class="material-icons material-icons-outlined" (click)="editCase(rowData)" matTooltip="Edit"
+                        matTooltipClass="accent-tooltip">edit</i> </mat-icon>
+                    <mat-icon [ngClass]="rowData.deleteDisableFlag === false ? 'page-btn disabled' : ''"> <i
+                        class="material-icons material-icons-outlined" (click)="openDialog(rowData)" matTooltip="Delete"
+                        matTooltipClass="accent-tooltip">delete</i> </mat-icon>
+                  </div>
+                </div>
+                <span
+                  *ngIf="col.field !== 'component' && col.field !== 'caseReceivedDate' && col.field !== 'caseInititationDate' && col.field !== 'action'">
+                  {{ (col.field === 'applicantId') ? ((rowData[col.field] ===  null || rowData[col.field] === '') ? 'N/A' : rowData[col.field]) : 
+                  rowData[col.field] ?  rowData[col.field]: 'N/A'}}
+                </span>
+                <span *ngIf="col.field === 'caseReceivedDate'">
+                  {{common.getTimezoneOffset(rowData[col.field])| date : 'dd/MM/yyyy hh:mm:ss a'}} </span>
+                  <span *ngIf="col.field === 'caseInititationDate'">
+                    {{common.getTimezoneOffset(rowData[col.field])| date : 'dd/MMM/yyyy'}} </span>
+                <span *ngIf="col.field == 'component'">
+                  <span *ngFor="let col1 of rowData[col.field]; let in = index"> {{ col1.compName }}
+                    <span *ngIf="in + 1 !== rowData[col.field].length">,</span> </span> </span>
+                <!-- <span *ngIf='col.field === "candidateName"'>{{rowData['candidateName']}}</span> -->
+                <!-- <span *ngIf='col.field === "candidateName"'> <span>{{rowData['candidateName']}}</span> <span
+                    *ngIf='rowData["candidateMiddleName"]'> {{rowData['candidateMiddleName']}}</span> <span
+                    *ngIf='rowData["candidateLastName"]'> {{rowData['candidateLastName']}}</span> </span> -->
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <ng-container *ngTemplateOutlet="paginantorGrid"></ng-container>
+        <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid"  fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+            fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} -
+            {{
+            dt.totalRecords > 0
+            ? dt.rows + dt.first <= dt.totalRecords
+            ? dt.rows + dt.first
+            : dt.totalRecords
+            : 0
+            }}
+            of {{ dt.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a></div>
+          <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center"
+            fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center"> <a
+              [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                  dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                  navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go
+              to Page<span class="input-num">
+                <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                  [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+              </span></span> <span class="mr-2" fxHide.xs>of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
+              [ngClass]="dt.rows + dt.first >= dt.totalRecords
+                    ? 'page-btn disabled'
+                    : 'page-btn'"
+              (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows }); navigateNxtPrevPage(dt.first + dt.rows, dt.rows) ">
+              Next <i class="icon-control-end ml-5"></i></a> </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px" *ngIf="showGrid" class="row pt-20">
+      <div fxFlex="100%">
+        <p-table #dt [columns]="displayedimportCol" [value]="docErrorList" [resizableColumns]="true"
+          [reorderableColumns]="true" [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="10"
+          [scrollable]="true">
+          <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+              <col *ngFor="let col of columns" [style.width]="col.field ==='excelRow' ? '80px' : '150px'" />
+            </colgroup>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns let-rowData>
+            <tr>
+              <th *ngFor="let col of columns" [ngSwitch]="col.field" pReorderableColumn pResizableColumn
+                [ngClass]="{ 'text-center': col.field === 'Action' }">
+                <span [pSortableColumn]="col.field">
+                  <div class="thname"> {{col?.header === 'applicantIdHeader' ? docErrorList[0][col?.header] : col?.header }} </div>
+                  <p-sortIcon *ngIf="col.field !== 'actions'" [field]="col.field" matTooltip="Sort"
+                    matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
+                    ariaLabelDesc="Activate to sort in descending order"
+                    ariaLabelAsc="Activate to sort in ascending order">
+                  </p-sortIcon>
+                </span>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+              <td *ngFor="let col of columns">
+                <div *ngIf="col.field ==='detail'">
+                  <button mat-icon-button class="in-btn" matTooltip="View Error Details"
+                    matTooltipClass="accent-tooltip" (click)="openEdetails(rowData[col.field])"> <i
+                      class="icon-eyeline"></i></button>
+                  <span [ngClass]="rowData['status']==='Failure'?'red':'green'">
+                    {{ rowData[col.field] }}</span>
+                </div>
+                <div *ngIf="col.field !=='detail'">
+                  <span [ngClass]="rowData['status']==='Failure'?'red':'green'">
+                    {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}</span>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template #history let-index="rowIndex">
+            <h1 mat-dialog-title>Bulk Case Creation Error Details</h1>
+            <mat-dialog-content>
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="start start">
+                  <p>
+                    <label>Error :</label>
+                    <em [ngClass]=" viewError == 'Case valid'?'green':'red'">{{viewError}}</em>
+                  </p>
+                </div>
+              </div>
+            </mat-dialog-content>
+            <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end center">
+              <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+            </mat-dialog-actions>
+          </ng-template>
+          <ng-template pTemplate="emptymessage" let-columns *ngIf="docErrorList.length == 0">
+            <tr>
+              <td [attr.colspan]="columns.length">
+                <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px">
+                  <div fxFlex="100%" class="pt-15">
+                    <div class="no-record text-center">
+                      <span>No Record Found</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <div class="cus-paginator" [ngClass]="{'empty-record': docErrorList.length == 0}" fxLayout="row wrap" fxLayoutGap="0px grid"  fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+           
+            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+            fxLayoutAlign="start center">
+              Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} -
+              {{ dt.totalRecords > 0 ? dt.rows + dt.first <= dt.totalRecords
+                        ? dt.rows + dt.first : dt.totalRecords : 0   }} of {{ dt.totalRecords }} record(s)
+            </div>
+            <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+            fxLayoutAlign.xs="start center">
+              <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                      dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
+                      navigateNxtPrevPage(dt.first + dt.rows, dt.rows)">
+                      <i class="icon-control-start mr-5"></i></a>
+              <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                  <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                    [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" /> </span></span>
+              <span class="mr-2" fxHide.xs> Of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+              <a [ngClass]="
+                      dt.rows + dt.first >= dt.totalRecords
+                        ? 'page-btn disabled' : 'page-btn'" (click)="
+                      dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
+                      navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
+                    "><i class="icon-control-end ml-5"></i></a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<ng-template #mailDialog>
+  <h1 mat-dialog-title>Case Creation Mail List</h1>
+  <mat-dialog-content>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%" class="text-sm text-dull">
+        <p class="text-ilatic">Email will be sent to following mail id&#96;s of the Client: <span class="text-bold">
+            {{SendCaseMailList.clientName}}</span> </p>
+      </div>
+    </div>
+    <!-- <div fxLayout="row" class="mb-10">
+      <div fxFlex="8.5%"></div>
+      <div fxFlex="40%" style="margin-bottom: -18px;">
+        <div class="mail-list">
+          <mat-form-field appearance="outline">
+            <input matInput autocomplete="off" [formControl]="addMailCtrl" (keydown.enter)="addMail('To')"
+              (keydown.tab)="addMail('To')" (blur)="addMail('To')" />
+            <mat-error *ngIf="addMailCtrl?.errors?.pattern"> Enter Valid
+              Email </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxFlex="20%">
+      </div>
+      <div></div>
+    </div> -->
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%">
+        <div class="mail-list">
+          <button mat-stroked-button [matMenuTriggerFor]="menu1">To...</button>
+          <mat-menu #menu1="matMenu">
+            <button *ngIf='checkIsExist("ToInc")' mat-menu-item>ToMail Not Found to Add</button>
+            <ng-container *ngFor="let mail of SendCaseMailList?.clientMailId;let i = index">
+              <!-- {{mail | json}} -->
+              <button (click)='mailChange(mail.emailAddress,true)'
+                *ngIf='mail.selected === false && mail.emailType ==="To"' mat-menu-item>{{ mail.emailAddress }}</button>
+            </ng-container>
+          </mat-menu>
+          <div class="list-area">
+            <!-- <span class="tag" *ngIf='checkIsExist("ToDec")'>ToMail Not Found </span> -->
+            <ng-container>
+              <mat-form-field appearance="outline" fxFlex="100%" style="width: 100%;">
+                <mat-chip-grid #chipList>
+                  <mat-chip-row *ngIf='checkIsExist("ToDec") && toList.length === 0 ' [removable]="removable">
+                    ToMail Not Found
+                  </mat-chip-row>
+                  <span *ngFor="let mail of SendCaseMailList?.clientMailId;let i = index">
+                    <mat-chip-row *ngIf='mail?.emailType==="To" && mail?.selected===true' [removable]="removable">
+                      {{ mail.emailAddress }}
+                      <span matChipRemove (click)='mailChange(mail.emailAddress,false)'>×</span>
+                    </mat-chip-row>
+                  </span>
+                  <mat-chip-row *ngFor="let mail of toList; let j = index" [removable]="removable"
+                    (removed)="removeControl( j, 'To')">
+                    {{mail}}
+                    <span matChipRemove  *ngIf="removable">×</span>
+                  </mat-chip-row>
+                  <input placeholder="To" matInput autocomplete="off" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                    (matChipInputTokenEnd)="addMail($event, 'To')">
+                </mat-chip-grid>
+                <mat-error *ngIf="addMailCtrl?.errors"> Enter Valid
+                  Email </mat-error>
+              </mat-form-field>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div fxLayout="row" class="mb-10">
+      <div fxFlex="8.5%"></div>
+      <div fxFlex="40%" style="margin-bottom: -18px;">
+        <div class="mail-list">
+          <mat-form-field appearance="outline">
+            <input matInput autocomplete="off" [formControl]="ccMailCtrl" (keydown.enter)="addMail('CC')"
+              (keydown.tab)="addMail('CC')" (blur)="addMail('CC')" />
+            <mat-error *ngIf="ccMailCtrl?.errors?.pattern"> Enter Valid
+              Email </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxFlex="20%">
+      </div>
+    </div> -->
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%">
+        <div class="mail-list">
+          <button mat-stroked-button [matMenuTriggerFor]="menu">Cc...</button>
+          <mat-menu #menu="matMenu">
+            <button *ngIf='checkIsExist("CCInc")' mat-menu-item>CCMail Not found to Add</button>
+            <ng-container *ngFor="let mail of SendCaseMailList?.clientMailId;let i = index">
+              <button (click)='mailChange(mail.emailAddress,true)'
+                *ngIf='mail.selected === false && mail.emailType ==="CC"' mat-menu-item>{{ mail.emailAddress }}</button>
+            </ng-container>
+          </mat-menu>
+          <div class="list-area">
+            <!-- <span class="tag" *ngIf='checkIsExist("CCDec")'>CCMail Not Found</span> -->
+            <mat-form-field appearance="outline" fxFlex="100%" style="width: 100%;">
+              <mat-chip-grid #chipList1>
+                <mat-chip-row *ngIf='checkIsExist("CCDec") && ccList.length === 0' [removable]="removable">
+                  CCMail Not Found
+                </mat-chip-row>
+                <span *ngFor="let mail of SendCaseMailList?.clientMailId;let i = index">
+                  <mat-chip-row *ngIf='mail?.emailType ==="CC" && mail?.selected ===  true' [removable]="removable">
+                    {{ mail.emailAddress }}
+                    <span matChipRemove (click)='mailChange(mail.emailAddress,false)'>×</span>
+                  </mat-chip-row>
+                </span>
+                <span *ngIf='(ccvalue)'>
+                  <mat-chip-row *ngFor="let cc of ccList; let j = index" [removable]="removable"
+                    (removed)="removeControl( j, 'CC')">
+                    {{cc}}
+                    <span matChipRemove  *ngIf="removable">×</span>
+                  </mat-chip-row>
+                </span>
+                <input placeholder="CC" matInput autocomplete="off" [matChipInputFor]="chipList1"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="addMail($event, 'CC')">
+              </mat-chip-grid>
+            </mat-form-field>
+            <!-- <span *ngFor="let mail of SendCaseMailList?.clientMailId;let i = index"><span
+                  *ngIf='mail?.emailType ==="CC" && mail?.selected ===  true' class="tag">
+                  {{ mail.emailAddress }} <a class="close" (click)='mailChange(mail.emailAddress,false);'>×</a></span>
+              </span>
+              <span *ngIf='(ccvalue)'>
+                <span *ngFor="let cc of ccList; let j = index" class="tag"> {{cc}}
+                  <a class="close" (click)='removeControl(j, "CC")'>×</a>
+                </span>
+              </span> -->
+            <!-- </div> -->
+            <!-- <button type="button" mat-button color="primary" matTooltip="Add"
+                  matTooltipClass="accent-tooltip" (click)="ccFlag =true;addMail('CC')">
+                  <i class="icon-plus-circle"></i>
+                </button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template [ngTemplateOutlet]="pTableTemplate"></ng-template>
+  </mat-dialog-content>
+  <mat-dialog-actions *ngIf='isMailIdSave' fxLayoutGap="8px" fxLayoutAlign="end end">
+    <button (click)='sendMail()' mat-flat-button color="primary" matTooltip="Send mail"
+      matTooltipClass="accent-tooltip">Send Mail</button>
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #pTableTemplate>
+  <p-table #dtable [columns]="caseCreationColumns" [value]="caseCreationList" [scrollable]="true" [scrollable]="true">
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+        <col *ngFor="let col of columns" [style.width]="col.field ==='sno' ? '10px' : col.field ==='indComp' ? '50px' : '30px'" />
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th [style.width]="col.field ==='sno' ? '10px' : col.field ==='indComp' ? '50px' : '30px'" *ngFor="let col of columns"> <span>
+            <div>{{ col.header }}</div>
+          </span> </th>
+      </tr>
+    </ng-template>
+    <ng-template #pEditor let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns" [style.width]="col.field ==='sno' ? '10px' : col.field ==='indComp' ? '50px' : '30px'"><span
+            *ngIf='col.field === "sno"'>{{index + 1}}</span> 
+            <span> <span *ngIf='isMailIdSave && col.field !== "sno" && col.field !== "indComp" && col.field !== "packageId" && col.field !== "packDetails" && col.field !== "casePriorityLookupId"&& col.field !== "countryId" && col.field !== "comps" && col.field !== "preComps"'>
+              {{rowData[col.field] ? rowData[col.field] : 'N/A'}}</span>
+            <mat-form-field *ngIf='!isMailIdSave && col.field !== "sno" && col.field !== "invitationExpireLookupId" && col.field !== "packageId" && col.field !== "packDetails" && col.field !== "casePriorityLookupId" &&col.field !== "countryId" && col.field !== "preComps" &&
+            col.field !== "invitationExpireLookupId" && col.field !== "indComp" && col.field !== "comps" && col.field !== "remarks"'>
+              <mat-label>{{col.header}}</mat-label>
+              <span *ngIf="col.field === 'clientReferenceNo'" matPrefix>{{caseDetails?.refNo}}</span>
+              <input maxlength="{{col.field === 'tat' ? 3 : 100}}"
+                [disabled]='caseCreationFormGroup?.controls["caseNo"].value !== 0 && (col.field ==="clientReferenceNo" ||(col.field ==="applicantId" && IqcByPassFlag)||(col.field ==="candidateFirstName" && IqcByPassFlag)||(col.field ==="candidateMiddleName" && IqcByPassFlag)||(col.field ==="candidateLastName" && IqcByPassFlag))'
+                appNumberOnly class='p-edit' placeholder="{{col.header}}"
+                [NumberOnly]="(col.field === 'clientReferenceNo' || col.field === 'tat') ? false : true"
+                [type]="col.field === 'clientReferenceNo' ? 'text' : 'text'" autocomplete="off"
+                [(ngModel)]="rowData[col.field]" role="presentation" matInput
+                (blur)='col.field === "applicantId" ? isExist(col.field,index,rowData[col.field],col.header) : (col.field === "clientReferenceNo"||
+                col.field === "chargeCode" ||(col.field ==="candidateFirstName" && IqcByPassFlag)||(col.field ==="candidateMiddleName" && IqcByPassFlag)||(col.field ==="candidateLastName" && IqcByPassFlag) ? 
+                      isExist(col.field,index,rowData[col.field],col.header,(caseDetails.refNo+rowData[col.field])) : true)' />
+            </mat-form-field>
+            <mat-form-field fxFlex="100%" *ngIf='!isMailIdSave && col.field === "packageId"'>
+              <mat-label>Select Package</mat-label>
+              <mat-select [(ngModel)]="rowData.packageId" [disabled]="this.caseCreationFormGroup.controls.caseNo.value > 0 && rowData.packageId"
+                placeholder="Select Package" (selectionChange)="packageName($event.value, rowData)">
+                <mat-option>Select Package</mat-option>
+                <mat-option *ngFor="let pack of packAndCompList?.package" [value]="pack.packageId"> {{ pack.packageName }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span *ngIf='col.field === "packDetails"'>
+              <span *ngFor="let comp of rowData?.packCompList; let ind = index"> {{ind+1}}.{{comp.compName}} <br/> 
+                <span *ngIf="comp.packageSubComponent?.length>0"> - <span *ngFor="let sub of comp.packageSubComponent; let last = last">
+                  {{sub.subCompName}}<span *ngIf="!last">,</span><br/></span> </span> </span>
+                  <span *ngIf="!(rowData?.packCompList?.length > 0)">N/A</span>
+            </span>
+            
+            <span *ngIf='col.field === "preComps"'>
+              <span *ngFor="let comp of rowData?.preComponentList; let ind = index"> {{ind+1}}.{{comp.compName}} <br/> 
+                <span *ngIf="comp.caseSubComponent?.length>0"> - <span *ngFor="let sub of comp.caseSubComponent; let last = last">
+                  {{sub.subCompName}}<span *ngIf="!last">,</span><br/></span> </span> </span>
+                  <span *ngIf="!(rowData?.preComponentList?.length > 0)">N/A</span>
+            </span>
+            <span *ngIf='col.field === "comps"'>
+              <span *ngFor="let comp of rowData?.caseComponent; let ind = index"> {{ind+1}}.{{comp.compName}} <br/> 
+                <span *ngIf="comp.caseSubComponent?.length>0"> - <span *ngFor="let sub of comp.caseSubComponent; let last = last">
+                  {{sub.subCompName}}<span *ngIf="!last">,</span></span> </span> </span>
+                  <span *ngIf="!(rowData?.caseComponent?.length > 0)">N/A</span>
+            </span>
+            <mat-form-field fxFlex="100%" *ngIf='!isMailIdSave && col.field === "indComp"&&!IqcByPassFlag'>
+              <mat-label>Select Components</mat-label>
+              <mat-select [(ngModel)]="rowData.indComponentList" [multiple]="userData.teamName != 'CRTAbroad' && !IqcByPassFlag" placeholder="Select Component" >
+                
+                <!-- 135 point - Workflow - Multiple [multiple] attribute condtion & mat-select-trigger ngIf condition has added for hide check box for abroad client in component name dropdown - Added by Naveen -->
+                <mat-select-trigger *ngIf="userData.teamName != 'CRTAbroad' && !IqcByPassFlag">
+                  {{rowData?.indComponentList ? ((rowData?.indComponentList[0]?.compName + (rowData?.indComponentList[0]?.subCompFlag === true ?
+                     ( '(' + rowData?.indComponentList[0]?.packageSubComponent[0]?.subCompName + ')') : '')) + ((rowData?.indComponentList[1]?.compName &&
+                                               rowData?.indComponentList?.length === 2) ? (',' + (rowData?.indComponentList[1]?.compName + (rowData?.indComponentList[1]?.subCompFlag === true ?
+                                               ( '(' + rowData?.indComponentList[1]?.packageSubComponent[0]?.subCompName + ')') : ''))) : '')) : ''}}
+                  <span *ngIf="rowData?.indComponentList?.length > 2">
+                    (+{{rowData?.indComponentList?.length - 1}}
+                    {{rowData?.indComponentList?.length === 2 ? 'other' : 'others'}})
+                  </span>
+                </mat-select-trigger>
+
+                <mat-select-trigger *ngIf="userData.teamName == 'CRTAbroad' && !IqcByPassFlag">
+                  {{rowData?.indComponentList ? ((rowData?.indComponentList?.compName + (rowData?.indComponentList?.subCompFlag === true ?
+                    ( '(' + rowData?.indComponentList?.packageSubComponent[0]?.subCompName + ')') : '')) + ((rowData?.indComponentList?.compName && rowData?.indComponentList?.length === 2) ? (',' + (rowData?.indComponentList?.compName + (rowData?.indComponentList?.subCompFlag === true ?
+                                              ( '(' + rowData?.indComponentList?.packageSubComponent[0]?.subCompName + ')') : ''))) : '')) : ''}}
+                </mat-select-trigger>
+
+                <span *ngFor="let packComp of packAndCompList?.component">
+                  <mat-optgroup [label]="packComp.compName" *ngIf="packComp.subCompFlag">
+                    <mat-option *ngFor="let subComp of packComp.packageSubComponent" [value]="setSubCompValue(rowData?.indComponentList, packComp, subComp)">{{subComp.subCompName}}</mat-option>
+                  </mat-optgroup>
+                  <mat-option *ngIf="!packComp.subCompFlag" [value]="packComp"> {{packComp.compName}} </mat-option>
+                </span>
+              </mat-select>
+            </mat-form-field>
+			<mat-form-field fxFlex="100%" *ngIf='!isMailIdSave && col.field === "indComp" &&IqcByPassFlag'>
+              <mat-label>Select Component</mat-label>
+              <mat-select [(ngModel)]="rowData.indComponentList" placeholder="Select Component" [disabled]="this.caseCreationFormGroup.controls.caseNo.value > 0">
+                <mat-select-trigger>
+                  {{rowData?.indComponentList ? ((rowData?.indComponentList?.compName + (rowData?.indComponentList?.subCompFlag === true ?
+                     ( '(' + rowData?.indComponentList?.packageSubComponent[0]?.subCompName + ')') : '')) + ((rowData?.indComponentList?.compName && rowData?.indComponentList?.length === 2) ? (',' + (rowData?.indComponentList?.compName + (rowData?.indComponentList?.subCompFlag === true ?
+                                               ( '(' + rowData?.indComponentList?.packageSubComponent[0]?.subCompName + ')') : ''))) : '')) : ''}}
+                  
+                </mat-select-trigger>
+                <span *ngFor="let packComp of packAndCompList?.component">
+                  <mat-optgroup [label]="packComp.compName" *ngIf="packComp.subCompFlag" >
+                    <mat-option *ngFor="let subComp of packComp.packageSubComponent" [value]="setSubCompValue(rowData?.indComponentList, packComp, subComp)">{{subComp.subCompName}}</mat-option>
+                  </mat-optgroup>
+                  <mat-option *ngIf="!packComp.subCompFlag" [value]="packComp"> {{packComp.compName}} </mat-option>
+                </span>
+              </mat-select>
+            </mat-form-field>
+			
+			
+			<mat-form-field fxFlex="100%" *ngIf='col.field === "casePriorityLookupId"'>
+              <mat-label>Select Priority</mat-label>
+              <mat-select [(ngModel)]="rowData.casePriorityLookupId" [disabled]="this.caseCreationFormGroup.controls.caseNo.value > 0 && rowData.casePriorityLookupId"
+                placeholder="Select Priority" (selectionChange)="casePriorityName($event.value, rowData)">
+                <mat-option>Select Priority</mat-option>
+                <mat-option *ngFor="let priority of casePriority" [value]="priority.lookUpId"> {{ priority.lookUpName }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>		
+			<mat-form-field fxFlex="100%" *ngIf='col.field === "countryId"'>
+              <mat-label>Select Priority</mat-label>
+              <mat-select [(ngModel)]="rowData.countryId" [disabled]="this.caseCreationFormGroup.controls.caseNo.value > 0 && rowData.countryId"
+                placeholder="Select Country" (selectionChange)="caseCountryName($event.value, rowData)">
+                <mat-option>Select Country</mat-option>
+                <mat-option *ngFor="let count of country" [value]="count.countryId"> {{ count.countryName }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>		
+			
+			<!-- Request to increase the character limit | UAT environment | Tech-M -->
+            <mat-form-field fxFlex="100%" *ngIf='!isMailIdSave && col.field === "remarks"'>
+              <mat-label>Remarks</mat-label><textarea [(ngModel)]="rowData.remarks" matInput #ramarks placeholder="Remarks"
+                autocomplete="off" role="presentation" maxlength="1000"></textarea>
+              <mat-hint class="f-13"> ({{ramarks?.value?.length}}/1000 max) </mat-hint>
+            </mat-form-field>
+            <!-- <div class="tbl-icon" *ngIf="col.field === 'action' && col.field !== 'invitationExpiryLookupId' && col.field !== 'sno' && !isMailIdSave">
+              <mat-icon> <i class="material-icons-outlined" matTooltip="Delete" matTooltipClass="accent-tooltip"
+                  (click)="deleteRow(index)">delete</i> </mat-icon>
+            </div> -->
+          </span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <!-- <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid"  fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="start center">
+      Showing {{ dtable.totalRecords < 1 ? 0 : dtable.first + 1 }} -
+      {{
+            dtable.totalRecords > 0
+            ? dtable.rows + dtable.first <= dtable.totalRecords
+            ? dtable.rows + dtable.first
+            : dtable.totalRecords
+            : 0
+            }}
+      of {{ dtable.totalRecords }} record(s) </div>
+    <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center"
+      fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center"> <a
+        [ngClass]="dtable.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
+                  dtable.onPageChange({ first: dtable.first - dtable.rows, rows: dtable.rows });
+                  navigateNxtPrevPage(dtable.first + dtable.rows, dtable.rows)
+                ">  <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2"
+        fxHide.xs>Go to Page<span class="input-num">
+          <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+            [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dtable.rows)" />
+        </span></span> <span class="mr-2" fxHide.xs>of {{ getTotalPages(dtable.totalRecords, dtable.rows) }}</span> <a
+        [ngClass]="dtable.rows + dtable.first >= dtable.totalRecords
+                    ? 'page-btn disabled'
+                    : 'page-btn'"
+        (click)="dtable.onPageChange({ first: dtable.first + dtable.rows, rows: dtable.rows });"> 
+        <i class="icon-control-end ml-5"></i>
+        </a> </div>
+  </div> -->
+</ng-template>
+<ng-template #uploadConfirm>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="100%" class="text-center">
+            <h3 class="m-0">Confirmation !</h3>
+            <p class="text-sm">Are you sure want to update this records ?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="dialogClose()">No, validate it</button>
+    <button mat-flat-button color="accent" (click)="validateUploadFile(true)">Yes, update it</button>
+  </mat-dialog-actions>
+</ng-template>

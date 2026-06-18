@@ -1,0 +1,414 @@
+<div class="FullBody">
+  <div class="HeaderBg">
+    <div class="HContBody">
+      <div fxLayout="row" fxFlex="100%">
+        <div fxFlex="100%">
+          <div class="LogTxt">
+            <a href="#aaa" routerLink="/" class="link">
+              <div class="Logo lnd-logo kryalogo">
+                <i class="icon-K-transparent"></i>
+              </div>
+              <div class="logo-lett">
+                <div class="logo-txt">Krya Screening Private Limited</div>
+                <!-- <div class="logo-sol">Screening Made Smart</div> -->
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-toast position="top-center"></p-toast>
+  <div class="ContBody">
+    <div fxFlex="100%">
+      <form [formGroup]="addressForm">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <h3 class="sub-header">Digital Address Verification</h3>
+          </div>
+        </div>
+        <div class="d-view mb-25">
+          <div fxlayout="row">
+            <div fxflex="100%">
+              <h3>Candidate</h3>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap="0 grid" class="btmline">
+            <div fxFlex="33.33%">
+              <p>
+                <label>Verification ID</label>
+                <em>{{verifiationId}} </em>
+              </p>
+            </div>
+            <div fxFlex="33.33%">
+              <p>
+                <label>Candidate Name</label>
+                <em>{{candidateName}}</em>
+              </p>
+            </div>
+            <div fxFlex="33.33%">
+              <p>
+                <label>Client Name</label>
+                <em>{{clientName}} </em>
+              </p>
+            </div>
+            <!-- <div fxFlex="33.33%">
+            <p>
+              <label>Company</label>
+              <em>DSSI Solution </em>
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>Contact Person</label>
+              <em>Jawahar Ramaiah</em>
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>Mobile Number</label>
+              <em>97899 64799</em>
+            </p>
+          </div>
+          <div fxFlex="33.33%">
+            <p>
+              <label>Phone Number</label>
+              <em>044 2562 2562</em>
+            </p>
+          </div> -->
+        </div>
+      </div>
+      <!-- <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+      fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Address Type</mat-label>
+          <input matInput autocomplete="off" placeholder="Address Type" formControlName="addressType" maxlength="60" />
+        </mat-form-field>
+      </div>
+    </div> -->
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+      fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Latitude</mat-label>
+          <input matInput autocomplete="off" readonly placeholder="Latitude" formControlName="latitude" maxlength="25" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Longitude</mat-label>
+          <input matInput autocomplete="off" readonly placeholder="Longitude" formControlName="longitude" maxlength="25" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%" style="margin-top: 8px;" class="btnTool">
+        <button mat-icon-button matTooltip="Add" matTooltipClass="accent-tooltip" (click)="getLocation()">
+          <i class="icon-address"></i>Get Location</button>
+
+          <!-- <button mat-flat-button color="primary" (click)="getLocation()">Get Location</button> -->
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+        fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <!-- <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Address</mat-label>
+          <textarea matInput autocomplete="off" readonly placeholder="Address" maxlength="150" #address formControlName="addressuser"></textarea>
+          <mat-hint>({{address.value.length}}/150 Max)</mat-hint>
+        </mat-form-field>
+      </div> -->
+      <!-- <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Distance Km</mat-label>
+        <input matInput autocomplete="off" placeholder="Distance Km" appNumberOnly formControlName="distanceKm" maxlength="5" />
+      </mat-form-field>
+    </div> -->
+  </div>
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      <h3 class="sub-header">Applicant Details</h3>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+    fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="50%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Respondent Name</mat-label>
+        <input matInput autocomplete="off" required placeholder="Respondent Name" formControlName="respondentName" maxlength="45" />
+        @if (!!addressForm?.get('respondentName')?.errors?.required) {
+          <mat-error>Respondent name required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="50%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Relationship with the Candidate</mat-label>
+        <input matInput autocomplete="off" required formControlName="RelationshipWithTheCandidate" #relationship placeholder="Relationship with the Candidate(Self/Family Member/Neighbour/Friend)"
+          maxlength="45" />
+          @if (!!addressForm?.get('RelationshipWithTheCandidate')?.errors?.required) {
+            <mat-error> Relationship with the candidate required </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+      fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="50%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Alternative Contact Number</mat-label>
+          <input matInput autocomplete="off" required appNumberOnly [NumericValue]="false"  placeholder="Alternative Contact Number" formControlName="alternativeContactNumber"
+            minlength="10" maxlength="12" />
+            @if (!!addressForm?.get('alternativeContactNumber')?.errors?.minlength) {
+              <mat-error> Minimum 10 digit required </mat-error>
+            }
+            @if (!!addressForm?.get('alternativeContactNumber')?.errors?.required) {
+              <mat-error> Alternative contact number required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline"  fxFlex="100%">
+            <mat-label>Building / Address Status</mat-label>
+            <mat-select placeholder="Building / Address Status"  formControlName="addressType" required>
+              @for (addressTypeId of addressType; track addressTypeId; let i = $index) {
+                <mat-option  [value]="addressTypeId.lookUpId"> {{addressTypeId.lookUpName}} </mat-option>
+              }
+            </mat-select>
+            @if (!!addressForm?.get('addressType')?.errors?.required) {
+              <mat-error>Building / address status required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <app-address [addressList]="address1" [addressformgrp]="addressForm"></app-address>
+
+      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+        fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>From Date</mat-label>
+            <input matInput [matDatepicker]="fromdateinvoicegen" onkeypress="return false;" onkeyup="return false;" [max]="minDate" (dateChange)="setToDate($event)"
+              autocomplete="off" formControlName="fromDate" required placeholder="From Date" (focus)="fromdateinvoicegen.open()"/>
+              <mat-datepicker-toggle matSuffix [for]="fromdateinvoicegen"></mat-datepicker-toggle>
+              <mat-datepicker #fromdateinvoicegen></mat-datepicker>
+              @if (!!addressForm?.get('fromDate')?.errors?.required) {
+                <mat-error> From date required </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>To Date</mat-label>
+              <input matInput [matDatepicker]="toDate" required onkeypress="return false;" onkeyup="return false;" [min]="maxDate" autocomplete="off"
+                formControlName="toDate" placeholder="To Date" (focus)="toDate.open()"/>
+                <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                <mat-datepicker #toDate></mat-datepicker>
+                @if (!!addressForm?.get('toDate')?.errors?.required) {
+                  <mat-error> To date required </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-checkbox (change)="tillDate($event)">Till Date</mat-checkbox>
+            </div>
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <h3 class="sub-header">Attach </h3>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="35px grid"
+            fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+
+                <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="file-container">
+                  <mat-label>Candidate Photo/Selfie Upload</mat-label>
+
+                  <!-- Browse button triggers camera -->
+                  <div class="file-upload">
+                    <i class="material-icons">photo_camera</i>
+                    <span>Open Camera</span>
+                    <button mat-raised-button color="primary" (click)="openCamera()">Browse</button>
+                  </div>
+
+                  <!-- Camera view -->
+                  @if (isCameraOpen) {
+                    <div style="margin-top:10px;">
+                      <video #video autoplay playsinline width="300" height="220"
+                      style="border:1px solid #ccc; border-radius:5px;"></video>
+                      <div style="margin-top:10px;">
+                        <button mat-raised-button color="accent" (click)="captureImage()">Capture</button>
+                        <button mat-button color="warn" (click)="closeCamera()">Close</button>
+                      </div>
+                    </div>
+                  }
+
+                  <!-- Captured image preview -->
+                  @if (capturedImage) {
+                    <div class="file-names">
+                      <div class="file-upload-files">
+                        <img [src]="capturedImage" alt="Captured Photo"
+                          style="width:150px;height:auto;border-radius:5px;border:1px solid #aaa;">
+                          <br>{{candidatePhotoName}}
+                            <button type="button" (click)="removeImageCaptured()" class="close" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                        </div>
+                      }
+
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+                  fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div ffxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="file-container">
+                    <mat-label>Candidate Photo/Selfie Upload</mat-label>
+                    <div class="file-upload">
+                      <i class="material-icons">cloud_upload</i>
+                      <span>Browse here...</span>
+                      <input type="file" capture="user" (change)="uploaCandidate($event.target.files)" accept="image/*" #candiatePhoto>
+                    </div>-->
+                    <!-- {{docName.value}} -->
+                    <!-- <div class="file-names">
+                    <div class="file-upload-files"> {{candidatePhotoName}}
+                      <button type="button" (click)="removeImage('candidatePhotoName')" class="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div> -->
+            <!-- <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+              fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div ffxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="file-container">
+                <mat-label>Sign Upload </mat-label>
+                <div class="file-upload">
+                  <i class="material-icons">cloud_upload</i>
+                  <span>Browse here...</span>
+                  <input type="file" capture="user" (change)="uploadSign($event.target.files)" accept="image/*" #candidateSign>
+                </div>
+                <div class="file-names">
+                  <div class="file-upload-files"> {{signPhotoName}}
+                    <button type="button" (click)="removeImage('signPhotoName')" class="close" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+              fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div ffxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="file-container">
+                <mat-label>ID Proof</mat-label>
+                <div class="file-upload">
+                  <i class="material-icons">cloud_upload</i>
+                  <span>Browse here...</span>
+                  <input type="file" (change)="uploadIdProff($event.target.files)" accept="image/x-png,image/gif,image/jpeg" #idProff>
+                </div>
+                <div class="file-names">
+                  <div class="file-upload-files"> {{idProffName}}
+                    <button type="button" (click)="removeImage('idProffName')" class="close" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+              fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div ffxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="file-container">
+                <mat-label>House Photo </mat-label>
+                <div class="file-upload">
+                  <i class="material-icons">cloud_upload</i>
+                  <span>Browse here...</span>
+                  <input type="file" #signupload (change)="housePhoto($event.target.files)" accept="image/x-png,image/gif,image/jpeg">
+                </div>
+                <div class="file-names">
+                  <div class="file-upload-files">{{Housename}}
+                    <button type="button" class="close" (click)="removeImage('Housename')" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+          <!-- <span>
+          <button mat-flat-button color="primary" (click)="closeTab()">Close</button>
+        </span> -->
+        <span>
+          <button mat-flat-button color="warn" (click)="clearValue()">Reset</button>
+        </span>
+        <span>
+          <button mat-flat-button color="accent" (click)="addressSumbit()">Submit</button>
+        </span>
+      </mat-card-actions>
+    </form>
+    <footer>
+      <strong>Verification Tracking System.</strong> Copyright © Krya Screening Private Limited. All rights reserved.
+      <a routerLink="/privacy" target="_blank">Privacy Policies</a>
+    </footer>
+  </div>
+</div>
+<ng-template #sucessAlert>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15">
+            <img src="assets/images/alert-warning.gif"> </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">{{headerText}} !</h3>
+              <p class="text-sm" style="font-size:14px !important">{{bodyText}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+      <button mat-stroked-button (click)="dialogClose()">Close</button>
+    </mat-dialog-actions>
+  </ng-template>
+  <!-- <ng-template #imgDialog>
+  <div class="confirm-pop">
+    <h1 mat-dialog-title>Image Cropper</h1>
+    <mat-dialog-content>
+      <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="100%">
+          <image-cropper [imageBase64]="imageChangedEvent" [maintainAspectRatio]="false" [aspectRatio]="4 / 3" format="png"
+          (imageCropped)="imageCropped($event)"></image-cropper>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+      <button mat-icon-button matTooltip="Rotate right" (click)="rotate('right')" matTooltipClass="accent-tooltip"> <i
+      class="icon-rotate-cw"></i></button>
+      <button mat-icon-button matTooltip="Rotate left" (click)="rotate('left')" matTooltipClass="accent-tooltip"> <i
+      class="icon-rotate-ccw"></i></button>
+      <button mat-icon-button matTooltip="Flip horizontal" (click)="rotate('flipHorizontal')"
+        matTooltipClass="accent-tooltip"> <i class="icon-fliphorizontal"></i></button>
+        <button mat-icon-button matTooltip="Flip vertical" (click)="rotate('flipVertical')"
+          matTooltipClass="accent-tooltip"> <i class="icon-flipvertical"></i></button>
+          <button (click)="closeDialog('crop')" color="accent" class="mat-flat-button mat-accent"> Crop Image</button>
+          <button mat-stroked-button (click)="closeDialog('close')">Cancel</button>
+        </mat-dialog-actions>
+      </div>
+    </ng-template> -->

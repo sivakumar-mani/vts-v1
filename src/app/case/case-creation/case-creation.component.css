@@ -1,0 +1,28 @@
+﻿.mat-mdc-outlined-button {
+  height: 43px !important;
+}
+.mail-list {
+  display: flex;
+  flex-direction: row;
+}
+.list-area {
+  margin: 0 0 0 15px;
+  width: 100%;
+}
+.tag {
+  text-transform: none !important;
+}
+.example-trigger {
+  display: inline-block;
+}
+.example-container {
+  padding: 1rem;
+}
+.example-wrapper {
+  margin-bottom: 3rem;
+}
+.example-input-wrapper {
+  display: block;
+  width: 200px;
+  margin-bottom: 1.5rem;
+}

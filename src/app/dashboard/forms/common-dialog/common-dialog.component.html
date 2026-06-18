@@ -1,0 +1,393 @@
+﻿@if (common.newDesignation==false) {
+  <div>
+    <h1 mat-dialog-title>Add Designation</h1>
+    <mat-dialog-content>
+      <div fxLayout="row" fxLayoutGap="20px" class="pb-15">
+        <div fxFlex="100%">
+          <div class="highlights"> <span class="word">{{bindingValue}}</span> is not available. Do you want to save?</div>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="50%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>{{bindingValue}}</mat-label>
+            <input matInput placeholder="Designation" formControlName="designation">
+          </mat-form-field>
+        </div>
+        <div fxFlex="50%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Designation</mat-label>
+            <input matInput placeholder="Description" formControlName="description">
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+      <button mat-flat-button color="primary" (click)="onSubmit()">Save</button>
+      <button mat-flat-button color="warn" (click)="onCancel()">Cancel</button>
+    </mat-dialog-actions>
+  </div>
+}
+
+<!-- For Designer Sample -->
+
+<!-- common Popup -->
+@if (common.popupDialog) {
+  <div>
+    <h1 mat-dialog-title>Add Designation - Test </h1>
+    <mat-dialog-content>
+      <div fxLayout="row" fxLayoutGap="20px" class="pb-15">
+        <div fxFlex="100%">
+          <div class="highlights"> <span class="word">"ACG-125-6855"</span> is not available. Do you want to save?</div>
+        </div>
+      </div>
+      <div>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="50%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Sample textbox</mat-label>
+              <input matInput placeholder="Designation">
+            </mat-form-field>
+          </div>
+          <div fxFlex="50%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Designation</mat-label>
+              <input matInput placeholder="Description">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-flat-button color="primary">Save</button>
+      <button mat-flat-button color="warn">Cancel</button>
+    </mat-dialog-actions>
+  </div>
+}
+
+<!-- confirmation Popup -->
+@if (common.popupconfirmation) {
+  <div>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">Confirmation !</h3>
+              <p class="text-sm">Are you sure, you want to <b>delete</b> this file?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+      <button mat-stroked-button>No, Keep it</button>
+      <button mat-flat-button color="warn">Yes, Delete it</button>
+    </mat-dialog-actions>
+  </div>
+}
+
+<!-- session out Popup -->
+@if (common.popuptimeout) {
+  <div class="session-out">
+    <mat-dialog-content>
+      <div class="timerbg"> <img src="assets/images/timeup.gif" alt="Time Up">
+        <p class="ooops">OOOPS!!! <span class="small">YOU ARE RUNNING OUT OF TIME</span></p>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <p>Your session will expire in 3 minutes press <strong>Ok</strong> to remain logged in or press
+          <strong>Cancel</strong> to log off.
+          If you are logged off any changes will be lost.
+        </p>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
+    <button mat-stroked-button>Ok</button>
+    <button mat-flat-button color="warn">Cancel</button>
+  </mat-dialog-actions>
+</div>
+}
+
+<!-- Department Team -->
+@if (common.popupDialogDepartment) {
+  <div>
+    <h1 mat-dialog-title>Create Sub Team </h1>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div class="dt-list-scrollbar" style="overflow:auto">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="`100%">
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <p class="text-sm text-ilatic mt-0">You are creating a Sub Team for the Team <strong>Data Entry
+                    </strong></p>
+                  </div>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                      fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>Sub Team Name</mat-label>
+                          <input matInput placeholder="Department Name" required>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                      fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>Sub Team Client</mat-label>
+                          <mat-chip-grid #chipList aria-label="MultiChip selection">
+                            @for (fruit of fruits; track fruit) {
+                              <mat-chip-row [removable]="removable"
+                                (removed)="remove(fruit)"> {{fruit.name}}
+                                @if (removable) {
+                                  <mat-icon matChipRemove>cancel</mat-icon>
+                                }
+                              </mat-chip-row>
+                            }
+                            <input placeholder="Select Multi Chips..." [matChipInputFor]="chipList"
+                              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                              (matChipInputTokenEnd)="add($event)">
+                            </mat-chip-grid>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                        fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Sub Team Description</mat-label>
+                            <textarea matInput placeholder="Department Name" rows="4"> </textarea>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                        fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-label class="lbl">Active</mat-label>
+                          <mat-checkbox>Yes</mat-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Sub Team Role</mat-label>
+                        <input matInput placeholder="Department Name" required>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"> </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxFlex="100%">
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <h3 class="sub-header">Team Owner &amp; Members</h3>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Team Owner</mat-label>
+                        <mat-chip-grid #chipList aria-label="MultiChip selection">
+                          @for (fruit of fruits; track fruit) {
+                            <mat-chip-row [removable]="removable"
+                              (removed)="remove(fruit)"> {{fruit.name}}
+                              @if (removable) {
+                                <mat-icon matChipRemove>cancel</mat-icon>
+                              }
+                            </mat-chip-row>
+                          }
+                          <input placeholder="Select Multi Chips..." [matChipInputFor]="chipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                            (matChipInputTokenEnd)="add($event)">
+                          </mat-chip-grid>
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>Team Owner Role</mat-label>
+                          <mat-chip-grid #chipList aria-label="MultiChip selection">
+                            @for (fruit of fruits; track fruit) {
+                              <mat-chip-row [removable]="removable"
+                                (removed)="remove(fruit)"> {{fruit.name}}
+                                @if (removable) {
+                                  <mat-icon matChipRemove>cancel</mat-icon>
+                                }
+                              </mat-chip-row>
+                            }
+                            <input placeholder="Select Multi Chips..." [matChipInputFor]="chipList"
+                              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                              (matChipInputTokenEnd)="add($event)">
+                            </mat-chip-grid>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                        fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Team Members</mat-label>
+                            <mat-chip-grid #chipList aria-label="MultiChip selection">
+                              @for (fruit of fruits; track fruit) {
+                                <mat-chip-row [removable]="removable"
+                                  (removed)="remove(fruit)"> {{fruit.name}}
+                                  @if (removable) {
+                                    <mat-icon matChipRemove>cancel</mat-icon>
+                                  }
+                                </mat-chip-row>
+                              }
+                              <input placeholder="Select Multi Chips..." [matChipInputFor]="chipList"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                                (matChipInputTokenEnd)="add($event)">
+                              </mat-chip-grid>
+                            </mat-form-field>
+                          </div>
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"> </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-dialog-content>
+            <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+              <button mat-flat-button color="primary">Save</button>
+              <button mat-flat-button color="warn">Cancel</button>
+            </mat-dialog-actions>
+          </div>
+        }
+
+        <!-- Notification -->
+        <!-- <div>
+        <mat-nav-list> <a href="https://keep.google.com/" mat-list-item> <span mat-line>Google Keep</span>
+        <span mat-line>Add to a note</span> </a> <a href="https://docs.google.com/" mat-list-item >
+        <span mat-line>Google Docs</span> <span mat-line>Embed in a document</span> </a>
+        <a href="https://plus.google.com/" mat-list-item> <span mat-line>Google Plus</span>
+        <span mat-line>Share with your friends</span> </a> <a href="https://hangouts.google.com/" mat-list-item>
+        <span mat-line>Google Hangouts</span> <span mat-line>Show to your coworkers</span> </a>
+      </mat-nav-list>
+    </div> -->
+
+
+    @if (common.popCommonSearch) {
+      <div class="cmn-srch">
+        <h1 mat-dialog-title>Search</h1>
+        <mat-dialog-content>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Client Refrence #</mat-label>
+                <input matInput placeholder="Client Refrence #">
+              </mat-form-field>
+            </div>
+            <div fxFlex="50%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Client Name</mat-label>
+                <input matInput placeholder="Client Name">
+              </mat-form-field>
+            </div>
+            <div fxFlex="50%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Category Type</mat-label>
+                <mat-select matNativeControl>
+                  <mat-option value="option">Search by Candidate Name</mat-option>
+                  <mat-option value="option">Search by Employer Name</mat-option>
+                  <mat-option value="option">Search by Institution Name</mat-option>
+                  <mat-option value="option">Search by Professional Reference</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="50%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Search by Candidate Name</mat-label>
+                <input matInput placeholder="Search by Candidate Name">
+              </mat-form-field>
+            </div>
+            <div fxFlex="50%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Client Name</mat-label>
+                <input matInput placeholder="Client Name">
+              </mat-form-field>
+            </div>
+            <div fxFlex="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Address</mat-label>
+                <input matInput placeholder="Country/State/City">
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutGap="8px" fxLayoutAlign="end end">
+              <button mat-flat-button color="primary">Serch</button>
+              <button mat-flat-button color="warn">Cancel</button>
+            </div>
+          </div>
+        </mat-dialog-content>
+      </div>
+    }
+
+    <!-- OTP Popup -->
+    @if (common.popupOTP) {
+      <div class="otp">
+        <mat-dialog-content class="oflow-hid">
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <div fxLayout="row wrap" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px grid"
+                class="otppop" class.xs="otpxs">
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%">
+                  <div fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutAlign="center center" class="img-otp">
+                    <img src="assets/images/otp.png" width="80%">
+                  </div>
+                </div>
+                <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="65%" fxFlex.xs="100%">
+                  <div fxLayout="row wrap" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="0px grid"
+                    fxLayoutAlign="start start">
+                    <div fxFlex="100%">
+                      <h2>OTP Header Text </h2>
+                      <p>
+                        User/mobile verification <strong>OTP</strong> send in your registered mobile number. Please check your
+                        mohile
+                      </p>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="0px grid">
+                    <div fxFlex="80%" fxFlex.lg="80%" fxFlex.md="80%" fxFlex.sm="80%" fxFlex.xs="65%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <input matInput placeholder="OTP" maxlength="5">
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="20%" fxFlex.xs="35%">
+                      <button mat-flat-button color="primary" class="text-cap btn-otp">Verify</button>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="0px">
+                    <mat-hint class="sendotp"><a href="#resendotp">Resend OTP</a><span>0:26</span></mat-hint>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-dialog-content>
+      </div>
+    }

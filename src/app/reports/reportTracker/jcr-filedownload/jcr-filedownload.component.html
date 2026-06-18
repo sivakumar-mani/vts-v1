@@ -1,0 +1,121 @@
+<app-breadcrumb [routePath]="'Reports / Report Tracker / JCR File Download'" [btnDownLoad]="true"
+(eventDownload)="exportExcel()"></app-breadcrumb>
+<div fxLayout="row" class="advSearch">
+  <form autocomplete="off" [formGroup]="jcrfiledownloadForm">
+    <div class="advSearch-forms">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
+        fxLayoutGap="0px">
+        <div fxFlex="100%">
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="200px">
+              <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                [selectProperties]='candidateControl'>
+              </app-auto-complete>
+            </div>
+            <div fxFlex="180px">
+              <app-auto-complete (propValueEvent)="getPropertyValue($event)"
+                [selectProperties]='screeningNoControl'>
+              </app-auto-complete>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="100%" class="advSearch-btn">
+      <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+        <a (click)="searchValue()">Search</a>
+        <span>|</span>
+        <a (click)="resetfrom()">Reset</a>
+      </div>
+    </div>
+  </form>
+</div>
+<div fxLayout="row" class="srchPad">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                  fxLayout.xs="column" fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="80%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                    fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">JCR File Download</h1>
+                  </div>
+
+                  <span fxFlex></span>
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="50%" fxFlex.xs="75%"
+                    fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                    <div class="tbl-commonsearch">
+                      <mat-form-field fxFlex="100%">
+                        <mat-label></mat-label>
+                        <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                        <input matInput placeholder="Search here..." type="text" kendoTextBox
+                          autocomplete="off" [(ngModel)]="searchText"
+                          (input)="onFilter($event.target.value)" />
+                          @if (searchText) {
+                            <button mat-button matSuffix mat-icon-button
+                              aria-label="Clear" (click)="searchText = '';onFilter(searchText)">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                          }
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </mat-card-title>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid">
+            <div fxFlex="100%">
+              <div fxLayout="row wrap">
+                <kendo-grid #kt [data]="gridView" [reorderable]="true" [skip]="skip" [pageable]="true"
+                  (pageChange)="pageChange($event)" [resizable]="true" [sortable]="true"
+                  [groupable]="true" kendoGridSelectBy="screeningDocId" [selectedKeys]="mySelection"
+                  [pageSize]="itemPerPage" style="width: 100%; min-height: 10px;"
+                  [columnMenu]="{ filter: true }">
+                  <kendo-grid-command-column width="50"
+                    [style]="{'background-color': '#ffffff','color': '#333333'}">
+                    <ng-template kendoGridHeaderTemplate><span style="color:#ffffff">Select</span>
+                    <!-- <mat-checkbox class="example-margin"></mat-checkbox> -->
+                  </ng-template>
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    <mat-checkbox class="example-margin" [(ngModel)]="dataItem.checked">
+                    </mat-checkbox>
+                  </ng-template>
+                </kendo-grid-command-column>
+                @for (report of displayColumns; track report) {
+                  <kendo-grid-column [field]="report.field" [title]="report.header" [width]="180"
+                    [headerStyle]="{'background-color': '#58595C','color': '#fff','line-height': '2em'}"
+                    [style]="{'background-color': '#ffffff','color': '#333333'}">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                      {{ dataItem[report.field] ? dataItem[report.field] : 'N/A' }}
+                    </ng-template>
+                  </kendo-grid-column>
+                }
+                <ng-template kendoPagerTemplate let-totalPages="totalPages"
+                  let-currentPage="currentPage">
+                  <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                  <kendo-pager-numeric-buttons [buttonCount]="buttonCount">
+                  </kendo-pager-numeric-buttons>
+                  <kendo-pager-info></kendo-pager-info>
+                  <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                  <a (click)="showall()">Show All</a>
+                </ng-template>
+                <kendo-grid-messages noRecords="No Data Found"></kendo-grid-messages>
+              </kendo-grid>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

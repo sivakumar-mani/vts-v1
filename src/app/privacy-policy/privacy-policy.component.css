@@ -1,0 +1,49 @@
+.FullBody {
+    background: #fff;
+}
+.HContBody {
+	width: 75%;
+	margin-right: auto;
+	margin-left: auto;
+	padding-top: 25px;
+}
+.HeaderBg a {
+	color: #353537;
+	font-size: 14px;
+	font-weight: 600;
+	text-align: right;
+	float: right;
+	line-height: 50px;
+}
+.HeaderBg a i {
+	font-size: 18px;
+}
+.LogTxt img{width: 52px;}
+.ContBody {
+	width: 75%;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 25px;
+}
+h1, h3{
+	text-transform: uppercase;
+}
+p {
+	color: #58595c;
+	line-height: 28px;
+	margin: 0 0 15px 0;
+	text-align: justify;  
+}
+footer {
+	font-size: 11px;
+	color: #9b9b9d;
+	text-align: center;
+	padding: 10px 0 15px 0;
+	bottom: 0px;
+	width: 100%;
+}
+/* For Krya logo */
+.kryalogo i {
+	font-size: 42px !important;
+	color: #173962;
+  }

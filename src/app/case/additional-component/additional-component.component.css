@@ -1,0 +1,35 @@
+﻿fieldset {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 1.5em;
+}
+
+.error {
+    color: red;
+}
+
+.thname {
+    width: auto !important;
+    min-width: 65px;
+    float: left;
+    display: inline-block;
+    overflow: auto !important;
+    text-overflow: initial !important;
+    white-space: normal !important;
+    outline: none !important;
+
+}
+
+.inv_table .p-datatable .p-sortable-column {
+    display: inline-flex;
+    padding: 8px;
+}
+
+.inv_table .ng-star-inserted .ico-fieldsearch {
+    position: relative;
+    top: 8px;
+}
+
+.p-datatable .p-sortable-column {
+    cursor: pointer;
+    display: inline-flex !important;
+}

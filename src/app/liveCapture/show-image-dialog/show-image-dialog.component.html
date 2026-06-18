@@ -1,0 +1,14 @@
+<mat-grid-list cols="5">
+  @for (file of data.images; track file) {
+    <mat-grid-tile>
+      @if (data.type == 'image') {
+        <img [src]="file.url">
+      }
+      @if (data.type == 'video') {
+        <video width="320" height="240" controls>
+          <source [src]="file.url" type="video/mp4">
+        </video>
+      }
+    </mat-grid-tile>
+  }
+</mat-grid-list>

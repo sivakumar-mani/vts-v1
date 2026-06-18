@@ -1,0 +1,1139 @@
+﻿<form [formGroup]="verificationScreeningForm">
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      <mat-card-header>
+        <span fxFlex></span>
+        <div fxLayoutGap="8px">
+
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <div class="d-view">
+              <!-- <div fxLayout="row">
+              <div fxFlex="100%">
+                <h3 fxFlex="50%">Screening Details</h3>
+                <h3 fxFlex="50%" fxLayoutAlign="end center">
+                  <a class="text-cap" *ngIf="verificationForm.value['responseDocument']?.componentName === 'Address'" (click)="pvForm()">Address PV Form</a></h3>
+                </div>
+              </div> -->
+
+
+              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayout.lg="row" class="h3-header">
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <h3 class="p-0">Screening Details</h3>
+                </div>
+
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="end center" fxLayoutAlign.sm="start center"
+                  [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : '' "
+                  fxLayoutAlign.xs="start center" fxLayoutGap="8px" style="font-weight: normal;">
+                  @if (addressFlag==true && (verificationForm.value['responseDocument']?.componentName.toUpperCase() === 'ADDRESS' ||
+                    verificationForm.value['responseDocument']?.componentName.toUpperCase() === 'DIGITAL ADDRESS VERIFICATION')) {
+                    <a class="text-cap"
+                    (click)="smsPreview()">SMS Preview</a>
+                  }
+                  @if (addressFlag==true) {
+                    <span>|</span>
+                  }
+                  <!-- {{userData.teamName}} -->
+                  @if (verificationForm.value['responseDocument']?.componentName === 'Address') {
+                    <a class="text-cap"
+                    (click)="pvForm()">Address PV Form</a>
+                  }
+                  @if (verificationForm.value['responseDocument']?.componentType === 'companySiteVisit' ||
+                    verificationForm.value['responseDocument']?.componentType === 'education' || verificationForm.value['responseDocument']?.componentType === 'employee'|| verificationForm.value['responseDocument']?.componentType === 'employmentSupervisor'|| verificationForm.value['responseDocument']?.componentType === 'referenceCheck' || verificationForm.value['responseDocument']?.componentType === 'currentemployee' || verificationForm.value['responseDocument']?.componentType === 'previousemployee') {
+                    <a class="text-cap"
+                      (click)="getScreenLetter(verificationForm.value['responseDocument']?.componentType)">Generate
+                    E Mail Response </a>
+                  }
+
+                  @if (verificationForm.value['responseDocument']?.componentName === 'Address' ||
+                    verificationForm.value['responseDocument']?.componentType === 'companySiteVisit' ||
+                    verificationForm.value['responseDocument']?.componentType === 'education' ||
+                    verificationForm.value['responseDocument']?.componentType === 'employee'|| verificationForm.value['responseDocument']?.componentType === 'employmentSupervisor'|| verificationForm.value['responseDocument']?.componentType === 'referenceCheck' || verificationForm.value['responseDocument']?.componentType === 'currentemployee' || verificationForm.value['responseDocument']?.componentType === 'previousemployee') {
+                    <span
+                    >|</span>
+                  }
+                  <app-insuff-history
+                    [screeningCompId]="verificationService.tempData['screeningCompId']"
+                  [isInsuffScreen]="false"></app-insuff-history>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px"
+                class="line">
+                @if (restrictVeAccess() && common.VE === false) {
+                  <div fxFlex="33.33%">
+                    <p>
+                      <label>Screening Owner @if (userData.teamLeadFlag === true || userData.subTeamLeadFlag === true) {
+                        <span
+                          [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : '' "
+                          class="text-sm FloatR text-cap"><a
+                        (click)="opendialog('owner')">Change</a></span>
+                      }</label>
+                      @if (reassignFlag) {
+                        <em>{{
+                          verificationScreeningForm?.get("orginalScreeningOwnerName")?.value
+                          ? verificationScreeningForm?.get("orginalScreeningOwnerName")?.value
+                          : "N/A"
+                        }}</em>
+                      }
+                      @if (!reassignFlag) {
+                        <em>{{
+                          verificationScreeningForm?.get("screeningOwnerName")?.value
+                          ? verificationScreeningForm?.get("screeningOwnerName")?.value
+                          : "N/A"
+                        }}</em>
+                      }
+                    </p>
+                  </div>
+                }
+                @if (restrictVeAccess() && common.VE === false) {
+                  <div fxFlex="33.33%">
+                    <p>
+                      <label>Vendor Name <span class="text-sm FloatR text-cap"
+                        [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : '' "><a
+                      (click)="opendialog('vendor')" class="text-sm">Change</a>
+                    </span></label>
+                    <em>{{
+                      verificationScreeningForm?.get("vendorName")?.value
+                      ? verificationScreeningForm?.get("vendorName")?.value
+                      : "N/A"
+                    }}</em>
+                  </p>
+                </div>
+              }
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Submission owner</label>
+                  <em>{{
+                    verificationScreeningForm?.get("submissionQcOwnerName")?.value
+                    ? verificationScreeningForm?.get("submissionQcOwnerName")?.value
+                    : "N/A"
+                  }}</em>
+                </p>
+              </div>
+            </div>
+            @if (userData.applicationId !== 3) {
+              <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px"
+                class="line">
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Case Initiation Date</label>
+                    <em>{{
+                      verificationScreeningForm?.get("requestDate")?.value
+                      ?
+                      (common.getTimezoneOffset(verificationScreeningForm?.get("requestDate")?.value,
+                      false) | date: "dd/MMM/yyyy")
+                      : "N/A"
+                    }}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Component Initiation Date</label>
+                    <em>{{
+                      verificationScreeningForm?.get("componentInitDate")?.value
+                      ?
+                      (common.getTimezoneOffset(verificationScreeningForm?.get("componentInitDate")?.value,
+                      false) | date: "dd/MMM/yyyy")
+                      : "N/A"
+                    }}</em>
+                  </p>
+                </div>
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Component Due Date & Time</label>
+                    <em class="red">{{
+                      verificationScreeningForm?.get("componentDueDate")?.value
+                      ?
+                      (common.getTimezoneOffset(verificationScreeningForm?.get("componentDueDate")?.value,
+                      false) | date: "dd/MM/yyyy")
+                      : "N/A"
+                    }}</em>
+                  </p>
+                </div>
+              </div>
+            }
+            @if (userData.applicationId !== 3) {
+              <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px"
+                class="line">
+                @if (((userData.subTeamName === 'CRTCAMTeam') || (userData.teamName === 'CRTIndia')
+                  || (userData.teamName === 'CRTTechMahindra')|| (userData.teamName === 'CTS-CRTTeam') || (userData.applicationId === 2))) {
+                  <div fxFlex="33.33%"
+                    >
+                    <p>
+                      <label>Case Due Date</label>
+                      <em class="red">{{
+                        verificationScreeningForm?.get("caseDueDate")?.value
+                        ?
+                        (common.getTimezoneOffset(verificationScreeningForm?.get("caseDueDate")?.value,
+                        false) | date: "dd/MMM/yyyy")
+                        : "N/A"
+                      }}</em>
+                    </p>
+                  </div>
+                }
+                <div fxFlex="33.33%">
+                  <p>
+                    <label>Days Remaining/TAT Days </label>
+                    <em>@if (verificationScreeningForm?.get('tatDays')?.value > 0) {
+                      <span>
+                        <span class="outof" matTooltip="Remaining Days"
+                        matTooltipClass="accent-tooltip">{{verificationScreeningForm?.get('remainingDays')?.value}}</span>/<span
+                        matTooltip="Tat Days" matTooltipClass="accent-tooltip"
+                      class="outon">{{verificationScreeningForm?.get('tatDays')?.value}}</span>
+                    </span>
+                    }@if (!(verificationScreeningForm?.get('tatDays')?.value > 0)) {
+                    <span
+                    >N/A</span>
+                  }</em>
+                </p>
+              </div>
+              <div fxFlex="33.33%">
+                <p>
+                  <label>Inprogress Days</label>
+                  <em>{{verificationScreeningForm?.get("inProgressDays")?.value ?
+                    verificationScreeningForm?.get("inProgressDays")?.value > 1 ?
+                    verificationScreeningForm?.get("inProgressDays")?.value + ' days ':
+                    verificationScreeningForm?.get("inProgressDays")?.value + ' day ' :
+                  'N/A'}}</em>
+                </p>
+              </div>
+              @if (verificationForm.value['responseDocument']?.componentType === 'employee'|| verificationForm.value['responseDocument']?.componentType === 'currentemployee'|| verificationForm.value['responseDocument']?.componentType === 'previousemployee') {
+                <div
+                  fxFlex="33.33%">
+                  <p>
+                    <label>FR Inprogress Days</label>
+                    <em>{{verificationScreeningForm?.get("frInProgressDays")?.value ?
+                      verificationScreeningForm?.get("frInProgressDays")?.value > 1 ?
+                      verificationScreeningForm?.get("frInProgressDays")?.value + ' days ':
+                      verificationScreeningForm?.get("frInProgressDays")?.value + ' day ' :
+                    0}}</em>
+                  </p>
+                </div>
+              }
+              @if ((verificationForm.value['responseDocument']?.componentName.toUpperCase() === 'ADDRESS' ||
+                verificationForm.value['responseDocument']?.componentName.toUpperCase() === 'DIGITAL ADDRESS VERIFICATION')&&((userData.subTeamName !== 'CRTCAMTeam' && userData.teamName !== 'CRTIndia') &&
+                (userData.applicationId !== 2))) {
+                <div fxFlex="33.33%">
+                  <p> <label>Address Details</label>
+                  <em>{{address}}<br>
+                    {{verificationForm.value.screeningCandidateDet.phoneNo}}
+                    <br>
+                      {{
+                      (verificationForm?.value.verificationComponentDet.component[0].compRef.periodOfStay
+                      &&
+                      verificationForm?.value.verificationComponentDet.component[0].compRef.periodOfStayTo)?pstay
+                    + ' ' + pstayto :''}}</em>
+                  </p>
+                </div>
+              }
+                                <!-- <div fxFlex="33.33%" *ngIf="((userData.subTeamName !== 'CRTCAMTeam' && userData.teamName !== 'CRTIndia') &&
+                (userData.applicationId !== 2))&& (verificationForm.value['responseDocument']?.componentName.toUpperCase() !== 'ADDRESS' ||
+                verificationForm.value['responseDocument']?.componentName.toUpperCase() !== 'DIGITAL ADDRESS VERIFICATION')">
+            </div> -->
+          </div>
+        }
+        <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px"
+          class="line">
+
+          @if (verificationScreeningForm?.get('tatDays')?.value > 0) {
+            <div fxFlex="33.33%">
+              <p>
+                <label>Component TAT Status</label>
+                <em>{{verificationScreeningForm?.get('tatStatus')?.value ?
+                verificationScreeningForm?.get('tatStatus')?.value : 'N/A'}}</em>
+              </p>
+            </div>
+          }
+          @if (verificationScreeningForm?.get('tatDays')?.value > 0) {
+            <div fxFlex="33.33%">
+              <p>
+                <label>Within Tat Date</label>
+                <em>{{
+                  verificationScreeningForm?.get("withInDate")?.value
+                  ?
+                  (common.getTimezoneOffset(verificationScreeningForm?.get("withInDate")?.value,
+                  false) | date: "dd/MM/yyyy")
+                  : "N/A"
+                }}</em>
+              </p>
+            </div>
+          }
+          @if (verificationScreeningForm?.get('tatDays')?.value > 0) {
+            <div fxFlex="33.33%">
+              <p>
+                <label>Nearest Tat Date</label>
+                <em>{{
+                  verificationScreeningForm?.get("nearDate")?.value
+                  ?
+                  (common.getTimezoneOffset(verificationScreeningForm?.get("nearDate")?.value,
+                  false) | date: "dd/MM/yyyy")
+                  : "N/A"
+                }}</em>
+              </p>
+            </div>
+          }
+          @if (verificationScreeningForm?.get('tatDays')?.value > 0) {
+            <div fxFlex="33.33%">
+              <p>
+                <label>Current Tat Date</label>
+                <em>{{
+                  verificationScreeningForm?.get("currentDate")?.value
+                  ?
+                  (common.getTimezoneOffset(verificationScreeningForm?.get("currentDate")?.value,
+                  false) | date: "dd/MM/yyyy")
+                  : "N/A"
+                }}</em>
+              </p>
+            </div>
+          }
+          @if (verificationScreeningForm?.get('tatDays')?.value > 0) {
+            <div fxFlex="33.33%">
+              <p>
+                <label>Beyond Tat Date</label>
+                <em>{{
+                  verificationScreeningForm?.get("beyondDate")?.value
+                  ?
+                  (common.getTimezoneOffset(verificationScreeningForm?.get("beyondDate")?.value,
+                  false) | date: "dd/MM/yyyy")
+                  : "N/A"
+                }}</em>
+              </p>
+            </div>
+          }
+          @if (reassignFlag) {
+            <div fxFlex="33.33%">
+              <p>
+                <label>Reassign Owner</label>
+                <em>{{
+                  verificationScreeningForm?.get("screeningOwnerName")?.value
+                  ? verificationScreeningForm?.get("screeningOwnerName")?.value
+                  : "N/A"
+                }}</em>
+              </p>
+            </div>
+          }
+          @if (reopenFlag) {
+            <div fxFlex="33.33%">
+              <p>
+                <label>RE-OPEN DATE</label>
+                <em>{{
+                  verificationScreeningForm?.get("reopenDate")?.value
+                  ?
+                  (common.getTimezoneOffset(verificationScreeningForm?.get("reopenDate")?.value,
+                  false) | date: "dd/MMM/yyyy")
+                  : "N/A"
+                }}</em>
+              </p>
+            </div>
+          }
+          @if (subcheckFlag) {
+            <div fxFlex="33.33%">
+              <p>
+                <label>SUB CHECK ADDED DATE</label>
+                <em>{{
+                  verificationScreeningForm?.get("subCheckDate")?.value
+                  ?
+                  (common.getTimezoneOffset(verificationScreeningForm?.get("subCheckDate")?.value,
+                  false) | date: "dd/MMM/yyyy")
+                  : "N/A"
+                }}</em>
+              </p>
+            </div>
+          }
+
+        </div>
+        <!--    <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line">
+
+
+        <div fxFlex="33.33%">
+          <p>
+            <label>Reference No</label>
+            <em>{{
+              verificationScreeningForm?.get("referenceNo")?.value
+              ? verificationScreeningForm?.get("referenceNo")?.value
+              : "N/A"
+            }}</em> </p>
+          </div> -->
+          <!-- <div fxFlex="33.33%">
+          <p>
+            <label>Client Name </label>
+            <em>{{verificationScreeningForm?.get('clientName')?.value?verificationScreeningForm?.get('clientName')?.value:'N/A'}}</em>
+          </p>
+        </div>
+      </div>-->
+      <!-- <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" class="line" *ngIf="userData.applicationId !== 3"> -->
+      <!-- <div fxFlex="33.33%">
+      <p>
+        <label>Site Name</label>
+        <em>{{verificationScreeningForm?.get('siteNo')?.value?verificationScreeningForm?.get('siteNo')?.value:'N/A'}}</em>
+      </p>
+    </div> -->
+
+    <!-- <div fxFlex="33.33%">
+    <p>
+      <label>Applicant ID</label>
+      <em>{{
+        verificationScreeningForm?.get("applicationId")?.value
+        ? verificationScreeningForm?.get("applicationId")?.value
+        : "N/A"
+      }}</em> </p>
+    </div> -->
+  <!-- </div> -->
+</div>
+</div>
+</div>
+</mat-card-content>
+</div>
+</div>
+</form>
+
+
+<div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+  fxLayoutGap="20px grid">
+  @if (restrictVeAccess() && common.VE === false && verificationService.globalSearchFlag != true) {
+    <div fxFlex="24%" fxFlex.lg="24%" fxFlex.md="24%" fxFlex.sm="50%" fxFlex.xs="100%"
+      >
+      <mat-checkbox [ngClass]="(verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection')?'page-btn disabled':''" (change)="openInsufficiencyDialog(null)" [(ngModel)]="insuffRaisedFlag"
+      [disabled]="verificationForm?.get('insuffRaisedFlag').value === true">Raise Insufficiency</mat-checkbox>
+    </div>
+  }
+  <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="50%" fxFlex.xs="100%" fxLayoutAlign="end end">
+    <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">&nbsp;
+        <!-- <a class="text-sm veralign-super"  matTooltip="History" matTooltipClass="accent-tooltip"  (click)="openHistory()">Insufficiency&nbsp;History</a> -->
+      </div>
+      @if (insuffRaisedFlag) {
+        <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <button mat-icon-button class="in-btn mb-10" matTooltip="Save" matTooltipClass="accent-tooltip"
+            (click)="SaveInsuff()" [disabled]="verificationForm?.get('insuffRaisedFlag').value === true"> <i
+          class="icon-save"></i> </button>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+
+
+
+@if (insuffRaisedFlag) {
+  <div fxLayout="row wrap" fxLayoutGap="0px">
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <app-raise-insufficiency #insuff [docdata]="insuffDocument" [docList]="verificationTransBindDet.insuffDocument"
+        [mainForm]="insufficiencyForm"
+        [compBaseDetails]="{ compId: verificationForm.controls.verificationComponentDet.value.compId }"
+      [formgroupName]="'screeningInsufficiency'" [level]="'Verification'"> </app-raise-insufficiency>
+    </div>
+  </div>
+}
+
+@if (addressFlag==true && (verificationForm.value['responseDocument']?.componentName.toUpperCase()=== 'ADDRESS' ||
+  verificationForm.value['responseDocument']?.componentName.toUpperCase() === 'DIGITAL ADDRESS VERIFICATION')) {
+  <form
+    [formGroup]="smsFormGroup">
+    @if (true) {
+      <div fxlayoutGap="20px" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+        fxLayout.xs="column">
+        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <h3 class="sub-header">SMS Details <span fxFlex></span>
+          @if (closedFlag === false) {
+            <button
+              [ngClass]="(common.modifyAdditionalFeeFlag == true || common.modifyComponentFeeFlag == true) ? 'page-btn disabled' : ''"
+              mat-icon-button class="in-btn mb-10" matTooltip="Update SMS" matTooltipClass="accent-tooltip"
+              (click)="updateSms()"> <i class="icon-save"></i> </button>
+            }
+          </h3>
+        </div>
+      </div>
+    }
+    @if (true) {
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+            <mat-label>Primary Phone Number</mat-label>
+            <mat-icon matSuffix><i class="material-icons material-icons-outlined">phone</i></mat-icon>
+            <input matInput type="tel" formControlName="primaryMobileNo" placeholder="Primary Phone Number"
+              appNumberOnly [PhoneNumber]="false" autocomplete="off" role="presentation" minlength="10"
+              maxlength="14" />
+            @if (smsFormGroup?.get('primaryMobileNo')?.errors?.minlength) {
+              <mat-error> Enter atleast 10 numbers
+              </mat-error>
+            }
+            @if (smsFormGroup?.get('primaryMobileNo')?.errors?.required) {
+              <mat-error> Primary Phone Number is
+                required
+              </mat-error>
+            }
+            @if (smsFormGroup?.get('primaryMobileNo')?.errors?.pattern) {
+              <mat-error> Enter valid Primary Phone
+                numbers
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+            <mat-label>Secondary Phone Number</mat-label>
+            <mat-icon matSuffix><i class="material-icons material-icons-outlined">phone</i></mat-icon>
+            <input matInput type="tel" formControlName="secondaryMobileNo" placeholder="Secondary Phone Number"
+              appNumberOnly [PhoneNumber]="false" autocomplete="off" role="presentation" minlength="10"
+              maxlength="14" />
+            @if (smsFormGroup.get('secondaryMobileNo')?.errors?.minlength) {
+              <mat-error> Enter atleast 10 numbers
+              </mat-error>
+            }
+            @if (smsFormGroup.get('secondaryMobileNo')?.errors?.pattern) {
+              <mat-error> Enter valid Secondary Phone
+                numbers
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Email ID</mat-label>
+            <input matInput placeholder="Email ID" type="email" formControlName="mailId" autocomplete="off"
+              role="presentation" maxlength="120">
+            <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+            @if (smsFormGroup.get('mailId')?.errors?.required) {
+              <mat-error> Email id is required. </mat-error>
+            }
+            @if (smsFormGroup.get('mailId')?.errors?.pattern ||
+              smsFormGroup.get('mailId')?.errors?.email) {
+              <mat-error> Please enter valid email. </mat-error>
+            }
+            @if (smsFormGroup.get('mailId')?.errors?.incorrect) {
+              <mat-error> Email id already exist. </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    }
+    <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Remarks</mat-label>
+        <textarea #remarks formControlName="remarks" maxlength="1000" matInput placeholder="Remarks"></textarea>
+        <mat-hint>({{ remarks.value.length }}/5000)) Max</mat-hint>
+        <mat-error *ngIf="smsFormGroup.get('remarks')?.errors?.required"> Remarks is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div> -->
+</form>
+}
+<div class="d-view">
+  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayout.lg="row" class="h3-header">
+    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <h3 class="p-0">Initiate Digilocker Verification</h3>
+    </div>
+
+    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center"
+      fxLayoutAlign.sm="start center"
+      fxLayoutAlign.xs="start center" fxLayoutGap="8px" style="font-weight: normal;">
+      <a class="text-cap" (click)="getDigiLockerTemplate()">Send Email for
+      DigiLocker Verification</a>
+      <span>|</span>
+      <a class="text-cap" (click)="generateDigiLockerURL()">Generate DigiLocker URL</a>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayoutGap="0px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px" style="text-align: left;">
+    <mat-hint style="text-align: left;">
+      <pre>
+        Note:
+        1.Click 'Send Email for DigiLocker Verification' option to send mail to candidate's mail id
+        to initiate digilocker verification process
+        2.Click 'Generate DigiLocker URL' to generate link for digilocker verification process if the mail is not received.
+      </pre>
+    </mat-hint>
+  </div>
+  <div fxLayout="row" fxLayoutGap="15px" fxLayoutGap.sm="5px" fxLayoutGap.xs="6px"   class="line">
+    @if (UrlFlag === true) {
+      <div class="mt-3">
+        <span class="form-control" id="digilockerUrl">{{this.verificationService.digiLockerCallUrl}}</span>
+        &nbsp;&nbsp;&nbsp;<a (click)="copyToClipboard()" class="btn btn-secondary mt-2">Copy URL</a>
+      </div>
+    }
+  </div>
+</div>
+<!-- <div fxLayout="row wrap" fxLayoutGap="0px">
+<div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+  <h3 class="sub-header">Inititate Digilocker Verification<span fxFlex></span></h3>
+  <button (click)="onInitiateDigilockerClick()"
+    name="Send Email for DigiLocker Verication"> Send Email for
+  DigiLocker Verification</button>
+</div>
+</div>
+<div class="container">
+  <button (click)="generateDigiLockerURL()"  class="btn btn-primary">Generate DigiLocker URL</button>
+  <div *ngIf="UrlFlag === true" class="mt-3">
+    <span class="form-control"
+    id="digilockerUrl">{{this.verificationService.digiLockerCallUrl}}</span>
+    <button (click)="copyToClipboard()" class="btn btn-secondary mt-2">Copy URL</button>
+  </div>
+</div> -->
+
+<div fxLayout="row wrap" fxLayoutGap="0px">
+  <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <app-supporting-documents [screeningCompId]="verificationForm.get('screeningCompId').value"
+      [paymentDetails]="paymentDetails" [paymentList]="paymentModeList" [overrideFeeDetails]="overrideFeeDetails"
+      [communicationDetails]="communicationDetails" [digitalDocument]="digitalDocument"
+      [commList]="communicationList" [verificationForm]="verificationForm">
+    </app-supporting-documents>
+  </div>
+</div>
+<app-dynamic-component [verificationForm]="verificationForm"
+[verificationComponentDet]="this.verificationForm.controls['verificationComponentDet']"></app-dynamic-component>
+
+@if (userData.applicationId === 1 && common.VE === false) {
+  <form [formGroup]="screeningStatusForm" class="mt-15">
+    <div fxlayoutGap="20px" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+      fxLayout.xs="column">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <h3 class="sub-header">Screening Status <span fxFlex></span>
+        @if (closedFlag === false && common.modifyAdditionalFeeFlag!=true && common.modifyComponentFeeFlag!=true) {
+          <button [ngClass]="screenAuth.addFlag===false || (verificationForm.controls['verificationScreeningDet'].value.camRejectStatus !=null && verificationForm.controls['verificationScreeningDet'].value.camRejectStatus =='Rejection')?'page-btn disabled':''"
+            mat-icon-button class="in-btn mb-10" matTooltip="Update Status" matTooltipClass="accent-tooltip"
+            (click)="updateScreeningStatus()"> <i class="icon-save"></i>
+          </button>
+        }
+      </h3>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayo.ut.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Status Date</mat-label>
+        <!-- <input matInput formControlName="statusDate" placeholder="MM/DD/YYYY, HH:MM AM" [owlDateTimeTrigger]="Status"
+        [owlDateTime]="Status" />
+      <mat-datepicker-toggle [owlDateTimeTrigger]="Status" matSuffix></mat-datepicker-toggle>
+      <owl-date-time [pickerMode]="'popup'" #Status></owl-date-time> -->
+      <input matInput [matDatepicker]="statusDate" placeholder="Status Date" formControlName="statusDate"
+        (focus)="statusDate.open()" (click)="statusDate.open()" />
+      <mat-datepicker-toggle matSuffix [for]="statusDate"> </mat-datepicker-toggle>
+      <mat-datepicker #statusDate></mat-datepicker>
+      @if (!!screeningStatusForm?.get('statusDate')?.errors?.required) {
+        <mat-error>Status Date is required
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <!-- <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+    <mat-label>Vendor Report Received On</mat-label>
+    <input  matInput readonly [matDatepicker]="reportReceivedDate" placeholder="Vendor Report Received On"
+      formControlName="reportReceivedDate" (focus)="reportReceivedDate.open()" (click)="reportReceivedDate.open()"/>
+    <mat-datepicker-toggle readonly  matSuffix [for]="reportReceivedDate"> </mat-datepicker-toggle>
+    <mat-datepicker readonly #reportReceivedDate></mat-datepicker>
+  </mat-form-field>
+</div>
+-->
+<!-- P DROPDOWN -->
+<div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+  <span class="p-float-label verification-float-label">
+    <p-dropdown [options]="items" formControlName="screeningStatusId" placeholder="Select Status"
+      fxFlex="100%" [resetFilterOnHide]="true" [filter]="true" (onChange)="getStatusName($event)"
+    [style]="{minWidth: '300px'}"></p-dropdown>
+    <label class="lbl-float">Select Status</label>
+    @if (screeningStatusForm?.get('screeningStatusId')?.errors?.required) {
+      <mat-error>Status is
+      required</mat-error>
+    }
+  </span>
+</div>
+</div>
+<!-- //Added by Megala - For VTS2-2024-CRT-0155 -->
+@if ((screeningStatusForm.get('screeningStatusName').value === 'Re-Open')) {
+  <div fxlayoutGap="20px" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+    fxLayout.xs="column">
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <h3 class="sub-header">Supporting Documents <span fxFlex></span>
+    </h3>
+  </div>
+</div>
+}
+@if ((screeningStatusForm.get('screeningStatusName').value === 'Re-Open')) {
+  <div>
+    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <app-screening-documents header="reOpenDoc"
+        [mainForm]="verificationForm.get('verificationResponseDocument.reOpenResponseDocument')"
+        [formgroupName]="'document'"
+        [doctType]="verificationForm?.get('verificationTransBindDet').value.documentType" [showDocType]="false"
+        [verificationTransBindDet]="verificationForm?.get('verificationTransBindDet').value">
+      </app-screening-documents>
+    </div>
+  </div>
+}
+<br>
+  @if ((screeningStatusForm.get('screeningStatusName').value === 'Re-Open')) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+      >
+      <div fxFlex="49%" fxFlex.lg="49%" fxFlex.md="49%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Reason For Re-open</mat-label>
+          <textarea matInput #reopenRemarks maxlength="1500" placeholder="Reason For reopen"
+          formControlName="reopenRemarks"></textarea>
+          <mat-hint>({{ reopenRemarks.value.length }}/1500) Max</mat-hint>
+          <!-- <mat-error *ngIf="screeningStatusForm?.get('reopenRemarks')?.errors?.required">
+          Reason for re-open is required
+        </mat-error> -->
+      </mat-form-field>
+    </div>
+  </div>
+}
+@if (((screeningStatusForm.get('screeningStatusName').value === 'Close - Stop Check') || (screeningStatusForm.get('screeningStatusName').value === common.CANC_BCLI) ||
+  ((screeningStatusForm.get('cancelledDate').value) && (screeningStatusForm.get('cancelledRemarks').value)) || screeningStatusForm.get('screeningStatusName').value === 'Negative' ||
+  screeningStatusForm.get('screeningStatusName').value === common.NegativePleaseReview ||  screeningStatusForm.get('screeningStatusName').value === common.PositiveReview) || verificationService?.tempData?.ctsflag === true) {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+    >
+    @if (verificationService?.tempData?.ctsflag === true) {
+      <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+        >
+        @if (NAflag !== true) {
+          <mat-form-field appearance="outline" fxFlex="100%">
+            <mat-label>Confirmation Received date </mat-label>
+            <input matInput [matDatepicker]="confirmationReceivedDate" formControlName="confirmationReceivedDate"
+              [max]="dateMax" required placeholder="Confirmation Received Date"
+              (focus)="confirmationReceivedDate.open()" (click)="confirmationReceivedDate.open()" />
+            <mat-datepicker-toggle matSuffix [for]="confirmationReceivedDate"> </mat-datepicker-toggle>
+            <mat-datepicker #confirmationReceivedDate></mat-datepicker>
+            @if (!screeningStatusForm?.get('confirmationReceivedDate')?.value) {
+              <mat-error> Confirmation Received
+                Date is required
+              </mat-error>
+            }
+          </mat-form-field>
+        }
+        @if (NAflag === true) {
+          <mat-form-field appearance="outline" fxFlex="100%">
+            <mat-label>Confirmation Received date </mat-label>
+            <input matInput formControlName="confirmationReceivedDate" [max]="dateMax" required
+              placeholder="Confirmation Received Date" (focus)="confirmationReceivedDate.open()"
+              (click)="confirmationReceivedDate.open()" />
+            @if (!screeningStatusForm?.get('confirmationReceivedDate')?.value) {
+              <mat-error> Confirmation Received
+                Date is required
+              </mat-error>
+            }
+          </mat-form-field>
+        }
+      </div>
+    }
+    @if (((screeningStatusForm.get('screeningStatusName').value === 'Close - Stop Check') || (screeningStatusForm.get('screeningStatusName').value === common.CANC_BCLI)  ||
+      ((screeningStatusForm.get('cancelledDate').value) && (screeningStatusForm.get('cancelledRemarks').value)))) {
+      <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>Cancelled Date </mat-label>
+          <input matInput formControlName="cancelledDate" placeholder="CancelledDate"
+            [owlDateTimeTrigger]="dateTime1" [owlDateTime]="dateTime1" />
+          <mat-datepicker-toggle [owlDateTimeTrigger]="dateTime1" matSuffix></mat-datepicker-toggle>
+          <owl-date-time [pickerMode]="'popup'" #dateTime1></owl-date-time>
+          @if (!!screeningStatusForm?.get('cancelledDate')?.errors?.required) {
+            <mat-error> Cancelled Date is
+              required
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+    @if (screeningStatusForm.get('screeningStatusName').value === 'Negative' ||screeningStatusForm.get('screeningStatusName').value === common.CANC_BCLI ||
+      screeningStatusForm.get('screeningStatusName').value === common.NegativePleaseReview || screeningStatusForm.get('screeningStatusName').value === common.CLOSE_STOPCHECK ||screeningStatusForm.get('screeningStatusName').value === common.PositiveReview) {
+      <div fxFlex="49%" fxFlex.lg="49%" fxFlex.md="49%" fxFlex.sm="100%" fxFlex.xs="100%"
+        >
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>{{screeningStatusForm.get('screeningStatusName').value === 'Negative' ||
+            screeningStatusForm.get('screeningStatusName').value === common.NegativePleaseReview ||
+            screeningStatusForm.get('screeningStatusName').value === common.PositiveReview
+            ? 'Discrepancy status if any':screeningStatusForm.get('screeningStatusName').value ===
+            common.CLOSE_STOPCHECK || screeningStatusForm.get('screeningStatusName').value ===
+          common.CANC_BCLI ?'Cancelled Remark':'Remarks'}}</mat-label>
+          <textarea matInput #remarks maxlength="1500"
+                    placeholder="{{screeningStatusForm.get('screeningStatusName').value === 'Negative' ||
+        screeningStatusForm.get('screeningStatusName').value === common.NegativePleaseReview ||  screeningStatusForm.get('screeningStatusName').value === common.PositiveReview ? 'Discrepancy status if any':screeningStatusForm.get('screeningStatusName').value === common.CLOSE_STOPCHECK?'Cancelled Remark':'Remarks'}}"
+            formControlName="cancelledRemarks"
+          [required]="screeningStatusForm.get('screeningStatusName').value !== common.NegativePleaseReview && screeningStatusForm.get('screeningStatusName').value !== common.PositiveReview ?true : false"></textarea>
+          <mat-hint>({{ remarks.value.length }}/1500) Max</mat-hint>
+          @if (screeningStatusForm.get('screeningStatusName').value === 'Negative' ||!!screeningStatusForm?.get('cancelledRemarks')?.errors?.required) {
+            <mat-error
+              >
+              {{screeningStatusForm.get('screeningStatusName').value === 'Negative' ? 'Discrepancy status if
+              any':(screeningStatusForm.get('screeningStatusName').value === common.CLOSE_STOPCHECK ||
+              screeningStatusForm.get('screeningStatusName').value === common.CANC_BCLI)?'Cancelled
+              Remark':'Remarks'}} is required
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+  </div>
+}
+@if (this.verificationScreeningForm.get('componentDueDate').value &&
+  getTodayDate() > this.verificationScreeningForm.get('componentDueDate').value
+  && (screeningStatusForm.get('screeningStatusName').value !== 'Re-Open')) {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="49%" fxFlex.lg="49%" fxFlex.md="49%" fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+        <mat-label>Reason For Component Delay</mat-label>
+        <textarea matInput #delayReason maxlength="1500" placeholder="Reason For Component Delay"
+        formControlName="compDelayReason"></textarea>
+        <mat-hint>({{ delayReason.value.length }}/1500) Max</mat-hint>
+        @if (!!screeningStatusForm?.get('compDelayReason')?.errors?.required) {
+          <mat-error>
+            Reason For Component Delay is required
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+}
+</form>
+}
+
+
+<ng-template #assignOwnerPopUp>
+  <h1 mat-dialog-title> Screening Owner
+    <div fxLayout="row" class="scrollCls">
+      <div fxFlex="100%">
+        <div fxLayout="row">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <p class="text-sm text-dull text-ilatic mt-10 line-height"> Assign the below Screening Owner to
+              following Verification Reference no.: <span class="text-bold">{{ ownerControl?.value?.name
+            }}</span> </p>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field fxFlex="100%" floatLabel="always" appearance="outline" autocomplete="off" class="scr-own">
+              <mat-label></mat-label>
+              <mat-icon matPrefix>search</mat-icon>
+              <input matInput placeholder="Find someone" [formControl]="filterOwnerName" type="text"
+                pInputText size="50" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </h1>
+  <mat-dialog-content class="scrollCls mheight">
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        @for (owner of (verificationTransBindDet.persons | search: [{ key: 'name', value: filterOwnerName?.value }]); track owner; let i = $index) {
+          <div class="ownven-list" id="ownerDiv" (click)="assignScrnOwner(owner, 'owner', i)">
+            <div class="user avatarBg{{ (i % 6) + 1 }}"> {{ owner.name.split(" ").length - 1 > 0 ? owner.name
+              .split(" ")[0] .charAt(0) .toUpperCase() + owner.name .split(" ")[1] .charAt(0) .toUpperCase() :
+            owner.name.charAt(0).toUpperCase() }} </div>
+            <span [ngClass]="owner.lastLoginFlag === true ? 'pos act' : 'pos inact'">
+              <i [ngClass]="owner.lastLoginFlag === true ? 'icon-approv' : 'icon-reject'"></i></span>
+              <div class="ovname">{{ owner.name }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-stroked-button (click)="dialogClose()">No</button>
+      <button mat-flat-button color="warn" (click)="updatechanges(ownerControl.value, 'owner')">Submit</button>
+    </mat-dialog-actions>
+  </ng-template>
+  <ng-template #assignVendorPopUp>
+    <h1 mat-dialog-title>Vendor Name</h1>
+    <mat-dialog-content>
+      <p class="text-sm text-dull text-ilatic mt-0"> Assign the below Vendor Name to following Verification Reference
+        no.:
+        <span class="text-bold">{{ vendorControl?.value?.vendorName }}</span>
+      </p>
+      <form autocomplete="off" id="ngForm">
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+              <mat-label></mat-label>
+              <mat-select [formControl]="vendorControl" placeholder="Select Vendor Name">
+                <mat-option>Select Vendor Name</mat-option>
+                @for (vendor of verificationTransBindDet.vendors; track vendor; let i = $index) {
+                  <mat-option
+                    [value]="vendor">
+                  {{ vendor.vendorName }}</mat-option>
+                }
+              </mat-select>
+              @if (vendorControl.errors) {
+                <mat-error>Vendor Name is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+      <button mat-stroked-button (click)="dialogClose()">No</button>
+      <button mat-flat-button color="warn" (click)="updatechanges(vendorControl.value, 'vendor')">Submit</button>
+    </mat-dialog-actions>
+  </ng-template>
+  <ng-template #smsPopUp>
+    <h1 mat-dialog-title>Send Email & SMS Preview
+    </h1>
+    <mat-dialog-content>
+      <div fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex="100%">
+          <span [innerHTML]="htmlTempBody"></span>
+        </div>
+      </div>
+      <h3 class="sub-header"> SMS Content Preview <span fxFlex></span>
+    </h3>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%">
+        <span [innerHTML]="smshtmlTempBody"></span>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+    <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #mailDialog>
+  <h1 mat-dialog-title><span>
+    {{ SendCaseMailList.TemplateName === 'DigiLockerURLMailSend'
+    ? 'Generate Digilocker Email' : 'Generate E Mail Response' }}
+  </span></h1>
+  <mat-dialog-content>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxFlex="100%" class="text-sm text-dull">
+
+      </div>
+    </div>
+
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%">
+        <div class="mail-list">
+          <button mat-stroked-button [matMenuTriggerFor]="menu1">To...</button>
+          <mat-menu #menu1="matMenu">
+            @if (checkIsExist("ToInc")) {
+              <button mat-menu-item>ToMail Not Found to Add</button>
+            }
+            @for (mail of SendCaseMailList?.ClientMailId; track mail; let i = $index) {
+              <!-- {{mail | json}} -->
+              @if (mail.selected === false && mail.emailType ==="To") {
+                <button (click)='mailChange(mail.emailAddress,true)'
+                  mat-menu-item>{{
+                mail.emailAddress }}</button>
+              }
+            }
+          </mat-menu>
+          <div class="list-area">
+            <!-- <span class="tag" *ngIf='checkIsExist("ToDec")'>ToMail Not Found </span> -->
+            <ng-container>
+              <mat-form-field appearance="outline" fxFlex="100%" style="width: 100%;">
+                <mat-chip-grid #chipList>
+                  @if (checkIsExist("ToDec") && toList.length === 0 ) {
+                    <mat-chip-row
+                      [removable]="removable">
+                      ToMail Not Found
+                    </mat-chip-row>
+                  }
+                  @for (mail of SendCaseMailList?.ClientMailId; track mail; let i = $index) {
+                    <span>
+                      @if (mail?.emailType==="To" && mail?.selected===true) {
+                        <mat-chip-row
+                          [removable]="removable">
+                          {{ mail.emailAddress }}
+                          <span matChipRemove (click)='mailChange(mail.emailAddress,false)'>×</span>
+                        </mat-chip-row>
+                      }
+                    </span>
+                  }
+                  @for (mail of toList; track mail; let j = $index) {
+                    <mat-chip-row [removable]="removable" (removed)="removeControl( j, 'To')">
+                      {{mail}}
+                      @if (removable) {
+                        <span matChipRemove>×</span>
+                      }
+                    </mat-chip-row>
+                  }
+                  <input placeholder="To" matInput autocomplete="off" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="addOnBlur"
+                    (matChipInputTokenEnd)="addMail($event, 'To')">
+                </mat-chip-grid>
+                @if (addMailCtrl?.errors) {
+                  <mat-error> Enter Valid Email </mat-error>
+                }
+              </mat-form-field>
+            </ng-container>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%">
+        <div class="mail-list">
+          <button mat-stroked-button [matMenuTriggerFor]="menu">Cc...</button>
+          <mat-menu #menu="matMenu">
+            @if (checkIsExist("CCInc")) {
+              <button mat-menu-item>CCMail Not found to Add</button>
+            }
+            @for (mail of SendCaseMailList?.ClientMailId; track mail; let i = $index) {
+              @if (mail.selected === false && mail.emailType ==="CC") {
+                <button (click)='mailChange(mail.emailAddress,true)'
+                  mat-menu-item>{{
+                mail.emailAddress }}</button>
+              }
+            }
+          </mat-menu>
+          <div class="list-area">
+
+            <mat-form-field appearance="outline" fxFlex="100%" style="width: 100%;">
+              <mat-chip-grid #chipList1>
+                @if (checkIsExist("CCDec") && ccList.length === 0) {
+                  <mat-chip-row [removable]="removable">
+                    CCMail Not Found
+                  </mat-chip-row>
+                }
+                @for (mail of SendCaseMailList?.ClientMailId; track mail; let i = $index) {
+                  <span>
+                    @if (mail?.emailType ==="CC" && mail?.selected ===  true) {
+                      <mat-chip-row
+                        [removable]="removable">
+                        {{ mail.emailAddress }}
+                        <span matChipRemove (click)='mailChange(mail.emailAddress,false)'>×</span>
+                      </mat-chip-row>
+                    }
+                  </span>
+                }
+                <span>
+                  @for (cc of ccList; track cc; let j = $index) {
+                    <mat-chip-row [removable]="removable" (removed)="removeControl( j, 'CC')">
+                      {{cc}}
+                      @if (removable) {
+                        <span matChipRemove>×</span>
+                      }
+                    </mat-chip-row>
+                  }
+                </span>
+                <input placeholder="CC" matInput autocomplete="off" [matChipInputFor]="chipList1"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addMail($event, 'CC')">
+              </mat-chip-grid>
+            </mat-form-field>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="row" class="mb-10">
+      <div fxFlex="100%">
+        <div class="mail-list">
+          <button mat-stroked-button>Subject</button>
+
+          <div class="list-area">
+
+            <mat-form-field appearance="outline" fxFlex="100%" style="width: 100%;">
+
+              <input placeholder="Subject" matInput [(ngModel)]="SendCaseMailList.Subject"
+                autocomplete="off">
+
+            </mat-form-field>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <mat-label class="lbl pb-5">{{ SendCaseMailList.TemplateName === 'DigiLockerURLMailSend'
+        ? 'Attachment Document' : 'Upload Attachment documents / Email if any :' }}</mat-label>
+        @if (SendCaseMailList.TemplateName && SendCaseMailList.TemplateName !== 'DigiLockerURLMailSend') {
+          <div class="file-upload">
+            <i class="material-icons">cloud_upload</i>
+            <span>Browse here...</span>
+            <input type="file" #fileInput multiple (change)='openUploadDoc($event)'>
+          </div>
+        }
+        @if (SendCaseMailList.TemplateName && SendCaseMailList.TemplateName !== 'DigiLockerURLMailSend') {
+          <div class="file-names mt-10">
+            @for (document of SendCaseMailList.mailDocument; track document; let docIndex = $index) {
+              <div class="file-upload-files" matTooltip="{{document?.fileName}}" matTooltipClass="accent-tooltip"
+                >
+                @if (document?.fileName) {
+                  <a routerLinkActive="active-link">{{document?.fileName}}</a>
+                }
+                <button (click)='SendCaseMailList.mailDocument.splice(docIndex,1);' type="button"
+                  style=" top: 3px;right: 11px;line-height: 14px;" class="close" aria-label="Close"> <span
+                aria-hidden="true">&times;</span> </button>
+              </div>
+            }
+          </div>
+        }
+        @if (SendCaseMailList.TemplateName && SendCaseMailList.TemplateName === 'DigiLockerURLMailSend') {
+          <div class="file-names mt-10">
+            @for (document of SendCaseMailList.attachments; track document; let docIndex = $index) {
+              <div class="file-upload-files" matTooltip="{{document?.fileName}}" matTooltipClass="accent-tooltip"
+                >
+                @if (document?.fileName) {
+                  <a routerLinkActive="active-link">{{document?.fileName}}</a>
+                }
+                <!-- <button (click)='SendCaseMailList.attachments.splice(docIndex,1);' type="button"
+                style=" top: 3px;right: 11px;line-height: 14px;" class="close" aria-label="Close"> <span
+              aria-hidden="true">&times;</span> </button> -->
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+  @if (SendCaseMailList.TemplateName && SendCaseMailList.TemplateName !== 'DigiLockerURLMailSend') {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+      <div fxFlex="100%">
+        <div fxFlex="24%" fxFlex.lg="24%" fxFlex.md="24%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <mat-checkbox [(ngModel)]="SendCaseMailList.discloseClientFlag"
+            [checked]="SendCaseMailList.discloseClientFlag"
+            (change)="getDisaCloseVerificationDetails($event,verificationForm.value['responseDocument']?.componentType)">Disclose
+          Client Name</mat-checkbox>
+        </div>
+      </div>
+    </div>
+  }
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+    <div fxFlex="100%">
+      <div fxFlex="100%" class="ckeditor">
+        <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="SendCaseMailList.EmailTemplate"
+        [config]="editorConfig"></angular-editor>
+      </div>
+    </div>
+  </div>
+  <!-- <div fxLayout="row" class="mb-10">
+  <div fxFlex="100%">
+    <ng-template [ngTemplateOutlet]="pTableTemplate"></ng-template>
+  </div>
+</div> -->
+</mat-dialog-content>
+@if (isMailIdSave) {
+  <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+    <button  (click)="sendSelectMail()"  mat-flat-button color="primary" matTooltip="Send mail"
+    matTooltipClass="accent-tooltip">Send Mail</button>
+    <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+  </mat-dialog-actions>
+}
+</ng-template>
+
+<!-- <ng-template #pTableTemplate>
+<p [innerHtml]="SendCaseMailList.EmailTemplate"></p>
+
+</ng-template> -->

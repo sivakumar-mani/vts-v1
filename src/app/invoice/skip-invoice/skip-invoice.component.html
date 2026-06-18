@@ -1,0 +1,87 @@
+<app-breadcrumb [routePath]="'Invoice / Skip Invoice'" [btnExportDisabled] ="!screenAuth?.exportFlag" [btnExcelExport]="skipInvoice?.skipInvoiceList?.length > 0"
+(eventExcelExport)="exportExcel()"></app-breadcrumb>
+<div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card>
+      <mat-card-header>
+        <div fxFlex="100%">
+          <mat-card-title>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                  fxLayout.xs="column" fxLayoutGap="10px grid">
+                  <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="80%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                    fxLayoutAlign.xs="start center">
+                    <h1 class="header-title">Skip Invoice</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center"
+              fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+              <div fxFlex="350px">
+                <small>Generated Invoice No :
+                  <b>{{skipInvoice?.skipInvoiceNos?.currentInvoiceNo}}</b></small><br />
+                  <small>Next InV.No to be Skipped :
+                    <b>{{skipInvoice?.skipInvoiceNos?.nextInvoiceNo}}</b></small>
+                  </div>
+                  <div fxFlex="350px" fxLayoutGap="10px">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label>Reason for skipping the Invoice :</mat-label>
+                      <textarea matInput #remarks [formControl]="reason" (focus)="remarks?.select()"
+                        maxlength="1000" (click)="remarks?.select()" required
+                      placeholder="Reason for skipping the Invoice"></textarea>
+                      @if (reason?.errors?.required) {
+                        <mat-error>Reason for skipping the Invoice is
+                          required
+                        </mat-error>
+                      }
+                      <mat-hint class="f-13"> ({{ remarks?.value?.length }} /1000 max) </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <span fxFlex></span>
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                  fxLayoutAlign="end center" fxLayoutAlign.sm="end center" fxLayoutGap="5px">
+                  <button [ngClass]="screenAuth.viewFlag===false?'page-btn disabled':''"  mat-flat-button color="primary" (click)="AddSkipInvoice()"> Skip Invoice </button>
+                  <button mat-flat-button color="warn" (click)="GetSkipInvoice();reason?.reset()">
+                  Reset</button>
+                </div>
+              </div>
+            </div>
+            <br>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px grid">
+                <div fxFlex="100%">
+                  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                    <div fxFlex="100%">
+                      <kendo-grid [kendoGridBinding]="skipInvoice?.skipInvoiceList" [reorderable]="true"
+                        [pageable]="true" [sortable]="true" [groupable]="true" [pageSize]="15"
+                        style="width: 100%;" [columnMenu]="{ filter: true }">
+                        @for (group of displayColumns; track group) {
+                          <kendo-grid-column [field]="group?.field" [title]="group?.header" [width]="180"
+                            [headerStyle]="{'background-color': '#58595C','color': '#fff','line-height': '2em'}"
+                            [style]="{'background-color': '#ffffff','color': '#333333'}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                              {{ dataItem[group?.field] ? (group?.field === 'skipedDate' ? (commonService?.
+                              getTimezoneOffset(dataItem[group?.field], false) | date: 'dd/MM/yyyy hh:mm:ss a') : dataItem[group?.field]) : 'N/A' }}
+                            </ng-template>
+                          </kendo-grid-column>
+                        }
+                        <kendo-grid-messages noRecords="No Data Found"></kendo-grid-messages>
+                      </kendo-grid>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>

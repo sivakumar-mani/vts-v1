@@ -1,0 +1,63 @@
+// {
+//   "extends": "./tsconfig.json",
+//   "compilerOptions": {
+//     "outDir": "./out-tsc/app",
+//     "types": [],
+//     "skipLibCheck": true
+//   },
+//   "files": [
+//     "src/main.ts",
+//     "src/polyfills.ts"
+//   ],
+// //   "include": [
+// //     "src/**/*.ts",
+// //     "src/**/*.d.ts"
+// //   ],
+
+// "include": [
+//     "src/**/*.d.ts"
+//   ],
+
+  
+//  "exclude": [
+//     "**/*.spec.ts"
+//   ]
+
+// }
+
+// {
+//   "extends": "./tsconfig.json",
+//   "compilerOptions": {
+//     "outDir": "./out-tsc/app",
+//     "types": [],
+//     "skipLibCheck": true
+//   },
+//   "files": [
+//     "src/main.ts",
+//     "src/polyfills.ts"
+//   ],
+//   "exclude": [
+//     "**/*.spec.ts",
+//     "**/*.ngtypecheck.ts"
+//   ]
+// }
+
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": [],
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts",
+    "src/typings.d.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.ngtypecheck.ts"
+  ]
+}

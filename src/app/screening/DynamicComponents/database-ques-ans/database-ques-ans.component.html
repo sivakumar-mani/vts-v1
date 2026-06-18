@@ -1,0 +1,113 @@
+<form [formGroup]="mainForm">
+  @if (mainForm?.get(formArrName)?.value?.length >0) {
+    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+      <div fxFlex="100%">
+        <h3 class="sub-header">Criminal Database Details</h3>
+      </div>
+    </div>
+  }
+  @if (mainForm?.get(formArrName)?.value?.length >0) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid">
+      <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
+        <mat-label class="mat-hint-upload">{{miscHint.qHint}} </mat-label>
+      </div>
+      <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
+        <mat-label class="mat-hint-upload">{{miscHint.aHint}}</mat-label>
+      </div>
+    </div>
+  }
+  <div fxLayoutAlign="center center">
+    <h3 style="margin: 10px 0; font-size: 18px;font-weight: 600; font-family:  Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+      {{common.INDIA_SPECIFIC_REGULATORY_COMPLIANCE_DATABASE}}
+    </h3>
+
+  </div>
+  <br>
+    @for (item of getMiscFormGroup(); track item; let i = $index; let first = $first; let last = $last) {
+      <div [formGroupName]="formArrName">
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" [formGroupName]="i" class="mb-5" fxLayoutAlign="center center">
+          @if (mainForm.get(formArrName)?.controls[i]?.get('recordCheckCategoryName')?.value ==common.INDIA_SPECIFIC_REGULATORY_COMPLIANCE_DATABASE ) {
+            <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <span style="font-size: 13px;text-align: left;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">{{mainForm.get(formArrName)?.controls[i]?.get('recordCheckCategoryQues')?.value}}</span>
+            </div>
+          }
+          @if (mainForm.get(formArrName)?.controls[i]?.get('recordCheckCategoryName')?.value ==common.INDIA_SPECIFIC_REGULATORY_COMPLIANCE_DATABASE) {
+            <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="75%" fxFlex.xs="100%" fxLayoutAlign="center center">
+              <mat-form-field appearance="outline" fxFlex="90%">
+                <mat-label>Enter Answer</mat-label>
+                <textarea #ans [readonly]="disableAnswer" matInput placeholder="Enter  Answer" maxlength="500" formControlName="remark"></textarea>
+                <mat-hint>({{ans.value.length}} /500 max)</mat-hint>
+                @if (!!mainForm.get(formArrName)?.controls[i]?.get('remark')?.errors?.required) {
+                  <mat-error>
+                    Answer is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+        </div>
+      </div>
+    }
+    <div fxLayoutAlign="center center">
+      <h3 style="margin: 10px 0; font-size: 18px;font-weight: 600; font-family:  Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+        {{common.DATABASE_GLOBAL}}
+      </h3>
+    </div>
+    <br>
+      @for (item of getMiscFormGroup(); track item; let i = $index; let first = $first; let last = $last) {
+        <div [formGroupName]="formArrName">
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" [formGroupName]="i" class="mb-5" fxLayoutAlign="center center">
+            @if (mainForm.get(formArrName)?.controls[i]?.get('recordCheckCategoryName')?.value ==common.DATABASE_GLOBAL ) {
+              <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <span style="font-size: 13px;text-align: left;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">{{mainForm.get(formArrName)?.controls[i]?.get('recordCheckCategoryQues')?.value}}</span>
+              </div>
+            }
+            @if (mainForm.get(formArrName)?.controls[i]?.get('recordCheckCategoryName')?.value ==common.DATABASE_GLOBAL) {
+              <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="75%" fxFlex.xs="100%" fxLayoutAlign="center center">
+                <mat-form-field appearance="outline" fxFlex="90%">
+                  <mat-label>Enter Answer</mat-label>
+                  <textarea #ans [readonly]="disableAnswer" matInput placeholder="Enter  Answer" maxlength="500" formControlName="remark"></textarea>
+                  <mat-hint>({{ans.value.length}} /500 max)</mat-hint>
+                  @if (!!mainForm.get(formArrName)?.controls[i]?.get('remark')?.errors?.required) {
+                    <mat-error>
+                      Answer is required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      <div fxLayoutAlign="center center">
+        <h3 style="margin: 10px 0; font-size: 18px;font-weight: 600; font-family:  Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">
+          {{common.COMPLIANCE_LINK}}
+        </h3>
+      </div>
+      <br>
+        @for (item of getMiscFormGroup(); track item; let i = $index; let first = $first; let last = $last) {
+          <div [formGroupName]="formArrName">
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" [formGroupName]="i" class="mb-5" fxLayoutAlign="center center">
+              @if (mainForm.get(formArrName)?.controls[i]?.get('recordCheckCategoryName')?.value ==common.COMPLIANCE_LINK ) {
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <span style="font-size: 13px;text-align: left;font-family: Roboto,Calibri,Clear Sans,Helvetica Neue ,Helvetica,Arial,sans-serif;">{{mainForm.get(formArrName)?.controls[i]?.get('recordCheckCategoryQues')?.value}}</span>
+                </div>
+              }
+              @if (mainForm.get(formArrName)?.controls[i]?.get('recordCheckCategoryName')?.value ==common.COMPLIANCE_LINK ) {
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="75%" fxFlex.xs="100%" fxLayoutAlign="center center">
+                  <mat-form-field appearance="outline" fxFlex="90%">
+                    <mat-label>Enter Answer</mat-label>
+                    <textarea #ans [readonly]="disableAnswer" matInput placeholder="Enter  Answer" maxlength="500" formControlName="remark"></textarea>
+                    <mat-hint>({{ans.value.length}} /500 max)</mat-hint>
+                    @if (!!mainForm.get(formArrName)?.controls[i]?.get('remark')?.errors?.required) {
+                      <mat-error>
+                        Answer is required
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </form>

@@ -1,0 +1,125 @@
+<form [formGroup]="mainForm">
+  @if (mainForm?.get(formArrName)?.value?.length >0) {
+    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+      >
+      <div fxFlex="100%">
+        <h3 class="sub-header">Miscellaneous Details</h3>
+      </div>
+    </div>
+  }
+  @if (mainForm?.get(formArrName)?.value?.length >0) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+      fxLayoutGap="20px grid">
+      <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
+        <mat-label class="mat-hint-upload">{{miscHint.qHint}} </mat-label>
+      </div>
+      <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
+        <mat-label class="mat-hint-upload">{{miscHint.aHint}}</mat-label>
+      </div>
+    </div>
+  }
+  @for (item of getMiscFormGroup(); track item; let i = $index; let first = $first; let last = $last) {
+    <div [formGroupName]="formArrName">
+      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="0px grid" [formGroupName]="i" class="mb-5">
+        @if (miscType==='input') {
+          <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="90%">
+              <mat-label>Enter Misc. Question</mat-label>
+              <input #ques matInput placeholder="Enter Misc. Question" formControlName="miscQuestion"
+                [readonly]="!!mainForm.get(formArrName)?.controls[i]?.get('defaultQuestionFlag')?.value">
+              @if (!!mainForm.get(formArrName)?.controls[i]?.get('miscQuestion')?.errors?.required) {
+                <mat-error>
+                  Misc. question is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        }
+        @if (miscType==='textarea') {
+          <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="90%">
+              <mat-label>Enter Misc. Question</mat-label>
+              <textarea #ques1 matInput placeholder="Enter Misc. Question" formControlName="miscQuestion" maxlength="500"
+              [readonly]="!!mainForm.get(formArrName)?.controls[i]?.get('defaultQuestionFlag')?.value"></textarea>
+              <mat-hint>({{ques1.value.length}} /500 max)</mat-hint>
+              @if (!!mainForm.get(formArrName)?.controls[i]?.get('miscQuestion')?.errors?.required) {
+                <mat-error>
+                  Misc. question is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        }
+        @if (miscType==='input') {
+          <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="75%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="90%">
+              <mat-label>Enter Misc. Answer</mat-label>
+              <input #ans [readonly]="disableAnswer" matInput placeholder="Enter Misc. Answer" maxlength="1000"
+                formControlName="miscAnswer">
+              <mat-hint>({{ans.value.length}} /1000 max)</mat-hint>
+              @if (!!mainForm.get(formArrName)?.controls[i]?.get('miscAnswer')?.errors?.required) {
+                <mat-error>
+                  Misc. answer is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        }
+        @if (miscType==='textarea' && common.SOCIAL_MEDIAID !== common.Socialcompid) {
+          <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="75%" fxFlex.xs="100%"
+            >
+            <mat-form-field appearance="outline" fxFlex="90%">
+              <mat-label>Enter Misc. Answer</mat-label>
+              <textarea #ans [readonly]="disableAnswer" matInput placeholder="Enter Misc. Answer" maxlength="1000"
+              formControlName="miscAnswer"></textarea>
+              <mat-hint>({{ans.value.length}} /1000 max)</mat-hint>
+              @if (!!mainForm.get(formArrName)?.controls[i]?.get('miscAnswer')?.errors?.required) {
+                <mat-error>
+                  Misc. answer is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        }
+        @if (miscType==='textarea' && common.SOCIAL_MEDIAID === common.Socialcompid) {
+          <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="75%" fxFlex.xs="100%"
+            >
+            <mat-form-field appearance="outline" fxFlex="90%">
+              <mat-label>Enter Misc. Answer</mat-label>
+              <textarea #ans [readonly]="disableAnswer" matInput placeholder="Enter Misc. Answer" maxlength="1000"
+              ></textarea>
+              <mat-hint>({{ans.value.length}} /1000 max)</mat-hint>
+            </mat-form-field>
+          </div>
+        }
+        <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="25%" fxFlex.xs="100%">
+          <mat-label>&nbsp;</mat-label>
+          <!-- <div class="adrem text-left" fxLayoutGap="8px" *ngIf="!hiddenAddRemove">
+          <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+            [disabled]="!!mainForm.get(formArrName)?.controls[i]?.get('miscAnswer')?.disabled"
+            *ngIf="(i === rowCount-1)" (click)="addQues()">
+            <i class="icon-plus-circle"></i> </button>
+            <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+              [disabled]="!!mainForm.get(formArrName)?.controls[i]?.get('miscAnswer')?.disabled"
+              *ngIf="rowCount>0 && !mainForm.get(formArrName)?.controls[i]?.get('defaultQuestionFlag').value"
+              (click)="removeQues(i)">
+              <i class="icon-x-circle"></i> </button>
+            </div> -->
+            @if (!hiddenAddRemove) {
+              <div class="adrem text-left" fxLayoutGap="8px">
+                <button mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                  (click)="addQues()">
+                  <i class="icon-plus-circle"></i> </button>
+                  @if (!mainForm?.get('miscQuestion')?.disabled) {
+                    <button mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                      (click)="removeQues(i)">
+                      <i class="icon-x-circle"></i> </button>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </form>

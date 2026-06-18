@@ -1,0 +1,93 @@
+﻿<div [formGroup]="contactForm">
+  @for (item of getContactFormGroup(); track item; let i = $index) {
+    <div [formArrayName]=formArrayName>
+      <div [formGroupName]="i">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>PhoneNumber Type</mat-label>
+              <mat-select matNativeControl formControlName="lookupId"
+                (selectionChange)="selectionPhoneNumberList($event.value)">
+                <mat-option value=''>----Select PhoneNumber Type----</mat-option>
+                @for (categories of phoneNumberList; track categories) {
+                  <mat-option [value]="categories.lookUpId">
+                  {{ categories.lookUpName }}</mat-option>
+                }
+              </mat-select>
+              @if (item?.get('lookupId')?.errors?.required) {
+                <mat-error>
+                PhoneNumber Type is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Phone Number</mat-label>
+              <mat-icon matPrefix><i class="material-icons material-icons-outlined">phone</i></mat-icon>
+              <input matInput type="Phone Number" formControlName="phoneNumber" placeholder="Phone Number" preventDragdrop
+                preventCutCopyPaste appNumberOnly [PhoneNumber]="false" autocomplete="off" role="presentation"
+                [matChipInputFor]="chipList" minlength="10" maxlength="10"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false" />
+              <button mat-icon-button matSuffix color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                (click)="add($event,i)">
+                <mat-icon class="btn-inputIcon"><i class="icon-plus-circle"></i></mat-icon>
+              </button>
+              <mat-hint class="adrem">
+                @if ((i === rowCount-1) && (contactPhoneFilter.length-1 !== i)) {
+                  <button mat-button color="primary"
+                    matTooltip="Add" matTooltipClass="accent-tooltip" (click)="addItem()"> <i class="icon-plus-circle"></i>
+                  </button>
+                }
+                @if (i!=rowCount + 1 && rowCount !== 1) {
+                  <button type="reset" mat-button color="warn" matTooltip="Remove"
+                    matTooltipClass="accent-tooltip" (click)="removecontrol(i)"> <i class="icon-x-circle"></i> </button>
+                  }
+                </mat-hint>
+                @if (!!item?.get('phoneNumber')?.errors?.minlength) {
+                  <mat-error>
+                  Enter atleast 10 numbers </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <div class="add-data">
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <mat-chip-grid #chipList aria-label="Fruit selection">
+                    @for (contact of item.get('contact').value; track contact) {
+                      <mat-chip-row [removable]="false">
+                        <div class="add-title">
+                          <span>{{contact.contactData}}</span>
+                        </div>
+                        <div class="add-titleaction">
+                          <ul>
+                            <!-- <li><a (click)="remove(contact, i)">Edit</a></li> -->
+                            <li><a (click)="remove(contact, i)">Delete</a></li>
+                          </ul>
+                        </div>
+                        <!-- <mat-icon matChipRemove>cancel</mat-icon> -->
+                      </mat-chip-row>
+                    }
+                  </mat-chip-grid>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px">
+          <div>
+            <mat-chip-grid #chipList aria-label="Fruit selection">
+              <mat-chip-row *ngFor="let fruit of item.get('contact').value" [removable]="true"
+                (removed)="remove(fruit, i)">
+                {{fruit.contactData}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip-row>
+            </mat-chip-grid>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  }
+</div>
