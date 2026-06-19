@@ -904,27 +904,40 @@ span.tbl-filter {
 }
 
 .btnTool {
+  align-items: center;
+  display: flex !important;
+  flex-wrap: wrap;
   float: right;
+  gap: 8px;
+  justify-content: flex-end;
   padding: 0;
 }
 
 .btnTool button {
-  border: none;
-  border-radius: 4px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #b9cbd5;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.12);
   cursor: pointer;
-  color: #58595C;
+  color: #0A5D96;
+  display: inline-flex;
+  flex-direction: row;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 9px;
-  font-weight: 500;
-  height: auto;
-  line-height: 20px;
-  margin: 0 auto;
-  min-width: 32px;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 6px;
+  height: 36px;
+  justify-content: center;
+  line-height: 36px;
+  margin: 0;
+  min-width: 92px;
   outline: none;
-  padding: 5px 2px 0;
-  text-align: center;
-  text-transform: uppercase;
-  width: initial;
+  padding: 0 12px;
+  text-align: left;
+  text-transform: none;
+  white-space: nowrap;
+  width: auto;
   -webkit-appearance: none;
   appearance: none;
 }
@@ -936,18 +949,20 @@ span.tbl-filter {
 /* MDC icon-button in btnTool must allow auto width/height for icon+text layout */
 .btnTool .mat-mdc-icon-button {
   width: auto !important;
-  height: auto !important;
-  min-width: 32px !important;
-  padding: 5px 2px 0 !important;
-  border-radius: 4px !important;
+  height: 36px !important;
+  min-width: 92px !important;
+  padding: 0 12px !important;
+  border-radius: 8px !important;
   display: inline-flex !important;
-  flex-direction: column !important;
+  flex-direction: row !important;
   align-items: center !important;
-  line-height: 1 !important;
-  font-size: 9px !important;
-  font-weight: 500 !important;
-  color: #58595C !important;
-  text-transform: uppercase !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  line-height: 36px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #0A5D96 !important;
+  text-transform: none !important;
   white-space: nowrap !important;
 }
 .btnTool .mat-mdc-icon-button .mat-mdc-button-persistent-ripple,
@@ -958,17 +973,22 @@ span.tbl-filter {
 
 .btnTool button:hover,
 .btnTool button:focus {
-  color: #376b98;
-  background: rgba(0, 0, 0, 0.02);
+  color: #fff !important;
+  background: #0A5D96;
+  border-color: #0A5D96;
 }
 
 .btnTool button[disabled] {
   opacity: 0.7;
-  background: transparent;
+  background: #eef2f5;
+  border-color: #d7e0e6;
+  box-shadow: none;
+  color: #9aa7b2 !important;
 }
 
 .btnTool button[disabled]:hover {
-  background: transparent;
+  background: #eef2f5;
+  color: #9aa7b2 !important;
 }
 
 .btnTool .mat-icon {
@@ -980,17 +1000,16 @@ span.tbl-filter {
 
 .btnTool .mat-icon i,
 .btnTool i {
-  display: block;
+  display: inline-block;
   flex: 0 0 auto;
-  font-size: 16px;
-  line-height: 16px !important;
+  font-size: 15px;
+  line-height: 15px !important;
 }
 
 .btnTool .mat-mdc-button:last-child,
 .btnTool .mat-mdc-icon-button:last-child {
   margin-right: 0;
 }
-
 .header-title {
   color: #000;
   font-size: 20px;
@@ -7941,3 +7960,4 @@ th.k-header,
 /* ================================================================
    End Angular 16 MDC additional fixes
    ================================================================ */
+
