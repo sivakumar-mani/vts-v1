@@ -108,6 +108,313 @@
 .PView-box.search-Criteria {
   width: 620px;
 }
+.srchPad {
+  padding-top: 0 !important;
+}
+.advSearch {
+  align-items: flex-start !important;
+  background: #fff;
+  border: 1px solid #e3eef4;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.18);
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 12px;
+  /* margin: 18px 20px 12px; */
+  padding: 16px 18px 18px !important;
+  position: static !important;
+  top: auto !important;
+  width: auto !important;
+  z-index: auto !important;
+}
+.advSearch .advSearch-forms {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+  width: 100% !important;
+  z-index: auto !important;
+}
+.advSearch .search-field,
+.advSearchshow .search-field {
+  flex: initial !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+.advSearch .assign-toggle {
+  flex: 0 0 auto !important;
+  max-width: none !important;
+  min-width: 260px !important;
+}
+.verification-filter-top {
+  align-items: center;
+  display: flex;
+  flex: 0 0 100%;
+  gap: 12px;
+  justify-content: space-between;
+  max-width: 100%;
+}
+.verification-field-grid,
+.advSearchshow .advSearch-forms form > div > div > div {
+  align-items: start !important;
+  display: grid !important;
+  gap: 12px 18px !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
+}
+.advSearchshow {
+  display: flex !important;
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  position: static !important;
+  top: auto !important;
+  width: 100%;
+  z-index: auto !important;
+}
+.advSearchshow .advSearch-forms {
+  margin: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+  width: 100% !important;
+  z-index: auto !important;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-form-field,
+::ng-deep app-verification-list .advSearchshow .mat-mdc-form-field {
+  width: 100%;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-text-field-wrapper,
+::ng-deep app-verification-list .advSearchshow .mat-mdc-text-field-wrapper {
+  background: #fbfdff;
+  border-radius: 4px;
+  height: 36px;
+}
+::ng-deep app-verification-list .advSearch .mdc-notched-outline__leading,
+::ng-deep app-verification-list .advSearch .mdc-notched-outline__notch,
+::ng-deep app-verification-list .advSearch .mdc-notched-outline__trailing,
+::ng-deep app-verification-list .advSearchshow .mdc-notched-outline__leading,
+::ng-deep app-verification-list .advSearchshow .mdc-notched-outline__notch,
+::ng-deep app-verification-list .advSearchshow .mdc-notched-outline__trailing {
+  border-color: #b9cbd5 !important;
+  border-width: 1px !important;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep app-verification-list .advSearch .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+::ng-deep app-verification-list .advSearch .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing,
+::ng-deep app-verification-list .advSearchshow .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep app-verification-list .advSearchshow .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+::ng-deep app-verification-list .advSearchshow .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: #0A4F82 !important;
+  border-width: 2px !important;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-form-field-infix,
+::ng-deep app-verification-list .advSearchshow .mat-mdc-form-field-infix {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-form-field-subscript-wrapper,
+::ng-deep app-verification-list .advSearchshow .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-input-element,
+::ng-deep app-verification-list .advSearchshow .mat-mdc-input-element,
+::ng-deep app-verification-list .advSearch .mat-mdc-floating-label,
+::ng-deep app-verification-list .advSearchshow .mat-mdc-floating-label {
+  color: #1f2933 !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: 14px !important;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-form-field .mat-mdc-floating-label.mdc-floating-label--float-above,
+::ng-deep app-verification-list .advSearchshow .mat-mdc-form-field .mat-mdc-floating-label.mdc-floating-label--float-above {
+  top: 29px !important;
+  transform: translateY(-100%) scale(0.75) !important;
+}
+::ng-deep app-verification-list .advSearch mat-radio-group {
+  align-items: center;
+  background: #e5f5fb;
+  border-radius: 20px;
+  display: inline-flex !important;
+  gap: 0 !important;
+  height: 36px;
+  min-height: 36px;
+  padding: 0 4px;
+  width: 100%;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-radio-button {
+  border-radius: 18px;
+  color: #1f2933;
+  flex: 1 1 50%;
+  height: 28px;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-radio-button .mdc-form-field {
+  align-items: center;
+  height: 28px;
+  justify-content: center;
+  width: 100%;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-radio-button .mdc-radio {
+  height: 24px;
+  padding: 5px;
+  width: 24px;
+  margin-top: 9px;
+    margin-left: 5px;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-radio-button .mdc-radio__background {
+  height: 14px;
+  width: 14px;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-radio-button .mdc-label {
+  color: #1f2933;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 28px;
+  padding-left: 0;
+  white-space: nowrap;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-radio-button.mat-mdc-radio-checked {
+  background: #0A5D96;
+  box-shadow: 0 2px 6px rgba(10, 93, 150, 0.28);
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-radio-button.mat-mdc-radio-checked .mdc-label {
+  color: #fff !important;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__outer-circle {
+  border-color: #fff !important;
+}
+::ng-deep app-verification-list .advSearch .mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__inner-circle {
+  border-color: #fff !important;
+}
+.advSearchshow .advSearch-btn {
+  display: none !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+  right: auto !important;
+  top: auto !important;
+  width: auto !important;
+  z-index: auto !important;
+}
+.verification-search-actions {
+  gap: 8px !important;
+  margin-top: 0 !important;
+}
+.verify-action {
+  align-items: center;
+  border: 1px solid #0A5D96;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 6px;
+  height: 36px;
+  justify-content: center;
+  min-width: 92px;
+  padding: 0 12px;
+}
+.verify-action.primary {
+  background: #0A5D96;
+  box-shadow: 0 2px 6px rgba(10, 93, 150, 0.26);
+  color: #fff;
+}
+.verify-action.outline {
+  background: #fff;
+  color: #0A5D96;
+}
+.verify-action:hover {
+  background: #0A5D96;
+  color: #fff;
+}
+.verify-action i {
+  font-size: 15px;
+  line-height: 1;
+}
+::ng-deep app-verification-list app-breadcrumb .btnTool {
+  align-items: center;
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 8px !important;
+  justify-content: flex-end;
+}
+::ng-deep app-verification-list app-breadcrumb .btnTool button.mat-mdc-icon-button {
+  background: #fff;
+  border: 1px solid #b9cbd5;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.12);
+  color: #0A5D96;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  align-items: center !important;
+  display: inline-flex !important;
+  flex-direction: row !important;
+  gap: 6px;
+  height: 36px !important;
+  justify-content: center !important;
+  line-height: 36px !important;
+  min-width: 92px;
+  padding: 0 12px !important;
+  text-align: left;
+  text-transform: none !important;
+  white-space: nowrap;
+  width: auto !important;
+}
+::ng-deep app-verification-list app-breadcrumb .btnTool button.mat-mdc-icon-button:hover {
+  background: #0A5D96;
+  border-color: #0A5D96;
+  color: #fff;
+}
+::ng-deep app-verification-list app-breadcrumb .btnTool button.mat-mdc-icon-button i {
+  font-size: 15px;
+  line-height: 15px !important;
+  margin-right: 0;
+}
+::ng-deep app-verification-list app-breadcrumb .btnTool button.mat-mdc-icon-button[disabled] {
+  background: #eef2f5;
+  border-color: #d7e0e6;
+  box-shadow: none;
+  color: #9aa7b2;
+}
+@media (max-width: 1368px) {
+  .advSearch .assign-toggle {
+    min-width: 260px !important;
+  }
+}
+@media (max-width: 991px) {
+  .advSearch {
+    margin: 14px 12px;
+  }
+  .verification-filter-top {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .advSearch .assign-toggle {
+    min-width: 0 !important;
+    width: 100%;
+  }
+  .verification-field-grid,
+  .advSearchshow .advSearch-forms form > div > div > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .verification-search-actions {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .verify-action {
+    flex: 1 1 130px;
+  }
+}
+@media (max-width: 600px) {
+  .verification-field-grid,
+  .advSearchshow .advSearch-forms form > div > div > div {
+    grid-template-columns: 1fr;
+  }
+}
 .perfscrol-searchWH {
   width: 100%;
   height: calc(100vh - 100px);

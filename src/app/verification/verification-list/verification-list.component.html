@@ -1,4 +1,4 @@
-<app-breadcrumb
+﻿<app-breadcrumb
   [routePath]="routePath"
   [btnSearch]="searchPage === false ? (modifyAdditionalFeeFlag !== true && modifyComponentFeeFlag !== true) ? true : false : false"
   [btnAddUpload]="btnAddUpload"
@@ -18,7 +18,7 @@
             : router.navigate(['dashboard/verification/modifycomponentfee'])">
   <!-- FIX: eventSearch was using || short-circuit which always navigated to reopensearch.
   Now uses proper conditional (ternary) so only the correct route is triggered.
-  FIX: screenAuth?.addFlag — added safe navigation to prevent crash if screenAuth is null on load. -->
+  FIX: screenAuth?.addFlag â€” added safe navigation to prevent crash if screenAuth is null on load. -->
 </app-breadcrumb>
 
 <!-- Bulk Upload Section -->
@@ -52,88 +52,85 @@
   <div>
     @if (searchPage === false) {
       <div fxLayout="row" class="advSearch">
-        <div class="advSearch-forms">
-          <form autocomplete="off" [formGroup]="VerificationSearchForm">
-            <div fxLayout="row" fxLayoutGap="20px">
-              <div fxFlex="100%">
-                <div fxLayout="row" fxLayoutGap="20px">
-                  <!-- Assigned / Not Assigned radio toggle (team leads only) -->
-                  @if (getFlag()) {
-                    <div fxFlex="130px">
-                      <mat-radio-group fxLayoutGap="20px" [formControl]="assignControl"
-                        (change)="selectTab($event.value)">
-                        <mat-radio-button value="Not Assigned" (click)="showpg()">Not Assigned</mat-radio-button>
-                        <mat-radio-button value="Assigned" (click)="showpg()">Assigned</mat-radio-button>
-                      </mat-radio-group>
-                    </div>
-                  }
-                  <!-- Client Ref No -->
-                  <div fxFlex="170px">
-                    <mat-form-field appearance="outline" fxFlex="100%">
-                      <mat-label>Client Ref No.</mat-label>
-                      <input matInput placeholder="Client Ref No." formControlName="clientRefNo" type="text" />
-                    </mat-form-field>
-                  </div>
-                  <!-- Client Name -->
-                  <div fxFlex="170px">
-                    <mat-form-field appearance="outline" fxFlex="100%">
-                      <mat-label>Client Name</mat-label>
-                      <input matInput placeholder="Client Name" formControlName="clientName" type="text" />
-                    </mat-form-field>
-                  </div>
-                  <!-- Candidate Name (standard view) -->
-                  @if (!btnReAssign) {
-                    <div fxFlex="170px">
-                      <mat-form-field appearance="outline" fxFlex="100%">
-                        <mat-label>Candidate Name</mat-label>
-                        <input matInput placeholder="Candidate Name" formControlName="candidateFullName" type="text" />
-                      </mat-form-field>
-                    </div>
-                  }
-                  <!-- Component Name (standard view) -->
-                  @if (!btnReAssign) {
-                    <div fxFlex="170px">
-                      <mat-form-field appearance="outline" fxFlex="100%">
-                        <mat-label>Component Name</mat-label>
-                        <input matInput placeholder="Component Name" formControlName="componentName" type="text" />
-                      </mat-form-field>
-                    </div>
-                  }
-                  <!-- Screening Owner (reassign view) -->
-                  @if (btnReAssign) {
-                    <div fxFlex="170px">
-                      <mat-form-field appearance="outline" fxFlex="100%">
-                        <mat-label>Screening Owner</mat-label>
-                        <input matInput placeholder="Screening Owner" formControlName="screeningOwnerName" type="text" />
-                      </mat-form-field>
-                    </div>
-                  }
-                  <!-- Reassigned Owner (reassign view) -->
-                  @if (btnReAssign) {
-                    <div fxFlex="170px">
-                      <mat-form-field appearance="outline" fxFlex="100%">
-                        <mat-label>Reassigned Owner</mat-label>
-                        <input matInput placeholder="Reassigned Owner" formControlName="screeningRegOwnerName" type="text" />
-                      </mat-form-field>
-                    </div>
-                  }
-                </div>
-              </div>
+        <div class="verification-filter-top">
+          <!-- Assigned / Not Assigned radio toggle (team leads only) -->
+          @if (getFlag()) {
+            <div class="assign-toggle">
+              <mat-radio-group [formControl]="assignControl" (change)="selectTab($event.value)">
+                <mat-radio-button value="Not Assigned" (click)="showpg()">Not Assigned</mat-radio-button>
+                <mat-radio-button value="Assigned" (click)="showpg()">Assigned</mat-radio-button>
+              </mat-radio-group>
             </div>
-          </form>
-        </div>
-        <!-- Search / Reset / Show More actions -->
-        <div fxFlex="100%" class="advSearch-btn">
-          <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <a (click)="search()">Search</a>
-            <span>|</span>
-            <a (click)="resetFilterSort('reset')">Reset</a>
-            <span>|</span>
-            <a (click)="SearchCriFilter = !SearchCriFilter">
+          }
+          <!-- Search / Reset / Show More actions -->
+          <div class="FloatR mt-15 verification-search-actions" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <button type="button" class="verify-action primary" (click)="search()">
+              <i class="icon-search"></i>Search
+            </button>
+            <button type="button" class="verify-action outline" (click)="resetFilterSort('reset')">
+              <i class="icon-refreshsb"></i>Reset
+            </button>
+            <button type="button" class="verify-action outline" (click)="SearchCriFilter = !SearchCriFilter">
               {{ SearchCriFilter ? 'Show Less' : 'Show More' }}&nbsp;
               <i class="icon-chevron-{{ SearchCriFilter ? 'up' : 'down' }}"></i>
-            </a>
+            </button>
           </div>
+        </div>
+        <div class="advSearch-forms">
+          <form autocomplete="off" [formGroup]="VerificationSearchForm">
+            <div class="verification-field-grid">
+              <!-- Client Ref No -->
+              <div class="search-field">
+                <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
+                  <mat-label>Client Ref No.</mat-label>
+                  <input matInput placeholder="Client Ref No." formControlName="clientRefNo" type="text" />
+                </mat-form-field>
+              </div>
+              <!-- Client Name -->
+              <div class="search-field">
+                <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
+                  <mat-label>Client Name</mat-label>
+                  <input matInput placeholder="Client Name" formControlName="clientName" type="text" />
+                </mat-form-field>
+              </div>
+              <!-- Candidate Name (standard view) -->
+              @if (!btnReAssign) {
+                <div class="search-field">
+                  <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
+                    <mat-label>Candidate Name</mat-label>
+                    <input matInput placeholder="Candidate Name" formControlName="candidateFullName" type="text" />
+                  </mat-form-field>
+                </div>
+              }
+              <!-- Component Name (standard view) -->
+              @if (!btnReAssign) {
+                <div class="search-field">
+                  <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
+                    <mat-label>Component Name</mat-label>
+                    <input matInput placeholder="Component Name" formControlName="componentName" type="text" />
+                  </mat-form-field>
+                </div>
+              }
+              <!-- Screening Owner (reassign view) -->
+              @if (btnReAssign) {
+                <div class="search-field">
+                  <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
+                    <mat-label>Screening Owner</mat-label>
+                    <input matInput placeholder="Screening Owner" formControlName="screeningOwnerName" type="text" />
+                  </mat-form-field>
+                </div>
+              }
+              <!-- Reassigned Owner (reassign view) -->
+              @if (btnReAssign) {
+                <div class="search-field">
+                  <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
+                    <mat-label>Reassigned Owner</mat-label>
+                    <input matInput placeholder="Reassigned Owner" formControlName="screeningRegOwnerName" type="text" />
+                  </mat-form-field>
+                </div>
+              }
+            </div>
+          </form>
         </div>
         <!-- Advanced / "Show More" filter row -->
         @if (SearchCriFilter) {
@@ -143,62 +140,62 @@
                 <div fxLayout="row wrap" fxLayoutGap="20px grid">
                   <div fxFlex="100%">
                     <div fxLayout="row" fxLayoutGap="20px">
-                      <!-- Candidate Name (reassign view — moved to Show More) -->
+                      <!-- Candidate Name (reassign view â€” moved to Show More) -->
                       @if (btnReAssign) {
-                        <div fxFlex="170px">
-                          <mat-form-field appearance="outline" fxFlex="100%">
+                        <div fxFlex="170px" class="search-field">
+                          <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
                             <mat-label>Candidate Name</mat-label>
                             <input matInput placeholder="Candidate Name" formControlName="candidateFullName" type="text" />
                           </mat-form-field>
                         </div>
                       }
-                      <!-- Component Name (reassign view — moved to Show More) -->
+                      <!-- Component Name (reassign view â€” moved to Show More) -->
                       @if (btnReAssign) {
-                        <div fxFlex="170px">
-                          <mat-form-field appearance="outline" fxFlex="100%">
+                        <div fxFlex="170px" class="search-field">
+                          <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
                             <mat-label>Component Name</mat-label>
                             <input matInput placeholder="Component Name" formControlName="componentName" type="text" />
                           </mat-form-field>
                         </div>
                       }
                       <!-- Verification Id -->
-                      <div fxFlex="170px">
-                        <mat-form-field appearance="outline" fxFlex="100%">
+                      <div fxFlex="170px" class="search-field">
+                        <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
                           <mat-label>Verification Id</mat-label>
                           <input matInput placeholder="Verification Id" formControlName="verificationId" type="text" />
                         </mat-form-field>
                       </div>
                       <!-- Screening Owner -->
-                      <div fxFlex="170px">
-                        <mat-form-field appearance="outline" fxFlex="100%">
+                      <div fxFlex="170px" class="search-field">
+                        <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
                           <mat-label>Screening Owner</mat-label>
                           <input matInput placeholder="Screening Owner" formControlName="screeningOwnerName" type="text" />
                         </mat-form-field>
                       </div>
                       <!-- Vendor Name -->
-                      <div fxFlex="170px">
-                        <mat-form-field appearance="outline" fxFlex="100%">
+                      <div fxFlex="170px" class="search-field">
+                        <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
                           <mat-label>Vendor Name</mat-label>
                           <input matInput placeholder="Vendor Name" formControlName="vendorName" type="text" />
                         </mat-form-field>
                       </div>
                       <!-- Component Status -->
-                      <div fxFlex="170px">
-                        <mat-form-field appearance="outline" fxFlex="100%">
+                      <div fxFlex="170px" class="search-field">
+                        <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
                           <mat-label>Component Status</mat-label>
                           <input matInput placeholder="Component Status" formControlName="componentStatus" type="text" />
                         </mat-form-field>
                       </div>
                       <!-- Screening Priority -->
-                      <div fxFlex="170px">
-                        <mat-form-field appearance="outline" fxFlex="100%">
+                      <div fxFlex="170px" class="search-field">
+                        <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
                           <mat-label>Screening Priority</mat-label>
                           <input matInput placeholder="Screening Priority" formControlName="prioritylookupId" type="text" />
                         </mat-form-field>
                       </div>
                       <!-- Screening Id -->
-                      <div fxFlex="170px">
-                        <mat-form-field appearance="outline" fxFlex="100%">
+                      <div fxFlex="170px" class="search-field">
+                        <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
                           <mat-label>Screening Id</mat-label>
                           <input matInput placeholder="Screening Id" formControlName="screeningId" type="text" />
                         </mat-form-field>
@@ -255,7 +252,7 @@
               <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
                 fxLayout.xs="column" fxLayoutGap="20px grid">
                 <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="60%" fxFlex.xs="100%">
-                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
                     <mat-label>Client Ref No / Verification Id</mat-label>
                     <input matInput #clear [formControl]="verifyId" maxlength="20"
                       placeholder="Client Ref No / Verification Id">
@@ -285,7 +282,7 @@
                           @for (s of searchValueArr; track s; let in = $index) {
                             <span class="tag">
                               {{s.value}}
-                              <a class="close" (click)="removeSearchValue(s.propertyName, in)">×</a>
+                              <a class="close" (click)="removeSearchValue(s.propertyName, in)">Ã—</a>
                             </span>
                           }
                         </div>
@@ -362,7 +359,7 @@
                                   Call Back Date
                                 </a>
                               }
-                              <!-- FIX: veType string comparisons — removed erroneous parentheses -->
+                              <!-- FIX: veType string comparisons â€” removed erroneous parentheses -->
                               @if (commonService.commonVeFlag === 'pendingChecks' || verificationService.veType === 'Not Assigned' || verificationService.veType === 'Assigned' || commonService.reassigned === true) {
                                 <i
                                                     [ngClass]="{
@@ -665,7 +662,7 @@
             </div>
             <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
               <div fxFlex="100%">
-                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always" autocomplete="off" class="scr-own">
+                <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%" autocomplete="off" class="scr-own">
                   <mat-label></mat-label>
                   <mat-icon matPrefix>search</mat-icon>
                   <input matInput placeholder="Find someone" [formControl]="filterOwnerName" type="text" pInputText>
@@ -726,3 +723,4 @@
         <button mat-flat-button color="accent" (click)="submitOrgOwner()">Yes</button>
       </mat-dialog-actions>
     </ng-template>
+

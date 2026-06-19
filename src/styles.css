@@ -1,4 +1,4 @@
-﻿@import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
 /* @import "../node_modules/font-awesome/css/font-awesome.css"; */
 @import '../node_modules/perfect-scrollbar/css/perfect-scrollbar.css';
 @import "../node_modules/primeicons/primeicons.css";
@@ -9,7 +9,7 @@
 @import "../src/assets/fonts/component-font.css";
 @import "@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
 
-/* PrimeNG 9→13: ui-g grid was removed from primeng.min.css, define p-grid/p-col-* here */
+/* PrimeNG 9?13: ui-g grid was removed from primeng.min.css, define p-grid/p-col-* here */
 .p-grid { display: flex; flex-wrap: wrap; margin-right: -0.5rem; margin-left: -0.5rem; margin-top: -0.5rem; }
 .p-col-1  { width: 8.3333%;  flex: 0 0 8.3333%;  padding: 0.5rem; }
 .p-col-2  { width: 16.6667%; flex: 0 0 16.6667%; padding: 0.5rem; }
@@ -29,7 +29,7 @@
 body {
   background-color: #f8f8f8;
   color: #353537;
-  font-family: "Roboto", "Clear Sans", "Calibri", "Helvetica Neue", Helvetica, Arial, "Georgia", sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
@@ -773,7 +773,7 @@ span.tbl-filter {
 
 .logo-txt {
   color: #58595c;
-  font-family: Arial;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 24px;
   font-weight: bold;
   line-height: 22px;
@@ -786,7 +786,7 @@ span.tbl-filter {
 
 .logo-sol {
   color: #58595c;
-  font-family: Georgia;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 11px;
   font-style: italic;
   letter-spacing: 0;
@@ -913,7 +913,7 @@ span.tbl-filter {
   border-radius: 4px;
   cursor: pointer;
   color: #58595C;
-  font-family: inherit;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 9px;
   font-weight: 500;
   height: auto;
@@ -1568,7 +1568,7 @@ button.mat-mdc-button:visited {
 .mat-mdc-icon-button {
   font-size: 13px !important;
   font-weight: 400 !important;
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   --mdc-text-button-label-text-size: 13px;
   --mdc-filled-button-label-text-size: 13px;
   --mdc-outlined-button-label-text-size: 13px;
@@ -2370,7 +2370,7 @@ textarea.mat-mdc-input-element {
 /*Forms Ends*/
 /*Table Starts*/
 table {
-  font-family: "Calibri", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 13px;
 }
 
@@ -2729,7 +2729,7 @@ body .inn-table .p-datatable .p-datatable-thead>tr>th:focus {
 .mt-table {
   margin: 0px;
   padding: 0px;
-  font-family: "Calibri", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 13px;
 }
 
@@ -2815,9 +2815,9 @@ tr.mat-mdc-row:nth-child(even) {
 
 /*Table Ends*/
 /* **** PrimeNG **** */
-/* PrimeNG 13 removed .ui-widget/.p-widget — override via CSS variables instead */
+/* PrimeNG 13 removed .ui-widget/.p-widget � override via CSS variables instead */
 :root {
-  --font-family: "Calibri", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-family: Roboto, "Helvetica Neue", sans-serif;
   --font-size: 13px;
   --text-color: #353537;
   --surface-0: #ffffff;
@@ -2825,7 +2825,7 @@ tr.mat-mdc-row:nth-child(even) {
 }
 body .p-component {
   color: #353537;
-  font-family: "Calibri", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 13px !important;
   border-radius: 4px;
 }
@@ -4064,7 +4064,7 @@ h6.hints {
 }
 
 .hints ul li:before {
-  content: "‣";
+  content: "?";
   font-size: 20px;
   padding-right: 5px;
   color: #9b9b9d;
@@ -5343,7 +5343,7 @@ a.dwicon i {
 /* Graph charts Style */
 ngx-charts-legend.chart-legend {
   width: 100% !important;
-  font-family: "Calibri", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   position: relative;
   z-index: 5;
 }
@@ -6226,7 +6226,7 @@ table.autocomp .mat-mdc-autocomplete-panel .mat-mdc-option.mdc-list-item--select
 
 /*  Time settings Datepicker */
 .owl-dt-control-button {
-  font-family: "Calibri", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px;
   font-weight: 500;
 }
@@ -6490,7 +6490,7 @@ div.k-grid-header {
   font-size: 12px;
   font-weight: 500;
   text-transform: uppercase !important;
-  font-family: "Calibri", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .k-icon {
@@ -6831,7 +6831,7 @@ th.k-header,
 /* Multi select dropdown logic start here  */
 
 /* ===================================================
-   Global p-multiSelect Styles — paste into styles.css
+   Global p-multiSelect Styles � paste into styles.css
    Matches your exact pattern:
      <span class="ui-float-label">
        <p-multiSelect ...></p-multiSelect>
@@ -6840,7 +6840,7 @@ th.k-header,
      </span>
    ===================================================== */
 
-/* ── Wrapper ── */
+/* -- Wrapper -- */
 .p-float-label {
   position: relative;
   display: block;
@@ -6849,7 +6849,7 @@ th.k-header,
   margin-bottom: 4px;
 }
 
-/* ── Float label ── */
+/* -- Float label -- */
 .p-float-label .lbl-float {
   position: absolute;
   top: -8px;
@@ -6874,7 +6874,7 @@ th.k-header,
   color: #f44336;
 }
 
-/* ── mat-error positioning ── */
+/* -- mat-error positioning -- */
 .p-float-label mat-error {
   display: block;
   font-size: 12px;
@@ -6883,7 +6883,7 @@ th.k-header,
   padding-left: 2px;
 }
 
-/* ── p-multiSelect base (supports both old ui- and new p- prefixes) ── */
+/* -- p-multiSelect base (supports both old ui- and new p- prefixes) -- */
 .p-float-label .p-multiselect,
 .p-float-label .p-multiselect {
   width: 100% !important;
@@ -6920,7 +6920,7 @@ th.k-header,
   cursor: not-allowed;
 }
 
-/* ── Dropdown panel (global — not scoped to wrapper) ── */
+/* -- Dropdown panel (global � not scoped to wrapper) -- */
 .p-multiselect-panel,
 .p-multiselect-panel {
   border-radius: 4px !important;
@@ -6979,51 +6979,51 @@ th.k-header,
 /* Multi select dropdown logic End here  */
 
 /* ================================================================
-   Angular Material 15 MDC → Legacy Design Compatibility Overrides
+   Angular Material 15 MDC ? Legacy Design Compatibility Overrides
    ================================================================ */
 
 /* ---- Global MDC Typography Custom Properties (Calibri = Angular 14 default) ---- */
 :root {
   /* Base font family */
-  --mdc-typography-font-family: "Calibri", Arial, Helvetica, sans-serif;
+  --mdc-typography-font-family: Roboto, "Helvetica Neue", sans-serif;
 
   /* Body */
-  --mdc-typography-body1-font-family: "Calibri", Arial, Helvetica, sans-serif;
+  --mdc-typography-body1-font-family: Roboto, "Helvetica Neue", sans-serif;
   --mdc-typography-body1-font-size: 14px;
   --mdc-typography-body1-font-weight: 400;
   --mdc-typography-body1-line-height: 20px;
   --mdc-typography-body1-letter-spacing: normal;
-  --mdc-typography-body2-font-family: "Calibri", Arial, Helvetica, sans-serif;
+  --mdc-typography-body2-font-family: Roboto, "Helvetica Neue", sans-serif;
   --mdc-typography-body2-font-size: 12px;
   --mdc-typography-body2-font-weight: 400;
 
   /* Button */
-  --mdc-typography-button-font-family: "Calibri", Arial, Helvetica, sans-serif;
+  --mdc-typography-button-font-family: Roboto, "Helvetica Neue", sans-serif;
   --mdc-typography-button-font-size: 14px;
   --mdc-typography-button-font-weight: 500;
   --mdc-typography-button-letter-spacing: 0.0892857143em;
 
   /* Caption / Overline */
-  --mdc-typography-caption-font-family: "Calibri", Arial, Helvetica, sans-serif;
+  --mdc-typography-caption-font-family: Roboto, "Helvetica Neue", sans-serif;
   --mdc-typography-caption-font-size: 12px;
-  --mdc-typography-overline-font-family: "Calibri", Arial, Helvetica, sans-serif;
+  --mdc-typography-overline-font-family: Roboto, "Helvetica Neue", sans-serif;
   --mdc-typography-overline-font-size: 10px;
 
   /* Headlines */
-  --mdc-typography-headline1-font-family: "Calibri", Arial, Helvetica, sans-serif;
-  --mdc-typography-headline2-font-family: "Calibri", Arial, Helvetica, sans-serif;
-  --mdc-typography-headline3-font-family: "Calibri", Arial, Helvetica, sans-serif;
-  --mdc-typography-headline4-font-family: "Calibri", Arial, Helvetica, sans-serif;
-  --mdc-typography-headline5-font-family: "Calibri", Arial, Helvetica, sans-serif;
-  --mdc-typography-headline6-font-family: "Calibri", Arial, Helvetica, sans-serif;
+  --mdc-typography-headline1-font-family: Roboto, "Helvetica Neue", sans-serif;
+  --mdc-typography-headline2-font-family: Roboto, "Helvetica Neue", sans-serif;
+  --mdc-typography-headline3-font-family: Roboto, "Helvetica Neue", sans-serif;
+  --mdc-typography-headline4-font-family: Roboto, "Helvetica Neue", sans-serif;
+  --mdc-typography-headline5-font-family: Roboto, "Helvetica Neue", sans-serif;
+  --mdc-typography-headline6-font-family: Roboto, "Helvetica Neue", sans-serif;
   --mdc-typography-headline6-font-size: 20px;
   --mdc-typography-headline6-font-weight: 500;
 
   /* Subtitle */
-  --mdc-typography-subtitle1-font-family: "Calibri", Arial, Helvetica, sans-serif;
+  --mdc-typography-subtitle1-font-family: Roboto, "Helvetica Neue", sans-serif;
   --mdc-typography-subtitle1-font-size: 16px;
   --mdc-typography-subtitle1-font-weight: 400;
-  --mdc-typography-subtitle2-font-family: "Calibri", Arial, Helvetica, sans-serif;
+  --mdc-typography-subtitle2-font-family: Roboto, "Helvetica Neue", sans-serif;
   --mdc-typography-subtitle2-font-size: 14px;
   --mdc-typography-subtitle2-font-weight: 500;
 
@@ -7140,7 +7140,7 @@ th.k-header,
 
 /* ---------- FORM FIELD ---------- */
 .mat-mdc-form-field {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px;
   width: 100%;
   display: block;
@@ -7157,7 +7157,7 @@ th.k-header,
   background-color: transparent !important;
 }
 
-/* Infix (input area) height – match legacy ~56px */
+/* Infix (input area) height � match legacy ~56px */
 .mat-mdc-form-field-infix {
   padding-top: 16px !important;
   padding-bottom: 8px !important;
@@ -7206,7 +7206,7 @@ th.k-header,
 .mat-mdc-raised-button,
 .mat-mdc-outlined-button,
 .mat-mdc-unelevated-button {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   min-height: 36px !important;
   height: 36px !important;
   font-size: 13px !important;
@@ -7243,7 +7243,7 @@ th.k-header,
 /* ---------- TABLE ---------- */
 .mat-mdc-table {
   background: white !important;
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 13px !important;
 }
 
@@ -7286,7 +7286,7 @@ th.k-header,
 
 /* ---------- SELECT ---------- */
 .mat-mdc-select {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 13px !important;
 }
 
@@ -7295,7 +7295,7 @@ th.k-header,
 }
 
 .mat-mdc-option {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 13px !important;
   border-bottom: 1px solid rgba(0, 0, 0, .08);
   color: #58595c !important;
@@ -7360,7 +7360,7 @@ th.k-header,
   padding: 10px !important;
 }
 
-/* MDC accent radio → green to match Angular 14 override */
+/* MDC accent radio ? green to match Angular 14 override */
 .mat-mdc-radio-button.mat-accent {
   --mdc-radio-selected-icon-color: #08BA53;
   --mdc-radio-selected-hover-icon-color: #06a348;
@@ -7401,7 +7401,7 @@ th.k-header,
 .mat-mdc-dialog-content {
   max-height: 65vh !important;
   padding: 15px 24px !important;
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px !important;
 }
 
@@ -7410,7 +7410,7 @@ th.k-header,
   font-size: 16px !important;
   font-weight: 500 !important;
   padding: 15px 24px !important;
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
   margin-bottom: 0 !important;
 }
@@ -7450,7 +7450,7 @@ th.k-header,
 
 /* ---------- MENU ---------- */
 .mat-mdc-menu-content {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .mat-mdc-menu-panel {
@@ -7461,7 +7461,7 @@ th.k-header,
 }
 
 .mat-mdc-menu-item {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px !important;
   height: 48px !important;
   min-height: 48px !important;
@@ -7469,7 +7469,7 @@ th.k-header,
 
 /* ---------- TABS ---------- */
 .mat-mdc-tab {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px !important;
   font-weight: 500 !important;
   min-width: 90px !important;
@@ -7477,7 +7477,7 @@ th.k-header,
 }
 
 .mat-mdc-tab-group {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .mat-mdc-tab-header {
@@ -7524,13 +7524,13 @@ th.k-header,
 
 /* ---------- LIST ---------- */
 .mat-mdc-list-item {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px !important;
   height: 48px !important;
 }
 
 .mat-mdc-list-option {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px !important;
   height: 48px !important;
 }
@@ -7541,13 +7541,13 @@ th.k-header,
 }
 
 .mat-expansion-panel-header {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px !important;
   height: 48px !important;
 }
 
 .mat-expansion-panel-body {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px;
 }
 
@@ -7558,7 +7558,7 @@ th.k-header,
 
 /* ---------- INPUT text color & caret ---------- */
 .mat-mdc-input-element {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px !important;
   color: rgba(0, 0, 0, 1) !important;
   caret-color: #0e4872 !important;
@@ -7652,7 +7652,7 @@ th.k-header,
 /* ---------- TAB LABELS USING OLD CLASS NAMES ---------- */
 .mat-mdc-tab .mdc-tab__text-label {
   color: rgba(0, 0, 0, 0.6) !important;
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 13px !important;
   font-weight: 500 !important;
   text-transform: uppercase;
@@ -7661,7 +7661,7 @@ th.k-header,
   color: #0e4872 !important;
 }
 .mat-mdc-tab-labels .mat-mdc-tab-content {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 /* Tab header background to match Angular 14 */
 .mat-mdc-tab-header {
@@ -7677,7 +7677,7 @@ th.k-header,
 
 /* ---------- TOOLBAR OLD CLASS ALIASES ---------- */
 .mat-toolbar-row, .mat-toolbar-single-row {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px !important;
 }
 
@@ -7686,7 +7686,7 @@ th.k-header,
    ================================================================ */
 
 /* ================================================================
-   ANGULAR 14 → 16 REMAINING VISUAL GAP FIXES
+   ANGULAR 14 ? 16 REMAINING VISUAL GAP FIXES
    ================================================================ */
 
 /* ---- 1. mat-card: Angular 14 used .mat-card, MDC uses .mat-mdc-card ---- */
@@ -7744,7 +7744,7 @@ th.k-header,
   margin-top: 15px;
 }
 
-/* ---- 2. Form field outline lighter — Angular 14 used rgba(0,0,0,0.25) ---- */
+/* ---- 2. Form field outline lighter � Angular 14 used rgba(0,0,0,0.25) ---- */
 .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
 .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
 .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
@@ -7756,14 +7756,14 @@ th.k-header,
   border-color: rgba(0, 0, 0, 0.45) !important;
 }
 
-/* ---- 3. Form field CSS height tokens — prevents MDC from overriding ---- */
+/* ---- 3. Form field CSS height tokens � prevents MDC from overriding ---- */
 :root {
   --mdc-outlined-text-field-container-height: 56px;
   --mat-form-field-container-height: 56px;
   --mat-form-field-filled-container-height: 56px;
 }
 
-/* ---- 4. Form field infix — match Angular 14 padding (7px top, 13px bottom) ---- */
+/* ---- 4. Form field infix � match Angular 14 padding (7px top, 13px bottom) ---- */
 .mat-mdc-form-field-infix {
   padding-top: 7px !important;
   padding-bottom: 13px !important;
@@ -7774,14 +7774,14 @@ th.k-header,
   padding-bottom: 13px !important;
 }
 
-/* ---- 5. Autocomplete panel — Angular 14 style ---- */
+/* ---- 5. Autocomplete panel � Angular 14 style ---- */
 .mat-mdc-autocomplete-panel {
   border: 1px solid rgba(0, 0, 0, 0.2) !important;
   border-radius: 4px !important;
   box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12) !important;
 }
 
-/* ---- 6. Accent checkbox green (mat.accent → #08BA53) ---- */
+/* ---- 6. Accent checkbox green (mat.accent ? #08BA53) ---- */
 .mat-mdc-checkbox.mat-accent {
   --mdc-checkbox-selected-icon-color: #08BA53 !important;
   --mdc-checkbox-selected-hover-icon-color: #06a348 !important;
@@ -7815,12 +7815,12 @@ th.k-header,
   font-weight: 400;
 }
 
-/* ---- 9. Form field subscript — no extra bottom gap when empty ---- */
+/* ---- 9. Form field subscript � no extra bottom gap when empty ---- */
 .mat-mdc-form-field-subscript-wrapper:empty {
   display: none !important;
 }
 
-/* ---- 10. Select arrow — restore Angular 14 CSS triangle ---- */
+/* ---- 10. Select arrow � restore Angular 14 CSS triangle ---- */
 .mat-mdc-select-arrow svg {
   display: none !important;
 }
@@ -7842,12 +7842,12 @@ th.k-header,
    ANGULAR 16 MDC: Additional component fixes
    ================================================================ */
 
-/* ---- mat-chip / mat-chip-row (MDC) → Angular 14 appearance ---- */
+/* ---- mat-chip / mat-chip-row (MDC) ? Angular 14 appearance ---- */
 .mat-mdc-chip.mat-mdc-standard-chip {
   background-color: #e0e0e0 !important;
   color: rgba(0,0,0,0.87) !important;
   font-size: 13px !important;
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   min-height: 28px !important;
   height: 28px !important;
   border-radius: 16px !important;
@@ -7855,7 +7855,7 @@ th.k-header,
 }
 .mat-mdc-chip-action-label {
   font-size: 13px !important;
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 .mat-mdc-chip-remove {
   color: rgba(0,0,0,0.54) !important;
@@ -7871,7 +7871,7 @@ th.k-header,
   padding: 4px 0 !important;
 }
 
-/* ---- mat-slide-toggle MDC → match Angular 14 size ---- */
+/* ---- mat-slide-toggle MDC ? match Angular 14 size ---- */
 .mat-mdc-slide-toggle .mdc-switch {
   --mdc-switch-track-width: 36px;
   --mdc-switch-track-height: 14px;
@@ -7879,37 +7879,37 @@ th.k-header,
   --mdc-switch-handle-height: 20px;
 }
 
-/* ---- mat-radio-button MDC — keep 14px touch target ---- */
+/* ---- mat-radio-button MDC � keep 14px touch target ---- */
 .mat-mdc-radio-button .mdc-radio {
   --mdc-radio-state-layer-size: 32px;
   padding: 4px !important;
 }
 .mat-mdc-radio-button .mdc-form-field > label {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 13px !important;
 }
 
-/* ---- mat-menu MDC — restore Angular 14 appearance ---- */
+/* ---- mat-menu MDC � restore Angular 14 appearance ---- */
 .mat-mdc-menu-panel {
   min-width: 112px !important;
   border-radius: 4px !important;
   box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12) !important;
 }
 .mat-mdc-menu-item {
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 13px !important;
   min-height: 40px !important;
   line-height: 40px !important;
 }
 .mat-mdc-menu-item .mat-mdc-menu-item-text {
   font-size: 13px !important;
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-/* ---- mat-paginator MDC — match Angular 14 size ---- */
+/* ---- mat-paginator MDC � match Angular 14 size ---- */
 .mat-mdc-paginator {
   font-size: 12px !important;
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 .mat-mdc-paginator-range-label {
   font-size: 12px !important;
@@ -7921,7 +7921,7 @@ th.k-header,
 /* ---- Tooltip MDC ---- */
 .mdc-tooltip__surface {
   font-size: 11px !important;
-  font-family: "Calibri", Arial, Helvetica, sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: rgba(97, 97, 97, 0.9) !important;
   border-radius: 4px !important;
   padding: 6px 8px !important;

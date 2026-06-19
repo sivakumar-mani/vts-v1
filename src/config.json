@@ -1,11 +1,12 @@
 {
-  "apiUrl": "http://localhost:62414/api/",
-  "apiUrl1": "http://localhost:62414/api/",
-  "invoiceapiUrl": "http://localhost:5003/api/",
-  "expressUrl": "http://localhost:62414",
-  "documentUrl": "http://localhost:62414/VtsDocument",
+  "apiUrl": "https://dev-vts.kryasolutions.com/DevApi/api/",
+  "apiUrl1": "https://dev-vts.kryasolutions.com/DevApi/api/",
+  "invoiceapiUrl": "https://dev-vts.kryasolutions.com/DevApi/api/",
+  "expressUrl": "https://dev-vts.kryasolutions.com/DevApi",
+  "documentUrl": "https://dev-vts.kryasolutions.com/DevApi/VtsDocument",
   "redirectUri": "http://localhost:4200/auth-callback",
   "pdfType": "1",
   "acheck": 1,
   "candidate": 3
-}
+} 
+ 

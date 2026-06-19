@@ -181,7 +181,7 @@ OAuthModule.forRoot({
     },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: { appearance: 'outline', floatLabel: 'auto' }
+      useValue: { appearance: 'outline', floatLabel: 'always' }
     }
   ],
   bootstrap: [AppComponent]

@@ -25,14 +25,14 @@
     font-size: 17px;
     text-transform: uppercase;
     padding: 10px;
-    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .headingInitialCap span {
     font-weight: 600;
     font-size: 25px;
     letter-spacing: 0.8px;
-    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .mb-20 {
@@ -42,7 +42,7 @@
 .report-text {
     color: #000000;
     line-height: 1.5em;
-    font-family: Roboto, Calibri, "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -56,7 +56,7 @@ tr .columns th {
     font-weight: 600;
     vertical-align: middle;
     text-align: center;
-    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .txtLeft {
@@ -71,12 +71,12 @@ tr .columns th {
     border: 1px solid #bcbdbe;
     font-weight: normal;
     font-size: 13px;
-    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .tdStyle,
 .columns td {
-    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
     border: 1px solid #bcbdbe;
     padding: 6px 8px;
     font-weight: normal;
@@ -88,12 +88,12 @@ tr .columns th {
 .confidential {
     font-size: 14px;
     font-weight: 600;
-    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
     display: block;
 }
 
 .educationTd {
-    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
     border: 1px solid #bcbdbe;
     padding: 6px 8px;
     font-weight: normal;
@@ -111,7 +111,7 @@ tr .columns th {
 .confidentialSpan {
     font-size: 12px;
     font-weight: 400;
-    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .disclaimerH3 {
@@ -119,7 +119,7 @@ tr .columns th {
     font-size: 13px;
     text-align: center;
     margin: 0 0 20px 0;
-    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
     padding: 0;
 
 }
@@ -141,7 +141,7 @@ tr .columns th {
     vertical-align: center;
     text-align: center;
     line-height: 1.5em;
-    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .page-break-after {
@@ -173,7 +173,7 @@ tr .columns th {
     font-size: 18px;
     text-align: center;
     font-weight: 600;
-    font-family: Roboto, Calibri, Clear Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 } */
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i&display=swap');
