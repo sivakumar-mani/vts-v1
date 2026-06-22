@@ -49,33 +49,11 @@
       </div>
     </div>
   </div> -->
-  <div class="dashboard-tabs" role="tablist" aria-label="Dashboard sections">
-    @if (caseviFlag()) {
-      <button type="button" class="dashboard-tab" [class.active]="common.caseFlag"
-        (click)="getdashboardcnwise(false,false,false,true, false);">Case Details</button>
-    }
-    @if (caseHistoryviFlag()) {
-      <button type="button" class="dashboard-tab" [class.active]="common.caseHistoryFlag"
-        (click)="getdashboardcnwise(false,false,false,false,true);">Case History</button>
-    }
-    @if (inCountFlag() && userData.subTeamName !== 'CRTCaseCreation' && userData.subTeamName !== 'CRTScopeCreation') {
-      <button type="button" class="dashboard-tab" [class.active]="common.insuffCountFlag"
-        (click)="getdashboardcnwise(true,false,false,false, false);">Insufficiency</button>
-    }
-    @if (veCountFlag() && userData.subTeamName !== 'CRTScopeCreation') {
-      <button type="button" class="dashboard-tab" [class.active]="common.VeCountFlag"
-        (click)="getdashboardcnwise(false,true,false,false, false)">Verification</button>
-    }
-    @if (userData.subTeamName !== 'CRTCaseCreation' && userData.subTeamName !== 'CRTScopeCreation' &&userData.teamName !== 'ApprovalManager' && userData.teamName !== 'ManagingDirector' && userData.applicationId !== 2) {
-      <button type="button" class="dashboard-tab" [class.active]="common.qcCountFlag"
-        (click)="getdashboardcnwise(false,false,true,false, false)">QC</button>
-    }
-  </div>
   @if (caseviFlag()) {
     <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
       fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
       <div fxFlex="100%">
-        <h3 class="sub-header dashboard-section-toggle"><a [ngClass]="(common.caseFlag)?'disabled':''"
+        <h3 class="sub-header"><a [ngClass]="(common.caseFlag)?'disabled':''"
           (click)="getdashboardcnwise(false,false,false,true, false);">Case Details&nbsp;<i
         class="icon-chevron-{{ common.caseFlag?'up':'down' }}"></i></a></h3>
       </div>
@@ -1004,7 +982,7 @@
   <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
     fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
     <div fxFlex="100%">
-      <h3 class="sub-header dashboard-section-toggle"><a [ngClass]="(common.caseHistoryFlag)?'disabled':''"
+      <h3 class="sub-header"><a [ngClass]="(common.caseHistoryFlag)?'disabled':''"
         (click)="getdashboardcnwise(false,false,false,false,true);">Case History Details&nbsp;<i
       class="icon-chevron-{{ common.caseHistoryFlag?'up':'down' }}"></i></a></h3>
     </div>
@@ -1085,7 +1063,7 @@
     fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
     >
     <div fxFlex="100%">
-      <h3 class="sub-header dashboard-section-toggle"><a [ngClass]="(common.insuffCountFlag)?'disabled':''"
+      <h3 class="sub-header"><a [ngClass]="(common.insuffCountFlag)?'disabled':''"
         (click)="getdashboardcnwise(true,false,false,false, false);">Insufficiency&nbsp;<i
       class="icon-chevron-{{ common.insuffCountFlag?'up':'down' }}"></i></a></h3>
     </div>
@@ -1257,7 +1235,7 @@
     fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
     >
     <div fxFlex="100%">
-      <h3 class="sub-header dashboard-section-toggle"><a [ngClass]="(common.VeCountFlag)?'disabled':''"
+      <h3 class="sub-header"><a [ngClass]="(common.VeCountFlag)?'disabled':''"
         (click)="getdashboardcnwise(false,true,false,false, false)">Verification&nbsp;<i
       class="icon-chevron-{{ common.VeCountFlag?'up':'down' }}"></i></a></h3>
     </div>
@@ -1615,7 +1593,7 @@
     fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
     >
     <div fxFlex="100%">
-      <h3 class="sub-header dashboard-section-toggle"><a [ngClass]="(common.qcCountFlag)?'disabled':''"
+      <h3 class="sub-header"><a [ngClass]="(common.qcCountFlag)?'disabled':''"
         (click)="getdashboardcnwise(false,false,true,false, false)">QC&nbsp;<i
       class="icon-chevron-{{ common.qcCountFlag?'up':'down' }}"></i></a></h3>
     </div>

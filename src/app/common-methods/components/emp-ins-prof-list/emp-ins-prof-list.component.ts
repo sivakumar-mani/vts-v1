@@ -44,6 +44,7 @@ export class EmpInsProfListComponent implements OnInit {
   verSt = false;
   @ViewChild('deleteconfirmation') confirmation!: TemplateRef<any>;
   cols = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'name', header: 'Employer Name' },
     { field: 'addLine1', header: 'Address' },
     { field: 'city', header: 'City' },

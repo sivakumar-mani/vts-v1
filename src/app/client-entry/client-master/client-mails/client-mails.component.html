@@ -1,269 +1,297 @@
 <div fxLayout="row">
-    <div fxFlex="100%">
-        <mat-card-content>
-            <form [formGroup]="clientMailIdForm" autocomplete="off">
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px">
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Email Category Type</mat-label>
-                            <mat-select placeholder="Email Category Type" formControlName="categoryLookupId"
-                                (selectionChange)="categoryChange($event?.value)">
-                                <!-- <mat-option>--Select Email Category Type--</mat-option> -->
-                                <span *ngFor="let emailCategoryType of bindData?.emailCategoryType">
-                                    <mat-option [value]="emailCategoryType?.lookUpId">
-                                        {{ emailCategoryType?.lookUpName }} </mat-option>
-                                </span>
-                            </mat-select>
-                            <mat-error *ngIf="clientMailIdForm?.get('categoryLookupId')?.errors?.required"> Email
-                                category type is required </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="(commonService?.getNameById(bindData?.emailCategoryType, 'lookUpId', 'lookUpName', clientMailIdForm?.get('categoryLookupId')?.value)?.
-                        toLowerCase() === commonService?.INSUF_NOTIFICATION?.toLowerCase()) || (commonService?.getNameById(bindData?.emailCategoryType, 'lookUpId', 'lookUpName', clientMailIdForm?.get('categoryLookupId')?.value)?.
-                        toLowerCase() === commonService?.FINAL_REPORT?.toLowerCase())">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Report Type</mat-label>
-                            <mat-select placeholder="Report Type" formControlName="reportLookupId">
-                                <!-- <mat-option>--Select Report Type --</mat-option> -->
-                                <span *ngFor="let reportType of reportType">
-                                    <mat-option [value]="reportType?.lookUpId"> {{ reportType?.lookUpName }}
-                                    </mat-option>
-                                </span>
-                            </mat-select>
-                            <mat-error *ngIf="clientMailIdForm?.get('reportLookupId')?.errors?.required"> Report type
-                                is required </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
-                        *ngIf="commonService.getNameById(bindData?.emailCategoryType, 'lookUpId', 'lookUpName',
-                        clientMailIdForm?.get('categoryLookupId')?.value)?.toLowerCase() === commonService?.INSUF_NOTIFICATION?.toLowerCase()">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Send Type</mat-label>
-                            <mat-select placeholder="Send Type" formControlName="sendTypeLookupId">
-                                <!-- <mat-option>--Select Send Type--</mat-option> -->
-                                <span *ngFor="let Type of bindData?.sendType">
-                                    <mat-option [value]="Type?.lookUpId"> {{ Type?.lookUpName }} </mat-option>
-                                </span>
-                            </mat-select>
-                            <mat-error *ngIf="clientMailIdForm?.get('sendTypeLookupId')?.errors?.required"> Send type
-                                is required </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px grid">
-                    <div fxFlex="66.66%" fxFlex.lg="66.66%" fxFlex.md="66.66%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <app-email-dynamic-controls [contactForm]="clientMailIdForm" [commonContact]="emailData"
-                            [emailTypeData]="bindData?.typeOfAgreement" [formArrayNanme]="'commonEmailDet'"
-                            [emailType]="true"> </app-email-dynamic-controls>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
-                        fxLayoutGap="20px">
-                        <mat-label class="lbl">Send Email</mat-label>
-                        <mat-checkbox formControlName="mailNotification">Send Email</mat-checkbox>
-                    </div>
-                </div>
-                <div fxlayout="row">
-                    <div fxFlex="100%">
-                        <div class="adrem" fxLayoutGap="8px">
-                            <button mat-button color="primary" matTooltip="{{index > -1 ? 'Update' : 'Add'}}"
-                                matTooltipClass="accent-tooltip" (click)="addMailId()"> <i class="icon-plus-circle"></i>
-                            </button>
-                            <button mat-button color="warn" matTooltip="Clear" matTooltipClass="accent-tooltip"
-                                (click)="resetMailId()"> <i class="icon-x-circle"></i> </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <div fxLayout="row" class="pt-15">
-                <div fxFlex="100%">
-               <p-table
-  #dt
-  [columns]="columns"
-  [value]="mainForm?.value?.clientEmailConfig"
-  dataKey="notifyId"
-  [scrollable]="true"
-  [paginator]="true"
-  [rows]="10"
-  [resizableColumns]="true"
-  [reorderableColumns]="true"
-  columnResizeMode="expand">
-
-  <!-- ================= COLGROUP ================= -->
-  <ng-template pTemplate="colgroup" let-colGroupCols>
-    <colgroup>
-      <col style="width:40px" />
-      <col style="width:100px" />
-      <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-    </colgroup>
-  </ng-template>
-
-  <!-- ================= HEADER ================= -->
-  <ng-template pTemplate="header" let-headerCols>
-    <tr>
-      <th class="action"></th>
-      <th class="action">Action</th>
-
-      <th *ngFor="let col of headerCols"
-          [ngClass]="{ 'text-center action': col?.field === 'action' }"
-          pReorderableColumn
-          pResizableColumn
-          [ngSwitch]="col?.field">
-
-        <div class="thname">{{ col?.header }}</div>
-
-        <span [pSortableColumn]="col?.field">
-          <p-sortIcon
-            *ngIf="col?.field !== 'expand' && col?.field !== 'action'"
-            [field]="col?.field">
-          </p-sortIcon>
-        </span>
-
-      </th>
-    </tr>
-  </ng-template>
-
-  <!-- ================= BODY ================= -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-index="rowIndex"
-    let-expanded="expanded"
-    let-bodyCols="columns">
-
-    <tr>
-      <!-- EXPAND -->
-      <td class="action">
-        <a href="#" [pRowToggler]="rowData">
-          <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i>
-        </a>
-      </td>
-
-      <!-- ACTION -->
-      <td class="action">
-        <div fxLayout="row" class="tbl-icon">
-          <mat-icon>
-            <i class="material-icons-outlined"
-               matTooltip="Edit"
-               (click)="editMailId(rowData, index)">
-              edit
-            </i>
-          </mat-icon>
-          <mat-icon>
-            <i class="material-icons-outlined"
-               matTooltip="Delete"
-               (click)="openDialog(index)">
-              delete
-            </i>
-          </mat-icon>
+  <div fxFlex="100%">
+    <mat-card-content>
+      <form [formGroup]="clientMailIdForm" autocomplete="off">
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px">
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Email Category Type</mat-label>
+              <mat-select placeholder="Email Category Type" formControlName="categoryLookupId"
+                (selectionChange)="categoryChange($event?.value)">
+                <!-- <mat-option>--Select Email Category Type--</mat-option> -->
+                @for (emailCategoryType of bindData?.emailCategoryType; track emailCategoryType) {
+                  <span>
+                    <mat-option [value]="emailCategoryType?.lookUpId">
+                    {{ emailCategoryType?.lookUpName }} </mat-option>
+                  </span>
+                }
+              </mat-select>
+              @if (clientMailIdForm?.get('categoryLookupId')?.errors?.required) {
+                <mat-error> Email
+                category type is required </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          @if ((commonService?.getNameById(bindData?.emailCategoryType, 'lookUpId', 'lookUpName', clientMailIdForm?.get('categoryLookupId')?.value)?.
+            toLowerCase() === commonService?.INSUF_NOTIFICATION?.toLowerCase()) || (commonService?.getNameById(bindData?.emailCategoryType, 'lookUpId', 'lookUpName', clientMailIdForm?.get('categoryLookupId')?.value)?.
+            toLowerCase() === commonService?.FINAL_REPORT?.toLowerCase())) {
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Report Type</mat-label>
+                <mat-select placeholder="Report Type" formControlName="reportLookupId">
+                  <!-- <mat-option>--Select Report Type --</mat-option> -->
+                  @for (reportType of reportType; track reportType) {
+                    <span>
+                      <mat-option [value]="reportType?.lookUpId"> {{ reportType?.lookUpName }}
+                      </mat-option>
+                    </span>
+                  }
+                </mat-select>
+                @if (clientMailIdForm?.get('reportLookupId')?.errors?.required) {
+                  <mat-error> Report type
+                  is required </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          @if (commonService.getNameById(bindData?.emailCategoryType, 'lookUpId', 'lookUpName',
+            clientMailIdForm?.get('categoryLookupId')?.value)?.toLowerCase() === commonService?.INSUF_NOTIFICATION?.toLowerCase()) {
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+              >
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Send Type</mat-label>
+                <mat-select placeholder="Send Type" formControlName="sendTypeLookupId">
+                  <!-- <mat-option>--Select Send Type--</mat-option> -->
+                  @for (Type of bindData?.sendType; track Type) {
+                    <span>
+                      <mat-option [value]="Type?.lookUpId"> {{ Type?.lookUpName }} </mat-option>
+                    </span>
+                  }
+                </mat-select>
+                @if (clientMailIdForm?.get('sendTypeLookupId')?.errors?.required) {
+                  <mat-error> Send type
+                  is required </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
         </div>
-      </td>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid">
+          <div fxFlex="66.66%" fxFlex.lg="66.66%" fxFlex.md="66.66%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <app-email-dynamic-controls [contactForm]="clientMailIdForm" [commonContact]="emailData"
+              [emailTypeData]="bindData?.typeOfAgreement" [formArrayNanme]="'commonEmailDet'"
+            [emailType]="true"> </app-email-dynamic-controls>
+          </div>
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+            fxLayoutGap="20px">
+            <mat-label class="lbl">Send Email</mat-label>
+            <mat-checkbox formControlName="mailNotification">Send Email</mat-checkbox>
+          </div>
+        </div>
+        <div fxlayout="row">
+          <div fxFlex="100%">
+            <div class="adrem" fxLayoutGap="8px">
+              <button mat-button color="primary" matTooltip="{{index > -1 ? 'Update' : 'Add'}}"
+                matTooltipClass="accent-tooltip" (click)="addMailId()"> <i class="icon-plus-circle"></i>
+              </button>
+              <button mat-button color="warn" matTooltip="Clear" matTooltipClass="accent-tooltip"
+                (click)="resetMailId()"> <i class="icon-x-circle"></i> </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div fxLayout="row" class="pt-15">
+          <div fxFlex="100%">
+            <p-table
+              #dt
+              [columns]="columns"
+              [value]="mainForm?.value?.clientEmailConfig"
+              dataKey="notifyId"
+              [scrollable]="true"
+              [paginator]="true"
+              [rows]="10"
+              [resizableColumns]="true"
+              [reorderableColumns]="true"
+              columnResizeMode="expand">
 
-      <!-- DATA -->
-      <td *ngFor="let col of bodyCols" [ngSwitch]="col?.field">
-        <span *ngSwitchCase="'categoryLookupId'">
-          {{ commonService.getNameById(
-              bindData.emailCategoryType,
-              'lookUpId', 'lookUpName',
-              rowData.categoryLookupId) }}
-        </span>
+              <!-- ================= COLGROUP ================= -->
+              <ng-template pTemplate="colgroup" let-colGroupCols>
+                <colgroup>
+                <col style="width:40px" />
+                <col style="width:100px" />
+                @for (col of colGroupCols; track col) {
+                  <col style="min-width:200px" />
+                }
+              </colgroup>
+            </ng-template>
 
-        <span *ngSwitchCase="'sendTypeLookupId'">
-          {{ rowData.sendTypeLookupId
-            ? commonService.getNameById(
-                bindData.sendType,
-                'lookUpId','lookUpName',
-                rowData.sendTypeLookupId)
-            : 'N/A'
-          }}
-        </span>
+            <!-- ================= HEADER ================= -->
+            <ng-template pTemplate="header" let-headerCols>
+              <tr>
+                <th class="action"></th>
+                <th class="action">Action</th>
 
-        <span *ngSwitchCase="'reportLookupId'">
-          {{ rowData.reportName || 'N/A' }}
-        </span>
+                @for (col of headerCols; track col) {
+                  <th
+                    [ngClass]="{ 'text-center action': col?.field === 'action' }"
+                    pReorderableColumn
+                    pResizableColumn>
+                    <div class="thname">{{ col?.header }}</div>
+                    <span [pSortableColumn]="col?.field">
+                      @if (col?.field !== 'expand' && col?.field !== 'action') {
+                        <p-sortIcon
+                          [field]="col?.field">
+                        </p-sortIcon>
+                      }
+                    </span>
+                  </th>
+                }
+              </tr>
+            </ng-template>
 
-        <span *ngSwitchCase="'mailNotification'">
-          {{ rowData.mailNotification ? 'True' : 'False' }}
-        </span>
-      </td>
-    </tr>
-  </ng-template>
+            <!-- ================= BODY ================= -->
+            <ng-template
+              pTemplate="body"
+              let-rowData
+              let-index="rowIndex"
+              let-expanded="expanded"
+              let-bodyCols="columns">
 
-  <!-- ================= ROW EXPANSION ================= -->
-  <ng-template pTemplate="rowexpansion" let-rowData let-expCols="columns">
-    <tr>
-      <td [attr.colspan]="6">
-        <p-table
-          [columns]="emailColumns"
-          [value]="rowData.commonEmailDet"
-          [paginator]="true"
-          [rows]="10"
-          [scrollable]="true"
-          class="inn-table">
+              <tr>
+                <!-- EXPAND -->
+                <td class="action">
+                  <a href="#" [pRowToggler]="rowData">
+                    <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i>
+                  </a>
+                </td>
 
-          <!-- INNER HEADER -->
-          <ng-template pTemplate="header" let-innerHeaderCols>
-            <tr>
-              <th *ngFor="let col of innerHeaderCols">
-                <div class="thname">{{ col.header }}</div>
-                <p-sortIcon [field]="col.field"></p-sortIcon>
-              </th>
-            </tr>
-          </ng-template>
+                <!-- ACTION -->
+                <td class="action">
+                  <div fxLayout="row" class="tbl-icon">
+                    <mat-icon>
+                      <i class="material-icons-outlined"
+                        matTooltip="Edit"
+                        (click)="editMailId(rowData, index)">
+                        edit
+                      </i>
+                    </mat-icon>
+                    <mat-icon>
+                      <i class="material-icons-outlined"
+                        matTooltip="Delete"
+                        (click)="openDialog(index)">
+                        delete
+                      </i>
+                    </mat-icon>
+                  </div>
+                </td>
 
-          <!-- INNER BODY -->
-          <ng-template
-            pTemplate="body"
-            let-rowData
-            let-innerBodyCols="columns">
+                <!-- DATA -->
+                @for (col of bodyCols; track col) {
+                  <td>
+                    @if (col?.field === 'categoryLookupId') {
+                      <span>
+                        {{ commonService.getNameById(
+                        bindData.emailCategoryType,
+                        'lookUpId', 'lookUpName',
+                        rowData.categoryLookupId) }}
+                      </span>
+                    }
+                    @if (col?.field === 'sendTypeLookupId') {
+                      <span>
+                        {{ rowData.sendTypeLookupId
+                        ? commonService.getNameById(
+                        bindData.sendType,
+                        'lookUpId','lookUpName',
+                        rowData.sendTypeLookupId)
+                        : 'N/A'
+                        }}
+                      </span>
+                    }
+                    @if (col?.field === 'reportLookupId') {
+                      <span>
+                        {{ rowData.reportName || 'N/A' }}
+                      </span>
+                    }
+                    @if (col?.field === 'mailNotification') {
+                      <span>
+                        {{ rowData.mailNotification ? 'True' : 'False' }}
+                      </span>
+                    }
+                  </td>
+                }
+              </tr>
+            </ng-template>
 
-            <tr>
-              <td *ngFor="let col of innerBodyCols">
-                {{ rowData[col.field] }}
-              </td>
-            </tr>
-          </ng-template>
+            <!-- ================= ROW EXPANSION ================= -->
+            <ng-template pTemplate="rowexpansion" let-rowData let-expCols="columns">
+              <tr>
+                <td [attr.colspan]="6">
+                  <p-table
+                    [columns]="emailColumns"
+                    [value]="rowData.commonEmailDet"
+                    [paginator]="true"
+                    [rows]="10"
+                    [scrollable]="true"
+                    class="inn-table">
 
-          <!-- INNER EMPTY -->
-          <ng-template pTemplate="emptymessage" let-emptyCols>
-            <tr>
-              <td [attr.colspan]="emptyCols.length" class="text-center">
-                <div class="no-record">No Records Found</div>
-              </td>
-            </tr>
-          </ng-template>
+                    <!-- INNER HEADER -->
+                    <ng-template pTemplate="header" let-innerHeaderCols>
+                      <tr>
+                        @for (col of innerHeaderCols; track col) {
+                          <th>
+                            <div class="thname">{{ col.header }}</div>
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                          </th>
+                        }
+                      </tr>
+                    </ng-template>
 
-        </p-table>
-      </td>
-    </tr>
-  </ng-template>
+                    <!-- INNER BODY -->
+                    <ng-template
+                      pTemplate="body"
+                      let-rowData
+                      let-innerBodyCols="columns">
 
-</p-table>
-            <div class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
-                fxLayoutGap.xs="20px grid">
-                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                    fxLayoutAlign="start center"> Showing {{ dt?.totalRecords
-                < 1 ? 0 : dt?.first + 1 }} - {{ dt?.totalRecords> 0 ? dt?.rows + dt?.first
-                <=dt?.totalRecords ? dt?.rows + dt?.first : dt?.totalRecords : 0 }} of {{ dt?.totalRecords }} record(s)
-                </div>
-                <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                    fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                    fxLayoutAlign.xs="start center"> <a [ngClass]="dt?.first===0?'page-btn disabled': 'page-btn'"
+                      <tr>
+                        @for (col of innerBodyCols; track col) {
+                          <td>
+                            {{ rowData[col.field] }}
+                          </td>
+                        }
+                      </tr>
+                    </ng-template>
+
+                    <!-- INNER EMPTY -->
+                    <ng-template pTemplate="emptymessage" let-emptyCols>
+                      <tr>
+                        <td [attr.colspan]="emptyCols.length" class="text-center">
+                          <div class="no-record">No Records Found</div>
+                        </td>
+                      </tr>
+                    </ng-template>
+
+                  </p-table>
+                </td>
+              </tr>
+            </ng-template>
+
+          </p-table>
+          <div class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+            fxLayoutGap.xs="20px grid">
+            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+              fxLayoutAlign="start center"> Showing {{ dt?.totalRecords
+              < 1 ? 0 : dt?.first + 1 }} - {{ dt?.totalRecords> 0 ? dt?.rows + dt?.first
+              <=dt?.totalRecords ? dt?.rows + dt?.first : dt?.totalRecords : 0 }} of {{ dt?.totalRecords }} record(s)
+            </div>
+            <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+              fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+              fxLayoutAlign.xs="start center"> <a [ngClass]="dt?.first===0?'page-btn disabled': 'page-btn'"
                         (click)="dt?.onPageChange({ first: dt?.first - dt?.rows, rows: dt?.rows });
                           navigateNxtPrevPage(dt?.first + dt?.rows,dt?.rows)"> <i
-                            class="icon-control-start mr-5"></i></a>
-                    <span class="gotopagbg mr-2 ml-2">Go to Page<span class="input-num">
-                            <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
-                                [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value,dt?.rows)" />
-                        </span></span> <span class="mr-2">Of {{ getTotalPages(dt?.totalRecords,dt?.rows) }}</span> <a
+            class="icon-control-start mr-5"></i></a>
+            <span class="gotopagbg mr-2 ml-2">Go to Page<span class="input-num">
+              <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value,dt?.rows)" />
+                </span></span> <span class="mr-2">Of {{ getTotalPages(dt?.totalRecords,dt?.rows) }}</span> <a
                         [ngClass]="(dt?.rows + dt?.first)>=dt?.totalRecords?'page-btn disabled': 'page-btn'" (click)="dt?.onPageChange({ first: dt?.first + dt?.rows, rows: dt?.rows });
                               navigateNxtPrevPage(dt?.first + dt?.rows,dt?.rows)"><i
-                            class="icon-control-end ml-5"></i></a> </div>
+              class="icon-control-end ml-5"></i></a> </div>
             </div>
+          </div>
+        </div>
+      </mat-card-content>
     </div>
-</div>
-</mat-card-content>
-</div>
-</div>
+  </div>

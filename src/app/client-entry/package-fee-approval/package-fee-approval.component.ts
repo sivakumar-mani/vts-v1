@@ -42,6 +42,7 @@ export class PackageFeeApprovalComponent implements OnInit, OnDestroy {
   tempCurrentPage = 1;
   packageFeeForm: UntypedFormGroup;
   columnName = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'clientName', header: 'Client Name' },
     { field: 'packageName', header: 'Package Name' },
     { field: 'requestAmount', header: 'Requested Amount' },

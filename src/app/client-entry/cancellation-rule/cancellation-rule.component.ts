@@ -42,6 +42,7 @@ export class CancellationRuleComponent implements OnInit {
   routePath = 'Client / Cancellation Rule';
   filednames: any[];
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'clientName', header: 'Client Name' },
     { field: 'description', header: 'Description' },
     { field: 'fromLookupName', header: 'From Condition' },

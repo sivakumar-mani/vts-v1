@@ -68,6 +68,7 @@ export class ClientEntryMasterComponent implements OnInit {
   event: LazyLoadEvent;
   loading: boolean;
   accessClientlist = new AccessClientlist();
+  private skipFirstLazyLoad = false;
   @ViewChild('global')
   global!: ElementRef;
 
@@ -196,11 +197,18 @@ export class ClientEntryMasterComponent implements OnInit {
     this.breadcrumbFlags = this.commonService.breadcrumbFlags(true);
     this.screenAuth = this.authService.getScreenAuth(this.router.url);
     this.initFormGroup();
-    //this.getClientDetails();
     this.getLookUp()
     this.displayedColumns = this.fieldName.filter(e => e.disabled);
     this.itemperpage = 10;
     // this.clienttSettings();
+    this.accessClientlist.loggedIn = this.userData.userId;
+    this.accessClientlist.clientId = this.userData.clientId;
+    this.accessClientlist.page = 1;
+    this.accessClientlist.pageSize = 10;
+    this.accessClientlist.applyPaging = true;
+    this.accessClientlist.needTotal = true;
+    this.skipFirstLazyLoad = true;
+    this.getClientDetails();
   }
   initFormGroup() {
     this.paswordFormGrp = this.fb.group({
@@ -254,8 +262,12 @@ export class ClientEntryMasterComponent implements OnInit {
     this.accessClientlist.pageSize = 10;
     this.accessClientlist.applyPaging = true;
     this.accessClientlist.needTotal = true;
-    this.accessClientlist.loggedIn = this.userData.userId,
-      this.accessClientlist.clientId = this.userData.clientId
+    this.accessClientlist.loggedIn = this.userData.userId;
+    this.accessClientlist.clientId = this.userData.clientId;
+    if (this.skipFirstLazyLoad && this.accessClientlist.page === 1 && !event.sortField && Object.keys(event.filters || {}).length === 0) {
+      this.skipFirstLazyLoad = false;
+      return;
+    }
     this.getClientDetails();
   }
   getClientDetails() {

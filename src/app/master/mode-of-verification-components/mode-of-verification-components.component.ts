@@ -31,6 +31,7 @@ export class ModeOfVerificationComponentsComponent implements OnInit {
   filteredOptions: Observable<VerificationModelVm[]>;
   departmentName = new UntypedFormControl();
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'compName', header: 'Component Name' },
     { field: 'lookupValue', header: 'Mode of Verification' },
     // { field: 'Actions', header: 'Action' },

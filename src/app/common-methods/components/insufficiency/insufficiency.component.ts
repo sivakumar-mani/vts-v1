@@ -1,4 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { UntypedFormGroup, UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 import { ScreeningService } from '../../services/screening.service';
 import { AutoCompleteDropDown } from '../../models/autoComplete';
@@ -1220,7 +1221,7 @@ export class InsufficiencyComponent implements OnInit {
   }
   exportAsExcelFile() {
     this.shievePageNo = 1;
-    let tabInd = this.CurrentTab;
+    const tabInd = this.CurrentTab;
     let statusId = this.insufficiencyFormGroup.controls.statusId.value;
     let levelId = this.insufficiencyFormGroup.controls.levelId.value;
     statusId = statusId === 'null' ? 0 : statusId;
@@ -1240,46 +1241,59 @@ export class InsufficiencyComponent implements OnInit {
 
     this.applyPagination();
     this.userData.applyPaging = false;
-    this.screeningService.getInsuffSearch(false, statusId, levelId, this.userData.userId,
-      this.userData.teamName, InsuffStatus, this.userData).subscribe(res => {
+
+    const needsCloseList = tabInd === 3 || (this.common.fullyClearTab === null && tabInd === 5);
+
+    const insuffColumn = [
+      { field: 'sno', header: 'S No' },
+      { field: 'candidateName', header: 'Candidate Name' },
+      { field: 'clientName', header: 'Client Name' },
+      { field: 'siteName', header: 'Site Name' },
+      { field: 'clientRefNo', header: 'Client Reference No' },
+      { field: 'screeningCompId', header: 'Verification Id' },
+      { field: 'componentName', header: 'Component Name' },
+      { field: 'screeningStatus', header: 'Screening Status' },
+      { field: 'clientScreeningId', header: 'Screening ID' },
+      { field: 'insuffStatus', header: 'Insuff Status' },
+      { field: 'insuffLevel', header: 'Insuff Level' },
+      { field: 'insuffRaisedBy', header: 'Insuff Raised By' },
+      { field: 'functionalEntity', header: 'Functional Entity' },
+      { field: 'raisedDate', header: 'Raised Date & Time' },
+      { field: 'clearedDate', header: 'Cleared Date & Time' },
+      { field: 'ceaInitiationDate', header: 'CEA Initiation Date & Time' }];
+
+    const search$ = this.screeningService.getInsuffSearch(false, statusId, levelId, this.userData.userId,
+      this.userData.teamName, InsuffStatus, this.userData);
+
+    if (!needsCloseList) {
+      search$.subscribe(res => {
         if (res) {
           const respBody = res.body;
           respBody.forEach(m => { m.screeningCompId = 'ACG' + m.screeningCompId; });
           this.insuffList = respBody;
           this.insuffSearchList = respBody;
-          this.screeningService.GetDetailsForAutomationInsuff(this.userData).subscribe(resp => {
-            if (resp) {
-              const respBody1 = resp.body;
-              this.insuffCloseList = respBody1;
-              const data = (this.common.fullyClearTab === null && tabInd === 5 || tabInd === 3) ? this.insuffCloseList : this.insuffList;
-              this.insuffStatusListExport = data;
-              this.insuffStatusListExport.forEach((ele, i) => {
-                ele.sno = i + 1;
-
-              })
-              const insuffColumn = [
-                { field: 'sno', header: 'S No' },
-                { field: 'candidateName', header: 'Candidate Name' },
-                { field: 'clientName', header: 'Client Name' },
-                { field: 'siteName', header: 'Site Name' },
-                { field: 'clientRefNo', header: 'Client Reference No' },
-                { field: 'screeningCompId', header: 'Verification Id' },
-                { field: 'componentName', header: 'Component Name' },
-                { field: 'screeningStatus', header: 'Screening Status' },
-                { field: 'clientScreeningId', header: 'Screening ID' },
-                { field: 'insuffStatus', header: 'Insuff Status' },
-                { field: 'insuffLevel', header: 'Insuff Level' },
-                { field: 'insuffRaisedBy', header: 'Insuff Raised By' },
-                { field: 'functionalEntity', header: 'Functional Entity' },
-                { field: 'raisedDate', header: 'Raised Date & Time' },
-                { field: 'clearedDate', header: 'Cleared Date & Time' },
-                { field: 'ceaInitiationDate', header: 'CEA Initiation Date & Time' }];
-
-              this.common.exportToExcel(insuffColumn, this.insuffStatusListExport, 'Insufficiency List', true);
-            }
-          });
+          this.insuffStatusListExport = this.insuffList;
+          this.insuffStatusListExport.forEach((ele, i) => { ele.sno = i + 1; });
+          this.common.exportToExcel(insuffColumn, this.insuffStatusListExport, 'Insufficiency List', true);
         }
       });
+    } else {
+      forkJoin([search$, this.screeningService.GetDetailsForAutomationInsuff(this.userData)]).subscribe(([res, resp]) => {
+        if (res) {
+          const respBody = res.body;
+          respBody.forEach(m => { m.screeningCompId = 'ACG' + m.screeningCompId; });
+          this.insuffList = respBody;
+          this.insuffSearchList = respBody;
+        }
+        if (resp) {
+          this.insuffCloseList = resp.body;
+        }
+        const data = needsCloseList ? this.insuffCloseList : this.insuffList;
+        this.insuffStatusListExport = data;
+        this.insuffStatusListExport.forEach((ele, i) => { ele.sno = i + 1; });
+        this.common.exportToExcel(insuffColumn, this.insuffStatusListExport, 'Insufficiency List', true);
+      });
+    }
   }
 
   GetBulkFormdata() {

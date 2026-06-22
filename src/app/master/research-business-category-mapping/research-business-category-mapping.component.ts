@@ -38,6 +38,7 @@ export class ResearchBusinessCategoryMappingComponent implements OnInit {
   selectedEmpList: any[] = [];
   catList: any[] = [];
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'businessCategoryLookupName', header: 'Category Name' },
     { field: 'questionName', header: 'Question Name' }
   ];

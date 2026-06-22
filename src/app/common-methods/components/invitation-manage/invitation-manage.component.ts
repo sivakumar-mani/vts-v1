@@ -37,6 +37,7 @@ export class InvitationManageComponent implements OnInit {
   shieveTotalCount = 0;
   shievePageNo = 1;
   shievePageSize = 10;
+  private skipFirstLazyLoad = false;
   ExcelFlag: boolean = false;
   reportTitle = 'Manage Invitation';
   extractedDate = new Date();
@@ -131,8 +132,6 @@ export class InvitationManageComponent implements OnInit {
     this.userData = JSON.parse(sessionStorage.getItem('user_data'));
     this.screenAuth = this.auth.getScreenAuth(this.router.url);
     // this.loaderHide(true)
-    //this.getManageInviteData();
-
     if (this.userData.teamName === 'DEPre-QC') {
       this.manageColumns = [
         { field: 'invitationStatus', header: 'Status' },
@@ -145,7 +144,12 @@ export class InvitationManageComponent implements OnInit {
     }
     this.itemPerPage = 10;
     this.itemperpage = 4;
-
+    this.invitationDetails.page = this.shievePageNo;
+    this.invitationDetails.pageSize = this.shievePageSize;
+    this.invitationDetails.needTotal = true;
+    this.invitationDetails.applyPaging = true;
+    this.skipFirstLazyLoad = true;
+    this.getManageInviteData();
   }
   getExpiryDateLst() {
     this.screening.getExpiryDateLst().subscribe(resp => {
@@ -209,6 +213,10 @@ export class InvitationManageComponent implements OnInit {
     this.userData.sorts = event.sortOrder == -1 ? "-" + sort : sort;
     this.userData.applyPaging = true;
     this.userData.needTotal = true;
+    if (this.skipFirstLazyLoad && this.userData.page === 1 && !event.sortField && Object.keys(event.filters).length === 0) {
+      this.skipFirstLazyLoad = false;
+      return;
+    }
     if (Object.keys(event.filters).length > 0 || event.sortField || this.userData.page) {
       this.getManageInviteData();
     }

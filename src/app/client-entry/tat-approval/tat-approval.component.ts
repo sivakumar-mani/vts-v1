@@ -50,6 +50,7 @@ export class TatApprovalComponent implements OnInit {
   tatApprovalobj: any;
   model = new ClientCompTATStatusTrans();
   filedname = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'clientName', header: 'Client Name' },
     { field: 'componentName', header: 'Component Name' },
     { field: 'requestTat', header: 'Request TAT' },

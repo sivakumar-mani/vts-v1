@@ -1,4 +1,5 @@
-﻿<app-breadcrumb *ngIf='!screeningService.isVerifiactionMode' [btnBulk]="btnBulk" (eventBack)="closeForm()"
+﻿@if (!screeningService.isVerifiactionMode) {
+  <app-breadcrumb [btnBulk]="btnBulk" (eventBack)="closeForm()"
     (eventReset)="resetForm()" (eventBulk)="addBulkForm()" [routePath]="'Screening / Insufficiency'" [toolTip]="toolTip"
     [btnReset]="btnReset" [btnExportDisabled]="!screenAuth?.exportFlag"
     [btnSave]="(btnSave && selectedInsufficiencyDetails?.insuffStatus !== common.Submitted) || (btnSave && toolTip === 'Bulk Save')"
@@ -9,662 +10,721 @@
     (eventReject)="insuffReject(false);rejectFlag = true;"
     [btnReject]="toolTip === 'Save' && selectedInsufficiencyDetails?.insuffStatus === common.Submitted"
     (eventExcelExport)="exportAsExcelFile()" [btnBack]="true" [btnExcelExport]="insuffScreenMode">
-</app-breadcrumb>
-<div *ngIf="!btnCheck">
-    <div fxLayout="row" class="advSearch" *ngIf="insuffScreenMode">
+  </app-breadcrumb>
+}
+@if (!btnCheck) {
+  <div>
+    @if (insuffScreenMode) {
+      <div fxLayout="row" class="advSearch">
         <form [formGroup]="insufficiencyFormGroup" autocomplete="off">
-            <div class="advSearch-forms">
-                <div fxLayout="row" fxLayoutGap="20px">
-                    <div fxFlex="100%">
-                        <div fxLayout="row" fxLayoutGap="17px">
-                            <div fxFlex="130px">
-                                <app-auto-complete [selectProperties]='clientNameControl'>
-                                </app-auto-complete>
-                            </div>
-                            <div fxFlex="130px">
-                                <app-auto-complete [selectProperties]='refNoControl'>
-                                </app-auto-complete>
-                            </div>
-                            <div fxFlex="130px">
-                                <app-auto-complete [selectProperties]='verificationIdControl'> </app-auto-complete>
-                            </div>
-                            <div fxFlex="130px">
-                                <app-auto-complete [selectProperties]='screeningControl'>
-                                </app-auto-complete>
-                            </div>
-                            <div fxFlex="130px">
-                                <app-auto-complete [selectProperties]='candidateNameControl'> </app-auto-complete>
-                            </div>
-                            <div fxFlex="130px">
-                                <app-auto-complete [selectProperties]='levelControls'>
-                                </app-auto-complete>
-                            </div>
-                        </div>
-                    </div>
+          <div class="advSearch-forms">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="100%">
+                <div fxLayout="row" fxLayoutGap="17px">
+                  <div fxFlex="130px">
+                    <app-auto-complete [selectProperties]='clientNameControl'>
+                    </app-auto-complete>
+                  </div>
+                  <div fxFlex="130px">
+                    <app-auto-complete [selectProperties]='refNoControl'>
+                    </app-auto-complete>
+                  </div>
+                  <div fxFlex="130px">
+                    <app-auto-complete [selectProperties]='verificationIdControl'> </app-auto-complete>
+                  </div>
+                  <div fxFlex="130px">
+                    <app-auto-complete [selectProperties]='screeningControl'>
+                    </app-auto-complete>
+                  </div>
+                  <div fxFlex="130px">
+                    <app-auto-complete [selectProperties]='candidateNameControl'> </app-auto-complete>
+                  </div>
+                  <div fxFlex="130px">
+                    <app-auto-complete [selectProperties]='levelControls'>
+                    </app-auto-complete>
+                  </div>
                 </div>
+              </div>
             </div>
-            <div fxFlex="100%" class="advSearch-btn">
-                <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
-                    <span><a (click)="searchInsufficiencyList(this.CurrentTab, 1)">Search</a>
-                        <span> &nbsp;&nbsp; | </span></span>
-                    <a (click)="clearInsufficiency('reset')">Reset</a>
-                </div>
+          </div>
+          <div fxFlex="100%" class="advSearch-btn">
+            <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+              <span><a (click)="searchInsufficiencyList(this.CurrentTab, 1)">Search</a>
+              <span> &nbsp;&nbsp; | </span></span>
+              <a (click)="clearInsufficiency('reset')">Reset</a>
             </div>
+          </div>
         </form>
-    </div>
+      </div>
+    }
     <div fxLayout="row" [ngClass]="insuffScreenMode === true ? 'srchPad':''">
-        <div fxFlex="100%">
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>
-                        <h1  class="header-title">Insufficiency
-                        </h1>
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="row"
-                        fxLayoutGap="0 grid" *ngIf="insuffScreenMode">
+      <div fxFlex="100%">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <h1  class="header-title">Insufficiency
+              </h1>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (insuffScreenMode) {
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="row"
+                fxLayoutGap="0 grid">
+                <div fxFlex="100%">
+                  <div fxLayout="row" class="mb-15">
+                    <div fxFlex="100%"> @if (searchValueArr?.length > 0) {
+                      <b class="text-sm mr-10 text-semi-bold text-dull"
+                        >
+                      Search results for:</b>
+                      } @for (s of searchValueArr; track s; let in = $index) {
+                      <span class="tag"
+                        >{{s.value}} <a class="close"
+                      (click)="removeSearchValue(s?.propertyName,in)">Ã—</a></span>
+                    }
+                  </div>
+                </div>
+                <mat-tab-group #tab (selectedTabChange)="searchInsufficiencyList($event.index,1)">
+                  <!-- <mat-tab-group #tab (selectedTabChange)="statusChange($event.index)"> -->
+                  @for (res of menubar; track res; let ind = $index) {
+                    <mat-tab label="{{res?.menuName}}">
+                      <div fxLayout="row" fxLayoutGap="20px">
                         <div fxFlex="100%">
-                            <div fxLayout="row" class="mb-15">
-                                <div fxFlex="100%"> <b class="text-sm mr-10 text-semi-bold text-dull"
-                                        *ngIf="searchValueArr?.length > 0">
-                                        Search results for:</b> <span class="tag"
-                                        *ngFor="let s of searchValueArr;let in = index">{{s.value}} <a class="close"
-                                            (click)="removeSearchValue(s?.propertyName,in)">Ã—</a></span>
-                                </div>
-                            </div>
-                            <mat-tab-group #tab (selectedTabChange)="searchInsufficiencyList($event.index,1)">
-                                <!-- <mat-tab-group #tab (selectedTabChange)="statusChange($event.index)"> -->
-                                <mat-tab *ngFor="let res of menubar;let ind = index" label="{{res?.menuName}}">
-                                    <div fxLayout="row" fxLayoutGap="20px">
-                                        <div fxFlex="100%">
-                                            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
-                                                fxLayout.xs="column" class="sortrow">
-                                                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="70%" fxFlex.sm="100%"
-                                                    class="sortrow" fxLayoutAlign="end end">
-                                                    <ul>
-                                                        <li> <span class="text-dull"> Showing
-                                                                {{(insuffStatusList?.length > 0 ?
-                                                                ((shievePageSize*shievePageNo)-shievePageSize+1): 0)}} -
-                                                                {{((shievePageSize*shievePageNo)>=(shieveTotalCount))?(shieveTotalCount):(shievePageSize*shievePageNo)}}
-                                                                of </span> <b> {{shieveTotalCount}}record(s)</b>
-                                                            <!-- {{count > 0 ? ((itemPerPage[tabIndex]*page[tabIndex])-itemPerPage[tabIndex]+1) : 0}} -
-                                {{(itemPerPage[tabIndex]*page[tabIndex])>=insuffStatusList?.length?(insuffStatusList?.length):count}}
-                                of </span> <b>{{insuffStatusList?.length}} record(s)</b> -->
-                                                        </li>
-                                                        |
-                                                        <li>
-                                                            <a (click)="showall(ind)">Show All</a>
-                                                        </li>|
-                                                        <!-- <li><b>Sort By:</b> <a
-                                                                [ngClass]="column==='candidateName'?'active':''"
-                                                                (click)="sortBy('candidateName')">Candidate
-                                                                Name</a> <i
+                          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                            fxLayout.xs="column" class="sortrow">
+                            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="70%" fxFlex.sm="100%"
+                              class="sortrow" fxLayoutAlign="end end">
+                              <ul>
+                                <li> <span class="text-dull"> Showing
+                                  {{(insuffStatusList?.length > 0 ?
+                                  ((shievePageSize*shievePageNo)-shievePageSize+1): 0)}} -
+                                  {{((shievePageSize*shievePageNo)>=(shieveTotalCount))?(shieveTotalCount):(shievePageSize*shievePageNo)}}
+                                  of </span> <b> {{shieveTotalCount}}record(s)</b>
+                                  <!-- {{count > 0 ? ((itemPerPage[tabIndex]*page[tabIndex])-itemPerPage[tabIndex]+1) : 0}} -
+                                  {{(itemPerPage[tabIndex]*page[tabIndex])>=insuffStatusList?.length?(insuffStatusList?.length):count}}
+                                  of </span> <b>{{insuffStatusList?.length}} record(s)</b> -->
+                                </li>
+                                |
+                                <li>
+                                  <a (click)="showall(ind)">Show All</a>
+                                </li>|
+                                <!-- <li><b>Sort By:</b> <a
+                                [ngClass]="column==='candidateName'?'active':''"
+                                (click)="sortBy('candidateName')">Candidate
+                              Name</a> <i
                                                                 [ngClass]="{'icon-sort': column != 'candidateName', 'icon-sort-asc': (column == 'candidateName' && !isDesc), 
                                                                                 'icon-sort-desc': (column == 'candidateName' && isDesc) }"
-                                                                aria-hidden="true"> </i> <a
-                                                                [ngClass]="column==='clientRefNo'?'active':''"
-                                                                (click)="sortBy('clientRefNo')">Reference
-                                                                No</a> <i
+                            aria-hidden="true"> </i> <a
+                            [ngClass]="column==='clientRefNo'?'active':''"
+                            (click)="sortBy('clientRefNo')">Reference
+                          No</a> <i
                                                                 [ngClass]="{'icon-sort': column != 'clientRefNo',   'icon-sort-asc': (column == 'clientRefNo' && !isDesc), 
                                                                                   'icon-sort-desc': (column == 'clientRefNo' && isDesc) }"
-                                                                aria-hidden="true"> </i> </li> -->
-
-                                                        <li><b>Sort By:</b> <a
-                                                                [ngClass]="column==='candidateName'?'active':''"
-                                                                (click)="sortBy('candidateName')">Candidate
-                                                                Name</a> <i
+                        aria-hidden="true"> </i> </li> -->
+                        <li><b>Sort By:</b> <a
+                        [ngClass]="column==='candidateName'?'active':''"
+                        (click)="sortBy('candidateName')">Candidate
+                      Name</a> <i
                                                                 [ngClass]="{'icon-sort': column != 'candidateName', 
                                                                       'icon-sort-asc': (column == 'candidateName' && !isDesc), 
                                                                       'icon-sort-desc': (column == 'candidateName' && isDesc) }"
-                                                                aria-hidden="true"> </i> <a
-                                                                [ngClass]="column==='clientRefNo'?'active':''"
-                                                                (click)="sortBy('clientRefNo')">Reference No</a> <i
+                    aria-hidden="true"> </i> <a
+                    [ngClass]="column==='clientRefNo'?'active':''"
+                  (click)="sortBy('clientRefNo')">Reference No</a> <i
                                                                 [ngClass]="{'icon-sort': column != 'clientRefNo', 
                                                                         'icon-sort-asc': (column == 'clientRefNo' && !isDesc), 
                                                                         'icon-sort-desc': (column == 'clientRefNo' && isDesc) }"
-                                                                aria-hidden="true"> </i> </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- | search: [{key:'candidateName', value: insufficiencyFormGroup?.get('candidateName')?.value},
-                                        {key:'clientRefNo', value: insufficiencyFormGroup?.get('clientRefNo')?.value},
-                                        {key:'clientName', value: insufficiencyFormGroup?.get('clientName')?.value},
-                                        {key:'insuffLevel', value: insufficiencyFormGroup?.get('levelId')?.value},
-                                        {key:'screeningCompId', value: insufficiencyFormGroup?.get('screeningCompId')?.value}]  -->
-                                            <div fxLayout="row" class="listrow"
-                                                *ngFor="let view of (insuffStatusList
-                                        
-                                        | sort: {property: column, direction: direction}
-                                        | paginate: { itemsPerPage: shievePageSize, currentPage:shievePageNo,totalItems: shieveTotalCount }); let i = index;let count = count;">
-                                                <div fxFlex="100%" [class]="getcount(count)">
-                                                    <div fxLayout="row" fxLayoutGap="20px">
-                                                        <div fxFlex="24%">
-                                                            <a (click)="insufficiencyAction(view)">
-                                                                <mat-card-header>
-                                                                    <div mat-card-avatar
-                                                                        class="avatar avatarBg{{(i%6)+1}}">
-                                                                        {{ view?.candidateFName?.slice(0, 1)}}{{
-                                                                        view?.candidateLName?.slice(0, 1)}} </div>
-                                                                    <mat-card-title class="cname">{{
-                                                                        view?.candidateFName }} {{ view?.candidateMName
-                                                                        }} {{ view?.candidateLName }}</mat-card-title>
-                                                                    <mat-card-subtitle
-                                                                        class="cdesg mb-10">{{view?.clientRefNo}}
-                                                                    </mat-card-subtitle>
-                                                                    <mat-card-subtitle class="cstat mb-0">Verification
-                                                                        Id:
-                                                                        <em
-                                                                            *ngIf="view?.manualFileSubmissionFlag !=true">{{view?.screeningCompId}}</em>
-                                                                        <em
-                                                                            *ngIf="view?.manualFileSubmissionFlag ==true">{{view?.clientScreeningId}}</em>
-                                                                        <br> Functional Entity:
-                                                                        <em>{{view.functionalEntity
-                                                                            ?view.functionalEntity : 'N/A'}}</em>
-                                                                    </mat-card-subtitle>
-                                                                </mat-card-header>
-                                                            </a>
-                                                        </div>
-                                                        <div fxFlex="36%">
-                                                            <p>
-                                                                <label>Client Name:</label>
-                                                                <em>{{view?.clientName}}</em>
-                                                            </p>
-                                                            <p>
-                                                                <label>Component Name:</label>
-                                                                <em class="cn-chip">{{view?.componentName}}{{view?.subCompName
-                                                                    ? (' - ' +
-                                                                    view?.subCompName) : ''}}</em>
-                                                            </p>
-                                                            <p>
-                                                                <label>Raised Date & Time:</label>
-                                                                <em>{{(common.getTimezoneOffset(view?.raisedDate)) |
-                                                                    date : 'dd/MM/yyyy hh:mm:ss
-                                                                    a'}}</em>
-                                                            </p>
-                                                            <p *ngIf="view?.clearedDate">
-                                                                <label>{{view?.insuffStatus}} Date & Time:</label>
-                                                                <em>{{(common.getTimezoneOffset(view?.clearedDate)) |
-                                                                    date : 'dd/MM/yyyy hh:mm:ss
-                                                                    a'}}</em>
-                                                            </p>
-                                                        </div>
-                                                        <div fxFlex="36%">
-                                                            <p>
-                                                                <label> {{view?.insuffStatus}} in {{view?.insuffLevel}}
-                                                                    by:
-                                                                    <em>{{view?.insuffRaisedBy}}</em> </label>
-                                                            </p>
-                                                            <p>
-                                                                <label>Required Type:</label>
-                                                                <em>{{view?.insuffReqType}}</em>
-                                                            </p>
-                                                            <p
-                                                                *ngIf="view?.insuffStatus.toLowerCase() !== common.Submitted.toLowerCase()">
-                                                                <label>Status:<em>{{view?.screeningStatus}}</em></label>
-                                                            </p>
-                                                            <p
-                                                                *ngIf="view?.insuffStatus.toLowerCase() === common.FULLY_CLE.toLowerCase()">
-                                                                <label>Insuff Days:</label>
-                                                                <em>{{view?.insuffDays}}</em>
-                                                            </p>
-                                                        </div>
-                                                        <div fxFlex="5%" fx>
-                                                            <app-insuff-history [screeningCompId]="view.screeningCompId"
-                                                                [isInsuffScreen]="true">
-                                                            </app-insuff-history>
-                                                            <!-- <button mat-icon-button class="in-btn" matTooltip="History"
-                                matTooltipClass="accent-tooltip" (click)="openHistory(view)"> <i
-                                  class="icon-eyeline"></i></button> -->
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div fxLayout="row">
-                                                <div class="cus-paginator" *ngIf="insuffStatusList?.length>0">
-                                                    <div fxFlex="100%" fxLayoutAlign="end center"> <span>
-                                                            <!-- <pagination-controls class="cus-paginator" (pageChange)="getPage($event, ind)">
-                              </pagination-controls>
-                            </span> <span class="gotopagbg mr-2 ml-2">Items / page<span class="input-num">
-                                <input type="number" [(ngModel)]="itemPerPage[ind]" min="1" maxlength="4" appNumberOnly
-                                  preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
-                              </span></span> <span class="gotopagbg mr-2 ml-2">Go to Page<span class="input-num">
-                                <input type="number" [(ngModel)]="page[ind]" min="1" maxlength="4" appNumberOnly
-                                  preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
-                              </span></span> <span class="mr-2">Of {{ getTotalPage(ind) }}</span> -->
-
-                                                            <pagination-controls class="cus-paginator"
-                                                                (pageChange)="shievePagination($event)"></pagination-controls>
-                                                        </span> <span fxHide.xs class="gotopagbg ml-2">Go to Page<span
-                                                                class="input-num">
-                                                                <input type="number" [(ngModel)]="shievePageNo" min="1"
-                                                                    maxlength="4" appNumberOnly preventDragdrop
-                                                                    (blur)="OnPageChange()" preventCutCopyPaste
-                                                                    autocomplete=" off" [NumberOnly]="false">
-                                                            </span></span> <span fxHide.xs class="gotopagbg ml-2">Items
-                                                            / page<span class="input-num">
-                                                                <input type="number" [(ngModel)]="shievePageSize"
-                                                                    min="1" maxlength="4" appNumberOnly preventDragdrop
-                                                                    preventCutCopyPaste autocomplete="off"
-                                                                    [NumberOnly]="false" (blur)="preventInfinite()">
-                                                            </span> </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </mat-tab>
-                            </mat-tab-group>
-                        </div>
+                aria-hidden="true"> </i> </li>
+              </ul>
+            </div>
+          </div>
+          <!-- | search: [{key:'candidateName', value: insufficiencyFormGroup?.get('candidateName')?.value},
+          {key:'clientRefNo', value: insufficiencyFormGroup?.get('clientRefNo')?.value},
+          {key:'clientName', value: insufficiencyFormGroup?.get('clientName')?.value},
+          {key:'insuffLevel', value: insufficiencyFormGroup?.get('levelId')?.value},
+          {key:'screeningCompId', value: insufficiencyFormGroup?.get('screeningCompId')?.value}]  -->
+          @for (view of (insuffStatusList
+            | sort: {property: column, direction: direction}
+            | paginate: { itemsPerPage: shievePageSize, currentPage:shievePageNo,totalItems: shieveTotalCount }); track view; let i = $index; let count = $count) {
+            <div fxLayout="row" class="listrow"
+              >
+              <div fxFlex="100%" [class]="getcount(count)">
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <div fxFlex="24%">
+                    <a (click)="insufficiencyAction(view)">
+                      <mat-card-header>
+                        <div mat-card-avatar
+                          class="avatar avatarBg{{(i%6)+1}}">
+                          {{ view?.candidateFName?.slice(0, 1)}}{{
+                        view?.candidateLName?.slice(0, 1)}} </div>
+                        <mat-card-title class="cname">{{
+                          view?.candidateFName }} {{ view?.candidateMName
+                        }} {{ view?.candidateLName }}</mat-card-title>
+                        <mat-card-subtitle
+                          class="cdesg mb-10">{{view?.clientRefNo}}
+                        </mat-card-subtitle>
+                        <mat-card-subtitle class="cstat mb-0">Verification
+                          Id:
+                          @if (view?.manualFileSubmissionFlag !=true) {
+                            <em
+                            >{{view?.screeningCompId}}</em>
+                          }
+                          @if (view?.manualFileSubmissionFlag ==true) {
+                            <em
+                            >{{view?.clientScreeningId}}</em>
+                          }
+                          <br> Functional Entity:
+                            <em>{{view.functionalEntity
+                            ?view.functionalEntity : 'N/A'}}</em>
+                          </mat-card-subtitle>
+                        </mat-card-header>
+                      </a>
                     </div>
-                    <div *ngIf="!insuffScreenMode">
-                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
-                            fxLayout.xs="column" fxLayoutGap="0px grid">
-                            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-                                <div class="client-details">
-                                    <div  class="client-avatar" fxHide.sm fxHide.xs>
-                                        <i  class="icon-referencecheck"></i>
-                                    </div>
-                                    <div class="client-data">
-                                        <h3 matTooltip="Client details" matTooltipClass="accent-tooltip"> {{
-                                            selectedComponentDetails?.candidateFName }} {{
-                                            selectedComponentDetails?.candidateMName }} {{
-                                            selectedComponentDetails?.candidateLName }}</h3>
-                                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
-                                            fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
-                                            fxLayoutGap.sm="10px grid" fxLayoutGap.xs="0px grid">
-                                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                                fxFlex.xs="100%">
-                                                <p>
-                                                    <label>Client Name:</label>
-                                                    <span>{{ selectedComponentDetails?.clientName }}</span>
-                                                </p>
-                                            </div>
-                                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                                fxFlex.xs="100%">
-                                                <p>
-                                                    <label>Component Name:</label>
-                                                    <span>{{ selectedComponentDetails?.componentName
-                                                        }}{{selectedComponentDetails?.subCompName ?
-                                                        (' - ' + selectedComponentDetails?.subCompName) : ''}}</span>
-                                                </p>
-                                            </div>
-                                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                                fxFlex.xs="100%">
-                                                <p>
-                                                    <label>Client Ref No.:</label>
-                                                    <span>{{ selectedComponentDetails?.clientRefNo }}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
-                                            fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
-                                            fxLayoutGap.sm="10px grid" fxLayoutGap.xs="0px grid">
-                                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                                fxFlex.xs="100%">
-                                                <p>
-                                                    <label>Status:</label>
-                                                    <span>{{ selectedInsufficiencyDetails?.insuffStatus }}</span>
-                                                </p>
-                                            </div>
-                                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                                fxFlex.xs="100%">
-                                                <p>
-                                                    <label>Required Type:</label>
-                                                    <span>{{ selectedInsufficiencyDetails?.insuffReqType }}</span>
-                                                </p>
-                                            </div>
-                                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                                fxFlex.xs="100%">
-                                                <p>
-                                                    <label>Raised Date & Time:</label>
-                                                    <span>{{
-                                                        common.getTimezoneOffset(selectedInsufficiencyDetails?.raisedDate,
-                                                        false) | date:
-                                                        'dd/MM/yyyy h:mm a' }}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
-                                            fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
-                                            fxLayoutGap.sm="10px grid" fxLayoutGap.xs="0px grid">
-                                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                                fxFlex.xs="100%">
-                                                <p>
-                                                    <label>Functional Entity:</label>
-                                                    <span>{{ selectedComponentDetails?.functionalEntity
-                                                        ?selectedComponentDetails?.functionalEntity : 'N/A'}}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div fxLayout="row wrap" fxLayoutGap="0px grid">
-                            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-                                <ng-container *ngTemplateOutlet="docDetailTableColumnListTemplate"></ng-container>
-                            </div>
-                        </div>
-                        <br />
-                        <br />
-                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
-                            fxLayout.xs="column" fxLayoutGap="10px grid">
-                            <div fxFlex="100%" *ngIf="rejectFlag !== true">
-                                <div fxLayout="row">
-                                    <div fxFlex="100%">
-                                        <h3 class="sub-header">Insufficiency Status</h3>
-                                    </div>
-                                </div>
-                                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
-                                    fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
-                                    fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
-                                    <div fxFlex="27%" fxFlex.lg="27%" fxFlex.md="27%" fxFlex.sm="40%" fxFlex.xs="100%">
-                                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                            <mat-label>Insufficiency Status</mat-label>
-                                            <mat-select placeholder="Insufficiency Status" [(ngModel)]="statusLookupId"
-                                                matNativeControl>
-                                                <ng-container *ngFor="let item of statusList;let i = index">
-                                                    <mat-option
-                                                        *ngIf='item?.lookUpName.toLowerCase() !== common.RAISED.toLowerCase()'
-                                                        [value]="item?.lookUpId"> {{item?.lookUpName}} </mat-option>
-                                                </ng-container>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="30%" fxFlex.xs="100%">
-                                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                            <mat-label>Cleared Date</mat-label>
-                                            <input [(ngModel)]="clearedDate" matInput [matDatepicker]="clearenceDate"
-                                                [max]="getDate()" placeholder="Choose a date"
-                                                (focus)="clearenceDate.open()" (click)="clearenceDate.open()" />
-                                            <mat-datepicker-toggle matSuffix [for]="clearenceDate">
-                                            </mat-datepicker-toggle>
-                                            <mat-datepicker #clearenceDate></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="30%" fxFlex.xs="100%"
-                                        *ngIf="(getLookUpName(statusLookupId) === common.FULLY_CLE.toLowerCase() && selectedInsufficiencyDetails.clientCategoryId == screeningService.techmCatId  && selectedInsufficiencyDetails.currentEmployerFlag === true)">
-                                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                            <mat-label>CEA Initiation Date</mat-label>
-                                            <input [(ngModel)]="ceaInitiationDate" matInput [matDatepicker]="ceaDate"
-                                                placeholder="Choose a date" (focus)="ceaDate.open()"
-                                                (click)="ceaDate.open()" />
-                                            <mat-datepicker-toggle matSuffix [for]="ceaDate">
-                                            </mat-datepicker-toggle>
-                                            <mat-datepicker #ceaDate></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="30%" fxFlex.xs="100%">
-                                        <mat-label class="lbl">&nbsp;</mat-label>
-                                        <mat-checkbox
-                                            [disabled]='selectedInsufficiencyDetails.insuffLevel === "FeesRequest"||selectedInsufficiencyDetails.frFlag || selectedInsufficiencyDetails.isReverifyFlag === true || selectedInsufficiencyDetails.holdFlag === true||selectedComponentDetails?.componentName.toUpperCase() === common.GAP_VERIFICATION '
-                                            *ngIf="getLookUpName(this.statusLookupId) === common.FULLY_CLE.toLowerCase() && selectedInsufficiencyDetails.abroadFlag != true"
-                                            [(ngModel)]="verifierQueue"> Move to Verification
-                                        </mat-checkbox>
-                                        <mat-checkbox
-                                            [disabled]=' selectedInsufficiencyDetails.insuffLevel === "FeesRequest"||selectedInsufficiencyDetails.holdFlag === true|| selectedInsufficiencyDetails.isReverifyFlag === true ||selectedComponentDetails?.componentName.toUpperCase() === common.GAP_VERIFICATION '
-                                            *ngIf="getLookUpName(this.statusLookupId) === common.FULLY_CLE.toLowerCase() && selectedInsufficiencyDetails.moveToVeFlag==true && selectedInsufficiencyDetails.abroadFlag == true"
-                                            [(ngModel)]="verifierQueue"> Move to Verification
-                                        </mat-checkbox>
-                                    </div>
-                                </div>
-                            </div>
-                            <div fxFlex="100%" fxLayout="row"
-                                *ngIf='((documentList?.length > 0 || (selectedInsufficiencyDetails?.insuffReqType.toLowerCase() === common.
-                INFO_REQ.toLowerCase()) || clearInsuffContent?.insuffDocument?.length > 0) && (getLookUpName(this.statusLookupId) !== common.HOLD_CLE.toLowerCase())) && rejectFlag !== true'>
-                                <h3 class="sub-header">Supporting Documents</h3>
-                            </div>
-                            <div fxLayout="row wrap" fxFlex="100%" fxLayoutGap="50px grid" *ngIf="rejectFlag !== true">
-                                <mat-form-field *ngIf="selectedInsufficiencyDetails?.insuffReqType !== common.INFO_REQ"
-                                    appearance="outline" fxFlex="40%">
-                                    <mat-label>Select Document</mat-label>
-                                    <mat-select [(ngModel)]='selDocName' placeholder="Select Document" matNativeControl>
-                                        <mat-option [value]=0
-                                            *ngIf="selectedInsufficiencyDetails?.insuffReqType !== common.DOCU_REQ">
-                                            Select Document</mat-option>
-                                        <mat-option *ngFor="let doc of documentList"
-                                            [value]="doc?.insuffDocTransId">{{doc?.description}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <div fxFlex="60%"
-                                    *ngIf="getLookUpName(this.statusLookupId) !== common.HOLD_CLE.toLowerCase()">
-                                    <mat-label class="lbl">Approver Attached Documents</mat-label>
-                                    <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
-                                            here...</span>
-                                        <input type="file" #fileInput
-                                            (change)="openUploadDoc($event);allowSameFileUpload($event)"
-                                            accept=".eml, .pst, .txt, .pdf, .docx, .doc, .xps, .xlsx, .xls, .xlsb, .xlsm,.png, .jpg, .jpeg, .gif, .psd, .tiff, .eps, .raw, .msg" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf='clearInsuffContent?.insuffDocument?.length > 0 && getLookUpName(this.statusLookupId) !== common.HOLD_CLE.toLowerCase()'
-                                fxLayout="row" fxFlex="100%" fxLayoutGap="10px">
-                                <div fxFlex="100%">
-                                    <br />
-                                    <p-table [columns]="docTableCol" [value]="clearInsuffContent?.insuffDocument"
-                                        [scrollable]="true" scrollHeight="">
-
-                                        <!-- COLGROUP -->
-                                        <ng-template pTemplate="colgroup" let-colgroupCols>
-                                            <colgroup>
-                                                <col *ngFor="let col of colgroupCols" style="min-width:200px" />
-                                            </colgroup>
-                                        </ng-template>
-
-                                        <!-- HEADER -->
-                                        <ng-template pTemplate="header" let-headerCols>
-                                            <tr>
-                                                <th *ngFor="let col of headerCols" [pSortableColumn]="col.field">
-                                                    <div>{{ col.header }}</div>
-                                                    <p-sortIcon *ngIf="col.field !== 'action'" [field]="col.field"
-                                                        ariaLabel="Activate to sort"
-                                                        ariaLabelDesc="Activate to sort in descending order"
-                                                        ariaLabelAsc="Activate to sort in ascending order">
-                                                    </p-sortIcon>
-                                                </th>
-                                            </tr>
-                                        </ng-template>
-
-                                        <!-- BODY -->
-                                        <ng-template pTemplate="body" let-rowData let-index="rowIndex"
-                                            let-bodyCols="columns">
-
-                                            <tr>
-                                                <td *ngFor="let col of bodyCols" [ngSwitch]="col.field">
-
-                                                    <!-- NORMAL FIELDS -->
-                                                    <span *ngIf="col.field !== 'action' && col.field !== 'fileName'">
-                                                        {{ rowData[col.field] || 'N/A' }}
-                                                    </span>
-
-                                                    <!-- FILE NAME -->
-                                                    <span *ngIf="col.field === 'fileName'">
-                                                        <a (click)="preview(rowData)" [matTooltip]="rowData.fileName">
-                                                            {{ rowData[col.field] || 'N/A' }}
-                                                        </a>
-                                                    </span>
-
-                                                    <!-- ACTION -->
-                                                    <div *ngSwitchCase="'action'">
-                                                        <div fxLayout="row" class="tbl-icon">
-                                                            <mat-icon>
-                                                                <i class="material-icons-outlined" matTooltip="Delete"
-                                                                    matTooltipClass="accent-tooltip"
-                                                                    [ngClass]="getDueDate(rowData) ? 'page-btn disabled' : ''"
-                                                                    (click)="openDeleteDialog(index, rowData)">
-                                                                    delete
-                                                                </i>
-                                                            </mat-icon>
-                                                        </div>
-                                                    </div>
-
-                                                </td>
-                                            </tr>
-                                        </ng-template>
-
-                                        <!-- EMPTY MESSAGE -->
-                                        <ng-template pTemplate="emptymessage" let-emptyCols>
-                                            <tr *ngIf="!clearInsuffContent?.insuffDocument?.length">
-                                                <td [attr.colspan]="emptyCols.length">
-                                                    <div class="no-record text-center">
-                                                        <span>No Record Found</span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </ng-template>
-
-                                    </p-table>
-                                    <br />
-                                </div>
-                            </div>
-                            <div fxLayout="row wrap" fxFlex="100%" fxLayoutGap="50px grid">
-                                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Insufficiency {{rejectFlag === true ? 'Reject' : 'Clearance'}}
-                                            Remarks</mat-label>
-                                        <textarea [(ngModel)]="insRemarks" matInput #ramarks placeholder="Remarks"
-                                            autocomplete="off" role="presentation" maxlength="1000"></textarea>
-                                        <mat-hint class="f-13"> ({{ramarks?.value?.length}}/1000 max) </mat-hint>
-                                    </mat-form-field>
-                                </div>
-                                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
-                                </div>
-                            </div>
-                        </div>
+                    <div fxFlex="36%">
+                      <p>
+                        <label>Client Name:</label>
+                        <em>{{view?.clientName}}</em>
+                      </p>
+                      <p>
+                        <label>Component Name:</label>
+                        <em class="cn-chip">{{view?.componentName}}{{view?.subCompName
+                          ? (' - ' +
+                        view?.subCompName) : ''}}</em>
+                      </p>
+                      <p>
+                        <label>Raised Date & Time:</label>
+                        <em>{{(common.getTimezoneOffset(view?.raisedDate)) |
+                          date : 'dd/MM/yyyy hh:mm:ss
+                        a'}}</em>
+                      </p>
+                      @if (view?.clearedDate) {
+                        <p>
+                          <label>{{view?.insuffStatus}} Date & Time:</label>
+                          <em>{{(common.getTimezoneOffset(view?.clearedDate)) |
+                            date : 'dd/MM/yyyy hh:mm:ss
+                          a'}}</em>
+                        </p>
+                      }
                     </div>
-                </mat-card-content>
-                <br />
-                <br />
-            </mat-card>
+                    <div fxFlex="36%">
+                      <p>
+                        <label> {{view?.insuffStatus}} in {{view?.insuffLevel}}
+                          by:
+                          <em>{{view?.insuffRaisedBy}}</em> </label>
+                        </p>
+                        <p>
+                          <label>Required Type:</label>
+                          <em>{{view?.insuffReqType}}</em>
+                        </p>
+                        @if (view?.insuffStatus.toLowerCase() !== common.Submitted.toLowerCase()) {
+                          <p
+                            >
+                            <label>Status:<em>{{view?.screeningStatus}}</em></label>
+                          </p>
+                        }
+                        @if (view?.insuffStatus.toLowerCase() === common.FULLY_CLE.toLowerCase()) {
+                          <p
+                            >
+                            <label>Insuff Days:</label>
+                            <em>{{view?.insuffDays}}</em>
+                          </p>
+                        }
+                      </div>
+                      <div fxFlex="5%" fx>
+                        <app-insuff-history [screeningCompId]="view.screeningCompId"
+                          [isInsuffScreen]="true">
+                        </app-insuff-history>
+                        <!-- <button mat-icon-button class="in-btn" matTooltip="History"
+                        matTooltipClass="accent-tooltip" (click)="openHistory(view)"> <i
+                      class="icon-eyeline"></i></button> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+            <div fxLayout="row">
+              @if (insuffStatusList?.length>0) {
+                <div class="cus-paginator">
+                  <div fxFlex="100%" fxLayoutAlign="end center"> <span>
+                    <!-- <pagination-controls class="cus-paginator" (pageChange)="getPage($event, ind)">
+                  </pagination-controls>
+                </span> <span class="gotopagbg mr-2 ml-2">Items / page<span class="input-num">
+                <input type="number" [(ngModel)]="itemPerPage[ind]" min="1" maxlength="4" appNumberOnly
+                  preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+                </span></span> <span class="gotopagbg mr-2 ml-2">Go to Page<span class="input-num">
+                <input type="number" [(ngModel)]="page[ind]" min="1" maxlength="4" appNumberOnly
+                  preventDragdrop preventCutCopyPaste autocomplete="off" [NumberOnly]="false">
+                  </span></span> <span class="mr-2">Of {{ getTotalPage(ind) }}</span> -->
+                  <pagination-controls class="cus-paginator"
+                  (pageChange)="shievePagination($event)"></pagination-controls>
+                </span> <span fxHide.xs class="gotopagbg ml-2">Go to Page<span
+                class="input-num">
+                <input type="number" [(ngModel)]="shievePageNo" min="1"
+                  maxlength="4" appNumberOnly preventDragdrop
+                  (blur)="OnPageChange()" preventCutCopyPaste
+                  autocomplete=" off" [NumberOnly]="false">
+                </span></span> <span fxHide.xs class="gotopagbg ml-2">Items
+                / page<span class="input-num">
+                <input type="number" [(ngModel)]="shievePageSize"
+                  min="1" maxlength="4" appNumberOnly preventDragdrop
+                  preventCutCopyPaste autocomplete="off"
+                  [NumberOnly]="false" (blur)="preventInfinite()">
+                </span> </span>
+              </div>
+            </div>
+          }
         </div>
+      </div>
     </div>
-    <ng-template #docDetailTableColumnListTemplate>
-        <div fxLayout="row" fxFlex="100%" fxLayoutGap="10px">
-            <div fxFlex="100%">
-                <p-table [columns]="docDetailTableColumnList" [value]="docContent" [scrollable]="true"
-                    [resizableColumns]="true" [reorderableColumns]="true" dataKey="insufficiencyId">
-
-                    <!-- COLGROUP -->
-                    <ng-template pTemplate="colgroup" let-colgroupCols>
-                        <colgroup>
-                            <col style="width:40px" />
-                            <col *ngFor="let col of colgroupCols" style="min-width:200px" />
-                        </colgroup>
-                    </ng-template>
-
-                    <!-- HEADER -->
-                    <ng-template pTemplate="header" let-headerCols>
-                        <tr>
-                            <th class="action"></th>
-                            <th *ngFor="let col of headerCols" pReorderableColumn pResizableColumn>
-                                {{ col.header }}
-                            </th>
-                        </tr>
-                    </ng-template>
-
-                    <!-- BODY -->
-                    <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-bodyCols="columns">
-
-                        <tr>
-                            <td class="action">
-                                <a *ngIf="rowData.insuffDocument?.length" href="#" [pRowToggler]="rowData">
-                                    <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i>
-                                </a>
-                            </td>
-
-                            <td *ngFor="let col of bodyCols">
-                                <span *ngIf="col.field !== 'comments'">
-                                    {{ rowData[col.field] || 'N/A' }}
-                                </span>
-
-                                <span *ngIf="col.field === 'comments'">
-                                    <span *ngFor="let d of rowData.insuffDetail" matTooltip="{{ d[col.field] }}">
-                                        {{ d[col.field] }}
-                                    </span>
-                                </span>
-                            </td>
-                        </tr>
-                    </ng-template>
-
-                    <!-- ROW EXPANSION -->
-                    <ng-template pTemplate="rowexpansion" let-rowData let-expandCols="columns">
-
-                        <tr>
-                            <td [attr.colspan]="expandCols.length + 1">
-                                <!-- inner p-table (safe, separate scope) -->
-                                <p-table [columns]="clearDocList" [value]="rowData.insuffDocument" [scrollable]="true">
-
-                                    <ng-template pTemplate="header" let-innerCols>
-                        <tr>
-                            <th *ngFor="let col of innerCols">
-                                {{ col.header }}
-                            </th>
-                        </tr>
-                    </ng-template>
-
-                    <ng-template pTemplate="body" let-doc>
-                        <tr>
-                            <td *ngFor="let col of clearDocList">
-                                {{ doc[col.field] || 'N/A' }}
-                            </td>
-                        </tr>
-                    </ng-template>
-
-                </p-table>
-                </td>
-                </tr>
-
-    </ng-template>
-
-    </p-table>
+  </mat-tab>
+}
+</mat-tab-group>
 </div>
+</div>
+}
+@if (!insuffScreenMode) {
+  <div>
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+      fxLayout.xs="column" fxLayoutGap="0px grid">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <div class="client-details">
+          <div  class="client-avatar" fxHide.sm fxHide.xs>
+            <i  class="icon-referencecheck"></i>
+          </div>
+          <div class="client-data">
+            <h3 matTooltip="Client details" matTooltipClass="accent-tooltip"> {{
+              selectedComponentDetails?.candidateFName }} {{
+              selectedComponentDetails?.candidateMName }} {{
+            selectedComponentDetails?.candidateLName }}</h3>
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+              fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+              fxLayoutGap.sm="10px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                fxFlex.xs="100%">
+                <p>
+                  <label>Client Name:</label>
+                  <span>{{ selectedComponentDetails?.clientName }}</span>
+                </p>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                fxFlex.xs="100%">
+                <p>
+                  <label>Component Name:</label>
+                  <span>{{ selectedComponentDetails?.componentName
+                    }}{{selectedComponentDetails?.subCompName ?
+                  (' - ' + selectedComponentDetails?.subCompName) : ''}}</span>
+                </p>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                fxFlex.xs="100%">
+                <p>
+                  <label>Client Ref No.:</label>
+                  <span>{{ selectedComponentDetails?.clientRefNo }}</span>
+                </p>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+              fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+              fxLayoutGap.sm="10px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                fxFlex.xs="100%">
+                <p>
+                  <label>Status:</label>
+                  <span>{{ selectedInsufficiencyDetails?.insuffStatus }}</span>
+                </p>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                fxFlex.xs="100%">
+                <p>
+                  <label>Required Type:</label>
+                  <span>{{ selectedInsufficiencyDetails?.insuffReqType }}</span>
+                </p>
+              </div>
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                fxFlex.xs="100%">
+                <p>
+                  <label>Raised Date & Time:</label>
+                  <span>{{
+                    common.getTimezoneOffset(selectedInsufficiencyDetails?.raisedDate,
+                    false) | date:
+                  'dd/MM/yyyy h:mm a' }}</span>
+                </p>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+              fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+              fxLayoutGap.sm="10px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                fxFlex.xs="100%">
+                <p>
+                  <label>Functional Entity:</label>
+                  <span>{{ selectedComponentDetails?.functionalEntity
+                  ?selectedComponentDetails?.functionalEntity : 'N/A'}}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="0px grid">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <ng-container *ngTemplateOutlet="docDetailTableColumnListTemplate"></ng-container>
+      </div>
+    </div>
+    <br />
+    <br />
+    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+      fxLayout.xs="column" fxLayoutGap="10px grid">
+      @if (rejectFlag !== true) {
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <h3 class="sub-header">Insufficiency Status</h3>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+            fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+            fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="27%" fxFlex.lg="27%" fxFlex.md="27%" fxFlex.sm="40%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Insufficiency Status</mat-label>
+                <mat-select placeholder="Insufficiency Status" [(ngModel)]="statusLookupId"
+                  matNativeControl>
+                  @for (item of statusList; track item; let i = $index) {
+                    @if (item?.lookUpName.toLowerCase() !== common.RAISED.toLowerCase()) {
+                      <mat-option
+                      [value]="item?.lookUpId"> {{item?.lookUpName}} </mat-option>
+                    }
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="30%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Cleared Date</mat-label>
+                <input [(ngModel)]="clearedDate" matInput [matDatepicker]="clearenceDate"
+                  [max]="getDate()" placeholder="Choose a date"
+                  (focus)="clearenceDate.open()" (click)="clearenceDate.open()" />
+                  <mat-datepicker-toggle matSuffix [for]="clearenceDate">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #clearenceDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              @if ((getLookUpName(statusLookupId) === common.FULLY_CLE.toLowerCase() && selectedInsufficiencyDetails.clientCategoryId == screeningService.techmCatId  && selectedInsufficiencyDetails.currentEmployerFlag === true)) {
+                <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="30%" fxFlex.xs="100%"
+                  >
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>CEA Initiation Date</mat-label>
+                    <input [(ngModel)]="ceaInitiationDate" matInput [matDatepicker]="ceaDate"
+                      placeholder="Choose a date" (focus)="ceaDate.open()"
+                      (click)="ceaDate.open()" />
+                      <mat-datepicker-toggle matSuffix [for]="ceaDate">
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #ceaDate></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                }
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="30%" fxFlex.xs="100%">
+                  <mat-label class="lbl">&nbsp;</mat-label>
+                  @if (getLookUpName(this.statusLookupId) === common.FULLY_CLE.toLowerCase() && selectedInsufficiencyDetails.abroadFlag != true) {
+                    <mat-checkbox
+                      [disabled]='selectedInsufficiencyDetails.insuffLevel === "FeesRequest"||selectedInsufficiencyDetails.frFlag || selectedInsufficiencyDetails.isReverifyFlag === true || selectedInsufficiencyDetails.holdFlag === true||selectedComponentDetails?.componentName.toUpperCase() === common.GAP_VERIFICATION '
+                      [(ngModel)]="verifierQueue"> Move to Verification
+                    </mat-checkbox>
+                  }
+                  @if (getLookUpName(this.statusLookupId) === common.FULLY_CLE.toLowerCase() && selectedInsufficiencyDetails.moveToVeFlag==true && selectedInsufficiencyDetails.abroadFlag == true) {
+                    <mat-checkbox
+                      [disabled]=' selectedInsufficiencyDetails.insuffLevel === "FeesRequest"||selectedInsufficiencyDetails.holdFlag === true|| selectedInsufficiencyDetails.isReverifyFlag === true ||selectedComponentDetails?.componentName.toUpperCase() === common.GAP_VERIFICATION '
+                      [(ngModel)]="verifierQueue"> Move to Verification
+                    </mat-checkbox>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+          @if (((documentList?.length > 0 || (selectedInsufficiencyDetails?.insuffReqType.toLowerCase() === common.
+            INFO_REQ.toLowerCase()) || clearInsuffContent?.insuffDocument?.length > 0) && (getLookUpName(this.statusLookupId) !== common.HOLD_CLE.toLowerCase())) && rejectFlag !== true) {
+            <div fxFlex="100%" fxLayout="row"
+              >
+              <h3 class="sub-header">Supporting Documents</h3>
+            </div>
+          }
+          @if (rejectFlag !== true) {
+            <div fxLayout="row wrap" fxFlex="100%" fxLayoutGap="50px grid">
+              @if (selectedInsufficiencyDetails?.insuffReqType !== common.INFO_REQ) {
+                <mat-form-field
+                  appearance="outline" fxFlex="40%">
+                  <mat-label>Select Document</mat-label>
+                  <mat-select [(ngModel)]='selDocName' placeholder="Select Document" matNativeControl>
+                    @if (selectedInsufficiencyDetails?.insuffReqType !== common.DOCU_REQ) {
+                      <mat-option [value]=0
+                        >
+                      Select Document</mat-option>
+                    }
+                    @for (doc of documentList; track doc) {
+                      <mat-option
+                        [value]="doc?.insuffDocTransId">{{doc?.description}}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+              @if (getLookUpName(this.statusLookupId) !== common.HOLD_CLE.toLowerCase()) {
+                <div fxFlex="60%"
+                  >
+                  <mat-label class="lbl">Approver Attached Documents</mat-label>
+                  <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                here...</span>
+                <input type="file" #fileInput
+                  (change)="openUploadDoc($event);allowSameFileUpload($event)"
+                  accept=".eml, .pst, .txt, .pdf, .docx, .doc, .xps, .xlsx, .xls, .xlsb, .xlsm,.png, .jpg, .jpeg, .gif, .psd, .tiff, .eps, .raw, .msg" />
+                </div>
+              </div>
+            }
+          </div>
+        }
+        @if (clearInsuffContent?.insuffDocument?.length > 0 && getLookUpName(this.statusLookupId) !== common.HOLD_CLE.toLowerCase()) {
+          <div
+            fxLayout="row" fxFlex="100%" fxLayoutGap="10px">
+            <div fxFlex="100%">
+              <br />
+              <p-table [columns]="docTableCol" [value]="clearInsuffContent?.insuffDocument"
+                [scrollable]="true" scrollHeight="">
+                <!-- COLGROUP -->
+                <ng-template pTemplate="colgroup" let-colgroupCols>
+                  <colgroup>
+                  @for (col of colgroupCols; track col) {
+                    <col style="min-width:200px" />
+                  }
+                </colgroup>
+              </ng-template>
+              <!-- HEADER -->
+              <ng-template pTemplate="header" let-headerCols>
+                <tr>
+                  @for (col of headerCols; track col) {
+                    <th [pSortableColumn]="col.field">
+                      <div>{{ col.header }}</div>
+                      @if (col.field !== 'action') {
+                        <p-sortIcon [field]="col.field"
+                          ariaLabel="Activate to sort"
+                          ariaLabelDesc="Activate to sort in descending order"
+                          ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                      }
+                    </th>
+                  }
+                </tr>
+              </ng-template>
+              <!-- BODY -->
+              <ng-template pTemplate="body" let-rowData let-index="rowIndex"
+                let-bodyCols="columns">
+                <tr>
+                  @for (col of bodyCols; track col) {
+                    <td>
+                      <!-- NORMAL FIELDS -->
+                      @if (col.field !== 'action' && col.field !== 'fileName') {
+                        <span>
+                          {{ rowData[col.field] || 'N/A' }}
+                        </span>
+                      }
+                      <!-- FILE NAME -->
+                      @if (col.field === 'fileName') {
+                        <span>
+                          <a (click)="preview(rowData)" [matTooltip]="rowData.fileName">
+                            {{ rowData[col.field] || 'N/A' }}
+                          </a>
+                        </span>
+                      }
+                      <!-- ACTION -->
+                      @if (col.field === 'action') {
+                        <div>
+                          <div fxLayout="row" class="tbl-icon">
+                            <mat-icon>
+                              <i class="material-icons-outlined" matTooltip="Delete"
+                                matTooltipClass="accent-tooltip"
+                                [ngClass]="getDueDate(rowData) ? 'page-btn disabled' : ''"
+                                (click)="openDeleteDialog(index, rowData)">
+                                delete
+                              </i>
+                            </mat-icon>
+                          </div>
+                        </div>
+                      }
+                    </td>
+                  }
+                </tr>
+              </ng-template>
+              <!-- EMPTY MESSAGE -->
+              <ng-template pTemplate="emptymessage" let-emptyCols>
+                @if (!clearInsuffContent?.insuffDocument?.length) {
+                  <tr>
+                    <td [attr.colspan]="emptyCols.length">
+                      <div class="no-record text-center">
+                        <span>No Record Found</span>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </ng-template>
+            </p-table>
+            <br />
+          </div>
+        </div>
+      }
+      <div fxLayout="row wrap" fxFlex="100%" fxLayoutGap="50px grid">
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Insufficiency {{rejectFlag === true ? 'Reject' : 'Clearance'}}
+            Remarks</mat-label>
+            <textarea [(ngModel)]="insRemarks" matInput #ramarks placeholder="Remarks"
+            autocomplete="off" role="presentation" maxlength="1000"></textarea>
+            <mat-hint class="f-13"> ({{ramarks?.value?.length}}/1000 max) </mat-hint>
+          </mat-form-field>
+        </div>
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+        </div>
+      </div>
+    </div>
+  </div>
+}
+</mat-card-content>
+<br />
+<br />
+</mat-card>
+</div>
+</div>
+<ng-template #docDetailTableColumnListTemplate>
+  <div fxLayout="row" fxFlex="100%" fxLayoutGap="10px">
+    <div fxFlex="100%">
+      <p-table [columns]="docDetailTableColumnList" [value]="docContent" [scrollable]="true"
+        [resizableColumns]="true" [reorderableColumns]="true" dataKey="insufficiencyId">
+        <!-- COLGROUP -->
+        <ng-template pTemplate="colgroup" let-colgroupCols>
+          <colgroup>
+          <col style="width:40px" />
+          @for (col of colgroupCols; track col) {
+            <col style="min-width:200px" />
+          }
+        </colgroup>
+      </ng-template>
+      <!-- HEADER -->
+      <ng-template pTemplate="header" let-headerCols>
+        <tr>
+          <th class="action"></th>
+          @for (col of headerCols; track col) {
+            <th pReorderableColumn pResizableColumn>
+              {{ col.header }}
+            </th>
+          }
+        </tr>
+      </ng-template>
+      <!-- BODY -->
+      <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-bodyCols="columns">
+        <tr>
+          <td class="action">
+            @if (rowData.insuffDocument?.length) {
+              <a href="#" [pRowToggler]="rowData">
+                <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i>
+              </a>
+            }
+          </td>
+          @for (col of bodyCols; track col) {
+            <td>
+              @if (col.field !== 'comments') {
+                <span>
+                  {{ rowData[col.field] || 'N/A' }}
+                </span>
+              }
+              @if (col.field === 'comments') {
+                <span>
+                  @for (d of rowData.insuffDetail; track d) {
+                    <span matTooltip="{{ d[col.field] }}">
+                      {{ d[col.field] }}
+                    </span>
+                  }
+                </span>
+              }
+            </td>
+          }
+        </tr>
+      </ng-template>
+      <!-- ROW EXPANSION -->
+      <ng-template pTemplate="rowexpansion" let-rowData let-expandCols="columns">
+        <tr>
+          <td [attr.colspan]="expandCols.length + 1">
+            <!-- inner p-table (safe, separate scope) -->
+            <p-table [columns]="clearDocList" [value]="rowData.insuffDocument" [scrollable]="true">
+              <ng-template pTemplate="header" let-innerCols>
+                <tr>
+                  @for (col of innerCols; track col) {
+                    <th>
+                      {{ col.header }}
+                    </th>
+                  }
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-doc>
+                <tr>
+                  @for (col of clearDocList; track col) {
+                    <td>
+                      {{ doc[col.field] || 'N/A' }}
+                    </td>
+                  }
+                </tr>
+              </ng-template>
+            </p-table>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>
 </ng-template>
 </div>
-<div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-    fxLayoutGap="20px grid" class="pt-15" *ngIf="btnCheck">
+}
+@if (btnCheck) {
+  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" class="pt-15">
     <div fxFlex="100%">
-        <mat-card>
-            <div fxLayout="row">
-                <mat-card-header fxFlex="100%">
-                    <div fxFlex="100%">
-                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-                            fxLayoutGap="10px">
-                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
-                                fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
-                                fxLayoutAlign.xs="start center">
-                                <mat-card-title>
-                                    <h1 class="header-title">Insufficiency Bulk Clearance</h1>
-                                </mat-card-title>
-                            </div>
-                            <span fxFlex></span>
-                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
-                                fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                                <div class="tbl-commonsearch">
-                                    <mat-form-field fxFlex="100%">
-                                        <mat-label></mat-label>
-                                        <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                                        <input #global matInput placeholder="Search here..." type="text" pInputText
-                                            size="50" (input)="dt?.filterGlobal($event.target.value, 'contains')">
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </div>
+      <mat-card>
+        <div fxLayout="row">
+          <mat-card-header fxFlex="100%">
+            <div fxFlex="100%">
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                fxLayoutGap="10px">
+                <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                  fxLayoutAlign.xs="start center">
+                  <mat-card-title>
+                    <h1 class="header-title">Insufficiency Bulk Clearance</h1>
+                  </mat-card-title>
+                </div>
+                <span fxFlex></span>
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                  fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input #global matInput placeholder="Search here..." type="text" pInputText
+                        size="50" (input)="dt?.filterGlobal($event.target.value, 'contains')">
+                      </mat-form-field>
                     </div>
-                </mat-card-header>
-            </div>
-            <mat-card-content>
-                <p-table #dt [columns]="invitationcols" [value]="insuffSearchList" [(selection)]="insuffSelectList"
-                    [scrollable]="true" [paginator]="true" [rows]="pageno" [resizableColumns]="true"
-                    [reorderableColumns]="true" columnResizeMode="expand">
-
-                    <!-- COLGROUP -->
-                    <ng-template pTemplate="colgroup" let-colgroupCols>
-                        <colgroup>
-                            <col style="width:25px" />
-                            <col *ngFor="let col of colgroupCols" [style.width]="
+                  </div>
+                </div>
+              </div>
+            </mat-card-header>
+          </div>
+          <mat-card-content>
+            <p-table #dt [columns]="invitationcols" [value]="insuffSearchList" [(selection)]="insuffSelectList"
+              [scrollable]="true" [paginator]="true" [rows]="pageno" [resizableColumns]="true"
+              [reorderableColumns]="true" columnResizeMode="expand">
+              <!-- COLGROUP -->
+              <ng-template pTemplate="colgroup" let-colgroupCols>
+                <colgroup>
+                <col style="width:25px" />
+                @for (col of colgroupCols; track col) {
+<col [style.width]="
           col.field === 'clientRefNo'        ? '50px'  :
           col.field === 'clientName'         ? '50px'  :
           col.field === 'screeningCompId'    ? '50px'  :
@@ -675,242 +735,255 @@
           col.field === 'queue'              ? '40px'  :
           col.field === 'status'             ? '80px'  :
                                                '100px'">
-                        </colgroup>
-                    </ng-template>
-
-                    <!-- HEADER -->
-                    <ng-template pTemplate="header" let-headerCols>
-                        <tr>
-                            <th pReorderableColumn pResizableColumn matTooltip="Select All">
-                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                            </th>
-
-                            <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn
-                                pResizableColumn matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
-
-                                <div class="thname">{{ col.header }}</div>
-                                <p-sortIcon [pSortableColumn]="col.field" matTooltip="Sorting"
-                                    matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
-                                    ariaLabelDesc="Activate to sort in descending order"
-                                    ariaLabelAsc="Activate to sort in ascending order">
-                                </p-sortIcon>
-
-                            </th>
-                        </tr>
-                    </ng-template>
-
-                    <!-- BODY -->
-                    <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
-
-                        <tr>
-                            <td>
-                                <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
-                            </td>
-
-                            <td *ngFor="let col of bodyCols" [ngSwitch]="col.field">
-
-                                <div *ngSwitchCase="'clientRefNo'">{{ rowData?.clientRefNo }}</div>
-                                <div *ngSwitchCase="'clientName'">{{ rowData?.clientName }}</div>
-
-                                <div *ngSwitchCase="'screeningCompId'">
-                                    {{ rowData?.manualFileSubmissionFlag
-                                    ? rowData?.clientScreeningId
-                                    : rowData?.screeningCompId }}
-                                </div>
-
-                                <div *ngSwitchCase="'candidateName'" matTooltip="{{ rowData?.candidateName }}"
-                                    matTooltipClass="accent-tooltip">
-                                    {{ rowData?.candidateName }}
-                                </div>
-
-                                <div *ngSwitchCase="'componentName'" matTooltip="{{ rowData?.componentName }}"
-                                    matTooltipClass="accent-tooltip">
-                                    {{ rowData?.componentName }}
-                                </div>
-
-                                <!-- Remaining cases unchanged -->
-
-                            </td>
-                        </tr>
-
-                    </ng-template>
-
-                </p-table>
-                <div class="cus-paginator" [ngClass]="{'empty-record': insuffSearchList.length == 0}">
-                    <div fxLayout="">
-                        <div fxFlex="30%"> Showing {{ dt.totalRecords
-                            < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
-                                <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }}
-                                    record(s)| &nbsp;<a (click)="showallb()">Show All</a>
-                        </div>
-                        <span fxFlex></span>
-                        <div fxFlex="50%" fxLayoutAlign="end center">
+                }
+              </colgroup>
+            </ng-template>
+            <!-- HEADER -->
+            <ng-template pTemplate="header" let-headerCols>
+              <tr>
+                <th pReorderableColumn pResizableColumn matTooltip="Select All">
+                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                @for (col of headerCols; track col) {
+                  <th pReorderableColumn
+                    pResizableColumn matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
+                    <div class="thname">{{ col.header }}</div>
+                    <p-sortIcon [pSortableColumn]="col.field" matTooltip="Sorting"
+                      matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
+                      ariaLabelDesc="Activate to sort in descending order"
+                      ariaLabelAsc="Activate to sort in ascending order">
+                    </p-sortIcon>
+                  </th>
+                }
+              </tr>
+            </ng-template>
+            <!-- BODY -->
+            <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+              <tr>
+                <td>
+                  <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                </td>
+                @for (col of bodyCols; track col) {
+                  <td>
+                    @if (col.field === 'clientRefNo') {
+                      <div>{{ rowData?.clientRefNo }}</div>
+                    }
+                    @if (col.field === 'clientName') {
+                      <div>{{ rowData?.clientName }}</div>
+                    }
+                    @if (col.field === 'screeningCompId') {
+                      <div>
+                        {{ rowData?.manualFileSubmissionFlag
+                        ? rowData?.clientScreeningId
+                        : rowData?.screeningCompId }}
+                      </div>
+                    }
+                    @if (col.field === 'candidateName') {
+                      <div matTooltip="{{ rowData?.candidateName }}"
+                        matTooltipClass="accent-tooltip">
+                        {{ rowData?.candidateName }}
+                      </div>
+                    }
+                    @if (col.field === 'componentName') {
+                      <div matTooltip="{{ rowData?.componentName }}"
+                        matTooltipClass="accent-tooltip">
+                        {{ rowData?.componentName }}
+                      </div>
+                    }
+                    <!-- Remaining cases unchanged -->
+                  </td>
+                }
+              </tr>
+            </ng-template>
+          </p-table>
+          <div class="cus-paginator" [ngClass]="{'empty-record': insuffSearchList.length == 0}">
+            <div fxLayout="">
+              <div fxFlex="30%"> Showing {{ dt.totalRecords
+                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }}
+                record(s)| &nbsp;<a (click)="showallb()">Show All</a>
+              </div>
+              <span fxFlex></span>
+              <div fxFlex="50%" fxLayoutAlign="end center">
                             <a [ngClass]="dt.first===0?'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                                                     navigateNxtPrevPage(dt.first + dt.rows,dt.rows)"> <i
-                                    class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2">Go to
-                                Page<span class="input-num">
-                                    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5"
-                                        appNumberOnly [NumberOnly]="false"
-                                        (keyup.enter)="navigatePage(pageNo.value,dt.rows)" />
-                                </span></span> <span class="mr-2">Of {{ getTotalPages(dt.totalRecords,dt.rows) }}</span>
-                            <a [ngClass]="(dt.rows + dt.first)>=dt.totalRecords?'page-btn disabled': 'page-btn'"
+                class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2">Go to
+                Page<span class="input-num">
+                <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5"
+                  appNumberOnly [NumberOnly]="false"
+                  (keyup.enter)="navigatePage(pageNo.value,dt.rows)" />
+                  </span></span> <span class="mr-2">Of {{ getTotalPages(dt.totalRecords,dt.rows) }}</span>
+                  <a [ngClass]="(dt.rows + dt.first)>=dt.totalRecords?'page-btn disabled': 'page-btn'"
                                 (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                                                                                     navigateNxtPrevPage(dt.first + dt.rows,dt.rows)"><i
-                                    class="icon-control-end ml-5"></i></a>
-                        </div>
-                    </div>
+                  class="icon-control-end ml-5"></i></a>
                 </div>
-            </mat-card-content>
+              </div>
+            </div>
+          </mat-card-content>
         </mat-card>
+      </div>
     </div>
-</div>
-<ng-template #bulkDocument>
+  }
+  <ng-template #bulkDocument>
     <h1 mat-dialog-title>Insufficiency Documents</h1>
     <mat-dialog-content>
-        <div fxLayout="row" fxLayoutGap="30px">
-            <div fxFlex="60%" *ngIf="documentList?.length > 0">
-                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                    <mat-label>Select Document</mat-label>
-                    <!-- <mat-select placeholder="Select Document" matNativeControl>
-            <mat-option [value]="1">Doc One</mat-option>
-            <mat-option [value]="2">Doc Two</mat-option>
-          </mat-select> -->
-                    <mat-select [(ngModel)]='bulkDocName' placeholder="Select Document" matNativeControl>
-                        <mat-option *ngFor="let doc of documentList" [value]="doc.insuffDocTransId">{{doc.description}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div fxFlex="40%">
-                <mat-label class="lbl">Attached Documents</mat-label>
-                <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
-                        here...</span>
-                    <input type="file" #fileInput (change)="openUploadBulkDoc($event)" />
-                </div>
-                <div class="file-names mt-10">
-                    <div *ngFor="let sel of insuffSelectList;let ind = index;">
-                        <div *ngIf="sel?.screeningCompId === insuffDocData?.screeningCompId">
-                            <div class="file-upload-files" *ngFor="let document of sel?.insuffDocument;let i = index;">
-                                {{this.common.getNameById(documentList, 'insuffDocTransId', 'description',
-                                document?.insuffDocTransId)}}{{(document?.insuffDocTransId > 0) ? '-' : ''}}<a
-                                    routerLinkActive="active-link" [matTooltip]="document.fileName"
-                                    (click)="preview(document)">{{document.fileName}}</a>
-                                <button type="button" class="close" aria-label="Close"
-                                    (click)="removeBulkDocument(i , insuffSelectList[ind]?.insuffDocument)"> <span
-                                        aria-hidden="false">&times;</span> </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="file-names mt-10">
-                    <div class="file-upload-files" *ngFor="let document of bulkDocumentList;let i = index;">
-                        {{this.common.getNameById(documentList, 'insuffDocTransId', 'description',
-                        document?.insuffDocTransId)}}{{(document?.insuffDocTransId > 0) ? '-' : ''}}<a
-                            routerLinkActive="active-link" [matTooltip]="document.fileName"
-                            (click)="preview(document)">{{document.fileName}}</a>
-                        <button type="button" class="close" aria-label="Close"
-                            (click)="removeBulkDocument(i, bulkDocumentList)">
-                            <span aria-hidden="false">&times;</span> </button>
-                    </div>
-                </div>
-            </div>
+      <div fxLayout="row" fxLayoutGap="30px">
+        @if (documentList?.length > 0) {
+          <div fxFlex="60%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Select Document</mat-label>
+              <!-- <mat-select placeholder="Select Document" matNativeControl>
+              <mat-option [value]="1">Doc One</mat-option>
+              <mat-option [value]="2">Doc Two</mat-option>
+            </mat-select> -->
+            <mat-select [(ngModel)]='bulkDocName' placeholder="Select Document" matNativeControl>
+              @for (doc of documentList; track doc) {
+                <mat-option [value]="doc.insuffDocTransId">{{doc.description}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
         </div>
-    </mat-dialog-content>
-    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
-        <button mat-flat-button color="primary" (click)="saveBulkDocument()">Save</button>
-        <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
-    </mat-dialog-actions>
+      }
+      <div fxFlex="40%">
+        <mat-label class="lbl">Attached Documents</mat-label>
+        <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+      here...</span>
+      <input type="file" #fileInput (change)="openUploadBulkDoc($event)" />
+    </div>
+    <div class="file-names mt-10">
+      @for (sel of insuffSelectList; track sel; let ind = $index) {
+        <div>
+          @if (sel?.screeningCompId === insuffDocData?.screeningCompId) {
+            <div>
+              @for (document of sel?.insuffDocument; track document; let i = $index) {
+                <div class="file-upload-files">
+                  {{this.common.getNameById(documentList, 'insuffDocTransId', 'description',
+                  document?.insuffDocTransId)}}{{(document?.insuffDocTransId > 0) ? '-' : ''}}<a
+                  routerLinkActive="active-link" [matTooltip]="document.fileName"
+                (click)="preview(document)">{{document.fileName}}</a>
+                <button type="button" class="close" aria-label="Close"
+                  (click)="removeBulkDocument(i , insuffSelectList[ind]?.insuffDocument)"> <span
+                aria-hidden="false">&times;</span> </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+  <div class="file-names mt-10">
+    @for (document of bulkDocumentList; track document; let i = $index) {
+      <div class="file-upload-files">
+        {{this.common.getNameById(documentList, 'insuffDocTransId', 'description',
+        document?.insuffDocTransId)}}{{(document?.insuffDocTransId > 0) ? '-' : ''}}<a
+        routerLinkActive="active-link" [matTooltip]="document.fileName"
+      (click)="preview(document)">{{document.fileName}}</a>
+      <button type="button" class="close" aria-label="Close"
+        (click)="removeBulkDocument(i, bulkDocumentList)">
+        <span aria-hidden="false">&times;</span> </button>
+      </div>
+    }
+  </div>
+</div>
+</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+  <button mat-flat-button color="primary" (click)="saveBulkDocument()">Save</button>
+  <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+</mat-dialog-actions>
 </ng-template>
 
 <!-- <preview> -->
 <ng-template #pdfDialog>
-    <div class=" confirm-pop">
-        <button mat-icon-button class="closed" [mat-dialog-close]="true">
-            <mat-icon class="close-icon" color="warn">close</mat-icon>
+  <div class=" confirm-pop">
+    <button mat-icon-button class="closed" [mat-dialog-close]="true">
+      <mat-icon class="close-icon" color="warn">close</mat-icon>
+    </button>
+    <h1 mat-dialog-title>Pdf Viewer</h1>
+    <br>
+      <mat-dialog-content>
+        <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="100%">
+            <pdf-viewer [src]="url" [render-text]="true" [original-size]="true" [show-borders]="true"
+              [zoom]="zoomval" [zoom-scale]="'page-height'" [rotation]="rvalue"
+            [fit-to-page]="true"></pdf-viewer>
+          </div>
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+        <button mat-icon-button matTooltip="Download Pdf" (click)="pdftool('download')"
+          matTooltipClass="accent-tooltip">
+          <mat-icon>cloud_download</mat-icon>
         </button>
-        <h1 mat-dialog-title>Pdf Viewer</h1>
-        <br>
+        <button mat-icon-button matTooltip="Rotate right" (click)="pdftool('right')"
+          matTooltipClass="accent-tooltip">
+          <mat-icon>rotate_right</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Rotate left" (click)="pdftool('left')" matTooltipClass="accent-tooltip">
+          <mat-icon>rotate_left</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Zoom In" (click)="pdftool('zoomin')" matTooltipClass="accent-tooltip">
+          <mat-icon>zoom_in</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Zoom Out" (click)="pdftool('zoomout')" matTooltipClass="accent-tooltip">
+          <mat-icon>zoom_out</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Reset" (click)="pdftool('reset')" matTooltipClass="accent-tooltip">
+          <mat-icon>settings_backup_restore</mat-icon>
+        </button>
+      </mat-dialog-actions>
+    </div>
+  </ng-template>
+
+
+
+  <ng-template #imgprDialog>
+    <div class=" confirm-pop">
+      <button mat-icon-button class="closed" [mat-dialog-close]="true">
+        <mat-icon class="close-icon" color="warn">close</mat-icon>
+      </button>
+      <h1 mat-dialog-title>Image Viewer</h1>
+      <br>
         <mat-dialog-content>
-            <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="100%">
-                    <pdf-viewer [src]="url" [render-text]="true" [original-size]="true" [show-borders]="true"
-                        [zoom]="zoomval" [zoom-scale]="'page-height'" [rotation]="rvalue"
-                        [fit-to-page]="true"></pdf-viewer>
-                </div>
+          <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="100%">
+              <img id="imgpre" [@rotatedState]='state' [src]='imageSource'>
             </div>
+          </div>
         </mat-dialog-content>
         <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
-            <button mat-icon-button matTooltip="Download Pdf" (click)="pdftool('download')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>cloud_download</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate right" (click)="pdftool('right')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>rotate_right</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate left" (click)="pdftool('left')" matTooltipClass="accent-tooltip">
-                <mat-icon>rotate_left</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Zoom In" (click)="pdftool('zoomin')" matTooltipClass="accent-tooltip">
-                <mat-icon>zoom_in</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Zoom Out" (click)="pdftool('zoomout')" matTooltipClass="accent-tooltip">
-                <mat-icon>zoom_out</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Reset" (click)="pdftool('reset')" matTooltipClass="accent-tooltip">
-                <mat-icon>settings_backup_restore</mat-icon>
-            </button>
+          <button mat-icon-button matTooltip="Download Image" (click)="pdftool('download')"
+            matTooltipClass="accent-tooltip">
+            <mat-icon>cloud_download</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Rotate Left" (click)="rotateimg('left')"
+            matTooltipClass="accent-tooltip">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Rotate Right" (click)="rotateimg('right')"
+            matTooltipClass="accent-tooltip">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Rotate Up" (click)="rotateimg('up')" matTooltipClass="accent-tooltip">
+            <mat-icon>arrow_upward</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Rotate Down" (click)="rotateimg('down')"
+            matTooltipClass="accent-tooltip">
+            <mat-icon>arrow_downward</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Zoom In" (click)="zoomin()" matTooltipClass="accent-tooltip">
+            <mat-icon>zoom_in</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Zoom Out" (click)="zoomout()" matTooltipClass="accent-tooltip">
+            <mat-icon>zoom_out</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Reset" (click)="rotateimg('reset')" matTooltipClass="accent-tooltip">
+            <mat-icon>settings_backup_restore</mat-icon>
+          </button>
         </mat-dialog-actions>
-    </div>
-</ng-template>
-
-
-
-<ng-template #imgprDialog>
-    <div class=" confirm-pop">
-        <button mat-icon-button class="closed" [mat-dialog-close]="true">
-            <mat-icon class="close-icon" color="warn">close</mat-icon>
-        </button>
-        <h1 mat-dialog-title>Image Viewer</h1>
-        <br>
-        <mat-dialog-content>
-            <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="100%">
-                    <img id="imgpre" [@rotatedState]='state' [src]='imageSource'>
-                </div>
-            </div>
-        </mat-dialog-content>
-        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
-            <button mat-icon-button matTooltip="Download Image" (click)="pdftool('download')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>cloud_download</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate Left" (click)="rotateimg('left')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate Right" (click)="rotateimg('right')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>arrow_forward</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate Up" (click)="rotateimg('up')" matTooltipClass="accent-tooltip">
-                <mat-icon>arrow_upward</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate Down" (click)="rotateimg('down')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>arrow_downward</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Zoom In" (click)="zoomin()" matTooltipClass="accent-tooltip">
-                <mat-icon>zoom_in</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Zoom Out" (click)="zoomout()" matTooltipClass="accent-tooltip">
-                <mat-icon>zoom_out</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Reset" (click)="rotateimg('reset')" matTooltipClass="accent-tooltip">
-                <mat-icon>settings_backup_restore</mat-icon>
-            </button>
-        </mat-dialog-actions>
-    </div>
-</ng-template>
+      </div>
+    </ng-template>

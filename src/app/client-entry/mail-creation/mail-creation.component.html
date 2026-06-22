@@ -1,407 +1,435 @@
 ﻿<app-breadcrumb [btnSave]="breadcrumbFlags.btnSave" [btnBack]="breadcrumbFlags.btnBack"
-    [btnResetTbl]="breadcrumbFlags.btnResetTbl" [routePath]='routePath' (eventBack)="back()"
-    (eventSave)="saveEmailConfig()" [toolTip]="breadcrumbFlags.toolTip" (eventResetTbl)="resetTable()"></app-breadcrumb>
+  [btnResetTbl]="breadcrumbFlags.btnResetTbl" [routePath]='routePath' (eventBack)="back()"
+(eventSave)="saveEmailConfig()" [toolTip]="breadcrumbFlags.toolTip" (eventResetTbl)="resetTable()"></app-breadcrumb>
 
 
 
-<div fxLayout="row" class="advSearch" *ngIf="!showFlag">
+@if (!showFlag) {
+  <div fxLayout="row" class="advSearch">
     <form autocomplete="off" [formGroup]="mailCreationForm">
-        <div class="advSearch-forms">
-            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
-                fxLayoutGap="0px">
-                <div fxFlex="100%">
-                    <div fxLayout="row" fxLayoutGap="20px">
-                        <div fxFlex="200px" *ngIf="clientList.length>0">
-                            <app-auto-complete [selectProperties]='clientName' (propValueEvent)="getsites($event)">
-                            </app-auto-complete>
-                        </div>
-                        <div fxFlex="180px" *ngIf="siteList.length>0">
-                            <app-auto-complete [selectProperties]='siteControl'>
-                            </app-auto-complete>
-                        </div>
-                        <div fxFlex="200px" *ngIf="mailcatList.length>0">
-                            <app-auto-complete [selectProperties]='mailCatControl'
-                                (propValueEvent)="getTemplate($event)">
-                            </app-auto-complete>
-                        </div>
-                        <div fxFlex="200px" *ngIf="templateList.length>0">
-                            <app-auto-complete [selectProperties]='templateControl'>
-                            </app-auto-complete>
-                        </div>
-                    </div>
+      <div class="advSearch-forms">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="row"
+          fxLayoutGap="0px">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayoutGap="20px">
+              @if (clientList.length>0) {
+                <div fxFlex="200px">
+                  <app-auto-complete [selectProperties]='clientName' (propValueEvent)="getsites($event)">
+                  </app-auto-complete>
                 </div>
+              }
+              @if (siteList.length>0) {
+                <div fxFlex="180px">
+                  <app-auto-complete [selectProperties]='siteControl'>
+                  </app-auto-complete>
+                </div>
+              }
+              @if (mailcatList.length>0) {
+                <div fxFlex="200px">
+                  <app-auto-complete [selectProperties]='mailCatControl'
+                    (propValueEvent)="getTemplate($event)">
+                  </app-auto-complete>
+                </div>
+              }
+              @if (templateList.length>0) {
+                <div fxFlex="200px">
+                  <app-auto-complete [selectProperties]='templateControl'>
+                  </app-auto-complete>
+                </div>
+              }
             </div>
+          </div>
         </div>
-        <div fxFlex="100%" class="advSearch-btn">
-            <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
-                <a (click)="searchValue()">Search</a>
-                <span>|</span>
-                <a (click)="resetform()">Reset</a>
-            </div>
+      </div>
+      <div fxFlex="100%" class="advSearch-btn">
+        <div class="FloatR mt-15" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <a (click)="searchValue()">Search</a>
+          <span>|</span>
+          <a (click)="resetform()">Reset</a>
         </div>
+      </div>
     </form>
-</div>
+  </div>
+}
 <br>
-<br>
-<div fxLayout="row">
-    <div fxFlex="100%">
+  <br>
+    <div fxLayout="row">
+      <div fxFlex="100%">
         <mat-card>
-            <mat-card-header>
-                <div fxFlex="100%">
-                    <mat-card-title>
-                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                            fxLayout.xs="column" fxLayoutGap="20px">
-                            <div fxFlex="100%">
-                                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
-                                    fxLayout.xs="column" fxLayoutGap="20px">
-                                    <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
-                                        fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
-                                        fxLayoutAlign.xs="start center">
-                                        <h1 class="header-title">Email Creation</h1>
-                                    </div>
-                                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%"
-                                        fxHide.xs fxLayoutAlign="end center" fxLayoutAlign.sm="end center"
-                                        fxLayoutAlign.xs="start center">
-                                        <div class="tbl-commonsearch" *ngIf="!showFlag">
-                                            <mat-form-field fxFlex="100%">
-                                                <mat-label></mat-label>
-                                                <mat-icon matPrefix>search</mat-icon>
-                                                <input #global matInput placeholder="Search here..." type="text"
-                                                    pInputText size="50" autocomplete="off"
-                                                    (input)="dt?.filterGlobal($event.target.value, 'contains')" />
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                </div>
+          <mat-card-header>
+            <div fxFlex="100%">
+              <mat-card-title>
+                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                  fxLayout.xs="column" fxLayoutGap="20px">
+                  <div fxFlex="100%">
+                    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                      fxLayout.xs="column" fxLayoutGap="20px">
+                      <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                        fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                        fxLayoutAlign.xs="start center">
+                        <h1 class="header-title">Email Creation</h1>
+                      </div>
+                      <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%"
+                        fxHide.xs fxLayoutAlign="end center" fxLayoutAlign.sm="end center"
+                        fxLayoutAlign.xs="start center">
+                        @if (!showFlag) {
+                          <div class="tbl-commonsearch">
+                            <mat-form-field fxFlex="100%">
+                              <mat-label></mat-label>
+                              <mat-icon matPrefix>search</mat-icon>
+                              <input #global matInput placeholder="Search here..." type="text"
+                                pInputText size="50" autocomplete="off"
+                                (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                              </mat-form-field>
                             </div>
+                          }
                         </div>
-                    </mat-card-title>
-                </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-title>
+              </div>
             </mat-card-header>
             <mat-card-content>
-                <div *ngIf="showFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
-                    fxLayout.xs="column" fxLayoutGap="0px grid">
-                    <div fxFlex="100%">
-                        <form [formGroup]='emailConfigForm' autocomplete="off" role="presentation">
-                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
-                                fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
-                                fxLayoutGap.xs="0px grid">
-                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                    fxFlex.xs="100%">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Client Name</mat-label>
-                                        <input matInput placeholder="Client Name" formControlName="clientName"
-                                            [readonly]="true">
-                                    </mat-form-field>
-                                </div>
-
-                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                    fxFlex.xs="100%">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Site Name</mat-label>
-                                        <input matInput placeholder="Site Name" [readonly]="true"
-                                            formControlName="siteName" />
-                                    </mat-form-field>
-                                </div>
-                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                    fxFlex.xs="100%">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Email Template Name</mat-label>
-                                        <input matInput placeholder="Email Template Name" [readonly]="true"
-                                            formControlName="templateName" />
-                                    </mat-form-field>
-                                </div>
+              @if (showFlag) {
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                  fxLayout.xs="column" fxLayoutGap="0px grid">
+                  <div fxFlex="100%">
+                    <form [formGroup]='emailConfigForm' autocomplete="off" role="presentation">
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                        fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+                        fxLayoutGap.xs="0px grid">
+                        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                          fxFlex.xs="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Client Name</mat-label>
+                            <input matInput placeholder="Client Name" formControlName="clientName"
+                              [readonly]="true">
+                            </mat-form-field>
+                          </div>
+                          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                            fxFlex.xs="100%">
+                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                              <mat-label>Site Name</mat-label>
+                              <input matInput placeholder="Site Name" [readonly]="true"
+                                formControlName="siteName" />
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                              fxFlex.xs="100%">
+                              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                <mat-label>Email Template Name</mat-label>
+                                <input matInput placeholder="Email Template Name" [readonly]="true"
+                                  formControlName="templateName" />
+                                </mat-form-field>
+                              </div>
                             </div>
                             <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
-                                fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
-                                fxLayoutGap.xs="0px grid">
-
-                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                    fxFlex.xs="100%">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Email Category</mat-label>
-                                        <input matInput placeholder="Email Category" [readonly]="true"
-                                            formControlName="emailCategory" />
-
-                                    </mat-form-field>
+                              fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+                              fxLayoutGap.xs="0px grid">
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                fxFlex.xs="100%">
+                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                  <mat-label>Email Category</mat-label>
+                                  <input matInput placeholder="Email Category" [readonly]="true"
+                                    formControlName="emailCategory" />
+                                  </mat-form-field>
                                 </div>
                                 <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                    fxFlex.xs="100%">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Subject</mat-label>
-                                        <input matInput placeholder="Subject" [readonly]="!breadcrumbFlags.btnSave"
-                                            formControlName="templateSubject" required />
-                                        <mat-error *ngIf="emailConfigForm.get('templateSubject').invalid">
-                                            Subject is required
+                                  fxFlex.xs="100%">
+                                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                    <mat-label>Subject</mat-label>
+                                    <input matInput placeholder="Subject" [readonly]="!breadcrumbFlags.btnSave"
+                                      formControlName="templateSubject" required />
+                                      @if (emailConfigForm.get('templateSubject').invalid) {
+                                        <mat-error>
+                                          Subject is required
                                         </mat-error>
+                                      }
                                     </mat-form-field>
-                                </div>
-                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                  </div>
+                                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
                                     fxFlex.xs="100%">
                                     <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                        fxLayoutGap="20px">
-                                        <mat-checkbox formControlName="discloseClientFlag"
-                                            [disabled]="!breadcrumbFlags.btnSave">Disclose Client Name</mat-checkbox>
+                                      fxLayoutGap="20px">
+                                      <mat-checkbox formControlName="discloseClientFlag"
+                                      [disabled]="!breadcrumbFlags.btnSave">Disclose Client Name</mat-checkbox>
                                     </div>
-
+                                  </div>
                                 </div>
-
-                            </div>
-                            <!-- VTS2-2023-CRT-0108 - Mail Creation report type change - by santhanalakshmi -->
-                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
-                                fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
-                                fxLayoutGap.xs="0px grid">
-                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                    fxFlex.xs="100%" *ngIf="emailcategoryname === common.FINAL_REPORT">
-                                    <p-multiSelect fxFlex="100%" [options]="reporttype"
+                                <!-- VTS2-2023-CRT-0108 - Mail Creation report type change - by santhanalakshmi -->
+                                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                                  fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+                                  fxLayoutGap.xs="0px grid">
+                                  @if (emailcategoryname === common.FINAL_REPORT) {
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                      fxFlex.xs="100%">
+                                      <p-multiSelect fxFlex="100%" [options]="reporttype"
                                         formControlName="emailReportLookupId" optionLabel="lookUpName"
                                         filterPlaceHolder="Select report type"
                                         [style]="{XminWidth: '270px', width:'100%'}" defaultLabel="Select report type"
                                         [showHeader]="true" required>
-                                    </p-multiSelect>
+                                      </p-multiSelect>
+                                    </div>
+                                  }
                                 </div>
-                            </div>
-                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
-                                fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
-                                fxLayoutGap.xs="0px grid">
-                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
-                                    fxFlex.xs="100%"
-                                    *ngIf="templateName === common.Consolidated_pending_insufficiencies">
-                                    <p-multiSelect fxFlex="100%" [options]="frequencyList"
+                                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                                  fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+                                  fxLayoutGap.xs="0px grid">
+                                  @if (templateName === common.Consolidated_pending_insufficiencies) {
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%"
+                                      fxFlex.xs="100%"
+                                      >
+                                      <p-multiSelect fxFlex="100%" [options]="frequencyList"
                                         formControlName="emailFrequencies" optionLabel="frequencyName"
                                         filterPlaceHolder="Select email frequency"
                                         [style]="{XminWidth: '270px', width:'100%'}"
                                         defaultLabel="Select email frequency" [showHeader]="true" required>
-                                    </p-multiSelect>
-                                </div>
-                            </div>
-                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap"
-                                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
-                                <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="50%" fxFlex.xs="100%"
-                                    *ngIf="emailConfigForm.get('templateName').value === common.CONSOLIDATE_AND_CUMULATIVE_INSUFFICIENCY">
-                                    <span class="p-float-label">
-                                        <p-multiSelect fxFlex="100%" [options]="colorStatus"
-                                            formControlName="sendTypeVm" optionLabel="lookUpName"
-                                            filterPlaceHolder="Select Send Type"
-                                            selectedItemsLabel="{0} Send Type selected"
-                                            [style]="{XminWidth: '550px', width:'100%'}" defaultLabel="Select Send Type"
-                                            [showHeader]="true">
-                                        </p-multiSelect>
-                                        <mat-error class="pt-10" *ngIf="!!emailConfigForm?.get('sendTypeVm')?.errors?.required &&
-                                    emailConfigForm?.get('sendTypeVm')?.touched">
-                                            Send Type is required. </mat-error>
-                                    </span>
-                                </div>
-                            </div>
-                            <div *ngIf="!emailViewFlag">
-                                <div formArrayName="emailClientUser"
-                                    *ngFor="let confrm of getContactFormGroup(); let i = index; let first = first; let last= last">
-                                    <div fxFlex="100%" [formGroupName]="i">
-                                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
-                                            fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
-                                            fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
-                                            *ngIf="!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('deleteFlag').value">
-                                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%"
-                                                fxFlex.xs="100%">
-                                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                                    <mat-label>Email Type</mat-label>
-                                                    <mat-select matNativeControl formControlName="lookupId"
-                                                        placeholder="Select Email Type"
-                                                        [required]="breadcrumbFlags.btnSave"
-                                                        (selectionChange)="lookupChange($event.value)"
-                                                        [disabled]="!breadcrumbFlags.btnSave">
-                                                        <mat-option *ngFor="let type of emailTypeData"
-                                                            [value]="type.lookUpId"> {{ type.lookUpName }}</mat-option>
-                                                    </mat-select>
-
-                                                    <mat-error
-                                                        *ngIf="breadcrumbFlags.btnSave&&!!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('lookupId')?.errors?.required">Email
-                                                        type is required </mat-error>
-                                                    <mat-error
-                                                        *ngIf="breadcrumbFlags.btnSave&&!!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('lookupId')?.errors?.incorrect">Atleast
-                                                        select one Email Type To</mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%"
-                                                fxFlex.xs="100%">
-                                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                                    <mat-label>Email ID</mat-label>
-                                                    <input email="true" #email matInput type="email"
-                                                        formControlName="emailAddress" placeholder="Email ID"
-                                                        maxlength="200" autocomplete="off" role="presentation"
-                                                        (blur)="checkValidEmail(i,email.value)"
-                                                        [required]="breadcrumbFlags.btnSave"
-                                                        [readonly]="!breadcrumbFlags.btnSave" />
-                                                    <div matSuffix>
-                                                        <div fxLayout="row">
-                                                            <div fxFlex="100%" class="adrem suf" fxLayoutGap="8px"
-                                                                fxLayoutAlign="end end">
-                                                                <button mat-button color="primary" matTooltip="Add"
-                                                                    matTooltipClass="accent-tooltip"
-                                                                    *ngIf="breadcrumbFlags.btnSave&&(i === rowCount-1)"
-                                                                    (click)="emailValidation(i,true);addItem(i,true)">
-                                                                    <i class="icon-plus-circle"></i> </button>
-                                                                <button mat-button color="warn" matTooltip="Remove"
-                                                                    matTooltipClass="accent-tooltip"
-                                                                    *ngIf="breadcrumbFlags.btnSave&&(rowCount >1)"
-                                                                    (click)="removeControl(i)"> <i
-                                                                        class="icon-x-circle"></i> </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <mat-error
-                                                        *ngIf="breadcrumbFlags.btnSave&&!!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('emailAddress')?.errors?.required">
-                                                        Email ID is required</mat-error>
-                                                    <mat-error
-                                                        *ngIf="breadcrumbFlags.btnSave&&!!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('emailAddress')?.errors?.alreadyExist">
-                                                        Email ID exist, Please try another one</mat-error>
-                                                    <mat-error
-                                                        *ngIf="breadcrumbFlags.btnSave&&!!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('emailAddress')?.errors?.pattern">Please
-                                                        enter valid Email </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-
+                                      </p-multiSelect>
                                     </div>
+                                  }
                                 </div>
-                            </div>
-
-
-
-                            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                                fxLayout.xs="column" fxLayoutGap="20px">
-                                <div fxFlex="100%" class="ckeditor">
-                                    <!-- <angular-editor [placeholder]="'Enter text here...'" formControlName="htmlTemplateBody" [ngModelOptions]="{standalone: true}" [config]="editorConfig"></angular-editor> -->
-                                    <angular-editor [placeholder]="'Enter text here...'"
-                                        [(ngModel)]="htmlTemplateBodyValue" [ngModelOptions]="{standalone: true}"
-                                        [config]="editorConfig">
-                                    </angular-editor>
+                                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap"
+                                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+                                  @if (emailConfigForm.get('templateName').value === common.CONSOLIDATE_AND_CUMULATIVE_INSUFFICIENCY) {
+                                    <div fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="50%" fxFlex.xs="100%"
+                                      >
+                                      <span class="p-float-label">
+                                        <p-multiSelect fxFlex="100%" [options]="colorStatus"
+                                          formControlName="sendTypeVm" optionLabel="lookUpName"
+                                          filterPlaceHolder="Select Send Type"
+                                          selectedItemsLabel="{0} Send Type selected"
+                                          [style]="{XminWidth: '550px', width:'100%'}" defaultLabel="Select Send Type"
+                                          [showHeader]="true">
+                                        </p-multiSelect>
+                                        @if (!!emailConfigForm?.get('sendTypeVm')?.errors?.required &&
+                                          emailConfigForm?.get('sendTypeVm')?.touched) {
+                                          <mat-error class="pt-10">
+                                          Send Type is required. </mat-error>
+                                        }
+                                      </span>
+                                    </div>
+                                  }
                                 </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                                @if (!emailViewFlag) {
+                                  <div>
+                                    @for (confrm of getContactFormGroup(); track confrm; let i = $index; let first = $first; let last = $last) {
+                                      <div formArrayName="emailClientUser"
+                                        >
+                                        <div fxFlex="100%" [formGroupName]="i">
+                                          @if (!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('deleteFlag').value) {
+                                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+                                              fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+                                              fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+                                              >
+                                              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%"
+                                                fxFlex.xs="100%">
+                                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                  <mat-label>Email Type</mat-label>
+                                                  <mat-select matNativeControl formControlName="lookupId"
+                                                    placeholder="Select Email Type"
+                                                    [required]="breadcrumbFlags.btnSave"
+                                                    (selectionChange)="lookupChange($event.value)"
+                                                    [disabled]="!breadcrumbFlags.btnSave">
+                                                    @for (type of emailTypeData; track type) {
+                                                      <mat-option
+                                                      [value]="type.lookUpId"> {{ type.lookUpName }}</mat-option>
+                                                    }
+                                                  </mat-select>
+                                                  @if (breadcrumbFlags.btnSave&&!!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('lookupId')?.errors?.required) {
+                                                    <mat-error
+                                                      >Email
+                                                    type is required </mat-error>
+                                                  }
+                                                  @if (breadcrumbFlags.btnSave&&!!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('lookupId')?.errors?.incorrect) {
+                                                    <mat-error
+                                                      >Atleast
+                                                    select one Email Type To</mat-error>
+                                                  }
+                                                </mat-form-field>
+                                              </div>
+                                              <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%"
+                                                fxFlex.xs="100%">
+                                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                                  <mat-label>Email ID</mat-label>
+                                                  <input email="true" #email matInput type="email"
+                                                    formControlName="emailAddress" placeholder="Email ID"
+                                                    maxlength="200" autocomplete="off" role="presentation"
+                                                    (blur)="checkValidEmail(i,email.value)"
+                                                    [required]="breadcrumbFlags.btnSave"
+                                                    [readonly]="!breadcrumbFlags.btnSave" />
+                                                    <div matSuffix>
+                                                      <div fxLayout="row">
+                                                        <div fxFlex="100%" class="adrem suf" fxLayoutGap="8px"
+                                                          fxLayoutAlign="end end">
+                                                          @if (breadcrumbFlags.btnSave&&(i === rowCount-1)) {
+                                                            <button mat-button color="primary" matTooltip="Add"
+                                                              matTooltipClass="accent-tooltip"
+                                                              (click)="emailValidation(i,true);addItem(i,true)">
+                                                              <i class="icon-plus-circle"></i> </button>
+                                                            }
+                                                            @if (breadcrumbFlags.btnSave&&(rowCount >1)) {
+                                                              <button mat-button color="warn" matTooltip="Remove"
+                                                                matTooltipClass="accent-tooltip"
+                                                                (click)="removeControl(i)"> <i
+                                                              class="icon-x-circle"></i> </button>
+                                                            }
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      @if (breadcrumbFlags.btnSave&&!!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('emailAddress')?.errors?.required) {
+                                                        <mat-error
+                                                          >
+                                                        Email ID is required</mat-error>
+                                                      }
+                                                      @if (breadcrumbFlags.btnSave&&!!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('emailAddress')?.errors?.alreadyExist) {
+                                                        <mat-error
+                                                          >
+                                                        Email ID exist, Please try another one</mat-error>
+                                                      }
+                                                      @if (breadcrumbFlags.btnSave&&!!emailConfigForm?.get('emailClientUser')?.controls[i]?.get('emailAddress')?.errors?.pattern) {
+                                                        <mat-error
+                                                          >Please
+                                                        enter valid Email </mat-error>
+                                                      }
+                                                    </mat-form-field>
+                                                  </div>
+                                                </div>
+                                              }
+                                            </div>
+                                          </div>
+                                        }
+                                      </div>
+                                    }
+                                    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                                      fxLayout.xs="column" fxLayoutGap="20px">
+                                      <div fxFlex="100%" class="ckeditor">
+                                        <!-- <angular-editor [placeholder]="'Enter text here...'" formControlName="htmlTemplateBody" [ngModelOptions]="{standalone: true}" [config]="editorConfig"></angular-editor> -->
+                                        <angular-editor [placeholder]="'Enter text here...'"
+                                          [(ngModel)]="htmlTemplateBodyValue" [ngModelOptions]="{standalone: true}"
+                                          [config]="editorConfig">
+                                        </angular-editor>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            }
 
-                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px" *ngIf="!showFlag">
-                    <div fxFlex="100%">
-                        <p-table #dt [columns]="columns" [value]="emailTemplateList" [scrollable]="true" scrollHeight=""
-                            [paginator]="true" [rows]="itemperpage" [resizableColumns]="true"
-                            [reorderableColumns]="true" frozenWidth="100px" [frozenColumns]="frozenCols">
-
-                            <!-- ===== COLGROUP ===== -->
-                            <ng-template pTemplate="colgroup" let-colGroupCols>
-                                <colgroup>
-                                    <col *ngFor="let col of colGroupCols" style="width:200px" />
-                                </colgroup>
-                            </ng-template>
-
-                            <!-- ===== HEADER ===== -->
-                            <ng-template pTemplate="header" let-headerCols>
-                                <tr>
-                                    <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn
-                                        pResizableColumn>
-
-                                        <span [pSortableColumn]="col.field">
+                            @if (!showFlag) {
+                              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                                fxLayoutGap="20px">
+                                <div fxFlex="100%">
+                                  <p-table #dt [columns]="columns" [value]="emailTemplateList" [scrollable]="true" scrollHeight=""
+                                    [paginator]="true" [rows]="itemperpage" [resizableColumns]="true"
+                                    [reorderableColumns]="true" frozenWidth="100px" [frozenColumns]="frozenCols">
+                                    <!-- ===== COLGROUP ===== -->
+                                    <ng-template pTemplate="colgroup" let-colGroupCols>
+                                      <colgroup>
+                                      @for (col of colGroupCols; track col) {
+                                        <col style="width:200px" />
+                                      }
+                                    </colgroup>
+                                  </ng-template>
+                                  <!-- ===== HEADER ===== -->
+                                  <ng-template pTemplate="header" let-headerCols>
+                                    <tr>
+                                      @for (col of headerCols; track col) {
+                                        <th pReorderableColumn
+                                          pResizableColumn>
+                                          <span [pSortableColumn]="col.field">
                                             <div class="thname">{{ col.header }}</div>
-
-                                            <p-sortIcon *ngIf="col.field !== 'action'" [field]="col.field"
+                                            @if (col.field !== 'action') {
+                                              <p-sortIcon [field]="col.field"
                                                 ariaLabel="Activate to sort"
                                                 ariaLabelDesc="Activate to sort in descending order"
                                                 ariaLabelAsc="Activate to sort in ascending order">
-                                            </p-sortIcon>
-                                        </span>
-
-                                    </th>
-                                </tr>
-                            </ng-template>
-
-                            <!-- ===== BODY ===== -->
-                            <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
-
-                                <tr>
-                                    <td *ngFor="let col of bodyCols; let i = index"
-                                        [ngClass]="{ 'desg-bg': col.field === 'action' }">
-
-                                        <span>
+                                              </p-sortIcon>
+                                            }
+                                          </span>
+                                        </th>
+                                      }
+                                    </tr>
+                                  </ng-template>
+                                  <!-- ===== BODY ===== -->
+                                  <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+                                    <tr>
+                                      @for (col of bodyCols; track col; let i = $index) {
+                                        <td
+                                          [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                                          <span>
                                             {{ rowData[col.field] }}
-                                        </span>
-
-                                        <!-- ACTION -->
-                                        <div *ngIf="col.field === 'action'" fxLayout="row" class="desg-icon">
-                                            <div fxFlex="100%" fxLayoutGap="10px">
-
+                                          </span>
+                                          <!-- ACTION -->
+                                          @if (col.field === 'action') {
+                                            <div fxLayout="row" class="desg-icon">
+                                              <div fxFlex="100%" fxLayoutGap="10px">
                                                 <mat-icon>
-                                                    <i matTooltip="View" matTooltipClass="accent-tooltip"
-                                                        class="material-icons-outlined"
-                                                        (click)="viewDetail(rowData.emailTempConfigId, rowData)">
-                                                        remove_red_eye
-                                                    </i>
+                                                  <i matTooltip="View" matTooltipClass="accent-tooltip"
+                                                    class="material-icons-outlined"
+                                                    (click)="viewDetail(rowData.emailTempConfigId, rowData)">
+                                                    remove_red_eye
+                                                  </i>
                                                 </mat-icon>
-
                                                 <mat-icon matTooltip="Edit" matTooltipClass="accent-tooltip"
-                                                    [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
-                                                    <i class="material-icons-outlined"
-                                                        (click)="editEmailTemplate(rowData.emailTempConfigId, rowData)">
-                                                        edit
-                                                    </i>
+                                                  [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                                                  <i class="material-icons-outlined"
+                                                    (click)="editEmailTemplate(rowData.emailTempConfigId, rowData)">
+                                                    edit
+                                                  </i>
                                                 </mat-icon>
-
                                                 <mat-icon matTooltip="Delete" matTooltipClass="accent-tooltip"
-                                                    [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''">
-                                                    <i class="material-icons-outlined" (click)="openDialog(rowData)">
-                                                        delete
-                                                    </i>
+                                                  [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''">
+                                                  <i class="material-icons-outlined" (click)="openDialog(rowData)">
+                                                    delete
+                                                  </i>
                                                 </mat-icon>
-
+                                              </div>
                                             </div>
-                                        </div>
-
-                                    </td>
-                                </tr>
-
-                            </ng-template>
-
-                            <br />
-                        </p-table>
-                        <div class="cus-paginator" [ngClass]="{'empty-record': emailTemplateList.length == 0}"
-                            fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                            fxLayoutGap="0px" fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
-
-                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                fxLayoutAlign="start center">
-                                Showing {{ dt.totalRecords
-                                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                                          }
+                                        </td>
+                                      }
+                                    </tr>
+                                  </ng-template>
+                                  <br />
+                                </p-table>
+                                <div class="cus-paginator" [ngClass]="{'empty-record': emailTemplateList.length == 0}"
+                                  fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                                  fxLayoutGap="0px" fxLayoutGap.sm="20px" fxLayoutGap.xs="20px">
+                                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                    fxLayoutAlign="start center">
+                                    Showing {{ dt.totalRecords
+                                    < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
                                     <=dt.totalRecords? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords
-                                        }} record(s) | &nbsp;<a (click)="showall()">Show All</a>
-                            </div>
-                            <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                                fxLayoutAlign.xs="start center">
+                                    }} record(s) | &nbsp;<a (click)="showall()">Show All</a>
+                                  </div>
+                                  <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                    fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                                    fxLayoutAlign.xs="start center">
                                 <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
                                   dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                                   navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
                                 ">
-                                    <i class="icon-control-start mr-5"></i></a>
-                                <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                                      <i class="icon-control-start mr-5"></i></a>
+                                      <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
                                         <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5"
-                                            appNumberOnly [NumberOnly]="false"
-                                            (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
-                                    </span></span>
-                                <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                                          appNumberOnly [NumberOnly]="false"
+                                          (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                                        </span></span>
+                                        <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
                                 <a [ngClass]="
                                   dt.rows + dt.first >= dt.totalRecords
                                     ? 'page-btn disabled'
                                     : 'page-btn'" (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                                   navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"><i
                                         class="icon-control-end ml-5"></i></a>
-                            </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              }
+                            </mat-card-content>
+                          </mat-card>
                         </div>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
-    </div>
-</div>
+                      </div>

@@ -12,196 +12,222 @@
         <div fxFlex="100%">
           <mat-tab-group #tab (selectedTabChange)="goToStep($event.index)">
             <mat-tab label="{{ menubar[0].menuName }}">
-              <div *ngIf="step1 === 0">
-                <mat-card-header>
-                  <mat-card-title>
-                    <div fxLayout="row" fxLayoutGap="20px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
-                      fxLayout.xs="column" fxFlex="100%">
-                      <div fxFlex="100%">
-                        <h1 class="header-title"> <span class="StprH">Step 1:</span>Select Components</h1>
+              @if (step1 === 0) {
+                <div>
+                  <mat-card-header>
+                    <mat-card-title>
+                      <div fxLayout="row" fxLayoutGap="20px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                        fxLayout.xs="column" fxFlex="100%">
+                        <div fxFlex="100%">
+                          <h1 class="header-title"> <span class="StprH">Step 1:</span>Select Components</h1>
+                        </div>
                       </div>
-                    </div>
-                  </mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                  <form [formGroup]="invitationFormGroup" id="ngForm" (keydown.enter)="$event.preventDefault()">
-                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
-                      fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
-
-                      <div fxFlex="40" fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <app-auto-complete (selectionChange)="getClientId($event); enableNoCases()"
+                    </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <form [formGroup]="invitationFormGroup" id="ngForm" (keydown.enter)="$event.preventDefault()">
+                      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                        fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="40" fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <app-auto-complete (selectionChange)="getClientId($event); enableNoCases()"
                           [selectProperties]="clientControls"> </app-auto-complete>
-                      </div>
-                      <div fxFlex="40%" fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
-                          <mat-label>Site Name</mat-label>
-                          <input matInput placeholder="Select Site Name" formControlName="siteId"
-                            [matAutocomplete]="autoComponent" #compInput (focus)="siteItems(compInput.value)"
-                            (keyup)="siteKeyupFunction($event, compInput.value)" (input)="siteItems(compInput.value)"
-                            (click)="compInput.select()" (blur)="checkVal(compInput.value)" required />
-                          <mat-error *ngIf="invitationFormGroup?.get('siteId')?.errors?.required"> Site Name required
-                          </mat-error>
-                          <mat-error *ngIf="invitationFormGroup?.get('siteId')?.errors?.incorrect"> Site Name is not
-                            valid
-                          </mat-error>
-                          <mat-autocomplete #autoComponent="matAutocomplete"
-                            (optionSelected)='getPacakgebysiteId($event.option.value)' [displayWith]="displaySiteFn">
-                            <mat-option (onSelectionChange)="getPacakgebysiteId(comp.siteId)" [value]="comp.siteId"
-                              *ngFor="let comp of sitefilterlist" class="autocom-option autocom-tr">
-                              <span [innerHTML]="comp.siteNoWithsiteName | highlight: compInput.value"></span>
-                            </mat-option>
-                            <mat-option *ngIf="sitefilterlist.length == 0">
-                              <div class="no-record"><span>No Data Found</span></div>
-                            </mat-option>
-                          </mat-autocomplete>
-                        </mat-form-field>
-                      </div>
-
-                    </div>
-                  </form>
-                  <app-additional-component #additioncomp *ngIf="(componentList.length > 0 || packagelist.length > 0)"
-                    [getValues]="commonControls" (compToEmit)="getCommonValues($event)"></app-additional-component>
-                </mat-card-content>
-              </div>
-            </mat-tab>
-            <mat-tab label="{{ menubar[1].menuName }}">
-              <div *ngIf="step1 === 1">
-                <mat-card-header>
-                  <mat-card-title>
-                    <div fxLayout="row" fxLayoutGap="20px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
-                      fxLayout.xs="column" fxFlex="100%">
-                      <div fxFlex="100%">
-                        <h1 class="header-title"> <span class="StprH">Step 2:</span>Candidate Review</h1>
-                      </div>
-                    </div>
-                  </mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
-                    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
-                    *ngIf="invitationFormGroup.controls.packageId.value > 0">
-                    Selected Package Name:
-                    &nbsp; <b>{{ packName }},</b> &nbsp;<span>Package Price :-</span> &nbsp; {{packPrice}}
-                  </div> &nbsp;
-                  <br />
-                  <div class="d-view" *ngIf="invitationFormGroup.controls.packageId.value > 0 && packComponent &&
-                packComponent.length > 0">
-                    <div fxLayout="row">
-                      <div fxFlex="100%">
-                        <h3>Package Details</h3>
-                      </div>
-                    </div>
-                    <table mat-table [dataSource]="packtableSource" style="width: 100%;">
-                      <ng-container matColumnDef="compName">
-                        <th mat-header-cell *matHeaderCellDef>Component Name</th>
-                        <td mat-cell *matCellDef="let element">
-                          {{ element.compName }}
-                        </td>
-                      </ng-container>
-                      <ng-container matColumnDef="noOfComponent">
-                        <th mat-header-cell *matHeaderCellDef>No of Component</th>
-                        <td mat-cell *matCellDef="let element">
-                          {{ element.noOfComponent }}
-                        </td>
-                      </ng-container>
-                      <!-- <ng-container matColumnDef="price">
-                            <th mat-header-cell *matHeaderCellDef>Price</th>
-                            <td mat-cell *matCellDef="let element">
+                        </div>
+                        <div fxFlex="40%" fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                            <mat-label>Site Name</mat-label>
+                            <input matInput placeholder="Select Site Name" formControlName="siteId"
+                              [matAutocomplete]="autoComponent" #compInput (focus)="siteItems(compInput.value)"
+                              (keyup)="siteKeyupFunction($event, compInput.value)" (input)="siteItems(compInput.value)"
+                              (click)="compInput.select()" (blur)="checkVal(compInput.value)" required />
+                              @if (invitationFormGroup?.get('siteId')?.errors?.required) {
+                                <mat-error> Site Name required
+                                </mat-error>
+                              }
+                              @if (invitationFormGroup?.get('siteId')?.errors?.incorrect) {
+                                <mat-error> Site Name is not
+                                  valid
+                                </mat-error>
+                              }
+                              <mat-autocomplete #autoComponent="matAutocomplete"
+                                (optionSelected)='getPacakgebysiteId($event.option.value)' [displayWith]="displaySiteFn">
+                                @for (comp of sitefilterlist; track comp) {
+                                  <mat-option (onSelectionChange)="getPacakgebysiteId(comp.siteId)" [value]="comp.siteId"
+                                    class="autocom-option autocom-tr">
+                                    <span [innerHTML]="comp.siteNoWithsiteName | highlight: compInput.value"></span>
+                                  </mat-option>
+                                }
+                                @if (sitefilterlist.length == 0) {
+                                  <mat-option>
+                                    <div class="no-record"><span>No Data Found</span></div>
+                                  </mat-option>
+                                }
+                              </mat-autocomplete>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </form>
+                      @if ((componentList.length > 0 || packagelist.length > 0)) {
+                        <app-additional-component #additioncomp
+                        [getValues]="commonControls" (compToEmit)="getCommonValues($event)"></app-additional-component>
+                      }
+                    </mat-card-content>
+                  </div>
+                }
+              </mat-tab>
+              <mat-tab label="{{ menubar[1].menuName }}">
+                @if (step1 === 1) {
+                  <div>
+                    <mat-card-header>
+                      <mat-card-title>
+                        <div fxLayout="row" fxLayoutGap="20px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                          fxLayout.xs="column" fxFlex="100%">
+                          <div fxFlex="100%">
+                            <h1 class="header-title"> <span class="StprH">Step 2:</span>Candidate Review</h1>
+                          </div>
+                        </div>
+                      </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                      @if (invitationFormGroup.controls.packageId.value > 0) {
+                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                          fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+                          >
+                          Selected Package Name:
+                          &nbsp; <b>{{ packName }},</b> &nbsp;<span>Package Price :-</span> &nbsp; {{packPrice}}
+                        </div>
+                        } &nbsp;
+                        <br />
+                        @if (invitationFormGroup.controls.packageId.value > 0 && packComponent &&
+                          packComponent.length > 0) {
+                          <div class="d-view">
+                            <div fxLayout="row">
+                              <div fxFlex="100%">
+                                <h3>Package Details</h3>
+                              </div>
+                            </div>
+                            <table mat-table [dataSource]="packtableSource" style="width: 100%;">
+                              <ng-container matColumnDef="compName">
+                                <th mat-header-cell *matHeaderCellDef>Component Name</th>
+                                <td mat-cell *matCellDef="let element">
+                                  {{ element.compName }}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="noOfComponent">
+                                <th mat-header-cell *matHeaderCellDef>No of Component</th>
+                                <td mat-cell *matCellDef="let element">
+                                  {{ element.noOfComponent }}
+                                </td>
+                              </ng-container>
+                              <!-- <ng-container matColumnDef="price">
+                              <th mat-header-cell *matHeaderCellDef>Price</th>
+                              <td mat-cell *matCellDef="let element">
                                 {{ element.price}}
-                            </td>
-                        </ng-container> -->
-
-                      <tr mat-header-row *matHeaderRowDef="packColumnsheaders"></tr>
-                      <tr mat-row *matRowDef="let row; columns: packColumnsheaders"></tr>
-                    </table>
-                  </div>
-                  <br />
-                  <!-- // Component Details -->
-                  <div class="d-view" *ngIf='saveInvitation.caseComponent.length > 0'>
-                    <div fxLayout="row">
-                      <div fxFlex="100%">
-                        <h3>Component Details</h3>
+                              </td>
+                            </ng-container> -->
+                            <tr mat-header-row *matHeaderRowDef="packColumnsheaders"></tr>
+                            <tr mat-row *matRowDef="let row; columns: packColumnsheaders"></tr>
+                          </table>
+                        </div>
+                      }
+                      <br />
+                      <!-- // Component Details -->
+                      @if (saveInvitation.caseComponent.length > 0) {
+                        <div class="d-view">
+                          <div fxLayout="row">
+                            <div fxFlex="100%">
+                              <h3>Component Details</h3>
+                            </div>
+                          </div>
+                          <table mat-table [dataSource]="mattableSource" style="width: 100%;">
+                            <ng-container matColumnDef="compName">
+                              <th mat-header-cell *matHeaderCellDef>Component Name</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{ element.compName }}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="noOfComponent">
+                              <th mat-header-cell *matHeaderCellDef>No of Component</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{ element.noOfComponent }}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="price">
+                              <th mat-header-cell *matHeaderCellDef>Price</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{ element.price}}
+                              </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="tableColumnsheaders"></tr>
+                            <tr mat-row *matRowDef="let row; columns: tableColumnsheaders"></tr>
+                          </table>
+                        </div>
+                      }
+                      <br />
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                        fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="100%">
+                          <h5 class="header-title"> <span class="StprH">Candidate Details</span></h5>
+                        </div>
                       </div>
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                        fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="100%" fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                          fxFlex.xs="100%">
+                          <div fxLayout="row" fxLayoutGap="20px">
+                            <mat-form-field fxFlex="30%" fxFlex.md="30%" fxFlex.md="30%" fxFlex.sm="0%" fxFlex.xs="100%"
+                              appearance="outline">
+                              <mat-label>No. of Candidates</mat-label>
+                              <input [formControl]="noOfCases" (blur)="caseCountCreate();isFocused = true" maxlength="2"
+                                appNumberOnly [NumberOnly]="false" autocomplete="off" role="presentation" matInput
+                                placeholder="No. of Candidates" required />
+                                @if (noOfCases?.errors?.required) {
+                                  <mat-error>No. of Candidates is required
+                                  </mat-error>
+                                }
+                                @if (noOfCases?.errors?.min) {
+                                  <mat-error>Min-1 </mat-error>
+                                }
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        @if (noOfCases?.value > 0) {
+                          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                            fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid"
+                            fxLayoutGap.xs="0px grid">
+                            <div fxFlex="100%">
+                              <ng-template [ngTemplateOutlet]="pTableTemplate"></ng-template>
+                            </div>
+                          </div>
+                        }
+                      </mat-card-content>
                     </div>
-                    <table mat-table [dataSource]="mattableSource" style="width: 100%;">
-                      <ng-container matColumnDef="compName">
-                        <th mat-header-cell *matHeaderCellDef>Component Name</th>
-                        <td mat-cell *matCellDef="let element">
-                          {{ element.compName }}
-                        </td>
-                      </ng-container>
-                      <ng-container matColumnDef="noOfComponent">
-                        <th mat-header-cell *matHeaderCellDef>No of Component</th>
-                        <td mat-cell *matCellDef="let element">
-                          {{ element.noOfComponent }}
-                        </td>
-                      </ng-container>
-                      <ng-container matColumnDef="price">
-                        <th mat-header-cell *matHeaderCellDef>Price</th>
-                        <td mat-cell *matCellDef="let element">
-                          {{ element.price}}
-                        </td>
-                      </ng-container>
-
-                      <tr mat-header-row *matHeaderRowDef="tableColumnsheaders"></tr>
-                      <tr mat-row *matRowDef="let row; columns: tableColumnsheaders"></tr>
-                    </table>
-                  </div>
-                  <br />
-                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
-                    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                    <div fxFlex="100%">
-                      <h5 class="header-title"> <span class="StprH">Candidate Details</span></h5>
-                    </div>
-                  </div>
-                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
-                    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                    <div fxFlex="100%" fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
-                      fxFlex.xs="100%">
-                      <div fxLayout="row" fxLayoutGap="20px">
-                        <mat-form-field fxFlex="30%" fxFlex.md="30%" fxFlex.md="30%" fxFlex.sm="0%" fxFlex.xs="100%"
-                          appearance="outline">
-                          <mat-label>No. of Candidates</mat-label>
-                          <input [formControl]="noOfCases" (blur)="caseCountCreate();isFocused = true" maxlength="2"
-                            appNumberOnly [NumberOnly]="false" autocomplete="off" role="presentation" matInput
-                            placeholder="No. of Candidates" required />
-                          <mat-error *ngIf="noOfCases?.errors?.required">No. of Candidates is required
-                          </mat-error>
-                          <mat-error *ngIf="noOfCases?.errors?.min">Min-1 </mat-error>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-                  <div fxLayout="row wrap" *ngIf="noOfCases?.value > 0" fxLayout.lg="row wrap" fxLayout.md="row wrap"
-                    fxLayout.sm="row wrap" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid"
-                    fxLayoutGap.xs="0px grid">
-                    <div fxFlex="100%">
-                      <ng-template [ngTemplateOutlet]="pTableTemplate"></ng-template>
-                    </div>
-                  </div>
-                </mat-card-content>
-              </div>
-            </mat-tab>
-          </mat-tab-group>
+                  }
+                </mat-tab>
+              </mat-tab-group>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="end end">
+            <div fxFlex="100%">
+              <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+                @if (step1 === 1) {
+                  <button mat-flat-button color="warn" (click)="goToStep(0)">Previous</button>
+                }
+                @if (step1 === 0) {
+                  <button mat-flat-button color="primary" (click)="goToStep(1)">Next</button>
+                }
+              </mat-card-actions>
+            </div>
+          </div>
         </div>
-      </div>
-      <div fxLayout="row" fxLayoutAlign="end end">
-        <div fxFlex="100%">
-          <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end">
-            <button *ngIf="step1 === 1" mat-flat-button color="warn" (click)="goToStep(0)">Previous</button>
-            <button *ngIf="step1 === 0" mat-flat-button color="primary" (click)="goToStep(1)">Next</button>
-          </mat-card-actions>
-        </div>
-      </div>
-    </div>
-    <!-- <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs>
+        <!-- <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs>
         <div class="step">
           <div class="list"> <a (click)="goToStep(0)">Component&nbsp;Details<i class="icon-note" fxHide.sm fxHide.xs> </i></a>
-          </div>
-          <div class="list"> <a (click)="goToStep(1)">Candidate&nbsp;Details<i class="icon-user-follow" fxHide.sm
-                fxHide.xs> </i></a> </div>
         </div>
-      </div> -->
+        <div class="list"> <a (click)="goToStep(1)">Candidate&nbsp;Details<i class="icon-user-follow" fxHide.sm
+        fxHide.xs> </i></a> </div>
+      </div>
+    </div> -->
 
   </div>
 </mat-card>
@@ -213,196 +239,223 @@
     <!-- ================= COLGROUP ================= -->
     <ng-template pTemplate="colgroup" let-colGroupCols>
       <colgroup>
-        <!-- column widths handled dynamically -->
-      </colgroup>
-    </ng-template>
+      <!-- column widths handled dynamically -->
+    </colgroup>
+  </ng-template>
 
-    <!-- ================= HEADER ================= -->
-    <ng-template pTemplate="header" let-headerCols>
-      <tr>
-        <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn
+  <!-- ================= HEADER ================= -->
+  <ng-template pTemplate="header" let-headerCols>
+    <tr>
+      @for (col of headerCols; track col) {
+        <th pReorderableColumn pResizableColumn
           matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
-
           <span [pSortableColumn]="col.field">
             <div>{{ col.header }}</div>
           </span>
-
         </th>
-      </tr>
-    </ng-template>
+      }
+    </tr>
+  </ng-template>
 
-    <!-- ================= BODY ================= -->
-    <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+  <!-- ================= BODY ================= -->
+  <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
 
-      <tr>
-        <td *ngFor="let col of bodyCols">
-
+    <tr>
+      @for (col of bodyCols; track col) {
+        <td>
           <!-- SERIAL NO -->
-          <span *ngIf="col.field === 'sno'">
-            {{ index + 1 }}
-          </span>
-
+          @if (col.field === 'sno') {
+            <span>
+              {{ index + 1 }}
+            </span>
+          }
           <!-- DATE OF JOINING -->
-          <span *ngIf="col.field === 'doj'">
-            <mat-form-field appearance="outline">
-              <mat-label>{{ col.header }}</mat-label>
-              <input matInput [matDatepicker]="picker" [(ngModel)]="rowData[col.field]" placeholder="Select Date"
-                autocomplete="off" />
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-          </span>
-
-          <!-- TEXT INPUT FIELDS -->
-          <span *ngIf="
-          col.field !== 'sno' &&
-          col.field !== 'contactData' &&
-          col.field !== 'consentLookupId' &&
-          col.field !== 'invitationExpiryLookupId' &&
-          col.field !== 'phoneNo' &&
-          col.field !== 'emailId' &&
-          col.field !== 'doj' &&
-          col.field !== 'action'
-        ">
-            <mat-form-field>
-              <mat-label>{{ col.header }}</mat-label>
-              <input matInput role="presentation" [(ngModel)]="rowData[col.field]" autocomplete="off"
-                (blur)="isExist(col.field, index, rowData[col.field], col.header)" />
-            </mat-form-field>
-          </span>
-
-          <!-- FORM GROUP CONTROLS -->
-          <form [formGroup]="tableForm">
-
-            <!-- PHONE -->
-            <span *ngIf="col.field === 'phoneNo'">
-              <mat-form-field>
+          @if (col.field === 'doj') {
+            <span>
+              <mat-form-field appearance="outline">
                 <mat-label>{{ col.header }}</mat-label>
-                <input matInput appNumberOnly maxlength="10" minlength="10" formControlName="phoneNo{{index}}"
-                  [(ngModel)]="rowData[col.field]" autocomplete="off"
-                  (blur)="isExist(col.field, index, rowData[col.field], col.header)" />
-                <mat-error *ngIf="tableForm.get('phoneNo'+index)?.errors">
-                  Number is Invalid
-                </mat-error>
-              </mat-form-field>
-            </span>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="rowData[col.field]" placeholder="Select Date"
+                  autocomplete="off" />
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </span>
+            }
+            <!-- TEXT INPUT FIELDS -->
+            @if (
+              col.field !== 'sno' &&
+              col.field !== 'contactData' &&
+              col.field !== 'consentLookupId' &&
+              col.field !== 'invitationExpiryLookupId' &&
+              col.field !== 'phoneNo' &&
+              col.field !== 'emailId' &&
+              col.field !== 'doj' &&
+              col.field !== 'action'
+              ) {
+              <span>
+                <mat-form-field>
+                  <mat-label>{{ col.header }}</mat-label>
+                  <input matInput role="presentation" [(ngModel)]="rowData[col.field]" autocomplete="off"
+                    (blur)="isExist(col.field, index, rowData[col.field], col.header)" />
+                  </mat-form-field>
+                </span>
+              }
+              <!-- FORM GROUP CONTROLS -->
+              <form [formGroup]="tableForm">
+                <!-- PHONE -->
+                @if (col.field === 'phoneNo') {
+                  <span>
+                    <mat-form-field>
+                      <mat-label>{{ col.header }}</mat-label>
+                      <input matInput appNumberOnly maxlength="10" minlength="10" formControlName="phoneNo{{index}}"
+                        [(ngModel)]="rowData[col.field]" autocomplete="off"
+                        (blur)="isExist(col.field, index, rowData[col.field], col.header)" />
+                        @if (tableForm.get('phoneNo'+index)?.errors) {
+                          <mat-error>
+                            Number is Invalid
+                          </mat-error>
+                        }
+                      </mat-form-field>
+                    </span>
+                  }
+                  <!-- EMAIL -->
+                  @if (col.field === 'emailId') {
+                    <span>
+                      <mat-form-field>
+                        <mat-label>{{ col.header }}</mat-label>
+                        <input matInput formControlName="emailId{{index}}" [(ngModel)]="rowData[col.field]" autocomplete="off"
+                          (blur)="isExist(col.field, index, rowData[col.field], col.header)" />
+                          @if (tableForm.get('emailId'+index)?.errors) {
+                            <mat-error>
+                              Please enter a valid email
+                            </mat-error>
+                          }
+                        </mat-form-field>
+                      </span>
+                    }
+                    <!-- CC EMAILS -->
+                    @if (col.field === 'contactData') {
+                      <span>
+                        <mat-form-field>
+                          <mat-chip-grid #chipList1>
+                            @for (cc of rowData.mailContact; track cc; let j = $index) {
+                              <mat-chip-row [removable]="removable">
+                                {{ cc.contactData }}
+                                <span matChipRemove (click)="removeControl(index, j, 'CC')">×</span>
+                              </mat-chip-row>
+                            }
+                            <input matInput placeholder="CC" formControlName="contactData{{index}}" [matChipInputFor]="chipList1"
+                              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                              (matChipInputTokenEnd)="addMail($event,'CC',index)" autocomplete="off" />
+                            </mat-chip-grid>
+                          </mat-form-field>
+                        </span>
+                      }
+                      <!-- EXPIRY -->
+                      @if (col.field === 'invitationExpiryLookupId') {
+                        <mat-form-field>
+                          <mat-label>Expiry Days</mat-label>
+                          <mat-select formControlName="expirelookupId{{index}}" [(ngModel)]="rowData[col.field]"
+                            (selectionChange)="getExpiryDateLst()">
+                            @for (exp of expiryDateLst; track exp) {
+                              <mat-option [value]="exp.lookUpId">
+                                {{ exp.lookUpDesc }}
+                              </mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                      }
+                      <!-- CONSENT -->
+                      @if (col.field === 'consentLookupId') {
+                        <mat-form-field>
+                          <mat-label>Consent Type</mat-label>
+                          <mat-select formControlName="consentLookupId{{index}}" [(ngModel)]="rowData[col.field]">
+                            @for (cons of consentList; track cons) {
+                              <mat-option [value]="cons.lookUpId">
+                                {{ cons.lookUpName }}
+                              </mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                      }
+                    </form>
+                    <!-- ACTION -->
+                    @if (col.field === 'action') {
+                      <div class="tbl-icon text-center">
+                        <mat-icon>
+                          <i class="material-icons-outlined" matTooltip="Delete" (click)="deleteRow(index)">
+                            delete
+                          </i>
+                        </mat-icon>
+                      </div>
+                    }
+                  </td>
+                }
+              </tr>
 
-            <!-- EMAIL -->
-            <span *ngIf="col.field === 'emailId'">
-              <mat-form-field>
-                <mat-label>{{ col.header }}</mat-label>
-                <input matInput formControlName="emailId{{index}}" [(ngModel)]="rowData[col.field]" autocomplete="off"
-                  (blur)="isExist(col.field, index, rowData[col.field], col.header)" />
-                <mat-error *ngIf="tableForm.get('emailId'+index)?.errors">
-                  Please enter a valid email
-                </mat-error>
-              </mat-form-field>
-            </span>
+            </ng-template>
 
-            <!-- CC EMAILS -->
-            <span *ngIf="col.field === 'contactData'">
-              <mat-form-field>
-                <mat-chip-grid #chipList1>
-                  <mat-chip-row *ngFor="let cc of rowData.mailContact; let j = index" [removable]="removable">
-                    {{ cc.contactData }}
-                    <span matChipRemove (click)="removeControl(index, j, 'CC')">×</span>
-                  </mat-chip-row>
+          </p-table>
+        </ng-template>
+        <ng-template #getTemplate>
+          <h1 mat-dialog-title>Please make a note of the reference number</h1>
+          <mat-dialog-content>
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <p-table [value]="dataList" [columns]="tabledetailsColumnsheaders" #invitetab [scrollable]="true" scrollHeight="" [paginator]="true"
+                  [resizableColumns]="true" [rows]="50" [reorderableColumns]="true">
 
-                  <input matInput placeholder="CC" formControlName="contactData{{index}}" [matChipInputFor]="chipList1"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                    (matChipInputTokenEnd)="addMail($event,'CC',index)" autocomplete="off" />
-                </mat-chip-grid>
-              </mat-form-field>
-            </span>
+                  <!-- ================= COLGROUP ================= -->
+                  <ng-template pTemplate="colgroup" let-colGroupCols>
+                    <colgroup>
+                    @for (col of colGroupCols; track col) {
+                      <col [style.width]="col.field === 'caseComponent' ? '300px' : '160px'" />
+                    }
+                  </colgroup>
+                </ng-template>
 
-            <!-- EXPIRY -->
-            <mat-form-field *ngIf="col.field === 'invitationExpiryLookupId'">
-              <mat-label>Expiry Days</mat-label>
-              <mat-select formControlName="expirelookupId{{index}}" [(ngModel)]="rowData[col.field]"
-                (selectionChange)="getExpiryDateLst()">
-                <mat-option *ngFor="let exp of expiryDateLst" [value]="exp.lookUpId">
-                  {{ exp.lookUpDesc }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+                <!-- ================= HEADER ================= -->
+                <ng-template pTemplate="header" let-headerCols>
+                  <tr>
+                    @for (col of headerCols; track col) {
+                      <th pReorderableColumn matTooltip="{{ col.header }}"
+                        matTooltipClass="accent-tooltip">
+                        <div>{{ col.header }}</div>
+                      </th>
+                    }
+                  </tr>
+                </ng-template>
 
-            <!-- CONSENT -->
-            <mat-form-field *ngIf="col.field === 'consentLookupId'">
-              <mat-label>Consent Type</mat-label>
-              <mat-select formControlName="consentLookupId{{index}}" [(ngModel)]="rowData[col.field]">
-                <mat-option *ngFor="let cons of consentList" [value]="cons.lookUpId">
-                  {{ cons.lookUpName }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+                <!-- ================= BODY ================= -->
+                <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
 
-          </form>
+                  <tr>
+                    @for (col of bodyCols; track col) {
+                      <td>
+                        @if (col.field === 'sNo') {
+                          <div>
+                            {{ index + 1 }}
+                          </div>
+                        }
+                        @if (col.field !== 'sNo') {
+                          <div>
+                            {{ rowData[col.field] }}
+                          </div>
+                        }
+                      </td>
+                    }
+                  </tr>
 
-          <!-- ACTION -->
-          <div *ngIf="col.field === 'action'" class="tbl-icon text-center">
-            <mat-icon>
-              <i class="material-icons-outlined" matTooltip="Delete" (click)="deleteRow(index)">
-                delete
-              </i>
-            </mat-icon>
+                </ng-template>
+
+              </p-table>
+
+
+            </div>
           </div>
-
-        </td>
-      </tr>
-
-    </ng-template>
-
-  </p-table>
-</ng-template>
-<ng-template #getTemplate>
-  <h1 mat-dialog-title>Please make a note of the reference number</h1>
-  <mat-dialog-content>
-    <div fxLayout="row">
-      <div fxFlex="100%">
-        <p-table [value]="dataList" [columns]="tabledetailsColumnsheaders" #invitetab [scrollable]="true" scrollHeight="" [paginator]="true"
-          [resizableColumns]="true" [rows]="50" [reorderableColumns]="true">
-
-          <!-- ================= COLGROUP ================= -->
-          <ng-template pTemplate="colgroup" let-colGroupCols>
-            <colgroup>
-              <col *ngFor="let col of colGroupCols" [style.width]="col.field === 'caseComponent' ? '300px' : '160px'" />
-            </colgroup>
-          </ng-template>
-
-          <!-- ================= HEADER ================= -->
-          <ng-template pTemplate="header" let-headerCols>
-            <tr>
-              <th *ngFor="let col of headerCols" pReorderableColumn [ngSwitch]="col.field" matTooltip="{{ col.header }}"
-                matTooltipClass="accent-tooltip">
-                <div>{{ col.header }}</div>
-              </th>
-            </tr>
-          </ng-template>
-
-          <!-- ================= BODY ================= -->
-          <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
-
-            <tr>
-              <td *ngFor="let col of bodyCols">
-                <div *ngIf="col.field === 'sNo'">
-                  {{ index + 1 }}
-                </div>
-                <div *ngIf="col.field !== 'sNo'">
-                  {{ rowData[col.field] }}
-                </div>
-              </td>
-            </tr>
-
-          </ng-template>
-
-        </p-table>
-
-
-      </div>
-    </div>
-  </mat-dialog-content>
-  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
-    <button (click)='dialog.closeAll();saveInvitation.caseComponent = [];packCmponent = []' color="primary"
-      mat-flat-button color="warn">Close</button>
-  </mat-dialog-actions>
-</ng-template>
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+          <button (click)='dialog.closeAll();saveInvitation.caseComponent = [];packCmponent = []' color="primary"
+          mat-flat-button color="warn">Close</button>
+        </mat-dialog-actions>
+      </ng-template>

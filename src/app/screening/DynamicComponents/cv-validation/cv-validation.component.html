@@ -14,7 +14,8 @@
     </div>
   </div>
   <div [formGroupName]="formarrayName">
-    <div [formArrayName]="item" *ngFor="let item of cvList; let i = index">
+    @for (item of cvList; track $index; let i = $index) {
+      <div [formArrayName]="item">
       <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
         <div fxFlex="100%">
           <fieldset class="cvvali-fieldset">
@@ -36,12 +37,12 @@
                   </div>
                 </div>
 
-                <div [formArrayName]="index"
-                  *ngFor="let particular of controls(item); let index = index; let count = count">
-                  <div [formGroupName]="i" fxLayout="row" fxLayoutGap="20px"
-                    *ngFor="let row of getparticularForm(particular); let i= index">
+                @for (particular of controls(item); track $index; let index = $index, let count = $count) {
+                  <div [formArrayName]="index">
+                  @for (row of getparticularForm(particular); track $index; let i = $index) {
+                    <div [formGroupName]="i" fxLayout="row" fxLayoutGap="20px">
 
-                    <div fxFlex="25%" class="border-right pr-20" [ngSwitch]="row.get('fieldType')?.value">
+                    <div fxFlex="25%" class="border-right pr-20">
                       <div fxLayout="row">
                         <div fxFlex="100%" class="mb-10">
                           <p>&nbsp;</p>
@@ -49,24 +50,32 @@
                       </div>
                       <div fxLayout="row">
                         <div fxFlex="100%">
-                          <mat-form-field *ngSwitchCase="'TextBox'" appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>{{row.get('fieldName').value}}</mat-label>
-                            <input matInput [placeholder]="row.get('fieldName').value" formControlName="fieldValue">
-                            <mat-error *ngIf="!!row.get('fieldValue')?.errors?.required">
-                              {{row.get('fieldName')?.value}} is required
-                            </mat-error>
-                          </mat-form-field>
-                          <mat-form-field *ngSwitchCase="'Date'" appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>{{row.get('fieldName')?.value}}</mat-label>
-                            <input matInput [matDatepicker]="picker2" placeholder="{{row.get('fieldName')?.value}}"
-                              formControlName="fieldValue" (focus)="picker2.open()" (click)="picker2.open()"/>
-                            <mat-datepicker-toggle matSuffix [for]="picker2">
-                            </mat-datepicker-toggle>
-                            <mat-datepicker #picker2></mat-datepicker>
-                            <mat-error *ngIf="!!row.get('fieldValue')?.errors?.required">
-                              {{row.get('fieldName')?.value}} is required
-                            </mat-error>
-                          </mat-form-field>
+                          @if (row.get('fieldType')?.value === 'TextBox') {
+                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                              <mat-label>{{row.get('fieldName').value}}</mat-label>
+                              <input matInput [placeholder]="row.get('fieldName').value" formControlName="fieldValue">
+                              @if (!!row.get('fieldValue')?.errors?.required) {
+                                <mat-error>
+                                {{row.get('fieldName')?.value}} is required
+                              </mat-error>                              }
+
+                            </mat-form-field>
+                          }
+                          @if (row.get('fieldType')?.value === 'Date') {
+                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                              <mat-label>{{row.get('fieldName')?.value}}</mat-label>
+                              <input matInput [matDatepicker]="picker2" placeholder="{{row.get('fieldName')?.value}}"
+                                formControlName="fieldValue" (focus)="picker2.open()" (click)="picker2.open()"/>
+                              <mat-datepicker-toggle matSuffix [for]="picker2">
+                              </mat-datepicker-toggle>
+                              <mat-datepicker #picker2></mat-datepicker>
+                              @if (!!row.get('fieldValue')?.errors?.required) {
+                                <mat-error>
+                                {{row.get('fieldName')?.value}} is required
+                              </mat-error>                              }
+
+                            </mat-form-field>
+                          }
                         </div>
                       </div>
                     </div>
@@ -80,10 +89,14 @@
                                 <mat-radio-button [value]=true>Yes
                                 </mat-radio-button>
                                 <mat-radio-button [value]=false>No</mat-radio-button>
-                                <i *ngIf="row.get('cvFlag').value"
-                                  class="material-icons csatus Priority text-bold">done</i>
-                                <i *ngIf="!row.get('cvFlag').value"
-                                  class="material-icons csatus Verizon text-bold">close</i>
+                                @if (row.get('cvFlag').value) {
+                                  <i
+                                  class="material-icons csatus Priority text-bold">done</i>                                }
+
+                                @if (!row.get('cvFlag').value) {
+                                  <i
+                                  class="material-icons csatus Verizon text-bold">close</i>                                }
+
                               </mat-radio-group>
                             </div>
                           </div>
@@ -108,10 +121,14 @@
                                 <mat-radio-button [value]=true>Yes
                                 </mat-radio-button>
                                 <mat-radio-button [value]=false>No</mat-radio-button>
-                                <i *ngIf="row.get('bgvFlag').value"
-                                  class="material-icons csatus Priority text-bold">done</i>
-                                <i *ngIf="!row.get('bgvFlag').value"
-                                  class="material-icons csatus Verizon text-bold">close</i>
+                                @if (row.get('bgvFlag').value) {
+                                  <i
+                                  class="material-icons csatus Priority text-bold">done</i>                                }
+
+                                @if (!row.get('bgvFlag').value) {
+                                  <i
+                                  class="material-icons csatus Verizon text-bold">close</i>                                }
+
                               </mat-radio-group>
                             </div>
                           </div>
@@ -136,10 +153,14 @@
                                 <mat-radio-button [value]=true>Yes
                                 </mat-radio-button>
                                 <mat-radio-button [value]=false>No</mat-radio-button>
-                                <i *ngIf="row.get('supportDocFlag').value"
-                                  class="material-icons csatus Priority text-bold">done</i>
-                                <i *ngIf="!row.get('supportDocFlag').value"
-                                  class="material-icons csatus Verizon text-bold">close</i>
+                                @if (row.get('supportDocFlag').value) {
+                                  <i
+                                  class="material-icons csatus Priority text-bold">done</i>                                }
+
+                                @if (!row.get('supportDocFlag').value) {
+                                  <i
+                                  class="material-icons csatus Verizon text-bold">close</i>                                }
+
                               </mat-radio-group>
                             </div>
                           </div>
@@ -154,26 +175,36 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div *ngIf="item !=='Header'" fxLayout="row" class="cvvali-footer">
+                  </div>                  }
+
+                  @if (item !=='Header') {
+                    <div fxLayout="row" class="cvvali-footer">
                     <div fxFlex="100%" fxLayoutAlign="end center" fxLayoutGap="8px">
-                      <button *ngIf="(index === count -1)" [ngClass]="fileBtn?'page-btn disabled':''" mat-flat-button
-                        color="primary" (click)="addnewComp(item, particular)">Add</button>
-                      <button *ngIf="count >1" [ngClass]="fileBtn?'page-btn disabled':''" mat-flat-button color="warn"
-                        (click)="removeCV(index, item)">Delete</button>
+                      @if ((index === count -1)) {
+                        <button [ngClass]="fileBtn?'page-btn disabled':''" mat-flat-button
+                        color="primary" (click)="addnewComp(item, particular)">Add</button>                      }
+
+                      @if (count >1) {
+                        <button [ngClass]="fileBtn?'page-btn disabled':''" mat-flat-button color="warn"
+                        (click)="removeCV(index, item)">Delete</button>                      }
+
                       <!-- <button mat-flat-button>Clear All</button> -->
                     </div>
-                  </div>
-                </div>
+                  </div>                  }
+
+                </div>                }
+
               </div>
             </div>
 
           </fieldset>
         </div>
       </div>
-    </div>
+    </div>    }
+
   </div>
-  <div *ngIf="invitationFlag !== true && !showInSuff && screeningMatError" fxLayout="row wrap" fxLayout.lg="row"
+  @if (invitationFlag !== true && !showInSuff && screeningMatError) {
+    <div fxLayout="row wrap" fxLayout.lg="row"
     fxLayout.md="row" fxLayo.ut.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
     fxLayoutGap.xs="0px grid" [formGroupName]="'screeningComponentInfo'">
     <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
@@ -181,53 +212,66 @@
         <mat-label>Select Status</mat-label>
         <mat-select placeholder="Select Status" formControlName="screeningStatusId"
           (selectionChange)="onSelectionChange($event.value)" [required]="!showInSuff">
-          <mat-option *ngFor="let option of items" [value]="option.value">
+          @for (option of items; track $index) {
+            <mat-option [value]="option.value">
             {{ option.label }}
-          </mat-option>
+          </mat-option>          }
+
         </mat-select>
-        <mat-error *ngIf="!!mainForm?.get(formarrayName)?.get('screeningStatusId')?.errors?.required">Status
+        @if (!!mainForm?.get(formarrayName)?.get('screeningStatusId')?.errors?.required) {
+          <mat-error>Status
           is
-          required</mat-error>
+          required</mat-error>        }
+
       </mat-form-field>
     </div>
-  </div>
+  </div>  }
+
   <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
     fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
-    <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
-      [formGroupName]="'screeningComponentInfo'" *ngIf="!fileBtn">
+    @if (!fileBtn) {
+      <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
+      [formGroupName]="'screeningComponentInfo'">
       <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
         <mat-label>Remarks</mat-label>
         <textarea #remark formControlName="remark" maxlength="1000" matInput placeholder="Remarks"> </textarea>
         <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
       </mat-form-field>
-    </div>
-    <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
-      [formGroupName]="'screeningComponentInfo'" *ngIf="!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length">
+    </div>    }
+
+    @if (!hiddenInsuff && !mainForm?.value?.qcRejectComments?.length) {
+      <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
+      [formGroupName]="'screeningComponentInfo'">
       <mat-label class="lbl">Choose</mat-label>
       <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise Insufficiency</mat-checkbox>
-    </div>
+    </div>    }
+
   </div>
 
-  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
-    *ngIf="mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0">
+  @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
     <div fxFlex="100%">
       <div class="alert alert-info" role="alert">
         <h4>Insufficiency Clearance Remarks: </h4>
-        <span
-          *ngFor="let insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; let count = count; let i= index">
-          {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+        @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track $index; let count = $count, let i = $index) {
+          <span>
+          {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>        }
+
       </div>
     </div>
-  </div>
-  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" *ngIf="showInSuff">
+  </div>  }
+
+  @if (showInSuff) {
+    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
     <div fxFlex="100%">
       <app-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm"
         [compBaseDetails]="mainForm.get('screeningComponentInfo').value" [formgroupName]="'screeningInsufficiency'">
       </app-raise-insufficiency>
     </div>
-  </div>
+  </div>  }
+
   <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
     fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
     <div fxFlex="100%">

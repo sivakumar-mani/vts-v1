@@ -55,6 +55,7 @@ export class BulkUploadDoc {
 export class CaseCreationComponent implements OnInit {
   searchValue: string = '';
   excelData: any;
+  private skipFirstLazyLoad = false;
   itemperpage;
   shieveTotalCount = 0;
   shievePageNo = 1;
@@ -262,8 +263,14 @@ actionTrigger!: MatMenuTrigger;
     this.screenAuth = this.auth.getScreenAuth(this.router.url);
     this.initFormGroup();
     this.getClients();
-    this.filednames = this.displayedColumns.filter(e => e.disabled);
+    this.filednames = [{ field: 'action', header: 'Action', value: true, disabled: true }, ...this.displayedColumns.filter(e => e.disabled)];
     this.itemperpage = 10;
+    this.userData.page = this.shievePageNo;
+    this.userData.pageSize = this.shievePageSize;
+    this.userData.needTotal = true;
+    this.userData.applyPaging = true;
+    this.skipFirstLazyLoad = true;
+    this.bindCaseCreation();
   }
   LoadHistory(event: LazyLoadEvent) {
     this.loading = true;
@@ -275,6 +282,10 @@ actionTrigger!: MatMenuTrigger;
     this.userData.sorts = event.sortOrder == -1 ? "-" + sort : sort;
     this.userData.applyPaging = true;
     this.userData.needTotal = true;
+    if (this.skipFirstLazyLoad && this.userData.page === 1 && !event.sortField && Object.keys(event.filters).length === 0) {
+      this.skipFirstLazyLoad = false;
+      return;
+    }
     if (Object.keys(event.filters).length > 0 || event.sortField || this.userData.page) {
       this.bindCaseCreation();
     }

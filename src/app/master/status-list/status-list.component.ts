@@ -32,6 +32,7 @@ export class StatusListComponent implements OnInit {
   routePath = 'Configure / Case / Status';
   breadcrumbFlags: BreadcrumbFlags = new BreadcrumbFlags();
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'statusName', header: 'Screening Status' },
     { field: 'statusDesc', header: 'description' },
     { field: 'clientViewFlag', header: 'Client View Flag' },

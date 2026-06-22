@@ -28,8 +28,7 @@
     @if (!showFlag) {
       <div class="tbl-commonsearch">
         <p-table #dt [columns]="displayedColumns" [value]="catList" [scrollable]="true" [resizableColumns]="true"
-          [reorderableColumns]="true" [paginator]="true" [rows]="itemperpage" frozenWidth="100px"
-          [frozenColumns]="frozenCols">
+          [reorderableColumns]="true" [paginator]="true" [rows]="itemperpage">
           <!-- ===== COLGROUP ===== -->
           <ng-template pTemplate="colgroup" let-colGroupCols>
             <colgroup>

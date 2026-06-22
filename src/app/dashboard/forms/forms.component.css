@@ -1,4 +1,4 @@
-@import "../../stepper.css";
+﻿@import "../../stepper.css";
 /* Sample works for background designs in forms page, pls don't take this style  */
 mat-drawer-container.PView {
   background: transparent;
@@ -415,7 +415,7 @@ table.invoice {
   border: 1px solid #6e91aa;
   border-collapse: collapse;
   margin: 50px 0 10px 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, "Georgia", sans-serif;
 }
 table.invoice th {
   border: 1px solid #6e91aa;
@@ -847,7 +847,7 @@ h5.chHead {
   background: #FF8500;
   border-radius: 100px;
   color: #fff;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "FontAwesome";
   padding: 0;
   text-align: center;
   font-size: 12px;

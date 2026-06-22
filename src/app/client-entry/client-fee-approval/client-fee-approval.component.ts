@@ -29,6 +29,7 @@ export class ClientFeeApprovalComponent implements OnInit {
   model = new ClientCompFeeStatusTrans();
   clientFeeApproval: any;
   filedname = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'clientName', header: 'Client Name' },
     { field: 'componentName', header: 'Component Name' },
     { field: 'requestAmount', header: 'Request Amount' },

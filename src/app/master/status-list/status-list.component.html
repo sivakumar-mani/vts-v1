@@ -1,342 +1,398 @@
 ﻿<app-breadcrumb [btnAdd]="breadcrumbFlags.btnAdd" [btnSave]="breadcrumbFlags.btnSave"
-    [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset"
-    [btnResetTbl]="breadcrumbFlags.btnResetTbl" (eventAdd)="addStatus()" [routePath]='routePath'
-    [btnAddDisabled]="!screenAuth.addFlag" (eventBack)="closeForm()" (eventSave)="saveStatus()"
-    [toolTip]="breadcrumbFlags.toolTip" (eventReset)="resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
+  [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset"
+  [btnResetTbl]="breadcrumbFlags.btnResetTbl" (eventAdd)="addStatus()" [routePath]='routePath'
+  [btnAddDisabled]="!screenAuth.addFlag" (eventBack)="closeForm()" (eventSave)="saveStatus()"
+[toolTip]="breadcrumbFlags.toolTip" (eventReset)="resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
 <div fxLayout="row">
-    <div fxFlex="100%">
-        <mat-card>
+  <div fxFlex="100%">
+    <mat-card>
 
 
-            <div fxLayout="row">
-                <mat-card-header fxFlex="100%">
-                    <div fxFlex="100%">
-                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="10px">
-                              <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%" fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
-                                <mat-card-title>
-                                  <h1 class="header-title">Status List</h1>
-                                </mat-card-title>
-                              </div>
-                              <span fxFlex></span>
-                              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                                <div class="tbl-commonsearch" *ngIf="!showFlag">
-                                    <mat-form-field fxFlex="100%">
-                                    <mat-label></mat-label>
-                                    <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                                    <input matInput #global placeholder="Search" type="text" pInputText size="50" autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
-                                    </mat-form-field>
-                                </div>
-                              </div>
-                        </div>
+      <div fxLayout="row">
+        <mat-card-header fxFlex="100%">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="10px">
+              <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%" fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                <mat-card-title>
+                  <h1 class="header-title">Status List</h1>
+                </mat-card-title>
+              </div>
+              <span fxFlex></span>
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                @if (!showFlag) {
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input matInput #global placeholder="Search" type="text" pInputText size="50" autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                    </mat-form-field>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </mat-card-header>
+      </div>
+
+      <mat-card-content>
+        @if (showFlag) {
+          <div fxLayout="row" fxLayoutAlign="start start">
+            <div fxFlex="100%">
+              <form [formGroup]="statusForm" autocomplete="off" id="ngForm">
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
+                  fxLayout.sm="column wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
+                  fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%"
+                    fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Select Status Category</mat-label>
+                      <mat-select placeholder="Select Status Category" required
+                        formControlName="statusLookupId">
+                        <!-- <mat-option>-- Select Status Category --</mat-option> -->
+                        @for (category of StatusCategoryList; track category) {
+                          <mat-option [value]="category.lookUpId"
+                            >
+                            {{ category.lookUpName }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                      @if (statusForm.get('statusLookupId').invalid) {
+                        <mat-error>
+                          Status Category is required
+                        </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%"
+                    fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>Enter Status Name</mat-label>
+                      <input matInput placeholder="Enter Status Name" formControlName="statusName"
+                        maxlength="150" required />
+                        @if (statusForm.get('statusName').invalid) {
+                          <mat-error>
+                            Status name is required
+                          </mat-error>
+                        }
+                      </mat-form-field>
                     </div>
-                </mat-card-header>
-            </div>  
-
-            <mat-card-content>
-                <div fxLayout="row" fxLayoutAlign="start start" *ngIf="showFlag">
-                    <div fxFlex="100%">
-                        <form [formGroup]="statusForm" autocomplete="off" id="ngForm">
-                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap"
-                                fxLayout.sm="column wrap" fxLayout.xs="column" fxLayoutGap="20px grid"
-                                fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%"
-                                    fxFlex.xs="100%">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Select Status Category</mat-label>
-                                        <mat-select placeholder="Select Status Category" required
-                                            formControlName="statusLookupId">
-                                            <!-- <mat-option>-- Select Status Category --</mat-option> -->
-                                            <mat-option [value]="category.lookUpId"
-                                                *ngFor="let category of StatusCategoryList">
-                                                {{ category.lookUpName }}
-                                            </mat-option>
-                                        </mat-select>
-                                        <mat-error *ngIf="statusForm.get('statusLookupId').invalid">
-                                            Status Category is required
-                                        </mat-error>
-                                    </mat-form-field>
-                                </div>
-                                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%"
-                                    fxFlex.xs="100%">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Enter Status Name</mat-label>
-                                        <input matInput placeholder="Enter Status Name" formControlName="statusName"
-                                            maxlength="150" required />
-                                        <mat-error *ngIf="statusForm.get('statusName').invalid">
-                                            Status name is required
-                                        </mat-error>
-                                    </mat-form-field>
-                                </div>
-                                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%"
-                                    fxFlex.xs="100%" class="mb-10">
-                                    <mat-label class="lbl">Choose</mat-label>
-                                    <mat-checkbox formControlName="clientViewFlag">Is Client View Flag</mat-checkbox>
-                                </div>
-                                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%"
-                                    fxFlex.xs="100%" class="mb-10">
-                                    <mat-label class="lbl">Choose</mat-label>
-                                    <mat-checkbox formControlName="ctsFlag">Is CTSFlag</mat-checkbox>
-                                </div>
-                            </div>
-                            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                                fxLayout.xs="row" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
-                                fxLayoutGap.xs="0px grid">
-                                <div fxFlex="66%" fxFlex.lg="66%" fxFlex.md="66%" fxFlex.sm="100%" fxFlex.xs="100%">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Description</mat-label>
-                                        <textarea #input matInput placeholder="Description" maxlength="200"
-                                            formControlName="statusDesc"></textarea>
-                                        <mat-hint>({{input.value.length}}/200 Max)</mat-hint>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </form>
+                    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%"
+                      fxFlex.xs="100%" class="mb-10">
+                      <mat-label class="lbl">Choose</mat-label>
+                      <mat-checkbox formControlName="clientViewFlag">Is Client View Flag</mat-checkbox>
                     </div>
-                </div>
-                <div fxLayout="row wrap" *ngIf="!showFlag">
-                    <div fxFlex="100%">
-                        <p-table #dt [columns]="displayedColumns" [value]="statusList" [scrollable]="true"
-                            [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true" [rows]="itemperpage"
-                            [scrollable]="true" frozenWidth="100px" [frozenColumns]="frozenCols">
-                            <ng-template pTemplate="colgroup" let-columns>
-                                <colgroup>
-                                    <col *ngFor="let col of columns" style="min-width:150px" />
-                                </colgroup>
-                            </ng-template>
-                            <ng-template pTemplate="header" let-columns>
-                                <tr>
-                                    <th *ngFor="let col of columns" pReorderableColumn [ngSwitch]="col.field">
-                                        <span [pSortableColumn]="col.field">
-                                            <div class="thname"> {{col.header}} </div>
-                                            <p-sortIcon *ngIf="col.field !== 'action'" [field]="col.field"
-                                                ariaLabel="Activate to sort"
-                                                ariaLabelDesc="Activate to sort in descending order"
-                                                ariaLabelAsc="Activate to sort in ascending order">
-                                            </p-sortIcon>
-                                        </span>
-
-                                        <span class="ico-fieldsearch">
-                                            <i *ngSwitchCase="'statusName'" class="icon-search2" matTooltip="Search"
-                                                matTooltipClass="accent-tooltip"
-                                                (click)='statusNameCtrlTrigger.openMenu()'></i>
-                                            <i *ngSwitchCase="'statusDesc'" matTooltip="Search"
-                                                matTooltipClass="accent-tooltip" class="icon-search2"
-                                                (click)='statusDescCtrlTrigger.openMenu()'></i>
-
-                                        </span>
-
-                                        <span *ngSwitchCase="'statusName'">
-                                            <div #statusNameCtrlTrigger="matMenuTrigger"
-                                                [matMenuTriggerFor]="statusCtrl" fxLayout="row"
-                                                fxLayoutAlign="space-between center" class="txtborder-bot">
-                                            </div>
-                                            <mat-menu #statusCtrl class="pos-top">
-                                                <div fxLayout="row">
-                                                    <div fxFlex="100%" class="p-10 tbl-fillddl">
-                                                        <mat-form-field (click)="$event.stopPropagation()">
-                                                            <input type="text" #emailCtl matInput
-                                                                [matAutocomplete]="automail" placeholder=" Status Name"
-                                                                autocomplete="off" role="presentation"
-                                                                (click)="emailCtl.select()"
-                                                                [formControl]="statusListControl"
-                                                                (change)="dt.filter($event.target.value, col.field, 'contains')"
-                                                                (blur)="dt.filter($event.target.value, col.field, 'contains')"
-                                                                (focusin)="dt.filter($event.target.value, col.field, 'contains')"
-                                                                (keyup)="dt.filter($event.target.value, col.field, 'contains')">
-                                                        </mat-form-field>
-                                                        <mat-autocomplete #automail="matAutocomplete">
-                                                            <mat-option
-                                                                (onSelectionChange)="statusNameCtrlTrigger.closeMenu();"
-                                                                *ngFor="let option of statusListFilteredOptions | async"
-                                                                [value]="option">
-                                                                <span
-                                                                    [innerHTML]="option|highlight:emailCtl.value"></span>
-                                                            </mat-option>
-                                                        </mat-autocomplete>
-                                                    </div>
-                                                </div>
-                                                <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end"
-                                                    class="p-10">
-                                                    <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a
-                                                            class="text-sm">Cancel</a>
-                                                        <a *ngIf='emailCtl.value'
-                                                            (click)="dt.filter('', col.field, 'contains');emailCtl.value='';statusListControl.reset()"
-                                                            class="text-sm">Reset</a> </div>
-                                                </div>
-                                            </mat-menu>
-                                        </span>
-                                        <span *ngSwitchCase="'statusDesc'">
-                                            <div #statusDescCtrlTrigger="matMenuTrigger" [matMenuTriggerFor]="emailCtrl"
-                                                fxLayout="row" fxLayoutAlign="space-between center"
-                                                class="txtborder-bot">
-                                            </div>
-                                            <mat-menu #emailCtrl class="pos-top">
-                                                <div fxLayout="row">
-                                                    <div fxFlex="100%" class="p-10 tbl-fillddl">
-                                                        <mat-form-field (click)="$event.stopPropagation()">
-                                                            <input type="text" #emailCtl matInput
-                                                                [matAutocomplete]="automail"
-                                                                placeholder="Status Description" autocomplete="off"
-                                                                role="presentation" (click)="emailCtl.select()"
-                                                                [formControl]="statusDescControl"
-                                                                (change)="dt.filter($event.target.value, col.field, 'contains')"
-                                                                (blur)="dt.filter($event.target.value, col.field, 'contains')"
-                                                                (focusin)="dt.filter($event.target.value, col.field, 'contains')"
-                                                                (keyup)="dt.filter($event.target.value, col.field, 'contains')">
-                                                        </mat-form-field>
-                                                        <mat-autocomplete #automail="matAutocomplete">
-                                                            <mat-option
-                                                                (onSelectionChange)="statusDescCtrlTrigger.closeMenu();"
-                                                                *ngFor="let option of statusDescFilteredOptions | async"
-                                                                [value]="option">
-                                                                <span [innerHTML]="option"></span>
-                                                            </mat-option>
-                                                        </mat-autocomplete>
-                                                    </div>
-                                                </div>
-                                                <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end"
-                                                    class="p-10">
-                                                    <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a
-                                                            class="text-sm">Cancel</a>
-                                                        <a *ngIf='emailCtl.value'
-                                                            (click)="dt.filter('', col.field, 'contains');emailCtl.value='';statusDescControl.reset()"
-                                                            class="text-sm">Reset</a> </div>
-                                                </div>
-                                            </mat-menu>
-                                        </span>
-                                    </th>
-                                </tr>
-                                <tr *ngIf="statusList.length > 0" style="display: none">
-                                    <th *ngFor="let col of columns" class="tbl-Column-seacrh">
-                                        <mat-form-field *ngIf="col.field === 'statusName'"
-                                            (click)="$event.stopPropagation()">
-                                            <input type="text" matInput [formControl]="statusListControl"
-                                                [matAutocomplete]="statusAutoClt" placeholder="{{ col.header }}"
+                    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="50%"
+                      fxFlex.xs="100%" class="mb-10">
+                      <mat-label class="lbl">Choose</mat-label>
+                      <mat-checkbox formControlName="ctsFlag">Is CTSFlag</mat-checkbox>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                    fxLayout.xs="row" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                    fxLayoutGap.xs="0px grid">
+                    <div fxFlex="66%" fxFlex.lg="66%" fxFlex.md="66%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Description</mat-label>
+                        <textarea #input matInput placeholder="Description" maxlength="200"
+                        formControlName="statusDesc"></textarea>
+                        <mat-hint>({{input.value.length}}/200 Max)</mat-hint>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          }
+          @if (!showFlag) {
+            <div fxLayout="row wrap">
+              <div fxFlex="100%">
+                <p-table #dt [columns]="displayedColumns" [value]="statusList" [scrollable]="true"
+                  [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true" [rows]="itemperpage"
+                  [scrollable]="true">
+                  <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                    @for (col of columns; track col) {
+                      <col style="min-width:150px" />
+                    }
+                  </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    @for (col of columns; track col) {
+                      <th pReorderableColumn>
+                        <span [pSortableColumn]="col.field">
+                          <div class="thname"> {{col.header}} </div>
+                          @if (col.field !== 'action') {
+                            <p-sortIcon [field]="col.field"
+                              ariaLabel="Activate to sort"
+                              ariaLabelDesc="Activate to sort in descending order"
+                              ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                          }
+                        </span>
+                        <span class="ico-fieldsearch">
+                          @if (col.field === 'statusName') {
+                            <i class="icon-search2" matTooltip="Search"
+                              matTooltipClass="accent-tooltip"
+                            (click)='statusNameCtrlTrigger.openMenu()'></i>
+                          }
+                          @if (col.field === 'statusDesc') {
+                            <i matTooltip="Search"
+                              matTooltipClass="accent-tooltip" class="icon-search2"
+                            (click)='statusDescCtrlTrigger.openMenu()'></i>
+                          }
+                        </span>
+                        @if (col.field === 'statusName') {
+                          <span>
+                            <div #statusNameCtrlTrigger="matMenuTrigger"
+                              [matMenuTriggerFor]="statusCtrl" fxLayout="row"
+                              fxLayoutAlign="space-between center" class="txtborder-bot">
+                            </div>
+                            <mat-menu #statusCtrl class="pos-top">
+                              <div fxLayout="row">
+                                <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                  <mat-form-field (click)="$event.stopPropagation()">
+                                    <input type="text" #emailCtl matInput
+                                      [matAutocomplete]="automail" placeholder=" Status Name"
+                                      autocomplete="off" role="presentation"
+                                      (click)="emailCtl.select()"
+                                      [formControl]="statusListControl"
+                                      (change)="dt.filter($event.target.value, col.field, 'contains')"
+                                      (blur)="dt.filter($event.target.value, col.field, 'contains')"
+                                      (focusin)="dt.filter($event.target.value, col.field, 'contains')"
+                                      (keyup)="dt.filter($event.target.value, col.field, 'contains')">
+                                    </mat-form-field>
+                                    <mat-autocomplete #automail="matAutocomplete">
+                                      @for (option of statusListFilteredOptions | async; track option) {
+                                        <mat-option
+                                          (onSelectionChange)="statusNameCtrlTrigger.closeMenu();"
+                                          [value]="option">
+                                          <span
+                                          [innerHTML]="option|highlight:emailCtl.value"></span>
+                                        </mat-option>
+                                      }
+                                    </mat-autocomplete>
+                                  </div>
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end"
+                                  class="p-10">
+                                  <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a
+                                  class="text-sm">Cancel</a>
+                                  @if (emailCtl.value) {
+                                    <a
+                                      (click)="dt.filter('', col.field, 'contains');emailCtl.value='';statusListControl.reset()"
+                                    class="text-sm">Reset</a>
+                                  } </div>
+                                </div>
+                              </mat-menu>
+                            </span>
+                          }
+                          @if (col.field === 'statusDesc') {
+                            <span>
+                              <div #statusDescCtrlTrigger="matMenuTrigger" [matMenuTriggerFor]="emailCtrl"
+                                fxLayout="row" fxLayoutAlign="space-between center"
+                                class="txtborder-bot">
+                              </div>
+                              <mat-menu #emailCtrl class="pos-top">
+                                <div fxLayout="row">
+                                  <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                    <mat-form-field (click)="$event.stopPropagation()">
+                                      <input type="text" #emailCtl matInput
+                                        [matAutocomplete]="automail"
+                                        placeholder="Status Description" autocomplete="off"
+                                        role="presentation" (click)="emailCtl.select()"
+                                        [formControl]="statusDescControl"
+                                        (change)="dt.filter($event.target.value, col.field, 'contains')"
+                                        (blur)="dt.filter($event.target.value, col.field, 'contains')"
+                                        (focusin)="dt.filter($event.target.value, col.field, 'contains')"
+                                        (keyup)="dt.filter($event.target.value, col.field, 'contains')">
+                                      </mat-form-field>
+                                      <mat-autocomplete #automail="matAutocomplete">
+                                        @for (option of statusDescFilteredOptions | async; track option) {
+                                          <mat-option
+                                            (onSelectionChange)="statusDescCtrlTrigger.closeMenu();"
+                                            [value]="option">
+                                            <span [innerHTML]="option"></span>
+                                          </mat-option>
+                                        }
+                                      </mat-autocomplete>
+                                    </div>
+                                  </div>
+                                  <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end"
+                                    class="p-10">
+                                    <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a
+                                    class="text-sm">Cancel</a>
+                                    @if (emailCtl.value) {
+                                      <a
+                                        (click)="dt.filter('', col.field, 'contains');emailCtl.value='';statusDescControl.reset()"
+                                      class="text-sm">Reset</a>
+                                    } </div>
+                                  </div>
+                                </mat-menu>
+                              </span>
+                            }
+                          </th>
+                        }
+                      </tr>
+                      @if (statusList.length > 0) {
+                        <tr style="display: none">
+                          @for (col of columns; track col) {
+                            <th class="tbl-Column-seacrh">
+                              @if (col.field === 'statusName') {
+                                <mat-form-field
+                                  (click)="$event.stopPropagation()">
+                                  <input type="text" matInput [formControl]="statusListControl"
+                                    [matAutocomplete]="statusAutoClt" placeholder="{{ col.header }}"
                                                 autocomplete="off" role="presentation" (input)="
                       dt.filter($event.target.value, col.field, 'contains')
                     " />
-                                            <mat-autocomplete #statusAutoClt="matAutocomplete">
-                                                <mat-option (onSelectionChange)="
+                                    <mat-autocomplete #statusAutoClt="matAutocomplete">
+                                      @for (option of statusListFilteredOptions | async; track option) {
+<mat-option (onSelectionChange)="
                         dt.filter(option, col.field, 'contains')
-                      " *ngFor="let option of statusListFilteredOptions | async" [value]="option">
-                                                    {{ option }}
-                                                </mat-option>
-                                            </mat-autocomplete>
-                                        </mat-form-field>
-
-                                        <mat-form-field *ngIf="col.field === 'statusDesc'"
-                                            (click)="$event.stopPropagation()">
-                                            <input type="text" matInput [formControl]="statusDescControl"
-                                                [matAutocomplete]="descAutoClt" placeholder="{{ col.header }}"
+                      " [value]="option">
+                                          {{ option }}
+                                        </mat-option>
+                                      }
+                                    </mat-autocomplete>
+                                  </mat-form-field>
+                                }
+                                @if (col.field === 'statusDesc') {
+                                  <mat-form-field
+                                    (click)="$event.stopPropagation()">
+                                    <input type="text" matInput [formControl]="statusDescControl"
+                                      [matAutocomplete]="descAutoClt" placeholder="{{ col.header }}"
                                                 autocomplete="off" role="presentation" (input)="
                       dt.filter($event.target.value, col.field, 'contains')
                     " />
-                                            <mat-autocomplete #descAutoClt="matAutocomplete">
-                                                <mat-option (onSelectionChange)="
+                                      <mat-autocomplete #descAutoClt="matAutocomplete">
+                                        @for (option of statusDescFilteredOptions | async; track option) {
+<mat-option (onSelectionChange)="
                         dt.filter(option, col.field, 'contains')
-                      " *ngFor="let option of statusDescFilteredOptions | async" [value]="option">
-                                                    {{ option }}
-                                                </mat-option>
-                                            </mat-autocomplete>
-                                        </mat-form-field>
-                                    </th>
-                                    <td class="tbl-Column-seacrh"></td>
-                                </tr>
-                            </ng-template>
-
-                            <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
-                                <tr>
-                                    <td *ngFor="let col of columns" [ngSwitch]='col.field'
-                                        [ngClass]="{'desg-bg':col.field == 'action'}"  style="width:200px">
-                                        <!-- {{ rowData[col.field] }} -->
-                                        <div *ngSwitchCase="'statusName'">{{rowData.statusName}}</div>
-                                        <div *ngSwitchCase="'statusDesc'">{{rowData.statusDesc}}</div>
-                                        <div *ngSwitchCase="'clientViewFlag'">
-                                            <div fxLayout="row" class="tbl-icon">
-                                                <div fxFlex="100%" fxLayoutGap="10px">
-                                                    <span *ngIf="rowData.clientViewFlag===true" class="istrue">
-                                                        <i matTooltipClass="accent-tooltip" matTooltip="Active"
-                                                            class="material-icons">thumb_up</i>
-                                                    </span>
-                                                    <span *ngIf="rowData.clientViewFlag===false" class="isfalse">
-                                                        <i matTooltipClass="accent-tooltip" matTooltip="In-Active"
-                                                            class="material-icons">thumb_down</i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div *ngSwitchCase="'ctsFlag'">
-                                            <div fxLayout="row" class="tbl-icon">
-                                                <div fxFlex="100%" fxLayoutGap="10px">
-                                                    <span *ngIf="rowData.ctsFlag===true" class="istrue">
-                                                        <i matTooltipClass="accent-tooltip" matTooltip="Active"
-                                                            class="material-icons">thumb_up</i>
-                                                    </span>
-                                                    <span *ngIf="rowData.ctsFlag===false" class="isfalse">
-                                                        <i matTooltipClass="accent-tooltip" matTooltip="In-Active"
-                                                            class="material-icons">thumb_down</i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div *ngIf='col.field === "action"' fxLayout="row" class="desg-icon">
-                                            <div fxFlex="100%" fxLayoutGap="10px">
-                                                <mat-icon
-                                                    [ngClass]="screenAuth.editFlag===false?'page-btn disabled':''">
-                                                    <i matTooltip="Edit" matTooltipClass="accent-tooltip"
-                                                        (click)="editStatus(rowData,'edit')"
-                                                        class="material-icons-outlined">edit</i>
-                                                </mat-icon>
-                                                <mat-icon
-                                                    [ngClass]="screenAuth.deleteFlag===false?'page-btn disabled':''"><i
-                                                        (click)="openDialog(rowData.screeningStatusId)"
-                                                        matTooltip="Delete" matTooltipClass="accent-tooltip"
-                                                        class="material-icons-outlined">delete</i></mat-icon>
-
-                                                <mat-icon [ngClass]="screenAuth.viewFlag===false?'page-btn disabled':''"
-                                                    matTooltip="View" matTooltipClass="accent-tooltip"><i
-                                                        (click)="editStatus(rowData,'view')"
-                                                        class="material-icons-outlined">visibility</i> </mat-icon>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                            <!-- <ng-template pTemplate="emptymessage">
+                      " [value]="option">
+                                            {{ option }}
+                                          </mat-option>
+                                        }
+                                      </mat-autocomplete>
+                                    </mat-form-field>
+                                  }
+                                </th>
+                              }
+                              <td class="tbl-Column-seacrh"></td>
+                            </tr>
+                          }
+                        </ng-template>
+                        <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
+                          <tr>
+                            @for (col of columns; track col) {
+                              <td
+                                [ngClass]="{'desg-bg':col.field == 'action'}"  style="width:200px">
+                                <!-- {{ rowData[col.field] }} -->
+                                @if (col.field === 'statusName') {
+                                  <div>{{rowData.statusName}}</div>
+                                }
+                                @if (col.field === 'statusDesc') {
+                                  <div>{{rowData.statusDesc}}</div>
+                                }
+                                @if (col.field === 'clientViewFlag') {
+                                  <div>
+                                    <div fxLayout="row" class="tbl-icon">
+                                      <div fxFlex="100%" fxLayoutGap="10px">
+                                        @if (rowData.clientViewFlag===true) {
+                                          <span class="istrue">
+                                            <i matTooltipClass="accent-tooltip" matTooltip="Active"
+                                            class="material-icons">thumb_up</i>
+                                          </span>
+                                        }
+                                        @if (rowData.clientViewFlag===false) {
+                                          <span class="isfalse">
+                                            <i matTooltipClass="accent-tooltip" matTooltip="In-Active"
+                                            class="material-icons">thumb_down</i>
+                                          </span>
+                                        }
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                                @if (col.field === 'ctsFlag') {
+                                  <div>
+                                    <div fxLayout="row" class="tbl-icon">
+                                      <div fxFlex="100%" fxLayoutGap="10px">
+                                        @if (rowData.ctsFlag===true) {
+                                          <span class="istrue">
+                                            <i matTooltipClass="accent-tooltip" matTooltip="Active"
+                                            class="material-icons">thumb_up</i>
+                                          </span>
+                                        }
+                                        @if (rowData.ctsFlag===false) {
+                                          <span class="isfalse">
+                                            <i matTooltipClass="accent-tooltip" matTooltip="In-Active"
+                                            class="material-icons">thumb_down</i>
+                                          </span>
+                                        }
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                                @if (col.field === "action") {
+                                  <div fxLayout="row" class="desg-icon">
+                                    <div fxFlex="100%" fxLayoutGap="10px">
+                                      <mat-icon
+                                        [ngClass]="screenAuth.editFlag===false?'page-btn disabled':''">
+                                        <i matTooltip="Edit" matTooltipClass="accent-tooltip"
+                                          (click)="editStatus(rowData,'edit')"
+                                        class="material-icons-outlined">edit</i>
+                                      </mat-icon>
+                                      <mat-icon
+                                        [ngClass]="screenAuth.deleteFlag===false?'page-btn disabled':''"><i
+                                        (click)="openDialog(rowData.screeningStatusId)"
+                                        matTooltip="Delete" matTooltipClass="accent-tooltip"
+                                      class="material-icons-outlined">delete</i></mat-icon>
+                                      <mat-icon [ngClass]="screenAuth.viewFlag===false?'page-btn disabled':''"
+                                        matTooltip="View" matTooltipClass="accent-tooltip"><i
+                                        (click)="editStatus(rowData,'view')"
+                                      class="material-icons-outlined">visibility</i> </mat-icon>
+                                    </div>
+                                  </div>
+                                }
+                              </td>
+                            }
+                          </tr>
+                        </ng-template>
+                        <!-- <ng-template pTemplate="emptymessage">
                         <div fxLayout="row">
-                            <div fxFlex="100%" class="pt-15">
-                                <div class="no-record text-center">
-                                    <span>No Record Found</span>
-                                </div>
+                          <div fxFlex="100%" class="pt-15">
+                            <div class="no-record text-center">
+                              <span>No Record Found</span>
                             </div>
+                          </div>
                         </div>
-                    </ng-template> -->
-                        </p-table>
-                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                            fxLayout.xs="row" fxLayoutGap="0px grid"   fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid" class="cus-paginator"
-                            [ngClass]="{'empty-record': statusList.length == 0}">
-
-                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                fxLayoutAlign="start center">
-                                Showing {{ dt.totalRecords
-                    < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                      </ng-template> -->
+                    </p-table>
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                      fxLayout.xs="row" fxLayoutGap="0px grid"   fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid" class="cus-paginator"
+                      [ngClass]="{'empty-record': statusList.length == 0}">
+                      <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                        fxLayoutAlign="start center">
+                        Showing {{ dt.totalRecords
+                        < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
                         <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }}
-                                record(s) | &nbsp;<a (click)="showall()">Show All</a></div>
-                            <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                                fxLayoutAlign.xs="start center">
+                        record(s) | &nbsp;<a (click)="showall()">Show All</a></div>
+                        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                          fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                          fxLayoutAlign.xs="start center">
                                 <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
                   dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                   navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
                 ">
-                                    <i class="icon-control-start mr-5"></i></a>
-                                <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
-                                        <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" min="1"
-                                            appNumberOnly [NumberOnly]="false"
-                                            (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
-                                    </span></span>
-                                <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                            <i class="icon-control-start mr-5"></i></a>
+                            <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                              <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" min="1"
+                                appNumberOnly [NumberOnly]="false"
+                                (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                              </span></span>
+                              <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
                                 <a [ngClass]="
                   dt.rows + dt.first >= dt.totalRecords
                     ? 'page-btn disabled'
@@ -345,12 +401,12 @@
                   dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                   navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
                 "><i class="icon-control-end ml-5"></i></a>
+                              </div>
                             </div>
-
+                          </div>
                         </div>
-                    </div>
+                      }
+                    </mat-card-content>
+                  </mat-card>
                 </div>
-            </mat-card-content>
-        </mat-card>
-    </div>
-</div>
+              </div>

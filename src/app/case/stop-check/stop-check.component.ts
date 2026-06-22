@@ -1,5 +1,6 @@
 ﻿import { DatePipe } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { LazyLoadEvent } from 'primeng/api';
 import { UntypedFormControl } from '@angular/forms';
 import { MatMenuTrigger } from '@angular/material/menu';
 import moment from 'moment';
@@ -21,7 +22,12 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./stop-check.component.css']
 })
 export class StopCheckComponent implements OnInit {
-  itemperpage:any;
+  itemperpage: any;
+  totalRecords = 0;
+  loading = false;
+  shievePageNo = 1;
+  shievePageSize = 10;
+  private skipFirstLazyLoad = false;
   routePath = 'Screening / Clients Case Creation / Stop Check';
   checkList: any[] = [];
   EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -74,13 +80,22 @@ clientNameTrigger!: MatMenuTrigger;
     this.breadcrumbFlags = this.common.breadcrumbFlags(true);
     this.screenAuth = this.auth.getScreenAuth(this.router.url);
     this.userData = JSON.parse(sessionStorage.getItem('user_data') as string);
-    this.stopCheck();
     this.itemperpage = 10;
+    this.userData.page = this.shievePageNo;
+    this.userData.pageSize = this.shievePageSize;
+    this.userData.needTotal = true;
+    this.userData.applyPaging = true;
+    this.skipFirstLazyLoad = true;
+    this.stopCheck();
   }
   stopCheck() {
+    this.loading = true;
     this.screening.GetStopCheckCaseDetails(this.userData).subscribe(res => {
       if (res) {
-        this.checkList = res;
+        const body = res.body ?? res;
+        const totalCount = res.headers?.get('X-Total-Count');
+        this.totalRecords = totalCount ? +totalCount : (body?.length ?? 0);
+        this.checkList = body;
         this.checkList.forEach(ele => {
           ele.candidateFirstName = ele.candidateFirstName + ' ' + ele.candidateMiddleName + ' ' +
             ele.candidateLastName;
@@ -88,7 +103,22 @@ clientNameTrigger!: MatMenuTrigger;
         this.filterCheckList = this.checkList;
         this.TblAutoFilters();
       }
+      this.loading = false;
     });
+  }
+
+  LoadHistory(event: LazyLoadEvent) {
+    this.loading = true;
+    this.userData.page = (event.first + event.rows) / 10;
+    this.userData.pageSize = 10;
+    this.userData.applyPaging = true;
+    this.userData.needTotal = true;
+    if (this.skipFirstLazyLoad && this.userData.page === 1 && !event.sortField && Object.keys(event.filters || {}).length === 0) {
+      this.skipFirstLazyLoad = false;
+      this.loading = false;
+      return;
+    }
+    this.stopCheck();
   }
   getTotalPages(totalRecords, rows) {
     this.totalpages = Math.ceil((totalRecords) / rows);

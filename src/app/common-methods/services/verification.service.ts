@@ -1,6 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { FinalReport, ClientLogoReport } from '../models/verification';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -9,6 +10,7 @@ import { MessageService } from 'primeng/api';
   providedIn: 'root'
 })
 export class VerificationService {
+  private digitalPVReportCache: any[] | null = null;
   prebothconfigFlag: boolean = false;
   enableAutoIqc: boolean = false;
   enableAutoFqc: boolean = false;
@@ -543,8 +545,17 @@ GetScreeningEmployerFollowupHistory(SearchData: any) {
     return this.http.post<any>(dataUrl, data);
   }
   digitalAddressCheckPVReport(loginUserDetVm: any) {
+    if (this.digitalPVReportCache) {
+      return of(this.digitalPVReportCache);
+    }
     const dataUrl = 'Verification/DigitalAddressCheckPVReport';
-    return this.http.post<any>(dataUrl, loginUserDetVm);
+    return this.http.post<any[]>(dataUrl, loginUserDetVm).pipe(
+      tap(data => { this.digitalPVReportCache = data; })
+    );
+  }
+
+  clearDigitalPVReportCache() {
+    this.digitalPVReportCache = null;
   }
   digitalAddressCheckGeo(loginUserDetVm: any) {
     const dataUrl = 'Verification/DigitalAddressCheckGeo';

@@ -1,4 +1,4 @@
-/* Employment Page Styles */
+﻿/* Employment Page Styles */
 
 .hname {
     color: #9b9b9d;
@@ -151,13 +151,13 @@ a.compList .subCompList.preQc .icon i {
 }
 
  ::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-family: "Calibri", Arial, Helvetica, sans-serif;
     font-size: 14px;
     font-weight: 400;
     color: rgba(255, 255, 255, 1);
 }
  ::ng-deep mat-tab-group.scrn-tab .mat-mdc-tab {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-family: "Calibri", Arial, Helvetica, sans-serif;
     font-size: 14px;
     font-weight: 400;
     color: rgba(255, 255, 255, 1);

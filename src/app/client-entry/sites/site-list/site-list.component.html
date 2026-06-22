@@ -1,184 +1,193 @@
 <app-breadcrumb [btnAdd]="btnAdd" [btnResetTbl]="btnResetTbl" (eventAdd)="addNewSite();" [routePath]='routePath'
-  [btnAddDisabled]="!screenAuth.addFlag" (eventResetTbl)="tblReset()"></app-breadcrumb>
- 
+[btnAddDisabled]="!screenAuth.addFlag" (eventResetTbl)="tblReset()"></app-breadcrumb>
 
-  <div fxLayout="row">
-      <div fxFlex="100%">
-        <mat-card>  
-          
+
 <div fxLayout="row">
+  <div fxFlex="100%">
+    <mat-card>
 
-            <mat-card-header fxFlex="100%"><div fxFlex="100%">
-                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-                fxLayoutGap="10px">
-                    <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
-                    fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
-                        <mat-card-title>
-                            <h1 class="header-title">Site Creation</h1>
-                        </mat-card-title>
-                    </div> 
-                    <span fxFlex></span>
-                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
-                    fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                      <div class="tbl-commonsearch">
-                        <mat-form-field fxFlex="100%">
-                            <mat-label></mat-label>
-                            <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+      <div fxLayout="row">
+
+        <mat-card-header fxFlex="100%"><div fxFlex="100%">
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+            fxLayoutGap="10px">
+            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+              fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+              <mat-card-title>
+                <h1 class="header-title">Site Creation</h1>
+              </mat-card-title>
+            </div>
+            <span fxFlex></span>
+            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+              fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+              <div class="tbl-commonsearch">
+                <mat-form-field fxFlex="100%">
+                  <mat-label></mat-label>
+                  <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
                             <input #global matInput size="50" placeholder="Search here..." (input)="
                                 sitetab.filterGlobal($event.target.value, 'contains')
                               "
-                              (keypress)="sitetab.reset();sitetab.filterGlobal($event.target.value, 'contains');siteNameControl.reset();clientNameControl.reset();" />
-                            <button mat-button *ngIf="global.value" matSuffix mat-icon-button aria-label="Clear" (click)="
+                    (keypress)="sitetab.reset();sitetab.filterGlobal($event.target.value, 'contains');siteNameControl.reset();clientNameControl.reset();" />
+                    @if (global.value) {
+<button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="
                                 global.value = '';
                                 sitetab.filterGlobal($event.target.value, 'contains')
                               ">
-                              <mat-icon>close</mat-icon>
-                            </button>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                </div> </div>     
-            </mat-card-header>
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+            </div> </div>
+          </mat-card-header>
 
-</div>    
-            
-
-       
-      <div fxLayout="row" fxLayoutGap="20px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-        fxLayout.xs="column">
-        <mat-card-content fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="80%" fxFlex.xs="50%">
-          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
-            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-               <p-table
-  #sitetab
-  [columns]="sitecols"
-  [value]="sitelist"
-  [scrollable]="true"
-  scrollHeight=""
-  [paginator]="true"
-  [rows]="itemperpage"
-  [resizableColumns]="true"
-  [reorderableColumns]="true"
-  frozenWidth="100px"
-  [frozenColumns]="frozenCols"
-  columnResizeMode="expand">
-
-  <!-- ===== COLGROUP ===== -->
-  <ng-template pTemplate="colgroup" let-colGroupCols>
-    <colgroup>
-      <col *ngFor="let col of colGroupCols" style="min-width:150px" />
-    </colgroup>
-  </ng-template>
-
-  <!-- ===== HEADER ===== -->
-  <ng-template pTemplate="header" let-headerCols>
-    <tr>
-      <th *ngFor="let col of headerCols"
-          [ngSwitch]="col.field"
-          pReorderableColumn
-          pResizableColumn
-          matTooltip="{{ col.header }}"
-          matTooltipClass="accent-tooltip">
-
-        <span [pSortableColumn]="col.field">
-          <div class="thname">{{ col.header }}</div>
-          <p-sortIcon
-            *ngIf="col.field !== 'action'"
-            [field]="col.field"
-            ariaLabel="Activate to sort"
-            ariaLabelDesc="Activate to sort in descending order"
-            matTooltip="Sorting"
-            matTooltipClass="accent-tooltip"
-            ariaLabelAsc="Activate to sort in ascending order">
-          </p-sortIcon>
-        </span>
-
-        <!-- 🔍 search menus – unchanged -->
-
-      </th>
-    </tr>
-  </ng-template>
-
-  <!-- ===== BODY ===== -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-bodyCols="columns">
-
-    <tr>
-      <td *ngFor="let col of bodyCols"
-          [ngSwitch]="col.field"
-          [ngClass]="{ 'desg-bg': col.field === 'action' }">
-
-        <!-- NORMAL FIELDS -->
-        <div *ngIf="col.field !== 'active' && col.field !== 'action'">
-          {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
         </div>
 
-        <!-- ACTION -->
-        <div *ngSwitchCase="'action'" fxLayout="row" class="desg-icon">
-          <div fxFlex="100%" fxLayoutGap="10px">
-            <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
-              <i class="material-icons-outlined"
-                 (click)="editSitedetails(rowData.siteId)">
-                edit
-              </i>
-            </mat-icon>
 
-            <mat-icon
+
+        <div fxLayout="row" fxLayoutGap="20px" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+          fxLayout.xs="column">
+          <mat-card-content fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="80%" fxFlex.xs="50%">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <p-table
+                  #sitetab
+                  [columns]="sitecols"
+                  [value]="sitelist"
+                  [scrollable]="true"
+                  scrollHeight=""
+                  [paginator]="true"
+                  [rows]="itemperpage"
+                  [resizableColumns]="true"
+                  [reorderableColumns]="true"
+                  frozenWidth="100px"
+                  [frozenColumns]="frozenCols"
+                  columnResizeMode="expand">
+
+                  <!-- ===== COLGROUP ===== -->
+                  <ng-template pTemplate="colgroup" let-colGroupCols>
+                    <colgroup>
+                    @for (col of colGroupCols; track col) {
+                      <col style="min-width:150px" />
+                    }
+                  </colgroup>
+                </ng-template>
+
+                <!-- ===== HEADER ===== -->
+                <ng-template pTemplate="header" let-headerCols>
+                  <tr>
+                    @for (col of headerCols; track col) {
+                      <th
+                        pReorderableColumn
+                        pResizableColumn
+                        matTooltip="{{ col.header }}"
+                        matTooltipClass="accent-tooltip">
+                        <span [pSortableColumn]="col.field">
+                          <div class="thname">{{ col.header }}</div>
+                          @if (col.field !== 'action') {
+                            <p-sortIcon
+                              [field]="col.field"
+                              ariaLabel="Activate to sort"
+                              ariaLabelDesc="Activate to sort in descending order"
+                              matTooltip="Sorting"
+                              matTooltipClass="accent-tooltip"
+                              ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                          }
+                        </span>
+                        <!-- 🔍 search menus – unchanged -->
+                      </th>
+                    }
+                  </tr>
+                </ng-template>
+
+                <!-- ===== BODY ===== -->
+                <ng-template
+                  pTemplate="body"
+                  let-rowData
+                  let-bodyCols="columns">
+
+                  <tr>
+                    @for (col of bodyCols; track col) {
+                      <td
+                        [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                        <!-- NORMAL FIELDS -->
+                        @if (col.field !== 'active' && col.field !== 'action') {
+                          <div>
+                            {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                          </div>
+                        }
+                        <!-- ACTION -->
+                        @if (col.field === 'action') {
+                          <div fxLayout="row" class="desg-icon">
+                            <div fxFlex="100%" fxLayoutGap="10px">
+                              <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                                <i class="material-icons-outlined"
+                                  (click)="editSitedetails(rowData.siteId)">
+                                  edit
+                                </i>
+                              </mat-icon>
+                              <mat-icon
               [ngClass]="
                 screenAuth.deleteFlag === false || rowData.deleteDisableFlag === true
                 ? 'page-btn disabled'
                 : ''">
-              <i class="material-icons-outlined"
-                 (click)="openDialog(rowData)">
-                delete
-              </i>
-            </mat-icon>
-          </div>
-        </div>
+                                <i class="material-icons-outlined"
+                                  (click)="openDialog(rowData)">
+                                  delete
+                                </i>
+                              </mat-icon>
+                            </div>
+                          </div>
+                        }
+                        <!-- ACTIVE -->
+                        @if (col.field === 'active') {
+                          <div fxLayout="row" class="tbl-icon">
+                            @if (rowData.active) {
+                              <span class="istrue">
+                                <i matTooltip="Active" class="material-icons">thumb_up</i>
+                              </span>
+                            }
+                            @if (!rowData.active) {
+                              <span class="isfalse">
+                                <i matTooltip="In-Active" class="material-icons">thumb_down</i>
+                              </span>
+                            }
+                          </div>
+                        }
+                      </td>
+                    }
+                  </tr>
 
-        <!-- ACTIVE -->
-        <div *ngSwitchCase="'active'" fxLayout="row" class="tbl-icon">
-          <span *ngIf="rowData.active" class="istrue">
-            <i matTooltip="Active" class="material-icons">thumb_up</i>
-          </span>
-          <span *ngIf="!rowData.active" class="isfalse">
-            <i matTooltip="In-Active" class="material-icons">thumb_down</i>
-          </span>
-        </div>
+                </ng-template>
 
-      </td>
-    </tr>
-
-  </ng-template>
-
-</p-table>
+              </p-table>
               <div class="cus-paginator" [ngClass]="{'empty-record': sitelist?.length == 0}" fxLayout="row wrap" fxLayoutGap="0px grid"  fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
 
                 <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="start center"> Showing {{ sitetab.totalRecords
-                            < 1 ? 0 : sitetab.first + 1 }} - {{ sitetab.totalRecords> 0 ? sitetab.rows + sitetab.first
-                                <=sitetab.totalRecords ? sitetab.rows + sitetab.first : sitetab.totalRecords : 0 }} of
-                                    {{ sitetab.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a></div>
-                                    <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                    fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                                    fxLayoutAlign.xs="start center">
+                  fxLayoutAlign="start center"> Showing {{ sitetab.totalRecords
+                  < 1 ? 0 : sitetab.first + 1 }} - {{ sitetab.totalRecords> 0 ? sitetab.rows + sitetab.first
+                  <=sitetab.totalRecords ? sitetab.rows + sitetab.first : sitetab.totalRecords : 0 }} of
+                  {{ sitetab.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a></div>
+                  <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                    fxLayoutAlign.xs="start center">
                                           <a [ngClass]="sitetab.first===0?'page-btn disabled': 'page-btn'" (click)="sitetab.onPageChange({ first: sitetab.first - sitetab.rows, rows: sitetab.rows });
                                                 navigateNxtPrevPage(sitetab.first + sitetab.rows,sitetab.rows)"> <i
-                                              class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.sm
-                                            fxHide.xs> Go to Page<span class="input-num">
-                                              <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" min="1" appNumberOnly
-                                                [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value,sitetab.rows)" />
-                                            </span></span> <span class="mr-2"> of
-                                            {{ getTotalPages(sitetab.totalRecords,sitetab.rows) }}</span> <a
-                                            [ngClass]="(sitetab.rows + sitetab.first)>=sitetab.totalRecords?'page-btn disabled': 'page-btn'"
+                    class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.sm
+                    fxHide.xs> Go to Page<span class="input-num">
+                    <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" min="1" appNumberOnly
+                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value,sitetab.rows)" />
+                    </span></span> <span class="mr-2"> of
+                  {{ getTotalPages(sitetab.totalRecords,sitetab.rows) }}</span> <a
+                  [ngClass]="(sitetab.rows + sitetab.first)>=sitetab.totalRecords?'page-btn disabled': 'page-btn'"
                                             (click)="sitetab.onPageChange({ first: sitetab.first + sitetab.rows, rows: sitetab.rows });
                                                     navigateNxtPrevPage(sitetab.first + sitetab.rows,sitetab.rows)"><i
-                                              class="icon-control-end ml-5"></i></a> </div>
+                class="icon-control-end ml-5"></i></a> </div>
 
-               
+
               </div>
             </div>
           </div>

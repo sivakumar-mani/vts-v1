@@ -28,6 +28,7 @@ export class ClientAgreementApprovalComponent implements OnInit {
   model = new ClientAgreeApproval();
   ClientAgreementApproval: any;
   filedname = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'clientName', header: 'Client Name' },
     { field: 'agreementAvailable', header: 'Agreement Availability' },
     { field: 'reason', header: 'Reason for non-availability' },

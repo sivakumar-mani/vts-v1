@@ -2,7 +2,7 @@
   [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset" [btnResetTbl]="breadcrumbFlags.btnResetTbl"
   (eventAdd)="addReordCheckCategory()" [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag"
   (eventBack)=" closeForm()" (eventSave)="saveRecordCheckCategory()" [toolTip]="breadcrumbFlags.toolTip"
-  (eventReset)=" resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
+(eventReset)=" resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
 <div fxLayout="row" fxLayoutGap="20px">
   <div fxFlex="100%">
     <mat-card>
@@ -20,204 +20,218 @@
               <span fxFlex></span>
               <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
                 fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                <div class="tbl-commonsearch" *ngIf="!showFlag">
-                  <mat-form-field fxFlex="100%">
-                    <mat-label></mat-label>
-                    <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                    <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
-                      autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
-                  </mat-form-field>
+                @if (!showFlag) {
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                        autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                      </mat-form-field>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
-          </div>
-        </mat-card-header>
-      </div>
-      <mat-card-content>
-        <div *ngIf="showFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap"
-          fxLayout.xs="column" fxLayoutGap="0px grid">
-          <div fxFlex="100%">
-            <form [formGroup]="recordCheckFormgroup" autocomplete="off" id="ngForm" autocomplete="off">
-              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
-                fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
-                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                    <mat-label>Record Check CategoryName</mat-label>
-                    <input formControlName="recordCheckCategoryName" (change)="checkValidRecordCheckCategory()" matInput
-                      placeholder="Record Check CategoryName" required>
-                    <mat-error *ngIf="recordCheckFormgroup?.get('recordCheckCategoryName')?.errors?.required"> Record
-                      Check CategoryName is required </mat-error>
-                    <mat-error *ngIf="recordCheckFormgroup?.get('recordCheckCategoryName')?.errors?.incorrect"> Record
-                      Check Name is already exist. </mat-error>
-                  </mat-form-field>
-                </div>
-                <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%">
-                  <mat-label class="lbl"><strong>Active</strong></mat-label>
-                  <mat-checkbox formControlName="active" (change)="activeChangeName($event.checked)">
-                    {{activeName}}</mat-checkbox>
-                </div>
-              </div>
-              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
-                fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="40%" fxFlex.xs="100%">
-                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                    <mat-label>Description</mat-label>
-                    <textarea #input formControlName="categoryDesc" matInput placeholder="Description" maxlength="200"
-                      required>
-                        </textarea>
-                    <mat-hint>({{ input.value.length }}/200 Max)</mat-hint>
-                    <mat-error *ngIf="recordCheckFormgroup.get('categoryDesc').invalid"> Description is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-            </form>
-          </div>
+          </mat-card-header>
         </div>
-        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-          fxLayoutGap="20px grid" *ngIf="!showFlag">
-          <div fxFlex="100%">
-            <p-table #dt [columns]="displayedColumns" [value]="recordCheckCategoryList" [scrollable]="true"
-              scrollHeight="" [paginator]="true" [rows]="itemperpage" [resizableColumns]="true"
-              [reorderableColumns]="true" columnResizeMode="expand" frozenWidth="150px" [frozenColumns]="frozenCols">
-
-              <!-- ===== COLGROUP ===== -->
-              <ng-template pTemplate="colgroup" let-colGroupCols>
-                <colgroup>
-                  <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-                </colgroup>
-              </ng-template>
-
-              <!-- ===== HEADER ===== -->
-              <ng-template pTemplate="header" let-headerCols>
-                <tr>
-                  <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn>
-
-                    <span [pSortableColumn]="col.field">
-                      <div class="thname">{{ col.header }}</div>
-
-                      <p-sortIcon *ngIf="col.field !== 'action' && col.field !== 'sNo'" [field]="col.field"
-                        ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
-                        matTooltip="Sorting" matTooltipClass="accent-tooltip"
-                        ariaLabelAsc="Activate to sort in ascending order">
-                      </p-sortIcon>
-                    </span>
-
-                  </th>
-                </tr>
-              </ng-template>
-
-              <!-- ===== BODY ===== -->
-              <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
-
-                <tr>
-                  <td *ngFor="let col of bodyCols" [ngSwitch]="col.field"
-                    [ngClass]="{ 'desg-bg': col.field === 'action' }">
-
-                    <!-- ACTION -->
-                    <div *ngSwitchCase="'action'" fxLayout="row" class="desg-icon">
-                      <div fxFlex="100%" fxLayoutGap="10px">
-
-                        <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
-                          <i class="material-icons-outlined" matTooltip="Edit" matTooltipClass="accent-tooltip"
-                            (click)="editDetail(rowData)">
-                            edit
-                          </i>
-                        </mat-icon>
-
-                        <mat-icon [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''"
-                          matTooltip="Delete" matTooltipClass="accent-tooltip">
-                          <i class="material-icons-outlined" (click)="openConfirmDialog(rowData)">
-                            delete
-                          </i>
-                        </mat-icon>
-
-                        <mat-icon [ngClass]="screenAuth.viewFlag === false ? 'page-btn disabled' : ''" matTooltip="View"
-                          matTooltipClass="accent-tooltip">
-                          <i class="material-icons-outlined" (click)="editDetail(rowData,'view')">
-                            visibility
-                          </i>
-                        </mat-icon>
-
+        <mat-card-content>
+          @if (showFlag) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap"
+              fxLayout.xs="column" fxLayoutGap="0px grid">
+              <div fxFlex="100%">
+                <form [formGroup]="recordCheckFormgroup" autocomplete="off" id="ngForm" autocomplete="off">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
+                    fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="50%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Record Check CategoryName</mat-label>
+                        <input formControlName="recordCheckCategoryName" (change)="checkValidRecordCheckCategory()" matInput
+                          placeholder="Record Check CategoryName" required>
+                          @if (recordCheckFormgroup?.get('recordCheckCategoryName')?.errors?.required) {
+                            <mat-error> Record
+                            Check CategoryName is required </mat-error>
+                          }
+                          @if (recordCheckFormgroup?.get('recordCheckCategoryName')?.errors?.incorrect) {
+                            <mat-error> Record
+                            Check Name is already exist. </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%">
+                        <mat-label class="lbl"><strong>Active</strong></mat-label>
+                        <mat-checkbox formControlName="active" (change)="activeChangeName($event.checked)">
+                        {{activeName}}</mat-checkbox>
                       </div>
                     </div>
-
-                    <div *ngSwitchCase="'recordCheckCategoryName'">
-                      {{ rowData.recordCheckCategoryName }}
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
+                      fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="40%" fxFlex.xs="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>Description</mat-label>
+                          <textarea #input formControlName="categoryDesc" matInput placeholder="Description" maxlength="200"
+                            required>
+                          </textarea>
+                          <mat-hint>({{ input.value.length }}/200 Max)</mat-hint>
+                          @if (recordCheckFormgroup.get('categoryDesc').invalid) {
+                            <mat-error> Description is required
+                            </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
                     </div>
-
-                    <div *ngSwitchCase="'categoryDesc'">
-                      {{ rowData.categoryDesc }}
-                    </div>
-
-                    <!-- ACTIVE -->
-                    <div *ngSwitchCase="'active'" fxLayout="row" class="tbl-icon">
-                      <span *ngIf="rowData.active" class="istrue">
-                        <i matTooltip="Active" class="material-icons">thumb_up</i>
-                      </span>
-                      <span *ngIf="!rowData.active" class="isfalse">
-                        <i matTooltip="In-Active" class="material-icons">thumb_down</i>
-                      </span>
-                    </div>
-
-                  </td>
-                </tr>
-
-              </ng-template>
-
-            </p-table>
-            <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
-              fxLayoutGap.xs="20px grid" [ngClass]="{'empty-record': recordCheckCategoryList?.length == 0}">
-              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="start center"> Showing {{ dt.totalRecords
-                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
-                  <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s) |
-                    &nbsp;<a (click)="showall()">Show All</a>
+                  </form>
+                </div>
               </div>
-              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                fxLayoutAlign.xs="start center"> <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'"
+            }
+            @if (!showFlag) {
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="20px grid">
+                <div fxFlex="100%">
+                  <p-table #dt [columns]="displayedColumns" [value]="recordCheckCategoryList" [scrollable]="true"
+                    scrollHeight="" [paginator]="true" [rows]="itemperpage" [resizableColumns]="true"
+                    [reorderableColumns]="true" columnResizeMode="expand" frozenWidth="150px" [frozenColumns]="frozenCols">
+                    <!-- ===== COLGROUP ===== -->
+                    <ng-template pTemplate="colgroup" let-colGroupCols>
+                      <colgroup>
+                      @for (col of colGroupCols; track col) {
+                        <col style="min-width:200px" />
+                      }
+                    </colgroup>
+                  </ng-template>
+                  <!-- ===== HEADER ===== -->
+                  <ng-template pTemplate="header" let-headerCols>
+                    <tr>
+                      @for (col of headerCols; track col) {
+                        <th pReorderableColumn pResizableColumn>
+                          <span [pSortableColumn]="col.field">
+                            <div class="thname">{{ col.header }}</div>
+                            @if (col.field !== 'action' && col.field !== 'sNo') {
+                              <p-sortIcon [field]="col.field"
+                                ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                matTooltip="Sorting" matTooltipClass="accent-tooltip"
+                                ariaLabelAsc="Activate to sort in ascending order">
+                              </p-sortIcon>
+                            }
+                          </span>
+                        </th>
+                      }
+                    </tr>
+                  </ng-template>
+                  <!-- ===== BODY ===== -->
+                  <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+                    <tr>
+                      @for (col of bodyCols; track col) {
+                        <td
+                          [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                          <!-- ACTION -->
+                          @if (col.field === 'action') {
+                            <div fxLayout="row" class="desg-icon">
+                              <div fxFlex="100%" fxLayoutGap="10px">
+                                <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                                  <i class="material-icons-outlined" matTooltip="Edit" matTooltipClass="accent-tooltip"
+                                    (click)="editDetail(rowData)">
+                                    edit
+                                  </i>
+                                </mat-icon>
+                                <mat-icon [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''"
+                                  matTooltip="Delete" matTooltipClass="accent-tooltip">
+                                  <i class="material-icons-outlined" (click)="openConfirmDialog(rowData)">
+                                    delete
+                                  </i>
+                                </mat-icon>
+                                <mat-icon [ngClass]="screenAuth.viewFlag === false ? 'page-btn disabled' : ''" matTooltip="View"
+                                  matTooltipClass="accent-tooltip">
+                                  <i class="material-icons-outlined" (click)="editDetail(rowData,'view')">
+                                    visibility
+                                  </i>
+                                </mat-icon>
+                              </div>
+                            </div>
+                          }
+                          @if (col.field === 'recordCheckCategoryName') {
+                            <div>
+                              {{ rowData.recordCheckCategoryName }}
+                            </div>
+                          }
+                          @if (col.field === 'categoryDesc') {
+                            <div>
+                              {{ rowData.categoryDesc }}
+                            </div>
+                          }
+                          <!-- ACTIVE -->
+                          @if (col.field === 'active') {
+                            <div fxLayout="row" class="tbl-icon">
+                              @if (rowData.active) {
+                                <span class="istrue">
+                                  <i matTooltip="Active" class="material-icons">thumb_up</i>
+                                </span>
+                              }
+                              @if (!rowData.active) {
+                                <span class="isfalse">
+                                  <i matTooltip="In-Active" class="material-icons">thumb_down</i>
+                                </span>
+                              }
+                            </div>
+                          }
+                        </td>
+                      }
+                    </tr>
+                  </ng-template>
+                </p-table>
+                <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                  fxLayoutGap.xs="20px grid" [ngClass]="{'empty-record': recordCheckCategoryList?.length == 0}">
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center"> Showing {{ dt.totalRecords
+                    < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                    <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s) |
+                    &nbsp;<a (click)="showall()">Show All</a>
+                  </div>
+                  <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                    fxLayoutAlign.xs="start center"> <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'"
                   (click)="
                                     dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                                     navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
                                   "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2"
-                  fxHide.xs>Go to
-                  Page<span class="input-num">
+                    fxHide.xs>Go to
+                    Page<span class="input-num">
                     <input type="number" #pageNo min="1" [(ngModel)]="currentPage" maxlength="5" appNumberOnly
                       [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
-                  </span></span> <span class="mr-2" fxHide.xs> of
+                    </span></span> <span class="mr-2" fxHide.xs> of
                   {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a [ngClass]="
                   dt.rows + dt.first >= dt.totalRecords
                   ? 'page-btn disabled': 'page-btn'
                   " (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                   navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"><i class="icon-control-end ml-5"></i></a> </div>
+                </div>
+              </div>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <ng-template #deleteConfirmation>
+    <mat-dialog-content>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <div fxLayout="row">
+            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="100%" class="text-center">
+              <h3 class="m-0">Confirmation !</h3>
+              <p class="text-sm">Are you sure you want to <b>delete</b> thi records?</p>
             </div>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div>
-<ng-template #deleteConfirmation>
-  <mat-dialog-content>
-    <div fxLayout="row">
-      <div fxFlex="100%">
-        <div fxLayout="row">
-          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
-          </div>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="center center">
-          <div fxFlex="100%" class="text-center">
-            <h3 class="m-0">Confirmation !</h3>
-            <p class="text-sm">Are you sure you want to <b>delete</b> thi records?</p>
-          </div>
-        </div>
       </div>
-    </div>
-  </mat-dialog-content>
-  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
-    <button mat-stroked-button (click)="dialogRef.close()">No, Keep it</button>
-    <button mat-flat-button color="warn" (click)="deleteRecordCheckCategory()">Yes, Delete it</button>
-  </mat-dialog-actions>
-</ng-template>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+      <button mat-stroked-button (click)="dialogRef.close()">No, Keep it</button>
+      <button mat-flat-button color="warn" (click)="deleteRecordCheckCategory()">Yes, Delete it</button>
+    </mat-dialog-actions>
+  </ng-template>

@@ -7,11 +7,11 @@ import "./chunk-JRYBI2CM.js";
 import "./chunk-3RUZQJQZ.js";
 import "./chunk-N4DOILP3.js";
 import {
-  coerceNumberProperty
-} from "./chunk-3P6NZDVG.js";
-import {
   BidiModule
 } from "./chunk-ILEVSUJ3.js";
+import {
+  coerceNumberProperty
+} from "./chunk-3P6NZDVG.js";
 import {
   Directionality
 } from "./chunk-Y6BXVQXT.js";

@@ -28,6 +28,7 @@ export class StateComponent implements OnInit {
   breadcrumbFlags = new BreadcrumbFlags();
   routePath = 'Configure / Location / State';
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'countryName', header: 'Country' },
     { field: 'stateName', header: 'State' },
     { field: 'active', header: 'Active' },

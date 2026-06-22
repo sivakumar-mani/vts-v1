@@ -1,4 +1,4 @@
-/* Container for the upload button */
+﻿/* Container for the upload button */
 .upload-trigger {
   cursor: pointer;
   display: flex;
@@ -58,7 +58,7 @@
   border-bottom: 1px solid rgba(0,0,0,0.42);
   background: transparent;
   font-size: 11px;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: inherit;
   cursor: pointer;
   outline: none;
   width: 100%;

@@ -56,6 +56,7 @@ export class LOAStatusComponent implements OnInit {
   routePath = 'Client / LOA Approval / BGV Approval';
   loaStatusFormGroup: UntypedFormGroup;
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'clientReferenceNo', header: 'Case Ref no', value: true, disabled: true },
     { field: 'clientName', header: 'Client Name', value: true, disabled: true },
     { field: 'screeningOwnerName', header: 'Assigned Owner', value: true, disabled: true },

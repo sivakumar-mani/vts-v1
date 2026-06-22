@@ -22,153 +22,179 @@
               <span fxFlex></span>
               <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
                 fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                <div class="tbl-commonsearch" *ngIf="!isGridPage">
-                  <mat-form-field fxFlex="100%">
-                    <mat-label></mat-label>
-                    <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                    <input matInput placeholder="Search here..." type="text" pInputText size="50"
-                      (input)="dt?.filterGlobal($event.target.value, 'contains')" />
-                  </mat-form-field>
+                @if (!isGridPage) {
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input matInput placeholder="Search here..." type="text" pInputText size="50"
+                        (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                      </mat-form-field>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
-          </div>
-        </mat-card-header>
+          </mat-card-header>
 
-      </div>
+        </div>
 
 
-      <mat-card-content>
-        <div *ngIf="!isGridPage" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="row">
-          <div fxFlex="100%">
-            <p-table #dt [resizableColumns]="true" [reorderableColumns]="true" [columns]="filedname"
-              [value]="screenPermissionDetail" [scrollable]="true">
-              <ng-template pTemplate="colgroup" let-columns>
-                <colgroup>
-                  <col style="width: 100px;" /> <!-- For action -->
-                  <col *ngFor="let col of columns" style="min-width: 200px;" />
-                </colgroup>
-              </ng-template>
-              <ng-template pTemplate="header" let-columns>
-                <tr>
-                  <th class="action"> Action </th>
-                  <th *ngFor="let col of columns" [ngSwitch]="col.field" pReorderableColumn pResizableColumn>
-                    <span [pSortableColumn]="col.field">
-                      <div class="thname"> {{col.header}} </div>
-                      <p-sortIcon *ngIf="col.field !== 'Actions'" [field]="col.field" ariaLabel="Activate to sort"
-                        ariaLabelDesc="Activate to sort in descending order"
-                        ariaLabelAsc="Activate to sort in ascending order">
-                      </p-sortIcon>
-                    </span>
-                    <span class="ico-fieldsearch">
-                      <i *ngSwitchCase="'roleName'" class="icon-search2" (click)='roleNameCtrlTrigger.openMenu()'></i>
-                      <i *ngSwitchCase="'applicationName'" class="icon-search2"
-                        (click)='applicationNameCtrlTrigger.openMenu()'></i>
-                    </span>
-
-                    <span *ngSwitchCase="'roleName'">
-                      <div matTooltip="RoleName" matTooltipClass="accent-tooltip" #roleNameCtrlTrigger="matMenuTrigger"
-                        [matMenuTriggerFor]="roleNameCtrl" fxLayout="row" fxLayoutAlign="space-between center"
-                        class="txtborder-bot">
-                      </div>
-                      <mat-menu #roleNameCtrl class="pos-top">
-                        <div fxLayout="row">
-                          <div fxFlex="100%" class="p-10 tbl-fillddl">
-                            <mat-form-field (click)="$event.stopPropagation()">
-                              <input type="text" #roleNameCtl matInput [matAutocomplete]="autoRoleName"
-                                placeholder="RoleName" autocomplete="off" role="presentation"
-                                (click)="roleNameCtl.select()" [formControl]="roleNameControl"
-                                (change)="dt.filter($event.target.value, col.field, 'contains')"
-                                (blur)="dt.filter($event.target.value, col.field, 'contains')"
-                                (focusin)="dt.filter($event.target.value, col.field, 'contains')"
-                                (keyup)="dt.filter($event.target.value, col.field, 'contains')">
-                            </mat-form-field>
-                            <mat-autocomplete #autoRoleName="matAutocomplete">
-                              <mat-option (onSelectionChange)="roleNameCtrlTrigger.closeMenu();"
-                                *ngFor="let option of roleNameFilteredOptions | async" [value]="option"> <span
-                                  [innerHTML]="option"></span>
-                              </mat-option>
-                            </mat-autocomplete>
-                          </div>
-                        </div>
-                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
-                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
-                            <a *ngIf='roleNameCtl.value'
-                              (click)="dt.filter('', col.field, 'contains');roleNameCtl.value='';roleNameControl.setValue('')"
-                              class="text-sm">Reset</a> </div>
-                        </div>
-                      </mat-menu>
-                    </span>
-
-                    <span *ngSwitchCase="'applicationName'">
-                      <div matTooltip="Application Name" matTooltipClass="accent-tooltip"
-                        #applicationNameCtrlTrigger="matMenuTrigger" [matMenuTriggerFor]="applicationNameCtrl"
-                        fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot">
-                      </div>
-                      <mat-menu #applicationNameCtrl class="pos-top">
-                        <div fxLayout="row">
-                          <div fxFlex="100%" class="p-10 tbl-fillddl">
-                            <mat-form-field (click)="$event.stopPropagation()">
-                              <input type="text" #applicationNameCtl matInput [matAutocomplete]="autodepartDesc"
-                                placeholder="Application Name" autocomplete="off" role="presentation"
-                                (click)="applicationNameCtl.select()" [formControl]="applicationNameControl"
-                                (change)="dt.filter($event.target.value, col.field, 'contains')"
-                                (blur)="dt.filter($event.target.value, col.field, 'contains')"
-                                (focusin)="dt.filter($event.target.value, col.field, 'contains')"
-                                (keyup)="dt.filter($event.target.value, col.field, 'contains')">
-                            </mat-form-field>
-                            <mat-autocomplete #autodepartDesc="matAutocomplete">
-                              <mat-option (onSelectionChange)="applicationNameCtrlTrigger.closeMenu();"
-                                *ngFor="let option of applicationNameFilteredOptions | async" [value]="option"> <span
-                                  [innerHTML]="option"></span>
-                              </mat-option>
-                            </mat-autocomplete>
-                          </div>
-                        </div>
-                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
-                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
-                            <a *ngIf='applicationNameCtl.value'
-                              (click)="dt.filter('', col.field, 'contains');applicationNameCtl.value='';applicationNameControl.setValue('')"
-                              class="text-sm">Reset</a> </div>
-                        </div>
-                      </mat-menu>
-                    </span>
-                  </th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr>
-                  <td class="action desg-bg">
-                    <div fxLayout="row" class="tbl-icon">
-                      <div fxFlex="100%" fxLayoutGap="10px">
-                        <mat-icon [ngClass]="screenAuth.editFlag===false?'page-btn disabled':''">
-                          <i class="material-icons material-icons-outlined"
+        <mat-card-content>
+          @if (!isGridPage) {
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="row">
+              <div fxFlex="100%">
+                <p-table #dt [resizableColumns]="true" [reorderableColumns]="true" [columns]="filedname"
+                  [value]="screenPermissionDetail" [scrollable]="true">
+                  <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                    <col style="width: 100px;" /> <!-- For action -->
+                    @for (col of columns; track col) {
+                      <col style="min-width: 200px;" />
+                    }
+                  </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th class="action"> Action </th>
+                    @for (col of columns; track col) {
+                      <th pReorderableColumn pResizableColumn>
+                        <span [pSortableColumn]="col.field">
+                          <div class="thname"> {{col.header}} </div>
+                          @if (col.field !== 'Actions') {
+                            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                              ariaLabelDesc="Activate to sort in descending order"
+                              ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                          }
+                        </span>
+                        <span class="ico-fieldsearch">
+                          @if (col.field === 'roleName') {
+                            <i class="icon-search2" (click)='roleNameCtrlTrigger.openMenu()'></i>
+                          }
+                          @if (col.field === 'applicationName') {
+                            <i class="icon-search2"
+                            (click)='applicationNameCtrlTrigger.openMenu()'></i>
+                          }
+                        </span>
+                        @if (col.field === 'roleName') {
+                          <span>
+                            <div matTooltip="RoleName" matTooltipClass="accent-tooltip" #roleNameCtrlTrigger="matMenuTrigger"
+                              [matMenuTriggerFor]="roleNameCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                              class="txtborder-bot">
+                            </div>
+                            <mat-menu #roleNameCtrl class="pos-top">
+                              <div fxLayout="row">
+                                <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                  <mat-form-field (click)="$event.stopPropagation()">
+                                    <input type="text" #roleNameCtl matInput [matAutocomplete]="autoRoleName"
+                                      placeholder="RoleName" autocomplete="off" role="presentation"
+                                      (click)="roleNameCtl.select()" [formControl]="roleNameControl"
+                                      (change)="dt.filter($event.target.value, col.field, 'contains')"
+                                      (blur)="dt.filter($event.target.value, col.field, 'contains')"
+                                      (focusin)="dt.filter($event.target.value, col.field, 'contains')"
+                                      (keyup)="dt.filter($event.target.value, col.field, 'contains')">
+                                    </mat-form-field>
+                                    <mat-autocomplete #autoRoleName="matAutocomplete">
+                                      @for (option of roleNameFilteredOptions | async; track option) {
+                                        <mat-option (onSelectionChange)="roleNameCtrlTrigger.closeMenu();"
+                                          [value]="option"> <span
+                                        [innerHTML]="option"></span>
+                                      </mat-option>
+                                    }
+                                  </mat-autocomplete>
+                                </div>
+                              </div>
+                              <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                                <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                                @if (roleNameCtl.value) {
+                                  <a
+                                    (click)="dt.filter('', col.field, 'contains');roleNameCtl.value='';roleNameControl.setValue('')"
+                                  class="text-sm">Reset</a>
+                                } </div>
+                              </div>
+                            </mat-menu>
+                          </span>
+                        }
+                        @if (col.field === 'applicationName') {
+                          <span>
+                            <div matTooltip="Application Name" matTooltipClass="accent-tooltip"
+                              #applicationNameCtrlTrigger="matMenuTrigger" [matMenuTriggerFor]="applicationNameCtrl"
+                              fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot">
+                            </div>
+                            <mat-menu #applicationNameCtrl class="pos-top">
+                              <div fxLayout="row">
+                                <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                  <mat-form-field (click)="$event.stopPropagation()">
+                                    <input type="text" #applicationNameCtl matInput [matAutocomplete]="autodepartDesc"
+                                      placeholder="Application Name" autocomplete="off" role="presentation"
+                                      (click)="applicationNameCtl.select()" [formControl]="applicationNameControl"
+                                      (change)="dt.filter($event.target.value, col.field, 'contains')"
+                                      (blur)="dt.filter($event.target.value, col.field, 'contains')"
+                                      (focusin)="dt.filter($event.target.value, col.field, 'contains')"
+                                      (keyup)="dt.filter($event.target.value, col.field, 'contains')">
+                                    </mat-form-field>
+                                    <mat-autocomplete #autodepartDesc="matAutocomplete">
+                                      @for (option of applicationNameFilteredOptions | async; track option) {
+                                        <mat-option (onSelectionChange)="applicationNameCtrlTrigger.closeMenu();"
+                                          [value]="option"> <span
+                                        [innerHTML]="option"></span>
+                                      </mat-option>
+                                    }
+                                  </mat-autocomplete>
+                                </div>
+                              </div>
+                              <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                                <div fxFlex="100%" class="text-right" fxLayoutGap="15px"> <a class="text-sm">Cancel</a>
+                                @if (applicationNameCtl.value) {
+                                  <a
+                                    (click)="dt.filter('', col.field, 'contains');applicationNameCtl.value='';applicationNameControl.setValue('')"
+                                  class="text-sm">Reset</a>
+                                } </div>
+                              </div>
+                            </mat-menu>
+                          </span>
+                        }
+                      </th>
+                    }
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr>
+                    <td class="action desg-bg">
+                      <div fxLayout="row" class="tbl-icon">
+                        <div fxFlex="100%" fxLayoutGap="10px">
+                          <mat-icon [ngClass]="screenAuth.editFlag===false?'page-btn disabled':''">
+                            <i class="material-icons material-icons-outlined"
                             (click)="roleChange(rowData.roleId)">edit</i>
-                        </mat-icon>
+                          </mat-icon>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td *ngFor="let col of columns">{{ rowData[col.field] }}</td>
-                </tr>
-              </ng-template>
-              <!-- <ng-template pTemplate="emptymessage" *ngIf="screenPermissionDetail.length == 0">
-                  <div fxLayout="row">
-                    <div fxFlex="100%" class="pt-15">
-                      <div class="no-record text-center">
-                        <span>No Record Found</span>
-                      </div>
+                    </td>
+                    @for (col of columns; track col) {
+                      <td>{{ rowData[col.field] }}</td>
+                    }
+                  </tr>
+                </ng-template>
+                <!-- <ng-template pTemplate="emptymessage" *ngIf="screenPermissionDetail.length == 0">
+                <div fxLayout="row">
+                  <div fxFlex="100%" class="pt-15">
+                    <div class="no-record text-center">
+                      <span>No Record Found</span>
                     </div>
                   </div>
-                </ng-template> -->
+                </div>
+              </ng-template> -->
             </p-table>
           </div>
         </div>
+      }
 
-        <div *ngIf="isGridPage" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+      @if (isGridPage) {
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
           fxLayout.xs="column" fxLayoutGap="20px grid">
           <div fxFlex="100%">
             <form [formGroup]="rolePermissionFormGroup" id="ngForm" autocomplete="off">
-
               <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
                 fxLayoutGap="20px grid" class="d-none">
                 <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex="100%">
@@ -178,301 +204,381 @@
                       [matAutocomplete]="autoSystem" #systemInput (focus)="systemItems(systemInput.value)"
                       (keyup)="systemKeyupFunction($event, systemInput.value)" (input)="systemItems(systemInput.value)"
                       (click)="systemInput.select()" />
-                    <mat-error *ngIf="
-                          !!rolePermissionFormGroup.get('applicationTypeControl')
-                            ?.errors?.required
-                        "> System is required. </mat-error>
+                      @if (
+                        !!rolePermissionFormGroup.get('applicationTypeControl')
+                        ?.errors?.required
+                        ) {
+                        <mat-error> System is required. </mat-error>
+                      }
                     <mat-autocomplete (optionSelected)="
                           getUserTypeByApplicationId($event.option.value);
                           getScreenPermission()
                         " #autoSystem="matAutocomplete" [displayWith]="displaySystemFn">
-                      <mat-option [value]="sys.applicationId" *ngFor="let sys of systemfilterlist"
-                        class="autocom-option autocom-tr"> <span [innerHTML]="sys.applicationName"></span> </mat-option>
-                      <mat-option *ngIf="systemfilterlist.length == 0">
-                        <div class="no-record"><span>No Data Found</span></div>
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </div>
-              </div>
-
-
-              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-                fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex="100%">
-                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
-                    <mat-label>User Type </mat-label>
-                    <input matInput placeholder="Select User Type" formControlName="userTypeControl"
-                      [matAutocomplete]="autoUserType" #userInput (focus)="userItems(userInput.value)"
-                      (keyup)="userKeyupFunction($event, userInput.value)" (input)="userItems(userInput.value)" required
-                      (click)="userInput.select()" />
-                    <mat-error *ngIf="
-            !!rolePermissionFormGroup.get('userTypeControl')?.errors
-              ?.required
-          "> User type is required. </mat-error>
+                        @for (sys of systemfilterlist; track sys) {
+                          <mat-option [value]="sys.applicationId"
+                            class="autocom-option autocom-tr"> <span [innerHTML]="sys.applicationName"></span> </mat-option>
+                          }
+                          @if (systemfilterlist.length == 0) {
+                            <mat-option>
+                              <div class="no-record"><span>No Data Found</span></div>
+                            </mat-option>
+                          }
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                    fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex="100%">
+                      <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                        <mat-label>User Type </mat-label>
+                        <input matInput placeholder="Select User Type" formControlName="userTypeControl"
+                          [matAutocomplete]="autoUserType" #userInput (focus)="userItems(userInput.value)"
+                          (keyup)="userKeyupFunction($event, userInput.value)" (input)="userItems(userInput.value)" required
+                          (click)="userInput.select()" />
+                          @if (
+                            !!rolePermissionFormGroup.get('userTypeControl')?.errors
+                            ?.required
+                            ) {
+                            <mat-error> User type is required. </mat-error>
+                          }
                     <mat-autocomplete (optionSelected)="
             setRoleAC('userTypeControl'); getScreenPermission()
           " #autoUserType="matAutocomplete" [displayWith]="displayUserFn">
-                      <mat-option [value]="user.lookUpId" *ngFor="let user of userTypefilterlist"
-                        class="autocom-option autocom-tr"> <span [innerHTML]="user.lookUpName"></span> </mat-option>
-                      <mat-option *ngIf="userTypefilterlist.length == 0">
-                        <div class="no-record"><span>No Data Found</span></div>
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                  <!--  readonly='headerName === "Edit Roles"' -->
-                </div>
-                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex="100%"
-                  *ngIf="systemId !== 2">
-                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
-                    <mat-label>Department Name</mat-label>
-                    <!-- readonly="this.rolePermissionFormGroup.controls['applicationTypeControl'].value ===2" -->
-                    <input matInput placeholder="Select Department Name" formControlName="deptTypeControl"
-                      [matAutocomplete]="deptUserType" #deptInput (focus)="deptItems(deptInput.value)"
-                      (keyup)="deptKeyupFunction($event, deptInput.value)" (input)="deptItems(deptInput.value)" required
-                      (click)="deptInput.select()" />
-                    <mat-error *ngIf="
-                        !!rolePermissionFormGroup.get('deptTypeControl')?.errors
-                          ?.required
-                      "> Dept type is required field. </mat-error>
+                            @for (user of userTypefilterlist; track user) {
+                              <mat-option [value]="user.lookUpId"
+                                class="autocom-option autocom-tr"> <span [innerHTML]="user.lookUpName"></span> </mat-option>
+                              }
+                              @if (userTypefilterlist.length == 0) {
+                                <mat-option>
+                                  <div class="no-record"><span>No Data Found</span></div>
+                                </mat-option>
+                              }
+                            </mat-autocomplete>
+                          </mat-form-field>
+                          <!--  readonly='headerName === "Edit Roles"' -->
+                        </div>
+                        @if (systemId !== 2) {
+                          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="50%" fxFlex="100%"
+                            >
+                            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                              <mat-label>Department Name</mat-label>
+                              <!-- readonly="this.rolePermissionFormGroup.controls['applicationTypeControl'].value ===2" -->
+                              <input matInput placeholder="Select Department Name" formControlName="deptTypeControl"
+                                [matAutocomplete]="deptUserType" #deptInput (focus)="deptItems(deptInput.value)"
+                                (keyup)="deptKeyupFunction($event, deptInput.value)" (input)="deptItems(deptInput.value)" required
+                                (click)="deptInput.select()" />
+                                @if (
+                                  !!rolePermissionFormGroup.get('deptTypeControl')?.errors
+                                  ?.required
+                                  ) {
+                                  <mat-error> Dept type is required field. </mat-error>
+                                }
                     <mat-autocomplete (optionSelected)="
                         setRoleAC('deptTypeControl'); getScreenPermission()
                       " #deptUserType="matAutocomplete" [displayWith]="displayDeptFn">
-                      <mat-option [value]="dept.departmentId" *ngFor="let dept of deptTypefilterlist"
-                        class="autocom-option autocom-tr"> <span [innerHTML]="dept.departmentName"></span> </mat-option>
-                      <mat-option *ngIf="deptTypefilterlist.length == 0">
-                        <div class="no-record"><span>No Data Found</span></div>
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <div *ngIf='roleNameLabel' fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                fxLayout.xs="column">
-                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex="100%">
-                  <h3 class="sub-header">Role - {{ roleNameLabel }}</h3>
-                </div>
-              </div>
-
-            </form>
-          </div>
-        </div>
-        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" *ngIf="
-                (systemId === 2 &&
-                  rolePermissionFormGroup?.controls?.['applicationTypeControl']
+                                  @for (dept of deptTypefilterlist; track dept) {
+                                    <mat-option [value]="dept.departmentId"
+                                      class="autocom-option autocom-tr"> <span [innerHTML]="dept.departmentName"></span> </mat-option>
+                                    }
+                                    @if (deptTypefilterlist.length == 0) {
+                                      <mat-option>
+                                        <div class="no-record"><span>No Data Found</span></div>
+                                      </mat-option>
+                                    }
+                                  </mat-autocomplete>
+                                </mat-form-field>
+                              </div>
+                            }
+                          </div>
+                          @if (roleNameLabel) {
+                            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                              fxLayout.xs="column">
+                              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex="100%">
+                                <h3 class="sub-header">Role - {{ roleNameLabel }}</h3>
+                              </div>
+                            </div>
+                          }
+                        </form>
+                      </div>
+                    </div>
+                  }
+                  @if (
+                    (systemId === 2 &&
+                    rolePermissionFormGroup?.controls?.['applicationTypeControl']
                     ?.value) ||
-                (rolePermissionFormGroup?.controls?.['userTypeControl']?.value &&
-                  rolePermissionFormGroup?.controls?.['applicationTypeControl']
+                    (rolePermissionFormGroup?.controls?.['userTypeControl']?.value &&
+                    rolePermissionFormGroup?.controls?.['applicationTypeControl']
                     ?.value &&
-                  rolePermissionFormGroup?.controls?.['deptTypeControl']?.value)
-              ">
-
-          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex="100%"
-            *ngIf="screenModuleList.length > 0">
-            <p-table [columns]="modulecols" [value]="screenModuleList" dataKey="moduleName" class="tree-tbl"
-              [responsive]="true">
-              <ng-template pTemplate="header" let-columns>
-                <tr>
-                  <th style="width: 3em"></th>
-                  <th *ngFor="let col of columns"> {{ col.header }} </th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-moduleRowData let-expanded="expanded" let-columns="columns">
-                <tr>
-                  <td>
+                    rolePermissionFormGroup?.controls?.['deptTypeControl']?.value)
+                    ) {
+                    <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+                      @if (screenModuleList.length > 0) {
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex="100%"
+                          >
+                          <p-table [columns]="modulecols" [value]="screenModuleList" dataKey="moduleName" class="tree-tbl"
+                            [responsive]="true">
+                            <ng-template pTemplate="header" let-columns>
+                              <tr>
+                                <th style="width: 3em"></th>
+                                @for (col of columns; track col) {
+                                  <th> {{ col.header }} </th>
+                                }
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-moduleRowData let-expanded="expanded" let-columns="columns">
+                              <tr>
+                                <td>
                     <a href="#" [pRowToggler]="moduleRowData"> <i [ngClass]="
                                 expanded
                                   ? 'icon-chevron-down'
                                   : 'icon-chevron-right'
                               "></i> </a></td>
-                  <!-- <td *ngIf='moduleRowData.subModule.length > 0 || moduleRowData.screen.length > 0'>
-                            <a href="#" [pRowToggler]="moduleRowData">
-                              <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-up'"></i>
-                            </a>
-                          </td> -->
-                  <!-- <td *ngIf='moduleRowData.subModule.length === 0 || moduleRowData.screen.length === 0'></td> -->
-                  <td *ngFor="let col of columns"><span *ngIf="col.field === 'moduleName'">{{
-                          moduleRowData[col.field]
-                          }}</span></td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="rowexpansion" let-moduleRowData let-columns="columns">
-                <tr>
-                  <td [attr.colspan]="columns.length + 1">
-                    <div class="p-grid p-fluid">
-                      <!-- {{moduleRowData | json}} -->
-                      <p-table [columns]="screenModulecols" [value]="moduleRowData.screen" class="inn-table"
-                        [responsive]="true">
-                        <ng-template pTemplate="header" let-columns>
-                <tr>
-                  <th *ngFor="let col of columns">
-                    <span *ngIf='col.field !== "ScreenName"'>
-                      <mat-checkbox (change)="screenHrChg($event,moduleRowData.screen,col.field)"
-                        [(ngModel)]="moduleRowData[col.field]" *ngIf='col.field !== "ScreenName"'>{{ col.header }}
-                      </mat-checkbox>
-                    </span>
-                    <span *ngIf='col.field === "ScreenName"'>{{ col.header }} </span>
-                  </th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-screenRowData let-columns="columns">
-                <tr>
-                  <td *ngFor="let col of columns"><span *ngIf="col.field === 'ScreenName'">{{
-                                                                  screenRowData[col.field]
-                                                                  }}</span>
-                    <!-- <mat-checkbox *ngIf='col.field !== "ScreenName"' (ngModelChange)="isTableChanged = true;"
-                                                          [(ngModel)]='screenRowData[col.field]'></mat-checkbox> -->
-                    <span *ngIf="col.field === 'addFlag'">
-                      <!-- screenRowData[col.field] -->
-                      <mat-checkbox [disabled]="screenRowData['disabledAdd']"
-                        (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
-                        [(ngModel)]="screenRowData[col.field]"></mat-checkbox>
-                    </span> <span *ngIf="col.field === 'viewFlag'">
-                      <mat-checkbox [disabled]="screenRowData['disabledView']"
-                        (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
-                        [(ngModel)]="screenRowData[col.field]"> </mat-checkbox>
-                    </span> <span *ngIf="col.field === 'editFlag'">
-                      <mat-checkbox [disabled]="screenRowData['disabledEdit']"
-                        (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
-                        [(ngModel)]="screenRowData[col.field]"> </mat-checkbox>
-                    </span> <span *ngIf="col.field === 'deleteFlag'">
-                      <mat-checkbox [disabled]="screenRowData['disabledDelete']"
-                        (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
-                        [(ngModel)]="screenRowData[col.field]"> </mat-checkbox>
-                    </span> <span *ngIf="col.field === 'approveFlag'">
-                      <mat-checkbox [disabled]="screenRowData['disabledApprove']"
-                        (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
-                        [(ngModel)]="screenRowData[col.field]">
-                      </mat-checkbox>
-                    </span>
-                    <span *ngIf="col.field === 'exportFlag'">
-                      <mat-checkbox [disabled]="screenRowData['disabledExport']"
-                        (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
-                        [(ngModel)]="screenRowData[col.field]">
-                      </mat-checkbox>
-                    </span>
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
-
-            <div *ngIf="moduleRowData?.subModule?.length > 0">
-              <!-- {{moduleRowData?.subModule | json}} -->
-              <p-table [columns]="subModulecols" [value]="moduleRowData.subModule" dataKey="SubModuleName"
-                [responsive]="true" class="inn-table">
-                <ng-template pTemplate="header" let-columns>
-                  <tr>
-                    <th style="width: 3em"></th>
-                    <th *ngFor="let col of columns">
-                      <!-- <mat-checkbox>{{ col.header }}</mat-checkbox> -->
-                    </th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-subModuleRowData let-expanded="expanded" let-columns="columns">
-                  <!-- {{subModuleRowData['SubModuleId']}} -->
-                  <tr>
-                    <td>
+                                  <!-- <td *ngIf='moduleRowData.subModule.length > 0 || moduleRowData.screen.length > 0'>
+                                  <a href="#" [pRowToggler]="moduleRowData">
+                                    <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-up'"></i>
+                                  </a>
+                                </td> -->
+                                <!-- <td *ngIf='moduleRowData.subModule.length === 0 || moduleRowData.screen.length === 0'></td> -->
+                                @for (col of columns; track col) {
+                                  <td>@if (col.field === 'moduleName') {
+                                    <span>{{
+                                      moduleRowData[col.field]
+                                    }}</span>
+                                  }</td>
+                                }
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="rowexpansion" let-moduleRowData let-columns="columns">
+                              <tr>
+                                <td [attr.colspan]="columns.length + 1">
+                                  <div class="p-grid p-fluid">
+                                    <!-- {{moduleRowData | json}} -->
+                                    <p-table [columns]="screenModulecols" [value]="moduleRowData.screen" class="inn-table"
+                                      [responsive]="true">
+                                      <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                          @for (col of columns; track col) {
+                                            <th>
+                                              @if (col.field !== "ScreenName") {
+                                                <span>
+                                                  @if (col.field !== "ScreenName") {
+                                                    <mat-checkbox (change)="screenHrChg($event,moduleRowData.screen,col.field)"
+                                                      [(ngModel)]="moduleRowData[col.field]">{{ col.header }}
+                                                    </mat-checkbox>
+                                                  }
+                                                </span>
+                                              }
+                                              @if (col.field === "ScreenName") {
+                                                <span>{{ col.header }} </span>
+                                              }
+                                            </th>
+                                          }
+                                        </tr>
+                                      </ng-template>
+                                      <ng-template pTemplate="body" let-screenRowData let-columns="columns">
+                                        <tr>
+                                          @for (col of columns; track col) {
+                                            <td>@if (col.field === 'ScreenName') {
+                                              <span>{{
+                                                screenRowData[col.field]
+                                              }}</span>
+                                            }
+                                            <!-- <mat-checkbox *ngIf='col.field !== "ScreenName"' (ngModelChange)="isTableChanged = true;"
+                                          [(ngModel)]='screenRowData[col.field]'></mat-checkbox> -->
+                                          @if (col.field === 'addFlag') {
+                                            <span>
+                                              <!-- screenRowData[col.field] -->
+                                              <mat-checkbox [disabled]="screenRowData['disabledAdd']"
+                                                (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
+                                              [(ngModel)]="screenRowData[col.field]"></mat-checkbox>
+                                            </span>
+                                            } @if (col.field === 'viewFlag') {
+                                            <span>
+                                              <mat-checkbox [disabled]="screenRowData['disabledView']"
+                                                (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
+                                              [(ngModel)]="screenRowData[col.field]"> </mat-checkbox>
+                                            </span>
+                                            } @if (col.field === 'editFlag') {
+                                            <span>
+                                              <mat-checkbox [disabled]="screenRowData['disabledEdit']"
+                                                (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
+                                              [(ngModel)]="screenRowData[col.field]"> </mat-checkbox>
+                                            </span>
+                                            } @if (col.field === 'deleteFlag') {
+                                            <span>
+                                              <mat-checkbox [disabled]="screenRowData['disabledDelete']"
+                                                (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
+                                              [(ngModel)]="screenRowData[col.field]"> </mat-checkbox>
+                                            </span>
+                                            } @if (col.field === 'approveFlag') {
+                                            <span>
+                                              <mat-checkbox [disabled]="screenRowData['disabledApprove']"
+                                                (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
+                                                [(ngModel)]="screenRowData[col.field]">
+                                              </mat-checkbox>
+                                            </span>
+                                          }
+                                          @if (col.field === 'exportFlag') {
+                                            <span>
+                                              <mat-checkbox [disabled]="screenRowData['disabledExport']"
+                                                (change)="screenHrUncheck(moduleRowData,moduleRowData?.screen ,col.field);isTableChanged = true"
+                                                [(ngModel)]="screenRowData[col.field]">
+                                              </mat-checkbox>
+                                            </span>
+                                          }
+                                        </td>
+                                      }
+                                    </tr>
+                                  </ng-template>
+                                </p-table>
+                                @if (moduleRowData?.subModule?.length > 0) {
+                                  <div>
+                                    <!-- {{moduleRowData?.subModule | json}} -->
+                                    <p-table [columns]="subModulecols" [value]="moduleRowData.subModule" dataKey="SubModuleName"
+                                      [responsive]="true" class="inn-table">
+                                      <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                          <th style="width: 3em"></th>
+                                          @for (col of columns; track col) {
+                                            <th>
+                                              <!-- <mat-checkbox>{{ col.header }}</mat-checkbox> -->
+                                            </th>
+                                          }
+                                        </tr>
+                                      </ng-template>
+                                      <ng-template pTemplate="body" let-subModuleRowData let-expanded="expanded" let-columns="columns">
+                                        <!-- {{subModuleRowData['SubModuleId']}} -->
+                                        <tr>
+                                          <td>
                       <a href="#" [pRowToggler]="subModuleRowData"> <i [ngClass]="
                                                                 expanded
                                                                   ? 'icon-chevron-down'
                                                                   : 'icon-chevron-right'
                                                               "></i> </a></td>
-                    <td *ngFor="let col of columns">
-                      <!-- {{subModuleRowData[col.field]}} -->
-                      <span *ngIf="col.field === 'SubModuleName'">{{ subModuleRowData[col.field] }}</span>
-                      <!-- <mat-checkbox *ngIf="col.field !== 'SubModuleName'" (ngModelChange)="isTableChanged = true"
+                                            @for (col of columns; track col) {
+                                              <td>
+                                                <!-- {{subModuleRowData[col.field]}} -->
+                                                @if (col.field === 'SubModuleName') {
+                                                  <span>{{ subModuleRowData[col.field] }}</span>
+                                                }
+                                                <!-- <mat-checkbox *ngIf="col.field !== 'SubModuleName'" (ngModelChange)="isTableChanged = true"
                                               [(ngModel)]="subModuleRowData[col.field]"></mat-checkbox> -->
-                    </td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="rowexpansion" let-screenRowData let-columns="columns">
-                  <tr>
-                    <td [attr.colspan]="columns.length + 1">
-                      <div class="p-grid p-fluid">
-                        <!-- {{screenRowData | json}} -->
-                        <p-table [columns]="screenModulecols" [value]="screenRowData.Screen" class="inn-table">
-                          <ng-template pTemplate="header" let-columns>
-                  <tr>
-                    <th *ngFor="let col of columns">
-                      <!-- <mat-checkbox *ngIf='col.field !== "ScreenName"'>
-                                            </mat-checkbox> -->
-                      <span *ngIf='col.field !== "ScreenName"'>
-                        <mat-checkbox (change)="screenHrChg($event,screenRowData.Screen,col.field)"
-                          [(ngModel)]="screenRowData[col.field]" *ngIf='col.field !== "ScreenName"'>
-                          {{ col.header }}
-                        </mat-checkbox>
-                      </span>
-                      <span *ngIf='col.field === "ScreenName"'>{{ col.header }}</span>
-
-                      <!-- <mat-checkbox *ngIf='col.field !== "ScreenName"'>
-                                            </mat-checkbox>
-                                            <span *ngIf='col.field === "ScreenName"'>{{ col.header }}</span> -->
-                    </th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-subModuleScreenRowData let-columns="columns">
-                  <tr>
-                    <td *ngFor="let col of columns">
-                      <!-- {{screenRowData[col.field]}} -->
-                      <span *ngIf="col.field === 'ScreenName'">{{ subModuleScreenRowData[col.field] }}</span>
-                      <span *ngIf="col.field === 'addFlag'">
-                        <mat-checkbox [disabled]="subModuleScreenRowData['disabledAdd']"
-                          (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
-                          [(ngModel)]="subModuleScreenRowData[col.field]">
-                        </mat-checkbox>
-                      </span> <span *ngIf="col.field === 'viewFlag'">
-                        <mat-checkbox [disabled]="subModuleScreenRowData['DisabledView']"
-                          (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
-                          [(ngModel)]="subModuleScreenRowData[col.field]">
-                        </mat-checkbox>
-                      </span> <span *ngIf="col.field === 'editFlag'">
-                        <mat-checkbox [disabled]="subModuleScreenRowData['disabledEdit']"
-                          (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
-                          [(ngModel)]="subModuleScreenRowData[col.field]">
-                        </mat-checkbox>
-                      </span> <span *ngIf="col.field === 'deleteFlag'">
-                        <mat-checkbox [disabled]="subModuleScreenRowData['disabledDelete']"
-                          (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
-                          [(ngModel)]="subModuleScreenRowData[col.field]">
-                        </mat-checkbox>
-                      </span> <span *ngIf="col.field === 'approveFlag'">
-                        <mat-checkbox [disabled]="subModuleScreenRowData['disabledApprove']"
-                          (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
-                          [(ngModel)]="subModuleScreenRowData[col.field]">
-                        </mat-checkbox>
-                      </span>
-                    
-                    <span *ngIf="col.field === 'exportFlag'">
-                      <mat-checkbox [disabled]="subModuleScreenRowData['disabledExport']"
-                        (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
-                        [(ngModel)]="subModuleScreenRowData[col.field]">
-                      </mat-checkbox>
-                    </span>
-                      <!-- <mat-checkbox *ngIf='col.field !== "ScreenName"' (ngModelChange)="isTableChanged = true;"
+                                            </td>
+                                          }
+                                        </tr>
+                                      </ng-template>
+                                      <ng-template pTemplate="rowexpansion" let-screenRowData let-columns="columns">
+                                        <tr>
+                                          <td [attr.colspan]="columns.length + 1">
+                                            <div class="p-grid p-fluid">
+                                              <!-- {{screenRowData | json}} -->
+                                              <p-table [columns]="screenModulecols" [value]="screenRowData.Screen" class="inn-table">
+                                                <ng-template pTemplate="header" let-columns>
+                                                  <tr>
+                                                    @for (col of columns; track col) {
+                                                      <th>
+                                                        <!-- <mat-checkbox *ngIf='col.field !== "ScreenName"'>
+                                                      </mat-checkbox> -->
+                                                      @if (col.field !== "ScreenName") {
+                                                        <span>
+                                                          @if (col.field !== "ScreenName") {
+                                                            <mat-checkbox (change)="screenHrChg($event,screenRowData.Screen,col.field)"
+                                                              [(ngModel)]="screenRowData[col.field]">
+                                                              {{ col.header }}
+                                                            </mat-checkbox>
+                                                          }
+                                                        </span>
+                                                      }
+                                                      @if (col.field === "ScreenName") {
+                                                        <span>{{ col.header }}</span>
+                                                      }
+                                                      <!-- <mat-checkbox *ngIf='col.field !== "ScreenName"'>
+                                                    </mat-checkbox>
+                                                    <span *ngIf='col.field === "ScreenName"'>{{ col.header }}</span> -->
+                                                  </th>
+                                                }
+                                              </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-subModuleScreenRowData let-columns="columns">
+                                              <tr>
+                                                @for (col of columns; track col) {
+                                                  <td>
+                                                    <!-- {{screenRowData[col.field]}} -->
+                                                    @if (col.field === 'ScreenName') {
+                                                      <span>{{ subModuleScreenRowData[col.field] }}</span>
+                                                    }
+                                                    @if (col.field === 'addFlag') {
+                                                      <span>
+                                                        <mat-checkbox [disabled]="subModuleScreenRowData['disabledAdd']"
+                                                          (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
+                                                          [(ngModel)]="subModuleScreenRowData[col.field]">
+                                                        </mat-checkbox>
+                                                      </span>
+                                                      } @if (col.field === 'viewFlag') {
+                                                      <span>
+                                                        <mat-checkbox [disabled]="subModuleScreenRowData['DisabledView']"
+                                                          (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
+                                                          [(ngModel)]="subModuleScreenRowData[col.field]">
+                                                        </mat-checkbox>
+                                                      </span>
+                                                      } @if (col.field === 'editFlag') {
+                                                      <span>
+                                                        <mat-checkbox [disabled]="subModuleScreenRowData['disabledEdit']"
+                                                          (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
+                                                          [(ngModel)]="subModuleScreenRowData[col.field]">
+                                                        </mat-checkbox>
+                                                      </span>
+                                                      } @if (col.field === 'deleteFlag') {
+                                                      <span>
+                                                        <mat-checkbox [disabled]="subModuleScreenRowData['disabledDelete']"
+                                                          (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
+                                                          [(ngModel)]="subModuleScreenRowData[col.field]">
+                                                        </mat-checkbox>
+                                                      </span>
+                                                      } @if (col.field === 'approveFlag') {
+                                                      <span>
+                                                        <mat-checkbox [disabled]="subModuleScreenRowData['disabledApprove']"
+                                                          (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
+                                                          [(ngModel)]="subModuleScreenRowData[col.field]">
+                                                        </mat-checkbox>
+                                                      </span>
+                                                    }
+                                                    @if (col.field === 'exportFlag') {
+                                                      <span>
+                                                        <mat-checkbox [disabled]="subModuleScreenRowData['disabledExport']"
+                                                          (change)="screenHrUncheck(screenRowData,screenRowData.Screen,col.field);isTableChanged = true"
+                                                          [(ngModel)]="subModuleScreenRowData[col.field]">
+                                                        </mat-checkbox>
+                                                      </span>
+                                                    }
+                                                    <!-- <mat-checkbox *ngIf='col.field !== "ScreenName"' (ngModelChange)="isTableChanged = true;"
                                                     [(ngModel)]='screenRowData[col.field]'>
                                                   </mat-checkbox> -->
-                    </td>
-                  </tr>
-                </ng-template>
-              </p-table>
-            </div>
-            </td>
-            </tr>
-            </ng-template>
-            </p-table>
+                                                </td>
+                                              }
+                                            </tr>
+                                          </ng-template>
+                                        </p-table>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </ng-template>
+                              </p-table>
+                            </div>
+                          }
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            }
           </div>
-        </div>
-        </td>
-        </tr>
-        </ng-template>
-        </p-table>
+        }
+        <!-- {{screenModuleList | json}}  -->
+
+      </mat-card-content>
+    </mat-card>
   </div>
-
-</div>
-<!-- {{screenModuleList | json}}  -->
-
-</mat-card-content>
-</mat-card>
-</div>
 </div>

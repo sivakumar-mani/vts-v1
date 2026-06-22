@@ -32,6 +32,7 @@ export class DepartmentComponentsComponent implements OnInit {
   filteredOptions: Observable<ComponentType[]>;
   departmentName = new UntypedFormControl();
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'departmentName', header: 'Department Name' },
     { field: 'component', header: 'Component Names' },
     // { field: 'Actions', header: 'Action' },

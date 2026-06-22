@@ -1,7 +1,7 @@
 ﻿<app-breadcrumb [btnAdd]="breadcrumbFlag.btnAdd" [btnSave]="breadcrumbFlag.btnSave" [btnBack]="breadcrumbFlag.btnBack"
   [btnReset]="breadcrumbFlag.btnReset" [btnResetTbl]="breadcrumbFlag.btnResetTbl" (eventAdd)="openForm();"
   [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag" (eventBack)="closeForm()" (eventSave)="addDepartment()"
-  [toolTip]="breadcrumbFlag.toolTip" (eventReset)="resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
+[toolTip]="breadcrumbFlag.toolTip" (eventReset)="resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
 <div fxLayout="row">
   <div fxFlex="100%">
     <mat-card>
@@ -19,150 +19,151 @@
               <span fxFlex></span>
               <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
                 fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                <div class="tbl-commonsearch" *ngIf="dispalyTable">
-                  <mat-form-field fxFlex="100%">
-                    <mat-label></mat-label>
-                    <mat-icon matPrefix>search</mat-icon>
-                    <input matInput placeholder="Search here..." type="text" pInputText size="50"
-                      (input)="dt?.filterGlobal($event.target.value, 'contains')" />
-                  </mat-form-field>
+                @if (dispalyTable) {
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix>search</mat-icon>
+                      <input matInput placeholder="Search here..." type="text" pInputText size="50"
+                        (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                      </mat-form-field>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
-          </div>
-        </mat-card-header>
-      </div>
-
-      <mat-card-content>
-        <div *ngIf="dispalyTable" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
-          fxLayout.xs="column">
-          <div fxFlex="100%">
-           <p-table
-  #dt
-  [columns]="displayedColumns"
-  [value]="deptList"
-  [scrollable]="true"
-  scrollHeight=""
-  [resizableColumns]="true"
-  [paginator]="true"
-  [rows]="10"
-  [reorderableColumns]="true"
-  frozenWidth="100px"
-  [frozenColumns]="frozenCols">
-
-  <!-- ===== COLGROUP ===== -->
-  <ng-template pTemplate="colgroup" let-colGroupCols>
-    <colgroup>
-      <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-    </colgroup>
-  </ng-template>
-
-  <!-- ===== HEADER ===== -->
-  <ng-template pTemplate="header" let-headerCols>
-    <tr>
-      <th *ngFor="let col of headerCols"
-          [ngSwitch]="col.field"
-          pReorderableColumn
-          pResizableColumn>
-
-        <span [pSortableColumn]="col.field">
-          <div class="thname">{{ col.header }}</div>
-
-          <p-sortIcon
-            *ngIf="col.field !== 'action'"
-            [field]="col.field"
-            ariaLabel="Activate to sort"
-            ariaLabelDesc="Activate to sort in descending order"
-            ariaLabelAsc="Activate to sort in ascending order">
-          </p-sortIcon>
-        </span>
-
-        <!-- 🔍 search menus unchanged -->
-
-      </th>
-    </tr>
-  </ng-template>
-
-  <!-- ===== BODY ===== -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-index="rowIndex"
-    let-bodyCols="columns">
-
-    <tr [pReorderableRow]="index">
-
-      <td *ngFor="let col of bodyCols"
-          [ngClass]="{ 'desg-bg': col.field === 'action' }">
-
-        <span *ngIf="col.field !== 'active' && col.field !== 'action'">
-          {{ rowData[col.field] }}
-        </span>
-
-        <!-- ACTIVE -->
-        <span *ngIf="col.field === 'active'">
-          <div fxLayout="row" class="tbl-icon">
-            <span *ngIf="rowData.active" class="istrue">
-              <i matTooltip="Active" class="material-icons">thumb_up</i>
-            </span>
-            <span *ngIf="!rowData.active" class="isfalse">
-              <i matTooltip="In-Active" class="material-icons">thumb_down</i>
-            </span>
-          </div>
-        </span>
-
-        <!-- ACTION -->
-        <div *ngIf="col.field === 'action'" fxLayout="row" class="desg-icon">
-          <div fxFlex="100%" fxLayoutGap="10px">
-
-            <mat-icon
-              [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
-              <i class="material-icons-outlined"
-                 (click)="getDepartmentsById(rowData.departId)">
-                edit
-              </i>
-            </mat-icon>
-
-            <mat-icon>
-              <i class="material-icons-outlined"
-                 matTooltip="View"
-                 matTooltipClass="accent-tooltip"
-                 (click)="viewDetail(rowData.departId)">
-                remove_red_eye
-              </i>
-            </mat-icon>
-
-          </div>
+          </mat-card-header>
         </div>
 
-      </td>
-    </tr>
-  </ng-template>
-
-  <!-- ===== EMPTY MESSAGE ===== -->
-  <ng-template pTemplate="emptymessage" let-emptyCols="columns">
-    <tr>
-      <td [attr.colspan]="dt.columns.length + 1">
-        <div class="no-record text-center">
-          <span>No Record Found</span>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-
-</p-table>
-            <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid"
-              [ngClass]="{'empty-record': deptList.length == 0}">
-              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="start center"> Showing {{ dt.totalRecords
-          < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
-          <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of
-                {{ dt.totalRecords }}
+        <mat-card-content>
+          @if (dispalyTable) {
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+              fxLayout.xs="column">
+              <div fxFlex="100%">
+                <p-table
+                  #dt
+                  [columns]="displayedColumns"
+                  [value]="deptList"
+                  [scrollable]="true"
+                  scrollHeight=""
+                  [resizableColumns]="true"
+                  [paginator]="true"
+                  [rows]="10"
+                  [reorderableColumns]="true"
+                  frozenWidth="100px"
+                  [frozenColumns]="frozenCols">
+                  <!-- ===== COLGROUP ===== -->
+                  <ng-template pTemplate="colgroup" let-colGroupCols>
+                    <colgroup>
+                    @for (col of colGroupCols; track col) {
+                      <col style="min-width:200px" />
+                    }
+                  </colgroup>
+                </ng-template>
+                <!-- ===== HEADER ===== -->
+                <ng-template pTemplate="header" let-headerCols>
+                  <tr>
+                    @for (col of headerCols; track col) {
+                      <th
+                        pReorderableColumn
+                        pResizableColumn>
+                        <span [pSortableColumn]="col.field">
+                          <div class="thname">{{ col.header }}</div>
+                          @if (col.field !== 'action') {
+                            <p-sortIcon
+                              [field]="col.field"
+                              ariaLabel="Activate to sort"
+                              ariaLabelDesc="Activate to sort in descending order"
+                              ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                          }
+                        </span>
+                        <!-- 🔍 search menus unchanged -->
+                      </th>
+                    }
+                  </tr>
+                </ng-template>
+                <!-- ===== BODY ===== -->
+                <ng-template
+                  pTemplate="body"
+                  let-rowData
+                  let-index="rowIndex"
+                  let-bodyCols="columns">
+                  <tr [pReorderableRow]="index">
+                    @for (col of bodyCols; track col) {
+                      <td
+                        [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                        @if (col.field !== 'active' && col.field !== 'action') {
+                          <span>
+                            {{ rowData[col.field] }}
+                          </span>
+                        }
+                        <!-- ACTIVE -->
+                        @if (col.field === 'active') {
+                          <span>
+                            <div fxLayout="row" class="tbl-icon">
+                              @if (rowData.active) {
+                                <span class="istrue">
+                                  <i matTooltip="Active" class="material-icons">thumb_up</i>
+                                </span>
+                              }
+                              @if (!rowData.active) {
+                                <span class="isfalse">
+                                  <i matTooltip="In-Active" class="material-icons">thumb_down</i>
+                                </span>
+                              }
+                            </div>
+                          </span>
+                        }
+                        <!-- ACTION -->
+                        @if (col.field === 'action') {
+                          <div fxLayout="row" class="desg-icon">
+                            <div fxFlex="100%" fxLayoutGap="10px">
+                              <mat-icon
+                                [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                                <i class="material-icons-outlined"
+                                  (click)="getDepartmentsById(rowData.departId)">
+                                  edit
+                                </i>
+                              </mat-icon>
+                              <mat-icon>
+                                <i class="material-icons-outlined"
+                                  matTooltip="View"
+                                  matTooltipClass="accent-tooltip"
+                                  (click)="viewDetail(rowData.departId)">
+                                  remove_red_eye
+                                </i>
+                              </mat-icon>
+                            </div>
+                          </div>
+                        }
+                      </td>
+                    }
+                  </tr>
+                </ng-template>
+                <!-- ===== EMPTY MESSAGE ===== -->
+                <ng-template pTemplate="emptymessage" let-emptyCols="columns">
+                  <tr>
+                    <td [attr.colspan]="dt.columns.length + 1">
+                      <div class="no-record text-center">
+                        <span>No Record Found</span>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid"
+                [ngClass]="{'empty-record': deptList.length == 0}">
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center"> Showing {{ dt.totalRecords
+                  < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                  <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of
+                  {{ dt.totalRecords }}
                 record(s) </div>
-              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                fxLayoutAlign.xs="start center"> <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'"
+                <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                  fxLayoutAlign.xs="start center"> <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'"
                   (click)="
                                         dt.onPageChange({
                                           first: dt.first - dt.rows,
@@ -172,8 +173,8 @@
                                       "> <i class="icon-control-start mr-5"></i></a> <span
                   class="gotopagbg mr-2 ml-2" fxHide.xs>Go to
                   Page<span class="input-num">
-                    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
-                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                  <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                    [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
                   </span></span> <span class="mr-2" fxHide.xs>of
                   {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a [ngClass]="
                                         dt.rows + dt.first >= dt.totalRecords
@@ -186,134 +187,135 @@
                                         });
                                         navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
                                       "><i class="icon-control-end ml-5"></i></a> </div>
+              </div>
             </div>
           </div>
-        </div>
+        }
 
 
-        <div *ngIf="!dispalyTable" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
-          fxLayout.xs="column">
-          <div fxFlex="100%">
-            <form [formGroup]="DepartmentForm" id='ngForm' autocomplete="off" role="presentation" id="ngForm">
-              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
-                fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
-
-                <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="60%" fxFlex.xs="100%">
-                  <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
-                    <mat-label>Department Name</mat-label>
-                    <input matInput type="text" placeholder="Department Name" maxlength="50" formControlName="deptName"
-                      (blur)="isDeptExist()" required/>
-                    <mat-error *ngIf="DepartmentForm.get('deptName').invalid"> Department is required. </mat-error>
-                  </mat-form-field>
-                </div>
-
-                <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="40%" fxFlex.xs="100%">
-                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-                    fxLayoutGap="20px grid">
-                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <section class="mb-15">
-                        <mat-label class="lbl">Is Active</mat-label>
-                        <mat-checkbox formControlName="isActive">Is Active</mat-checkbox>
-                        <span *ngIf="DepartmentForm.get('isActive').invalid"></span>
-                      </section>
+        @if (!dispalyTable) {
+          <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+            fxLayout.xs="column">
+            <div fxFlex="100%">
+              <form [formGroup]="DepartmentForm" id='ngForm' autocomplete="off" role="presentation" id="ngForm">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
+                  fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="60%" fxFlex.xs="100%">
+                    <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                      <mat-label>Department Name</mat-label>
+                      <input matInput type="text" placeholder="Department Name" maxlength="50" formControlName="deptName"
+                        (blur)="isDeptExist()" required/>
+                        @if (DepartmentForm.get('deptName').invalid) {
+                          <mat-error> Department is required. </mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="65%" fxFlex.lg="65%" fxFlex.md="65%" fxFlex.sm="40%" fxFlex.xs="100%">
+                      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                        fxLayoutGap="20px grid">
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <section class="mb-15">
+                            <mat-label class="lbl">Is Active</mat-label>
+                            <mat-checkbox formControlName="isActive">Is Active</mat-checkbox>
+                            @if (DepartmentForm.get('isActive').invalid) {
+                              <span></span>
+                            }
+                          </section>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Department Description</mat-label>
+                        <textarea #desc formControlName="deptDesc" matInput autocomplete="off"
+                        required   placeholder="Department Description" role="presentation" maxlength="200"></textarea>
+                        <mat-hint class="f-13"> ({{desc.value.length}} /200 max) </mat-hint>
+                        @if (DepartmentForm.get('deptDesc').invalid) {
+                          <mat-error> Department description is required.
+                          </mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- <form [formGroup]="MailForm" id='ngForm' autocomplete="off" role="presentation">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="75%" fxFlex.lg="75%" fxFlex.md="75%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                        fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
+                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%"
+                          fxFlex.xs="100%">
+                          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                            <mat-label>Email Id</mat-label>
+                            <input matInput formControlName="emailAddress" type="text"
+                              placeholder="Email Id" (blur)="checkvalidEmail()" />
+                              <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
+                              <mat-error *ngIf="MailForm?.get('emailAddress')?.errors?.required">
+                                Email is required.
+                              </mat-error>
+                              <mat-error *ngIf="MailForm.get('emailAddress')?.errors?.pattern"> Please enter a valid email.
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%"
+                            fxFlex.xs="100%">
+                            <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                              <mat-label>Email Type</mat-label>
+                              <mat-select formControlName="emailTypeLookupId" placeholder="Select Email Type">
+                                <mat-option *ngFor="let col of mailTypeList"
+                                  value="{{col.lookUpId}}">
+                                  {{col.lookUpName}}
+                                </mat-option>
+                              </mat-select>
+                              <mat-error *ngIf="MailForm.get('emailTypeLookupId').invalid">
+                                Email type is required.
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%"
+                        fxLayoutGap="20px">
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                            fxLayout.xs="column" >
+                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                              <mat-label class="lbl">Is Send Email</mat-label>
+                              <mat-checkbox formControlName="active">Is Send Email</mat-checkbox>
+                            </div>
+                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%" class="adrem text-left pt-15" fxLayoutAlign.md="end start" fxLayoutAlign.sm="end end" fxLayoutAlign.xs="start center">
+                              <button mat-button color="primary" matTooltip="Add"
+                                matTooltipClass="accent-tooltip" (click)='addEmail()'> <i
+                              class="icon-plus-circle"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form> -->
+                <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
+                fxLayout.xs="column" fxLayoutGap="20px grid">
+                <div fxFlex="100%" fxLayoutGap="20px" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                  fxFlex.xs="100%">
+                  <mat-chip-grid fxFlex="100%">
+                    <div *ngFor="let dept of currDeptNotifyDet;let i = index">
+                      <mat-chip-row *ngIf='dept.active'>
+                        {{ dept.emailAddress }}
+                        <mat-icon matChipRemove (click)="removeEmail(dept)">cancel</mat-icon>
+                      </mat-chip-row>
+                    </div>
+                  </mat-chip-grid>
                 </div>
-
-              </div>
-              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%">
-                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                    <mat-label>Department Description</mat-label>
-                    <textarea #desc formControlName="deptDesc" matInput autocomplete="off"
-                   required   placeholder="Department Description" role="presentation" maxlength="200"></textarea>
-                    <mat-hint class="f-13"> ({{desc.value.length}} /200 max) </mat-hint>
-                    <mat-error *ngIf="DepartmentForm.get('deptDesc').invalid"> Department description is required.
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <!-- <form [formGroup]="MailForm" id='ngForm' autocomplete="off" role="presentation">
-                                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-
-                                    <div fxFlex="75%" fxFlex.lg="75%" fxFlex.md="75%" fxFlex.sm="100%" fxFlex.xs="100%">
-                                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                                            fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.sm="0px" fxLayoutGap.xs="0px">
-                                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%"
-                                                fxFlex.xs="100%">
-                                                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
-                                                    <mat-label>Email Id</mat-label>
-                                                    <input matInput formControlName="emailAddress" type="text"
-                                                        placeholder="Email Id" (blur)="checkvalidEmail()" />
-                                                    <mat-icon matSuffix><i class="icon-mail"></i></mat-icon>
-                                                    <mat-error *ngIf="MailForm?.get('emailAddress')?.errors?.required">
-                                                        Email is required.
-                                                    </mat-error>
-                                                    <mat-error *ngIf="MailForm.get('emailAddress')?.errors?.pattern"> Please enter a valid email.
-                                                        </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%"
-                                                fxFlex.xs="100%">
-                                                <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
-                                                    <mat-label>Email Type</mat-label>
-                                                    <mat-select formControlName="emailTypeLookupId" placeholder="Select Email Type">
-                                                        <mat-option *ngFor="let col of mailTypeList"
-                                                            value="{{col.lookUpId}}">
-                                                            {{col.lookUpName}}
-                                                        </mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="MailForm.get('emailTypeLookupId').invalid">
-                                                        Email type is required.
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                        fxLayoutGap="20px">                                         
-
-                                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-                                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" 
-                                            fxLayout.xs="column" >
-                                                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
-                                                            <mat-label class="lbl">Is Send Email</mat-label>
-                                                            <mat-checkbox formControlName="active">Is Send Email</mat-checkbox>
-                                                    </div>
-                                                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%" class="adrem text-left pt-15" fxLayoutAlign.md="end start" fxLayoutAlign.sm="end end" fxLayoutAlign.xs="start center">
-                                                            <button mat-button color="primary" matTooltip="Add"
-                                                            matTooltipClass="accent-tooltip" (click)='addEmail()'> <i
-                                                                class="icon-plus-circle"></i>
-                                                        </button>
-                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form> -->
-
-              <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row"
-                                fxLayout.xs="column" fxLayoutGap="20px grid">
-                                <div fxFlex="100%" fxLayoutGap="20px" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%"
-                                    fxFlex.xs="100%">
-                                    <mat-chip-grid fxFlex="100%">
-                                        <div *ngFor="let dept of currDeptNotifyDet;let i = index">
-                                            <mat-chip-row *ngIf='dept.active'>
-                                                {{ dept.emailAddress }}
-                                                <mat-icon matChipRemove (click)="removeEmail(dept)">cancel</mat-icon>
-                                            </mat-chip-row>
-                                        </div>
-                                    </mat-chip-grid>
-                                </div>
-                            </div> -->
-
+              </div> -->
             </form>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
 </div>

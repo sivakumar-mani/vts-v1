@@ -14,13 +14,15 @@
         </div>
         <div fxFlex="60%">
           <span fxFlex></span>
-          <button
-            [ngClass]="screenAuth.addFlag===false || (verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus !=null && verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus =='Rejection') ? 'page-btn disabled' : ''"
-            *ngIf="closedFlag === false" mat-icon-button class="in-btn" matTooltip="Update" (click)="saveCurrency()"
-            matTooltipClass="accent-tooltip"
-            [ngClass]="(commonService.modifyAdditionalFeeFlag == true) || (verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus !=null && verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus =='Rejection') ? 'page-btn disabled' : ''">
-            <i class="icon-save"></i>
-          </button>
+          @if (closedFlag === false) {
+            <button
+              [ngClass]="screenAuth.addFlag===false || (verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus !=null && verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus =='Rejection') ? 'page-btn disabled' : ''"
+              mat-icon-button class="in-btn" matTooltip="Update" (click)="saveCurrency()"
+              matTooltipClass="accent-tooltip"
+              [ngClass]="(commonService.modifyAdditionalFeeFlag == true) || (verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus !=null && verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus =='Rejection') ? 'page-btn disabled' : ''">
+              <i class="icon-save"></i>
+            </button>
+          }
         </div>
       </div>
     </form>
@@ -33,13 +35,15 @@
     </div>
     <div fxLayout="row" fxLayoutGap="8px">
       <span fxFlex></span>
-      <button
-        [ngClass]="screenAuth.addFlag===false || (verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus !=null && verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus =='Rejection') ? 'page-btn disabled' : ''"
-        *ngIf="closedFlag === false" mat-icon-button class="in-btn"
-        matTooltip="{{additionalFeeForm?.get('screeningCompFeeId')?.value > 0 ? 'Update' :'Save'}}"
-        (click)="saveAddFee()" matTooltipClass="accent-tooltip">
-        <i class="icon-save"></i>
-      </button>
+      @if (closedFlag === false) {
+        <button
+          [ngClass]="screenAuth.addFlag===false || (verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus !=null && verificationForm?.controls['verificationScreeningDet']?.value?.camRejectStatus =='Rejection') ? 'page-btn disabled' : ''"
+          mat-icon-button class="in-btn"
+          matTooltip="{{additionalFeeForm?.get('screeningCompFeeId')?.value > 0 ? 'Update' :'Save'}}"
+          (click)="saveAddFee()" matTooltipClass="accent-tooltip">
+          <i class="icon-save"></i>
+        </button>
+      }
     </div>
     <div fxLayout="row wrap" fxLayoutGap="0px grid">
       <div fxFlex="100%" class="mb-15">
@@ -62,9 +66,11 @@
         <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
           <mat-label>Fee Type</mat-label>
           <mat-select placeholder="Select Fee Type" formControlName="feeType">
-            <mat-option *ngFor="let owner of feeTypeList; let i = index" [value]="owner.lookUpId">
-              {{ owner.lookUpName }}
-            </mat-option>
+            @for (owner of feeTypeList; track owner; let i = $index) {
+              <mat-option [value]="owner.lookUpId">
+                {{ owner.lookUpName }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
       </div>
@@ -79,165 +85,182 @@
             matInput mat-autofocus="true" preventCutCopyPaste preventDragdrop appNumberOnly [matDatepicker]="fee"
             [NumberOnlyWithslash]="false" placeholder="Fee Date" formControlName="feeDate" (click)="fee.open()"
             (focus)="fee.open()" />
-          <mat-error
-            *ngIf="!!additionalFeeForm?.get('feeDate')?.errors?.required && additionalFeeList?.length === 0">
-            Fee Date is required
-          </mat-error>
-          <mat-datepicker-toggle matSuffix [for]="fee"></mat-datepicker-toggle>
-          <mat-datepicker #fee></mat-datepicker>
-        </mat-form-field>
-      </div>
-      <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-          <mat-label>Fee Amount</mat-label>
-          <input
-            [required]="verificationService?.tempData?.verificationScreeningDet?.manualFileSubmissionFlag !== true && additionalFeeList?.length === 0"
-            matInput placeholder="Fee Amount" formControlName="fee" maxlength="6" appNumberOnly
-            [NumberOnly]="false">
-          <mat-error
-            *ngIf="!!additionalFeeForm?.get('fee')?.errors?.required && additionalFeeList?.length === 0">
-            Fee Amount is required
-          </mat-error>
-          <mat-error *ngIf="!!additionalFeeForm?.get('fee')?.errors?.min">
-            Fee Amount should be greater than 0
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
-      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="66.66%" fxFlex.sm="100%" fxFlex.xs="100%">
-        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-          <mat-label>Comments</mat-label>
-          <textarea #desc maxlength="5000" matInput placeholder="Comments" formControlName="feeDescription">
-          </textarea>
-          <mat-hint>({{desc.value.length}}/5000 Max)</mat-hint>
-        </mat-form-field>
-      </div>
-    </div>
-  </form>
-
-  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
-    fxLayoutGap="20px grid">
-    <div fxFlex="100%">
-
-      <p-table #dt [columns]="cols" [value]="additionalFeeList" [scrollable]="true" scrollHeight=""
-        [paginator]="true" [rows]="10" [resizableColumns]="true" [reorderableColumns]="true" frozenWidth="100px"
-        [frozenColumns]="frozenCols">
-
-        <ng-template pTemplate="colgroup" let-colGroupCols>
-          <colgroup>
-            <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-          </colgroup>
-        </ng-template>
-
-        <ng-template pTemplate="header" let-headerCols>
-          <tr>
-            <th *ngFor="let col of headerCols" matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip"
-              pReorderableColumn pResizableColumn>
-              <span [pSortableColumn]="col.field">
-                <div class="thname">{{ col.header }}</div>
-                <p-sortIcon *ngIf="col.field !== 'action'" ariaLabel="Activate to sort"
-                  ariaLabelDesc="Activate to sort in descending order" matTooltip="Sorting"
-                  matTooltipClass="accent-tooltip" ariaLabelAsc="Activate to sort in ascending order">
-                </p-sortIcon>
-              </span>
-            </th>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
-          <tr>
-            <td *ngFor="let col of bodyCols; let i = index" [ngSwitch]="col.field"
-              [ngClass]="{ 'desg-bg': col.field === 'action' }">
-
-              <div *ngSwitchCase="'countryName'">
-                {{ rowData.countryName ? rowData.countryName : 'N/A' }}
-              </div>
-
-              <div *ngSwitchCase="'feeDate'">
-                {{ commonService.getTimezoneOffset(rowData.feeDate, false) | date:'dd/MMM/yyyy' }}
-              </div>
-
-              <div *ngSwitchCase="'fee'">{{ rowData.fee }}</div>
-
-              <div *ngSwitchCase="'feeName'">{{ rowData.feeName }}</div>
-
-              <div *ngSwitchCase="'currencyName'">{{ rowData.currencyName }}</div>
-
-              <div *ngSwitchCase="'feeDescription'">
-                {{ rowData.feeDescription ? rowData.feeDescription : 'N/A' }}
-              </div>
-
-              <div *ngIf="col.field === 'action'" fxLayout="row" class="desg-icon">
-                <div fxFlex="100%" fxLayoutGap="10px"
-                  matTooltip="{{ rowData.feeApprovalFlag === true ? 'This record is sent to client for fees approval' : '' }}"
-                  matTooltipClass="accent-tooltip">
-
-                  <mat-icon>
-                    <i matTooltip="Edit" matTooltipClass="accent-tooltip" (click)="edit(rowData)"
-                      class="material-icons-outlined"
-                      [ngClass]="(
-                        (rowData.feeApprovalFlag === true && verificationForm?.get('insuffRaisedFlag')?.value === true) ||
-                        (commonService.modifyAdditionalFeeFlag === true && rowData.feeName === commonService.COMPON_FEE)
-                      ) ? 'page-btn disabled' : ''">
-                      edit
-                    </i>
-                  </mat-icon>
-
-                  <mat-icon>
-                    <i matTooltip="Delete" matTooltipClass="accent-tooltip" (click)="openDialog(rowData)"
-                      class="material-icons-outlined"
-                      [ngClass]="(
-                        (rowData.feeApprovalFlag === true && verificationForm?.get('insuffRaisedFlag')?.value === true) ||
-                        (commonService.modifyAdditionalFeeFlag === true && rowData.feeName === commonService.COMPON_FEE)
-                      ) ? 'page-btn disabled' : ''">
-                      delete
-                    </i>
-                  </mat-icon>
-
-                </div>
-              </div>
-
-            </td>
-          </tr>
-        </ng-template>
-
-      </p-table>
-
-      <div [ngClass]="additionalFeeList?.length == 0 ? 'empty-record' : ''" class="cus-paginator"
-        fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
-        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-          fxLayoutAlign="start center">
-          Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} -
-          {{ dt.totalRecords > 0 ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }}
-          of {{ dt.totalRecords }} record(s)
+            @if (!!additionalFeeForm?.get('feeDate')?.errors?.required && additionalFeeList?.length === 0) {
+              <mat-error
+                >
+                Fee Date is required
+              </mat-error>
+            }
+            <mat-datepicker-toggle matSuffix [for]="fee"></mat-datepicker-toggle>
+            <mat-datepicker #fee></mat-datepicker>
+          </mat-form-field>
         </div>
-        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-          fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-          fxLayoutAlign.xs="start center">
+        <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Fee Amount</mat-label>
+            <input
+              [required]="verificationService?.tempData?.verificationScreeningDet?.manualFileSubmissionFlag !== true && additionalFeeList?.length === 0"
+              matInput placeholder="Fee Amount" formControlName="fee" maxlength="6" appNumberOnly
+              [NumberOnly]="false">
+              @if (!!additionalFeeForm?.get('fee')?.errors?.required && additionalFeeList?.length === 0) {
+                <mat-error
+                  >
+                  Fee Amount is required
+                </mat-error>
+              }
+              @if (!!additionalFeeForm?.get('fee')?.errors?.min) {
+                <mat-error>
+                  Fee Amount should be greater than 0
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="66.66%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Comments</mat-label>
+              <textarea #desc maxlength="5000" matInput placeholder="Comments" formControlName="feeDescription">
+              </textarea>
+              <mat-hint>({{desc.value.length}}/5000 Max)</mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+
+      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+        fxLayoutGap="20px grid">
+        <div fxFlex="100%">
+
+          <p-table #dt [columns]="cols" [value]="additionalFeeList" [scrollable]="true" scrollHeight=""
+            [paginator]="true" [rows]="10" [resizableColumns]="true" [reorderableColumns]="true" frozenWidth="100px"
+            [frozenColumns]="frozenCols">
+
+            <ng-template pTemplate="colgroup" let-colGroupCols>
+              <colgroup>
+              @for (col of colGroupCols; track col) {
+                <col style="min-width:200px" />
+              }
+            </colgroup>
+          </ng-template>
+
+          <ng-template pTemplate="header" let-headerCols>
+            <tr>
+              @for (col of headerCols; track col) {
+                <th matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip"
+                  pReorderableColumn pResizableColumn>
+                  <span [pSortableColumn]="col.field">
+                    <div class="thname">{{ col.header }}</div>
+                    @if (col.field !== 'action') {
+                      <p-sortIcon ariaLabel="Activate to sort"
+                        ariaLabelDesc="Activate to sort in descending order" matTooltip="Sorting"
+                        matTooltipClass="accent-tooltip" ariaLabelAsc="Activate to sort in ascending order">
+                      </p-sortIcon>
+                    }
+                  </span>
+                </th>
+              }
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+            <tr>
+              @for (col of bodyCols; track col; let i = $index) {
+                <td
+                  [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                  @if (col.field === 'countryName') {
+                    <div>
+                      {{ rowData.countryName ? rowData.countryName : 'N/A' }}
+                    </div>
+                  }
+                  @if (col.field === 'feeDate') {
+                    <div>
+                      {{ commonService.getTimezoneOffset(rowData.feeDate, false) | date:'dd/MMM/yyyy' }}
+                    </div>
+                  }
+                  @if (col.field === 'fee') {
+                    <div>{{ rowData.fee }}</div>
+                  }
+                  @if (col.field === 'feeName') {
+                    <div>{{ rowData.feeName }}</div>
+                  }
+                  @if (col.field === 'currencyName') {
+                    <div>{{ rowData.currencyName }}</div>
+                  }
+                  @if (col.field === 'feeDescription') {
+                    <div>
+                      {{ rowData.feeDescription ? rowData.feeDescription : 'N/A' }}
+                    </div>
+                  }
+                  @if (col.field === 'action') {
+                    <div fxLayout="row" class="desg-icon">
+                      <div fxFlex="100%" fxLayoutGap="10px"
+                        matTooltip="{{ rowData.feeApprovalFlag === true ? 'This record is sent to client for fees approval' : '' }}"
+                        matTooltipClass="accent-tooltip">
+                        <mat-icon>
+                          <i matTooltip="Edit" matTooltipClass="accent-tooltip" (click)="edit(rowData)"
+                            class="material-icons-outlined"
+                      [ngClass]="(
+                        (rowData.feeApprovalFlag === true && verificationForm?.get('insuffRaisedFlag')?.value === true) ||
+                        (commonService.modifyAdditionalFeeFlag === true && rowData.feeName === commonService.COMPON_FEE)
+                      ) ? 'page-btn disabled' : ''">
+                            edit
+                          </i>
+                        </mat-icon>
+                        <mat-icon>
+                          <i matTooltip="Delete" matTooltipClass="accent-tooltip" (click)="openDialog(rowData)"
+                            class="material-icons-outlined"
+                      [ngClass]="(
+                        (rowData.feeApprovalFlag === true && verificationForm?.get('insuffRaisedFlag')?.value === true) ||
+                        (commonService.modifyAdditionalFeeFlag === true && rowData.feeName === commonService.COMPON_FEE)
+                      ) ? 'page-btn disabled' : ''">
+                            delete
+                          </i>
+                        </mat-icon>
+                      </div>
+                    </div>
+                  }
+                </td>
+              }
+            </tr>
+          </ng-template>
+
+        </p-table>
+
+        <div [ngClass]="additionalFeeList?.length == 0 ? 'empty-record' : ''" class="cus-paginator"
+          fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+            fxLayoutAlign="start center">
+            Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} -
+            {{ dt.totalRecords > 0 ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }}
+            of {{ dt.totalRecords }} record(s)
+          </div>
+          <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+            fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+            fxLayoutAlign.xs="start center">
           <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
               dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
               navigateNxtPrevPage(dt.first + dt.rows, dt.rows)">
-            <i class="icon-control-start mr-5"></i>
-          </a>
-          <span class="gotopagbg mr-2 ml-2" fxHide.xs>
-            Go to Page
-            <span class="input-num">
-              <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" min="1" appNumberOnly
-                [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
-            </span>
-          </span>
-          <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+              <i class="icon-control-start mr-5"></i>
+            </a>
+            <span class="gotopagbg mr-2 ml-2" fxHide.xs>
+              Go to Page
+              <span class="input-num">
+                <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" min="1" appNumberOnly
+                  [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                </span>
+              </span>
+              <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
           <a [ngClass]="dt.rows + dt.first >= dt.totalRecords ? 'page-btn disabled' : 'page-btn'" (click)="
               dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
               navigateNxtPrevPage(dt.first + dt.rows, dt.rows)">
-            <i class="icon-control-end ml-5"></i>
-          </a>
+                <i class="icon-control-end ml-5"></i>
+              </a>
+            </div>
+          </div>
+
         </div>
       </div>
-
-    </div>
-  </div>
-</mat-card-content>
+    </mat-card-content>

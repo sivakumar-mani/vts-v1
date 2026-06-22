@@ -315,9 +315,9 @@ clientNameTrigger!: MatMenuTrigger;
     this.screenAuth = this.auth.getScreenAuth(this.router.url);
     if (this.userData.applicationId === 2) {
       this.displayedColumns = this.clientColumns;
-      this.filednames = this.displayedColumns.filter(e => e.disabled);
+      this.filednames = [{ field: 'action', header: 'Action', value: true, disabled: true }, ...this.displayedColumns.filter(e => e.disabled)];
     } else {
-      this.filednames = this.displayedColumns.filter(e => e.disabled);
+      this.filednames = [{ field: 'action', header: 'Action', value: true, disabled: true }, ...this.displayedColumns.filter(e => e.disabled)];
     }
     if (this.common.screenName === 'Sub Checks') {
       this.routePath = 'Screening / Clients Case Creation / Sub Checks';

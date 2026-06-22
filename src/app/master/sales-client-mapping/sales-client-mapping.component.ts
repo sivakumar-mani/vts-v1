@@ -50,6 +50,7 @@ export class SalesClientMappingComponent implements OnInit {
 
   filteredOptions: Observable<Agent[]>;
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     // { field: 'sNo', header: 'SNo' },
     { field: 'salePersonName', header: 'Sales Person' },
     { field: 'clientName', header: 'Client Name' },

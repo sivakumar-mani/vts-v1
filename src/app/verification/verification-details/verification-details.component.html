@@ -1,6 +1,6 @@
 ﻿<app-breadcrumb [btnSaveDisabled]="breadcrumbFlags.btnSaveDisabled" [routePath]="routePath"
-    [btnBack]="breadcrumbFlags.btnBack" [toolTip]="breadcrumbFlags.toolTip"
-    (eventBack)=" verificationService.isFinalReport ? verificationService.isFinalReport = false : back()"
+  [btnBack]="breadcrumbFlags.btnBack" [toolTip]="breadcrumbFlags.toolTip"
+  (eventBack)=" verificationService.isFinalReport ? verificationService.isFinalReport = false : back()"
     (eventSave)="reviewComp?.updateContactDetails('updateData', reviewComp?.f)" [btnSave]="((stepper === 5 &&verificationService.tempData.verificationScreeningDet.camRejectStatus !='Rejection'&& verificationForm.get('showGenrateResponse').value===true) &&
   (verificationDetails?.loginUserDetVm?.teamName === 'AddressTeam' ||
   verificationDetails?.loginUserDetVm?.teamName === 'EducationTeam' &&commonService.redcaseFlag !== true || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentIndia'&&commonService.redcaseFlag !== true ||
@@ -9,7 +9,7 @@
   verificationDetails?.loginUserDetVm?.teamName === 'EducationOverseas' || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentTechM' || verificationDetails?.loginUserDetVm?.teamName === 'ForResearchEmploymentTeam' || verificationDetails?.loginUserDetVm?.teamName === 'ForResearchEducationTeam'   || verificationDetails?.loginUserDetVm?.teamName === 'CTS-AddressTeam' ||
   verificationDetails?.loginUserDetVm?.teamName === 'CTS-EducationTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-IdentityTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-CriminalTeam' ||
   verificationDetails?.loginUserDetVm?.teamName === 'CTS-EmploymentTeam'))" (eventMoveQc)="reviewComp?.openDialogQc()"
-    [btnMoveQcDisabled]="!(verificationService?.pdfvalue?.fileName && verificationService?.pdfvalue?.document && verificationService?.pdfvalue?.filePath)"
+  [btnMoveQcDisabled]="!(verificationService?.pdfvalue?.fileName && verificationService?.pdfvalue?.document && verificationService?.pdfvalue?.filePath)"
     [btnMoveQc]="((reviewComp?.fontColor && commonService.MVCamFlag != true && verificationService.tempData.verificationScreeningDet.camRejectStatus !='Rejection' && commonService.MVCamRjFlag != true&& stepper === 5 && verificationForm.get('showGenrateResponse').value===true) && (verificationDetails?.loginUserDetVm?.teamName === 'AddressTeam' ||
   verificationDetails?.loginUserDetVm?.teamName === 'EducationTeam' &&commonService.redcaseFlag !== true && commonService.MvTlFlag !=true || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentIndia' && commonService.MvTlFlag !=true&&commonService.redcaseFlag !== true ||
   verificationDetails?.loginUserDetVm?.teamName === 'CriminalTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CriminalTeam' ||
@@ -21,728 +21,817 @@
     verificationDetails?.loginUserDetVm?.teamName === 'EducationTeam' && commonService.MvTlFlag ==true &&commonService.redcaseFlag === true|| verificationDetails?.loginUserDetVm?.teamName === 'EmploymentIndia' && commonService.MvTlFlag ==true))"
     [btnReject]="((reviewComp?.fontColor &&commonService.redcaseFlag === true && stepper === 5 && verificationForm.get('showGenrateResponse').value===true) && (
         verificationDetails?.loginUserDetVm?.teamName === 'EducationTeam' && commonService.MvTlFlag ==true || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentIndia' && commonService.MvTlFlag ==true))"
-    (eventApprove)="openPopup(true)" (eventReject)="openPopuprej(false)" (eventMoveTl)="reviewComp?.openDialogTl()"
-    [btnMoveQcDisabled]="!(verificationService?.pdfvalue?.fileName && verificationService?.pdfvalue?.document && commonService.redcaseFlag != true &&verificationService?.pdfvalue?.filePath)"
+  (eventApprove)="openPopup(true)" (eventReject)="openPopuprej(false)" (eventMoveTl)="reviewComp?.openDialogTl()"
+  [btnMoveQcDisabled]="!(verificationService?.pdfvalue?.fileName && verificationService?.pdfvalue?.document && commonService.redcaseFlag != true &&verificationService?.pdfvalue?.filePath)"
     [btnMoveTl]="((reviewComp?.fontColor  && commonService.MVCamFlag != true && verificationService.tempData.verificationScreeningDet.camRejectStatus !='Rejection'  && commonService.MVCamRjFlag != true && stepper === 5 && verificationForm.get('showGenrateResponse').value===true) && (
   verificationDetails?.loginUserDetVm?.teamName === 'EducationTeam' && commonService.MvTlFlag ==true &&commonService.redcaseFlag !== true || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentIndia'&&commonService.redcaseFlag !== true && commonService.MvTlFlag ==true))"
-    (eventCAMApproval)="reviewComp?.openDialogCAM()"
-    [btnCAMApprovalDisabled]="!(verificationService?.pdfvalue?.fileName && verificationService?.pdfvalue?.document && commonService.camRejection != true &&verificationService?.pdfvalue?.filePath)"
+  (eventCAMApproval)="reviewComp?.openDialogCAM()"
+  [btnCAMApprovalDisabled]="!(verificationService?.pdfvalue?.fileName && verificationService?.pdfvalue?.document && commonService.camRejection != true &&verificationService?.pdfvalue?.filePath)"
     [btnCAMApproval]="(reviewComp?.fontColor && stepper === 5 && verificationForm.get('showGenrateResponse').value===true) && (reviewComp?.fontColor && stepper === 5 && verificationForm.get('showGenrateResponse').value===true) && (
     commonService.camRejection !== true && commonService.MVCamRjFlag === true)"
-    (eventPreview)="reviewComp?.getFinalReprt('preview')"
-    [btnPreview]="reviewComp?.fontColor && stepper === 5 && verificationForm.get('showGenrateResponse').value===true">
+  (eventPreview)="reviewComp?.getFinalReprt('preview')"
+  [btnPreview]="reviewComp?.fontColor && stepper === 5 && verificationForm.get('showGenrateResponse').value===true">
 </app-breadcrumb>
 <span [hidden]='verificationService.isFinalReport && verificationService.reportType ==="preview"'>
-    <div fxLayout="row">
-        <div fxFlex="100%">
-            <mat-card>
-                <div fxLayout="row" fxLayoutGap="20px">
-                    <div fxFlex="80%" fxFlex.lg="80%" fxFlex.md="75%" fxFlex.sm="70%" fxFlex.xs="100%">
-                        <div fxLayout="row">
-                            <mat-card-header>
-                                <div fxFlex="100%">
-                                    <mat-card-header *ngIf="stepper === 1">
-                                        <div fxLayout="row" fxLayoutGap="50px">
-                                            <div fxFlex="100%">
-                                                <h1 class="header-title"> <span class="StprH">Step 2
-                                                        :</span><span>Component Details</span> </h1>
-                                            </div>
-                                        </div>
-                                    </mat-card-header>
-                                    <mat-card-title *ngIf="stepper === 2">
-                                        <div fxLayout="row" fxLayoutGap="50px">
-                                            <div fxFlex="100%">
-                                                <h1 class="header-title"> <span class="StprH">Step 3 :</span><span>
-                                                        {{verificationService?.tempData?.verificationScreeningDet?.manualFileSubmissionFlag
-                                                        === true ? 'Override Fee' : 'Additional Fee'}} &amp;
-                                                        Component Details</span> </h1>
-                                            </div>
-                                        </div>
-                                    </mat-card-title>
-                                    <mat-card-header *ngIf="stepper === 3">
-                                        <div fxLayout="row" fxLayoutGap="50px">
-                                            <div fxFlex="100%">
-                                                <h1 class="header-title"> <span class="StprH">Step {{restrictVeAccess()
-                                                        ? 4 : 3}} :</span><span>
-                                                        Screening Details</span> </h1>
-                                            </div>
-                                        </div>
-                                    </mat-card-header>
-                                    <mat-card-title *ngIf="stepper === 4">
-                                        <div fxLayout="row" fxLayoutGap="50px">
-                                            <div fxFlex="100%">
-                                                <h1 class="header-title"> <span class="StprH">Step {{restrictVeAccess()
-                                                        ? 5 : 4}} :</span><span>
-                                                        Comments &amp; Follow Up</span> </h1>
-                                            </div>
-                                        </div>
-                                    </mat-card-title>
-                                    <mat-card-title *ngIf="stepper === 5">
-                                        <div fxLayout="row" fxLayoutGap="50px">
-                                            <div fxFlex="100%">
-                                                <h1 class="header-title"> <span class="StprH">Step 6 :</span><span>
-                                                        Generate Response</span>
-                                                </h1>
-                                            </div>
-                                        </div>
-                                    </mat-card-title>
-                                </div>
-                            </mat-card-header>
+  <div fxLayout="row">
+    <div fxFlex="100%">
+      <mat-card>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxFlex="80%" fxFlex.lg="80%" fxFlex.md="75%" fxFlex.sm="70%" fxFlex.xs="100%">
+            <div fxLayout="row">
+              <mat-card-header>
+                <div fxFlex="100%">
+                  @if (stepper === 1) {
+                    <mat-card-header>
+                      <div fxLayout="row" fxLayoutGap="50px">
+                        <div fxFlex="100%">
+                          <h1 class="header-title"> <span class="StprH">Step 2
+                            :</span><span>Component Details</span> </h1>
+                          </div>
                         </div>
-                        <div fxLayout="row">
-                            <div fxFlex="100%">
-                                <div fxLayout="row" class="mb-15" *ngIf="empinsFakeList.length>0">
-                                    <div fxFlex="100%" fxLayoutAlign="center center">
-                                        <button fxFlex="100%" mat-flat-button color="warn" (click)="openFakeDailog()"
-                                            class="text-cap btn-fake">
-                                            {{verificationService.tempData.empInsMasterDet.empFlag == true ? 'Employer
-                                            name matching with ' + empinsFakeList.length + ' fake employers':
-                                            'Institution name matching with ' + empinsFakeList.length + ' fake
-                                            institution'}}</button>
-                                    </div>
-                                </div>
-                                <div fxLayout="row">
-                                    <div fxFlex="100%">
-                                        <app-header *ngIf="stepper !==0"
-                                            [verificationForm]="verificationForm"></app-header>
-                                    </div>
-                                </div>
-                                <div fxLayout="row">
-                                    <div fxFlex="100%" [ngClass]="!!verificationForm?.disabled?'page-btn disabled':''">
-                                        <div *ngIf="stepper === 0">
-                                            <app-candidate-details
-                                                [screeningCandidateDet]="this.verificationForm.controls['screeningCandidateDet']"
-                                                [verificationCaseDet]="this.verificationForm.controls['verificationCaseDet']"
-                                                [casePriority]="this.verificationForm?.controls['verificationTransBindDet']?.value?.casePriority"
-                                                [verificationForm]="verificationForm"
-                                                [clientName]="verificationForm.controls['verificationScreeningDet']?.value.clientName">
-                                            </app-candidate-details>
-                                        </div>
-                                        <div *ngIf="stepper === 1">
-                                            <app-components
-                                                [verificationComponentDet]="this.verificationForm.controls['verificationComponentDet']"
-                                                [displayCaption]="this.verificationForm.controls['displayCaption']"
-                                                [empInsMasterDet]="this.verificationForm.controls['empInsMasterDet']"
-                                                [verificationTransBindDet]="verificationForm?.get('verificationTransBindDet')?.value?.documentType"
-                                                [verificationForm]="verificationForm"> </app-components>
-                                        </div>
-                                        <div *ngIf="stepper === 3">
-                                            <app-screening-details
-                                                [verificationScreeningForm]="this.verificationForm.controls['verificationScreeningDet']"
-                                                [screeningStatusForm]="verificationForm?.get('screeningStatus')"
-                                                [verificationTransBindDet]="verificationForm?.get('verificationTransBindDet').value"
-                                                [insuffRaisedFlag]="verificationForm?.get('insuffRaisedFlag').value"
-                                                [verificationComponentDet]="this.verificationForm.controls['verificationComponentDet']"
-                                                [verificationForm]="verificationForm" [paymentDetails]="paymentDetails"
-                                                [paymentList]="paymentModeList"
-                                                [overrideFeeDetails]="overrideFeeDetails"
-                                                [communicationDetails]="communicationDetails"
-                                                [commList]="communicationList">
-                                            </app-screening-details>
-                                            <!-- <div *ngIf="verificationForm?.get('paymentFlag').value === true">
-                            <app-payment-details
-                            >
-                            </app-payment-details>
-                            <app-communication-details [screeningCompId]="verificationDetails.screeningCompId"
-                              [communicationDetails]="communicationDetails" [commList]="communicationList">
-                            </app-communication-details>
-                            <app-override-fee [overrideFeeDetails]="overrideFeeDetails"
-                              [screeningCompId]="verificationDetails.screeningCompId"></app-override-fee>
-                          </div> -->
-                                            <app-annexure-check
-                                                *ngIf="verificationForm?.value['responseDocument']?.componentName?.toUpperCase() === commonService.CRIMINAL_DATABASE &&verificationService.tempData.verificationScreeningDet.clientCategoryId !== 4"
-                                                [clientId]="verificationForm?.get('verificationScreeningDet')?.get('clientId')?.value"
-                                                [responseDoc]="verificationForm?.get('responseDocument').value"
-                                                [formGroup]="verificationForm"
-                                                [generateFlag]="generateFlag"></app-annexure-check>
-                                            <!-- <app-supporting-documents [screeningCompId]="verificationDetails.screeningCompId"
-                            [paymentDetails]="paymentDetails" [paymentList]="paymentModeList"
-                            [overrideFeeDetails]="overrideFeeDetails" [communicationDetails]="communicationDetails"
-                            [commList]="communicationList" [verificationForm]="verificationForm"></app-supporting-documents> -->
-                                        </div>
-                                        <div *ngIf="stepper === 2">
-                                            <app-additional-fees [verificationForm]="verificationForm"
-                                                [additionalFeeList]="verificationForm?.get('additionalFee').value"></app-additional-fees>
-                                        </div>
-                                        <div *ngIf="stepper === 4">
-                                            <app-comments-updates [verificationForm]="verificationForm"
-                                                [commentsData]="verificationForm?.get('commentsFollowUp').value">
-                                            </app-comments-updates>
-                                        </div>
-                                        <div *ngIf="stepper === 5">
-                                            <app-review #review [verificationForm]="verificationForm"
-                                                [verificationTransBindDet]="verificationForm?.get('verificationTransBindDet')?.value"
-                                                [responseDocument]="verificationForm?.get('responseDocument')"></app-review>
-                                        </div>
-                                        <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end">
-                                            <!-- //VTS2-2024-IDE-0213 - Point Hold
-                                            <button  mat-flat-button color="primary"
-                                            *ngIf="stepper === 5  && verificationDetails?.loginUserDetVm?.teamName === 'IdentityTeam' && this.verificationService.tempData.screeningStatus.isDatabaseAnnexureFlag && verificationForm?.value['responseDocument']?.componentName.toUpperCase() === commonService.CRIMINAL_DATABASE && verificationForm.get('showGenrateResponse').value === true" [disabled]="!isRemoveDisabled"
-                                                                    (click)="removeDatabaseAnnexure(verificationDetails.screeningCompId,this.userData.userId)">
-                                                                Remove Annexure</button>
-                                            <button  mat-flat-button color="primary" 
-                                            *ngIf="stepper === 5 && verificationDetails?.loginUserDetVm?.teamName === 'IdentityTeam' && this.verificationService.tempData.screeningStatus.isDatabaseAnnexureFlag && verificationForm?.value['responseDocument']?.componentName.toUpperCase() === commonService.CRIMINAL_DATABASE && verificationForm.get('showGenrateResponse').value === true " 
-                                            [disabled]="!isGenerateDisabled"
-                                                                    (click)="generateDatabaseAnnexure(verificationDetails.screeningCompId,this.userData.userId,verificationForm?.get('verificationScreeningDet')?.get('clientId')?.value)">
-                                                                Generate Annexure</button> -->
+                      </mat-card-header>
+                    }
+                    @if (stepper === 2) {
+                      <mat-card-title>
+                        <div fxLayout="row" fxLayoutGap="50px">
+                          <div fxFlex="100%">
+                            <h1 class="header-title"> <span class="StprH">Step 3 :</span><span>
+                            {{verificationService?.tempData?.verificationScreeningDet?.manualFileSubmissionFlag
+                            === true ? 'Override Fee' : 'Additional Fee'}} &amp;
+                          Component Details</span> </h1>
+                        </div>
+                      </div>
+                    </mat-card-title>
+                  }
+                  @if (stepper === 3) {
+                    <mat-card-header>
+                      <div fxLayout="row" fxLayoutGap="50px">
+                        <div fxFlex="100%">
+                          <h1 class="header-title"> <span class="StprH">Step {{restrictVeAccess()
+                          ? 4 : 3}} :</span><span>
+                        Screening Details</span> </h1>
+                      </div>
+                    </div>
+                  </mat-card-header>
+                }
+                @if (stepper === 4) {
+                  <mat-card-title>
+                    <div fxLayout="row" fxLayoutGap="50px">
+                      <div fxFlex="100%">
+                        <h1 class="header-title"> <span class="StprH">Step {{restrictVeAccess()
+                        ? 5 : 4}} :</span><span>
+                      Comments &amp; Follow Up</span> </h1>
+                    </div>
+                  </div>
+                </mat-card-title>
+              }
+              @if (stepper === 5) {
+                <mat-card-title>
+                  <div fxLayout="row" fxLayoutGap="50px">
+                    <div fxFlex="100%">
+                      <h1 class="header-title"> <span class="StprH">Step 6 :</span><span>
+                    Generate Response</span>
+                  </h1>
+                </div>
+              </div>
+            </mat-card-title>
+          }
+        </div>
+      </mat-card-header>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        @if (empinsFakeList.length>0) {
+          <div fxLayout="row" class="mb-15">
+            <div fxFlex="100%" fxLayoutAlign="center center">
+              <button fxFlex="100%" mat-flat-button color="warn" (click)="openFakeDailog()"
+                class="text-cap btn-fake">
+                {{verificationService.tempData.empInsMasterDet.empFlag == true ? 'Employer
+                name matching with ' + empinsFakeList.length + ' fake employers':
+                'Institution name matching with ' + empinsFakeList.length + ' fake
+              institution'}}</button>
+            </div>
+          </div>
+        }
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            @if (stepper !==0) {
+              <app-header
+              [verificationForm]="verificationForm"></app-header>
+            }
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%" [ngClass]="!!verificationForm?.disabled?'page-btn disabled':''">
+            @if (stepper === 0) {
+              <div>
+                <app-candidate-details
+                  [screeningCandidateDet]="this.verificationForm.controls['screeningCandidateDet']"
+                  [verificationCaseDet]="this.verificationForm.controls['verificationCaseDet']"
+                  [casePriority]="this.verificationForm?.controls['verificationTransBindDet']?.value?.casePriority"
+                  [verificationForm]="verificationForm"
+                  [clientName]="verificationForm.controls['verificationScreeningDet']?.value.clientName">
+                </app-candidate-details>
+              </div>
+            }
+            @if (stepper === 1) {
+              <div>
+                <app-components
+                  [verificationComponentDet]="this.verificationForm.controls['verificationComponentDet']"
+                  [displayCaption]="this.verificationForm.controls['displayCaption']"
+                  [empInsMasterDet]="this.verificationForm.controls['empInsMasterDet']"
+                  [verificationTransBindDet]="verificationForm?.get('verificationTransBindDet')?.value?.documentType"
+                [verificationForm]="verificationForm"> </app-components>
+              </div>
+            }
+            @if (stepper === 3) {
+              <div>
+                <app-screening-details
+                  [verificationScreeningForm]="this.verificationForm.controls['verificationScreeningDet']"
+                  [screeningStatusForm]="verificationForm?.get('screeningStatus')"
+                  [verificationTransBindDet]="verificationForm?.get('verificationTransBindDet').value"
+                  [insuffRaisedFlag]="verificationForm?.get('insuffRaisedFlag').value"
+                  [verificationComponentDet]="this.verificationForm.controls['verificationComponentDet']"
+                  [verificationForm]="verificationForm" [paymentDetails]="paymentDetails"
+                  [paymentList]="paymentModeList"
+                  [overrideFeeDetails]="overrideFeeDetails"
+                  [communicationDetails]="communicationDetails"
+                  [commList]="communicationList">
+                </app-screening-details>
+                <!-- <div *ngIf="verificationForm?.get('paymentFlag').value === true">
+                <app-payment-details
+                  >
+                </app-payment-details>
+                <app-communication-details [screeningCompId]="verificationDetails.screeningCompId"
+                  [communicationDetails]="communicationDetails" [commList]="communicationList">
+                </app-communication-details>
+                <app-override-fee [overrideFeeDetails]="overrideFeeDetails"
+                [screeningCompId]="verificationDetails.screeningCompId"></app-override-fee>
+              </div> -->
+              @if (verificationForm?.value['responseDocument']?.componentName?.toUpperCase() === commonService.CRIMINAL_DATABASE &&verificationService.tempData.verificationScreeningDet.clientCategoryId !== 4) {
+                <app-annexure-check
+                  [clientId]="verificationForm?.get('verificationScreeningDet')?.get('clientId')?.value"
+                  [responseDoc]="verificationForm?.get('responseDocument').value"
+                  [formGroup]="verificationForm"
+                [generateFlag]="generateFlag"></app-annexure-check>
+              }
+              <!-- <app-supporting-documents [screeningCompId]="verificationDetails.screeningCompId"
+              [paymentDetails]="paymentDetails" [paymentList]="paymentModeList"
+              [overrideFeeDetails]="overrideFeeDetails" [communicationDetails]="communicationDetails"
+            [commList]="communicationList" [verificationForm]="verificationForm"></app-supporting-documents> -->
+          </div>
+        }
+        @if (stepper === 2) {
+          <div>
+            <app-additional-fees [verificationForm]="verificationForm"
+            [additionalFeeList]="verificationForm?.get('additionalFee').value"></app-additional-fees>
+          </div>
+        }
+        @if (stepper === 4) {
+          <div>
+            <app-comments-updates [verificationForm]="verificationForm"
+              [commentsData]="verificationForm?.get('commentsFollowUp').value">
+            </app-comments-updates>
+          </div>
+        }
+        @if (stepper === 5) {
+          <div>
+            <app-review #review [verificationForm]="verificationForm"
+              [verificationTransBindDet]="verificationForm?.get('verificationTransBindDet')?.value"
+            [responseDocument]="verificationForm?.get('responseDocument')"></app-review>
+          </div>
+        }
+        <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+          <!-- //VTS2-2024-IDE-0213 - Point Hold
+          <button  mat-flat-button color="primary"
+            *ngIf="stepper === 5  && verificationDetails?.loginUserDetVm?.teamName === 'IdentityTeam' && this.verificationService.tempData.screeningStatus.isDatabaseAnnexureFlag && verificationForm?.value['responseDocument']?.componentName.toUpperCase() === commonService.CRIMINAL_DATABASE && verificationForm.get('showGenrateResponse').value === true" [disabled]="!isRemoveDisabled"
+            (click)="removeDatabaseAnnexure(verificationDetails.screeningCompId,this.userData.userId)">
+          Remove Annexure</button>
+          <button  mat-flat-button color="primary"
+            *ngIf="stepper === 5 && verificationDetails?.loginUserDetVm?.teamName === 'IdentityTeam' && this.verificationService.tempData.screeningStatus.isDatabaseAnnexureFlag && verificationForm?.value['responseDocument']?.componentName.toUpperCase() === commonService.CRIMINAL_DATABASE && verificationForm.get('showGenrateResponse').value === true "
+            [disabled]="!isGenerateDisabled"
+            (click)="generateDatabaseAnnexure(verificationDetails.screeningCompId,this.userData.userId,verificationForm?.get('verificationScreeningDet')?.get('clientId')?.value)">
+          Generate Annexure</button> -->
 
-                                            <button *ngIf='stepper > 0' mat-flat-button color="primary"
-                                                (click)='goToStep(getPretStepValue())'>Previous</button>
-                                            <button *ngIf="(restrictVeAccess() && stepper !== (verificationForm.get('showGenrateResponse').value === true ? 5 : 4))
-                       || (userData.applicationId === 2 &&  stepper !== 4)
-                      || (userData.applicationId === 1 && (userData.subTeamName === commonService.COMMONSUBCAMTEAM || userData.teamName === commonService.COMMONCRTTEAM || this.getFrFlag())
-                       && stepper !== 4)" mat-flat-button color="primary"
+          @if (stepper > 0) {
+            <button mat-flat-button color="primary"
+            (click)='goToStep(getPretStepValue())'>Previous</button>
+          }
+          @if ((restrictVeAccess() && stepper !== (verificationForm.get('showGenrateResponse').value === true ? 5 : 4))
+            || (userData.applicationId === 2 &&  stepper !== 4)
+            || (userData.applicationId === 1 && (userData.subTeamName === commonService.COMMONSUBCAMTEAM || userData.teamName === commonService.COMMONCRTTEAM || this.getFrFlag())
+            && stepper !== 4)) {
+            <button mat-flat-button color="primary"
                                                 (click)='goToStep((((this.userData.applicationId === 2) || (this.userData.applicationId === 1 && (this.userData.subTeamName ===
                         this.commonService.COMMONSUBCAMTEAM || this.userData.teamName === this.commonService.COMMONCRTTEAM || this.getFrFlag()))) && stepper === 3) ? stepper : stepper+1)'>Next
-                                            </button>
-                                            <button [ngClass]="screenAuth.addFlag===false?'page-btn disabled':''" *ngIf="reviewComp?.fontColor && verificationService.tempData.verificationScreeningDet.camRejectStatus !='Rejection' &&closedFlag === false &&commonService.MVCamRjFlag != true && commonService.MVCamFlag !==true && commonService.modifyAdditionalFeeFlag!=true && commonService.modifyComponentFeeFlag!=true && stepper === 5 && verificationForm.get('showGenrateResponse').value === true && (verificationDetails?.loginUserDetVm?.teamName === 'AddressTeam' ||
-                        verificationDetails?.loginUserDetVm?.teamName === 'EducationTeam'&&commonService.redcaseFlag !== true &&commonService.MvTlFlag !=true || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentIndia' &&commonService.MvTlFlag !=true&&commonService.redcaseFlag !== true ||
-                        verificationDetails?.loginUserDetVm?.teamName === 'CriminalTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CriminalTeam' ||
-                        verificationDetails?.loginUserDetVm?.teamName === 'IdentityTeam' || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentAbroad' ||
-                        verificationDetails?.loginUserDetVm?.teamName === 'EducationOverseas' || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentTechM' || verificationDetails?.loginUserDetVm?.teamName === 'ForResearchEmploymentTeam' || verificationDetails?.loginUserDetVm?.teamName === 'ForResearchEducationTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-AddressTeam' ||
-                        verificationDetails?.loginUserDetVm?.teamName === 'CTS-EducationTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-IdentityTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-CriminalTeam' ||
-                        verificationDetails?.loginUserDetVm?.teamName === 'CTS-EmploymentTeam')" mat-flat-button
-                                                color="warn"
-                                                (click)="reviewComp?.openDialogQc(reviewComp?.reviewSaveTemplate, '266px', '377px', 'Not')">Send
-                                                To QC</button>
-                                            <button
-                                                *ngIf="reviewComp?.fontColor && closedFlag === false && stepper === 5 &&commonService.redcaseFlag !== true && commonService.MVCamFlag !==true&&commonService.MVCamRjFlag != true && verificationForm.get('showGenrateResponse').value === true && (verificationDetails?.loginUserDetVm?.teamName === 'EducationTeam' &&commonService.MvTlFlag ===true || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentIndia' &&commonService.MvTlFlag ===true)"
-                                                mat-flat-button color="warn" (click)="reviewComp?.openDialogTl()">Send
-                                                To TL</button>
-                                            <!-- // Added By Megala - For (sprint -22) VTS2-2024-CRT-0195 -->
-                                            <button
-                                                *ngIf="reviewComp?.fontColor && closedFlag === false && stepper === 5 && verificationForm.get('showGenrateResponse').value === true && (commonService.MVCamRjFlag === true)"
-                                                mat-flat-button color="warn" (click)="reviewComp?.openDialogCAM()">Send
-                                                To CAM Approval</button>
+            </button>
+          }
+          @if (reviewComp?.fontColor && verificationService.tempData.verificationScreeningDet.camRejectStatus !='Rejection' &&closedFlag === false &&commonService.MVCamRjFlag != true && commonService.MVCamFlag !==true && commonService.modifyAdditionalFeeFlag!=true && commonService.modifyComponentFeeFlag!=true && stepper === 5 && verificationForm.get('showGenrateResponse').value === true && (verificationDetails?.loginUserDetVm?.teamName === 'AddressTeam' ||
+            verificationDetails?.loginUserDetVm?.teamName === 'EducationTeam'&&commonService.redcaseFlag !== true &&commonService.MvTlFlag !=true || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentIndia' &&commonService.MvTlFlag !=true&&commonService.redcaseFlag !== true ||
+            verificationDetails?.loginUserDetVm?.teamName === 'CriminalTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CriminalTeam' ||
+            verificationDetails?.loginUserDetVm?.teamName === 'IdentityTeam' || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentAbroad' ||
+            verificationDetails?.loginUserDetVm?.teamName === 'EducationOverseas' || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentTechM' || verificationDetails?.loginUserDetVm?.teamName === 'ForResearchEmploymentTeam' || verificationDetails?.loginUserDetVm?.teamName === 'ForResearchEducationTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-AddressTeam' ||
+            verificationDetails?.loginUserDetVm?.teamName === 'CTS-EducationTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-IdentityTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-CriminalTeam' ||
+            verificationDetails?.loginUserDetVm?.teamName === 'CTS-EmploymentTeam')) {
+            <button [ngClass]="screenAuth.addFlag===false?'page-btn disabled':''" mat-flat-button
+              color="warn"
+              (click)="reviewComp?.openDialogQc(reviewComp?.reviewSaveTemplate, '266px', '377px', 'Not')">Send
+            To QC</button>
+          }
+          @if (reviewComp?.fontColor && closedFlag === false && stepper === 5 &&commonService.redcaseFlag !== true && commonService.MVCamFlag !==true&&commonService.MVCamRjFlag != true && verificationForm.get('showGenrateResponse').value === true && (verificationDetails?.loginUserDetVm?.teamName === 'EducationTeam' &&commonService.MvTlFlag ===true || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentIndia' &&commonService.MvTlFlag ===true)) {
+            <button
+              mat-flat-button color="warn" (click)="reviewComp?.openDialogTl()">Send
+            To TL</button>
+          }
+          <!-- // Added By Megala - For (sprint -22) VTS2-2024-CRT-0195 -->
+          @if (reviewComp?.fontColor && closedFlag === false && stepper === 5 && verificationForm.get('showGenrateResponse').value === true && (commonService.MVCamRjFlag === true)) {
+            <button
+              mat-flat-button color="warn" (click)="reviewComp?.openDialogCAM()">Send
+            To CAM Approval</button>
+          }
 
-                                            <button
-                                                *ngIf="reviewComp?.fontColor && closedFlag === false && stepper === 5 && verificationForm.get('showGenrateResponse').value === true"
-                                                mat-flat-button color="primary"
-                                                (click)="reviewComp?.getFinalReprt('preview')">Pre-View
-                                                Document</button>
-                                            <button [ngClass]="screenAuth.addFlag===false?'page-btn disabled':''" *ngIf="stepper === 5 &&verificationService.tempData.verificationScreeningDet.camRejectStatus !='Rejection'&& closedFlag === false && commonService.modifyAdditionalFeeFlag!=true && commonService.modifyComponentFeeFlag!=true && verificationForm.get('showGenrateResponse').value===true &&commonService.redcaseFlag !== true && (verificationDetails?.loginUserDetVm?.teamName === 'AddressTeam' ||
-                      verificationDetails?.loginUserDetVm?.teamName === 'EducationTeam' || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentIndia' ||
-                      verificationDetails?.loginUserDetVm?.teamName === 'CriminalTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CriminalTeam' ||
-                      verificationDetails?.loginUserDetVm?.teamName === 'IdentityTeam' || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentAbroad' ||
-                      verificationDetails?.loginUserDetVm?.teamName === 'EducationOverseas' || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentTechM' || verificationDetails?.loginUserDetVm?.teamName === 'ForResearchEmploymentTeam' || verificationDetails?.loginUserDetVm?.teamName === 'ForResearchEducationTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-AddressTeam' ||
-                      verificationDetails?.loginUserDetVm?.teamName === 'CTS-EducationTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-IdentityTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-CriminalTeam' ||
-                      verificationDetails?.loginUserDetVm?.teamName === 'CTS-EmploymentTeam')" mat-flat-button
-                                                color="accent"
-                                                (click)="reviewComp?.updateContactDetails('updateData', reviewComp?.f)">Save</button>
-                                        </mat-card-actions>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="25%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs>
-                        <div class="step">
-                            <div fxLayout='row'>
-                                <div fxFlex="100%">
-                                    <div class="list" (click)='goToStep(0)'>
-                                        <a>Candidate Details<i class="icon-support" fxHide.sm fxHide.xs></i></a>
-                                    </div>
-                                    <div class="list" (click)='goToStep(1);getDateCalc()'>
-                                        <a>Component Details <i class="icon-disc" fxHide.sm fxHide.xs></i></a>
-                                    </div>
-                                    <div class="list" (click)='goToStep(2)' *ngIf="restrictVeAccess()">
-                                        <a>{{verificationService?.tempData?.verificationScreeningDet?.manualFileSubmissionFlag
-                                            === true ? 'Override Fee' : 'Additional Fee'}}<i class="icon-banknote"
-                                                fxHide.sm fxHide.xs> </i></a>
-                                    </div>
-                                    <div class="list" (click)='goToStep(restrictVeAccess() ? 3 : 2)'>
-                                        <a>Screening <i class="icon-verification" fxHide.sm fxHide.xs></i></a>
-                                    </div>
-                                    <div class="list" (click)='goToStep(restrictVeAccess() ? 4 : 3)'>
-                                        <a>Comments & Follow Up<i class="icon-bubble" fxHide.sm fxHide.xs> </i></a>
-                                    </div>
-                                    <div class="list" (click)='goToStep(5)'
-                                        *ngIf="restrictVeAccess() && verificationForm.get('showGenrateResponse').value === true && commonService.modifyAdditionalFeeFlag!=true && commonService.modifyComponentFeeFlag!=true">
-                                        <a>Generate Response<i class="icon-envelope-letter" fxHide.sm fxHide.xs>
-                                            </i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mat-card>
-        </div>
+          @if (reviewComp?.fontColor && closedFlag === false && stepper === 5 && verificationForm.get('showGenrateResponse').value === true) {
+            <button
+              mat-flat-button color="primary"
+              (click)="reviewComp?.getFinalReprt('preview')">Pre-View
+            Document</button>
+          }
+          @if (stepper === 5 &&verificationService.tempData.verificationScreeningDet.camRejectStatus !='Rejection'&& closedFlag === false && commonService.modifyAdditionalFeeFlag!=true && commonService.modifyComponentFeeFlag!=true && verificationForm.get('showGenrateResponse').value===true &&commonService.redcaseFlag !== true && (verificationDetails?.loginUserDetVm?.teamName === 'AddressTeam' ||
+            verificationDetails?.loginUserDetVm?.teamName === 'EducationTeam' || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentIndia' ||
+            verificationDetails?.loginUserDetVm?.teamName === 'CriminalTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CriminalTeam' ||
+            verificationDetails?.loginUserDetVm?.teamName === 'IdentityTeam' || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentAbroad' ||
+            verificationDetails?.loginUserDetVm?.teamName === 'EducationOverseas' || verificationDetails?.loginUserDetVm?.teamName === 'EmploymentTechM' || verificationDetails?.loginUserDetVm?.teamName === 'ForResearchEmploymentTeam' || verificationDetails?.loginUserDetVm?.teamName === 'ForResearchEducationTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-AddressTeam' ||
+            verificationDetails?.loginUserDetVm?.teamName === 'CTS-EducationTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-IdentityTeam' || verificationDetails?.loginUserDetVm?.teamName === 'CTS-CriminalTeam' ||
+            verificationDetails?.loginUserDetVm?.teamName === 'CTS-EmploymentTeam')) {
+            <button [ngClass]="screenAuth.addFlag===false?'page-btn disabled':''" mat-flat-button
+              color="accent"
+            (click)="reviewComp?.updateContactDetails('updateData', reviewComp?.f)">Save</button>
+          }
+        </mat-card-actions>
+      </div>
     </div>
-    <ng-template #verificationTemplate>
-        <div fxLayout="row" fxLayoutGap="20px">
-            <div fxFlex="100%">
-                <div class="client-details">
-                    <div fxLayout="row" fxFlex="100%">
-                        <div fxFlex="7%">
-                            <div class="client-avatar">
-                                <i class="icon-referencecheck"></i>
-                            </div>
-                        </div>
-                        <div fxFlex="93%">
-                            <div fxLayout="row">
-                                <div fxFlex="100%">
-                                    <h3 matTooltip="Client details" matTooltipClass="accent-tooltip" class="m-0 pl-15">
-                                        Karan Aditya </h3>
-                                </div>
-                            </div>
-                            <div fxLayout="row">
-                                <div fxFlex="100%">
-                                    <h4 matTooltip="Client details" matTooltipClass="accent-tooltip" class="m-0 pl-15">
-                                        #10, Ganapathi Colony, Velachary, Chennai, Tamilnadu 600025 </h4>
-                                </div>
-                            </div>
-                            <div fxLayout="row" class="client-data">
-                                <div fxFlex="33.33%">
-                                    <div fxLayout="row">
-                                        <div fxFlex="100%">
-                                            <p>
-                                                <label>Date:</label>
-                                                <span>19/05/2019</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div fxLayout="row">
-                                        <div fxFlex="100%">
-                                            <p>
-                                                <label class="">Status Date:</label>
-                                                <span>10/09/2019 3:52 PM</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div fxLayout="row">
-                                        <div fxFlex="100%">
-                                            <p>
-                                                <label class="">Case Priority:</label>
-                                                <span>Normal Case</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div fxFlex="33.33%">
-                                    <div fxLayout="row">
-                                        <div fxFlex="100%">
-                                            <p>
-                                                <label>Contact No.:</label>
-                                                <span>044 2564 7265</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div fxLayout="row">
-                                        <div fxFlex="100%">
-                                            <p>
-                                                <label class="">Report Date:</label>
-                                                <span>10/09/2019 3:52 PM</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div fxLayout="row">
-                                        <div fxFlex="100%">
-                                            <p>
-                                                <label class="">Case Status:</label>
-                                                <span>Re-open</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div fxFlex="33.33%">
-                                    <div fxLayout="row">
-                                        <div fxFlex="100%">
-                                            <p>
-                                                <label>Mail ID</label>
-                                                <span><a href="mailto:adityakaranyak&#64;gmail.com">adi&#64;gmail.com</a></span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div fxLayout="row">
-                                        <div fxFlex="100%">
-                                            <p>
-                                                <label class="">Status:</label>
-                                                <span>Unable to Verify</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  </div>
+</div>
+</div>
+<div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="25%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs>
+  <div class="step">
+    <div fxLayout='row'>
+      <div fxFlex="100%">
+        <div class="list" (click)='goToStep(0)'>
+          <a>Candidate Details<i class="icon-support" fxHide.sm fxHide.xs></i></a>
         </div>
-    </ng-template>
-    <ng-template #empinsMatchingFakeTemplate>
-        <h1 mat-dialog-title>
-            {{verificationService.tempData.empInsMasterDet.empFlag?'Fake Employer LIst': 'Fake Institution List'}}</h1>
-        <mat-dialog-content>
+        <div class="list" (click)='goToStep(1);getDateCalc()'>
+          <a>Component Details <i class="icon-disc" fxHide.sm fxHide.xs></i></a>
+        </div>
+        @if (restrictVeAccess()) {
+          <div class="list" (click)='goToStep(2)'>
+            <a>{{verificationService?.tempData?.verificationScreeningDet?.manualFileSubmissionFlag
+              === true ? 'Override Fee' : 'Additional Fee'}}<i class="icon-banknote"
+            fxHide.sm fxHide.xs> </i></a>
+          </div>
+        }
+        <div class="list" (click)='goToStep(restrictVeAccess() ? 3 : 2)'>
+          <a>Screening <i class="icon-verification" fxHide.sm fxHide.xs></i></a>
+        </div>
+        <div class="list" (click)='goToStep(restrictVeAccess() ? 4 : 3)'>
+          <a>Comments & Follow Up<i class="icon-bubble" fxHide.sm fxHide.xs> </i></a>
+        </div>
+        @if (restrictVeAccess() && verificationForm.get('showGenrateResponse').value === true && commonService.modifyAdditionalFeeFlag!=true && commonService.modifyComponentFeeFlag!=true) {
+          <div class="list" (click)='goToStep(5)'
+            >
+            <a>Generate Response<i class="icon-envelope-letter" fxHide.sm fxHide.xs>
+            </i></a>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</mat-card>
+</div>
+</div>
+<ng-template #verificationTemplate>
+  <div fxLayout="row" fxLayoutGap="20px">
+    <div fxFlex="100%">
+      <div class="client-details">
+        <div fxLayout="row" fxFlex="100%">
+          <div fxFlex="7%">
+            <div class="client-avatar">
+              <i class="icon-referencecheck"></i>
+            </div>
+          </div>
+          <div fxFlex="93%">
             <div fxLayout="row">
-                <div fxFlex="100%">
-                    <p>
-                        <label class="">{{verificationService.tempData.empInsMasterDet.empFlag?'Employer
-                            Name:':'Institution Name:'}}</label>
-                        <span class="text-bold text-ilatic">
-                            {{verificationService.tempData.empInsMasterDet.name}}</span>
-                    </p>
-                </div>
+              <div fxFlex="100%">
+                <h3 matTooltip="Client details" matTooltipClass="accent-tooltip" class="m-0 pl-15">
+                Karan Aditya </h3>
+              </div>
             </div>
             <div fxLayout="row">
-                <div fxFlex="100%">
-                    <p-table #dt [columns]="empinsFakeColumns" [value]="empinsFakeList" [scrollable]="true"
-                        [paginator]="true" [rows]="10" [resizableColumns]="true" [reorderableColumns]="true"
-                        columnResizeMode="expand">
+              <div fxFlex="100%">
+                <h4 matTooltip="Client details" matTooltipClass="accent-tooltip" class="m-0 pl-15">
+                #10, Ganapathi Colony, Velachary, Chennai, Tamilnadu 600025 </h4>
+              </div>
+            </div>
+            <div fxLayout="row" class="client-data">
+              <div fxFlex="33.33%">
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <p>
+                      <label>Date:</label>
+                      <span>19/05/2019</span>
+                    </p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <p>
+                      <label class="">Status Date:</label>
+                      <span>10/09/2019 3:52 PM</span>
+                    </p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <p>
+                      <label class="">Case Priority:</label>
+                      <span>Normal Case</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div fxFlex="33.33%">
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <p>
+                      <label>Contact No.:</label>
+                      <span>044 2564 7265</span>
+                    </p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <p>
+                      <label class="">Report Date:</label>
+                      <span>10/09/2019 3:52 PM</span>
+                    </p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <p>
+                      <label class="">Case Status:</label>
+                      <span>Re-open</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div fxFlex="33.33%">
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <p>
+                      <label>Mail ID</label>
+                      <span><a href="mailto:adityakaranyak&#64;gmail.com">adi&#64;gmail.com</a></span>
+                    </p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxFlex="100%">
+                    <p>
+                      <label class="">Status:</label>
+                      <span>Unable to Verify</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #empinsMatchingFakeTemplate>
+  <h1 mat-dialog-title>
+  {{verificationService.tempData.empInsMasterDet.empFlag?'Fake Employer LIst': 'Fake Institution List'}}</h1>
+  <mat-dialog-content>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <p>
+          <label class="">{{verificationService.tempData.empInsMasterDet.empFlag?'Employer
+          Name:':'Institution Name:'}}</label>
+          <span class="text-bold text-ilatic">
+          {{verificationService.tempData.empInsMasterDet.name}}</span>
+        </p>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="100%">
+        <p-table #dt [columns]="empinsFakeColumns" [value]="empinsFakeList" [scrollable]="true"
+          [paginator]="true" [rows]="10" [resizableColumns]="true" [reorderableColumns]="true"
+          columnResizeMode="expand">
 
-                        <!-- ================= COLGROUP ================= -->
-                        <ng-template pTemplate="colgroup" let-colGroupCols>
-                            <colgroup>
-                                <col style="width:100px" />
-                                <col *ngFor="let col of colGroupCols" style="min-width:150px" />
-                            </colgroup>
-                        </ng-template>
+          <!-- ================= COLGROUP ================= -->
+          <ng-template pTemplate="colgroup" let-colGroupCols>
+            <colgroup>
+            <col style="width:100px" />
+            @for (col of colGroupCols; track col) {
+              <col style="min-width:150px" />
+            }
+          </colgroup>
+        </ng-template>
 
-                        <!-- ================= HEADER ================= -->
-                        <ng-template pTemplate="header" let-headerCols>
-                            <tr>
-                                <th>Sr. No.</th>
-                                <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn
-                                    pResizableColumn>
+        <!-- ================= HEADER ================= -->
+        <ng-template pTemplate="header" let-headerCols>
+          <tr>
+            <th>Sr. No.</th>
+            @for (col of headerCols; track col) {
+              <th pReorderableColumn
+                pResizableColumn>
+                <span [pSortableColumn]="col.field">
+                  <div matTooltip="{{col.header}}" matTooltipClass="accent-tooltip"
+                    class="thname">
+                    {{ col.header }}
+                  </div>
+                  @if (col.field !== 'action') {
+                    <p-sortIcon [field]="col.field"
+                      ariaLabel="Activate to sort"
+                      ariaLabelDesc="Activate to sort in descending order" matTooltip="Sorting"
+                      matTooltipClass="accent-tooltip"
+                      ariaLabelAsc="Activate to sort in ascending order">
+                    </p-sortIcon>
+                  }
+                </span>
+              </th>
+            }
+          </tr>
+        </ng-template>
 
-                                    <span [pSortableColumn]="col.field">
-                                        <div matTooltip="{{col.header}}" matTooltipClass="accent-tooltip"
-                                            class="thname">
-                                            {{ col.header }}
-                                        </div>
+        <!-- ================= BODY ================= -->
+        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-rowData let-bodyCols="columns">
 
-                                        <p-sortIcon *ngIf="col.field !== 'action'" [field]="col.field"
-                                            ariaLabel="Activate to sort"
-                                            ariaLabelDesc="Activate to sort in descending order" matTooltip="Sorting"
-                                            matTooltipClass="accent-tooltip"
-                                            ariaLabelAsc="Activate to sort in ascending order">
-                                        </p-sortIcon>
-                                    </span>
-                                </th>
-                            </tr>
-                        </ng-template>
+          <tr>
+            <td>{{ rowIndex + 1 }}</td>
 
-                        <!-- ================= BODY ================= -->
-                        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-rowData let-bodyCols="columns">
+            @for (col of bodyCols; track col) {
+              <td
+                [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                @if (col.field === 'SNo') {
+                  <div fxLayout="row" class="desg-icon">
+                    {{ rowIndex + 1 }}
+                  </div>
+                }
+                @if (col.field === 'name') {
+                  <div fxLayout="row" class="desg-icon">
+                    {{ rowData.name }}
+                  </div>
+                }
+              </td>
+            }
+          </tr>
+        </ng-template>
 
-                            <tr>
-                                <td>{{ rowIndex + 1 }}</td>
+        <!-- ================= EMPTY MESSAGE ================= -->
+        @if (empinsFakeList?.length == 0) {
+          <ng-template pTemplate="emptymessage">
+            <div fxLayout="row">
+              <div fxFlex="100%" class="pt-15">
+                <div class="no-record text-center">
+                  <span>No Record Found</span>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        }
 
-                                <td *ngFor="let col of bodyCols" [ngSwitch]="col.field"
-                                    [ngClass]="{ 'desg-bg': col.field === 'action' }">
-
-                                    <div fxLayout="row" *ngSwitchCase="'SNo'" class="desg-icon">
-                                        {{ rowIndex + 1 }}
-                                    </div>
-
-                                    <div fxLayout="row" *ngSwitchCase="'name'" class="desg-icon">
-                                        {{ rowData.name }}
-                                    </div>
-
-                                </td>
-                            </tr>
-                        </ng-template>
-
-                        <!-- ================= EMPTY MESSAGE ================= -->
-                        <ng-template pTemplate="emptymessage" *ngIf="empinsFakeList?.length == 0">
-                            <div fxLayout="row">
-                                <div fxFlex="100%" class="pt-15">
-                                    <div class="no-record text-center">
-                                        <span>No Record Found</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </ng-template>
-
-                    </p-table>
-                    <div class="cus-paginator" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
-                        fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
-                        fxLayoutGap.xs="20px grid" [ngClass]="{'empty-record': empinsFakeList.length == 0}">
-                        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                            fxLayoutAlign="start center">
-                            Showing {{ dt.totalRecords
-                            < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
-                                <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }}
-                                    record(s) </div>
-                                    <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                        fxLayoutAlign="end center" fxLayoutAlign.md="end center"
-                                        fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+      </p-table>
+      <div class="cus-paginator" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row"
+        fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+        fxLayoutGap.xs="20px grid" [ngClass]="{'empty-record': empinsFakeList.length == 0}">
+        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+          fxLayoutAlign="start center">
+          Showing {{ dt.totalRecords
+          < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+          <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }}
+        record(s) </div>
+        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+          fxLayoutAlign="end center" fxLayoutAlign.md="end center"
+          fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
                                         <a [ngClass]="dt.first===0?'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                           navigateNxtPrevPage(dt.first + dt.rows,dt.rows)">
-                                            <i class="icon-control-start mr-5"></i></a>
-                                        <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
-                                                <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5"
-                                                    appNumberOnly [NumberOnly]="false"
-                                                    (keyup.enter)="navigatePage(pageNo.value,dt.rows)" />
-                                            </span></span>
+            <i class="icon-control-start mr-5"></i></a>
+            <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+              <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5"
+                appNumberOnly [NumberOnly]="false"
+                (keyup.enter)="navigatePage(pageNo.value,dt.rows)" />
+              </span></span>
 
-                                        <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords,dt.rows)
-                                            }}</span>
-                                        <a [ngClass]="(dt.rows + dt.first)>=dt.totalRecords?'page-btn disabled': 'page-btn'"
+              <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords,dt.rows)
+              }}</span>
+              <a [ngClass]="(dt.rows + dt.first)>=dt.totalRecords?'page-btn disabled': 'page-btn'"
                                             (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                                     navigateNxtPrevPage(dt.first + dt.rows,dt.rows)"><i
-                                                class="icon-control-end ml-5"></i></a>
-                                    </div>
-                        </div>
-                    </div>
-                </div>
-        </mat-dialog-content>
-        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end center">
-            <button mat-flat-button color="warn" (click)="fakeListVerified()">
-                Verified
-            </button>
-            <button mat-stroked-button [mat-dialog-close]="true" (click)="dialog.closeAll()">
-                Cancel
-            </button>
-        </mat-dialog-actions>
-        <!-- </div>
-    </div> -->
-    </ng-template>
+              class="icon-control-end ml-5"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end center">
+      <button mat-flat-button color="warn" (click)="fakeListVerified()">
+        Verified
+      </button>
+      <button mat-stroked-button [mat-dialog-close]="true" (click)="dialog.closeAll()">
+        Cancel
+      </button>
+    </mat-dialog-actions>
+  <!-- </div>
+</div> -->
+</ng-template>
 </span>
-<span *ngIf='verificationService.isFinalReport'
+@if (verificationService.isFinalReport) {
+  <span
     [ngClass]="{'d-none': verificationService.isFinalReport && verificationService.reportType ==='download'}">
     <!-- <span > -->
     <div fxLayout="row">
-        <div fxFlex="80%" class="m-auto">
-            <app-response-document
-                *ngIf="pdfType === '1' && verificationService.tempData.verificationScreeningDet.clientCategoryId !== 4"></app-response-document>
-            <app-techm-response-document
-                *ngIf="pdfType === '1' && verificationService.tempData.verificationScreeningDet.clientCategoryId === 4"></app-techm-response-document>
-            <app-generate-pdf *ngIf="pdfType === '2'"></app-generate-pdf>
-        </div>
+      <div fxFlex="80%" class="m-auto">
+        @if (pdfType === '1' && verificationService.tempData.verificationScreeningDet.clientCategoryId !== 4) {
+          <app-response-document
+          ></app-response-document>
+        }
+        @if (pdfType === '1' && verificationService.tempData.verificationScreeningDet.clientCategoryId === 4) {
+          <app-techm-response-document
+          ></app-techm-response-document>
+        }
+        @if (pdfType === '2') {
+          <app-generate-pdf></app-generate-pdf>
+        }
+      </div>
     </div>
-    <!-- </span> -->
+  <!-- </span> -->
 </span>
+}
 <!-- mat drawer content-->
-<mat-drawer-container class="PView" *ngIf="true">
+@if (true) {
+  <mat-drawer-container class="PView">
     <mat-drawer #drawer mode="side" position="end">
-        <div class="PView-box">
-            <h4 class="sub-header">Client Information</h4>
-            <div class="side-scroll" style="overflow:auto">
-                <div fxLayout="row">
-                    <div fxFlex="100%" class="hints">
-                        <h6 class="hints">Client Name</h6>
-                        <ul>
-                            <li>{{this.verificationForm.get('verificationScreeningDet.clientName').value }}</li>
-                        </ul>
-                    </div>
-                </div>
-                <div fxLayout="row">
-                    <div fxFlex="100%" class="hints">
-                        <h6 class="hints">Client Instructions</h6>
-                        <ul *ngFor="let ins of this.verificationForm?.controls['clientPolicy']?.value">
-                            <li *ngIf="!ins?.componentId">
-                                {{ins?.lookUpName}} - <span innerHTML={{ins?.instruction}}></span></li>
-                            <li
-                                *ngIf="ins?.componentId && verificationForm?.value['responseDocument']?.componentName === ins?.rptType">
-                                {{ins?.lookUpName}} - <span innerHTML={{ins.instruction}}></span></li>
-                        </ul>
-                        <ul *ngIf="!(this.verificationForm.controls['clientPolicy']?.value?.length > 0)">
-                            <li>N/A</li>
-                        </ul>
-                    </div>
-                </div>
+      <div class="PView-box">
+        <h4 class="sub-header">Client Information</h4>
+        <div class="side-scroll" style="overflow:auto">
+          <div fxLayout="row">
+            <div fxFlex="100%" class="hints">
+              <h6 class="hints">Client Name</h6>
+              <ul>
+                <li>{{this.verificationForm.get('verificationScreeningDet.clientName').value }}</li>
+              </ul>
             </div>
-        </div>
-    </mat-drawer>
-    <div class="example-sidenav-content">
-        <button type="button" mat-stroked-button (click)="drawer.toggle()" class="PViewBtn">
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="100%" class="hints">
+              <h6 class="hints">Client Instructions</h6>
+              @for (ins of this.verificationForm?.controls['clientPolicy']?.value; track ins) {
+                <ul>
+                  @if (!ins?.componentId) {
+                    <li>
+                      {{ins?.lookUpName}} - <span innerHTML={{ins?.instruction}}></span></li>
+                    }
+                    @if (ins?.componentId && verificationForm?.value['responseDocument']?.componentName === ins?.rptType) {
+                      <li
+                        >
+                        {{ins?.lookUpName}} - <span innerHTML={{ins.instruction}}></span></li>
+                      }
+                    </ul>
+                  }
+                  @if (!(this.verificationForm.controls['clientPolicy']?.value?.length > 0)) {
+                    <ul>
+                      <li>N/A</li>
+                    </ul>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-drawer>
+        <div class="example-sidenav-content">
+          <button type="button" mat-stroked-button (click)="drawer.toggle()" class="PViewBtn">
             <label>Instructions</label>
             <!-- <i class="material-icons material-icons-outlined">more_horiz</i>  -->
-        </button>
-    </div>
-</mat-drawer-container>
-
-<ng-template #empmatching>
-    <mat-dialog-content>
-        <div fxLayout="row">
-            <div fxFlex="100%" class="text-center" fxLayoutAlign="center center">
-                <div class="dt"><a *ngIf="verificationService.tempData.empInsMasterDet.empFlag == true"
-                        (click)="viewmat()" style="color: red;"><b>Please note !,This Employer Name (
-                            {{empmat[0].empInsName}} ) is matching with Suspicious Employer list</b></a>
-                    <a *ngIf="verificationService.tempData.empInsMasterDet.empFlag != true" (click)="viewmat()"
-                        style="color: red;"><b>Please note !,This Institution Name ( {{empmat[0].empInsName}} ) is
-                            matching with Suspicious Institution list</b></a>
-                </div>
-            </div>
+          </button>
         </div>
+      </mat-drawer-container>
+    }
+
+    <ng-template #empmatching>
+      <mat-dialog-content>
+        <div fxLayout="row">
+          <div fxFlex="100%" class="text-center" fxLayoutAlign="center center">
+            <div class="dt">@if (verificationService.tempData.empInsMasterDet.empFlag == true) {
+              <a
+                (click)="viewmat()" style="color: red;"><b>Please note !,This Employer Name (
+              {{empmat[0].empInsName}} ) is matching with Suspicious Employer list</b></a>
+            }
+            @if (verificationService.tempData.empInsMasterDet.empFlag != true) {
+              <a (click)="viewmat()"
+                style="color: red;"><b>Please note !,This Institution Name ( {{empmat[0].empInsName}} ) is
+              matching with Suspicious Institution list</b></a>
+            }
+          </div>
+        </div>
+      </div>
     </mat-dialog-content>
-</ng-template>
-<ng-template #empsearch>
+  </ng-template>
+  <ng-template #empsearch>
     <mat-dialog-content class="ansqn">
-        <h1 mat-dialog-title *ngIf="verificationService.tempData.empInsMasterDet.empFlag == true">Suspicious Employer
-            Details</h1>
-        <h1 mat-dialog-title *ngIf="verificationService.tempData.empInsMasterDet.empFlag != true">Suspicious University
-            Details</h1>
-        <div *ngFor="let empm of empmat;let j = index">
-            <div fxLayout="row">
-                <div fxFlex="100%">
-                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
-                        fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid"
-                        fxLayoutGap.xs="20px grid">
-                        <div fxFlex="7%" fxFlex.lg="7%" fxFlex.md="5%" fxFlex.sm="50%" fxFlex.xs="100%">
-                            <div class="history-view">
-                                <div class="uname">
+      @if (verificationService.tempData.empInsMasterDet.empFlag == true) {
+        <h1 mat-dialog-title>Suspicious Employer
+        Details</h1>
+      }
+      @if (verificationService.tempData.empInsMasterDet.empFlag != true) {
+        <h1 mat-dialog-title>Suspicious University
+        Details</h1>
+      }
+      @for (empm of empmat; track empm; let j = $index) {
+        <div>
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid"
+                fxLayoutGap.xs="20px grid">
+                <div fxFlex="7%" fxFlex.lg="7%" fxFlex.md="5%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <div class="history-view">
+                    <div class="uname">
                                     <div matTooltip="{{ empm?.candidateFirstName }} {{ empm?.candidateMiddleName ? empm?.candidateMiddleName : '' }}
               {{ empm?.candidateLastName ? empm?.candidateLastName : '' }}" matTooltipClass="accent-tooltip"
-                                        class="user avatarBg{{(j%6)+1}}">
-                                        {{ empm?.candidateFirstName?.slice(0, 1)}}{{ empm?.candidateLastName?.slice(0,
-                                        1)}}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div fxFlex="24%" fxFlex.lg="24%" fxFlex.md="15%" fxFlex.sm="50%" fxFlex.xs="100%">
-                            <span style=" font-weight: bold;font-size: 15px;">
-                                {{ empm?.candidateFirstName }} {{ empm?.candidateMiddleName ? empm?.candidateMiddleName
-                                : '' }}
-                                {{ empm?.candidateLastName ? empm?.candidateLastName : '' }}
-                            </span>
-                            <div class="dt">{{empm?.verificationId}}</div>
-                        </div>
-                        <div fxFlex="32%" fxFlex.lg="32%" fxFlex.md="15%" fxFlex.sm="40%" fxFlex.xs="100%">
-                            <p>
-                                <label>Client:</label>
-                                <span>{{empm?.clientName}}</span>
-                            </p>
-                            <p>
-                                <label>Site Name:</label>
-                                <span>{{empm?.siteName ? empm?.siteName : 'N/A'}}</span>
-                            </p>
-                            <p>
-                                <label>Case Staus:</label>
-                                <span>{{empm?.caseStatus ? empm?.caseStatus : 'N/A'}}</span>
-                            </p>
-                            <p *ngIf="userData.applicationId === 1">
-                                <label>QC Status:</label>
-                                <span>{{empm?.qcStatus ? (empm?.qcStatus === 'Not Sent To QC' ? (empm?.generatedPdfFlag
-                                    === true ? empm?.qcStatus : 'N/A') : empm?.qcStatus) : 'N/A'}}</span>
-                            </p>
-                        </div>
-                        <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="15%" fxFlex.sm="50%" fxFlex.xs="100%">
-                            <p>
-                                <label>
-                                    Client Ref No:
-                                </label>
-                                <span>{{empm?.clientRefNo}}</span>
-                            </p>
-                            <p>
-                                <label>Vendor:</label>
-                                <span>{{empm?.vendorName ? empm?.vendorName : 'N/A'}}</span>
-                            </p>
-                            <p>
-                                <label>Owner:</label>
-                                <span>{{empm?.screeningOwnerName ? empm?.screeningOwnerName : 'N/A'}}</span>
-                            </p>
-                            <p>
-                            <p>
-                                <label>Component Status:</label>
-                                <span>{{empm?.componentStatus ? empm?.componentStatus : 'N/A'}}</span>
-                            </p>
-                            <p>
-                                <label>Component:</label>
-                                <span class="cn-chip">{{empm?.componentName}}
-                                    {{empm.subCompName? "- "+empm.subCompName:''}}
-                                    <!-- {{(empj?.componentName.toLowerCase() === 'address' ||
-                empj?.componentName.toLowerCase() === 'address - geo')?
-                "- "+empj?.functionalEntity:''}} -->
-                                </span>
-                            </p>
-                        </div>
+                        class="user avatarBg{{(j%6)+1}}">
+                        {{ empm?.candidateFirstName?.slice(0, 1)}}{{ empm?.candidateLastName?.slice(0,
+                      1)}}</div>
                     </div>
+                  </div>
                 </div>
+                <div fxFlex="24%" fxFlex.lg="24%" fxFlex.md="15%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <span style=" font-weight: bold;font-size: 15px;">
+                    {{ empm?.candidateFirstName }} {{ empm?.candidateMiddleName ? empm?.candidateMiddleName
+                    : '' }}
+                    {{ empm?.candidateLastName ? empm?.candidateLastName : '' }}
+                  </span>
+                  <div class="dt">{{empm?.verificationId}}</div>
+                </div>
+                <div fxFlex="32%" fxFlex.lg="32%" fxFlex.md="15%" fxFlex.sm="40%" fxFlex.xs="100%">
+                  <p>
+                    <label>Client:</label>
+                    <span>{{empm?.clientName}}</span>
+                  </p>
+                  <p>
+                    <label>Site Name:</label>
+                    <span>{{empm?.siteName ? empm?.siteName : 'N/A'}}</span>
+                  </p>
+                  <p>
+                    <label>Case Staus:</label>
+                    <span>{{empm?.caseStatus ? empm?.caseStatus : 'N/A'}}</span>
+                  </p>
+                  @if (userData.applicationId === 1) {
+                    <p>
+                      <label>QC Status:</label>
+                      <span>{{empm?.qcStatus ? (empm?.qcStatus === 'Not Sent To QC' ? (empm?.generatedPdfFlag
+                      === true ? empm?.qcStatus : 'N/A') : empm?.qcStatus) : 'N/A'}}</span>
+                    </p>
+                  }
+                </div>
+                <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="15%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <p>
+                    <label>
+                      Client Ref No:
+                    </label>
+                    <span>{{empm?.clientRefNo}}</span>
+                  </p>
+                  <p>
+                    <label>Vendor:</label>
+                    <span>{{empm?.vendorName ? empm?.vendorName : 'N/A'}}</span>
+                  </p>
+                  <p>
+                    <label>Owner:</label>
+                    <span>{{empm?.screeningOwnerName ? empm?.screeningOwnerName : 'N/A'}}</span>
+                  </p>
+                  <p>
+                    <p>
+                      <label>Component Status:</label>
+                      <span>{{empm?.componentStatus ? empm?.componentStatus : 'N/A'}}</span>
+                    </p>
+                    <p>
+                      <label>Component:</label>
+                      <span class="cn-chip">{{empm?.componentName}}
+                        {{empm.subCompName? "- "+empm.subCompName:''}}
+                        <!-- {{(empj?.componentName.toLowerCase() === 'address' ||
+                        empj?.componentName.toLowerCase() === 'address - geo')?
+                        "- "+empj?.functionalEntity:''}} -->
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
             <br>
-        </div>
-    </mat-dialog-content>
-    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
-        <button mat-flat-button color="warn" (click)="dialog?.closeAll();">Close</button>
-    </mat-dialog-actions>
-</ng-template>
-<ng-template #OverLabPopUp>
-    <mat-dialog-content>
-        <div fxLayout="row">
-            <div fxFlex="100%">
-                <div fxLayout="row">
-                    <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
-                            src="assets/images/alert-warning.gif"></div>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="center center">
-                    <div fxFlex="100%" class="text-center">
-                        <h3 class="m-0">{{ Message}} !</h3>
-
-                    </div>
-                </div>
             </div>
-        </div>
-    </mat-dialog-content>
-
-    <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
-        <button mat-flat-button color="warn" (click)="dialog.closeAll();employeematch();">OK</button>
-
-    </mat-dialog-actions>
-</ng-template>
-<ng-template #reject>
-    <form>
-        <h1 mat-dialog-title>Move to Employment</h1>
-        <mat-dialog-content>
-            <div fxLayout="row" class="pt-15">
-                <div fxFlex="100%">
-                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                        <mat-label>Comments</mat-label>
-                        <textarea fxFlex="100%" #rej [formControl]="rejectComments" required matInput
-                            placeholder="Comments" maxlength="1000">
-                         </textarea>
-                        <mat-hint class="f-13"> ({{rej.value.length}} /1000 max) </mat-hint>
-                        <mat-error *ngIf="!rejectComments.value">Comments is required</mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
+          }
         </mat-dialog-content>
-        <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
-            <button mat-flat-button color="warn" [disabled]="!rejectComments.valid"
-                (click)="approveOrRejectTL(false,true)"> Submit </button>
-            <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose()"> Cancel </button>
+        <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+          <button mat-flat-button color="warn" (click)="dialog?.closeAll();">Close</button>
         </mat-dialog-actions>
-    </form>
-</ng-template>
-<ng-template #DateAlertPopUp>
-    <mat-dialog-content>
-        <div fxLayout="row">
+      </ng-template>
+      <ng-template #OverLabPopUp>
+        <mat-dialog-content>
+          <div fxLayout="row">
             <div fxFlex="100%">
-                <div fxLayout="row">
-                    <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
-                            src="assets/images/alert-warning.gif"></div>
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                src="assets/images/alert-warning.gif"></div>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center center">
+                <div fxFlex="100%" class="text-center">
+                  <h3 class="m-0">{{ Message}} !</h3>
+
                 </div>
-                <div fxLayout="row" fxLayoutAlign="center center">
-                    <div fxFlex="100%" class="text-center">
-                        <h3 class="m-0">{{ headerText}} </h3>
-                        <!-- <p class="text-sm">{{ messageText }}</p> -->
-                        <!-- <div *ngFor="let message of messages">
-                            <p class="text-sm">
-                                <span>{{ message.split('-')[0] }}</span>
-                                <span *ngIf="message.split('-').length > 1"><strong>{{ message.split('-')[1] }}</strong></span>
-                            </p>
-                        </div> -->
-                        <ul *ngFor="let message of messages">
-                            <li style="text-align: left;" *ngIf="message != ''">
-                                <p class="text-sm">
-                                    <span>{{ message.split('-')[0] }}</span>
-                                    <span *ngIf="message.split('-').length > 1"><strong>{{ message.split('-')[1]
-                                            }}</strong></span>
-                                </p>
-                            </li>
-                        </ul>
-                        <!-- <ul *ngFor="let item of messageName1;let i = index">
-                            <li style="text-align: left;"><strong>{{item}}</strong></li>
-                        </ul> -->
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
+        </mat-dialog-content>
+
+        <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
+          <button mat-flat-button color="warn" (click)="dialog.closeAll();employeematch();">OK</button>
+
+        </mat-dialog-actions>
+      </ng-template>
+      <ng-template #reject>
+        <form>
+          <h1 mat-dialog-title>Move to Employment</h1>
+          <mat-dialog-content>
+            <div fxLayout="row" class="pt-15">
+              <div fxFlex="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Comments</mat-label>
+                  <textarea fxFlex="100%" #rej [formControl]="rejectComments" required matInput
+                    placeholder="Comments" maxlength="1000">
+                  </textarea>
+                  <mat-hint class="f-13"> ({{rej.value.length}} /1000 max) </mat-hint>
+                  @if (!rejectComments.value) {
+                    <mat-error>Comments is required</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-dialog-content>
+          <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+            <button mat-flat-button color="warn" [disabled]="!rejectComments.valid"
+            (click)="approveOrRejectTL(false,true)"> Submit </button>
+            <button mat-stroked-button [mat-dialog-close]="true" (click)="dialogClose()"> Cancel </button>
+          </mat-dialog-actions>
+        </form>
+      </ng-template>
+      <ng-template #DateAlertPopUp>
+        <mat-dialog-content>
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                src="assets/images/alert-warning.gif"></div>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center center">
+                <div fxFlex="100%" class="text-center">
+                  <h3 class="m-0">{{ headerText}} </h3>
+                  <!-- <p class="text-sm">{{ messageText }}</p> -->
+                  <!-- <div *ngFor="let message of messages">
+                  <p class="text-sm">
+                    <span>{{ message.split('-')[0] }}</span>
+                    <span *ngIf="message.split('-').length > 1"><strong>{{ message.split('-')[1] }}</strong></span>
+                  </p>
+                </div> -->
+                @for (message of messages; track message) {
+                  <ul>
+                    @if (message != '') {
+                      <li style="text-align: left;">
+                        <p class="text-sm">
+                          <span>{{ message.split('-')[0] }}</span>
+                          @if (message.split('-').length > 1) {
+                            <span><strong>{{ message.split('-')[1]
+                            }}</strong></span>
+                          }
+                        </p>
+                      </li>
+                    }
+                  </ul>
+                }
+                <!-- <ul *ngFor="let item of messageName1;let i = index">
+                <li style="text-align: left;"><strong>{{item}}</strong></li>
+              </ul> -->
+            </div>
+          </div>
         </div>
+      </div>
     </mat-dialog-content>
 
     <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
-        <button mat-flat-button color="warn" (click)="dialog.closeAll();"> Okay </button>
+      <button mat-flat-button color="warn" (click)="dialog.closeAll();"> Okay </button>
     </mat-dialog-actions>
-</ng-template>
+  </ng-template>

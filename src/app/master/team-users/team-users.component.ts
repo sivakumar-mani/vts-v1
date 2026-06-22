@@ -26,6 +26,7 @@ export class TeamUsersComponent implements OnInit {
   routePath = 'Screening / Team Users';
   caseLists = [{ caseReferenceNo: 647644, clientName: 'admin admin', applicantId: 75876, candidateName: 'AC-125-589' }];
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'teamName', header: 'Team Name' },
     { field: 'subTeamName', header: 'Sub Team Name' },
     { field: 'subTeamDescription', header: 'Sub Team Description' },

@@ -134,6 +134,7 @@ export class InvitationCreationComponent implements OnInit, OnDestroy {
   checkCopy = false;
   frozenCols = [{ field: 'action', header: 'Action' }];
   invitationcols = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'clientReferenceNo', header: 'Reference No' },
     { field: 'clientName', header: 'Client Name' },
     { field: 'firstName', header: 'Candidate Name' },

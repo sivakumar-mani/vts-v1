@@ -2,7 +2,24 @@
   "permissions": {
     "allow": [
       "Bash(Get-ChildItem -Path \"d:\\\\version13upgradeui\\\\vts\" -Force)",
-      "Bash(Select-Object Name, FullName)"
+      "Bash(Select-Object Name, FullName)",
+      "PowerShell(Get-ChildItem \"$env:ProgramData\\\\Microsoft\\\\VisualStudio\\\\Packages\" -ErrorAction SilentlyContinue | Select-Object -First 5 FullName)",
+      "PowerShell(& \"C:\\\\Program Files \\(x86\\)\\\\Microsoft Visual Studio\\\\Installer\\\\vs_installer.exe\" repair --installPath \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\" --quiet)",
+      "PowerShell(Get-Process -Name \"vs_installer\", \"VSIXInstaller\", \"setup\" -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Force)",
+      "PowerShell(Get-Process -Name \"iisexpress\" -ErrorAction SilentlyContinue)",
+      "Bash(Remove-Item \"d:\\\\version13upgradeui\\\\vts\\\\proxy.conf.json\" -Force)",
+      "Bash(awk -F: '{sum+=$2} END {print \"ngIf count:\", sum}')",
+      "Bash(awk -F: '{sum+=$2} END {print \"ngFor count:\", sum}')",
+      "Bash(awk -F: '{sum+=$2} END {print \"ngSwitch count:\", sum}')",
+      "Bash(xargs grep -l \"\\\\*ngIf\\\\|\\\\*ngFor\")",
+      "Bash(xargs grep -v \"<!--\")",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"import re; t='<div *ngSwitchCase=x fxLayout>'; x=\\\\\"'action'\\\\\"; t=t.replace\\('x','\\\\\"'+x+'\\\\\"'\\); print\\('Input:',t\\); r=re.sub\\(r'\\\\\\\\*ngSwitchCase=\\\\\"\\([^\\\\\"]*\\)\\\\\"', lambda m: '*ngIf=\\\\\"col.field === '+m.group\\(1\\)+'\\\\\"', t\\); print\\('Output:',r\\)\")",
+      "Bash(python \"C:\\\\Users\\\\selvi.mani\\\\.claude\\\\projects\\\\d--version13upgradeui-vts\\\\8a639247-ae04-4935-ad02-b9415dd73e64\\\\scratchpad\\\\fix_ngswitch.py\")",
+      "Bash(python \"C:\\\\Users\\\\selvi.mani\\\\.claude\\\\projects\\\\d--version13upgradeui-vts\\\\8a639247-ae04-4935-ad02-b9415dd73e64\\\\scratchpad\\\\fix_ngtemplate_ngif.py\")",
+      "Bash(python \"C:\\\\Users\\\\selvi.mani\\\\.claude\\\\projects\\\\d--version13upgradeui-vts\\\\8a639247-ae04-4935-ad02-b9415dd73e64\\\\scratchpad\\\\fix_response_document.py\")",
+      "Bash(python \"C:\\\\Users\\\\selvi.mani\\\\.claude\\\\projects\\\\d--version13upgradeui-vts\\\\8a639247-ae04-4935-ad02-b9415dd73e64\\\\scratchpad\\\\fix_ngfor.py\")"
     ]
   }
 }

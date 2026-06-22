@@ -1154,7 +1154,7 @@ export class ScreeningService {
   }
   GetStopCheckCaseDetails(loginUserDetVm: any) {
     const dataUrl = 'Screening/GetStopCheckCaseDetails';
-    return this.http.post<any>(dataUrl, loginUserDetVm);
+    return this.http.post<any>(dataUrl, loginUserDetVm, { observe: 'response' as 'body' });
   }
   InvitationStatusUpdate(invitationStatusVm: any) {
     const dataUrl = 'Invitation/InvitationStatusUpdate';

@@ -40,8 +40,8 @@
               </th>
             </tr>
             <tr>
-              <th *ngFor="let col of cols" [ngSwitch]="col.field" class="tbl-Column-seacrh">
-                <mat-form-field *ngSwitchCase="'contactPerson'">
+              <th *ngFor="let col of cols" class="tbl-Column-seacrh">
+                <mat-form-field *ngIf="col.field === 'contactPerson'">
                   <input #contactPerson matInput (input)="
                       professionaltab.filter(
                         $event.target.value,
@@ -60,7 +60,7 @@
                     <mat-icon>close</mat-icon>
                   </button>
                 </mat-form-field>
-                <mat-form-field *ngSwitchCase="'address1'">
+                <mat-form-field *ngIf="col.field === 'address1'">
                   <input #address1 matInput (input)="
                       professionaltab.filter(
                         $event.target.value,
@@ -79,7 +79,7 @@
                     <mat-icon>close</mat-icon>
                   </button>
                 </mat-form-field>
-                <mat-form-field *ngSwitchCase="'city'">
+                <mat-form-field *ngIf="col.field === 'city'">
                   <input #city matInput (input)="
                       professionaltab.filter(
                         $event.target.value,
@@ -98,7 +98,7 @@
                     <mat-icon>close</mat-icon>
                   </button>
                 </mat-form-field>
-                <mat-form-field *ngSwitchCase="'state'">
+                <mat-form-field *ngIf="col.field === 'state'">
                   <input #state matInput (input)="
                       professionaltab.filter(
                         $event.target.value,
@@ -117,7 +117,7 @@
                     <mat-icon>close</mat-icon>
                   </button>
                 </mat-form-field>
-                <mat-form-field *ngSwitchCase="'country'">
+                <mat-form-field *ngIf="col.field === 'country'">
                   <input #country matInput (input)="
                       professionaltab.filter(
                         $event.target.value,
@@ -136,7 +136,7 @@
                     <mat-icon>close</mat-icon>
                   </button>
                 </mat-form-field>
-                <mat-form-field *ngSwitchCase="'pincode'">
+                <mat-form-field *ngIf="col.field === 'pincode'">
                   <input #pincode matInput (input)="
                       professionaltab.filter(
                         $event.target.value,
@@ -160,26 +160,26 @@
           </ng-template>
           <ng-template pTemplate="body" let-rowData let-cols="columns">
             <tr>
-              <td *ngFor="let col of cols" [ngSwitch]="col.field">
-                <div *ngSwitchCase="'contactPerson'">
+              <td *ngFor="let col of cols">
+                <div *ngIf="col.field === 'contactPerson'">
                   {{ rowData["contactPerson"] }}
                 </div>
-                <div *ngSwitchCase="'address1'">
+                <div *ngIf="col.field === 'address1'">
                   {{ rowData["address1"] }}
                 </div>
-                <div *ngSwitchCase="'city'">
+                <div *ngIf="col.field === 'city'">
                   {{ rowData["city"] }}
                 </div>
-                <div *ngSwitchCase="'state'">
+                <div *ngIf="col.field === 'state'">
                   {{ rowData["state"] }}
                 </div>
-                <div *ngSwitchCase="'country'">
+                <div *ngIf="col.field === 'country'">
                   {{ rowData["country"] }}
                 </div>
-                <div *ngSwitchCase="'city'">
+                <div *ngIf="col.field === 'city'">
                   {{ rowData["pincode"] }}
                 </div>
-                <div *ngSwitchCase="'Actions'">
+                <div *ngIf="col.field === 'Actions'">
                   <div fxLayout="row" class="tbl-icon">
                     <div fxLayoutGap="30px">
                       <i class="material-icons-outlined" matTooltip="Edit Professional" (click)="
@@ -223,7 +223,7 @@
               </ng-template>
             <ng-template pTemplate="header" let-cols>
               <tr>              
-                <th *ngFor="let col of cols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn
+                <th *ngFor="let col of cols" pReorderableColumn pResizableColumn
                   [ngClass]="{'action': col.field === 'active'}">
   
                   <span [pSortableColumn]="col.field">
@@ -235,20 +235,20 @@
                   </span>
   
                   <span class="ico-fieldsearch">
-                  <i *ngSwitchCase="'contactPerson'" class="icon-search2" (click)='employerNameTrigger.openMenu()'
+                  <i *ngIf="col.field === 'contactPerson'" class="icon-search2" (click)='employerNameTrigger.openMenu()'
                     matTooltip="Search" matTooltipClass="accent-tooltip"></i>
-                    <i *ngSwitchCase="'address1'" class="icon-search2" (click)='address1Trigger.openMenu()'
+                    <i *ngIf="col.field === 'address1'" class="icon-search2" (click)='address1Trigger.openMenu()'
                       matTooltip="Search" matTooltipClass="accent-tooltip"></i>
-                    <i *ngSwitchCase="'city'" class="icon-search2" (click)='cityTrigger.openMenu()'
+                    <i *ngIf="col.field === 'city'" class="icon-search2" (click)='cityTrigger.openMenu()'
                       matTooltip="Search" matTooltipClass="accent-tooltip"></i>
-                    <i *ngSwitchCase="'state'" class="icon-search2" (click)='stateTrigger.openMenu()'
+                    <i *ngIf="col.field === 'state'" class="icon-search2" (click)='stateTrigger.openMenu()'
                       matTooltip="Search" matTooltipClass="accent-tooltip"></i>
-                    <i *ngSwitchCase="'country'" class="icon-search2" (click)='countryTrigger.openMenu()'
+                    <i *ngIf="col.field === 'country'" class="icon-search2" (click)='countryTrigger.openMenu()'
                       matTooltip="Search" matTooltipClass="accent-tooltip"></i>
-                    <i *ngSwitchCase="'pincode'" class="icon-search2" (click)='pincodeTrigger.openMenu()'
+                    <i *ngIf="col.field === 'pincode'" class="icon-search2" (click)='pincodeTrigger.openMenu()'
                       matTooltip="Search" matTooltipClass="accent-tooltip"></i>
                   </span>
-                  <span *ngSwitchCase="'contactPerson'">
+                  <span *ngIf="col.field === 'contactPerson'">
                     <div matTooltip="User name" matTooltipClass="accent-tooltip" #employerNameTrigger="matMenuTrigger"
                       [matMenuTriggerFor]="employerNameCtrl" fxLayout="row" fxLayoutAlign="space-between center"
                       class="txtborder-bot">
@@ -282,7 +282,7 @@
                     </mat-menu>
                   </span>
   
-                  <span *ngSwitchCase="'address1'">
+                  <span *ngIf="col.field === 'address1'">
                     <div matTooltip={{col.header}} matTooltipClass="accent-tooltip" #address1Trigger="matMenuTrigger"
                       [matMenuTriggerFor]="address1Ctrl" fxLayout="row" fxLayoutAlign="space-between center"
                       class="txtborder-bot">
@@ -315,7 +315,7 @@
                     </mat-menu>
                   </span>
   
-                  <span *ngSwitchCase="'city'">
+                  <span *ngIf="col.field === 'city'">
                     <div matTooltip={{col.header}} matTooltipClass="accent-tooltip" #cityTrigger="matMenuTrigger"
                       [matMenuTriggerFor]="cityCtrl" fxLayout="row" fxLayoutAlign="space-between center"
                       class="txtborder-bot">
@@ -349,7 +349,7 @@
                     </mat-menu>
                   </span>
   
-                  <span *ngSwitchCase="'state'">
+                  <span *ngIf="col.field === 'state'">
                     <div matTooltip={{col.header}} matTooltipClass="accent-tooltip" #stateTrigger="matMenuTrigger"
                       [matMenuTriggerFor]="stateCtrl" fxLayout="row" fxLayoutAlign="space-between center"
                       class="txtborder-bot">
@@ -383,7 +383,7 @@
                     </mat-menu>
                   </span>
   
-                  <span *ngSwitchCase="'country'">
+                  <span *ngIf="col.field === 'country'">
                     <div matTooltip={{col.header}} matTooltipClass="accent-tooltip" #countryTrigger="matMenuTrigger"
                       [matMenuTriggerFor]="countryCtrl" fxLayout="row" fxLayoutAlign="space-between center"
                       class="txtborder-bot">
@@ -416,7 +416,7 @@
                     </mat-menu>
                   </span>
   
-                  <span *ngSwitchCase="'pincode'">
+                  <span *ngIf="col.field === 'pincode'">
                     <div matTooltip={{col.header}} matTooltipClass="accent-tooltip" #pincodeTrigger="matMenuTrigger"
                       [matMenuTriggerFor]="pincodeCtrl" fxLayout="row" fxLayoutAlign="space-between center"
                       class="txtborder-bot">
@@ -455,27 +455,27 @@
             </ng-template>
             <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-cols="columns">
               <tr>
-                <td *ngFor="let col of cols" style="width:200px" [ngSwitch]='col.field'
+                <td *ngFor="let col of cols" style="width:200px"
                   [ngClass]="{'text-cap':col.field == 'active'}">
-                 <div *ngSwitchCase="'contactPerson'">
+                 <div *ngIf="col.field === 'contactPerson'">
                   {{ rowData["professionalName"] }}
                 </div>
-                <div *ngSwitchCase="'address1'">
+                <div *ngIf="col.field === 'address1'">
                   {{ rowData["addLine1"] }}
                 </div>
-                <div *ngSwitchCase="'city'">
+                <div *ngIf="col.field === 'city'">
                   {{ rowData["city"] }}
                 </div>
-                <div *ngSwitchCase="'state'">
+                <div *ngIf="col.field === 'state'">
                   {{ rowData["state"] }}
                 </div>
-                <div *ngSwitchCase="'country'">
+                <div *ngIf="col.field === 'country'">
                   {{ rowData["country"] }}
                 </div>
-                <div *ngSwitchCase="'city'">
+                <div *ngIf="col.field === 'city'">
                   {{ rowData["pinCode"] }}
                 </div>
-                  <div *ngSwitchCase="'active'">
+                  <div *ngIf="col.field === 'active'">
                     <div fxLayout="row" class="action tbl-icon">
                       <div fxFlex="100%" fxLayoutGap="10px">
                         <span *ngIf="rowData.active===true" class="istrue">

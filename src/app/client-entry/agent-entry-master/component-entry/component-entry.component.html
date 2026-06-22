@@ -1,235 +1,271 @@
 <div fxLayout="row">
-    <div fxFlex="100%">
-        <form id="ngForm" [formGroup]="agentEntryMasterService.componentEntryForm"
-            (keydown.enter)="$event.preventDefault()" autocomplete="off">
-            <mat-card-content>
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <app-auto-complete [selectProperties]='componentControls'
-                            (selectionChange)="componentDetailChange($event)"></app-auto-complete>
-                    </div>
-                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-form-field *ngIf="iscomponentDescList" appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Component Desc</mat-label>
-                            <mat-select (selectionChange)="componentChange($event.value)" matNativeControl
-                                placeholder="Select Component Desc" formControlName="componentDesc">
-                                <mat-option *ngFor="let componentDesc of componentDescList; let i = index"
-                                    [value]="componentDesc.subComponentId"> {{ componentDesc.subReportType }}
-                                </mat-option>
-                            </mat-select>
-                            <mat-error
-                                *ngIf="!!agentEntryMasterService.componentEntryForm?.get('componentDesc')?.errors?.required">
-                                Component desc is required </mat-error>
-                        </mat-form-field>
-                        <mat-form-field *ngIf="!iscomponentDescList" appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Component Desc</mat-label>
-                            <input disabled matInput formControlName="componentDesc" autocomplete="off"
-                                role="presentation" placeholder="Sub Component Desc" />
-                            <mat-error
-                                *ngIf="!!agentEntryMasterService.componentEntryForm?.get('componentDesc')?.errors?.required">
-                                Component desc is required </mat-error>
-                        </mat-form-field>
-                    </div>
+  <div fxFlex="100%">
+    <form id="ngForm" [formGroup]="agentEntryMasterService.componentEntryForm"
+      (keydown.enter)="$event.preventDefault()" autocomplete="off">
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <app-auto-complete [selectProperties]='componentControls'
+            (selectionChange)="componentDetailChange($event)"></app-auto-complete>
+          </div>
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+            @if (iscomponentDescList) {
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Component Desc</mat-label>
+                <mat-select (selectionChange)="componentChange($event.value)" matNativeControl
+                  placeholder="Select Component Desc" formControlName="componentDesc">
+                  @for (componentDesc of componentDescList; track componentDesc; let i = $index) {
+                    <mat-option
+                      [value]="componentDesc.subComponentId"> {{ componentDesc.subReportType }}
+                    </mat-option>
+                  }
+                </mat-select>
+                @if (!!agentEntryMasterService.componentEntryForm?.get('componentDesc')?.errors?.required) {
+                  <mat-error
+                    >
+                  Component desc is required </mat-error>
+                }
+              </mat-form-field>
+            }
+            @if (!iscomponentDescList) {
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Component Desc</mat-label>
+                <input disabled matInput formControlName="componentDesc" autocomplete="off"
+                  role="presentation" placeholder="Sub Component Desc" />
+                  @if (!!agentEntryMasterService.componentEntryForm?.get('componentDesc')?.errors?.required) {
+                    <mat-error
+                      >
+                    Component desc is required </mat-error>
+                  }
+                </mat-form-field>
+              }
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap"
+                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="10px grid">
+                <div fxFlex="55%" fxFlex.lg="55%" fxFlex.md="55%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%"
+                    [ngClass]="{ 'hide-action': !(this.agentEntryMasterService.componentEntryForm.get('component').value && this.agentEntryMasterService.componentEntryForm.get('componentDesc').value) }">
+                    <mat-label>Fees</mat-label>
+                    <mat-icon matSuffix><i
+                    [ngClass]="abroadCompFlag === true ? 'icon-banknote' : 'icon-inrrupeesb'"></i></mat-icon>
+                    <input formControlName="fees" maxlength="10" type="text" preventDragdrop
+                      preventCutCopyPaste appNumberOnly [NumberOnlyWithDot]="false"
+                      (blur)="checkFees()" matInput placeholder="Fees" />
+                      @if (!!agentEntryMasterService.componentEntryForm?.get('fees')?.errors?.required) {
+                        <mat-error
+                          >
+                        Fees is required </mat-error>
+                      }
+                      @if (!!agentEntryMasterService.componentEntryForm?.get('fees')?.errors?.min) {
+                        <mat-error
+                          >
+                        Please give a fee above 0 </mat-error>
+                      }
+                      <mat-hint> @if (msp && nrp) {
+                        <span>
+                          <label> MSP - @if (abroadCompFlag !== true) {
+                            <span>₹</span>
+                            }@if (abroadCompFlag === true) {
+                            <span
+                            >$</span>
+                          } {{msp}}</label>
+                          <label> NRP - @if (abroadCompFlag !== true) {
+                            <span>₹</span>
+                            }@if (abroadCompFlag === true) {
+                            <span
+                            >$</span>
+                          } {{nrp}}</label>
+                        </span>
+                      }
+                      <!-- <span *ngIf="msp && nrp">MSP-<sup>₹</sup>{{msp}} , </span>  icon-inrrupeesb  icon-inrrupee-line  icon-banknote
+                      <span *ngIf="msp && nrp">NRP-{{nrp}}</span> -->
+                    </mat-hint>
+                  </mat-form-field>
                 </div>
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap"
-                            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.xs="10px grid">
-                            <div fxFlex="55%" fxFlex.lg="55%" fxFlex.md="55%" fxFlex.sm="50%" fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%"
-                                    [ngClass]="{ 'hide-action': !(this.agentEntryMasterService.componentEntryForm.get('component').value && this.agentEntryMasterService.componentEntryForm.get('componentDesc').value) }">
-                                    <mat-label>Fees</mat-label>
-                                    <mat-icon matSuffix><i
-                                            [ngClass]="abroadCompFlag === true ? 'icon-banknote' : 'icon-inrrupeesb'"></i></mat-icon>
-                                    <input formControlName="fees" maxlength="10" type="text" preventDragdrop
-                                        preventCutCopyPaste appNumberOnly [NumberOnlyWithDot]="false"
-                                        (blur)="checkFees()" matInput placeholder="Fees" />
-                                    <mat-error
-                                        *ngIf="!!agentEntryMasterService.componentEntryForm?.get('fees')?.errors?.required">
-                                        Fees is required </mat-error>
-                                    <mat-error
-                                        *ngIf="!!agentEntryMasterService.componentEntryForm?.get('fees')?.errors?.min">
-                                        Please give a fee above 0 </mat-error>
-                                    <mat-hint> <span *ngIf="msp && nrp">
-                                            <label> MSP - <span *ngIf="abroadCompFlag !== true">₹</span><span
-                                                    *ngIf="abroadCompFlag === true">$</span> {{msp}}</label>
-                                            <label> NRP - <span *ngIf="abroadCompFlag !== true">₹</span><span
-                                                    *ngIf="abroadCompFlag === true">$</span> {{nrp}}</label>
-                                        </span>
-                                        <!-- <span *ngIf="msp && nrp">MSP-<sup>₹</sup>{{msp}} , </span>  icon-inrrupeesb  icon-inrrupee-line  icon-banknote
-                                          <span *ngIf="msp && nrp">NRP-{{nrp}}</span> -->
-                                    </mat-hint>
-                                </mat-form-field>
-                            </div>
-                            <div fxFlex="45%" fxFlex.lg="45%" fxFlex.md="45%" fxFlex.sm="50%" fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%"
-                                    [ngClass]="{ 'hide-action': !(this.agentEntryMasterService.componentEntryForm.get('component').value && this.agentEntryMasterService.componentEntryForm.get('componentDesc').value) }">
-                                    <mat-label>TAT Days</mat-label>
-                                    <input formControlName="tat" preventDragdrop preventCutCopyPaste autocomplete="off"
-                                        maxlength="2" role="presentation" type="text" appNumberOnly
-                                        [PhoneNumber]="false" matInput matTooltip="Enter TAT Days"
-                                        matTooltipClass="accent-tooltip" placeholder="TAT Days" (blur)="checkTat()" />
-                                    <mat-error
-                                        *ngIf="!!agentEntryMasterService.componentEntryForm?.get('tat')?.errors?.incorrect">
-                                        Tat Days less than or equal to Component TAT {{tat}}</mat-error>
-                                    <mat-error
-                                        *ngIf="!!agentEntryMasterService.componentEntryForm?.get('tat')?.errors?.required">
-                                        TAT days is required </mat-error>
-                                    <mat-error
-                                        *ngIf="!!agentEntryMasterService.componentEntryForm?.get('tat')?.errors?.min">
-                                        Please give a tat above 0 </mat-error>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap"
-                            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="15px grid"
-                            fxLayoutGap.xs="10px grid">
-                            <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="37.5%" fxFlex.xs="100%">
-                                <app-auto-complete [selectProperties]="currencyControls"></app-auto-complete>
-                            </div>
-                            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="37.5%" fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%"
-                                    [ngClass]="{ 'hide-action': !(this.agentEntryMasterService.componentEntryForm.get('component').value && this.agentEntryMasterService.componentEntryForm.get('componentDesc').value) }">
-                                    <mat-label>Effective Date</mat-label>
-                                    <input formControlName="effectiveDate" mat-autofocus="true" preventDragdrop
-                                        preventCutCopyPaste [max]="maxDate" (dateChange)="effectiveDateChange()"
-                                        appNumberOnly [NumberOnlyWithslash]="false" matInput [matDatepicker]="picker"
-                                        placeholder="DD/MM/YYYY" autocomplete="off" role="presentation"
-                                        (focus)="picker.open();openDate(picker)" (click)="openDate(picker)" />
-                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker></mat-datepicker>
-                                    <mat-error
-                                        *ngIf="!!agentEntryMasterService.componentEntryForm?.get('effectiveDate')?.errors?.required">
-                                        Effective date is required </mat-error>
-                                </mat-form-field>
-                            </div>
-                            <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="25%" fxFlex.xs="100%">
-                                <mat-label>&nbsp;</mat-label>
-                                <div class="adrem" fxLayoutGap="8px">
-                                    <button mat-button color="primary" *ngIf="!tooltip" matTooltip="Add"
-                                        matTooltipClass="accent-tooltip" (click)="addComponent()"> <i
-                                            class="icon-plus-circle"></i> </button>
-                                    <button mat-button color="primary" *ngIf="tooltip" matTooltip="Update"
-                                        matTooltipClass="accent-tooltip" (click)="addComponent()"> <i
-                                            class="icon-plus-circle"></i> </button>
-                                    <button mat-button color="warn" matTooltip="Clear" matTooltipClass="accent-tooltip"
-                                        (click)="clear()"> <i class="icon-x-circle"></i> </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div fxFlex="45%" fxFlex.lg="45%" fxFlex.md="45%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%"
+                    [ngClass]="{ 'hide-action': !(this.agentEntryMasterService.componentEntryForm.get('component').value && this.agentEntryMasterService.componentEntryForm.get('componentDesc').value) }">
+                    <mat-label>TAT Days</mat-label>
+                    <input formControlName="tat" preventDragdrop preventCutCopyPaste autocomplete="off"
+                      maxlength="2" role="presentation" type="text" appNumberOnly
+                      [PhoneNumber]="false" matInput matTooltip="Enter TAT Days"
+                      matTooltipClass="accent-tooltip" placeholder="TAT Days" (blur)="checkTat()" />
+                      @if (!!agentEntryMasterService.componentEntryForm?.get('tat')?.errors?.incorrect) {
+                        <mat-error
+                          >
+                        Tat Days less than or equal to Component TAT {{tat}}</mat-error>
+                      }
+                      @if (!!agentEntryMasterService.componentEntryForm?.get('tat')?.errors?.required) {
+                        <mat-error
+                          >
+                        TAT days is required </mat-error>
+                      }
+                      @if (!!agentEntryMasterService.componentEntryForm?.get('tat')?.errors?.min) {
+                        <mat-error
+                          >
+                        Please give a tat above 0 </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
                 </div>
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px grid" class="pt-15" *ngIf="!componentFlag === true">
-                    <div fxFlex="100%"> <span class="error"
-                            *ngIf="agentEntryMasterService.componentEntryList.length == 0 && errormsg">{{errormsg}}</span>
-                        <p-table #dt [columns]="columnName" [value]="agentEntryMasterService.componentEntryList"
-                            [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="10" [resizableColumns]="true"
-                            [reorderableColumns]="true">
-
-                            <!-- ================= COLGROUP ================= -->
-                            <ng-template pTemplate="colgroup" let-colGroupCols>
-                                <colgroup>
-                                    <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-                                </colgroup>
-                            </ng-template>
-
-                            <!-- ================= HEADER ================= -->
-                            <ng-template pTemplate="header" let-headerCols>
-                                <tr>
-                                    <th *ngFor="let col of headerCols"
-                                        [ngClass]="{ 'text-center': col.field === 'Actions' }"
-                                        [pSortableColumn]="col.field" pReorderableColumn pResizableColumn>
-                                        <div class="thname">{{ col.header }}</div>
-                                        <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
-                                            ariaLabelDesc="Activate to sort in descending order"
-                                            ariaLabelAsc="Activate to sort in ascending order">
-                                        </p-sortIcon>
-                                    </th>
-
-                                    <th class="action">Action</th>
-                                </tr>
-                            </ng-template>
-
-                            <!-- ================= BODY ================= -->
-                            <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
-
-                                <tr>
-                                    <td *ngFor="let col of bodyCols"
-                                        matTooltip="Component was exists in the package. Please remove the component from the package first"
-                                        matTooltipClass="accent-tooltip"
-                                        [matTooltipDisabled]="rowData['deleteDisableFlag'] !== true">
-
-                                        <span *ngIf="col.field === 'effectiveDate'">
-                                            {{ rowData[col.field] | date:'dd/MM/yyyy' }}
-                                        </span>
-
-                                        <span *ngIf="col.field !== 'effectiveDate' && col.field !== 'currencyId'">
-                                            {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
-                                        </span>
-
-                                        <span *ngIf="col.field === 'currencyId'">
-                                            {{ rowData.currencyId ? getName(rowData) : 'N/A' }}
-                                        </span>
-
-                                    </td>
-
-                                    <!-- ACTION COLUMN -->
-                                    <td class="action">
-                                        <div fxLayout="row" class="tbl-icon">
-                                            <div fxFlex="100%" fxLayoutGap="10px">
-
-                                                <mat-icon>
-                                                    <i class="material-icons-outlined" matTooltip="Edit"
-                                                        matTooltipClass="accent-tooltip"
-                                                        (click)="editDelete(rowData, 'Edit')">
-                                                        edit
-                                                    </i>
-                                                </mat-icon>
-
-                                                <mat-icon
-                                                    [ngClass]="rowData.deleteDisableFlag === true ? 'page-btn disabled' : ''">
-                                                    <i class="material-icons-outlined" matTooltip="Delete"
-                                                        matTooltipClass="accent-tooltip"
-                                                        (click)="openConfirmDialog(rowData)">
-                                                        delete
-                                                    </i>
-                                                </mat-icon>
-
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                            </ng-template>
-
-                        </p-table>
-                        <div [ngClass]="{'empty-record': agentEntryMasterService?.componentEntryList.length == 0}"
-                            fxLayout="row wrap" fxLayout.md="column" class="cus-paginator" fxLayoutGap="0px grid"
-                            fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
-                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                fxLayoutAlign="start center"> Showing {{ dt.totalRecords
-                                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
-                                    <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
-                                        dt.totalRecords }} record(s) </div>
-                                        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%"
-                                            fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.md="end center"
-                                            fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+              </div>
+              <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap"
+                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="15px grid"
+                  fxLayoutGap.xs="10px grid">
+                  <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="37.5%" fxFlex.xs="100%">
+                    <app-auto-complete [selectProperties]="currencyControls"></app-auto-complete>
+                  </div>
+                  <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="37.5%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%"
+                      [ngClass]="{ 'hide-action': !(this.agentEntryMasterService.componentEntryForm.get('component').value && this.agentEntryMasterService.componentEntryForm.get('componentDesc').value) }">
+                      <mat-label>Effective Date</mat-label>
+                      <input formControlName="effectiveDate" mat-autofocus="true" preventDragdrop
+                        preventCutCopyPaste [max]="maxDate" (dateChange)="effectiveDateChange()"
+                        appNumberOnly [NumberOnlyWithslash]="false" matInput [matDatepicker]="picker"
+                        placeholder="DD/MM/YYYY" autocomplete="off" role="presentation"
+                        (focus)="picker.open();openDate(picker)" (click)="openDate(picker)" />
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        @if (!!agentEntryMasterService.componentEntryForm?.get('effectiveDate')?.errors?.required) {
+                          <mat-error
+                            >
+                          Effective date is required </mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="25%" fxFlex.xs="100%">
+                      <mat-label>&nbsp;</mat-label>
+                      <div class="adrem" fxLayoutGap="8px">
+                        @if (!tooltip) {
+                          <button mat-button color="primary" matTooltip="Add"
+                            matTooltipClass="accent-tooltip" (click)="addComponent()"> <i
+                          class="icon-plus-circle"></i> </button>
+                        }
+                        @if (tooltip) {
+                          <button mat-button color="primary" matTooltip="Update"
+                            matTooltipClass="accent-tooltip" (click)="addComponent()"> <i
+                          class="icon-plus-circle"></i> </button>
+                        }
+                        <button mat-button color="warn" matTooltip="Clear" matTooltipClass="accent-tooltip"
+                          (click)="clear()"> <i class="icon-x-circle"></i> </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                @if (!componentFlag === true) {
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="20px grid" class="pt-15">
+                    <div fxFlex="100%"> @if (agentEntryMasterService.componentEntryList.length == 0 && errormsg) {
+                      <span class="error"
+                      >{{errormsg}}</span>
+                    }
+                    <p-table #dt [columns]="columnName" [value]="agentEntryMasterService.componentEntryList"
+                      [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="10" [resizableColumns]="true"
+                      [reorderableColumns]="true">
+                      <!-- ================= COLGROUP ================= -->
+                      <ng-template pTemplate="colgroup" let-colGroupCols>
+                        <colgroup>
+                        @for (col of colGroupCols; track col) {
+                          <col style="min-width:200px" />
+                        }
+                      </colgroup>
+                    </ng-template>
+                    <!-- ================= HEADER ================= -->
+                    <ng-template pTemplate="header" let-headerCols>
+                      <tr>
+                        @for (col of headerCols; track col) {
+                          <th
+                            [ngClass]="{ 'text-center': col.field === 'Actions' }"
+                            [pSortableColumn]="col.field" pReorderableColumn pResizableColumn>
+                            <div class="thname">{{ col.header }}</div>
+                            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                              ariaLabelDesc="Activate to sort in descending order"
+                              ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                          </th>
+                        }
+                        <th class="action">Action</th>
+                      </tr>
+                    </ng-template>
+                    <!-- ================= BODY ================= -->
+                    <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+                      <tr>
+                        @for (col of bodyCols; track col) {
+                          <td
+                            matTooltip="Component was exists in the package. Please remove the component from the package first"
+                            matTooltipClass="accent-tooltip"
+                            [matTooltipDisabled]="rowData['deleteDisableFlag'] !== true">
+                            @if (col.field === 'effectiveDate') {
+                              <span>
+                                {{ rowData[col.field] | date:'dd/MM/yyyy' }}
+                              </span>
+                            }
+                            @if (col.field !== 'effectiveDate' && col.field !== 'currencyId') {
+                              <span>
+                                {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                              </span>
+                            }
+                            @if (col.field === 'currencyId') {
+                              <span>
+                                {{ rowData.currencyId ? getName(rowData) : 'N/A' }}
+                              </span>
+                            }
+                          </td>
+                        }
+                        <!-- ACTION COLUMN -->
+                        <td class="action">
+                          <div fxLayout="row" class="tbl-icon">
+                            <div fxFlex="100%" fxLayoutGap="10px">
+                              <mat-icon>
+                                <i class="material-icons-outlined" matTooltip="Edit"
+                                  matTooltipClass="accent-tooltip"
+                                  (click)="editDelete(rowData, 'Edit')">
+                                  edit
+                                </i>
+                              </mat-icon>
+                              <mat-icon
+                                [ngClass]="rowData.deleteDisableFlag === true ? 'page-btn disabled' : ''">
+                                <i class="material-icons-outlined" matTooltip="Delete"
+                                  matTooltipClass="accent-tooltip"
+                                  (click)="openConfirmDialog(rowData)">
+                                  delete
+                                </i>
+                              </mat-icon>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                  <div [ngClass]="{'empty-record': agentEntryMasterService?.componentEntryList.length == 0}"
+                    fxLayout="row wrap" fxLayout.md="column" class="cus-paginator" fxLayoutGap="0px grid"
+                    fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutAlign="start center"> Showing {{ dt.totalRecords
+                      < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                      <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
+                    dt.totalRecords }} record(s) </div>
+                    <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%"
+                      fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.md="end center"
+                      fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
                                             <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
                 dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                 navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
               "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to
-                                                Page<span class="input-num">
-                                                    <input type="number" min="1" #pageNo [value]="currentPage"
-                                                        maxlength="5" appNumberOnly [NumberOnly]="false"
-                                                        (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
-                                                </span></span> <span class="mr-2" fxHide.xs> of {{
-                                                getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                        Page<span class="input-num">
+                        <input type="number" min="1" #pageNo [value]="currentPage"
+                          maxlength="5" appNumberOnly [NumberOnly]="false"
+                          (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                        </span></span> <span class="mr-2" fxHide.xs> of {{
+                      getTotalPages(dt.totalRecords, dt.rows) }}</span>
                                             <a [ngClass]="
                 dt.rows + dt.first >= dt.totalRecords
                   ? 'page-btn disabled'
@@ -238,484 +274,517 @@
                 dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                 navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
               "> <i class="icon-control-end ml-5"></i></a>
-                                        </div>
-                            </div>
-                        </div>
+                      </div>
                     </div>
+                  </div>
+                </div>
+              }
             </mat-card-content>
             <ng-template #checkTAT>
-                <div fxLayout="row">
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <div fxLayout="row">
                     <div fxFlex="100%">
-                        <div fxLayout="row">
-                            <div fxFlex="100%">
-                                <h3>Please Update the Components TAT Days less than or Equal to TAT Count</h3>
-                            </div>
-                        </div>
+                      <h3>Please Update the Components TAT Days less than or Equal to TAT Count</h3>
                     </div>
+                  </div>
                 </div>
-                <div fxLayout="row">
-                    <div fxFlex="100%">
-                        <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
-                            <button mat-flat-button color="primary" (click)="okay()"> Ok </button>
-                        </mat-dialog-actions>
-                    </div>
+              </div>
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+                    <button mat-flat-button color="primary" (click)="okay()"> Ok </button>
+                  </mat-dialog-actions>
                 </div>
+              </div>
             </ng-template>
             <ng-template #feesConfirmation>
-                <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
-                    (click)="close()"> <i class="material-icons">clear</i> </button>
+              <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
+                (click)="close()"> <i class="material-icons">clear</i> </button>
                 <h1 mat-dialog-title>Entered amount is less than MSP and NRP</h1>
                 <mat-dialog-content>
-                    <div fxLayout="row">
-                        <div fxFlex="100%">
-                            <div class="para">
-                                <p>
-                                    <label>Client Name:</label>
-                                    <em>{{
-                                        agentEntryMasterService.clientEntryForm.get("clientName")
-                                        .value
-                                        }}</em>
-                                </p>
-                                <p>
-                                    <label>Component:</label>
-                                    <em>{{ componentEntry.componentType }} -
-                                        {{ componentEntry.componentDesc }}</em>
-                                </p>
-                                <p>
-                                    <label>MSP Rate:</label>
-                                    <em>{{ msp }}</em>
-                                </p>
-                                <p>
-                                    <label>NRP Rate:</label>
-                                    <em>{{ nrp }}</em>
-                                </p>
-                                <p>
-                                    <label>Entered Price:</label>
-                                    <em>{{
-                                        agentEntryMasterService.componentEntryForm.get("fees").value
-                                        }}</em>
-                                </p>
-                            </div>
-                        </div>
+                  <div fxLayout="row">
+                    <div fxFlex="100%">
+                      <div class="para">
+                        <p>
+                          <label>Client Name:</label>
+                          <em>{{
+                            agentEntryMasterService.clientEntryForm.get("clientName")
+                            .value
+                          }}</em>
+                        </p>
+                        <p>
+                          <label>Component:</label>
+                          <em>{{ componentEntry.componentType }} -
+                          {{ componentEntry.componentDesc }}</em>
+                        </p>
+                        <p>
+                          <label>MSP Rate:</label>
+                          <em>{{ msp }}</em>
+                        </p>
+                        <p>
+                          <label>NRP Rate:</label>
+                          <em>{{ nrp }}</em>
+                        </p>
+                        <p>
+                          <label>Entered Price:</label>
+                          <em>{{
+                            agentEntryMasterService.componentEntryForm.get("fees").value
+                          }}</em>
+                        </p>
+                      </div>
                     </div>
-                    <div fxLayout="row" class="pt-15">
-                        <div fxFlex="100%">
-                            <mat-radio-group formControlName="feeChange" aria-label="Select an option"
-                                fxLayoutGap="20px">
-                                <mat-label class="lbl">Do you have a pre-approval email for this component?</mat-label>
-                                <mat-radio-button [value]="true">Yes</mat-radio-button>
-                                &nbsp;
-                                <mat-radio-button [value]="false">No <span class="info-text">(This will send email for
-                                        approval)</span> </mat-radio-button>
-                            </mat-radio-group>
-                            <mat-error
-                                *ngIf="!!agentEntryMasterService.componentEntryForm?.get('feeChange')?.errors?.required">
-                                Choose any one </mat-error>
-                        </div>
+                  </div>
+                  <div fxLayout="row" class="pt-15">
+                    <div fxFlex="100%">
+                      <mat-radio-group formControlName="feeChange" aria-label="Select an option"
+                        fxLayoutGap="20px">
+                        <mat-label class="lbl">Do you have a pre-approval email for this component?</mat-label>
+                        <mat-radio-button [value]="true">Yes</mat-radio-button>
+                        &nbsp;
+                        <mat-radio-button [value]="false">No <span class="info-text">(This will send email for
+                        approval)</span> </mat-radio-button>
+                      </mat-radio-group>
+                      @if (!!agentEntryMasterService.componentEntryForm?.get('feeChange')?.errors?.required) {
+                        <mat-error
+                          >
+                        Choose any one </mat-error>
+                      }
                     </div>
-                    <div fxLayout="row" class="pt-15">
-                        <div fxFlex="100%">
-                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                <mat-label>Comments</mat-label>
-                                <textarea #feeappcmt formControlName="requestorComments" matInput autocomplete="off"
-                                    placeholder="Comments" (focus)="feeappcmt.select()" (click)="feeappcmt.select()"
-                                    role="presentation" maxlength="1000">
-                      </textarea>
-                                <mat-hint class="f-13"> ({{feeappcmt.value.length}} /1000 max) </mat-hint>
-                                <mat-error
-                                    *ngIf="!!agentEntryMasterService.componentEntryForm?.get('requestorComments')?.errors?.required">
-                                    Comments is required </mat-error>
-                            </mat-form-field>
-                        </div>
+                  </div>
+                  <div fxLayout="row" class="pt-15">
+                    <div fxFlex="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Comments</mat-label>
+                        <textarea #feeappcmt formControlName="requestorComments" matInput autocomplete="off"
+                          placeholder="Comments" (focus)="feeappcmt.select()" (click)="feeappcmt.select()"
+                          role="presentation" maxlength="1000">
+                        </textarea>
+                        <mat-hint class="f-13"> ({{feeappcmt.value.length}} /1000 max) </mat-hint>
+                        @if (!!agentEntryMasterService.componentEntryForm?.get('requestorComments')?.errors?.required) {
+                          <mat-error
+                            >
+                          Comments is required </mat-error>
+                        }
+                      </mat-form-field>
                     </div>
+                  </div>
                 </mat-dialog-content>
                 <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
-                    <button mat-flat-button color="warn" (click)="saveFee()"> Submit </button>
+                  <button mat-flat-button color="warn" (click)="saveFee()"> Submit </button>
                 </mat-dialog-actions>
-            </ng-template>
-            <ng-template #tatConfirmation>
+              </ng-template>
+              <ng-template #tatConfirmation>
                 <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
-                    (click)="closeTAT()"> <i class="material-icons">clear</i> </button>
-                <h1 mat-dialog-title>Entered TAT days is less than TAT</h1>
-                <mat-dialog-content>
+                  (click)="closeTAT()"> <i class="material-icons">clear</i> </button>
+                  <h1 mat-dialog-title>Entered TAT days is less than TAT</h1>
+                  <mat-dialog-content>
                     <div fxLayout="row">
-                        <div fxFlex="100%">
-                            <div class="para">
-                                <p>
-                                    <label>Client Name:</label>
-                                    <em>{{
-                                        agentEntryMasterService.clientEntryForm.get("clientName")
-                                        .value
-                                        }}</em>
-                                </p>
-                                <p>
-                                    <label>Component:</label>
-                                    <em>{{ componentEntry.componentType }} -
-                                        {{ componentEntry.componentDesc }}</em>
-                                </p>
-                                <p>
-                                    <label>TAT:</label>
-                                    <em>{{ tat }}</em>
-                                </p>
-                                <p>
-                                    <label>Entered TAT Days:</label>
-                                    <em>{{
-                                        agentEntryMasterService.componentEntryForm.get("tat").value
-                                        }}</em>
-                                </p>
-                            </div>
+                      <div fxFlex="100%">
+                        <div class="para">
+                          <p>
+                            <label>Client Name:</label>
+                            <em>{{
+                              agentEntryMasterService.clientEntryForm.get("clientName")
+                              .value
+                            }}</em>
+                          </p>
+                          <p>
+                            <label>Component:</label>
+                            <em>{{ componentEntry.componentType }} -
+                            {{ componentEntry.componentDesc }}</em>
+                          </p>
+                          <p>
+                            <label>TAT:</label>
+                            <em>{{ tat }}</em>
+                          </p>
+                          <p>
+                            <label>Entered TAT Days:</label>
+                            <em>{{
+                              agentEntryMasterService.componentEntryForm.get("tat").value
+                            }}</em>
+                          </p>
                         </div>
+                      </div>
                     </div>
                     <div fxLayout="row" class="pt-15">
-                        <div fxFlex="100%">
-                            <mat-radio-group formControlName="TATChange" aria-label="Select an option"
-                                fxLayoutGap="20px">
-                                <mat-label class="lbl">Do you have a pre-approval email for this component?</mat-label>
-                                <mat-radio-button [value]="true">Yes</mat-radio-button>
-                                &nbsp;
-                                <mat-radio-button [value]="false">No <span class="info-text">(This will send email for
-                                        approval)</span> </mat-radio-button>
-                            </mat-radio-group>
+                      <div fxFlex="100%">
+                        <mat-radio-group formControlName="TATChange" aria-label="Select an option"
+                          fxLayoutGap="20px">
+                          <mat-label class="lbl">Do you have a pre-approval email for this component?</mat-label>
+                          <mat-radio-button [value]="true">Yes</mat-radio-button>
+                          &nbsp;
+                          <mat-radio-button [value]="false">No <span class="info-text">(This will send email for
+                          approval)</span> </mat-radio-button>
+                        </mat-radio-group>
+                        @if (!!agentEntryMasterService.componentEntryForm?.get('TATChange')?.errors?.required) {
+                          <mat-error
+                            >
+                          Choose any one </mat-error>
+                        }
+                      </div>
+                    </div>
+                    <div fxLayout="row" class="pt-15">
+                      <div fxFlex="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>Comments</mat-label>
+                          <textarea #tatappcmt formControlName="requestorCommentsTAT" matInput autocomplete="off"
+                            placeholder="Comments" (focus)="tatappcmt.select()" (click)="tatappcmt.select()"
+                            role="presentation" maxlength="1000">
+                          </textarea>
+                          <mat-hint class="f-13"> ({{tatappcmt.value.length}} /1000 max) </mat-hint>
+                          @if (!!agentEntryMasterService.componentEntryForm?.get('requestorCommentsTAT')?.errors?.required) {
                             <mat-error
-                                *ngIf="!!agentEntryMasterService.componentEntryForm?.get('TATChange')?.errors?.required">
-                                Choose any one </mat-error>
-                        </div>
+                              >
+                            Comments is required </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
                     </div>
-                    <div fxLayout="row" class="pt-15">
-                        <div fxFlex="100%">
-                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                <mat-label>Comments</mat-label>
-                                <textarea #tatappcmt formControlName="requestorCommentsTAT" matInput autocomplete="off"
-                                    placeholder="Comments" (focus)="tatappcmt.select()" (click)="tatappcmt.select()"
-                                    role="presentation" maxlength="1000">
-                                  </textarea>
-                                <mat-hint class="f-13"> ({{tatappcmt.value.length}} /1000 max) </mat-hint>
-                                <mat-error
-                                    *ngIf="!!agentEntryMasterService.componentEntryForm?.get('requestorCommentsTAT')?.errors?.required">
-                                    Comments is required </mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </mat-dialog-content>
-                <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+                  </mat-dialog-content>
+                  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
                     <button mat-flat-button color="warn" (click)="saveTAT()">Submit</button>
-                </mat-dialog-actions>
-            </ng-template>
-            <div class=sep-line
-                *ngIf="agentEntryMasterService?.clientFeePreApprovalEmail?.length > 0 || agentEntryMasterService?.clientFeePreApprovalEmailList?.length > 0">
-                <div fxLayout="row" fxLayoutGap="20px"
-                    *ngIf="agentEntryMasterService?.clientFeePreApprovalEmail?.length > 0">
-                    <div fxFlex="100%">
-                        <div fxLayout="row">
+                  </mat-dialog-actions>
+                </ng-template>
+                @if (agentEntryMasterService?.clientFeePreApprovalEmail?.length > 0 || agentEntryMasterService?.clientFeePreApprovalEmailList?.length > 0) {
+                  <div class=sep-line
+                    >
+                    @if (agentEntryMasterService?.clientFeePreApprovalEmail?.length > 0) {
+                      <div fxLayout="row" fxLayoutGap="20px"
+                        >
+                        <div fxFlex="100%">
+                          <div fxLayout="row">
                             <div fxFlex="100%">
-                                <h3 class="sub-header">Pre-approval Fees documents</h3>
+                              <h3 class="sub-header">Pre-approval Fees documents</h3>
                             </div>
-                        </div>
-                        <div fxLayout="row" fxLayoutGap="20px">
+                          </div>
+                          <div fxLayout="row" fxLayoutGap="20px">
                             <div fxFlex="30%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>Select Service</mat-label>
-                                    <mat-select placeholder="Select Service" formControlName="approvalFee"
-                                        (selectionChange)="categoryChange($event.value)"> <span
-                                            *ngFor="let clientFee of agentEntryMasterService?.clientFeePreApprovalEmail; let i = index">
-                                            <mat-option [value]="clientFee"> {{ clientFee.componentType }} - {{
-                                                clientFee.componentDesc }} </mat-option>
-                                        </span> </mat-select>
-                                </mat-form-field>
+                              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                <mat-label>Select Service</mat-label>
+                                <mat-select placeholder="Select Service" formControlName="approvalFee"
+                                  (selectionChange)="categoryChange($event.value)"> @for (clientFee of agentEntryMasterService?.clientFeePreApprovalEmail; track clientFee; let i = $index) {
+                                  <span
+                                    >
+                                    <mat-option [value]="clientFee"> {{ clientFee.componentType }} - {{
+                                    clientFee.componentDesc }} </mat-option>
+                                  </span>
+                                } </mat-select>
+                              </mat-form-field>
                             </div>
                             <div fxFlex="70%">
-                                <mat-label class="lbl">Attached Document</mat-label>
-                                <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
-                                        here...</span>
-                                    <input type="file" #fileInput (change)="openUploadDoc($event)"
-                                        formControlName="componentFeeDocument" />
-                                </div>
-                                <div class="clear">
-                                    <mat-error
-                                        *ngIf="!!agentEntryMasterService.componentEntryForm?.get('componentFeeDocument')?.errors?.incorrect">
-                                        Document is required </mat-error>
-                                </div>
+                              <mat-label class="lbl">Attached Document</mat-label>
+                              <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                            here...</span>
+                            <input type="file" #fileInput (change)="openUploadDoc($event)"
+                              formControlName="componentFeeDocument" />
                             </div>
+                            <div class="clear">
+                              @if (!!agentEntryMasterService.componentEntryForm?.get('componentFeeDocument')?.errors?.incorrect) {
+                                <mat-error
+                                  >
+                                Document is required </mat-error>
+                              }
+                            </div>
+                          </div>
                         </div>
                         <div fxLayout="row">
-                            <div fxFlex="100%"> </div>
+                          <div fxFlex="100%"> </div>
                         </div>
                         <div fxLayout="row">
-                            <div fxFlex="100%"> </div>
+                          <div fxFlex="100%"> </div>
                         </div>
+                      </div>
                     </div>
-                </div>
-                <div fxLayout="row" class="pt-15"
-                    *ngIf="agentEntryMasterService?.clientFeePreApprovalEmailList?.length > 0">
-                    <div fxFlex="100%">
+                  }
+                  @if (agentEntryMasterService?.clientFeePreApprovalEmailList?.length > 0) {
+                    <div fxLayout="row" class="pt-15"
+                      >
+                      <div fxFlex="100%">
                         <p-table [columns]="columns" able]="true"
-                            [value]="agentEntryMasterService.clientFeePreApprovalEmailList" scrollHeight=""
-                            [resizableColumns]="true" [reorderableColumns]="true">
-
-                            <!-- ================= COLGROUP ================= -->
-                            <ng-template pTemplate="colgroup" let-colGroupCols>
-                                <colgroup>
-                                    <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-                                </colgroup>
-                            </ng-template>
-
-                            <!-- ================= HEADER ================= -->
-                            <ng-template pTemplate="header" let-headerCols>
-                                <tr>
-                                    <th *ngFor="let col of headerCols" [pSortableColumn]="col.field" pReorderableColumn
-                                        pResizableColumn>
-
-                                        <div class="thname">{{ col.header }}</div>
-
-                                        <p-sortIcon *ngIf="col.field !== 'Actions'" [field]="col.field"
-                                            ariaLabel="Activate to sort"
-                                            ariaLabelDesc="Activate to sort in descending order"
-                                            ariaLabelAsc="Activate to sort in ascending order">
-                                        </p-sortIcon>
-
-                                    </th>
-                                </tr>
-                            </ng-template>
-
-                            <!-- ================= BODY ================= -->
-                            <ng-template pTemplate="body" let-index="rowIndex" let-rowData let-bodyCols="columns">
-
-                                <tr>
-                                    <td *ngFor="let col of bodyCols" [ngSwitch]="col.field">
-
-                                        <span *ngIf="col.field !== 'Actions'">
-                                            {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
-                                        </span>
-
-                                        <div *ngSwitchCase="'Actions'">
-                                            <div fxLayout="row" class="tbl-icon">
-                                                <div fxFlex="100%" fxLayoutGap="10px">
-                                                    <mat-icon>
-                                                        <i class="material-icons-outlined" matTooltip="Delete"
-                                                            matTooltipClass="accent-tooltip"
-                                                            (click)="removeDocument(index)">
-                                                            delete
-                                                        </i>
-                                                    </mat-icon>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </td>
-                                </tr>
-
-                            </ng-template>
-
-                            <br />
-
-                            <!-- ================= EMPTY MESSAGE ================= -->
-                            <ng-template pTemplate="emptymessage" let-emptyCols *ngIf="!tempClientFeeApproval?.length">
-
-                                <tr>
-                                    <td [attr.colspan]="emptyCols.length">
-                                        <div class="no-record">
-                                            <span>No Records Found</span>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                            </ng-template>
-
-                        </p-table>
-
+                          [value]="agentEntryMasterService.clientFeePreApprovalEmailList" scrollHeight=""
+                          [resizableColumns]="true" [reorderableColumns]="true">
+                          <!-- ================= COLGROUP ================= -->
+                          <ng-template pTemplate="colgroup" let-colGroupCols>
+                            <colgroup>
+                            @for (col of colGroupCols; track col) {
+                              <col style="min-width:200px" />
+                            }
+                          </colgroup>
+                        </ng-template>
+                        <!-- ================= HEADER ================= -->
+                        <ng-template pTemplate="header" let-headerCols>
+                          <tr>
+                            @for (col of headerCols; track col) {
+                              <th [pSortableColumn]="col.field" pReorderableColumn
+                                pResizableColumn>
+                                <div class="thname">{{ col.header }}</div>
+                                @if (col.field !== 'Actions') {
+                                  <p-sortIcon [field]="col.field"
+                                    ariaLabel="Activate to sort"
+                                    ariaLabelDesc="Activate to sort in descending order"
+                                    ariaLabelAsc="Activate to sort in ascending order">
+                                  </p-sortIcon>
+                                }
+                              </th>
+                            }
+                          </tr>
+                        </ng-template>
+                        <!-- ================= BODY ================= -->
+                        <ng-template pTemplate="body" let-index="rowIndex" let-rowData let-bodyCols="columns">
+                          <tr>
+                            @for (col of bodyCols; track col) {
+                              <td>
+                                @if (col.field !== 'Actions') {
+                                  <span>
+                                    {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                                  </span>
+                                }
+                                @if (col.field === 'Actions') {
+                                  <div>
+                                    <div fxLayout="row" class="tbl-icon">
+                                      <div fxFlex="100%" fxLayoutGap="10px">
+                                        <mat-icon>
+                                          <i class="material-icons-outlined" matTooltip="Delete"
+                                            matTooltipClass="accent-tooltip"
+                                            (click)="removeDocument(index)">
+                                            delete
+                                          </i>
+                                        </mat-icon>
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                              </td>
+                            }
+                          </tr>
+                        </ng-template>
+                        <br />
+                        <!-- ================= EMPTY MESSAGE ================= -->
+                        @if (!tempClientFeeApproval?.length; as emptyCols) {
+                          <ng-template pTemplate="emptymessage" let-emptyCols>
+                            <tr>
+                              <td [attr.colspan]="emptyCols.length">
+                                <div class="no-record">
+                                  <span>No Records Found</span>
+                                </div>
+                              </td>
+                            </tr>
+                          </ng-template>
+                        }
+                      </p-table>
                     </div>
-                </div>
-            </div>
-            <div class=sep-line
-                *ngIf="agentEntryMasterService?.clientTATPreApprovalEmail?.length > 0 || agentEntryMasterService?.clientTATPreApprovalEmailList?.length > 0">
-                <div fxLayout="row" fxLayoutGap="20px"
-                    *ngIf="agentEntryMasterService?.clientTATPreApprovalEmail?.length > 0">
+                  </div>
+                }
+              </div>
+            }
+            @if (agentEntryMasterService?.clientTATPreApprovalEmail?.length > 0 || agentEntryMasterService?.clientTATPreApprovalEmailList?.length > 0) {
+              <div class=sep-line
+                >
+                @if (agentEntryMasterService?.clientTATPreApprovalEmail?.length > 0) {
+                  <div fxLayout="row" fxLayoutGap="20px"
+                    >
                     <div fxFlex="100%">
-                        <div fxLayout="row">
-                            <div fxFlex="100%">
-                                <h3 class="sub-header">Pre-approval TAT documents</h3>
-                            </div>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <h3 class="sub-header">Pre-approval TAT documents</h3>
                         </div>
-                        <div fxLayout="row" fxLayoutGap="20px">
-                            <div fxFlex="30%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>Select Service</mat-label>
-                                    <mat-select placeholder="Select Service" formControlName="approvalTAT"
-                                        (selectionChange)="categoryChangeTAT($event.value)"> <span
-                                            *ngFor="let clientTAT of agentEntryMasterService?.clientTATPreApprovalEmail; let i = index">
-                                            <mat-option [value]="clientTAT"> {{ clientTAT.componentType }} - {{
-                                                clientTAT.componentDesc }} </mat-option>
-                                        </span> </mat-select>
-                                </mat-form-field>
-                            </div>
-                            <div fxFlex="70%">
-                                <mat-label class="lbl">Attached Document</mat-label>
-                                <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
-                                        here...</span>
-                                    <input type="file" #fileInput (change)="openUploadDocTAT($event)"
-                                        formControlName="componentTATDocument" />
-                                </div>
-                                <div class="clear">
-                                    <mat-error
-                                        *ngIf="!!agentEntryMasterService.componentEntryForm?.get('componentTATDocument')?.errors?.incorrect">
-                                        Document is required </mat-error>
-                                </div>
-                            </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutGap="20px">
+                        <div fxFlex="30%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Select Service</mat-label>
+                            <mat-select placeholder="Select Service" formControlName="approvalTAT"
+                              (selectionChange)="categoryChangeTAT($event.value)"> @for (clientTAT of agentEntryMasterService?.clientTATPreApprovalEmail; track clientTAT; let i = $index) {
+                              <span
+                                >
+                                <mat-option [value]="clientTAT"> {{ clientTAT.componentType }} - {{
+                                clientTAT.componentDesc }} </mat-option>
+                              </span>
+                            } </mat-select>
+                          </mat-form-field>
                         </div>
-                        <div fxLayout="row">
-                            <div fxFlex="100%"> </div>
+                        <div fxFlex="70%">
+                          <mat-label class="lbl">Attached Document</mat-label>
+                          <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                        here...</span>
+                        <input type="file" #fileInput (change)="openUploadDocTAT($event)"
+                          formControlName="componentTATDocument" />
                         </div>
-                        <div fxLayout="row">
-                            <div fxFlex="100%"> </div>
+                        <div class="clear">
+                          @if (!!agentEntryMasterService.componentEntryForm?.get('componentTATDocument')?.errors?.incorrect) {
+                            <mat-error
+                              >
+                            Document is required </mat-error>
+                          }
                         </div>
+                      </div>
                     </div>
+                    <div fxLayout="row">
+                      <div fxFlex="100%"> </div>
+                    </div>
+                    <div fxLayout="row">
+                      <div fxFlex="100%"> </div>
+                    </div>
+                  </div>
                 </div>
+              }
+              @if (agentEntryMasterService?.clientTATPreApprovalEmailList?.length > 0) {
                 <div fxLayout="row" class="pt-15"
-                    *ngIf="agentEntryMasterService?.clientTATPreApprovalEmailList?.length > 0">
-                    <div fxFlex="100%">
-                        <p-table [columns]="columnsTAT" [value]="agentEntryMasterService.clientTATPreApprovalEmailList"
-                            [scrollable]="true" scrollHeight="" [resizableColumns]="true" [reorderableColumns]="true">
-
-                            <!-- ================= COLGROUP ================= -->
-                            <ng-template pTemplate="colgroup" let-colGroupCols>
-                                <colgroup>
-                                    <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-                                </colgroup>
-                            </ng-template>
-
-                            <!-- ================= HEADER ================= -->
-                            <ng-template pTemplate="header" let-headerCols>
-                                <tr>
-                                    <th *ngFor="let col of headerCols" [pSortableColumn]="col.field" pReorderableColumn
-                                        pResizableColumn>
-
-                                        <div class="thname">{{ col.header }}</div>
-
-                                        <p-sortIcon *ngIf="col.field !== 'Actions'" [field]="col.field"
-                                            ariaLabel="Activate to sort"
-                                            ariaLabelDesc="Activate to sort in descending order"
-                                            ariaLabelAsc="Activate to sort in ascending order">
-                                        </p-sortIcon>
-
-                                    </th>
-                                </tr>
-                            </ng-template>
-
-                            <!-- ================= BODY ================= -->
-                            <ng-template pTemplate="body" let-index="rowIndex" let-rowData let-bodyCols="columns">
-
-                                <tr>
-                                    <td *ngFor="let col of bodyCols" [ngSwitch]="col.field">
-
-                                        <span *ngIf="col.field !== 'Actions'">
-                                            {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
-                                        </span>
-
-                                        <div *ngSwitchCase="'Actions'">
-                                            <div fxLayout="row" class="tbl-icon">
-                                                <div fxFlex="100%" fxLayoutGap="10px">
-                                                    <mat-icon>
-                                                        <i class="material-icons-outlined" matTooltip="Delete"
-                                                            matTooltipClass="accent-tooltip"
-                                                            (click)="removeDocumentTAT(index)">
-                                                            delete
-                                                        </i>
-                                                    </mat-icon>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </td>
-                                </tr>
-
-                            </ng-template>
-
-                            <br />
-
-                            <!-- ================= EMPTY MESSAGE ================= -->
-                            <ng-template pTemplate="emptymessage" let-emptyCols *ngIf="!tempClientTATApproval?.length">
-
-                                <tr>
-                                    <td [attr.colspan]="emptyCols.length">
-                                        <div class="no-record">
-                                            <span>No Records Found</span>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                            </ng-template>
-                        </p-table>
-                    </div>
+                  >
+                  <div fxFlex="100%">
+                    <p-table [columns]="columnsTAT" [value]="agentEntryMasterService.clientTATPreApprovalEmailList"
+                      [scrollable]="true" scrollHeight="" [resizableColumns]="true" [reorderableColumns]="true">
+                      <!-- ================= COLGROUP ================= -->
+                      <ng-template pTemplate="colgroup" let-colGroupCols>
+                        <colgroup>
+                        @for (col of colGroupCols; track col) {
+                          <col style="min-width:200px" />
+                        }
+                      </colgroup>
+                    </ng-template>
+                    <!-- ================= HEADER ================= -->
+                    <ng-template pTemplate="header" let-headerCols>
+                      <tr>
+                        @for (col of headerCols; track col) {
+                          <th [pSortableColumn]="col.field" pReorderableColumn
+                            pResizableColumn>
+                            <div class="thname">{{ col.header }}</div>
+                            @if (col.field !== 'Actions') {
+                              <p-sortIcon [field]="col.field"
+                                ariaLabel="Activate to sort"
+                                ariaLabelDesc="Activate to sort in descending order"
+                                ariaLabelAsc="Activate to sort in ascending order">
+                              </p-sortIcon>
+                            }
+                          </th>
+                        }
+                      </tr>
+                    </ng-template>
+                    <!-- ================= BODY ================= -->
+                    <ng-template pTemplate="body" let-index="rowIndex" let-rowData let-bodyCols="columns">
+                      <tr>
+                        @for (col of bodyCols; track col) {
+                          <td>
+                            @if (col.field !== 'Actions') {
+                              <span>
+                                {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                              </span>
+                            }
+                            @if (col.field === 'Actions') {
+                              <div>
+                                <div fxLayout="row" class="tbl-icon">
+                                  <div fxFlex="100%" fxLayoutGap="10px">
+                                    <mat-icon>
+                                      <i class="material-icons-outlined" matTooltip="Delete"
+                                        matTooltipClass="accent-tooltip"
+                                        (click)="removeDocumentTAT(index)">
+                                        delete
+                                      </i>
+                                    </mat-icon>
+                                  </div>
+                                </div>
+                              </div>
+                            }
+                          </td>
+                        }
+                      </tr>
+                    </ng-template>
+                    <br />
+                    <!-- ================= EMPTY MESSAGE ================= -->
+                    @if (!tempClientTATApproval?.length; as emptyCols) {
+                      <ng-template pTemplate="emptymessage" let-emptyCols>
+                        <tr>
+                          <td [attr.colspan]="emptyCols.length">
+                            <div class="no-record">
+                              <span>No Records Found</span>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    }
+                  </p-table>
                 </div>
-            </div>
-            <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end">
-                <button mat-flat-button type="button" color="primary" (click)="previousStep.emit()"> Previous </button>
+              </div>
+            }
+          </div>
+        }
+        <mat-card-actions fxLayoutGap="8px" fxLayoutAlign="end end">
+          <button mat-flat-button type="button" color="primary" (click)="previousStep.emit()"> Previous </button>
                 <button mat-flat-button type="button" color="primary" (click)="validationClienFee();validationClienTAT();msgAdd();
    (agentEntryMasterService?.componentEntryList?.length > 0 && documentValidation === true &&
     documentTAT === true && !agentEntryMasterService.tatFlag) ? nextStep.emit() : true;"> Next </button>
-            </mat-card-actions>
-        </form>
-        <ng-template #clientFeeDocument>
-            <div fxLayout="row" fxLayoutGap="30px">
-                <div fxFlex="100%">
-                    <div fxLayout="row">
-                        <div fxFlex="100%"> <span *ngIf="documentValidationFees===true">
-                                <h3>Upload the Pre-Approval documents.</h3>
-                            </span> <span *ngIf="documentValidationFeesTotal===true">
-                                <h3>Select the services from dropdown and upload the doucments.</h3>
-                            </span> </div>
-                    </div>
-                </div>
-            </div>
+        </mat-card-actions>
+      </form>
+      <ng-template #clientFeeDocument>
+        <div fxLayout="row" fxLayoutGap="30px">
+          <div fxFlex="100%">
             <div fxLayout="row">
-                <div fxFlex="100%">
-                    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
-                        <button mat-flat-button color="primary" (click)="okay()"> Ok </button>
-                    </mat-dialog-actions>
-                </div>
+              <div fxFlex="100%"> @if (documentValidationFees===true) {
+                <span>
+                  <h3>Upload the Pre-Approval documents.</h3>
+                </span>
+                } @if (documentValidationFeesTotal===true) {
+                <span>
+                  <h3>Select the services from dropdown and upload the doucments.</h3>
+                </span>
+              } </div>
             </div>
-        </ng-template>
-        <ng-template #clientTATDocument>
-            <div fxLayout="row" fxLayoutGap="30px">
-                <div fxFlex="100%">
-                    <div fxLayout="row">
-                        <div fxFlex="100%"> <span *ngIf="documentValidationTAT===true">
-                                <h3>Upload the Pre-Approval documents.</h3>
-                            </span> <span *ngIf="documentValidationTATTotal===true">
-                                <h3>Select the services from dropdown and upload the doucments.</h3>
-                            </span> </div>
-                    </div>
-                </div>
-            </div>
-            <div fxLayout="row">
-                <div fxFlex="100%">
-                    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
-                        <button mat-flat-button color="primary" (click)="okay()"> Ok </button>
-                    </mat-dialog-actions>
-                </div>
-            </div>
-        </ng-template>
-        <ng-template #clientComponentPopUp>
-            <mat-dialog-content>
-                <div fxLayout="row">
-                    <div fxFlex="100%">
-                        <div fxLayout="row">
-                            <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
-                                    src="assets/images/alert-warning.gif"> </div>
-                        </div>
-                        <div fxLayout="row" fxLayoutAlign="center center">
-                            <div fxFlex="100%" class="text-center">
-                                <h3 class="m-0">Confirmation !</h3>
-                                <p class="text-sm">Are you sure you want to <b>delete</b> this record?</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mat-dialog-content>
-            <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
-                <button mat-stroked-button (click)="dialogClose()">No, Keep it</button>
-                <button mat-flat-button color="warn" (click)="removeClientComponent()">Yes, Delete it</button>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+              <button mat-flat-button color="primary" (click)="okay()"> Ok </button>
             </mat-dialog-actions>
-        </ng-template>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #clientTATDocument>
+        <div fxLayout="row" fxLayoutGap="30px">
+          <div fxFlex="100%">
+            <div fxLayout="row">
+              <div fxFlex="100%"> @if (documentValidationTAT===true) {
+                <span>
+                  <h3>Upload the Pre-Approval documents.</h3>
+                </span>
+                } @if (documentValidationTATTotal===true) {
+                <span>
+                  <h3>Select the services from dropdown and upload the doucments.</h3>
+                </span>
+              } </div>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+              <button mat-flat-button color="primary" (click)="okay()"> Ok </button>
+            </mat-dialog-actions>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #clientComponentPopUp>
+        <mat-dialog-content>
+          <div fxLayout="row">
+            <div fxFlex="100%">
+              <div fxLayout="row">
+                <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                src="assets/images/alert-warning.gif"> </div>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center center">
+                <div fxFlex="100%" class="text-center">
+                  <h3 class="m-0">Confirmation !</h3>
+                  <p class="text-sm">Are you sure you want to <b>delete</b> this record?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+          <button mat-stroked-button (click)="dialogClose()">No, Keep it</button>
+          <button mat-flat-button color="warn" (click)="removeClientComponent()">Yes, Delete it</button>
+        </mat-dialog-actions>
+      </ng-template>
     </div>
-</div>
+  </div>

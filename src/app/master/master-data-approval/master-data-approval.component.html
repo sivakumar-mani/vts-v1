@@ -1,162 +1,166 @@
 <app-breadcrumb [routePath]='routePath' [btnBack]="btnBack" (eventBack)="closeForm()"></app-breadcrumb>
 
 <mat-card>
-    <div fxLayout="row">
-        <mat-card-header fxFlex="100%">
-            <div fxFlex="100%">
-                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-                    fxLayoutGap="10px">
-                    <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
-                        fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
-                        <mat-card-title>
-                            <h1 class="header-title">Master Data Approval</h1>
-                        </mat-card-title>
-                    </div>
-                    <span fxFlex></span>
-                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
-                        fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                        <div class="tbl-commonsearch">
-                            <mat-form-field fxFlex="100%">
-                                <mat-label></mat-label>
-                                <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                                <input matInput #global placeholder="Search" type="text" pInputText size="50"
-                                    autocomplete="off" (input)="mdtab.filterGlobal($event.target.value, 'contains')" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
+  <div fxLayout="row">
+    <mat-card-header fxFlex="100%">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+          fxLayoutGap="10px">
+          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+            fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+            <mat-card-title>
+              <h1 class="header-title">Master Data Approval</h1>
+            </mat-card-title>
+          </div>
+          <span fxFlex></span>
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+            fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+            <div class="tbl-commonsearch">
+              <mat-form-field fxFlex="100%">
+                <mat-label></mat-label>
+                <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                <input matInput #global placeholder="Search" type="text" pInputText size="50"
+                  autocomplete="off" (input)="mdtab.filterGlobal($event.target.value, 'contains')" />
+                </mat-form-field>
+              </div>
             </div>
-        </mat-card-header>
+          </div>
+        </div>
+      </mat-card-header>
     </div>
 
 
 
 
     <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
-        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-            
-          <p-table
-  #mdtab
-  [columns]="masterScreencols"
-  [value]="masterScreenList"
-  [scrollable]="true"
-  scrollHeight=""
-  [paginator]="true"
-  [rows]="itemperpage"
-  [resizableColumns]="true"
-  [reorderableColumns]="true"
-  columnResizeMode="expand"
-  frozenWidth="150px"
-  [frozenColumns]="frozenCols">
+      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
 
-  <!-- ===== COLGROUP ===== -->
-  <ng-template pTemplate="colgroup" let-colGroupCols>
-    <colgroup>
-      <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-    </colgroup>
-  </ng-template>
+        <p-table
+          #mdtab
+          [columns]="masterScreencols"
+          [value]="masterScreenList"
+          [scrollable]="true"
+          scrollHeight=""
+          [paginator]="true"
+          [rows]="itemperpage"
+          [resizableColumns]="true"
+          [reorderableColumns]="true"
+          columnResizeMode="expand"
+          frozenWidth="150px"
+          [frozenColumns]="frozenCols">
 
-  <!-- ===== HEADER ===== -->
-  <ng-template pTemplate="header" let-headerCols>
-    <tr>
-      <th *ngFor="let col of headerCols"
-          [ngSwitch]="col.field"
-          pReorderableColumn
-          pResizableColumn>
+          <!-- ===== COLGROUP ===== -->
+          <ng-template pTemplate="colgroup" let-colGroupCols>
+            <colgroup>
+            @for (col of colGroupCols; track col) {
+              <col style="min-width:200px" />
+            }
+          </colgroup>
+        </ng-template>
 
-        <span [pSortableColumn]="col.field">
-          <div class="thname">
-            {{ col.header }}
-          </div>
+        <!-- ===== HEADER ===== -->
+        <ng-template pTemplate="header" let-headerCols>
+          <tr>
+            @for (col of headerCols; track col) {
+              <th
+                pReorderableColumn
+                pResizableColumn>
+                <span [pSortableColumn]="col.field">
+                  <div class="thname">
+                    {{ col.header }}
+                  </div>
+                  @if (col.field !== 'action' && col.field !== 'sNo') {
+                    <p-sortIcon
+                      [field]="col.field"
+                      ariaLabel="Activate to sort"
+                      ariaLabelDesc="Activate to sort in descending order"
+                      matTooltip="Sorting"
+                      matTooltipClass="accent-tooltip"
+                      ariaLabelAsc="Activate to sort in ascending order">
+                    </p-sortIcon>
+                  }
+                </span>
+              </th>
+            }
+          </tr>
+        </ng-template>
 
-          <p-sortIcon
-            *ngIf="col.field !== 'action' && col.field !== 'sNo'"
-            [field]="col.field"
-            ariaLabel="Activate to sort"
-            ariaLabelDesc="Activate to sort in descending order"
-            matTooltip="Sorting"
-            matTooltipClass="accent-tooltip"
-            ariaLabelAsc="Activate to sort in ascending order">
-          </p-sortIcon>
-        </span>
+        <!-- ===== BODY ===== -->
+        <ng-template
+          pTemplate="body"
+          let-rowData
+          let-bodyCols="columns">
 
-      </th>
-    </tr>
-  </ng-template>
+          <tr>
+            @for (col of bodyCols; track col) {
+              <td
+                [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                <!-- ACTION -->
+                @if (col.field === 'action') {
+                  <div fxLayout="row" class="desg-icon">
+                    <div fxFlex="100%" fxLayoutGap="10px">
+                      <mat-icon [ngClass]="screenAuth.approveFlag === false ? 'page-btn disabled' : ''">
+                        <i
+                          class="material-icons material-icons-outlined"
+                          matTooltip="Approve"
+                          matTooltipClass="accent-tooltip"
+                          (click)="openDialog(true, rowData)">
+                          check_circle_outline
+                        </i>
+                      </mat-icon>
+                      <mat-icon>
+                        <i
+                          class="material-icons material-icons-outlined"
+                          matTooltip="Reject"
+                          matTooltipClass="accent-tooltip"
+                          (click)="openDialog(false, rowData)">
+                          highlight_off
+                        </i>
+                      </mat-icon>
+                    </div>
+                  </div>
+                }
+                @if (col.field === 'sNo') {
+                  <div>{{ rowData.sNo }}</div>
+                }
+                @if (col.field === 'screenName') {
+                  <div>{{ rowData.screenName }}</div>
+                }
+                @if (col.field === 'masterDataName') {
+                  <div>{{ rowData.masterDataName }}</div>
+                }
+              </td>
+            }
+          </tr>
 
-  <!-- ===== BODY ===== -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-bodyCols="columns">
+        </ng-template>
 
-    <tr>
-      <td *ngFor="let col of bodyCols"
-          [ngSwitch]="col.field"
-          [ngClass]="{ 'desg-bg': col.field === 'action' }">
+      </p-table>
 
-        <!-- ACTION -->
-        <div *ngSwitchCase="'action'" fxLayout="row" class="desg-icon">
-          <div fxFlex="100%" fxLayoutGap="10px">
-
-            <mat-icon [ngClass]="screenAuth.approveFlag === false ? 'page-btn disabled' : ''">
-              <i
-                class="material-icons material-icons-outlined"
-                matTooltip="Approve"
-                matTooltipClass="accent-tooltip"
-                (click)="openDialog(true, rowData)">
-                check_circle_outline
-              </i>
-            </mat-icon>
-
-            <mat-icon>
-              <i
-                class="material-icons material-icons-outlined"
-                matTooltip="Reject"
-                matTooltipClass="accent-tooltip"
-                (click)="openDialog(false, rowData)">
-                highlight_off
-              </i>
-            </mat-icon>
-
-          </div>
-        </div>
-
-        <div *ngSwitchCase="'sNo'">{{ rowData.sNo }}</div>
-        <div *ngSwitchCase="'screenName'">{{ rowData.screenName }}</div>
-        <div *ngSwitchCase="'masterDataName'">{{ rowData.masterDataName }}</div>
-
-      </td>
-    </tr>
-
-  </ng-template>
-
-</p-table>
-
-            <div [ngClass]="{'empty-record': masterScreenList.length == 0}" class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
-                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="start center">
-                    Showing {{ mdtab.totalRecords
-                            < 1 ? 0 : mdtab.first + 1 }} - {{ mdtab.totalRecords> 0 ? mdtab.rows + mdtab.first
-                            <=mdtab.totalRecords ? mdtab.rows + mdtab.first : mdtab.totalRecords : 0 }}
-                    of {{ mdtab.totalRecords }} record(s)  | &nbsp;<a (click)="showall()">Show All</a></div>
-                <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+      <div [ngClass]="{'empty-record': masterScreenList.length == 0}" class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="start center">
+          Showing {{ mdtab.totalRecords
+          < 1 ? 0 : mdtab.first + 1 }} - {{ mdtab.totalRecords> 0 ? mdtab.rows + mdtab.first
+          <=mdtab.totalRecords ? mdtab.rows + mdtab.first : mdtab.totalRecords : 0 }}
+          of {{ mdtab.totalRecords }} record(s)  | &nbsp;<a (click)="showall()">Show All</a></div>
+          <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
 
                     <a [ngClass]="mdtab.first===0?'page-btn disabled': 'page-btn'" (click)="mdtab.onPageChange({ first: mdtab.first - mdtab.rows, rows: mdtab.rows });
                             navigateNxtPrevPage(mdtab.first + mdtab.rows,mdtab.rows)">
-                        <i class="icon-control-start mr-5"></i></a>
-                    <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
-                            <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
-                                [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value,mdtab.rows)" />
-                        </span></span>
-                    <span class="mr-2" fxHide.xs>Of {{ getTotalPages(mdtab.totalRecords,mdtab.rows) }}</span>
-                    <a [ngClass]="(mdtab.rows + mdtab.first)>=mdtab.totalRecords?'page-btn disabled': 'page-btn'"
+              <i class="icon-control-start mr-5"></i></a>
+              <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                  [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value,mdtab.rows)" />
+                </span></span>
+                <span class="mr-2" fxHide.xs>Of {{ getTotalPages(mdtab.totalRecords,mdtab.rows) }}</span>
+                <a [ngClass]="(mdtab.rows + mdtab.first)>=mdtab.totalRecords?'page-btn disabled': 'page-btn'"
                         (click)="mdtab.onPageChange({ first: mdtab.first + mdtab.rows, rows: mdtab.rows });
                             navigateNxtPrevPage(mdtab.first + mdtab.rows,mdtab.rows)"><i
-                            class="icon-control-end ml-5"></i></a>
-                </div>
+                class="icon-control-end ml-5"></i></a>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
 
-</mat-card>
+      </mat-card>

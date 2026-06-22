@@ -35,6 +35,7 @@ export class VendorEntryComponent implements OnInit {
   stateFilterlist: any[] = [];
   breadcrumbFlags = new BreadcrumbFlags();
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'vendorName', header: 'Vendor Name' },
     { field: 'countryName', header: 'Country' },
     { field: 'stateName', header: 'State' },

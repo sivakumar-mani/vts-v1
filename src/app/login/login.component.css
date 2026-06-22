@@ -1,20 +1,16 @@
 ﻿::ng-deep body {
     background-color: #FBFBFB !important;
     position: relative;
-    overflow: hidden;
 }
 
 .registration_larea {
     width: 100%;
-    min-height: 100vh;
-    max-height: 100vh;
     float: left;
     position: relative;
-    overflow: hidden;
 }
 
 .registration_larea .register_left {
-    width: 40%;
+    width: 30%;
     float: left;
 }
 
@@ -69,35 +65,28 @@
 }
 
 .register_left .content_here .inside_bg .bg_content .inside_content {
-    padding: 0 3em 4.4em 3em;
+    padding: 0 3em 2.5em 3em;
     text-align: center;
 }
 
 .register_left .content_here .inside_bg .bg_content .inside_content h2 {
-    margin: 0 0 10px;
-    font-size: 19px;
-    line-height: 1.2;
-    font-weight: 400;
-    padding-top: 20px;
+    margin-bottom: 0;
 }
 
 .register_left .content_here .inside_bg .bg_content .inside_content p {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.7;
-    font-weight: 400;
+    margin-top: 0;
 }
 
 .register_left .content_here .inside_bg .bg_content .contact_info {
     width: 100%;
     float: left;
-    padding: 0 42px 25px;
+    padding: 15px;
 }
 
 .contact_info .call_text {
     color: #B1CAFF;
-    font-size: 12px;
-    margin: 0 0 18px;
+    font-size: 11px;
+    margin: 0;
     text-align: center;
 }
 
@@ -105,7 +94,6 @@
     text-align: center;
     font-size: 12px;
     font-weight: 400;
-    margin: 0;
 }
 
 .contact_info p>a {
@@ -121,41 +109,33 @@
 /* Right Side */
 
 .registration_larea .register_right {
-    min-height: 100vh;
-    max-height: 100vh;
-    padding: 0 4.2rem;
+    padding: 0 5.8rem;
     position: relative;
-    padding-top: 1px;
-    overflow: hidden;
+    padding-top: 10px;
 }
 
 .help_link {
     text-align: right;
     position: absolute;
-    top: 23px;
-    right: 52px;
-    margin: 0;
+    top: 20px;
+    right: 40px;
 }
 
 .help_link>a {
     color: #353537;
-    font-size: 15px;
-    text-decoration: none;
 }
 
 .help_link>a span {
     color: #0E4872;
-    font-size: 16px;
+    font-size: 18px;
     margin-right: 8px;
 }
 
 .register_right .page_title {
     color: #484848;
     margin: 0;
-    font-size: 20px;
-    line-height: 1.25;
     font-weight: 300;
-    padding-top: 4.75em;
+    padding-top: 3.5em;
 }
 
 .register_right .page_des {
@@ -171,7 +151,7 @@
 .copyright_sec {
     width: 100%;
     float: left;
-    padding: 4px 15px 8px;
+    padding: 15px;
 }
 
 .copyright_sec p {
@@ -379,7 +359,7 @@
     display: none !important;
 }
 ::ng-deep .login_card mat-form-field {
-    margin-bottom: 22px !important;
+    margin-bottom: 4px !important;
 }
 /* Login form field input background — light tint like old design */
 ::ng-deep .login_card .mdc-text-field--outlined .mat-mdc-form-field-infix,
@@ -428,9 +408,9 @@
     width: 70%;
     margin: 0 auto;
     background: linear-gradient(90deg, #29B2FC -60.12%, #004C80 100%);
-    padding: 16px 15px;
-    border-bottom-left-radius: 26px;
-    border-bottom-right-radius: 26px;
+    padding: 10px 15px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
 }
 
 .logName {
@@ -440,78 +420,21 @@
     margin: 0;
     text-align: center;
     font-weight: 600;
-    letter-spacing: 0;
+    letter-spacing: 1px;
 }
 
 .login_card {
     position: relative;
-    width: 405px;
-    max-width: calc(100vw - 56px);
-    min-height: 454px;
-    padding: 0 25px 14px !important;
-    border: 1px solid #e1e1e1;
-    border-radius: 4px !important;
-    box-shadow: none !important;
-    overflow: hidden;
 }
 
 ::ng-deep .captch-btn .mat-mdc-icon-button i,
  ::ng-deep .captch-btn a i {
     color: #0e4872;
-
 }
 
 ::ng-deep .captcha-img,
  ::ng-deep .captch-btn {
-    padding-top: 0;   
-}
-
-.resetTxt {
-    color: #006dff;
-    font-size: 14px;
-    text-decoration: none;
-    margin: -1px 0 8px;
-}
-
-::ng-deep .login_card .mat-mdc-form-field {
-    width: 100%;
-    font-family: Roboto, "Helvetica Neue", sans-serif !important;
-    --mat-form-field-container-text-font: Roboto, "Helvetica Neue", sans-serif;
-    --mat-form-field-outlined-label-text-font: Roboto, "Helvetica Neue", sans-serif;
-    --mat-form-field-subscript-text-font: Roboto, "Helvetica Neue", sans-serif;
-    --mdc-outlined-text-field-label-text-font: Roboto, "Helvetica Neue", sans-serif;
-    --mdc-outlined-text-field-input-text-font: Roboto, "Helvetica Neue", sans-serif;
-}
-
-::ng-deep .login_card .mat-mdc-text-field-wrapper {
-    min-height: 44px;
-    font-family: Roboto, "Helvetica Neue", sans-serif !important;
-}
-
-::ng-deep .login_card .mat-mdc-form-field-infix {
-    min-height: 44px;
-    padding-top: 12px !important;
-    padding-bottom: 6px !important;
-}
-
-::ng-deep .login_card .mat-mdc-form-field-icon-suffix {
-    align-self: center;
-}
-
-::ng-deep .login_card .mat-mdc-form-field *,
-::ng-deep .login_card .mat-mdc-input-element,
-::ng-deep .login_card .mdc-floating-label,
-::ng-deep .login_card .mat-mdc-form-field-error,
-::ng-deep .login_card .mat-mdc-form-field-hint,
-::ng-deep .login_card .mat-mdc-button-base {
-    font-family: Roboto, "Helvetica Neue", sans-serif !important;
-}
-
-::ng-deep .login_card .mat-mdc-unelevated-button.mat-primary {
-    height: 36px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
+    padding-top: 14px;
 }
 
 
@@ -521,18 +444,6 @@
     .registration_larea .register_left {
         display: none;
     }
-    .registration_larea .register_right {
-        padding: 24px 24px 0;
-    }
-    .help_link {
-        position: relative;
-        top: auto;
-        right: auto;
-        margin: 0 0 14px;
-    }
-    .register_right .page_title {
-        padding-top: 4.5em;
-    }
 }
 
 @media only screen and (max-width: 480px) {
@@ -541,7 +452,7 @@
     }
     .help_link {
         z-index: 10;
-        top: auto;
+        top: 4.3em;
     }
      ::ng-deep .mat-horizontal-content-container {
         padding: 0 !important;
@@ -554,17 +465,6 @@
     }
     .register_right {
         padding: 0 2rem 2rem 2rem !important;
-    }
-    .login_card {
-        max-width: calc(100vw - 32px);
-        min-height: auto;
-        padding: 0 18px 16px !important;
-    }
-    .login_title {
-        width: 82%;
-    }
-    .register_right .page_title {
-        font-size: 18px;
     }
     .contact_info p>a span {
         display: block;
@@ -677,6 +577,6 @@
         padding-top: 15px;
     } */
     .login_card {
-        margin-top: 3.75em;
+        margin-top: 5em;
     }
 }

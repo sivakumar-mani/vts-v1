@@ -27,6 +27,7 @@ export class ScreenComponent implements OnInit {
   screenAuth: any = {};
   subModuleList: any;
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'screenName', header: 'Screen Name' },
     { field: 'moduleName', header: 'Module Name' },
     { field: 'subModuleName', header: 'Sub Module Name' },

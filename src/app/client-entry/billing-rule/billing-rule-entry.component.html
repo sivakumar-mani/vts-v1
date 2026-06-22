@@ -19,178 +19,179 @@
           <span fxFlex></span>
           <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
             fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-            <div class="tbl-commonsearch" *ngIf="!showBillingRule">
-              <mat-form-field fxFlex="100%">
-                <mat-label></mat-label>
-                <mat-icon matPrefix>search</mat-icon>
-                <input #global matInput size="50" placeholder="Search..." autocomplete="off"
-                  (input)="dt?.filterGlobal($event.target.value, 'contains')"
-                  (keypress)="dt.reset();dt?.filterGlobal($event.target.value, 'contains');ruleControl.reset();" />
-              </mat-form-field>
+            @if (!showBillingRule) {
+              <div class="tbl-commonsearch">
+                <mat-form-field fxFlex="100%">
+                  <mat-label></mat-label>
+                  <mat-icon matPrefix>search</mat-icon>
+                  <input #global matInput size="50" placeholder="Search..." autocomplete="off"
+                    (input)="dt?.filterGlobal($event.target.value, 'contains')"
+                    (keypress)="dt.reset();dt?.filterGlobal($event.target.value, 'contains');ruleControl.reset();" />
+                  </mat-form-field>
+                </div>
+              }
             </div>
           </div>
         </div>
-      </div>
-    </mat-card-header>
-  </div>
-  <mat-card-content>
-    <form [formGroup]="billingFormGroup" class="form-center" *ngIf="showBillingRule" id="ngForm" autocomplete="off">
-      <!-- <div class="page-container"> 
-        <div fxFlex="100%">-->
-      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
-        fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
-        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
-          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-            <mat-label>Billing Rule Name</mat-label>
-            <input matInput type="text" maxlength="75" mat-autofocus="true" placeholder="Enter Billing Rule"
-              formControlName="lookupName" autocomplete="off" role="presentation" />
-            <mat-error *ngIf="billingFormGroup.get('lookupName').invalid">Billing rule name is required </mat-error>
-          </mat-form-field>
-        </div>
-        <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="20%" fxFlex.xs="100%">
-          <mat-label class="lbl">Is Active</mat-label>
-          <mat-checkbox formControlName="active">Active </mat-checkbox>
-        </div>
-      </div>
-      <!-- </div>
-      </div> -->
-    </form>
-    <div fxLayout="row" *ngIf="!showBillingRule">
-      <div fxFlex="100%">
-        
-        <p-table
-  #dt
-  [columns]="cols"
-  (onRowReorder)="onRowReorder($event)"
-  [value]="billingList"
-  [scrollable]="true"
-  scrollHeight=""
-  [resizableColumns]="true"
-  [reorderableColumns]="true"
-  [paginator]="true"
-  [rows]="billingList.length">
-
-  <!-- ================= COLGROUP ================= -->
-  <ng-template pTemplate="colgroup" let-colGroupCols>
-    <colgroup>
-      <col *ngFor="let col of colGroupCols" style="min-width:150px" />
-    </colgroup>
-  </ng-template>
-
-  <!-- ================= HEADER ================= -->
-  <ng-template pTemplate="header" let-headerCols>
-    <tr>
-      <th style="width:70px">#order</th>
-      <th style="width:100px">Actions</th>
-
-      <th
-        *ngFor="let col of headerCols"
-        [ngSwitch]="col.field"
-        pReorderableColumn
-        pResizableColumn
-        [ngClass]="{ 'text-center action': col.field === 'Actions' }">
-
-        <span [pSortableColumn]="col.field">
-          <div class="thname">{{ col.header }}</div>
-          <p-sortIcon
-            *ngIf="col.field !== 'Actions'"
-            ariaLabel="Activate to sort"
-            ariaLabelDesc="Activate to sort in descending order"
-            matTooltip="Sorting"
-            matTooltipClass="accent-tooltip"
-            ariaLabelAsc="Activate to sort in ascending order">
-          </p-sortIcon>
-        </span>
-
-        <!-- ðŸ” search menu blocks remain UNCHANGED -->
-      </th>
-    </tr>
-  </ng-template>
-
-  <!-- ================= BODY ================= -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-index="rowIndex"
-    let-bodyCols="columns">
-
-    <tr [pReorderableRow]="index">
-      <td style="width:70px">
-        <i
-          class="icon-menu"
-          matTooltip="Re-order"
-          matTooltipClass="accent-tooltip"
-          pReorderableRowHandle>
-        </i>
-      </td>
-
-      <td class="desg-bg" style="width:100px">
-        <div fxLayout="row" class="tbl-icon">
-          <div fxFlex="100%" fxLayoutGap="10px">
-
-            <mat-icon
+      </mat-card-header>
+    </div>
+    <mat-card-content>
+      @if (showBillingRule) {
+        <form [formGroup]="billingFormGroup" class="form-center" id="ngForm" autocomplete="off">
+          <!-- <div class="page-container">
+          <div fxFlex="100%">-->
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
+              fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Billing Rule Name</mat-label>
+                  <input matInput type="text" maxlength="75" mat-autofocus="true" placeholder="Enter Billing Rule"
+                    formControlName="lookupName" autocomplete="off" role="presentation" />
+                    @if (billingFormGroup.get('lookupName').invalid) {
+                      <mat-error>Billing rule name is required </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="20%" fxFlex.xs="100%">
+                  <mat-label class="lbl">Is Active</mat-label>
+                  <mat-checkbox formControlName="active">Active </mat-checkbox>
+                </div>
+              </div>
+            <!-- </div>
+          </div> -->
+        </form>
+      }
+      @if (!showBillingRule) {
+        <div fxLayout="row">
+          <div fxFlex="100%">
+            <p-table
+              #dt
+              [columns]="cols"
+              (onRowReorder)="onRowReorder($event)"
+              [value]="billingList"
+              [scrollable]="true"
+              scrollHeight=""
+              [resizableColumns]="true"
+              [reorderableColumns]="true"
+              [paginator]="true"
+              [rows]="billingList.length">
+              <!-- ================= COLGROUP ================= -->
+              <ng-template pTemplate="colgroup" let-colGroupCols>
+                <colgroup>
+                @for (col of colGroupCols; track col) {
+                  <col style="min-width:150px" />
+                }
+              </colgroup>
+            </ng-template>
+            <!-- ================= HEADER ================= -->
+            <ng-template pTemplate="header" let-headerCols>
+              <tr>
+                <th style="width:70px">#order</th>
+                <th style="width:100px">Actions</th>
+                @for (col of headerCols; track col) {
+                  <th
+                    pReorderableColumn
+                    pResizableColumn
+                    [ngClass]="{ 'text-center action': col.field === 'Actions' }">
+                    <span [pSortableColumn]="col.field">
+                      <div class="thname">{{ col.header }}</div>
+                      @if (col.field !== 'Actions') {
+                        <p-sortIcon
+                          ariaLabel="Activate to sort"
+                          ariaLabelDesc="Activate to sort in descending order"
+                          matTooltip="Sorting"
+                          matTooltipClass="accent-tooltip"
+                          ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                      }
+                    </span>
+                    <!-- ðŸ” search menu blocks remain UNCHANGED -->
+                  </th>
+                }
+              </tr>
+            </ng-template>
+            <!-- ================= BODY ================= -->
+            <ng-template
+              pTemplate="body"
+              let-rowData
+              let-index="rowIndex"
+              let-bodyCols="columns">
+              <tr [pReorderableRow]="index">
+                <td style="width:70px">
+                  <i
+                    class="icon-menu"
+                    matTooltip="Re-order"
+                    matTooltipClass="accent-tooltip"
+                    pReorderableRowHandle>
+                  </i>
+                </td>
+                <td class="desg-bg" style="width:100px">
+                  <div fxLayout="row" class="tbl-icon">
+                    <div fxFlex="100%" fxLayoutGap="10px">
+                      <mat-icon
               [ngClass]="screenAuth.editFlag === false || rowData['disable'] === true
                 ? 'page-btn disabled'
                 : ''">
-              <i
-                matTooltip="Edit"
-                matTooltipClass="accent-tooltip"
-                class="material-icons-outlined"
-                (click)="editRule(rowData)">
-                edit
-              </i>
-            </mat-icon>
-
-            <mat-icon
+                        <i
+                          matTooltip="Edit"
+                          matTooltipClass="accent-tooltip"
+                          class="material-icons-outlined"
+                          (click)="editRule(rowData)">
+                          edit
+                        </i>
+                      </mat-icon>
+                      <mat-icon
               [ngClass]="screenAuth.deleteFlag === false
                 || rowData.deleteEnableFlag === false
                 || rowData['disable'] === true
                 ? 'page-btn disabled'
                 : ''">
-              <i
-                matTooltip="Delete"
-                matTooltipClass="accent-tooltip"
-                class="material-icons-outlined"
-                (click)="openDialog(rowData)">
-                delete
-              </i>
-            </mat-icon>
-
-          </div>
+                        <i
+                          matTooltip="Delete"
+                          matTooltipClass="accent-tooltip"
+                          class="material-icons-outlined"
+                          (click)="openDialog(rowData)">
+                          delete
+                        </i>
+                      </mat-icon>
+                    </div>
+                  </div>
+                </td>
+                @for (col of bodyCols; track col) {
+                  <td
+                    matTooltip="Client is allotted for the Billing Rule"
+                    matTooltipClass="accent-tooltip"
+                    [matTooltipDisabled]="rowData['disable'] === false">
+                    @if (col.field === 'lookupName') {
+                      <div>
+                        {{ rowData.lookupName }}
+                      </div>
+                    }
+                    @if (col.field === 'active') {
+                      <div>
+                        <div fxLayout="row" class="tbl-icon">
+                          @if (rowData.active) {
+                            <span class="istrue">
+                              <i matTooltip="Active" class="material-icons">thumb_up</i>
+                            </span>
+                          }
+                          @if (!rowData.active) {
+                            <span class="isfalse">
+                              <i matTooltip="In-Active" class="material-icons">thumb_down</i>
+                            </span>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </td>
+                }
+              </tr>
+            </ng-template>
+          </p-table>
+          <div fxLayout="row" [ngClass]="{ 'empty-record': billingList.length == 0 }"></div>
         </div>
-      </td>
-
-      <td
-        *ngFor="let col of bodyCols"
-        [ngSwitch]="col.field"
-        matTooltip="Client is allotted for the Billing Rule"
-        matTooltipClass="accent-tooltip"
-        [matTooltipDisabled]="rowData['disable'] === false">
-
-        <div *ngSwitchCase="'lookupName'">
-          {{ rowData.lookupName }}
-        </div>
-
-        <div *ngSwitchCase="'active'">
-          <div fxLayout="row" class="tbl-icon">
-            <span *ngIf="rowData.active" class="istrue">
-              <i matTooltip="Active" class="material-icons">thumb_up</i>
-            </span>
-            <span *ngIf="!rowData.active" class="isfalse">
-              <i matTooltip="In-Active" class="material-icons">thumb_down</i>
-            </span>
-          </div>
-        </div>
-
-      </td>
-    </tr>
-  </ng-template>
-
-</p-table>
-
-        <div fxLayout="row" [ngClass]="{ 'empty-record': billingList.length == 0 }"></div>
       </div>
-    </div>
+    }
   </mat-card-content>
 </mat-card>
 <div>

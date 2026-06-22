@@ -1,351 +1,402 @@
 ﻿<app-breadcrumb [btnResetTbl]="btnResetTbl" [btnBack]="btnBack" [btnSave]="btnSave" [toolTip]="toolTip"
-    [btnSaveDisabled]="!screenAuth.addFlag" [btnApproveDisabled]="!screenAuth.approveFlag" [btnApprove]="btnApprove"
-    [btnReject]="btnReject" (eventSave)="saveClientFeeApproval('Update')"
-    (eventApprove)="saveClientFeeApproval('Approved')" (eventReject)="saveClientFeeApproval('Rejected')"
-    (eventBack)="backToSearch()" [routePath]='routePath' (eventResetTbl)="tblReset()"> </app-breadcrumb>
+  [btnSaveDisabled]="!screenAuth.addFlag" [btnApproveDisabled]="!screenAuth.approveFlag" [btnApprove]="btnApprove"
+  [btnReject]="btnReject" (eventSave)="saveClientFeeApproval('Update')"
+  (eventApprove)="saveClientFeeApproval('Approved')" (eventReject)="saveClientFeeApproval('Rejected')"
+(eventBack)="backToSearch()" [routePath]='routePath' (eventResetTbl)="tblReset()"> </app-breadcrumb>
 <div fxLayout="row">
-    <div fxFlex="100%">
-        <mat-card>
-            <div fxLayout="row">
-                <mat-card-header fxFlex="100%">
-                    <div fxFlex="100%">
-                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-                            fxLayoutGap="10px">
-                            <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
-                                fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
-                                fxLayoutAlign.xs="start center">
-                                <mat-card-title>
-                                    <h1 class="header-title">{{common?.agreementapproveFlag === true ? 'Free Of Cost
-                                        Approval' : 'MSP & NRP Fee Approval/Pending'}}</h1>
-                                </mat-card-title>
-                            </div>
-                            <span fxFlex></span>
-                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
-                                fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                                <div class="tbl-commonsearch" *ngIf="!showGrid">
-                                    <mat-form-field fxFlex="100%">
-                                        <mat-label></mat-label>
-                                        <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                                        <input #global matInput size="50" placeholder="Search..." autocomplete="off"
-                                            (input)="dt?.filterGlobal($event.target.value, 'contains')"
-                                            (keypress)="dt.reset();dt?.filterGlobal($event.target.value, 'contains');componentNameControl.reset();clientNameControl.reset();amountCtl.reset();" />
-                                        <button mat-button *ngIf="global.value" matSuffix mat-icon-button
-                                            aria-label="Clear"
-                                            (click)="global.value = '';dt?.filterGlobal($event.target.value, 'contains')"></button>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </div>
+  <div fxFlex="100%">
+    <mat-card>
+      <div fxLayout="row">
+        <mat-card-header fxFlex="100%">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+              fxLayoutGap="10px">
+              <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                fxLayoutAlign="start center" fxLayoutAlign.sm="start center"
+                fxLayoutAlign.xs="start center">
+                <mat-card-title>
+                  <h1 class="header-title">{{common?.agreementapproveFlag === true ? 'Free Of Cost
+                  Approval' : 'MSP & NRP Fee Approval/Pending'}}</h1>
+                </mat-card-title>
+              </div>
+              <span fxFlex></span>
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                @if (!showGrid) {
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input #global matInput size="50" placeholder="Search..." autocomplete="off"
+                        (input)="dt?.filterGlobal($event.target.value, 'contains')"
+                        (keypress)="dt.reset();dt?.filterGlobal($event.target.value, 'contains');componentNameControl.reset();clientNameControl.reset();amountCtl.reset();" />
+                        @if (global.value) {
+                          <button mat-button matSuffix mat-icon-button
+                            aria-label="Clear"
+                          (click)="global.value = '';dt?.filterGlobal($event.target.value, 'contains')"></button>
+                        }
+                      </mat-form-field>
                     </div>
-                </mat-card-header>
+                  }
+                </div>
+              </div>
             </div>
-            <mat-card-content>
-                <div fxLayout="row wrap" *ngIf="!showGrid">
-                    <div fxFlex="100%">
-                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                            fxLayout.xs="column" fxLayoutGap="0px grid">
-                            <div fxFlex="100%">
-                                <p-table #dt [columns]="filedname" [value]="clientCompFeeStatusTransList"
-                                    [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true"
-                                    scrollHeight="" [paginator]="true" [rows]="itemperpage" frozenWidth="100px"
-                                    [frozenColumns]="frozenCols">
-
-                                    <!-- ================= COLGROUP ================= -->
-                                    <ng-template pTemplate="colgroup" let-colGroupCols>
-                                        <colgroup>
-                                            <col *ngFor="let col of colGroupCols" style="width:150px" />
-                                        </colgroup>
-                                    </ng-template>
-
-                                    <!-- ================= HEADER ================= -->
-                                    <ng-template pTemplate="header" let-headerCols>
-                                        <tr>
-                                            <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn
-                                                pResizableColumn matTooltip="{{ col.header }}"
-                                                matTooltipClass="accent-tooltip">
-
-                                                <span [pSortableColumn]="col.field">
-                                                    <div class="thname">{{ col.header }}</div>
-                                                    <p-sortIcon *ngIf="col.field !== 'action'" [field]="col.field"
-                                                        ariaLabel="Activate to sort"
-                                                        ariaLabelDesc="Activate to sort in descending order"
-                                                        ariaLabelAsc="Activate to sort in ascending order">
-                                                    </p-sortIcon>
-                                                </span>
-
-                                                <!-- ðŸ” SEARCH ICONS -->
-                                                <span class="ico-fieldsearch">
-                                                    <i *ngSwitchCase="'clientName'" class="icon-search2"
-                                                        matTooltip="Search" matTooltipClass="accent-tooltip"
-                                                        (click)="clientNameCtrlTrigger.openMenu()"></i>
-
-                                                    <i *ngSwitchCase="'componentName'" class="icon-search2"
-                                                        matTooltip="Search" matTooltipClass="accent-tooltip"
-                                                        (click)="componentNameCtrlTrigger.openMenu()"></i>
-
-                                                    <i *ngSwitchCase="'requestAmount'" class="icon-search2"
-                                                        matTooltip="Search" matTooltipClass="accent-tooltip"
-                                                        (click)="requestAmountCtrlTrigger.openMenu()"></i>
-
-                                                    <i *ngSwitchCase="'reqEffectiveDate'" class="icon-search2"
-                                                        matTooltip="Search" matTooltipClass="accent-tooltip"
-                                                        (click)="reqEffectiveDateCtrlTrigger.openMenu()"></i>
-
-                                                    <i *ngSwitchCase="'requestedByFirstName'" class="icon-search2"
-                                                        matTooltip="Search" matTooltipClass="accent-tooltip"
-                                                        (click)="requestByCtrlTrigger.openMenu()"></i>
-
-                                                    <i *ngSwitchCase="'status'" class="icon-search2" matTooltip="Search"
-                                                        matTooltipClass="accent-tooltip"
-                                                        (click)="statusCtrlTrigger.openMenu()"></i>
-                                                </span>
-
-                                                <!--  œ… all mat-menu filter blocks unchanged -->
-                                            </th>
-                                        </tr>
-                                    </ng-template>
-
-                                    <!-- ================= BODY ================= -->
-                                    <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
-
-                                        <tr>
-                                            <td *ngFor="let col of bodyCols" [ngSwitch]="col.field"
-                                                [ngClass]="{ 'desg-bg': col.field === 'action' }">
-
-                                                <div *ngIf="col.field !== 'status'">
-
-                                                    <div *ngSwitchCase="'clientName'">{{ rowData.clientName }}</div>
-                                                    <div *ngSwitchCase="'componentName'">{{ rowData.componentName }}
-                                                    </div>
-                                                    <div *ngSwitchCase="'requestedByFirstName'">{{
-                                                        rowData.requestedByFirstName }}</div>
-
-                                                    <div *ngSwitchCase="'requestAmount'" class="text-right">
-                                                        {{ rowData.requestAmount }}
-                                                    </div>
-
-                                                    <div *ngSwitchCase="'reqEffectiveDate'">
-                                                        {{ rowData.reqEffectiveDate | date:'dd/MM/yyyy' }}
-                                                    </div>
-
-                                                    <!-- ACTION -->
-                                                    <div *ngIf="col.field === 'action'" fxLayout="row"
-                                                        class="desg-icon">
-                                                        <div fxFlex="100%" fxLayoutGap="10px">
-
-                                                            <mat-icon *ngIf="rowData.status === 'Pending'"
-                                                                matTooltip="Edit" matTooltipClass="accent-tooltip"
-                                                                [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
-                                                                <i class="material-icons-outlined"
-                                                                    (click)="getClientFeeApprovalByID(rowData)">
-                                                                    edit
-                                                                </i>
-                                                            </mat-icon>
-
-                                                            <mat-icon
-                                                                *ngIf="rowData.status === 'Approved' || rowData.status === 'Rejected'"
-                                                                matTooltip="View" matTooltipClass="accent-tooltip"
-                                                                [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
-                                                                <i class="material-icons-outlined"
-                                                                    (click)="getClientFeeApprovalByID(rowData)">
-                                                                    remove_red_eye
-                                                                </i>
-                                                            </mat-icon>
-
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <!-- STATUS -->
-                                                <div *ngIf="col.field === 'status'">
-                                                    <div *ngIf="rowData.status === 'Pending'" class="status pending">
-                                                        {{ rowData.status }}
-                                                    </div>
-                                                    <div *ngIf="rowData.status === 'Rejected'" class="status rejected">
-                                                        {{ rowData.status }}
-                                                    </div>
-                                                    <div *ngIf="rowData.status === 'Approved'" class="status approved">
-                                                        {{ rowData.status }}
-                                                    </div>
-                                                </div>
-
-                                            </td>
-                                        </tr>
-
-                                    </ng-template>
-
-                                </p-table>
-                            </div>
-                        </div>
-                        <div class="cus-paginator"
-                            [ngClass]="{'empty-record': clientCompFeeStatusTransList?.length === 0}"
-                            fxLayout.lg="row wrap" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                            fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
-                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                fxLayoutAlign="start center"> Showing {{ dt.totalRecords
-                                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
-                                    <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
-                                        dt.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a>
-                            </div>
-                            <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                                fxLayoutAlign.xs="start center"> <a
+          </mat-card-header>
+        </div>
+        <mat-card-content>
+          @if (!showGrid) {
+            <div fxLayout="row wrap">
+              <div fxFlex="100%">
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                  fxLayout.xs="column" fxLayoutGap="0px grid">
+                  <div fxFlex="100%">
+                    <p-table #dt [columns]="filedname" [value]="clientCompFeeStatusTransList"
+                      [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true"
+                      scrollHeight="" [paginator]="true" [rows]="itemperpage">
+                      <!-- ================= COLGROUP ================= -->
+                      <ng-template pTemplate="colgroup" let-colGroupCols>
+                        <colgroup>
+                        @for (col of colGroupCols; track col) {
+                          <col style="width:150px" />
+                        }
+                      </colgroup>
+                    </ng-template>
+                    <!-- ================= HEADER ================= -->
+                    <ng-template pTemplate="header" let-headerCols>
+                      <tr>
+                        @for (col of headerCols; track col) {
+                          <th pReorderableColumn
+                            pResizableColumn matTooltip="{{ col.header }}"
+                            matTooltipClass="accent-tooltip">
+                            <span [pSortableColumn]="col.field">
+                              <div class="thname">{{ col.header }}</div>
+                              @if (col.field !== 'action') {
+                                <p-sortIcon [field]="col.field"
+                                  ariaLabel="Activate to sort"
+                                  ariaLabelDesc="Activate to sort in descending order"
+                                  ariaLabelAsc="Activate to sort in ascending order">
+                                </p-sortIcon>
+                              }
+                            </span>
+                            <!-- ðŸ” SEARCH ICONS -->
+                            <span class="ico-fieldsearch">
+                              @if (col.field === 'clientName') {
+                                <i class="icon-search2"
+                                  matTooltip="Search" matTooltipClass="accent-tooltip"
+                                (click)="clientNameCtrlTrigger.openMenu()"></i>
+                              }
+                              @if (col.field === 'componentName') {
+                                <i class="icon-search2"
+                                  matTooltip="Search" matTooltipClass="accent-tooltip"
+                                (click)="componentNameCtrlTrigger.openMenu()"></i>
+                              }
+                              @if (col.field === 'requestAmount') {
+                                <i class="icon-search2"
+                                  matTooltip="Search" matTooltipClass="accent-tooltip"
+                                (click)="requestAmountCtrlTrigger.openMenu()"></i>
+                              }
+                              @if (col.field === 'reqEffectiveDate') {
+                                <i class="icon-search2"
+                                  matTooltip="Search" matTooltipClass="accent-tooltip"
+                                (click)="reqEffectiveDateCtrlTrigger.openMenu()"></i>
+                              }
+                              @if (col.field === 'requestedByFirstName') {
+                                <i class="icon-search2"
+                                  matTooltip="Search" matTooltipClass="accent-tooltip"
+                                (click)="requestByCtrlTrigger.openMenu()"></i>
+                              }
+                              @if (col.field === 'status') {
+                                <i class="icon-search2" matTooltip="Search"
+                                  matTooltipClass="accent-tooltip"
+                                (click)="statusCtrlTrigger.openMenu()"></i>
+                              }
+                            </span>
+                            <!--  œ… all mat-menu filter blocks unchanged -->
+                          </th>
+                        }
+                      </tr>
+                    </ng-template>
+                    <!-- ================= BODY ================= -->
+                    <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+                      <tr>
+                        @for (col of bodyCols; track col) {
+                          <td
+                            [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                            @if (col.field !== 'status') {
+                              <div>
+                                @if (col.field === 'clientName') {
+                                  <div>{{ rowData.clientName }}</div>
+                                }
+                                @if (col.field === 'componentName') {
+                                  <div>{{ rowData.componentName }}
+                                  </div>
+                                }
+                                @if (col.field === 'requestedByFirstName') {
+                                  <div>{{
+                                  rowData.requestedByFirstName }}</div>
+                                }
+                                @if (col.field === 'requestAmount') {
+                                  <div class="text-right">
+                                    {{ rowData.requestAmount }}
+                                  </div>
+                                }
+                                @if (col.field === 'reqEffectiveDate') {
+                                  <div>
+                                    {{ rowData.reqEffectiveDate | date:'dd/MM/yyyy' }}
+                                  </div>
+                                }
+                                <!-- ACTION -->
+                                @if (col.field === 'action') {
+                                  <div fxLayout="row"
+                                    class="desg-icon">
+                                    <div fxFlex="100%" fxLayoutGap="10px">
+                                      @if (rowData.status === 'Pending') {
+                                        <mat-icon
+                                          matTooltip="Edit" matTooltipClass="accent-tooltip"
+                                          [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                                          <i class="material-icons-outlined"
+                                            (click)="getClientFeeApprovalByID(rowData)">
+                                            edit
+                                          </i>
+                                        </mat-icon>
+                                      }
+                                      @if (rowData.status === 'Approved' || rowData.status === 'Rejected') {
+                                        <mat-icon
+                                          matTooltip="View" matTooltipClass="accent-tooltip"
+                                          [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                                          <i class="material-icons-outlined"
+                                            (click)="getClientFeeApprovalByID(rowData)">
+                                            remove_red_eye
+                                          </i>
+                                        </mat-icon>
+                                      }
+                                    </div>
+                                  </div>
+                                }
+                              </div>
+                            }
+                            <!-- STATUS -->
+                            @if (col.field === 'status') {
+                              <div>
+                                @if (rowData.status === 'Pending') {
+                                  <div class="status pending">
+                                    {{ rowData.status }}
+                                  </div>
+                                }
+                                @if (rowData.status === 'Rejected') {
+                                  <div class="status rejected">
+                                    {{ rowData.status }}
+                                  </div>
+                                }
+                                @if (rowData.status === 'Approved') {
+                                  <div class="status approved">
+                                    {{ rowData.status }}
+                                  </div>
+                                }
+                              </div>
+                            }
+                          </td>
+                        }
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </div>
+              <div class="cus-paginator"
+                [ngClass]="{'empty-record': clientCompFeeStatusTransList?.length === 0}"
+                fxLayout.lg="row wrap" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center"> Showing {{ dt.totalRecords
+                  < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                  <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
+                  dt.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a>
+                </div>
+                <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                  fxLayoutAlign.xs="start center"> <a
                                     [ngClass]="dt.first===0?'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                       navigateNxtPrevPage(dt.first + dt.rows,dt.rows)"> <i class="icon-control-start mr-5"></i></a>
-                                <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
-                                        <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5"
-                                            appNumberOnly [NumberOnly]="false" min="1"
-                                            (keyup.enter)="navigatePage(pageNo.value,dt.rows)" />
-                                    </span></span> <span class="mr-2" fxHide.xs> of
-                                    {{ getTotalPages(dt.totalRecords,dt.rows) }}</span> <a
-                                    [ngClass]="(dt.rows + dt.first)>=dt.totalRecords?'page-btn disabled': 'page-btn'"
+                  <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                    <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5"
+                      appNumberOnly [NumberOnly]="false" min="1"
+                      (keyup.enter)="navigatePage(pageNo.value,dt.rows)" />
+                    </span></span> <span class="mr-2" fxHide.xs> of
+                  {{ getTotalPages(dt.totalRecords,dt.rows) }}</span> <a
+                  [ngClass]="(dt.rows + dt.first)>=dt.totalRecords?'page-btn disabled': 'page-btn'"
                                     (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                           navigateNxtPrevPage(dt.first + dt.rows,dt.rows)">Next <i
-                                        class="icon-control-end ml-5"></i></a>
-                            </div>
-                        </div>
+                class="icon-control-end ml-5"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+      @if (showGrid) {
+        <div>
+          <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="100%">
+              <div class="client-details">
+                <div  class="client-avatar"><i  class="icon-referencecheck"></i></div>
+                <div class="client-data">
+                  <h3 matTooltip="Client details" matTooltipClass="accent-tooltip"> {{
+                  clientFeeApproval.clientName }}</h3>
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="33.33%">
+                      <p>
+                        <label>Component Name:</label>
+                        <span>{{ clientFeeApproval.componentName }}</span>
+                      </p>
                     </div>
-                </div>
-                <div *ngIf="showGrid">
-                    <div fxLayout="row" fxLayoutGap="20px">
-                        <div fxFlex="100%">
-                            <div class="client-details">
-                                <div  class="client-avatar"><i  class="icon-referencecheck"></i></div>
-                                <div class="client-data">
-                                    <h3 matTooltip="Client details" matTooltipClass="accent-tooltip"> {{
-                                        clientFeeApproval.clientName }}</h3>
-                                    <div fxLayout="row" fxLayoutGap="20px">
-                                        <div fxFlex="33.33%">
-                                            <p>
-                                                <label>Component Name:</label>
-                                                <span>{{ clientFeeApproval.componentName }}</span>
-                                            </p>
-                                        </div>
-                                        <div fxFlex="33.33%">
-                                            <p>
-                                                <label>MSP Rate:</label>
-                                                <span>{{ clientFeeApproval.msp }}</span>
-                                            </p>
-                                        </div>
-                                        <div fxFlex="33.33%">
-                                            <p>
-                                                <label>NRP Rate:</label>
-                                                <span>{{ clientFeeApproval.nrp }}</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div fxLayout="row" fxLayoutGap="20px">
-                                        <div fxFlex="33.33%">
-                                            <p>
-                                                <label>Requested Amount:</label>
-                                                <span>{{ clientFeeApproval.requestAmount }}</span>
-                                            </p>
-                                        </div>
-                                        <div fxFlex="33.33%">
-                                            <p>
-                                                <label>Requested Date:</label>
-                                                <span>{{ clientFeeApproval.reqEffectiveDate | date:'dd/MM/yyyy'}}</span>
-                                            </p>
-                                        </div>
-                                        <div fxFlex="33.33%">
-                                            <p>
-                                                <label>Status:</label>
-                                                <span>{{ clientFeeApproval.status }}</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div fxLayout="row" fxLayoutGap="20px">
-                                        <div fxFlex="33.33%">
-                                            <p>
-                                                <label>Requested By:</label>
-                                                <span>{{ clientFeeApproval.requestedByFirstName }}</span>
-                                            </p>
-                                        </div>
-                                        <div fxFlex="33.33%">
-                                            <p *ngIf="requestorDocList?.length > 0">
-                                                <label>Requester's Document:</label>
-                                                <span *ngFor="let document of requestorDocList"><a
-                                                        (click)="downloadDoc(document)" routerLinkActive="active-link">
-                                                        <i class="icon-file-text"></i> {{document.fileName ?
-                                                        document.fileName : '--'}} </a> </span> <span
-                                                    *ngIf='requestorDocList?.length===0||requestorDocList===null'> --
-                                                </span>
-                                            </p>
-                                        </div>
-                                        <div fxFlex="33.33%">
-                                            <p *ngIf="approverDocList?.length > 0">
-                                                <label>Approver's Document:</label>
-                                                <span *ngFor="let document of approverDocList"><a
-                                                        (click)="downloadDoc(document)" routerLinkActive="active-link">
-                                                        <i class="icon-file-text"></i> {{document.fileName ?
-                                                        document.fileName : '--'}} </a> </span> <span
-                                                    *ngIf='approverDocList?.length===0||approverDocList===null'> --
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div fxLayout="row">
-                                        <div fxFlex="100%">
-                                            <p>
-                                                <label>Requester Comments:</label>
-                                                <span>{{ clientFeeApproval.reason }}</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div fxLayout="row">
-                                        <div fxFlex="100%" *ngIf="clientFeeApproval.approveComments">
-                                            <p>
-                                                <label>Approver Comments:</label>
-                                                <span>{{ clientFeeApproval.approveComments }}</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div fxFlex="33.33%">
+                      <p>
+                        <label>MSP Rate:</label>
+                        <span>{{ clientFeeApproval.msp }}</span>
+                      </p>
                     </div>
-                    <form [formGroup]="clientFeeForm" id="ngForm">
-                        <div fxLayout="row" fxLayoutGap="30px" class="mt-10"
-                            *ngIf="clientFeeApproval.status ==='Pending'">
-                            <div fxFlex="30%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>Comments</mat-label>
-                                    <textarea #msgCount formControlName='comments' matInput maxlength="1000"
-                                        placeholder="Comments" required></textarea>
-                                    <mat-error *ngIf="clientFeeForm.get('comments').invalid"> Comments is Required
-                                    </mat-error>
-                                    <mat-hint class="f-13"> ({{msgCount.value.length}} /1000 max) </mat-hint>
-                                </mat-form-field>
-                            </div>
-                            <div fxFlex="70%">
-                                <mat-label class="lbl">Approver Attached Documents</mat-label>
-                                <!-- <pre>{{clientFeeForm.value|json}}</pre> -->
-                                <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
-                                        here...</span>
-                                    <input type="file" #fileInput (change)="openUploadDoc($event)" multiple
-                                        formControlName="clientFeeApproval" />
-                                </div>
-                                <div class="clear">
-                                    <mat-error *ngIf="this.clientFeeForm.get('clientFeeApproval')?.errors?.incorrect">
-                                        Document is required </mat-error>
-                                </div>
-                                <div class="file-names mt-10">
-                                    <div class="file-upload-files"
-                                        *ngFor="let document of model.clientFeeApproveDoc;let i=index"> <a
-                                            *ngIf="document.fileName" (click)="downloadDoc(document)"
-                                            routerLinkActive="active-link">{{document.fileName}}</a>
-                                        <button type="button" class="close" aria-label="Close"
-                                            (click)="removeDocument(document,i)"> <span
-                                                aria-hidden="true">&times;</span> </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    <div fxFlex="33.33%">
+                      <p>
+                        <label>NRP Rate:</label>
+                        <span>{{ clientFeeApproval.nrp }}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="33.33%">
+                      <p>
+                        <label>Requested Amount:</label>
+                        <span>{{ clientFeeApproval.requestAmount }}</span>
+                      </p>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <p>
+                        <label>Requested Date:</label>
+                        <span>{{ clientFeeApproval.reqEffectiveDate | date:'dd/MM/yyyy'}}</span>
+                      </p>
+                    </div>
+                    <div fxFlex="33.33%">
+                      <p>
+                        <label>Status:</label>
+                        <span>{{ clientFeeApproval.status }}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxFlex="33.33%">
+                      <p>
+                        <label>Requested By:</label>
+                        <span>{{ clientFeeApproval.requestedByFirstName }}</span>
+                      </p>
+                    </div>
+                    <div fxFlex="33.33%">
+                      @if (requestorDocList?.length > 0) {
+                        <p>
+                          <label>Requester's Document:</label>
+                          @for (document of requestorDocList; track document) {
+                            <span><a
+                              (click)="downloadDoc(document)" routerLinkActive="active-link">
+                              <i class="icon-file-text"></i> {{document.fileName ?
+                            document.fileName : '--'}} </a> </span>
+                            } @if (requestorDocList?.length===0||requestorDocList===null) {
+                            <span
+                              > --
+                            </span>
+                          }
+                        </p>
+                      }
+                    </div>
+                    <div fxFlex="33.33%">
+                      @if (approverDocList?.length > 0) {
+                        <p>
+                          <label>Approver's Document:</label>
+                          @for (document of approverDocList; track document) {
+                            <span><a
+                              (click)="downloadDoc(document)" routerLinkActive="active-link">
+                              <i class="icon-file-text"></i> {{document.fileName ?
+                            document.fileName : '--'}} </a> </span>
+                            } @if (approverDocList?.length===0||approverDocList===null) {
+                            <span
+                              > --
+                            </span>
+                          }
+                        </p>
+                      }
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxFlex="100%">
+                      <p>
+                        <label>Requester Comments:</label>
+                        <span>{{ clientFeeApproval.reason }}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    @if (clientFeeApproval.approveComments) {
+                      <div fxFlex="100%">
+                        <p>
+                          <label>Approver Comments:</label>
+                          <span>{{ clientFeeApproval.approveComments }}</span>
+                        </p>
+                      </div>
+                    }
+                  </div>
                 </div>
-            </mat-card-content>
-        </mat-card>
+              </div>
+            </div>
+          </div>
+          <form [formGroup]="clientFeeForm" id="ngForm">
+            @if (clientFeeApproval.status ==='Pending') {
+              <div fxLayout="row" fxLayoutGap="30px" class="mt-10"
+                >
+                <div fxFlex="30%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Comments</mat-label>
+                    <textarea #msgCount formControlName='comments' matInput maxlength="1000"
+                    placeholder="Comments" required></textarea>
+                    @if (clientFeeForm.get('comments').invalid) {
+                      <mat-error> Comments is Required
+                      </mat-error>
+                    }
+                    <mat-hint class="f-13"> ({{msgCount.value.length}} /1000 max) </mat-hint>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="70%">
+                  <mat-label class="lbl">Approver Attached Documents</mat-label>
+                  <!-- <pre>{{clientFeeForm.value|json}}</pre> -->
+                  <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                here...</span>
+                <input type="file" #fileInput (change)="openUploadDoc($event)" multiple
+                  formControlName="clientFeeApproval" />
+                </div>
+                <div class="clear">
+                  @if (this.clientFeeForm.get('clientFeeApproval')?.errors?.incorrect) {
+                    <mat-error>
+                    Document is required </mat-error>
+                  }
+                </div>
+                <div class="file-names mt-10">
+                  @for (document of model.clientFeeApproveDoc; track document; let i = $index) {
+                    <div class="file-upload-files"
+                      > @if (document.fileName) {
+                      <a
+                        (click)="downloadDoc(document)"
+                      routerLinkActive="active-link">{{document.fileName}}</a>
+                    }
+                    <button type="button" class="close" aria-label="Close"
+                      (click)="removeDocument(document,i)"> <span
+                    aria-hidden="true">&times;</span> </button>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </form>
     </div>
+  }
+</mat-card-content>
+</mat-card>
+</div>
 </div>

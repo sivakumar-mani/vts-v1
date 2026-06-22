@@ -7,7 +7,7 @@
   <button class="btn btn-danger" (click)="clearSignPad()">Clear</button>
   <button class="btn btn-warning" (click)="undoSign()">Undo</button>
   <div>
-    <!-- <span style="font-family: Roboto, Helvetica Neue, sans-serif;">Write the signature and click on Save</span> -->
+    <!-- <span style="font-family: monospace;">Write the signature and click on Save</span> -->
     @if (signImage && signImage != '') {
       <div>
         <img src='{{ signImage }}' />

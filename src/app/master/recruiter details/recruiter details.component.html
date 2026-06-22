@@ -1,194 +1,202 @@
 ﻿<app-breadcrumb [btnAdd]="breadcrumbFlags?.btnAdd" [btnSave]="breadcrumbFlags?.btnSave"
-    [btnBack]="breadcrumbFlags?.btnBack" [btnReset]="breadcrumbFlags?.btnReset"
-    [btnResetTbl]="breadcrumbFlags?.btnResetTbl" (eventAdd)="addForm()" (eventSave)="saveForm()"
-    [routePath]="'Configure / Master / Recruiter Details'" [btnAddDisabled]="!screenAuth.addFlag"
-    (eventBack)="this.breadcrumbFlags = this.common.breadcrumbFlags();getRecruiter()"
-    [toolTip]="breadcrumbFlags.toolTip" (eventReset)="resetForm()" (eventResetTbl)="resetTable()">
+  [btnBack]="breadcrumbFlags?.btnBack" [btnReset]="breadcrumbFlags?.btnReset"
+  [btnResetTbl]="breadcrumbFlags?.btnResetTbl" (eventAdd)="addForm()" (eventSave)="saveForm()"
+  [routePath]="'Configure / Master / Recruiter Details'" [btnAddDisabled]="!screenAuth.addFlag"
+  (eventBack)="this.breadcrumbFlags = this.common.breadcrumbFlags();getRecruiter()"
+  [toolTip]="breadcrumbFlags.toolTip" (eventReset)="resetForm()" (eventResetTbl)="resetTable()">
 </app-breadcrumb>
 <mat-card>
-    <div fxLayout="row">
-        <mat-card-header fxFlex="100%">
-            <div fxFlex="100%">
-                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-                    fxLayoutGap="10px">
-                    <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
-                        fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
-                        <mat-card-title>
-                            <h1 class="header-title">Recruiter Details</h1>
-                        </mat-card-title>
-                    </div>
-                    <span fxFlex></span>
-                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
-                        fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                        <div class="tbl-commonsearch" *ngIf="breadcrumbFlags?.btnAdd">
-                            <mat-form-field fxFlex="100%">
-                                <mat-label></mat-label>
-                                <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                                <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
-                                    autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
-                            </mat-form-field>
-                        </div>
-                    </div>
+  <div fxLayout="row">
+    <mat-card-header fxFlex="100%">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+          fxLayoutGap="10px">
+          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+            fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+            <mat-card-title>
+              <h1 class="header-title">Recruiter Details</h1>
+            </mat-card-title>
+          </div>
+          <span fxFlex></span>
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+            fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+            @if (breadcrumbFlags?.btnAdd) {
+              <div class="tbl-commonsearch">
+                <mat-form-field fxFlex="100%">
+                  <mat-label></mat-label>
+                  <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                  <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                    autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                  </mat-form-field>
                 </div>
+              }
             </div>
-        </mat-card-header>
+          </div>
+        </div>
+      </mat-card-header>
     </div>
     <mat-card-content>
-        <div class="content-area">
-            <form *ngIf="!breadcrumbFlags?.btnAdd" autocomplete="off" [formGroup]="recruiterForm">
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
-                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
-                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="25%" fxFlex.xs="100%">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Recruiter Name</mat-label>
-                            <input matInput type="text" placeholder="Recruiter Name" formControlName="recruiterName"
-                                maxlength="75" autocomplete="off" role="presentation" required />
-                            <mat-error *ngIf="recruiterForm?.get('recruiterName')?.errors?.required"> Recruiter Name
-                                is required </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="25%" fxFlex.xs="100%">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Email Id</mat-label>
-                            <input matInput type="email" formControlName="emailId" maxlength="50" autocomplete="off"
-                                role="presentation" placeholder="Email Id" required>
-                            <mat-error *ngIf="recruiterForm?.get('emailId')?.errors?.required"> Email id
-                                is required </mat-error>
-                            <mat-error *ngIf="recruiterForm?.get('emailId')?.errors?.pattern"> Enter Valid
-                                Email </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="15%" fxFlex.xs="100%">
-                        <mat-label class="lbl"><strong>Active</strong></mat-label>
-                        <mat-checkbox formControlName="active">
-                            {{recruiterForm?.get('active')?.value === true ? 'Active' : 'In-Active'}}</mat-checkbox>
-                    </div>
+      <div class="content-area">
+        @if (!breadcrumbFlags?.btnAdd) {
+          <form autocomplete="off" [formGroup]="recruiterForm">
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="25%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Recruiter Name</mat-label>
+                  <input matInput type="text" placeholder="Recruiter Name" formControlName="recruiterName"
+                    maxlength="75" autocomplete="off" role="presentation" required />
+                    @if (recruiterForm?.get('recruiterName')?.errors?.required) {
+                      <mat-error> Recruiter Name
+                      is required </mat-error>
+                    }
+                  </mat-form-field>
                 </div>
-            </form>
-            <div fxLayout="row" *ngIf="breadcrumbFlags?.btnAdd">
+                <div fxFlex="25%" fxFlex.lg="25%" fxFlex.md="25%" fxFlex.sm="25%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Email Id</mat-label>
+                    <input matInput type="email" formControlName="emailId" maxlength="50" autocomplete="off"
+                      role="presentation" placeholder="Email Id" required>
+                      @if (recruiterForm?.get('emailId')?.errors?.required) {
+                        <mat-error> Email id
+                        is required </mat-error>
+                      }
+                      @if (recruiterForm?.get('emailId')?.errors?.pattern) {
+                        <mat-error> Enter Valid
+                        Email </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="15%" fxFlex.xs="100%">
+                    <mat-label class="lbl"><strong>Active</strong></mat-label>
+                    <mat-checkbox formControlName="active">
+                    {{recruiterForm?.get('active')?.value === true ? 'Active' : 'In-Active'}}</mat-checkbox>
+                  </div>
+                </div>
+              </form>
+            }
+            @if (breadcrumbFlags?.btnAdd) {
+              <div fxLayout="row">
                 <div fxFlex="100%">
-                    <p-table #dt [columns]="displayedColumns" [value]="recruiterList" [scrollable]="true" [rows]="10"
-                        [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true">
-
-                        <!-- ===== COLGROUP ===== -->
-                        <ng-template pTemplate="colgroup" let-colGroupCols>
-                            <colgroup>
-                                <col style="width:100px;" />
-                                <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-                            </colgroup>
-                        </ng-template>
-
-                        <!-- ===== HEADER ===== -->
-                        <ng-template pTemplate="header" let-headerCols>
-                            <tr>
-                                <th class="action">Action</th>
-
-                                <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn
-                                    pResizableColumn>
-
-                                    <div class="thname" matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
-                                        {{ col.header }}
-                                    </div>
-
-                                    <span [pSortableColumn]="col.field">
-                                        <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
-                                            ariaLabelDesc="Activate to sort in descending order"
-                                            ariaLabelAsc="Activate to sort in ascending order">
-                                        </p-sortIcon>
-                                    </span>
-
-                                </th>
-                            </tr>
-                        </ng-template>
-
-                        <!-- ===== BODY ===== -->
-                        <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-expanded="expanded"
-                            let-bodyCols="columns">
-
-                            <tr>
-
-                                <!-- ACTION COLUMN -->
-                                <td class="action desg-bg">
-                                    <div fxLayout="row" class="desg-icon">
-                                        <div fxFlex="100%" fxLayoutGap="10px">
-
-                                            <mat-icon
-                                                [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''"
-                                                matTooltip="Edit" matTooltipClass="accent-tooltip">
-                                                <i class="material-icons-outlined" (click)="editForm(rowData)">
-                                                    edit
-                                                </i>
-                                            </mat-icon>
-
-                                            <mat-icon
-                                                [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''"
-                                                matTooltip="Delete" matTooltipClass="accent-tooltip">
-                                                <i class="material-icons-outlined" (click)="deleteForm(rowData)">
-                                                    delete
-                                                </i>
-                                            </mat-icon>
-
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <!-- DATA COLUMNS -->
-                                <td *ngFor="let col of bodyCols">
-
-                                    <span *ngIf="col.field !== 'active'"
-                                        matTooltip="{{ rowData[col.field] ? rowData[col.field] : 'N/A' }}"
-                                        matTooltipClass="accent-tooltip">
-                                        {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
-                                    </span>
-
-                                    <span *ngIf="col.field === 'active'">
-                                        <div fxLayout="row" class="tbl-icon">
-                                            <span *ngIf="rowData.active" class="istrue">
-                                                <i matTooltip="Active" class="material-icons">thumb_up</i>
-                                            </span>
-                                            <span *ngIf="!rowData.active" class="isfalse">
-                                                <i matTooltip="In-Active" class="material-icons">thumb_down</i>
-                                            </span>
-                                        </div>
-                                    </span>
-
-                                </td>
-                            </tr>
-
-                        </ng-template>
-
-                    </p-table>
-                    ``
-                    <div [ngClass]="{'empty-record': recruiterList?.length === 0}" class="cus-paginator"
-                        fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
-                        fxLayoutGap.xs="20px grid">
-                        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                            fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{
-                                dt.totalRecords> 0
-                                ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of
-                                    {{ dt.totalRecords }} record(s) </div>
-                                    <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                        fxLayoutAlign="end center" fxLayoutAlign.md="end center"
-                                        fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center"> <a
+                  <p-table #dt [columns]="displayedColumns" [value]="recruiterList" [scrollable]="true" [rows]="10"
+                    [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true">
+                    <!-- ===== COLGROUP ===== -->
+                    <ng-template pTemplate="colgroup" let-colGroupCols>
+                      <colgroup>
+                      <col style="width:100px;" />
+                      @for (col of colGroupCols; track col) {
+                        <col style="min-width:200px" />
+                      }
+                    </colgroup>
+                  </ng-template>
+                  <!-- ===== HEADER ===== -->
+                  <ng-template pTemplate="header" let-headerCols>
+                    <tr>
+                      <th class="action">Action</th>
+                      @for (col of headerCols; track col) {
+                        <th pReorderableColumn
+                          pResizableColumn>
+                          <div class="thname" matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip">
+                            {{ col.header }}
+                          </div>
+                          <span [pSortableColumn]="col.field">
+                            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                              ariaLabelDesc="Activate to sort in descending order"
+                              ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                          </span>
+                        </th>
+                      }
+                    </tr>
+                  </ng-template>
+                  <!-- ===== BODY ===== -->
+                  <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-expanded="expanded"
+                    let-bodyCols="columns">
+                    <tr>
+                      <!-- ACTION COLUMN -->
+                      <td class="action desg-bg">
+                        <div fxLayout="row" class="desg-icon">
+                          <div fxFlex="100%" fxLayoutGap="10px">
+                            <mat-icon
+                              [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''"
+                              matTooltip="Edit" matTooltipClass="accent-tooltip">
+                              <i class="material-icons-outlined" (click)="editForm(rowData)">
+                                edit
+                              </i>
+                            </mat-icon>
+                            <mat-icon
+                              [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''"
+                              matTooltip="Delete" matTooltipClass="accent-tooltip">
+                              <i class="material-icons-outlined" (click)="deleteForm(rowData)">
+                                delete
+                              </i>
+                            </mat-icon>
+                          </div>
+                        </div>
+                      </td>
+                      <!-- DATA COLUMNS -->
+                      @for (col of bodyCols; track col) {
+                        <td>
+                          @if (col.field !== 'active') {
+                            <span
+                              matTooltip="{{ rowData[col.field] ? rowData[col.field] : 'N/A' }}"
+                              matTooltipClass="accent-tooltip">
+                              {{ rowData[col.field] ? rowData[col.field] : 'N/A' }}
+                            </span>
+                          }
+                          @if (col.field === 'active') {
+                            <span>
+                              <div fxLayout="row" class="tbl-icon">
+                                @if (rowData.active) {
+                                  <span class="istrue">
+                                    <i matTooltip="Active" class="material-icons">thumb_up</i>
+                                  </span>
+                                }
+                                @if (!rowData.active) {
+                                  <span class="isfalse">
+                                    <i matTooltip="In-Active" class="material-icons">thumb_down</i>
+                                  </span>
+                                }
+                              </div>
+                            </span>
+                          }
+                        </td>
+                      }
+                    </tr>
+                  </ng-template>
+                </p-table>
+                ``
+                <div [ngClass]="{'empty-record': recruiterList?.length === 0}" class="cus-paginator"
+                  fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                  fxLayoutGap.xs="20px grid">
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{
+                    dt.totalRecords> 0
+                    ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of
+                  {{ dt.totalRecords }} record(s) </div>
+                  <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="end center" fxLayoutAlign.md="end center"
+                    fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center"> <a
                                             [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
                                     dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                                     navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"> <i
-                                                class="icon-control-start mr-5"></i></a> <span
-                                            class="gotopagbg mr-2 ml-2" fxHide.xs>Go to
-                                            Page<span class="input-num">
-                                                <input type="number" min="1" #pageNo [(ngModel)]="currentPage"
-                                                    maxlength="5" appNumberOnly [NumberOnly]="false"
-                                                    (keyup.enter)="navigatePage(pageNo.value, dt.rows, true)" />
-                                            </span></span> <span class="mr-2" fxHide.xs> of
-                                            {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
-                                            [ngClass]=" dt.rows + dt.first >= dt.totalRecords? 'page-btn disabled': 'page-btn'"
+                  class="icon-control-start mr-5"></i></a> <span
+                  class="gotopagbg mr-2 ml-2" fxHide.xs>Go to
+                  Page<span class="input-num">
+                  <input type="number" min="1" #pageNo [(ngModel)]="currentPage"
+                    maxlength="5" appNumberOnly [NumberOnly]="false"
+                    (keyup.enter)="navigatePage(pageNo.value, dt.rows, true)" />
+                  </span></span> <span class="mr-2" fxHide.xs> of
+                {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
+                [ngClass]=" dt.rows + dt.first >= dt.totalRecords? 'page-btn disabled': 'page-btn'"
                                             (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                                     navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"><i
-                                                class="icon-control-end ml-5"></i></a> </div>
-                        </div>
-                    </div>
-                </div>
+              class="icon-control-end ml-5"></i></a> </div>
             </div>
-    </mat-card-content>
+          </div>
+        </div>
+      }
+    </div>
+  </mat-card-content>
 </mat-card>

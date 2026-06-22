@@ -2,7 +2,7 @@
   [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset" [btnResetTbl]="breadcrumbFlags.btnResetTbl"
   (eventAdd)="addInvoiceTax()" [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag" (eventBack)=" closeForm()"
   (eventSave)="saveInvoiceTax()" [toolTip]="breadcrumbFlags.toolTip" (eventReset)=" resetForm()"
-  (eventResetTbl)="resetTable()"></app-breadcrumb>
+(eventResetTbl)="resetTable()"></app-breadcrumb>
 <div fxLayout="row" fxLayoutGap="20px">
   <div fxFlex="100%">
     <mat-card>
@@ -20,182 +20,198 @@
               <span fxFlex></span>
               <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
                 fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                <div class="tbl-commonsearch" *ngIf="!showFlag">
-                  <mat-form-field fxFlex="100%">
-                    <mat-label></mat-label>
-                    <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                    <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
-                      autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
-                  </mat-form-field>
+                @if (!showFlag) {
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                        autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                      </mat-form-field>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
-          </div>
-        </mat-card-header>
-      </div>
-      <mat-card-content>
-        <div *ngIf="showFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap"
-          fxLayout.xs="column" fxLayoutGap="0px grid">
-          <div fxFlex="100%">
-            <form [formGroup]="invoicetaxFormgroup" autocomplete="off" id="ngForm" autocomplete="off">
-              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
-                fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="40%" fxFlex.xs="100%">
-                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                    <mat-label>Tax</mat-label>
-                    <input formControlName="type" matInput placeholder="Tax" required>
-                    <mat-error *ngIf="invoicetaxFormgroup?.get('type')?.errors?.required"> Tax is required </mat-error>
-                  </mat-form-field>
-                </div>
-                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="40%" fxFlex.xs="100%">
-                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                    <mat-label>Percentage</mat-label>
-                    <input formControlName="percentage" matInput placeholder="Percentage" required>
-                    <mat-error *ngIf="invoicetaxFormgroup?.get('percentage')?.errors?.required"> Percentage is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="20%" fxFlex.xs="100%"
-                  ngClass.sm="mb-20" ngClass.xs="mb-20">
-                  <mat-label class="lbl"><strong>Active</strong></mat-label>
-                  <mat-checkbox formControlName="active" (change)="activeChangeName($event.checked)">
-                    {{activeName}}</mat-checkbox>
-                </div>
-              </div>
-              <div class="row">
-                <div fxFlex="66.66%" fxFlex.lg="66.66%" fxFlex.md="66.66%" fxFlex.sm="100%" fxFlex.xs="100%">
-                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                    <mat-label>Description</mat-label>
-                    <textarea #input formControlName="description" matInput placeholder="Description" maxlength="200"
-                      required>
-                            </textarea>
-                    <mat-hint>({{ input.value.length }}/200 Max)</mat-hint>
-                    <mat-error *ngIf="invoicetaxFormgroup.get('description').invalid"> Description is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-            </form>
-          </div>
+          </mat-card-header>
         </div>
-        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-          fxLayoutGap="20px grid" *ngIf="!showFlag">
-          <div fxFlex="100%">
-
-            <p-table #dt [columns]="displayedColumns" [value]="invoiceTaxList" [scrollable]="true" scrollHeight=""
-              [paginator]="true" [rows]="itemperpage" [resizableColumns]="true" [reorderableColumns]="true"
-              columnResizeMode="expand" frozenWidth="100px" [frozenColumns]="frozenCols">
-
-              <!-- ===== COLGROUP ===== -->
-              <ng-template pTemplate="colgroup" let-colGroupCols>
-                <colgroup>
-                  <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-                </colgroup>
-              </ng-template>
-
-              <!-- ===== HEADER ===== -->
-              <ng-template pTemplate="header" let-headerCols>
-                <tr>
-                  <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn>
-
-                    <span [pSortableColumn]="col.field">
-                      <div class="thname">{{ col.header }}</div>
-
-                      <p-sortIcon *ngIf="col.field !== 'action' && col.field !== 'sNo'" [field]="col.field"
-                        ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
-                        matTooltip="Sorting" matTooltipClass="accent-tooltip"
-                        ariaLabelAsc="Activate to sort in ascending order">
-                      </p-sortIcon>
-                    </span>
-
-                  </th>
-                </tr>
-              </ng-template>
-
-              <!-- ===== BODY ===== -->
-              <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
-
-                <tr>
-                  <td *ngFor="let col of bodyCols" [ngSwitch]="col.field"
-                    [ngClass]="{ 'desg-bg': col.field === 'action' }">
-
-                    <!-- ACTION -->
-                    <div *ngSwitchCase="'action'" fxLayout="row" class="desg-icon">
-                      <div fxFlex="100%" fxLayoutGap="10px">
-
-                        <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
-                          <i class="material-icons-outlined" matTooltip="Edit" matTooltipClass="accent-tooltip"
-                            (click)="editDetail(rowData)">
-                            edit
-                          </i>
-                        </mat-icon>
-
-                        <mat-icon matTooltip="Delete" matTooltipClass="accent-tooltip"
-                          [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''">
-                          <i class="material-icons-outlined" (click)="openConfirmDialog(rowData)">
-                            delete
-                          </i>
-                        </mat-icon>
-
-                        <mat-icon matTooltip="View" matTooltipClass="accent-tooltip"
-                          [ngClass]="screenAuth.viewFlag === false ? 'page-btn disabled' : ''">
-                          <i class="material-icons-outlined" (click)="editDetail(rowData, 'view')">
-                            visibility
-                          </i>
-                        </mat-icon>
-
-                      </div>
+        <mat-card-content>
+          @if (showFlag) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap"
+              fxLayout.xs="column" fxLayoutGap="0px grid">
+              <div fxFlex="100%">
+                <form [formGroup]="invoicetaxFormgroup" autocomplete="off" id="ngForm" autocomplete="off">
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row wrap" fxLayout.xs="column"
+                    fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="40%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Tax</mat-label>
+                        <input formControlName="type" matInput placeholder="Tax" required>
+                        @if (invoicetaxFormgroup?.get('type')?.errors?.required) {
+                          <mat-error> Tax is required </mat-error>
+                        }
+                      </mat-form-field>
                     </div>
-
-                    <div *ngSwitchCase="'type'">{{ rowData.type }}</div>
-                    <div *ngSwitchCase="'description'">{{ rowData.description }}</div>
-                    <div *ngSwitchCase="'percentage'">{{ rowData.percentage }}</div>
-
-                    <!-- ACTIVE -->
-                    <div *ngSwitchCase="'active'" fxLayout="row" class="tbl-icon">
-                      <span *ngIf="rowData.active" class="istrue">
-                        <i matTooltip="Active" class="material-icons">thumb_up</i>
-                      </span>
-                      <span *ngIf="!rowData.active" class="isfalse">
-                        <i matTooltip="In-Active" class="material-icons">thumb_down</i>
-                      </span>
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="40%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Percentage</mat-label>
+                        <input formControlName="percentage" matInput placeholder="Percentage" required>
+                        @if (invoicetaxFormgroup?.get('percentage')?.errors?.required) {
+                          <mat-error> Percentage is required
+                          </mat-error>
+                        }
+                      </mat-form-field>
                     </div>
-
-                  </td>
-                </tr>
-
-              </ng-template>
-
-            </p-table>
-            <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
-              fxLayoutGap.xs="20px grid" [ngClass]="{'empty-record': invoiceTaxList?.length == 0}">
-              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="start center"> Showing {{ dt.totalRecords
-                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
-                  <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s) |
-                    &nbsp;<a (click)="showall()">Show All</a>
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="20%" fxFlex.xs="100%"
+                      ngClass.sm="mb-20" ngClass.xs="mb-20">
+                      <mat-label class="lbl"><strong>Active</strong></mat-label>
+                      <mat-checkbox formControlName="active" (change)="activeChangeName($event.checked)">
+                      {{activeName}}</mat-checkbox>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div fxFlex="66.66%" fxFlex.lg="66.66%" fxFlex.md="66.66%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Description</mat-label>
+                        <textarea #input formControlName="description" matInput placeholder="Description" maxlength="200"
+                          required>
+                        </textarea>
+                        <mat-hint>({{ input.value.length }}/200 Max)</mat-hint>
+                        @if (invoicetaxFormgroup.get('description').invalid) {
+                          <mat-error> Description is required
+                          </mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </form>
               </div>
-              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                fxLayoutAlign.xs="start center"> <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'"
+            </div>
+          }
+          @if (!showFlag) {
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="20px grid">
+              <div fxFlex="100%">
+                <p-table #dt [columns]="displayedColumns" [value]="invoiceTaxList" [scrollable]="true" scrollHeight=""
+                  [paginator]="true" [rows]="itemperpage" [resizableColumns]="true" [reorderableColumns]="true"
+                  columnResizeMode="expand" frozenWidth="100px" [frozenColumns]="frozenCols">
+                  <!-- ===== COLGROUP ===== -->
+                  <ng-template pTemplate="colgroup" let-colGroupCols>
+                    <colgroup>
+                    @for (col of colGroupCols; track col) {
+                      <col style="min-width:200px" />
+                    }
+                  </colgroup>
+                </ng-template>
+                <!-- ===== HEADER ===== -->
+                <ng-template pTemplate="header" let-headerCols>
+                  <tr>
+                    @for (col of headerCols; track col) {
+                      <th pReorderableColumn pResizableColumn>
+                        <span [pSortableColumn]="col.field">
+                          <div class="thname">{{ col.header }}</div>
+                          @if (col.field !== 'action' && col.field !== 'sNo') {
+                            <p-sortIcon [field]="col.field"
+                              ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                              matTooltip="Sorting" matTooltipClass="accent-tooltip"
+                              ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                          }
+                        </span>
+                      </th>
+                    }
+                  </tr>
+                </ng-template>
+                <!-- ===== BODY ===== -->
+                <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+                  <tr>
+                    @for (col of bodyCols; track col) {
+                      <td
+                        [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                        <!-- ACTION -->
+                        @if (col.field === 'action') {
+                          <div fxLayout="row" class="desg-icon">
+                            <div fxFlex="100%" fxLayoutGap="10px">
+                              <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                                <i class="material-icons-outlined" matTooltip="Edit" matTooltipClass="accent-tooltip"
+                                  (click)="editDetail(rowData)">
+                                  edit
+                                </i>
+                              </mat-icon>
+                              <mat-icon matTooltip="Delete" matTooltipClass="accent-tooltip"
+                                [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''">
+                                <i class="material-icons-outlined" (click)="openConfirmDialog(rowData)">
+                                  delete
+                                </i>
+                              </mat-icon>
+                              <mat-icon matTooltip="View" matTooltipClass="accent-tooltip"
+                                [ngClass]="screenAuth.viewFlag === false ? 'page-btn disabled' : ''">
+                                <i class="material-icons-outlined" (click)="editDetail(rowData, 'view')">
+                                  visibility
+                                </i>
+                              </mat-icon>
+                            </div>
+                          </div>
+                        }
+                        @if (col.field === 'type') {
+                          <div>{{ rowData.type }}</div>
+                        }
+                        @if (col.field === 'description') {
+                          <div>{{ rowData.description }}</div>
+                        }
+                        @if (col.field === 'percentage') {
+                          <div>{{ rowData.percentage }}</div>
+                        }
+                        <!-- ACTIVE -->
+                        @if (col.field === 'active') {
+                          <div fxLayout="row" class="tbl-icon">
+                            @if (rowData.active) {
+                              <span class="istrue">
+                                <i matTooltip="Active" class="material-icons">thumb_up</i>
+                              </span>
+                            }
+                            @if (!rowData.active) {
+                              <span class="isfalse">
+                                <i matTooltip="In-Active" class="material-icons">thumb_down</i>
+                              </span>
+                            }
+                          </div>
+                        }
+                      </td>
+                    }
+                  </tr>
+                </ng-template>
+              </p-table>
+              <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                fxLayoutGap.xs="20px grid" [ngClass]="{'empty-record': invoiceTaxList?.length == 0}">
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center"> Showing {{ dt.totalRecords
+                  < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                  <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s) |
+                  &nbsp;<a (click)="showall()">Show All</a>
+                </div>
+                <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                  fxLayoutAlign.xs="start center"> <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'"
                   (click)="
                                     dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                                     navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
                                   "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2"
                   fxHide.xs>Go to
                   Page<span class="input-num">
-                    <input type="number" #pageNo min="1" [(ngModel)]="currentPage" maxlength="5" appNumberOnly
-                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                  <input type="number" #pageNo min="1" [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                    [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
                   </span></span> <span class="mr-2" fxHide.xs> of
                   {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a [ngClass]="
                   dt.rows + dt.first >= dt.totalRecords
                   ? 'page-btn disabled': 'page-btn'
                   " (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                   navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"><i class="icon-control-end ml-5"></i></a> </div>
+              </div>
             </div>
           </div>
-        </div>
+        }
       </mat-card-content>
     </mat-card>
   </div>

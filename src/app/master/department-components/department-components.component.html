@@ -150,7 +150,7 @@
           <div fxFlex="100%">
             <p-table #dt [columns]="displayedColumns" [value]="deptComponentList" [resizableColumns]="true"
               [reorderableColumns]="true" [scrollable]="true" scrollHeight="" [paginator]="true"
-              [rows]="itemperpage" [scrollable]="true" frozenWidth="100px" [frozenColumns]="frozenCols">
+              [rows]="itemperpage" [scrollable]="true">
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
                 @for (col of columns; track col) {

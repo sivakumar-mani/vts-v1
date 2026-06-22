@@ -21,6 +21,7 @@ import { VerificationService } from 'src/app/common-methods/services/verificatio
 })
 export class DigitalCheckPvReportComponent implements OnInit {
   itemperpage;
+  isLoading = false;
   routePath = 'Verification / Digital Address Check PV_Report';
   digitalAddressPVReportList: any[] = [];
   displayedColumns = [
@@ -74,9 +75,16 @@ clientNameTrigger!: MatMenuTrigger;
     this.itemperpage = 10;
   }
   digitalPVReport() {
-    this.verificationService.digitalAddressCheckPVReport(this.userData).subscribe(res => {
-      if (res) {
-        this.digitalAddressPVReportList = res;
+    this.isLoading = true;
+    this.verificationService.digitalAddressCheckPVReport(this.userData).subscribe({
+      next: (res) => {
+        if (res) {
+          this.digitalAddressPVReportList = res;
+        }
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
       }
     });
   }

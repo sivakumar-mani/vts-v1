@@ -1,613 +1,694 @@
 <div fxLayout="row">
-    <div fxFlex="100%">
-        <form id="ngForm" [formGroup]="componentForm" (keydown.enter)="$event?.preventDefault()" autocomplete="off">
-            <mat-card-content>
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <app-auto-complete [selectProperties]='componentControls'
-                            (selectionChange)="componentChange($event)"></app-auto-complete>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
-                        *ngIf="subCompList?.subComponent === null">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Component Desc</mat-label>
-                            <input matInput formControlName="componentDesc" autocomplete="off" role="presentation"
-                                placeholder="Component Desc" />
-                            <mat-error *ngIf="componentForm?.get('componentDesc')?.errors?.required">
-                                Component Desc is required </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
-                        *ngIf="subCompList?.subComponent !== null">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Sub Component
-                            </mat-label>
-                            <mat-select matNativeControl (selectionChange)="subComponentChange($event?.value)"
-                                [disabled]="index > -1" placeholder="Select Sub Component"
-                                formControlName="subComponentId" required>
-                                <mat-option *ngFor="let sub of subCompList?.subComponent" [value]="sub?.subComponentId">
-                                    {{ sub?.subReportType }}
-                                </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="componentForm?.get('subComponentId')?.errors?.required">
-                                Sub Component is required </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Effective Date</mat-label>
-                            <input formControlName="effectiveDate" mat-autofocus="true" preventDragdrop
-                                preventCutCopyPaste [min]="minDate" [max]="maxDate" appNumberOnly
-                                [NumberOnlyWithslash]="false" readonly matInput [matDatepicker]="picker"
-                                placeholder="DD/MM/YYYY" autocomplete="off" role="presentation" (focus)="picker.open()"
-                                (click)="picker.open()" required />
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                            <mat-error *ngIf="componentForm?.get('effectiveDate')?.errors?.required">
-                                Effective date is required </mat-error>
-                        </mat-form-field>
-                    </div>
+  <div fxFlex="100%">
+    <form id="ngForm" [formGroup]="componentForm" (keydown.enter)="$event?.preventDefault()" autocomplete="off">
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <app-auto-complete [selectProperties]='componentControls'
+            (selectionChange)="componentChange($event)"></app-auto-complete>
+          </div>
+          @if (subCompList?.subComponent === null) {
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+              >
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Component Desc</mat-label>
+                <input matInput formControlName="componentDesc" autocomplete="off" role="presentation"
+                  placeholder="Component Desc" />
+                  @if (componentForm?.get('componentDesc')?.errors?.required) {
+                    <mat-error>
+                    Component Desc is required </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            }
+            @if (subCompList?.subComponent !== null) {
+              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                >
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Sub Component
+                  </mat-label>
+                  <mat-select matNativeControl (selectionChange)="subComponentChange($event?.value)"
+                    [disabled]="index > -1" placeholder="Select Sub Component"
+                    formControlName="subComponentId" required>
+                    @for (sub of subCompList?.subComponent; track sub) {
+                      <mat-option [value]="sub?.subComponentId">
+                        {{ sub?.subReportType }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                  @if (componentForm?.get('subComponentId')?.errors?.required) {
+                    <mat-error>
+                    Sub Component is required </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            }
+            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Effective Date</mat-label>
+                <input formControlName="effectiveDate" mat-autofocus="true" preventDragdrop
+                  preventCutCopyPaste [min]="minDate" [max]="maxDate" appNumberOnly
+                  [NumberOnlyWithslash]="false" readonly matInput [matDatepicker]="picker"
+                  placeholder="DD/MM/YYYY" autocomplete="off" role="presentation" (focus)="picker.open()"
+                  (click)="picker.open()" required />
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  @if (componentForm?.get('effectiveDate')?.errors?.required) {
+                    <mat-error>
+                    Effective date is required </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+              fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Fees</mat-label>
+                  <mat-icon matSuffix><i
+                  [ngClass]="subCompList?.abroadCompFlag === true ? 'icon-banknote' : 'icon-inrrupeesb'"></i>
+                </mat-icon>
+                <input formControlName="fees" maxlength="10" type="text" preventDragdrop preventCutCopyPaste
+                  appNumberOnly [NumberOnlyWithDot]="false" (blur)="checkFees($event?.target?.value)"
+                  matInput placeholder="Fees" />
+                  @if (componentForm?.get('fees')?.errors?.required) {
+                    <mat-error>
+                    Fees is required </mat-error>
+                  }
+                  <!-- <mat-error *ngIf="componentForm?.get('fees')?.errors?.min">
+                Please give a fee above 0 </mat-error> -->
+                <mat-hint> @if (componentForm?.get('msp')?.value && componentForm?.get('msp')?.value) {
+                  <span
+                    >
+                    <label> MSP - @if (subCompList?.abroadCompFlag !== true) {
+                      <span>₹</span>
+                      }@if (subCompList?.abroadCompFlag === true) {
+                      <span
+                      >$</span>
+                    }
+                    {{componentForm?.get('msp')?.value}}
+                  </label>
+                  <label> NRP - @if (subCompList?.abroadCompFlag !== true) {
+                    <span>₹</span>
+                    }@if (subCompList?.abroadCompFlag === true) {
+                    <span
+                    >$</span>
+                  }
+                {{componentForm?.get('nrp')?.value}}</label>
+              </span>
+            }
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div fxFlex="24%" fxFlex.lg="24%" fxFlex.md="24%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <app-auto-complete [selectProperties]="currencyControls"></app-auto-complete>
+      </div>
+      <div fxFlex="18%" fxFlex.lg="18%" fxFlex.md="18%" fxFlex.sm="100%" fxFlex.xs="100%">
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>TAT Days</mat-label>
+          <input formControlName="tat" preventDragdrop preventCutCopyPaste autocomplete="off"
+            maxlength="2" role="presentation" appNumberOnly [PhoneNumber]="false" matInput
+            matTooltip="Enter TAT Days" matTooltipClass="accent-tooltip" placeholder="TAT Days"
+            (blur)="checkTat($event?.target?.value, 'tat')" />
+            @if (componentForm?.get('tat')?.errors?.incorrect) {
+              <mat-error>
+                Tat Days should be less than or equal to Component TAT
+                ({{componentForm?.get('originalTAT')?.value}}) & Client TAT
+                ({{mainForm?.get('clientEntry.tatCount')?.value}})
+              </mat-error>
+            }
+            @if (componentForm?.get('tat')?.errors?.required) {
+              <mat-error>
+              TAT days is required </mat-error>
+            }
+            @if (componentForm?.get('tat')?.errors?.min) {
+              <mat-error>
+              Please give a tat above 0 </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div fxFlex="18%" fxFlex.lg="18%" fxFlex.md="18%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+            <mat-label>Report Display Order</mat-label>
+            <input matInput formControlName="displayOrder" placeholder="Report Display Order"
+              appNumberOnly maxlength="2" [PhoneNumber]="false" preventDragdrop preventCutCopyPaste
+              autocomplete="off" />
+            </mat-form-field>
+          </div>
+          <div fxFlex="18%" fxFlex.lg="18%" fxFlex.md="18%" fxFlex.sm="100%" fxFlex.xs="100%">
+            @if (mainForm?.value?.clientEntry?.daValidationFlag === true) {
+              <mat-checkbox
+              formControlName="daCompValidationFlag">DA Validation</mat-checkbox>
+            }
+            <mat-checkbox formControlName="interimReportFlag"> Interim Report</mat-checkbox>
+            <mat-checkbox formControlName="isAdditionalPos"> Additional period of stay</mat-checkbox>
+            <!-- VTS2 - 2023 - INT - 0135 - WorkFlow changes based on check box - added by Naveen -->
+            <mat-checkbox formControlName="enableAutoIqc"> Enable auto IQC</mat-checkbox>
+            <mat-checkbox formControlName="enableAutoFqc"> Enable auto FQC</mat-checkbox>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+          <div fxflex="100%">
+            <h3 class="sub-header">TAT Calculation Index</h3>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="25.33%" fxFlex.lg="25.33%" fxFlex.md="25.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Beyond TAT</mat-label>
+              <input matInput formControlName="beyondTat" appNumberOnly maxlength="2"
+                [PhoneNumber]="false" preventDragdrop preventCutCopyPaste autocomplete="off"
+                (blur)="checkTat($event?.target?.value,'bt')" placeholder="BT" />
+                @if (componentForm?.get('beyondTat')?.errors?.incorrect) {
+                  <mat-error>
+                  Beyond TAT should be greater than component TAT </mat-error>
+                }
+                @if (componentForm?.get('beyondTat')?.errors?.required) {
+                  <mat-error>
+                  BT is required </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div fxFlex="25.33%" fxFlex.lg="25.33%" fxFlex.md="25.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Current TAT</mat-label>
+                <input matInput formControlName="currentTat" appNumberOnly maxlength="2"
+                  [PhoneNumber]="false" preventDragdrop preventCutCopyPaste autocomplete="off"
+                  (blur)="checkTat($event?.target?.value,'ct')" placeholder="CT" />
+                  @if (componentForm?.get('currentTat')?.errors?.incorrect) {
+                    <mat-error>
+                    Current TAT should be Lesser than or equal to Beyond TAT </mat-error>
+                  }
+                  @if (componentForm?.get('currentTat')?.errors?.required) {
+                    <mat-error>
+                    CT is required </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div fxFlex="25.33%" fxFlex.lg="25.33%" fxFlex.md="25.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                  <mat-label>Near TAT</mat-label>
+                  <input matInput formControlName="nearTat" appNumberOnly maxlength="2" [PhoneNumber]="false"
+                    preventDragdrop preventCutCopyPaste autocomplete="off"
+                    (blur)="checkTat($event?.target?.value,'nt')" placeholder="NT" />
+                    @if (componentForm?.get('nearTat')?.errors?.incorrect) {
+                      <mat-error>
+                      Near TAT should be Lesser than or equal to current TAT </mat-error>
+                    }
+                    @if (componentForm?.get('nearTat')?.errors?.required) {
+                      <mat-error>
+                      NT is required </mat-error>
+                    }
+                  </mat-form-field>
                 </div>
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Fees</mat-label>
-                            <mat-icon matSuffix><i
-                                    [ngClass]="subCompList?.abroadCompFlag === true ? 'icon-banknote' : 'icon-inrrupeesb'"></i>
-                            </mat-icon>
-                            <input formControlName="fees" maxlength="10" type="text" preventDragdrop preventCutCopyPaste
-                                appNumberOnly [NumberOnlyWithDot]="false" (blur)="checkFees($event?.target?.value)"
-                                matInput placeholder="Fees" />
-                            <mat-error *ngIf="componentForm?.get('fees')?.errors?.required">
-                                Fees is required </mat-error>
-                            <!-- <mat-error *ngIf="componentForm?.get('fees')?.errors?.min">
-                                Please give a fee above 0 </mat-error> -->
-                            <mat-hint> <span
-                                    *ngIf="componentForm?.get('msp')?.value && componentForm?.get('msp')?.value">
-                                    <label> MSP - <span *ngIf="subCompList?.abroadCompFlag !== true">₹</span><span
-                                            *ngIf="subCompList?.abroadCompFlag === true">$</span>
-                                        {{componentForm?.get('msp')?.value}}
-                                    </label>
-                                    <label> NRP - <span *ngIf="subCompList?.abroadCompFlag !== true">₹</span><span
-                                            *ngIf="subCompList?.abroadCompFlag === true">$</span>
-                                        {{componentForm?.get('nrp')?.value}}</label>
-                                </span>
-                            </mat-hint>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="24%" fxFlex.lg="24%" fxFlex.md="24%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <app-auto-complete [selectProperties]="currencyControls"></app-auto-complete>
-                    </div>
-                    <div fxFlex="18%" fxFlex.lg="18%" fxFlex.md="18%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>TAT Days</mat-label>
-                            <input formControlName="tat" preventDragdrop preventCutCopyPaste autocomplete="off"
-                                maxlength="2" role="presentation" appNumberOnly [PhoneNumber]="false" matInput
-                                matTooltip="Enter TAT Days" matTooltipClass="accent-tooltip" placeholder="TAT Days"
-                                (blur)="checkTat($event?.target?.value, 'tat')" />
-                            <mat-error *ngIf="componentForm?.get('tat')?.errors?.incorrect">
-                                Tat Days should be less than or equal to Component TAT
-                                ({{componentForm?.get('originalTAT')?.value}}) & Client TAT
-                                ({{mainForm?.get('clientEntry.tatCount')?.value}})
-                            </mat-error>
-                            <mat-error *ngIf="componentForm?.get('tat')?.errors?.required">
-                                TAT days is required </mat-error>
-                            <mat-error *ngIf="componentForm?.get('tat')?.errors?.min">
-                                Please give a tat above 0 </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="18%" fxFlex.lg="18%" fxFlex.md="18%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Report Display Order</mat-label>
-                            <input matInput formControlName="displayOrder" placeholder="Report Display Order"
-                                appNumberOnly maxlength="2" [PhoneNumber]="false" preventDragdrop preventCutCopyPaste
-                                autocomplete="off" />
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="18%" fxFlex.lg="18%" fxFlex.md="18%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-checkbox *ngIf="mainForm?.value?.clientEntry?.daValidationFlag === true"
-                            formControlName="daCompValidationFlag">DA Validation</mat-checkbox>
-                        <mat-checkbox formControlName="interimReportFlag"> Interim Report</mat-checkbox>
-                        <mat-checkbox formControlName="isAdditionalPos"> Additional period of stay</mat-checkbox>
-                        <!-- VTS2 - 2023 - INT - 0135 - WorkFlow changes based on check box - added by Naveen -->
-                        <mat-checkbox formControlName="enableAutoIqc"> Enable auto IQC</mat-checkbox>
-                        <mat-checkbox formControlName="enableAutoFqc"> Enable auto FQC</mat-checkbox>
-                    </div>
-                </div>
-                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
-                    <div fxflex="100%">
-                        <h3 class="sub-header">TAT Calculation Index</h3>
-                    </div>
-                </div>
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                    <div fxFlex="25.33%" fxFlex.lg="25.33%" fxFlex.md="25.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Beyond TAT</mat-label>
-                            <input matInput formControlName="beyondTat" appNumberOnly maxlength="2"
-                                [PhoneNumber]="false" preventDragdrop preventCutCopyPaste autocomplete="off"
-                                (blur)="checkTat($event?.target?.value,'bt')" placeholder="BT" />
-                            <mat-error *ngIf="componentForm?.get('beyondTat')?.errors?.incorrect">
-                                Beyond TAT should be greater than component TAT </mat-error>
-                            <mat-error *ngIf="componentForm?.get('beyondTat')?.errors?.required">
-                                BT is required </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="25.33%" fxFlex.lg="25.33%" fxFlex.md="25.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Current TAT</mat-label>
-                            <input matInput formControlName="currentTat" appNumberOnly maxlength="2"
-                                [PhoneNumber]="false" preventDragdrop preventCutCopyPaste autocomplete="off"
-                                (blur)="checkTat($event?.target?.value,'ct')" placeholder="CT" />
-                            <mat-error *ngIf="componentForm?.get('currentTat')?.errors?.incorrect">
-                                Current TAT should be Lesser than or equal to Beyond TAT </mat-error>
-                            <mat-error *ngIf="componentForm?.get('currentTat')?.errors?.required">
-                                CT is required </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="25.33%" fxFlex.lg="25.33%" fxFlex.md="25.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Near TAT</mat-label>
-                            <input matInput formControlName="nearTat" appNumberOnly maxlength="2" [PhoneNumber]="false"
-                                preventDragdrop preventCutCopyPaste autocomplete="off"
-                                (blur)="checkTat($event?.target?.value,'nt')" placeholder="NT" />
-                            <mat-error *ngIf="componentForm?.get('nearTat')?.errors?.incorrect">
-                                Near TAT should be Lesser than or equal to current TAT </mat-error>
-                            <mat-error *ngIf="componentForm?.get('nearTat')?.errors?.required">
-                                NT is required </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="25.33%" fxFlex.lg="25.33%" fxFlex.md="25.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                            <mat-label>Within TAT</mat-label>
-                            <input matInput formControlName="withInTat" appNumberOnly maxlength="2"
-                                [PhoneNumber]="false" preventDragdrop preventCutCopyPaste autocomplete="off"
-                                (blur)="checkTat($event?.target?.value,'wt')" placeholder="WT" />
-                            <mat-error *ngIf="componentForm?.get('withInTat')?.errors?.incorrect">
-                                Within TAT should be Lesser than or equal to near TAT </mat-error>
-                            <mat-error *ngIf="componentForm?.get('withInTat')?.errors?.required">
-                                WT is required </mat-error>
-                        </mat-form-field>
-                    </div>
+                <div fxFlex="25.33%" fxFlex.lg="25.33%" fxFlex.md="25.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Within TAT</mat-label>
+                    <input matInput formControlName="withInTat" appNumberOnly maxlength="2"
+                      [PhoneNumber]="false" preventDragdrop preventCutCopyPaste autocomplete="off"
+                      (blur)="checkTat($event?.target?.value,'wt')" placeholder="WT" />
+                      @if (componentForm?.get('withInTat')?.errors?.incorrect) {
+                        <mat-error>
+                        Within TAT should be Lesser than or equal to near TAT </mat-error>
+                      }
+                      @if (componentForm?.get('withInTat')?.errors?.required) {
+                        <mat-error>
+                        WT is required </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
 
-                    <div fxFlex="18%" fxFlex.lg="18%" fxFlex.md="18%" fxFlex.sm="100%" fxFlex.xs="100%">
-                        <mat-label>&nbsp;</mat-label>
-                        <div class="adrem" fxLayoutGap="2px">
-                            <!-- Added By Naveen -->
-                            <button mat-button color="primary" matTooltip="View Status History"
-                                matTooltipClass="accent-tooltip" (click)="openInsuffHistory()"> <i
-                                    class="icon-info"></i>
-                            </button>
-                            <button mat-button color="primary" matTooltip="{{index > -1 ? 'Update' : 'Add'}}"
-                                matTooltipClass="accent-tooltip" (click)="addComponent()"> <i
-                                    class="icon-plus-circle"></i>
-                            </button>
-                            <button mat-button color="warn" matTooltip="Reset" matTooltipClass="accent-tooltip"
-                                (click)="resetComponent()"> <i class="icon-x-circle"></i> </button>
+                  <div fxFlex="18%" fxFlex.lg="18%" fxFlex.md="18%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <mat-label>&nbsp;</mat-label>
+                    <div class="adrem" fxLayoutGap="2px">
+                      <!-- Added By Naveen -->
+                      <button mat-button color="primary" matTooltip="View Status History"
+                        matTooltipClass="accent-tooltip" (click)="openInsuffHistory()"> <i
+                      class="icon-info"></i>
+                    </button>
+                    <button mat-button color="primary" matTooltip="{{index > -1 ? 'Update' : 'Add'}}"
+                      matTooltipClass="accent-tooltip" (click)="addComponent()"> <i
+                    class="icon-plus-circle"></i>
+                  </button>
+                  <button mat-button color="warn" matTooltip="Reset" matTooltipClass="accent-tooltip"
+                    (click)="resetComponent()"> <i class="icon-x-circle"></i> </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fee Popup -->
+              <ng-template #feesConfirmation>
+                <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
+                  (click)="feePopupClose()"> <i class="material-icons">clear</i> </button>
+                  <h1 mat-dialog-title>Entered amount is less than MSP and NRP</h1>
+                  <mat-dialog-content>
+                    <form [formGroup]="clientFeesApprovalForm">
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <div class="para">
+                            <p>
+                              <label>Client Name:</label>
+                              <em>{{ mainForm?.get('clientEntry.clientName')?.value}}</em>
+                            </p>
+                            <p>
+                              <label>Component:</label>
+                              <em>{{ commonService?.getNameById(bindData, 'serviceId',
+                                'rptType', componentForm?.get('componentId')?.value) }}
+                                @if (componentForm?.get('isSubComponent')?.value === true ) {
+                                  -
+                                  {{ getSubCompName(componentForm?.get('componentId')?.value,
+                                  componentForm?.get('subComponentId')?.value) }}
+                                } @else {
+                                  -
+                                  {{ componentForm?.get('componentDesc')?.value }}
+                                }
+                              </em>
+                            </p>
+                            <p>
+                              <label>MSP Rate:</label>
+                              <em>{{ componentForm?.get('msp')?.value }}</em>
+                            </p>
+                            <p>
+                              <label>NRP Rate:</label>
+                              <em>{{ componentForm?.get('nrp')?.value }}</em>
+                            </p>
+                            <p>
+                              <label>Entered Price:</label>
+                              <em>{{ componentForm?.get('fees')?.value }}</em>
+                            </p>
+                          </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Fee Popup -->
-                <ng-template #feesConfirmation>
-                    <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
-                        (click)="feePopupClose()"> <i class="material-icons">clear</i> </button>
-                    <h1 mat-dialog-title>Entered amount is less than MSP and NRP</h1>
-                    <mat-dialog-content>
-                        <form [formGroup]="clientFeesApprovalForm">
-                            <div fxLayout="row">
-                                <div fxFlex="100%">
-                                    <div class="para">
-                                        <p>
-                                            <label>Client Name:</label>
-                                            <em>{{ mainForm?.get('clientEntry.clientName')?.value}}</em>
-                                        </p>
-                                        <p>
-                                            <label>Component:</label>
-                                            <em>{{ commonService?.getNameById(bindData, 'serviceId',
-                                                'rptType', componentForm?.get('componentId')?.value) }}
-                                                <ng-container
-                                                    *ngIf="componentForm?.get('isSubComponent')?.value === true ;then sub else comp">
-                                                </ng-container>
-                                                <ng-template #sub> -
-                                                    {{ getSubCompName(componentForm?.get('componentId')?.value,
-                                                    componentForm?.get('subComponentId')?.value) }}
-                                                </ng-template>
-                                                <ng-template #comp> -
-                                                    {{ componentForm?.get('componentDesc')?.value }}
-                                                </ng-template>
-                                            </em>
-                                        </p>
-                                        <p>
-                                            <label>MSP Rate:</label>
-                                            <em>{{ componentForm?.get('msp')?.value }}</em>
-                                        </p>
-                                        <p>
-                                            <label>NRP Rate:</label>
-                                            <em>{{ componentForm?.get('nrp')?.value }}</em>
-                                        </p>
-                                        <p>
-                                            <label>Entered Price:</label>
-                                            <em>{{ componentForm?.get('fees')?.value }}</em>
-                                        </p>
-                                    </div>
+                      </div>
+                      <div fxLayout="row" class="pt-15">
+                        <div fxFlex="100%">
+                          <mat-radio-group formControlName="clientApprovalFlag" aria-label="Select an option"
+                            fxLayoutGap="20px" (change)="typeChange($event?.value, true)">
+                            <mat-label class="lbl">Do you have a pre-approval email for this component?
+                            </mat-label>
+                            <mat-radio-button [value]="true">Yes</mat-radio-button>
+                            &nbsp;
+                            <mat-radio-button [disabled]="componentForm?.get('fees')?.value === '0'"
+                              [value]="false">No
+                              <span class="info-text">(This will send
+                                email
+                                for
+                              approval)</span>
+                            </mat-radio-button>
+                          </mat-radio-group>
+                          @if (clientFeesApprovalForm?.get('clientApprovalFlag')?.touched && clientFeesApprovalForm?.get('clientApprovalFlag')?.errors?.required) {
+                            <mat-error
+                              >
+                            Choose One </mat-error>
+                          }
+                        </div>
+                      </div>
+                      @if (clientFeesApprovalForm?.get('clientApprovalFlag')?.value === true) {
+                        <div fxLayout="row" class="pt-15"
+                          >
+                          <div fxFlex="100%">
+                            <mat-label class="lbl">Attached Document</mat-label>
+                            <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                          here...</span>
+                          <input type="file" #fileInput (change)="openUploadFeeDoc($event)"
+                            formControlName="feeDocument" />
+                          </div>
+                          <div class="file-names mt-10">
+                            @for (document of clientFeesApprovalForm?.value?.clientFeeDocument; track document; let i = $index) {
+                              <div class="file-upload-files"
+                                >
+                                @if (document.fileName) {
+                                  <a routerLinkActive="active-link"
+                                  (click)="preview(document)">{{document.fileName}}</a>
+                                }
+                                <button type="button" class="close" aria-label="Close"
+                                  (click)="removeFeeDoc(i)">
+                                  <span aria-hidden="true">&times;</span></button>
                                 </div>
+                              }
                             </div>
-                            <div fxLayout="row" class="pt-15">
-                                <div fxFlex="100%">
-                                    <mat-radio-group formControlName="clientApprovalFlag" aria-label="Select an option"
-                                        fxLayoutGap="20px" (change)="typeChange($event?.value, true)">
-                                        <mat-label class="lbl">Do you have a pre-approval email for this component?
-                                        </mat-label>
-                                        <mat-radio-button [value]="true">Yes</mat-radio-button>
-                                        &nbsp;
-                                        <mat-radio-button [disabled]="componentForm?.get('fees')?.value === '0'"
-                                            [value]="false">No
-                                            <span class="info-text">(This will send
-                                                email
-                                                for
-                                                approval)</span>
-                                        </mat-radio-button>
-                                    </mat-radio-group>
-                                    <mat-error
-                                        *ngIf="clientFeesApprovalForm?.get('clientApprovalFlag')?.touched && clientFeesApprovalForm?.get('clientApprovalFlag')?.errors?.required">
-                                        Choose One </mat-error>
-                                </div>
-                            </div>
-                            <div fxLayout="row" class="pt-15"
-                                *ngIf="clientFeesApprovalForm?.get('clientApprovalFlag')?.value === true">
-                                <div fxFlex="100%">
-                                    <mat-label class="lbl">Attached Document</mat-label>
-                                    <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
-                                            here...</span>
-                                        <input type="file" #fileInput (change)="openUploadFeeDoc($event)"
-                                            formControlName="feeDocument" />
-                                    </div>
-                                    <div class="file-names mt-10">
-                                        <div class="file-upload-files"
-                                            *ngFor="let document of clientFeesApprovalForm?.value?.clientFeeDocument; let i = index">
-                                            <a *ngIf="document.fileName" routerLinkActive="active-link"
-                                                (click)="preview(document)">{{document.fileName}}</a>
-                                            <button type="button" class="close" aria-label="Close"
-                                                (click)="removeFeeDoc(i)">
-                                                <span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <mat-error *ngIf="clientFeesApprovalForm?.get('clientApprovalFlag')?.value === true && clientFeesApprovalForm?.get('feeDocument')?.touched &&
-                            clientFeesApprovalForm?.get('feeDocument')?.errors?.required">
-                                Document is required </mat-error>
-                            <div fxLayout="row" class="pt-15">
-                                <div fxFlex="100%">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Comments</mat-label>
-                                        <textarea #fee formControlName="requestorComments" matInput autocomplete="off"
-                                            placeholder="Comments" (focus)="fee.select()" (click)="fee.select()"
-                                            role="presentation" maxlength="1000">
-                                      </textarea>
-                                        <mat-hint class="f-13"> ({{fee.value?.length}} /1000 max) </mat-hint>
-                                        <mat-error
-                                            *ngIf="clientFeesApprovalForm?.get('requestorComments')?.errors?.required">
-                                            Comments is required </mat-error>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </form>
-                    </mat-dialog-content>
-                    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
-                        <button mat-flat-button color="warn" (click)="saveFeePopup()"> Submit </button>
-                    </mat-dialog-actions>
+                          </div>
+                        </div>
+                      }
+                      @if (clientFeesApprovalForm?.get('clientApprovalFlag')?.value === true && clientFeesApprovalForm?.get('feeDocument')?.touched &&
+                        clientFeesApprovalForm?.get('feeDocument')?.errors?.required) {
+                        <mat-error>
+                        Document is required </mat-error>
+                      }
+                      <div fxLayout="row" class="pt-15">
+                        <div fxFlex="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>Comments</mat-label>
+                            <textarea #fee formControlName="requestorComments" matInput autocomplete="off"
+                              placeholder="Comments" (focus)="fee.select()" (click)="fee.select()"
+                              role="presentation" maxlength="1000">
+                            </textarea>
+                            <mat-hint class="f-13"> ({{fee.value?.length}} /1000 max) </mat-hint>
+                            @if (clientFeesApprovalForm?.get('requestorComments')?.errors?.required) {
+                              <mat-error
+                                >
+                              Comments is required </mat-error>
+                            }
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </form>
+                  </mat-dialog-content>
+                  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+                    <button mat-flat-button color="warn" (click)="saveFeePopup()"> Submit </button>
+                  </mat-dialog-actions>
                 </ng-template>
                 <!-- Tat Popup -->
                 <ng-template #tatConfirmation>
-                    <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
-                        (click)="tatPopupClose()"> <i class="material-icons">clear</i> </button>
+                  <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip"
+                    (click)="tatPopupClose()"> <i class="material-icons">clear</i> </button>
                     <h1 mat-dialog-title>Entered Tat Days is less than Original Tat</h1>
                     <mat-dialog-content>
-                        <form [formGroup]="clientTATApprovalForm">
-                            <div fxLayout="row">
-                                <div fxFlex="100%">
-                                    <div class="para">
-                                        <p>
-                                            <label>Client Name:</label>
-                                            <em>{{ mainForm?.get('clientEntry.clientName')?.value}}</em>
-                                        </p>
-                                        <p>
-                                            <label>Component:</label>
-                                            <em>{{ commonService?.getNameById(bindData, 'serviceId',
-                                                'rptType', componentForm?.get('componentId')?.value) }}
-                                                <ng-container
-                                                    *ngIf="componentForm?.get('isSubComponent')?.value === true ;then sub else comp">
-                                                </ng-container>
-                                                <ng-template #sub> -
-                                                    {{ getSubCompName(componentForm?.get('componentId')?.value,
-                                                    componentForm?.get('subComponentId')?.value) }}
-                                                </ng-template>
-                                                <ng-template #comp> -
-                                                    {{ componentForm?.get('componentDesc')?.value }}
-                                                </ng-template>
-                                            </em>
-                                        </p>
-                                        <p>
-                                            <label>Original Tat:</label>
-                                            <em>{{ componentForm?.get('originalTAT')?.value }}</em>
-                                        </p>
-                                        <p>
-                                            <label>Entered Tat:</label>
-                                            <em>{{ componentForm?.get('tat')?.value }}</em>
-                                        </p>
-                                    </div>
-                                </div>
+                      <form [formGroup]="clientTATApprovalForm">
+                        <div fxLayout="row">
+                          <div fxFlex="100%">
+                            <div class="para">
+                              <p>
+                                <label>Client Name:</label>
+                                <em>{{ mainForm?.get('clientEntry.clientName')?.value}}</em>
+                              </p>
+                              <p>
+                                <label>Component:</label>
+                                <em>{{ commonService?.getNameById(bindData, 'serviceId',
+                                  'rptType', componentForm?.get('componentId')?.value) }}
+                                  @if (componentForm?.get('isSubComponent')?.value === true ) {
+                                    -
+                                    {{ getSubCompName(componentForm?.get('componentId')?.value,
+                                    componentForm?.get('subComponentId')?.value) }}
+                                  } @else {
+                                    -
+                                    {{ componentForm?.get('componentDesc')?.value }}
+                                  }
+                                </em>
+                              </p>
+                              <p>
+                                <label>Original Tat:</label>
+                                <em>{{ componentForm?.get('originalTAT')?.value }}</em>
+                              </p>
+                              <p>
+                                <label>Entered Tat:</label>
+                                <em>{{ componentForm?.get('tat')?.value }}</em>
+                              </p>
                             </div>
-                            <div fxLayout="row" class="pt-15">
-                                <div fxFlex="100%">
-                                    <mat-radio-group formControlName="clientApprovalFlag" aria-label="Select an option"
-                                        fxLayoutGap="20px" (change)="typeChange($event?.value, false)">
-                                        <mat-label class="lbl">Do you have a pre-approval email for this component?
-                                        </mat-label>
-                                        <mat-radio-button [value]="true">Yes</mat-radio-button>
-                                        &nbsp;
-                                        <mat-radio-button [value]="false">No <span class="info-text">(This will send
-                                                email
-                                                for
-                                                approval)</span> </mat-radio-button>
-                                    </mat-radio-group>
-                                    <mat-error
-                                        *ngIf="clientTATApprovalForm?.get('clientApprovalFlag')?.touched && clientTATApprovalForm?.get('clientApprovalFlag')?.errors?.required">
-                                        Choose One </mat-error>
-                                </div>
+                          </div>
+                        </div>
+                        <div fxLayout="row" class="pt-15">
+                          <div fxFlex="100%">
+                            <mat-radio-group formControlName="clientApprovalFlag" aria-label="Select an option"
+                              fxLayoutGap="20px" (change)="typeChange($event?.value, false)">
+                              <mat-label class="lbl">Do you have a pre-approval email for this component?
+                              </mat-label>
+                              <mat-radio-button [value]="true">Yes</mat-radio-button>
+                              &nbsp;
+                              <mat-radio-button [value]="false">No <span class="info-text">(This will send
+                                email
+                                for
+                              approval)</span> </mat-radio-button>
+                            </mat-radio-group>
+                            @if (clientTATApprovalForm?.get('clientApprovalFlag')?.touched && clientTATApprovalForm?.get('clientApprovalFlag')?.errors?.required) {
+                              <mat-error
+                                >
+                              Choose One </mat-error>
+                            }
+                          </div>
+                        </div>
+                        @if (clientTATApprovalForm?.get('clientApprovalFlag')?.value === true) {
+                          <div fxLayout="row" class="pt-15"
+                            >
+                            <div fxFlex="100%">
+                              <mat-label class="lbl">Attached Document</mat-label>
+                              <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
+                            here...</span>
+                            <input type="file" #fileInput (change)="openUploadTatDoc($event)"
+                              formControlName="tatDocument" />
                             </div>
-                            <div fxLayout="row" class="pt-15"
-                                *ngIf="clientTATApprovalForm?.get('clientApprovalFlag')?.value === true">
-                                <div fxFlex="100%">
-                                    <mat-label class="lbl">Attached Document</mat-label>
-                                    <div class="file-upload"> <i class="material-icons">cloud_upload</i> <span>Browse
-                                            here...</span>
-                                        <input type="file" #fileInput (change)="openUploadTatDoc($event)"
-                                            formControlName="tatDocument" />
-                                    </div>
-                                    <div class="file-names mt-10">
-                                        <div class="file-upload-files"
-                                            *ngFor="let document of clientTATApprovalForm?.value?.clientTATDocument; let i = index">
-                                            <a *ngIf="document.fileName" routerLinkActive="active-link"
-                                                (click)="preview(document)">{{document.fileName}}</a>
-                                            <button type="button" class="close" aria-label="Close"
-                                                (click)="removeTatDoc(i)">
-                                                <span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="file-names mt-10">
+                              @for (document of clientTATApprovalForm?.value?.clientTATDocument; track document; let i = $index) {
+                                <div class="file-upload-files"
+                                  >
+                                  @if (document.fileName) {
+                                    <a routerLinkActive="active-link"
+                                    (click)="preview(document)">{{document.fileName}}</a>
+                                  }
+                                  <button type="button" class="close" aria-label="Close"
+                                    (click)="removeTatDoc(i)">
+                                    <span aria-hidden="true">&times;</span></button>
+                                  </div>
+                                }
+                              </div>
                             </div>
-                            <mat-error *ngIf="clientTATApprovalForm?.get('clientApprovalFlag')?.value === true && clientTATApprovalForm?.get('tatDocument')?.touched &&
-                             clientTATApprovalForm?.get('tatDocument')?.errors?.required">
-                                Document is required </mat-error>
-                            <div fxLayout="row" class="pt-15">
-                                <div fxFlex="100%">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Comments</mat-label>
-                                        <textarea #tat formControlName="requestorComments" matInput autocomplete="off"
-                                            placeholder="Comments" (focus)="tat.select()" (click)="tat.select()"
-                                            role="presentation" maxlength="1000">
-                                  </textarea>
-                                        <mat-hint class="f-13"> ({{tat.value?.length}} /1000 max) </mat-hint>
-                                        <mat-error
-                                            *ngIf="clientTATApprovalForm?.get('requestorComments')?.errors?.required">
-                                            Comments is required </mat-error>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </form>
+                          </div>
+                        }
+                        @if (clientTATApprovalForm?.get('clientApprovalFlag')?.value === true && clientTATApprovalForm?.get('tatDocument')?.touched &&
+                          clientTATApprovalForm?.get('tatDocument')?.errors?.required) {
+                          <mat-error>
+                          Document is required </mat-error>
+                        }
+                        <div fxLayout="row" class="pt-15">
+                          <div fxFlex="100%">
+                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                              <mat-label>Comments</mat-label>
+                              <textarea #tat formControlName="requestorComments" matInput autocomplete="off"
+                                placeholder="Comments" (focus)="tat.select()" (click)="tat.select()"
+                                role="presentation" maxlength="1000">
+                              </textarea>
+                              <mat-hint class="f-13"> ({{tat.value?.length}} /1000 max) </mat-hint>
+                              @if (clientTATApprovalForm?.get('requestorComments')?.errors?.required) {
+                                <mat-error
+                                  >
+                                Comments is required </mat-error>
+                              }
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </form>
                     </mat-dialog-content>
                     <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
-                        <button mat-flat-button color="warn" (click)="saveTatPopup()"> Submit </button>
+                      <button mat-flat-button color="warn" (click)="saveTatPopup()"> Submit </button>
                     </mat-dialog-actions>
-                </ng-template>
-                <ng-template #tatValidation let-message>
+                  </ng-template>
+                  <ng-template #tatValidation let-message>
                     <h1 mat-dialog-title>{{message}}</h1>
                     <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
-                        <button mat-flat-button color="warn" mat-dialog-close="cancel"> Cancel </button>
-                        <button mat-flat-button color="warn" mat-dialog-close="ok"> OK </button>
+                      <button mat-flat-button color="warn" mat-dialog-close="cancel"> Cancel </button>
+                      <button mat-flat-button color="warn" mat-dialog-close="ok"> OK </button>
                     </mat-dialog-actions>
-                </ng-template>
-                <!-- P Table -->
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  </ng-template>
+                  <!-- P Table -->
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
                     fxLayoutGap="20px grid" class="pt-15">
                     <div fxFlex="100%">
-                        <p-table #dt [columns]="columnName" [value]="mainForm?.get('componentEntry')?.value"
-                            dataKey="componentId" [scrollable]="true" [paginator]="true" [rows]="10"
-                            [resizableColumns]="true" [reorderableColumns]="true" columnResizeMode="expand">
+                      <p-table #dt [columns]="columnName" [value]="mainForm?.get('componentEntry')?.value"
+                        dataKey="componentId" [scrollable]="true" [paginator]="true" [rows]="10"
+                        [resizableColumns]="true" [reorderableColumns]="true" columnResizeMode="expand">
 
-                            <!-- ================= COLGROUP ================= -->
-                            <ng-template pTemplate="colgroup" let-colGroupCols>
-                                <colgroup>
-                                    <col style="width:40px" />
-                                    <col style="width:100px" />
-                                    <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-                                </colgroup>
-                            </ng-template>
+                        <!-- ================= COLGROUP ================= -->
+                        <ng-template pTemplate="colgroup" let-colGroupCols>
+                          <colgroup>
+                          <col style="width:40px" />
+                          <col style="width:100px" />
+                          @for (col of colGroupCols; track col) {
+                            <col style="min-width:200px" />
+                          }
+                        </colgroup>
+                      </ng-template>
 
-                            <!-- ================= HEADER ================= -->
-                            <ng-template pTemplate="header" let-headerCols>
-                                <tr>
-                                    <th class="action"></th>
-                                    <th class="action">Action</th>
+                      <!-- ================= HEADER ================= -->
+                      <ng-template pTemplate="header" let-headerCols>
+                        <tr>
+                          <th class="action"></th>
+                          <th class="action">Action</th>
 
-                                    <th *ngFor="let col of headerCols"
-                                        [ngClass]="{ 'text-center action': col?.field === 'action' }" pReorderableColumn
-                                        pResizableColumn>
+                          @for (col of headerCols; track col) {
+                            <th
+                              [ngClass]="{ 'text-center action': col?.field === 'action' }" pReorderableColumn
+                              pResizableColumn>
+                              <div class="thname" matTooltip="{{ col?.header }}"
+                                matTooltipClass="accent-tooltip">
+                                {{ col?.header }}
+                              </div>
+                              <span [pSortableColumn]="col?.field">
+                                @if (col?.field !== 'expand' && col?.field !== 'action') {
+                                  <p-sortIcon
+                                    [field]="col?.field">
+                                  </p-sortIcon>
+                                }
+                              </span>
+                            </th>
+                          }
+                        </tr>
+                      </ng-template>
 
-                                        <div class="thname" matTooltip="{{ col?.header }}"
-                                            matTooltipClass="accent-tooltip">
-                                            {{ col?.header }}
-                                        </div>
+                      <!-- ================= BODY ================= -->
+                      <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-expanded="expanded"
+                        let-bodyCols="columns">
 
-                                        <span [pSortableColumn]="col?.field">
-                                            <p-sortIcon *ngIf="col?.field !== 'expand' && col?.field !== 'action'"
-                                                [field]="col?.field">
-                                            </p-sortIcon>
-                                        </span>
+                        <tr
+                          [ngStyle]="rowData.daCompValidationFlag === true ? {'background-color':'#efe6f1'} : {}">
 
-                                    </th>
-                                </tr>
-                            </ng-template>
+                          <!-- EXPAND ICON -->
+                          <td class="action">
+                            @if (
+                              rowData?.clientTATApproval?.clientTATDocument?.length ||
+                              rowData?.subComponentEntry[0]?.clientTATApproval?.clientTATDocument?.length ||
+                              rowData?.clientFeesApproval?.clientFeeDocument?.length ||
+                              rowData?.subComponentEntry[0]?.clientFeesApproval?.clientFeeDocument?.length) {
+                              <div>
+                                <a [pRowToggler]="rowData">
+                                  <i
+                                  [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i>
+                                </a>
+                              </div>
+                            }
+                          </td>
 
-                            <!-- ================= BODY ================= -->
-                            <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-expanded="expanded"
-                                let-bodyCols="columns">
+                          <!-- ACTION ICONS -->
+                          <td class="action">
+                            <mat-icon matTooltip="Edit" (click)="editComponent(rowData, index)">
+                              <i class="material-icons-outlined">edit</i>
+                            </mat-icon>
 
-                                <tr
-                                    [ngStyle]="rowData.daCompValidationFlag === true ? {'background-color':'#efe6f1'} : {}">
+                            <mat-icon [ngClass]="rowData?.deleteDisableFlag ? 'page-btn disabled' : ''"
+                              matTooltip="Delete" (click)="openDialog(index)">
+                              <i class="material-icons-outlined">delete</i>
+                            </mat-icon>
+                          </td>
 
-                                    <!-- EXPAND ICON -->
-                                    <td class="action">
-                                        <div *ngIf="
-          rowData?.clientTATApproval?.clientTATDocument?.length ||
-          rowData?.subComponentEntry[0]?.clientTATApproval?.clientTATDocument?.length ||
-          rowData?.clientFeesApproval?.clientFeeDocument?.length ||
-          rowData?.subComponentEntry[0]?.clientFeesApproval?.clientFeeDocument?.length">
+                          <!-- DATA COLUMNS -->
+                          @for (col of bodyCols; track col) {
+                            <td
+                              matTooltip="Component was exists in the package. Please remove the component from the package first"
+                              matTooltipClass="accent-tooltip"
+                              [matTooltipDisabled]="rowData?.deleteDisableFlag !== true">
+                              @if (col?.field === 'effectiveDate') {
+                                <span>
+                                  {{ rowData[col.field] | date:'dd/MM/yyyy' }}
+                                </span>
+                              }
+                              @if (col?.field === 'daCompValidationFlag') {
+                                <span>
+                                  {{ rowData[col.field] ? 'Yes' : 'No' }}
+                                </span>
+                              }
+                              @if (col?.field === 'interimReportFlag') {
+                                <span>
+                                  {{ rowData[col.field] ? 'Yes' : 'No' }}
+                                </span>
+                              }
+                              @if (col?.field === 'currencyId') {
+                                <span>
+                                  {{
+                                  commonService.getNameById(currencyList,'currencyId','currencyShortName',rowData[col.field])
+                                  }}
+                                </span>
+                              }
+                              <span>
+                                {{ rowData[col.field] }}
+                              </span>
+                            </td>
+                          }
+                        </tr>
 
-                                            <a [pRowToggler]="rowData">
-                                                <i
-                                                    [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i>
-                                            </a>
+                      </ng-template>
 
-                                        </div>
-                                    </td>
+                      <!-- ================= ROW EXPANSION ================= -->
+                      <ng-template pTemplate="rowexpansion" let-subRowData let-expCols="columns">
+                        <tr>
+                          <td [attr.colspan]="8">
 
-                                    <!-- ACTION ICONS -->
-                                    <td class="action">
-                                        <mat-icon matTooltip="Edit" (click)="editComponent(rowData, index)">
-                                            <i class="material-icons-outlined">edit</i>
-                                        </mat-icon>
-
-                                        <mat-icon [ngClass]="rowData?.deleteDisableFlag ? 'page-btn disabled' : ''"
-                                            matTooltip="Delete" (click)="openDialog(index)">
-                                            <i class="material-icons-outlined">delete</i>
-                                        </mat-icon>
-                                    </td>
-
-                                    <!-- DATA COLUMNS -->
-                                    <td *ngFor="let col of bodyCols" [ngSwitch]="col?.field"
-                                        matTooltip="Component was exists in the package. Please remove the component from the package first"
-                                        matTooltipClass="accent-tooltip"
-                                        [matTooltipDisabled]="rowData?.deleteDisableFlag !== true">
-
-                                        <span *ngSwitchCase="'effectiveDate'">
-                                            {{ rowData[col.field] | date:'dd/MM/yyyy' }}
-                                        </span>
-
-                                        <span *ngSwitchCase="'daCompValidationFlag'">
-                                            {{ rowData[col.field] ? 'Yes' : 'No' }}
-                                        </span>
-
-                                        <span *ngSwitchCase="'interimReportFlag'">
-                                            {{ rowData[col.field] ? 'Yes' : 'No' }}
-                                        </span>
-
-                                        <span *ngSwitchCase="'currencyId'">
-                                            {{
-                                            commonService.getNameById(currencyList,'currencyId','currencyShortName',rowData[col.field])
-                                            }}
-                                        </span>
-
-                                        <span *ngSwitchDefault>
-                                            {{ rowData[col.field] }}
-                                        </span>
-
-                                    </td>
-                                </tr>
-
-                            </ng-template>
-
-                            <!-- ================= ROW EXPANSION ================= -->
-                            <ng-template pTemplate="rowexpansion" let-subRowData let-expCols="columns">
-                                <tr>
-                                    <td [attr.colspan]="8">
-
-                                        <!-- ================= FEE TABLE ================= -->
-                                        <p-table *ngIf="
-            subRowData?.clientFeesApproval?.clientFeeDocument?.length ||
-            subRowData?.subComponentEntry[0]?.clientFeesApproval?.clientFeeDocument?.length"
+                            <!-- ================= FEE TABLE ================= -->
+                            @if (
+                              subRowData?.clientFeesApproval?.clientFeeDocument?.length ||
+                              subRowData?.subComponentEntry[0]?.clientFeesApproval?.clientFeeDocument?.length) {
+                              <p-table
                                             [columns]="getFeeColumns()" [value]="subRowData?.isSubComponent
             ? subRowData?.subComponentEntry[0]?.clientFeesApproval?.clientFeeDocument
             : subRowData?.clientFeesApproval?.clientFeeDocument" [paginator]="true" [rows]="10" class="inn-table">
-
-                                            <ng-template pTemplate="header" let-feeHeaderCols>
-                                <tr>
-                                    <th *ngFor="let col of feeHeaderCols">
+                                <ng-template pTemplate="header" let-feeHeaderCols>
+                                  <tr>
+                                    @for (col of feeHeaderCols; track col) {
+                                      <th>
                                         <div class="thname">{{ col.header }}</div>
-                                    </th>
-                                </tr>
-                            </ng-template>
-
-                            <ng-template pTemplate="body" let-subData let-feeBodyCols="columns">
-                                <tr>
-                                    <td *ngFor="let col of feeBodyCols">
+                                      </th>
+                                    }
+                                  </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-subData let-feeBodyCols="columns">
+                                  <tr>
+                                    @for (col of feeBodyCols; track col) {
+                                      <td>
                                         {{ subData[col.field] }}
-                                    </td>
-                                </tr>
-                            </ng-template>
+                                      </td>
+                                    }
+                                  </tr>
+                                </ng-template>
+                              </p-table>
+                            }
 
-                        </p-table>
-
-                        <!-- ================= TAT TABLE ================= -->
-                        <p-table *ngIf="
-            subRowData?.clientTATApproval?.clientTATDocument?.length ||
-            subRowData?.subComponentEntry[0]?.clientTATApproval?.clientTATDocument?.length" [columns]="getTatColumns()"
+                            <!-- ================= TAT TABLE ================= -->
+                            @if (
+                              subRowData?.clientTATApproval?.clientTATDocument?.length ||
+                              subRowData?.subComponentEntry[0]?.clientTATApproval?.clientTATDocument?.length) {
+                              <p-table [columns]="getTatColumns()"
                             [value]="subRowData?.isSubComponent
             ? subRowData?.subComponentEntry[0]?.clientTATApproval?.clientTATDocument
             : subRowData?.clientTATApproval?.clientTATDocument" [paginator]="true" [rows]="10" class="inn-table">
-
-                            <ng-template pTemplate="header" let-tatHeaderCols>
-                                <tr>
-                                    <th *ngFor="let col of tatHeaderCols">
+                                <ng-template pTemplate="header" let-tatHeaderCols>
+                                  <tr>
+                                    @for (col of tatHeaderCols; track col) {
+                                      <th>
                                         <div class="thname">{{ col.header }}</div>
-                                    </th>
-                                </tr>
-                            </ng-template>
-
-                            <ng-template pTemplate="body" let-subData let-tatBodyCols="columns">
-                                <tr>
-                                    <td *ngFor="let col of tatBodyCols">
+                                      </th>
+                                    }
+                                  </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-subData let-tatBodyCols="columns">
+                                  <tr>
+                                    @for (col of tatBodyCols; track col) {
+                                      <td>
                                         {{ subData[col.field] }}
-                                    </td>
-                                </tr>
-                            </ng-template>
+                                      </td>
+                                    }
+                                  </tr>
+                                </ng-template>
+                              </p-table>
+                            }
 
-                        </p-table>
-
-                        </td>
+                          </td>
                         </tr>
-                        </ng-template>
+                      </ng-template>
 
-                        </p-table>
-                        <!-- Paginator -->
-                        <div [ngClass]="{'empty-record': mainForm?.get('componentEntry')?.value?.length === 0}"
-                            fxLayout="row wrap" fxLayout.md="column" class="cus-paginator" fxLayoutGap="0px grid"
-                            fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
-                            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                fxLayoutAlign="start center">
-                                Showing {{ dt.totalRecords
-                                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
-                                    <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
-                                        dt.totalRecords }} record(s) </div>
-                                        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%"
-                                            fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.md="end center"
-                                            fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                    </p-table>
+                    <!-- Paginator -->
+                    <div [ngClass]="{'empty-record': mainForm?.get('componentEntry')?.value?.length === 0}"
+                      fxLayout="row wrap" fxLayout.md="column" class="cus-paginator" fxLayoutGap="0px grid"
+                      fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+                      <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                        fxLayoutAlign="start center">
+                        Showing {{ dt.totalRecords
+                        < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                        <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
+                      dt.totalRecords }} record(s) </div>
+                      <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%"
+                        fxFlex.xs="100%" fxLayoutAlign="end center" fxLayoutAlign.md="end center"
+                        fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
                                             <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
                 dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                 navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
               "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to
-                                                Page<span class="input-num">
-                                                    <input type="number" min="1" #pageNo [value]="currentPage"
-                                                        maxlength="5" appNumberOnly [NumberOnly]="false"
-                                                        (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
-                                                </span></span> <span class="mr-2" fxHide.xs> of
-                                                {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                          Page<span class="input-num">
+                          <input type="number" min="1" #pageNo [value]="currentPage"
+                            maxlength="5" appNumberOnly [NumberOnly]="false"
+                            (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                          </span></span> <span class="mr-2" fxHide.xs> of
+                        {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
                                             <a [ngClass]="
                 dt.rows + dt.first >= dt.totalRecords
                   ? 'page-btn disabled'
@@ -616,206 +697,220 @@
                 dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                 navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
               "> <i class="icon-control-end ml-5"></i></a>
-                                        </div>
-                            </div>
                         </div>
+                      </div>
                     </div>
-            </mat-card-content>
-        </form>
-    </div>
-</div>
-<!-- <preview> -->
-<ng-template #pdfDialog>
-    <div class=" confirm-pop">
-        <button mat-icon-button class="closed" [mat-dialog-close]="true">
-            <mat-icon class="close-icon" color="warn">close</mat-icon>
-        </button>
-        <h1 mat-dialog-title>Pdf Viewer</h1>
-        <br>
-        <mat-dialog-content>
-            <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="100%">
-                    <pdf-viewer [src]="url" [render-text]="true" [original-size]="true" [show-borders]="true"
+                  </div>
+                </mat-card-content>
+              </form>
+            </div>
+          </div>
+          <!-- <preview> -->
+          <ng-template #pdfDialog>
+            <div class=" confirm-pop">
+              <button mat-icon-button class="closed" [mat-dialog-close]="true">
+                <mat-icon class="close-icon" color="warn">close</mat-icon>
+              </button>
+              <h1 mat-dialog-title>Pdf Viewer</h1>
+              <br>
+                <mat-dialog-content>
+                  <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                    <div fxFlex="100%">
+                      <pdf-viewer [src]="url" [render-text]="true" [original-size]="true" [show-borders]="true"
                         [zoom]="zoomval" [zoom-scale]="'page-height'" [rotation]="rvalue" [fit-to-page]="true">
-                    </pdf-viewer>
+                      </pdf-viewer>
+                    </div>
+                  </div>
+                </mat-dialog-content>
+                <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+                  <button mat-icon-button matTooltip="Download Pdf" (click)="pdftool('download')"
+                    matTooltipClass="accent-tooltip">
+                    <mat-icon>cloud_download</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Rotate right" (click)="pdftool('right')"
+                    matTooltipClass="accent-tooltip">
+                    <mat-icon>rotate_right</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Rotate left" (click)="pdftool('left')" matTooltipClass="accent-tooltip">
+                    <mat-icon>rotate_left</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Zoom In" (click)="pdftool('zoomin')" matTooltipClass="accent-tooltip">
+                    <mat-icon>zoom_in</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Zoom Out" (click)="pdftool('zoomout')" matTooltipClass="accent-tooltip">
+                    <mat-icon>zoom_out</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Reset" (click)="pdftool('reset')" matTooltipClass="accent-tooltip">
+                    <mat-icon>settings_backup_restore</mat-icon>
+                  </button>
+                </mat-dialog-actions>
+              </div>
+            </ng-template>
+
+
+
+            <ng-template #imgprDialog>
+              <div class=" confirm-pop">
+                <button mat-icon-button class="closed" [mat-dialog-close]="true">
+                  <mat-icon class="close-icon" color="warn">close</mat-icon>
+                </button>
+                <h1 mat-dialog-title>Image Viewer</h1>
+                <br>
+                  <mat-dialog-content>
+                    <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                      fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="100%">
+
+                        <img id="imgpre" [@rotatedState]='state' [src]='imageSource'>
+
+                      </div>
+                    </div>
+                  </mat-dialog-content>
+                  <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+                    <button mat-icon-button matTooltip="Download Image" (click)="pdftool('download')"
+                      matTooltipClass="accent-tooltip">
+                      <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Rotate Left" (click)="rotateimg('left')"
+                      matTooltipClass="accent-tooltip">
+                      <mat-icon>arrow_back</mat-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Rotate Right" (click)="rotateimg('right')"
+                      matTooltipClass="accent-tooltip">
+                      <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Rotate Up" (click)="rotateimg('up')" matTooltipClass="accent-tooltip">
+                      <mat-icon>arrow_upward</mat-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Rotate Down" (click)="rotateimg('down')"
+                      matTooltipClass="accent-tooltip">
+                      <mat-icon>arrow_downward</mat-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Zoom In" (click)="zoomin()" matTooltipClass="accent-tooltip">
+                      <mat-icon>zoom_in</mat-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Zoom Out" (click)="zoomout()" matTooltipClass="accent-tooltip">
+                      <mat-icon>zoom_out</mat-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Reset" (click)="rotateimg('reset')" matTooltipClass="accent-tooltip">
+                      <mat-icon>settings_backup_restore</mat-icon>
+                    </button>
+                  </mat-dialog-actions>
                 </div>
-            </div>
-        </mat-dialog-content>
-        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
-            <button mat-icon-button matTooltip="Download Pdf" (click)="pdftool('download')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>cloud_download</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate right" (click)="pdftool('right')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>rotate_right</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate left" (click)="pdftool('left')" matTooltipClass="accent-tooltip">
-                <mat-icon>rotate_left</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Zoom In" (click)="pdftool('zoomin')" matTooltipClass="accent-tooltip">
-                <mat-icon>zoom_in</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Zoom Out" (click)="pdftool('zoomout')" matTooltipClass="accent-tooltip">
-                <mat-icon>zoom_out</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Reset" (click)="pdftool('reset')" matTooltipClass="accent-tooltip">
-                <mat-icon>settings_backup_restore</mat-icon>
-            </button>
-        </mat-dialog-actions>
-    </div>
-</ng-template>
-
-
-
-<ng-template #imgprDialog>
-    <div class=" confirm-pop">
-        <button mat-icon-button class="closed" [mat-dialog-close]="true">
-            <mat-icon class="close-icon" color="warn">close</mat-icon>
-        </button>
-        <h1 mat-dialog-title>Image Viewer</h1>
-        <br>
-        <mat-dialog-content>
-            <div div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="100%">
-
-                    <img id="imgpre" [@rotatedState]='state' [src]='imageSource'>
-
-                </div>
-            </div>
-        </mat-dialog-content>
-        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
-            <button mat-icon-button matTooltip="Download Image" (click)="pdftool('download')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>cloud_download</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate Left" (click)="rotateimg('left')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate Right" (click)="rotateimg('right')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>arrow_forward</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate Up" (click)="rotateimg('up')" matTooltipClass="accent-tooltip">
-                <mat-icon>arrow_upward</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Rotate Down" (click)="rotateimg('down')"
-                matTooltipClass="accent-tooltip">
-                <mat-icon>arrow_downward</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Zoom In" (click)="zoomin()" matTooltipClass="accent-tooltip">
-                <mat-icon>zoom_in</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Zoom Out" (click)="zoomout()" matTooltipClass="accent-tooltip">
-                <mat-icon>zoom_out</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Reset" (click)="rotateimg('reset')" matTooltipClass="accent-tooltip">
-                <mat-icon>settings_backup_restore</mat-icon>
-            </button>
-        </mat-dialog-actions>
-    </div>
-</ng-template>
-<!-- Added By Naveen -->
-<ng-template #insuffHistory>
-    <form>
-        <h1 mat-dialog-title>Component Fee history</h1>
-        <mat-dialog-content>
-            <div fxLayout="column" fxLayoutGap="0px" class="border-dashed" *ngIf="insuffHistoryData.length > 0">
-                <div fxFlex="100%" *ngFor="let history of insuffHistoryData; let i = index">
-                    <div fxLayout="row" fxLayoutGap="20px" class="lbl-res">
-                        <div fxFlex="100%">
-                            <div class="history-view">
+              </ng-template>
+              <!-- Added By Naveen -->
+              <ng-template #insuffHistory>
+                <form>
+                  <h1 mat-dialog-title>Component Fee history</h1>
+                  <mat-dialog-content>
+                    @if (insuffHistoryData.length > 0) {
+                      <div fxLayout="column" fxLayoutGap="0px" class="border-dashed">
+                        @for (history of insuffHistoryData; track history; let i = $index) {
+                          <div fxFlex="100%">
+                            <div fxLayout="row" fxLayoutGap="20px" class="lbl-res">
+                              <div fxFlex="100%">
+                                <div class="history-view">
+                                  <div fxLayout="column">
+                                    <div fxFlex="100%" fxLayoutAlign="start start">
+                                      <p>
+                                        <label>Component Name: </label>
+                                        <em class="green">{{history?.componentName ? history?.componentName :
+                                        'N/A'}}</em>
+                                      </p>
+                                    </div>
+                                    <div fxFlex="100%" fxLayoutAlign="start start">
+                                      <p>
+                                        <label>User Name: </label>
+                                        <em class="green">{{history?.userName ? history?.userName : 'N/A'}}</em>
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div><br>
+                              <div fxFlex="100%">
                                 <div fxLayout="column">
-                                    <div fxFlex="100%" fxLayoutAlign="start start">
-                                        <p>
-                                            <label>Component Name: </label>
-                                            <em class="green">{{history?.componentName ? history?.componentName :
-                                                'N/A'}}</em>
-                                        </p>
-                                    </div>
-                                    <div fxFlex="100%" fxLayoutAlign="start start">
-                                        <p>
-                                            <label>User Name: </label>
-                                            <em class="green">{{history?.userName ? history?.userName : 'N/A'}}</em>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><br>
-                        <div fxFlex="100%">
-                            <div fxLayout="column">
-                                <div fxFlex="100%" fxLayoutAlign="start start">
+                                  <div fxFlex="100%" fxLayoutAlign="start start">
                                     <p>
-                                        <label>Description: </label>
-                                        <em class="green">{{history?.description ? history?.description : ' N/A'}}</em>
+                                      <label>Description: </label>
+                                      <em class="green">{{history?.description ? history?.description : ' N/A'}}</em>
                                     </p>
-                                </div>
-                                <div fxFlex="100%" fxLayoutAlign="start start">
+                                  </div>
+                                  <div fxFlex="100%" fxLayoutAlign="start start">
                                     <p>
-                                        <label>Modified Date: </label>
-                                        <em class="green">{{history?.modifiedDate ? history?.modifiedDate : 'N/A'}}</em>
+                                      <label>Modified Date: </label>
+                                      <em class="green">{{history?.modifiedDate ? history?.modifiedDate : 'N/A'}}</em>
                                     </p>
+                                  </div>
                                 </div>
+                              </div>
                             </div>
-                        </div>
-                    </div>
-                    <a
-                        *ngIf="history.isSubComp != true && (history.subComponentEffectiveHistoryDetails == null || history.subComponentEffectiveHistoryDetails.length == 0)">
-                        <hr>
-                    </a>
-                    <div fxLayout="column" fxLayoutGap="20px" class="lbl-res"
-                        *ngIf="history.isSubComp == true && (history.subComponentEffectiveHistoryDetails != null || history.subComponentEffectiveHistoryDetails.length > 0)">
-                        <!-- <h1>Sub Component Details</h1> -->
-                        <div fxFlex="100%"
-                            *ngFor="let subHis of history.subComponentEffectiveHistoryDetails; let j = index">
-                            <div fxLayout="row">
-                                <div fxFlex="100%" fxLayoutAlign="start start">
-                                    <p>
-                                        <label>Sub Component Name: </label>
-                                        <em class="green">{{subHis?.subComponentName ? subHis?.subComponentName :
+                            @if (history.isSubComp != true && (history.subComponentEffectiveHistoryDetails == null || history.subComponentEffectiveHistoryDetails.length == 0)) {
+                              <a
+                                >
+                                <hr>
+                                </a>
+                              }
+                              @if (history.isSubComp == true && (history.subComponentEffectiveHistoryDetails != null || history.subComponentEffectiveHistoryDetails.length > 0)) {
+                                <div fxLayout="column" fxLayoutGap="20px" class="lbl-res"
+                                  >
+                                  <!-- <h1>Sub Component Details</h1> -->
+                                  @for (subHis of history.subComponentEffectiveHistoryDetails; track subHis; let j = $index) {
+                                    <div fxFlex="100%"
+                                      >
+                                      <div fxLayout="row">
+                                        <div fxFlex="100%" fxLayoutAlign="start start">
+                                          <p>
+                                            <label>Sub Component Name: </label>
+                                            <em class="green">{{subHis?.subComponentName ? subHis?.subComponentName :
                                             'N/A'}}</em>
-                                    </p>
-                                </div>
-                                <div fxFlex="100%" fxLayoutAlign="start start">
-                                    <p>
-                                        <label>Sub Component Modified Date: </label>
-                                        <em class="green">{{subHis?.modifiedDate ? subHis?.modifiedDate : 'N/A'}}</em>
-                                    </p>
-                                </div>
-                            </div>
-                            <div fxLayout="column">
-                                <div fxFlex="100%" fxLayoutAlign="start start">
-                                    <p>
-                                        <label>Sub Component Description: </label>
-                                        <em class="green">{{subHis?.subCompDescription ? subHis?.subCompDescription :
+                                          </p>
+                                        </div>
+                                        <div fxFlex="100%" fxLayoutAlign="start start">
+                                          <p>
+                                            <label>Sub Component Modified Date: </label>
+                                            <em class="green">{{subHis?.modifiedDate ? subHis?.modifiedDate : 'N/A'}}</em>
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <div fxLayout="column">
+                                        <div fxFlex="100%" fxLayoutAlign="start start">
+                                          <p>
+                                            <label>Sub Component Description: </label>
+                                            <em class="green">{{subHis?.subCompDescription ? subHis?.subCompDescription :
                                             'N/A'}}</em>
-                                    </p>
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  }
                                 </div>
+                              }
+                              @if (history.isSubComp == true && (history.subComponentEffectiveHistoryDetails != null || history.subComponentEffectiveHistoryDetails.length > 0)) {
+                                <a
+                                  >
+                                  <hr>
+                                  </a>
+                                }
+                              </div>
+                            }
+                          </div>
+                        }
+                        @if (insuffHistoryData.length == 0) {
+                          <div>
+                            <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                              fxLayout.xs="column" fxLayoutGap="0px">
+                              <div fxFlex="100%" class="pt-15">
+                                <div class="no-record text-center">
+                                  <span>No Record Found</span>
+                                </div>
+                              </div>
                             </div>
-                        </div>
-                    </div>
-                    <a
-                        *ngIf="history.isSubComp == true && (history.subComponentEffectiveHistoryDetails != null || history.subComponentEffectiveHistoryDetails.length > 0)">
-                        <hr>
-                    </a>
-                </div>
-            </div>
-            <div *ngIf="insuffHistoryData.length == 0">
-                <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                    fxLayout.xs="column" fxLayoutGap="0px">
-                    <div fxFlex="100%" class="pt-15">
-                        <div class="no-record text-center">
-                            <span>No Record Found</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </mat-dialog-content>
-        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end center">
-            <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
-        </mat-dialog-actions>
-    </form>
-</ng-template>
+                          </div>
+                        }
+                      </mat-dialog-content>
+                      <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end center">
+                        <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+                      </mat-dialog-actions>
+                    </form>
+                  </ng-template>

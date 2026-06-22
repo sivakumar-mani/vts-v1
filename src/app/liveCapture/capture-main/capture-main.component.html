@@ -34,10 +34,10 @@
 </div>
 
 <!-- Terminal -->
-<!-- <div class="terminal" [ngSwitch]="selection.value">
-    <app-image *ngSwitchDefault></app-image>
-    <app-video *ngSwitchCase="'video'"></app-video>
-    <app-signature *ngSwitchCase="'sign'"></app-signature>
-    <app-scanner *ngSwitchCase="'scan'"></app-scanner>
-    <app-location style="width:100%" *ngSwitchCase="'map'"></app-location>
+<!-- <div class="terminal">
+    <app-image></app-image>
+    <app-video *ngIf="selection.value === 'video'"></app-video>
+    <app-signature *ngIf="selection.value === 'sign'"></app-signature>
+    <app-scanner *ngIf="selection.value === 'scan'"></app-scanner>
+    <app-location style="width:100%" *ngIf="selection.value === 'map'"></app-location>
 </div> -->

@@ -370,8 +370,8 @@
                     }
                   </tr>
                 </ng-template>
-                <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns"
-                  *ngIf="reportModuleName != 'Monthly Cumulative Final Report Completed' && reportModuleName !='Monthly cumulative Cases and checks created'">
+                @if (reportModuleName != 'Monthly Cumulative Final Report Completed' && reportModuleName !='Monthly cumulative Cases and checks created') {
+                  <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
                   <tr>
                     @for (col of columns; track col) {
                       <td style="width:200px;white-space: unset;">
@@ -420,9 +420,10 @@
                       </td>
                     }
                   </tr>
-                </ng-template>
-                <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns"
-                  *ngIf="reportModuleName == 'Monthly Cumulative Final Report Completed' || reportModuleName =='Monthly cumulative Cases and checks created'">
+                                  </ng-template>
+                }
+                @if (reportModuleName == 'Monthly Cumulative Final Report Completed' || reportModuleName =='Monthly cumulative Cases and checks created') {
+                  <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
                   <tr>
                     @for (col of columns; track col) {
                       <td style="width:200px;text-align: center;">
@@ -443,7 +444,8 @@
                         </td>
                       }
                     </tr>
-                  </ng-template>
+                                    </ng-template>
+                }
                   @if (outputDataReportList.length == 0; as columns) {
                     <ng-template pTemplate="emptymessage" let-columns
                       >

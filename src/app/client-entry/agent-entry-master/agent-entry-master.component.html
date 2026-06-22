@@ -3,384 +3,430 @@
   [btnSaveDisabled]="breadcrumbFlags.btnSaveDisabled" [btnResetTbl]="breadcrumbFlags.btnResetTbl"
   (eventAdd)="openAgentEntryForm()" [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag"
   (eventBack)="closeClient()" (eventSave)="saveClientDetails()" [toolTip]="breadcrumbFlags.toolTip"
-  (eventReset)="resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
+(eventReset)="resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
 <div fxLayout="row">
   <div fxFlex="100%">
     <mat-card>
-      <div fxLayout="row" *ngIf="mode === 'AddClient'">
-        <mat-card-header fxFlex="100%">
-          <div fxFlex="100%">
-            <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-              fxLayoutGap="10px">
-              <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
-                fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
-                <mat-card-title>
-                  <h1 class="header-title">Client Creation</h1>
-                </mat-card-title>
-              </div>
-              <span fxFlex></span>
-              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
-                fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                <div class="tbl-commonsearch" *ngIf="mode === 'AddClient'">
-                  <mat-form-field fxFlex="100%">
-                    <mat-label></mat-label>
-                    <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                    <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
-                      cdkAutofill="false" [readOnly]="pwdFlag" autocomplete="off" role="presentation"
-                      (input)="dt?.filterGlobal($event.target.value, 'contains')"
-                      (keypress)="dt.reset();dt?.filterGlobal($event.target.value, 'contains');countryListControl.reset();stateListListControl.reset();agentNameListControl.reset();cityListListControl.reset();" />
-                  </mat-form-field>
+      @if (mode === 'AddClient') {
+        <div fxLayout="row">
+          <mat-card-header fxFlex="100%">
+            <div fxFlex="100%">
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+                fxLayoutGap="10px">
+                <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                  <mat-card-title>
+                    <h1 class="header-title">Client Creation</h1>
+                  </mat-card-title>
+                </div>
+                <span fxFlex></span>
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+                  fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                  @if (mode === 'AddClient') {
+                    <div class="tbl-commonsearch">
+                      <mat-form-field fxFlex="100%">
+                        <mat-label></mat-label>
+                        <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                        <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                          cdkAutofill="false" [readOnly]="pwdFlag" autocomplete="off" role="presentation"
+                          (input)="dt?.filterGlobal($event.target.value, 'contains')"
+                          (keypress)="dt.reset();dt?.filterGlobal($event.target.value, 'contains');countryListControl.reset();stateListListControl.reset();agentNameListControl.reset();cityListListControl.reset();" />
+                        </mat-form-field>
+                      </div>
+                    }
+                  </div>
                 </div>
               </div>
-            </div>
+            </mat-card-header>
           </div>
-        </mat-card-header>
-      </div>
-      <mat-card-content *ngIf="mode === 'AddClient'">
-        <div>
-          <div fxLayout="row">
-            <div fxFlex="100%">
-              <p-table #dt [columns]="filednames" [value]="agentEntryMasterService.agentDetailsData" [scrollable]="true"
-                scrollHeight="" [paginator]="true" [rows]="10" [resizableColumns]="true" [reorderableColumns]="true"
-                columnResizeMode="expand">
-
-                <!-- ================= COLGROUP ================= -->
-                <ng-template pTemplate="colgroup" let-colGroupCols>
-                  <colgroup>
-                    <col *ngFor="let col of colGroupCols" [style.width]="col.field === 'action' ? '130px' : '200px'" />
-                  </colgroup>
-                </ng-template>
-
-                <!-- ================= HEADER ================= -->
-                <ng-template pTemplate="header" let-headerCols>
-                  <tr>
-                    <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn
-                      [ngClass]="{ 'actionrow': col.field === 'action' }">
-
-                      <span [pSortableColumn]="col.field">
-                        <span class="desg-col" *ngIf="col.field === 'action'">
-                          <i class="icon-grid" matTooltip="Filter Columns" matTooltipClass="accent-tooltip"
-                            (click)="actionTrigger.openMenu()">
-                          </i>
-                        </span>
-
-                        <div class="action-name" [ngClass]="{ 'thname': col.field !== 'action' }">
-                          {{ col.header }}
-                        </div>
-
-                        <p-sortIcon *ngIf="col.field !== 'action' && col.field !== 'pdfpassword'"
-                          ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
-                          ariaLabelAsc="Activate to sort in ascending order">
-                        </p-sortIcon>
-                      </span>
-
-                      <!-- 🔍 SEARCH ICONS -->
-                      <span class="ico-fieldsearch">
-                        <i *ngSwitchCase="'clientName'" class="icon-search2" (click)="userNameTrigger.openMenu()"></i>
-                        <i *ngSwitchCase="'country'" class="icon-search2" (click)="firstNameTrigger.openMenu()"></i>
-                        <i *ngSwitchCase="'state'" class="icon-search2" (click)="lastNameTrigger.openMenu()"></i>
-                        <i *ngSwitchCase="'city'" class="icon-search2" (click)="designationTrigger.openMenu()"></i>
-                        <i *ngSwitchCase="'dssiOwner'" class="icon-search2"
-                          (click)="componentNameTrigger.openMenu()"></i>
-                        <i *ngSwitchCase="'status'" class="icon-search2" matTooltip="Search"
-                          matTooltipClass="accent-tooltip" (click)="statusTrigger.openMenu()"></i>
-                      </span>
-
-
-                      <!-- ACTION column chooser trigger -->
-                      <span *ngSwitchCase="'action'">
-                        <div #actionTrigger="matMenuTrigger" [matMenuTriggerFor]="actionCtrl"
-                          fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
-                        <mat-menu class="tbl-filtercolumn" #actionCtrl>
-                          <mat-card>
-                            <mat-card-content>
-                              <div fxLayout="row">
-                                <div fxFlex="100%">
-                                  <div fxLayout="row" fxLayoutAlign="end end" class="pb-15">
-                                    <div fxFlex="100%">
-                                      <button mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip" class="close">
-                                        <i class="material-icons" (click)="actionTrigger.closeMenu()">clear</i>
-                                      </button>
-                                    </div>
-                                  </div>
-                                  <div fxLayout="row">
-                                    <div fxFlex="100%">
-                                      <div style="overflow:auto">
-                                        <mat-selection-list class="row-design">
-                                          <mat-list-option [disabled]="field.disabled" [value]="field"
-                                            *ngFor="let field of filedname" [selected]="field.value"
-                                            (click)="$event.stopPropagation(); toggleColumn(field)">
-                                            {{field.header}}
-                                          </mat-list-option>
-                                        </mat-selection-list>
+        }
+        @if (mode === 'AddClient') {
+          <mat-card-content>
+            <div>
+              <div fxLayout="row">
+                <div fxFlex="100%">
+                  <p-table #dt [columns]="filednames" [value]="agentEntryMasterService.agentDetailsData" [scrollable]="true"
+                    scrollHeight="" [paginator]="true" [rows]="10" [resizableColumns]="true" [reorderableColumns]="true"
+                    columnResizeMode="expand">
+                    <!-- ================= COLGROUP ================= -->
+                    <ng-template pTemplate="colgroup" let-colGroupCols>
+                      <colgroup>
+                      @for (col of colGroupCols; track col) {
+                        <col [style.width]="col.field === 'action' ? '130px' : '200px'" />
+                      }
+                    </colgroup>
+                  </ng-template>
+                  <!-- ================= HEADER ================= -->
+                  <ng-template pTemplate="header" let-headerCols>
+                    <tr>
+                      @for (col of headerCols; track col) {
+                        <th pReorderableColumn pResizableColumn
+                          [ngClass]="{ 'actionrow': col.field === 'action' }">
+                          <span [pSortableColumn]="col.field">
+                            @if (col.field === 'action') {
+                              <span class="desg-col">
+                                <i class="icon-grid" matTooltip="Filter Columns" matTooltipClass="accent-tooltip"
+                                  (click)="actionTrigger.openMenu()">
+                                </i>
+                              </span>
+                            }
+                            <div class="action-name" [ngClass]="{ 'thname': col.field !== 'action' }">
+                              {{ col.header }}
+                            </div>
+                            @if (col.field !== 'action' && col.field !== 'pdfpassword') {
+                              <p-sortIcon
+                                ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                ariaLabelAsc="Activate to sort in ascending order">
+                              </p-sortIcon>
+                            }
+                          </span>
+                          <!-- 🔍 SEARCH ICONS -->
+                          <span class="ico-fieldsearch">
+                            @if (col.field === 'clientName') {
+                              <i class="icon-search2" (click)="userNameTrigger.openMenu()"></i>
+                            }
+                            @if (col.field === 'country') {
+                              <i class="icon-search2" (click)="firstNameTrigger.openMenu()"></i>
+                            }
+                            @if (col.field === 'state') {
+                              <i class="icon-search2" (click)="lastNameTrigger.openMenu()"></i>
+                            }
+                            @if (col.field === 'city') {
+                              <i class="icon-search2" (click)="designationTrigger.openMenu()"></i>
+                            }
+                            @if (col.field === 'dssiOwner') {
+                              <i class="icon-search2"
+                              (click)="componentNameTrigger.openMenu()"></i>
+                            }
+                            @if (col.field === 'status') {
+                              <i class="icon-search2" matTooltip="Search"
+                              matTooltipClass="accent-tooltip" (click)="statusTrigger.openMenu()"></i>
+                            }
+                          </span>
+                          <!-- ACTION column chooser trigger -->
+                          @if (col.field === 'action') {
+                            <span>
+                              <div #actionTrigger="matMenuTrigger" [matMenuTriggerFor]="actionCtrl"
+                              fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                              <mat-menu class="tbl-filtercolumn" #actionCtrl>
+                                <mat-card>
+                                  <mat-card-content>
+                                    <div fxLayout="row">
+                                      <div fxFlex="100%">
+                                        <div fxLayout="row" fxLayoutAlign="end end" class="pb-15">
+                                          <div fxFlex="100%">
+                                            <button mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip" class="close">
+                                              <i class="material-icons" (click)="actionTrigger.closeMenu()">clear</i>
+                                            </button>
+                                          </div>
+                                        </div>
+                                        <div fxLayout="row">
+                                          <div fxFlex="100%">
+                                            <div style="overflow:auto">
+                                              <mat-selection-list class="row-design">
+                                                @for (field of filedname; track field) {
+                                                  <mat-list-option [disabled]="field.disabled" [value]="field"
+                                                    [selected]="field.value"
+                                                    (click)="$event.stopPropagation(); toggleColumn(field)">
+                                                    {{field.header}}
+                                                  </mat-list-option>
+                                                }
+                                              </mat-selection-list>
+                                            </div>
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
+                                  </mat-card-content>
+                                </mat-card>
+                              </mat-menu>
+                            </span>
+                          }
+                          <!-- clientName filter (uses userNameTrigger) -->
+                          @if (col.field === 'clientName') {
+                            <span>
+                              <div #userNameTrigger="matMenuTrigger" [matMenuTriggerFor]="userNameCtrl"
+                              fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                              <mat-menu #userNameCtrl class="pos-top">
+                                <div fxLayout="row">
+                                  <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                    <mat-form-field (click)="$event.stopPropagation()">
+                                      <input type="text" #userNameCtl matInput [matAutocomplete]="autouserName"
+                                        placeholder="Client Name" autocomplete="off" role="presentation"
+                                        (click)="userNameCtl.select()" [formControl]="agentNameListControl" />
+                                      </mat-form-field>
+                                      <mat-autocomplete #autouserName="matAutocomplete">
+                                        @for (option of agentNameListFilteredOptions | async; track option) {
+                                          <mat-option (onSelectionChange)="userNameTrigger.closeMenu()"
+                                            [value]="option">
+                                            <span [innerHTML]="option"></span>
+                                          </mat-option>
+                                        }
+                                      </mat-autocomplete>
+                                    </div>
                                   </div>
-                                </div>
-                              </div>
-                            </mat-card-content>
-                          </mat-card>
-                        </mat-menu>
-                      </span>
-
-                      <!-- clientName filter (uses userNameTrigger) -->
-                      <span *ngSwitchCase="'clientName'">
-                        <div #userNameTrigger="matMenuTrigger" [matMenuTriggerFor]="userNameCtrl"
-                          fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
-                        <mat-menu #userNameCtrl class="pos-top">
-                          <div fxLayout="row">
-                            <div fxFlex="100%" class="p-10 tbl-fillddl">
-                              <mat-form-field (click)="$event.stopPropagation()">
-                                <input type="text" #userNameCtl matInput [matAutocomplete]="autouserName"
-                                  placeholder="Client Name" autocomplete="off" role="presentation"
-                                  (click)="userNameCtl.select()" [formControl]="agentNameListControl" />
-                              </mat-form-field>
-                              <mat-autocomplete #autouserName="matAutocomplete">
-                                <mat-option (onSelectionChange)="userNameTrigger.closeMenu()"
-                                  *ngFor="let option of agentNameListFilteredOptions | async" [value]="option">
-                                  <span [innerHTML]="option"></span>
-                                </mat-option>
-                              </mat-autocomplete>
-                            </div>
-                          </div>
-                          <div fxLayout="row" fxLayoutGap="8px" class="p-10">
-                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                              <a class="text-sm">Cancel</a>
-                              <a *ngIf="userNameCtl.value" (click)="agentNameListControl.setValue('')" class="text-sm">Reset</a>
-                            </div>
-                          </div>
-                        </mat-menu>
-                      </span>
-
-                      <!-- status filter -->
-                      <span *ngSwitchCase="'status'">
-                        <div #statusTrigger="matMenuTrigger" [matMenuTriggerFor]="statusCtrl"
-                          fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
-                        <mat-menu #statusCtrl class="pos-top">
-                          <div fxLayout="row">
-                            <div fxFlex="100%" class="p-10 tbl-fillddl">
-                              <mat-form-field (click)="$event.stopPropagation()">
-                                <input type="text" #statusCtl matInput [matAutocomplete]="autostatus"
-                                  placeholder="Status" autocomplete="off" role="presentation"
-                                  (click)="statusCtl.select()" [formControl]="statusFormCtrl" />
-                              </mat-form-field>
-                              <mat-autocomplete #autostatus="matAutocomplete">
-                                <mat-option (onSelectionChange)="statusTrigger.closeMenu()"
-                                  *ngFor="let option of statusFilteredOptions | async" [value]="option">
-                                  <span [innerHTML]="option"></span>
-                                </mat-option>
-                              </mat-autocomplete>
-                            </div>
-                          </div>
-                          <div fxLayout="row" fxLayoutGap="8px" class="p-10">
-                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                              <a class="text-sm">Cancel</a>
-                              <a *ngIf="statusCtl.value" (click)="statusFormCtrl.setValue('')" class="text-sm">Reset</a>
-                            </div>
-                          </div>
-                        </mat-menu>
-                      </span>
-
-                      <!-- country filter (uses firstNameTrigger) -->
-                      <span *ngSwitchCase="'country'">
-                        <div #firstNameTrigger="matMenuTrigger" [matMenuTriggerFor]="countryCtrl"
-                          fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
-                        <mat-menu #countryCtrl class="pos-top">
-                          <div fxLayout="row">
-                            <div fxFlex="100%" class="p-10 tbl-fillddl">
-                              <mat-form-field (click)="$event.stopPropagation()">
-                                <input type="text" #countryCtl matInput [matAutocomplete]="autocountry"
-                                  placeholder="Country" autocomplete="off" role="presentation"
-                                  (click)="countryCtl.select()" [formControl]="countryListControl" />
-                              </mat-form-field>
-                              <mat-autocomplete #autocountry="matAutocomplete">
-                                <mat-option (onSelectionChange)="firstNameTrigger.closeMenu()"
-                                  *ngFor="let option of countryListFilteredOptions | async" [value]="option">
-                                  <span [innerHTML]="option"></span>
-                                </mat-option>
-                              </mat-autocomplete>
-                            </div>
-                          </div>
-                          <div fxLayout="row" fxLayoutGap="8px" class="p-10">
-                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                              <a class="text-sm">Cancel</a>
-                              <a *ngIf="countryCtl.value" (click)="countryListControl.setValue('')" class="text-sm">Reset</a>
-                            </div>
-                          </div>
-                        </mat-menu>
-                      </span>
-
-                      <!-- state filter (uses lastNameTrigger) -->
-                      <span *ngSwitchCase="'state'">
-                        <div #lastNameTrigger="matMenuTrigger" [matMenuTriggerFor]="stateCtrl"
-                          fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
-                        <mat-menu #stateCtrl class="pos-top">
-                          <div fxLayout="row">
-                            <div fxFlex="100%" class="p-10 tbl-fillddl">
-                              <mat-form-field (click)="$event.stopPropagation()">
-                                <input type="text" #stateCtl matInput [matAutocomplete]="autostate"
-                                  placeholder="State" autocomplete="off" role="presentation"
-                                  (click)="stateCtl.select()" [formControl]="stateListListControl" />
-                              </mat-form-field>
-                              <mat-autocomplete #autostate="matAutocomplete">
-                                <mat-option (onSelectionChange)="lastNameTrigger.closeMenu()"
-                                  *ngFor="let option of stateListListFilteredOptions | async" [value]="option">
-                                  <span [innerHTML]="option"></span>
-                                </mat-option>
-                              </mat-autocomplete>
-                            </div>
-                          </div>
-                          <div fxLayout="row" fxLayoutGap="8px" class="p-10">
-                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                              <a class="text-sm">Cancel</a>
-                              <a *ngIf="stateCtl.value" (click)="stateListListControl.setValue('')" class="text-sm">Reset</a>
-                            </div>
-                          </div>
-                        </mat-menu>
-                      </span>
-
-                      <!-- city filter (uses designationTrigger) -->
-                      <span *ngSwitchCase="'city'">
-                        <div #designationTrigger="matMenuTrigger" [matMenuTriggerFor]="cityCtrl"
-                          fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
-                        <mat-menu #cityCtrl class="pos-top">
-                          <div fxLayout="row">
-                            <div fxFlex="100%" class="p-10 tbl-fillddl">
-                              <mat-form-field (click)="$event.stopPropagation()">
-                                <input type="text" #cityCtl matInput [matAutocomplete]="autocity"
-                                  placeholder="City" autocomplete="off" role="presentation"
-                                  (click)="cityCtl.select()" [formControl]="cityListListControl" />
-                              </mat-form-field>
-                              <mat-autocomplete #autocity="matAutocomplete">
-                                <mat-option (onSelectionChange)="designationTrigger.closeMenu()"
-                                  *ngFor="let option of cityListListFilteredOptions | async" [value]="option">
-                                  <span [innerHTML]="option"></span>
-                                </mat-option>
-                              </mat-autocomplete>
-                            </div>
-                          </div>
-                          <div fxLayout="row" fxLayoutGap="8px" class="p-10">
-                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                              <a class="text-sm">Cancel</a>
-                              <a *ngIf="cityCtl.value" (click)="cityListListControl.setValue('')" class="text-sm">Reset</a>
-                            </div>
-                          </div>
-                        </mat-menu>
-                      </span>
-
-                      <!-- dssiOwner filter (uses componentNameTrigger) -->
-                      <span *ngSwitchCase="'dssiOwner'">
-                        <div #componentNameTrigger="matMenuTrigger" [matMenuTriggerFor]="dssiOwnerCtrl"
-                          fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
-                        <mat-menu #dssiOwnerCtrl class="pos-top">
-                          <div fxLayout="row">
-                            <div fxFlex="100%" class="p-10 tbl-fillddl">
-                              <mat-form-field (click)="$event.stopPropagation()">
-                                <input type="text" #dssiOwnerCtl matInput [matAutocomplete]="autodssiOwner"
-                                  placeholder="Account Manager" autocomplete="off" role="presentation"
-                                  (click)="dssiOwnerCtl.select()" [formControl]="dssiOwnerListControl" />
-                              </mat-form-field>
-                              <mat-autocomplete #autodssiOwner="matAutocomplete">
-                                <mat-option (onSelectionChange)="componentNameTrigger.closeMenu()"
-                                  *ngFor="let option of dssiOwnerListFilteredOptions | async" [value]="option">
-                                  <span [innerHTML]="option"></span>
-                                </mat-option>
-                              </mat-autocomplete>
-                            </div>
-                          </div>
-                          <div fxLayout="row" fxLayoutGap="8px" class="p-10">
-                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                              <a class="text-sm">Cancel</a>
-                              <a *ngIf="dssiOwnerCtl.value" (click)="dssiOwnerListControl.setValue('')" class="text-sm">Reset</a>
-                            </div>
-                          </div>
-                        </mat-menu>
-                      </span>
-
-
-                    </th>
-                  </tr>
-                </ng-template>
-
-                <!-- ================= BODY ================= -->
-                <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
-
-                  <tr>
-                    <td *ngFor="let col of bodyCols" [ngSwitch]="col.field"
-                      [ngClass]="{ 'desg-bg': col.field === 'action' }"
-                      matTooltip="Client was assigned in the Case's, Could not remove the client"
-                      matTooltipClass="accent-tooltip" [matTooltipDisabled]="rowData.clientDeleteFlag !== true">
-
-                      <!-- NORMAL DATA -->
-                      <div *ngIf="col.field !== 'active' && col.field !== 'action'">
-                        {{ rowData[col.field] }}
-                      </div>
-
-                      <!-- ACTION COLUMN -->
-                      <div fxLayout="row" *ngSwitchCase="'action'" class="desg-icon">
-                        <div fxFlex="100%" fxLayoutGap="10px">
-
-                          <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
-                            <i class="material-icons-outlined" matTooltip="Edit" matTooltipClass="accent-tooltip"
-                              (click)="editOpen(rowData); onEdit(rowData.clientId)">
-                              edit
-                            </i>
-                          </mat-icon>
-
+                                  <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+                                    <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                      <a class="text-sm">Cancel</a>
+                                      @if (userNameCtl.value) {
+                                        <a (click)="agentNameListControl.setValue('')" class="text-sm">Reset</a>
+                                      }
+                                    </div>
+                                  </div>
+                                </mat-menu>
+                              </span>
+                            }
+                            <!-- status filter -->
+                            @if (col.field === 'status') {
+                              <span>
+                                <div #statusTrigger="matMenuTrigger" [matMenuTriggerFor]="statusCtrl"
+                                fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                                <mat-menu #statusCtrl class="pos-top">
+                                  <div fxLayout="row">
+                                    <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                      <mat-form-field (click)="$event.stopPropagation()">
+                                        <input type="text" #statusCtl matInput [matAutocomplete]="autostatus"
+                                          placeholder="Status" autocomplete="off" role="presentation"
+                                          (click)="statusCtl.select()" [formControl]="statusFormCtrl" />
+                                        </mat-form-field>
+                                        <mat-autocomplete #autostatus="matAutocomplete">
+                                          @for (option of statusFilteredOptions | async; track option) {
+                                            <mat-option (onSelectionChange)="statusTrigger.closeMenu()"
+                                              [value]="option">
+                                              <span [innerHTML]="option"></span>
+                                            </mat-option>
+                                          }
+                                        </mat-autocomplete>
+                                      </div>
+                                    </div>
+                                    <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+                                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                        <a class="text-sm">Cancel</a>
+                                        @if (statusCtl.value) {
+                                          <a (click)="statusFormCtrl.setValue('')" class="text-sm">Reset</a>
+                                        }
+                                      </div>
+                                    </div>
+                                  </mat-menu>
+                                </span>
+                              }
+                              <!-- country filter (uses firstNameTrigger) -->
+                              @if (col.field === 'country') {
+                                <span>
+                                  <div #firstNameTrigger="matMenuTrigger" [matMenuTriggerFor]="countryCtrl"
+                                  fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                                  <mat-menu #countryCtrl class="pos-top">
+                                    <div fxLayout="row">
+                                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                        <mat-form-field (click)="$event.stopPropagation()">
+                                          <input type="text" #countryCtl matInput [matAutocomplete]="autocountry"
+                                            placeholder="Country" autocomplete="off" role="presentation"
+                                            (click)="countryCtl.select()" [formControl]="countryListControl" />
+                                          </mat-form-field>
+                                          <mat-autocomplete #autocountry="matAutocomplete">
+                                            @for (option of countryListFilteredOptions | async; track option) {
+                                              <mat-option (onSelectionChange)="firstNameTrigger.closeMenu()"
+                                                [value]="option">
+                                                <span [innerHTML]="option"></span>
+                                              </mat-option>
+                                            }
+                                          </mat-autocomplete>
+                                        </div>
+                                      </div>
+                                      <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+                                        <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                          <a class="text-sm">Cancel</a>
+                                          @if (countryCtl.value) {
+                                            <a (click)="countryListControl.setValue('')" class="text-sm">Reset</a>
+                                          }
+                                        </div>
+                                      </div>
+                                    </mat-menu>
+                                  </span>
+                                }
+                                <!-- state filter (uses lastNameTrigger) -->
+                                @if (col.field === 'state') {
+                                  <span>
+                                    <div #lastNameTrigger="matMenuTrigger" [matMenuTriggerFor]="stateCtrl"
+                                    fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                                    <mat-menu #stateCtrl class="pos-top">
+                                      <div fxLayout="row">
+                                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                          <mat-form-field (click)="$event.stopPropagation()">
+                                            <input type="text" #stateCtl matInput [matAutocomplete]="autostate"
+                                              placeholder="State" autocomplete="off" role="presentation"
+                                              (click)="stateCtl.select()" [formControl]="stateListListControl" />
+                                            </mat-form-field>
+                                            <mat-autocomplete #autostate="matAutocomplete">
+                                              @for (option of stateListListFilteredOptions | async; track option) {
+                                                <mat-option (onSelectionChange)="lastNameTrigger.closeMenu()"
+                                                  [value]="option">
+                                                  <span [innerHTML]="option"></span>
+                                                </mat-option>
+                                              }
+                                            </mat-autocomplete>
+                                          </div>
+                                        </div>
+                                        <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+                                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                            <a class="text-sm">Cancel</a>
+                                            @if (stateCtl.value) {
+                                              <a (click)="stateListListControl.setValue('')" class="text-sm">Reset</a>
+                                            }
+                                          </div>
+                                        </div>
+                                      </mat-menu>
+                                    </span>
+                                  }
+                                  <!-- city filter (uses designationTrigger) -->
+                                  @if (col.field === 'city') {
+                                    <span>
+                                      <div #designationTrigger="matMenuTrigger" [matMenuTriggerFor]="cityCtrl"
+                                      fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                                      <mat-menu #cityCtrl class="pos-top">
+                                        <div fxLayout="row">
+                                          <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                            <mat-form-field (click)="$event.stopPropagation()">
+                                              <input type="text" #cityCtl matInput [matAutocomplete]="autocity"
+                                                placeholder="City" autocomplete="off" role="presentation"
+                                                (click)="cityCtl.select()" [formControl]="cityListListControl" />
+                                              </mat-form-field>
+                                              <mat-autocomplete #autocity="matAutocomplete">
+                                                @for (option of cityListListFilteredOptions | async; track option) {
+                                                  <mat-option (onSelectionChange)="designationTrigger.closeMenu()"
+                                                    [value]="option">
+                                                    <span [innerHTML]="option"></span>
+                                                  </mat-option>
+                                                }
+                                              </mat-autocomplete>
+                                            </div>
+                                          </div>
+                                          <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+                                            <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                              <a class="text-sm">Cancel</a>
+                                              @if (cityCtl.value) {
+                                                <a (click)="cityListListControl.setValue('')" class="text-sm">Reset</a>
+                                              }
+                                            </div>
+                                          </div>
+                                        </mat-menu>
+                                      </span>
+                                    }
+                                    <!-- dssiOwner filter (uses componentNameTrigger) -->
+                                    @if (col.field === 'dssiOwner') {
+                                      <span>
+                                        <div #componentNameTrigger="matMenuTrigger" [matMenuTriggerFor]="dssiOwnerCtrl"
+                                        fxLayout="row" fxLayoutAlign="space-between center" class="txtborder-bot"></div>
+                                        <mat-menu #dssiOwnerCtrl class="pos-top">
+                                          <div fxLayout="row">
+                                            <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                              <mat-form-field (click)="$event.stopPropagation()">
+                                                <input type="text" #dssiOwnerCtl matInput [matAutocomplete]="autodssiOwner"
+                                                  placeholder="Account Manager" autocomplete="off" role="presentation"
+                                                  (click)="dssiOwnerCtl.select()" [formControl]="dssiOwnerListControl" />
+                                                </mat-form-field>
+                                                <mat-autocomplete #autodssiOwner="matAutocomplete">
+                                                  @for (option of dssiOwnerListFilteredOptions | async; track option) {
+                                                    <mat-option (onSelectionChange)="componentNameTrigger.closeMenu()"
+                                                      [value]="option">
+                                                      <span [innerHTML]="option"></span>
+                                                    </mat-option>
+                                                  }
+                                                </mat-autocomplete>
+                                              </div>
+                                            </div>
+                                            <div fxLayout="row" fxLayoutGap="8px" class="p-10">
+                                              <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                                <a class="text-sm">Cancel</a>
+                                                @if (dssiOwnerCtl.value) {
+                                                  <a (click)="dssiOwnerListControl.setValue('')" class="text-sm">Reset</a>
+                                                }
+                                              </div>
+                                            </div>
+                                          </mat-menu>
+                                        </span>
+                                      }
+                                    </th>
+                                  }
+                                </tr>
+                              </ng-template>
+                              <!-- ================= BODY ================= -->
+                              <ng-template pTemplate="body" let-rowData let-bodyCols="columns">
+                                <tr>
+                                  @for (col of bodyCols; track col) {
+                                    <td
+                                      [ngClass]="{ 'desg-bg': col.field === 'action' }"
+                                      matTooltip="Client was assigned in the Case's, Could not remove the client"
+                                      matTooltipClass="accent-tooltip" [matTooltipDisabled]="rowData.clientDeleteFlag !== true">
+                                      <!-- NORMAL DATA -->
+                                      @if (col.field !== 'active' && col.field !== 'action') {
+                                        <div>
+                                          {{ rowData[col.field] }}
+                                        </div>
+                                      }
+                                      <!-- ACTION COLUMN -->
+                                      @if (col.field === 'action') {
+                                        <div fxLayout="row" class="desg-icon">
+                                          <div fxFlex="100%" fxLayoutGap="10px">
+                                            <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                                              <i class="material-icons-outlined" matTooltip="Edit" matTooltipClass="accent-tooltip"
+                                                (click)="editOpen(rowData); onEdit(rowData.clientId)">
+                                                edit
+                                              </i>
+                                            </mat-icon>
                           <mat-icon [ngClass]="screenAuth.deleteFlag === false || rowData.clientDeleteFlag === true
                           ? 'page-btn disabled' : ''">
-                            <i class="material-icons-outlined" matTooltip="Delete" matTooltipClass="accent-tooltip"
-                              (click)="openDialog(rowData.clientId)">
-                              delete
-                            </i>
-                          </mat-icon>
-
-                          <mat-icon (click)="openPWDialog(rowData); getPassword(rowData.clientId)">
-                            <i class="material-icons" matTooltip="PDF Password" matTooltipClass="accent-tooltip">
-                              layers
-                            </i>
-                          </mat-icon>
-
-                        </div>
-                      </div>
-
-                      <!-- ACTIVE -->
-                      <div *ngSwitchCase="'active'">
-                        <div fxLayout="row" class="tbl-icon">
-                          <span *ngIf="rowData.active" class="istrue">
-                            <i class="material-icons" matTooltip="Active" matTooltipClass="accent-tooltip">
-                              thumb_up
-                            </i>
-                          </span>
-                          <span *ngIf="!rowData.active" class="isfalse">
-                            <i class="material-icons" matTooltip="In-Active" matTooltipClass="accent-tooltip">
-                              thumb_down
-                            </i>
-                          </span>
-                        </div>
-                      </div>
-
-                    </td>
-                  </tr>
-
-                </ng-template>
-
-              </p-table>
-
-              <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
-                fxLayoutGap.xs="20px grid"
-                [ngClass]="{'empty-record': agentEntryMasterService.agentDetailsData.length == 0}">
-
-                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                  fxLayoutAlign="start center"> Showing {{ dt.totalRecords
-                  < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
-                    <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s)
-                      </div>
-
-                      <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                      <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                        fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                        fxLayoutAlign.xs="start center">
+                                              <i class="material-icons-outlined" matTooltip="Delete" matTooltipClass="accent-tooltip"
+                                                (click)="openDialog(rowData.clientId)">
+                                                delete
+                                              </i>
+                                            </mat-icon>
+                                            <mat-icon (click)="openPWDialog(rowData); getPassword(rowData.clientId)">
+                                              <i class="material-icons" matTooltip="PDF Password" matTooltipClass="accent-tooltip">
+                                                layers
+                                              </i>
+                                            </mat-icon>
+                                          </div>
+                                        </div>
+                                      }
+                                      <!-- ACTIVE -->
+                                      @if (col.field === 'active') {
+                                        <div>
+                                          <div fxLayout="row" class="tbl-icon">
+                                            @if (rowData.active) {
+                                              <span class="istrue">
+                                                <i class="material-icons" matTooltip="Active" matTooltipClass="accent-tooltip">
+                                                  thumb_up
+                                                </i>
+                                              </span>
+                                            }
+                                            @if (!rowData.active) {
+                                              <span class="isfalse">
+                                                <i class="material-icons" matTooltip="In-Active" matTooltipClass="accent-tooltip">
+                                                  thumb_down
+                                                </i>
+                                              </span>
+                                            }
+                                          </div>
+                                        </div>
+                                      }
+                                    </td>
+                                  }
+                                </tr>
+                              </ng-template>
+                            </p-table>
+                            <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                              fxLayoutGap.xs="20px grid"
+                              [ngClass]="{'empty-record': agentEntryMasterService.agentDetailsData.length == 0}">
+                              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                fxLayoutAlign="start center"> Showing {{ dt.totalRecords
+                                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                                <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s)
+                              </div>
+                              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                                fxLayoutAlign.xs="start center">
                         <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
                             dt.onPageChange({
                               first: dt.first - dt.rows,
@@ -388,11 +434,11 @@
                             });
                             navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
                           "> <i class="icon-control-start mr-5"></i> </a> <span class="gotopagbg mr-2 ml-2"
-                          fxHide.xs>Go to Page<span class="input-num">
-                            <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
-                              [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
-                          </span></span> <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows)
-                          }}</span>
+                                  fxHide.xs>Go to Page<span class="input-num">
+                                  <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                                    [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                                  </span></span> <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows)
+                                }}</span>
                         <a [ngClass]="
                             dt.rows + dt.first >= dt.totalRecords
                               ? 'page-btn disabled'
@@ -404,201 +450,225 @@
                             });
                             navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
                           "><i class="icon-control-end ml-5"></i></a>
-                      </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-      </mat-card-content>
-      <div *ngIf="mode === 'SearchClient'">
-        <form #scrollError appScrollToError>
-          <div fxLayout="row" fxFlex="100%" fxLayoutGap="0px">
-            <div fxFlex="80%" fxFlex.lg="80%" fxFlex.md="75%" fxFlex.sm="70%" fxFlex.xs="100%">
-              <div fxLayout="row wrap" fxFlex="100%" fxLayoutGap="25px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="100%">
-                  <div *ngIf="step1 === 0">
-                    <div fxLayout='row'>
-                      <div fxFlex="100%">
-                        <mat-card-header>
-                          <mat-card-title>
-                            <h1 class="header-title"> <span class="StprH">Step 1:</span>Client Entry </h1>
-                          </mat-card-title>
-                        </mat-card-header>
-                      </div>
-                    </div>
-                    <app-client-entry #clientEntryComp type="submit" (nextStep)="goToStep(1)">
-                    </app-client-entry>
-                  </div>
-                  <div *ngIf="step1 === 1 ">
-                    <div fxLayout='row'>
-                      <div fxFlex="100%">
-                        <mat-card-header>
-                          <mat-card-title>
-                            <h1 class="header-title"> <span class="StprH">Step 2:</span>Component Entry </h1>
-                          </mat-card-title>
-                        </mat-card-header>
-                      </div>
-                    </div>
-                    <app-component-entry #componentEntryPage [currencyList]="currencyList" (nextStep)="goToStep(2)"
-                      (previousStep)="goToStep(0)">
-                    </app-component-entry>
-                  </div>
-                  <div *ngIf="step1 === 2">
-                    <div fxLayout='row'>
-                      <div fxFlex="100%">
-                        <mat-card-header>
-                          <mat-card-title>
-                            <h1 class="header-title"> <span class="StprH">Step 3:</span>Agreement Details </h1>
-                          </mat-card-title>
-                        </mat-card-header>
-                      </div>
-                    </div>
-                    <app-agreement-details (nextStep)="goToStep(3)" (previousStep)="goToStep(1)">
-                    </app-agreement-details>
-                    <!-- <app-client-instruction (nextStep)="goToStep(3)" (previousStep)="goToStep(1)"> </app-client-instruction> -->
-                  </div>
-                  <div *ngIf="step1 === 3">
-                    <div fxLayout='row'>
-                      <div fxFlex="100%">
-                        <mat-card-header>
-                          <mat-card-title>
-                            <h1 class="header-title"> <span class="StprH">Step 4:</span>Client Instructions</h1>
-                          </mat-card-title>
-                        </mat-card-header>
-                      </div>
-                    </div>
-                    <app-client-instruction (nextStep)="goToStep(4)" (previousStep)="goToStep(2)">
-                    </app-client-instruction>
-                    <!-- <app-agreement-details (nextStep)="goToStep(4)" (previousStep)="goToStep(2)"> </app-agreement-details> -->
-                  </div>
-                  <!-- <div *ngIf="step1 === 4">
-                                <div fxLayout='row'>
-                                    <div fxFlex="100%">
-                                        <mat-card-header>
-                                            <mat-card-title>
-                                                <h1 class="header-title"> <span class="StprH">Step 5:</span>Client mail Id's </h1>
-                                            </mat-card-title>
-                                        </mat-card-header>
-                                    </div>
                                 </div>
-                                <app-client-mail-ids (nextStep)="goToStep(5)" (previousStep)="goToStep(3)"></app-client-mail-ids>
-                            </div> -->
-                  <!-- /*Future Use---20-08-2019*/ -->
-                  <div *ngIf="agentEntryMasterService.clientEntryForm.get('siteCreationFlag').value === false">
-                    <!--/*Future Use---20-08-2019*/-->
-                    <div *ngIf="step1 === 4">
-                      <div fxLayout='row'>
-                        <div fxFlex="100%">
-                          <mat-card-header>
-                            <mat-card-title>
-                              <h1 class="header-title"> <span class="StprH">Step 5:</span>Client mail Id's </h1>
-                            </mat-card-title>
-                          </mat-card-header>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <app-client-mail-ids (nextStep)="goToStep(5)" (previousStep)="goToStep(3)"></app-client-mail-ids>
-                    </div>
-                    <!-- /*Future Use---20-08-2019*/ -->
-                    <div *ngIf="step1 === 5">
-                      <div fxLayout="row">
-                        <div fxFlex="100%">
-                          <mat-card-header>
-                            <mat-card-title>
-                              <h1 class="header-title"> <span class="StprH">Step 6:</span>Review </h1>
-                            </mat-card-title>
-                          </mat-card-header>
+                      </mat-card-content>
+                    }
+                    @if (mode === 'SearchClient') {
+                      <div>
+                        <form #scrollError appScrollToError>
+                          <div fxLayout="row" fxFlex="100%" fxLayoutGap="0px">
+                            <div fxFlex="80%" fxFlex.lg="80%" fxFlex.md="75%" fxFlex.sm="70%" fxFlex.xs="100%">
+                              <div fxLayout="row wrap" fxFlex="100%" fxLayoutGap="25px grid" fxLayoutGap.xs="0px grid">
+                                <div fxFlex="100%">
+                                  @if (step1 === 0) {
+                                    <div>
+                                      <div fxLayout='row'>
+                                        <div fxFlex="100%">
+                                          <mat-card-header>
+                                            <mat-card-title>
+                                              <h1 class="header-title"> <span class="StprH">Step 1:</span>Client Entry </h1>
+                                            </mat-card-title>
+                                          </mat-card-header>
+                                        </div>
+                                      </div>
+                                      <app-client-entry #clientEntryComp type="submit" (nextStep)="goToStep(1)">
+                                      </app-client-entry>
+                                    </div>
+                                  }
+                                  @if (step1 === 1 ) {
+                                    <div>
+                                      <div fxLayout='row'>
+                                        <div fxFlex="100%">
+                                          <mat-card-header>
+                                            <mat-card-title>
+                                              <h1 class="header-title"> <span class="StprH">Step 2:</span>Component Entry </h1>
+                                            </mat-card-title>
+                                          </mat-card-header>
+                                        </div>
+                                      </div>
+                                      <app-component-entry #componentEntryPage [currencyList]="currencyList" (nextStep)="goToStep(2)"
+                                        (previousStep)="goToStep(0)">
+                                      </app-component-entry>
+                                    </div>
+                                  }
+                                  @if (step1 === 2) {
+                                    <div>
+                                      <div fxLayout='row'>
+                                        <div fxFlex="100%">
+                                          <mat-card-header>
+                                            <mat-card-title>
+                                              <h1 class="header-title"> <span class="StprH">Step 3:</span>Agreement Details </h1>
+                                            </mat-card-title>
+                                          </mat-card-header>
+                                        </div>
+                                      </div>
+                                      <app-agreement-details (nextStep)="goToStep(3)" (previousStep)="goToStep(1)">
+                                      </app-agreement-details>
+                                      <!-- <app-client-instruction (nextStep)="goToStep(3)" (previousStep)="goToStep(1)"> </app-client-instruction> -->
+                                    </div>
+                                  }
+                                  @if (step1 === 3) {
+                                    <div>
+                                      <div fxLayout='row'>
+                                        <div fxFlex="100%">
+                                          <mat-card-header>
+                                            <mat-card-title>
+                                              <h1 class="header-title"> <span class="StprH">Step 4:</span>Client Instructions</h1>
+                                            </mat-card-title>
+                                          </mat-card-header>
+                                        </div>
+                                      </div>
+                                      <app-client-instruction (nextStep)="goToStep(4)" (previousStep)="goToStep(2)">
+                                      </app-client-instruction>
+                                      <!-- <app-agreement-details (nextStep)="goToStep(4)" (previousStep)="goToStep(2)"> </app-agreement-details> -->
+                                    </div>
+                                  }
+                                  <!-- <div *ngIf="step1 === 4">
+                                  <div fxLayout='row'>
+                                    <div fxFlex="100%">
+                                      <mat-card-header>
+                                        <mat-card-title>
+                                          <h1 class="header-title"> <span class="StprH">Step 5:</span>Client mail Id's </h1>
+                                        </mat-card-title>
+                                      </mat-card-header>
+                                    </div>
+                                  </div>
+                                  <app-client-mail-ids (nextStep)="goToStep(5)" (previousStep)="goToStep(3)"></app-client-mail-ids>
+                                </div> -->
+                                <!-- /*Future Use---20-08-2019*/ -->
+                                @if (agentEntryMasterService.clientEntryForm.get('siteCreationFlag').value === false) {
+                                  <div>
+                                    <!--/*Future Use---20-08-2019*/-->
+                                    @if (step1 === 4) {
+                                      <div>
+                                        <div fxLayout='row'>
+                                          <div fxFlex="100%">
+                                            <mat-card-header>
+                                              <mat-card-title>
+                                                <h1 class="header-title"> <span class="StprH">Step 5:</span>Client mail Id's </h1>
+                                              </mat-card-title>
+                                            </mat-card-header>
+                                          </div>
+                                        </div>
+                                        <app-client-mail-ids (nextStep)="goToStep(5)" (previousStep)="goToStep(3)"></app-client-mail-ids>
+                                      </div>
+                                    }
+                                    <!-- /*Future Use---20-08-2019*/ -->
+                                    @if (step1 === 5) {
+                                      <div>
+                                        <div fxLayout="row">
+                                          <div fxFlex="100%">
+                                            <mat-card-header>
+                                              <mat-card-title>
+                                                <h1 class="header-title"> <span class="StprH">Step 6:</span>Review </h1>
+                                              </mat-card-title>
+                                            </mat-card-header>
+                                          </div>
+                                        </div>
+                                        <app-client-review (previousStep)="goToStep(4)"></app-client-review>
+                                      </div>
+                                    }
+                                  </div>
+                                }
+                                @if (agentEntryMasterService.clientEntryForm.get('siteCreationFlag').value === true) {
+                                  <div>
+                                    @if (step1 === 4) {
+                                      <div>
+                                        <div fxLayout="row">
+                                          <div fxFlex="100%">
+                                            <mat-card-header>
+                                              <mat-card-title>
+                                                <h1 class="header-title"> <span class="StprH">Step 5:</span>Review </h1>
+                                              </mat-card-title>
+                                            </mat-card-header>
+                                          </div>
+                                        </div>
+                                        <app-client-review (previousStep)="goToStep(3)"></app-client-review>
+                                      </div>
+                                    }
+                                  </div>
+                                }
+                              </div>
+                            </div>
+                          </div>
+                          <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="25%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs>
+                            <div class="step">
+                              <div fxLayout='row'>
+                                <div fxFlex="100%">
+                                  <div class="list "> <a (click)="goToStep(0)">Client Entry<i class="icon-note" fxHide.sm fxHide.xs>
+                                  </i></a> </div>
+                                  <div class="list "> <a (click)="goToStep(1)">Component Entry<i class="icon-disc" fxHide.sm
+                                  fxHide.xs> </i></a> </div>
+                                  <div class="list"> <a (click)="goToStep(2)">Agreement Details<i class="icon-news-paper" fxHide.sm
+                                  fxHide.xs> </i></a> </div>
+                                  <div class="list"> <a (click)="goToStep(3)">Client Instructions<i class="icon-support" fxHide.sm
+                                  fxHide.xs> </i></a> </div>
+                                  <!-- /*Future Use---20-08-2019*/<div class="list"> <a (click)="goToStep(4)">Client&nbsp;mail&nbsp;Id's<i class="icon-mail"> </i></a> </div> -->
+                                  @if (agentEntryMasterService.clientEntryForm.get('siteCreationFlag').value === true) {
+                                    <div class="list"
+                                      > <a
+                                      (click)="goToStep(4)">Review<i class="icon-book-open" fxHide.sm fxHide.xs> </i></a> </div>
+                                    }
+                                    @if (agentEntryMasterService.clientEntryForm.get('siteCreationFlag').value === false) {
+                                      <div class="list"
+                                        > <a
+                                        (click)="goToStep(4)">Client mail Id's<i class="icon-mail" fxHide.sm fxHide.xs> </i></a>
+                                      </div>
+                                    }
+                                    @if (agentEntryMasterService.clientEntryForm.get('siteCreationFlag').value === false) {
+                                      <div class="list"
+                                        > <a
+                                        (click)="goToStep(5)">Review<i class="icon-book-open" fxHide.sm fxHide.xs> </i></a> </div>
+                                      }
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
                         </div>
-                      </div>
-                      <app-client-review (previousStep)="goToStep(4)"></app-client-review>
-                    </div>
-                  </div>
-                  <div *ngIf="agentEntryMasterService.clientEntryForm.get('siteCreationFlag').value === true">
-                    <div *ngIf="step1 === 4">
-                      <div fxLayout="row">
-                        <div fxFlex="100%">
-                          <mat-card-header>
-                            <mat-card-title>
-                              <h1 class="header-title"> <span class="StprH">Step 5:</span>Review </h1>
-                            </mat-card-title>
-                          </mat-card-header>
-                        </div>
-                      </div>
-                      <app-client-review (previousStep)="goToStep(3)"></app-client-review>
-                    </div>
+                      }
+                    </mat-card>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="25%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs>
-              <div class="step">
+                <ng-template #PDFPasswordDialog>
+                  <div>
+                    <h1 mat-dialog-title>PDF Password</h1>
+                    <mat-dialog-content>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
+                            <mat-label>Enter the Password</mat-label>
+                            <input maxlength="50" autocomplete="off" role="presentation" [type]="hide ? 'password' : 'text'" matInput
+                              [formControl]="passwordCtrl" placeholder="Enter the Password">
 
-                <div fxLayout='row'>
-                  <div fxFlex="100%">
+                              <button mat-icon-button matSuffix (click)="hide = !hide;" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide">
+                                <mat-icon><i class="material-icons material-icons">
+                                  {{hide ? 'visibility_off' : 'visibility'}}
+                                </i></mat-icon>
+                              </button>
+                              @if (passwordCtrl?.errors?.required) {
+                                <mat-error>Password is required</mat-error>
+                              }
+                            </mat-form-field>
+                          </div>
+                        </div>
 
-                    <div class="list "> <a (click)="goToStep(0)">Client Entry<i class="icon-note" fxHide.sm fxHide.xs>
-                        </i></a> </div>
-                    <div class="list "> <a (click)="goToStep(1)">Component Entry<i class="icon-disc" fxHide.sm
-                          fxHide.xs> </i></a> </div>
-                    <div class="list"> <a (click)="goToStep(2)">Agreement Details<i class="icon-news-paper" fxHide.sm
-                          fxHide.xs> </i></a> </div>
-                    <div class="list"> <a (click)="goToStep(3)">Client Instructions<i class="icon-support" fxHide.sm
-                          fxHide.xs> </i></a> </div>
-                    <!-- /*Future Use---20-08-2019*/<div class="list"> <a (click)="goToStep(4)">Client&nbsp;mail&nbsp;Id's<i class="icon-mail"> </i></a> </div> -->
-                    <div class="list"
-                      *ngIf="agentEntryMasterService.clientEntryForm.get('siteCreationFlag').value === true"> <a
-                        (click)="goToStep(4)">Review<i class="icon-book-open" fxHide.sm fxHide.xs> </i></a> </div>
-                    <div class="list"
-                      *ngIf="agentEntryMasterService.clientEntryForm.get('siteCreationFlag').value === false"> <a
-                        (click)="goToStep(4)">Client mail Id's<i class="icon-mail" fxHide.sm fxHide.xs> </i></a>
+                        <div fxLayout="row">
+                          <mat-checkbox [formControl]="sendCrtFlag"> Send to CRT
+                          </mat-checkbox>
+                        </div>
+                      </mat-dialog-content>
+                      <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+                        <button mat-flat-button color="primary" matTooltip="Save" matTooltipClass="accent-tooltip"
+                        (click)="savePassword()">Save</button>
+                        <!-- <button [disabled]='crtSendFlag' mat-stroked-button> Send to CRT</button> -->
+                        <button (click)='dialog.closeAll()' mat-flat-button color="warn">Cancel</button>
+                      </mat-dialog-actions>
                     </div>
-                    <div class="list"
-                      *ngIf="agentEntryMasterService.clientEntryForm.get('siteCreationFlag').value === false"> <a
-                        (click)="goToStep(5)">Review<i class="icon-book-open" fxHide.sm fxHide.xs> </i></a> </div>
-
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    </mat-card>
-  </div>
-</div>
-<ng-template #PDFPasswordDialog>
-  <div>
-    <h1 mat-dialog-title>PDF Password</h1>
-    <mat-dialog-content>
-      <div fxLayout="row">
-        <div fxFlex="100%">
-          <mat-form-field fxFlex="100%" appearance="outline" floatLabel="always">
-            <mat-label>Enter the Password</mat-label>
-            <input maxlength="50" autocomplete="off" role="presentation" [type]="hide ? 'password' : 'text'" matInput
-              [formControl]="passwordCtrl" placeholder="Enter the Password">
-
-            <button mat-icon-button matSuffix (click)="hide = !hide;" [attr.aria-label]="'Hide password'"
-              [attr.aria-pressed]="hide">
-              <mat-icon><i class="material-icons material-icons">
-                  {{hide ? 'visibility_off' : 'visibility'}}
-                </i></mat-icon>
-            </button>
-            <mat-error *ngIf="passwordCtrl?.errors?.required">Password is required</mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div fxLayout="row">
-        <mat-checkbox [formControl]="sendCrtFlag"> Send to CRT
-        </mat-checkbox>
-      </div>
-    </mat-dialog-content>
-    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
-      <button mat-flat-button color="primary" matTooltip="Save" matTooltipClass="accent-tooltip"
-        (click)="savePassword()">Save</button>
-      <!-- <button [disabled]='crtSendFlag' mat-stroked-button> Send to CRT</button> -->
-      <button (click)='dialog.closeAll()' mat-flat-button color="warn">Cancel</button>
-    </mat-dialog-actions>
-  </div>
-</ng-template>
+                  </ng-template>

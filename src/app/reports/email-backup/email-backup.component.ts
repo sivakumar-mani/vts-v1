@@ -45,7 +45,7 @@ export class EmailBackupComponent implements OnInit {
   totalpages: number;
   emailHistorycols = [
     // { field: 'S.No', header: 'S.No' },
-    // { field: 'View', header: 'VIEW' },
+    { field: 'View', header: 'VIEW' },
     { field: 'categoryName', header: 'TYPE' },
     // { field: 'fromMail', header: 'FROM MAIL' },
     // { field: 'toMail', header: 'TO MAIL' },

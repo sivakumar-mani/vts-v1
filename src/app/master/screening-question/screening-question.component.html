@@ -2,56 +2,58 @@
   [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset" [btnResetTbl]="breadcrumbFlags.btnResetTbl"
   (eventAdd)="addScreeningQuestions()" [routePath]='routePath' [btnAddDisabled]="!screenAuth.addFlag"
   (eventBack)="closeForm()" (eventSave)="saveScreeningQuestion()" [toolTip]="breadcrumbFlags.toolTip"
-  (eventReset)="resetForm()" (eventResetTbl)="resettable()"></app-breadcrumb>
+(eventReset)="resetForm()" (eventResetTbl)="resettable()"></app-breadcrumb>
 <mat-card>
   <!-- <div fxLayout="row">
-    <mat-card-header fxFlex="100%">
-      <div fxFlex="100%">
-        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-                    fxLayoutGap="10px">
-          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
-                        fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
-            <mat-card-title>
-              <h1 class="header-title"></h1>
-            </mat-card-title>
-          </div>
-          <span fxFlex></span>
-          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
-                        fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-            <div class="tbl-commonsearch" >
-              <mat-form-field fxFlex="100%">
-                <mat-label></mat-label>
-                <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                
-              </mat-form-field>
-            </div>
+  <mat-card-header fxFlex="100%">
+    <div fxFlex="100%">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+        fxLayoutGap="10px">
+        <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+          fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+          <mat-card-title>
+            <h1 class="header-title"></h1>
+          </mat-card-title>
+        </div>
+        <span fxFlex></span>
+        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+          fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+          <div class="tbl-commonsearch" >
+            <mat-form-field fxFlex="100%">
+              <mat-label></mat-label>
+              <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+
+            </mat-form-field>
           </div>
         </div>
       </div>
-    </mat-card-header>
-  </div>   -->
-  <div fxLayout="row">
-    <mat-card-header fxFlex="100%">
-      <div fxFlex="100%">
-        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-          fxLayoutGap="10px">
-          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
-            fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
-            <mat-card-title>
-              <h1 class="header-title">Screening Questions</h1>
-            </mat-card-title>
-          </div>
-          <span fxFlex></span>
-          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
-            fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-            <div class="tbl-commonsearch" *ngIf="!showFlag">
+    </div>
+  </mat-card-header>
+</div>   -->
+<div fxLayout="row">
+  <mat-card-header fxFlex="100%">
+    <div fxFlex="100%">
+      <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+        fxLayoutGap="10px">
+        <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+          fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+          <mat-card-title>
+            <h1 class="header-title">Screening Questions</h1>
+          </mat-card-title>
+        </div>
+        <span fxFlex></span>
+        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+          fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+          @if (!showFlag) {
+            <div class="tbl-commonsearch">
               <mat-form-field fxFlex="100%">
                 <mat-label></mat-label>
                 <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
                 <input #global matInput placeholder="Search here..." type="text" pInputText size="50" autocomplete="off"
                   (input)="dt?.filterGlobal($event.target.value, 'contains')" />
-              </mat-form-field>
-            </div>
+                </mat-form-field>
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -62,203 +64,211 @@
 
   <mat-card-content>
     <div class="content-area">
-      <form *ngIf="showFlag" id="ngForm" autocomplete="off" [formGroup]="screeningForm">
-        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
-          fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
-          <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%">
-            <app-auto-complete [selectProperties]='clientControls'></app-auto-complete>
-          </div>
-          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="50%" fxFlex.xs="100%">
-            <app-auto-complete [selectProperties]='componentControls'></app-auto-complete>
-          </div>
-        </div>
-        <div formArrayName="question"
-          *ngFor="let item of getformgroup(); let i = index; let first = first; let last= last">
-          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
-            fxLayout.xs="row wrap" fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid" [formGroupName]="i">
-            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
-              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                <mat-label>Question</mat-label>
-                <input matInput #ques type="text" placeholder="Question" formControlName="question" maxlength="320"
-                  autocomplete="off" role="presentation" required />
-
-                <!-- <textarea matInput #ques type="text" placeholder="Question" formControlName="question"
-                                            maxlength="320" autocomplete="off" role="presentation" required></textarea> -->
-                <mat-error *ngIf="item.get('question').invalid"> Question is required </mat-error>
-              </mat-form-field>
+      @if (showFlag) {
+        <form id="ngForm" autocomplete="off" [formGroup]="screeningForm">
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+            fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+            <div fxFlex="35%" fxFlex.lg="35%" fxFlex.md="35%" fxFlex.sm="50%" fxFlex.xs="100%">
+              <app-auto-complete [selectProperties]='clientControls'></app-auto-complete>
             </div>
-            <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="15%" fxFlex.xs="40%" ngClass.xs="mb-20">
-              <mat-label class="lbl">Is Active</mat-label>
-              <mat-checkbox formControlName="active">Active</mat-checkbox>
-            </div>
-            <div ngClass.xs="mb-15" fxFlex="15%" fxFlex.lg="15%" fxFlex.md="20%" fxFlex.sm="15%" fxFlex.xs="40%"
-              *ngIf="screeningForm.disabled === false">
-              <mat-label>&nbsp;</mat-label>
-              <div class="adrem text-left" fxLayoutGap="8px">
-                <button type="button" mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
-                  (click)="addControl(i)" *ngIf="last && !isEdit"> <i class="icon-plus-circle"></i> </button>
-                <button type="button" mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
-                  (click)="removeControl(i)" *ngIf="!(first && last)"> <i class="icon-x-circle"></i> </button>
-              </div>
+            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="50%" fxFlex.xs="100%">
+              <app-auto-complete [selectProperties]='componentControls'></app-auto-complete>
             </div>
           </div>
-        </div>
-      </form>
-      <div fxLayout="row" *ngIf="!showFlag">
-        <div fxFlex="100%">
-          <p-table #dt [columns]="displayedColumns" [value]="screeningQuestionList" [scrollable]="true" [rows]="10"
-            [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true" dataKey="logginId">
-
-            <!-- ================= COLGROUP ================= -->
-            <ng-template pTemplate="colgroup" let-colGroupCols>
-              <colgroup>
-                <col style="width:50px" />
-                <col style="width:120px" />
-                <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-              </colgroup>
-            </ng-template>
-
-            <!-- ================= HEADER ================= -->
-            <ng-template pTemplate="header" let-headerCols>
-              <tr>
-                <th class="action"></th>
-                <th class="action">Action</th>
-
-                <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn>
-
-                  <div class="thname">{{ col.header }}</div>
-
-                  <span [pSortableColumn]="col.field">
-                    <p-sortIcon [field]="col.field"></p-sortIcon>
-                  </span>
-
-                  <!-- SEARCH ICONS (UNCHANGED) -->
-                  <span class="ico-fieldsearch">
-                    <i *ngSwitchCase="'clientName'" class="icon-search2" matTooltip="Search"
-                      (click)="clientNameCtrlTrigger.openMenu()"></i>
-
-                    <i *ngSwitchCase="'componetName'" class="icon-search2" matTooltip="Search"
-                      (click)="componetNameCtrlTrigger.openMenu()"></i>
-                  </span>
-
-                  <!-- FILTER MENUS (UNCHANGED) -->
-                </th>
-              </tr>
-
-              <!-- HIDDEN FILTER ROW -->
-              <tr *ngIf="screeningQuestionList.length > 0" style="display:none">
-                <th *ngFor="let col of headerCols" class="tbl-Column-seacrh">
-                  <mat-form-field *ngIf="col.field !== 'Actions'">
-                    <input matInput placeholder="{{ col.header }}" autocomplete="off"
-                      (input)="dt.filter($event.target.value, col.field, 'contains')" />
+          @for (item of getformgroup(); track item; let i = $index; let first = $first; let last = $last) {
+            <div formArrayName="question"
+              >
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+                fxLayout.xs="row wrap" fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid" [formGroupName]="i">
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.sm="50%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Question</mat-label>
+                    <input matInput #ques type="text" placeholder="Question" formControlName="question" maxlength="320"
+                      autocomplete="off" role="presentation" required />
+                      <!-- <textarea matInput #ques type="text" placeholder="Question" formControlName="question"
+                    maxlength="320" autocomplete="off" role="presentation" required></textarea> -->
+                    @if (item.get('question').invalid) {
+                      <mat-error> Question is required </mat-error>
+                    }
                   </mat-form-field>
-                </th>
-                <td class="tbl-Column-seacrh"></td>
-              </tr>
-            </ng-template>
-
-            <!-- ================= BODY ================= -->
-            <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-bodyCols="columns">
-
-              <tr>
-                <td class="desg-bg">
-                  <a [pRowToggler]="rowData">
-                    <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i>
-                  </a>
-                </td>
-
-                <td class="desg-bg">
-                  <div fxLayout="row" class="desg-icon">
-                    <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''" matTooltip="Edit"
-                      (click)="editScreeningQuestion(rowData, 0, 'editMultiple')">
-                      <i class="material-icons-outlined">edit</i>
-                    </mat-icon>
-
-                    <mat-icon [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''" matTooltip="Delete"
-                      (click)="openDialog(rowData, 0, 'deleteMultiple')">
-                      <i class="material-icons-outlined">delete</i>
-                    </mat-icon>
-
-                    <mat-icon [ngClass]="screenAuth.viewFlag === false ? 'page-btn disabled' : ''" matTooltip="View"
-                      (click)="editScreeningQuestion(rowData, 0, 'view')">
-                      <i class="material-icons-outlined">visibility</i>
-                    </mat-icon>
+                </div>
+                <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="15%" fxFlex.xs="40%" ngClass.xs="mb-20">
+                  <mat-label class="lbl">Is Active</mat-label>
+                  <mat-checkbox formControlName="active">Active</mat-checkbox>
+                </div>
+                @if (screeningForm.disabled === false) {
+                  <div ngClass.xs="mb-15" fxFlex="15%" fxFlex.lg="15%" fxFlex.md="20%" fxFlex.sm="15%" fxFlex.xs="40%"
+                    >
+                    <mat-label>&nbsp;</mat-label>
+                    <div class="adrem text-left" fxLayoutGap="8px">
+                      @if (last && !isEdit) {
+                        <button type="button" mat-button color="primary" matTooltip="Add" matTooltipClass="accent-tooltip"
+                          (click)="addControl(i)"> <i class="icon-plus-circle"></i> </button>
+                        }
+                        @if (!(first && last)) {
+                          <button type="button" mat-button color="warn" matTooltip="Remove" matTooltipClass="accent-tooltip"
+                            (click)="removeControl(i)"> <i class="icon-x-circle"></i> </button>
+                          }
+                        </div>
+                      </div>
+                    }
                   </div>
-                </td>
-
-                <td *ngFor="let col of bodyCols">
-                  {{ rowData[col.field] }}
-                </td>
-              </tr>
-
-            </ng-template>
-
-            <!-- ================= ROW EXPANSION ================= -->
-            <ng-template pTemplate="rowexpansion" let-moduleRowData let-expCols="columns">
-              <tr>
-                <td [attr.colspan]="4">
-                  <p-table #sub [columns]="questionColumns" [value]="moduleRowData.question" class="inn-table"
-                    [responsive]="true" [paginator]="true" [rows]="10">
-
-                    <!-- INNER HEADER -->
-                    <ng-template pTemplate="header" let-innerHeaderCols>
-              <tr>
-                <th style="width:100px">Action</th>
-                <th *ngFor="let col of innerHeaderCols" pReorderableColumn pResizableColumn>
-
-                  <span matTooltip="{{ col.header }}">
-                    {{ col.header }}
-                  </span>
-
-                  <span [pSortableColumn]="col.field">
-                    <p-sortIcon [field]="col.field"></p-sortIcon>
-                  </span>
-                </th>
-              </tr>
-            </ng-template>
-
-            <!-- INNER BODY -->
-            <ng-template pTemplate="body" let-screenRowData let-innerBodyCols="columns">
-
-              <tr>
-                <td class="desg-bg">
-                  <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''" matTooltip="Edit"
-                    (click)="editScreeningQuestion(moduleRowData, screenRowData.questionClientMapId, 'editSingle')">
-                    <i class="material-icons-outlined">edit</i>
-                  </mat-icon>
-
-                  <mat-icon [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''" matTooltip="Delete"
-                    (click)="openDialog(moduleRowData, screenRowData.questionClientMapId, 'deleteSingle')">
-                    <i class="material-icons-outlined">delete</i>
-                  </mat-icon>
-                </td>
-
-                <td *ngFor="let col of innerBodyCols">
-                  <span *ngIf="col.field !== 'active'">
-                    {{ screenRowData[col.field] }}
-                  </span>
-
-                  <span *ngIf="col.field === 'active'">
-                    <i class="material-icons">
-                      {{ screenRowData.active ? 'thumb_up' : 'thumb_down' }}
-                    </i>
-                  </span>
-                </td>
-              </tr>
-
-            </ng-template>
-
-          </p-table>
-          </td>
-          </tr>
-          </ng-template>
-
-          </p-table>
-          <div [ngClass]="{'empty-record': screeningQuestionList.length == 0}" class="cus-paginator" fxLayout="row wrap"
-            fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
-            <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-              fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0
-                ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
+                </div>
+              }
+            </form>
+          }
+          @if (!showFlag) {
+            <div fxLayout="row">
+              <div fxFlex="100%">
+                <p-table #dt [columns]="displayedColumns" [value]="screeningQuestionList" [scrollable]="true" [rows]="10"
+                  [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true" dataKey="logginId">
+                  <!-- ================= COLGROUP ================= -->
+                  <ng-template pTemplate="colgroup" let-colGroupCols>
+                    <colgroup>
+                    <col style="width:50px" />
+                    <col style="width:120px" />
+                    @for (col of colGroupCols; track col) {
+                      <col style="min-width:200px" />
+                    }
+                  </colgroup>
+                </ng-template>
+                <!-- ================= HEADER ================= -->
+                <ng-template pTemplate="header" let-headerCols>
+                  <tr>
+                    <th class="action"></th>
+                    <th class="action">Action</th>
+                    @for (col of headerCols; track col) {
+                      <th pReorderableColumn pResizableColumn>
+                        <div class="thname">{{ col.header }}</div>
+                        <span [pSortableColumn]="col.field">
+                          <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </span>
+                        <!-- SEARCH ICONS (UNCHANGED) -->
+                        <span class="ico-fieldsearch">
+                          @if (col.field === 'clientName') {
+                            <i class="icon-search2" matTooltip="Search"
+                            (click)="clientNameCtrlTrigger.openMenu()"></i>
+                          }
+                          @if (col.field === 'componetName') {
+                            <i class="icon-search2" matTooltip="Search"
+                            (click)="componetNameCtrlTrigger.openMenu()"></i>
+                          }
+                        </span>
+                        <!-- FILTER MENUS (UNCHANGED) -->
+                      </th>
+                    }
+                  </tr>
+                  <!-- HIDDEN FILTER ROW -->
+                  @if (screeningQuestionList.length > 0) {
+                    <tr style="display:none">
+                      @for (col of headerCols; track col) {
+                        <th class="tbl-Column-seacrh">
+                          @if (col.field !== 'Actions') {
+                            <mat-form-field>
+                              <input matInput placeholder="{{ col.header }}" autocomplete="off"
+                                (input)="dt.filter($event.target.value, col.field, 'contains')" />
+                              </mat-form-field>
+                            }
+                          </th>
+                        }
+                        <td class="tbl-Column-seacrh"></td>
+                      </tr>
+                    }
+                  </ng-template>
+                  <!-- ================= BODY ================= -->
+                  <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-bodyCols="columns">
+                    <tr>
+                      <td class="desg-bg">
+                        <a [pRowToggler]="rowData">
+                          <i [ngClass]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'"></i>
+                        </a>
+                      </td>
+                      <td class="desg-bg">
+                        <div fxLayout="row" class="desg-icon">
+                          <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''" matTooltip="Edit"
+                            (click)="editScreeningQuestion(rowData, 0, 'editMultiple')">
+                            <i class="material-icons-outlined">edit</i>
+                          </mat-icon>
+                          <mat-icon [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''" matTooltip="Delete"
+                            (click)="openDialog(rowData, 0, 'deleteMultiple')">
+                            <i class="material-icons-outlined">delete</i>
+                          </mat-icon>
+                          <mat-icon [ngClass]="screenAuth.viewFlag === false ? 'page-btn disabled' : ''" matTooltip="View"
+                            (click)="editScreeningQuestion(rowData, 0, 'view')">
+                            <i class="material-icons-outlined">visibility</i>
+                          </mat-icon>
+                        </div>
+                      </td>
+                      @for (col of bodyCols; track col) {
+                        <td>
+                          {{ rowData[col.field] }}
+                        </td>
+                      }
+                    </tr>
+                  </ng-template>
+                  <!-- ================= ROW EXPANSION ================= -->
+                  <ng-template pTemplate="rowexpansion" let-moduleRowData let-expCols="columns">
+                    <tr>
+                      <td [attr.colspan]="4">
+                        <p-table #sub [columns]="questionColumns" [value]="moduleRowData.question" class="inn-table"
+                          [responsive]="true" [paginator]="true" [rows]="10">
+                          <!-- INNER HEADER -->
+                          <ng-template pTemplate="header" let-innerHeaderCols>
+                            <tr>
+                              <th style="width:100px">Action</th>
+                              @for (col of innerHeaderCols; track col) {
+                                <th pReorderableColumn pResizableColumn>
+                                  <span matTooltip="{{ col.header }}">
+                                    {{ col.header }}
+                                  </span>
+                                  <span [pSortableColumn]="col.field">
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                  </span>
+                                </th>
+                              }
+                            </tr>
+                          </ng-template>
+                          <!-- INNER BODY -->
+                          <ng-template pTemplate="body" let-screenRowData let-innerBodyCols="columns">
+                            <tr>
+                              <td class="desg-bg">
+                                <mat-icon [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''" matTooltip="Edit"
+                                  (click)="editScreeningQuestion(moduleRowData, screenRowData.questionClientMapId, 'editSingle')">
+                                  <i class="material-icons-outlined">edit</i>
+                                </mat-icon>
+                                <mat-icon [ngClass]="screenAuth.deleteFlag === false ? 'page-btn disabled' : ''" matTooltip="Delete"
+                                  (click)="openDialog(moduleRowData, screenRowData.questionClientMapId, 'deleteSingle')">
+                                  <i class="material-icons-outlined">delete</i>
+                                </mat-icon>
+                              </td>
+                              @for (col of innerBodyCols; track col) {
+                                <td>
+                                  @if (col.field !== 'active') {
+                                    <span>
+                                      {{ screenRowData[col.field] }}
+                                    </span>
+                                  }
+                                  @if (col.field === 'active') {
+                                    <span>
+                                      <i class="material-icons">
+                                        {{ screenRowData.active ? 'thumb_up' : 'thumb_down' }}
+                                      </i>
+                                    </span>
+                                  }
+                                </td>
+                              }
+                            </tr>
+                          </ng-template>
+                        </p-table>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+                <div [ngClass]="{'empty-record': screeningQuestionList.length == 0}" class="cus-paginator" fxLayout="row wrap"
+                  fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0
+                    ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
                   dt.totalRecords }} record(s) </div>
                   <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
                   <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
@@ -267,18 +277,19 @@
                       (click)="
                                     dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                                     navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"> <i
-                        class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to
-                      Page<span class="input-num">
-                        <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
-                          [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows, true)" />
-                      </span></span> <span class="mr-2" fxHide.xs> of
-                      {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
+                  class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to
+                  Page<span class="input-num">
+                  <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                    [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows, true)" />
+                  </span></span> <span class="mr-2" fxHide.xs> of
+                {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
                       [ngClass]=" dt.rows + dt.first >= dt.totalRecords? 'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                                     navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"><i
-                        class="icon-control-end ml-5"></i></a> </div>
+              class="icon-control-end ml-5"></i></a> </div>
             </div>
           </div>
         </div>
-      </div>
+      }
+    </div>
   </mat-card-content>
 </mat-card>

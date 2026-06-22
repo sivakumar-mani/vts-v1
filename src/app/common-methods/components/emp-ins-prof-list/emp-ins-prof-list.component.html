@@ -19,210 +19,248 @@
               <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
                 fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
                 <mat-card-title>
-                  <h1 *ngIf="authService.empInsProf === common.SCRN_EMPLOYER_CREATION" class="header-title">Employer
+                  @if (authService.empInsProf === common.SCRN_EMPLOYER_CREATION) {
+                    <h1 class="header-title">Employer
                     Creation</h1>
-                  <h1 *ngIf="authService.empInsProf === common.SCRN_INSTITUTION_CREATION" class="header-title">
+                  }
+                  @if (authService.empInsProf === common.SCRN_INSTITUTION_CREATION) {
+                    <h1 class="header-title">
                     Institution Creation</h1>
-                  <h1 *ngIf="authService.empInsProf === common.SCRN_PROFESSIONAL_REFERENCE" class="header-title">
+                  }
+                  @if (authService.empInsProf === common.SCRN_PROFESSIONAL_REFERENCE) {
+                    <h1 class="header-title">
                     Professional Reference Creation</h1>
-                  <h1 *ngIf="authService.empInsProf === common.SCRN_LICENSE_CREATION" class="header-title">License
+                  }
+                  @if (authService.empInsProf === common.SCRN_LICENSE_CREATION) {
+                    <h1 class="header-title">License
                     Creation</h1>
+                  }
                 </mat-card-title>
               </div>
               <span fxFlex></span>
               <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
                 fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                <div class="tbl-commonsearch" *ngIf='!showBulkUpload'>
-                  <mat-form-field fxFlex="100%">
-                    <mat-label></mat-label>
-                    <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                    <input #global matInput size="50" placeholder="Search here..."
-                      (input)="dt?.filterGlobal($event.target.value, 'contains')"
-                      (keypress)="dt.reset();dt?.filterGlobal($event.target.value, 'contains');" autocomplete="off"
-                      role="presentation" />
-                    <button mat-button *ngIf="global.value" matSuffix mat-icon-button aria-label="Clear"
-                      (click)="global.value = ''; dt?.filterGlobal($event.target.value, 'contains')">
-                      <mat-icon>close</mat-icon>
-                    </button>
-                  </mat-form-field>
+                @if (!showBulkUpload) {
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input #global matInput size="50" placeholder="Search here..."
+                        (input)="dt?.filterGlobal($event.target.value, 'contains')"
+                        (keypress)="dt.reset();dt?.filterGlobal($event.target.value, 'contains');" autocomplete="off"
+                        role="presentation" />
+                        @if (global.value) {
+                          <button mat-button matSuffix mat-icon-button aria-label="Clear"
+                            (click)="global.value = ''; dt?.filterGlobal($event.target.value, 'contains')">
+                            <mat-icon>close</mat-icon>
+                          </button>
+                        }
+                      </mat-form-field>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
-          </div>
-        </mat-card-header>
-      </div>
+          </mat-card-header>
+        </div>
 
 
 
 
 
-      <mat-card-content>
-        <div fxLayout="row wrap">
-          <div fxFlex="100%" *ngIf="!showBulkUpload">
-
-            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-              fxLayoutGap="0px grid">
+        <mat-card-content>
+          <div fxLayout="row wrap">
+            @if (!showBulkUpload) {
               <div fxFlex="100%">
-                <p-table #dt [columns]="cols" [value]="employerInstutionList" [scrollable]="true" scrollHeight=""
-                  [reorderableColumns]="true" [paginator]="true" [rows]="itemperpage" [resizableColumns]="true"
-                  frozenWidth="100px" [frozenColumns]="frozenCols">
-
-                  <!-- ================= COLGROUP ================= -->
-                  <ng-template pTemplate="colgroup" let-colGroupCols>
-                    <colgroup>
-                      <col *ngFor="let col of colGroupCols" style="width:200px" />
-                    </colgroup>
-                  </ng-template>
-
-                  <!-- ================= HEADER ================= -->
-                  <ng-template pTemplate="header" let-headerCols>
-                    <tr>
-                      <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pReorderableColumn pResizableColumn>
-
-                        <span [pSortableColumn]="col.field">
-                          <div class="thname">{{ col.header }}</div>
-                          <p-sortIcon *ngIf="col.field !== 'action'" [field]="col.field" ariaLabel="Activate to sort"
-                            ariaLabelDesc="Activate to sort in descending order"
-                            ariaLabelAsc="Activate to sort in ascending order">
-                          </p-sortIcon>
-                        </span>
-
-                        <!-- ðŸ” SEARCH ICONS -->
-                        <span class="ico-fieldsearch">
-                          <i *ngSwitchCase="'name'" class="icon-search2" matTooltip="Search"
-                            matTooltipClass="accent-tooltip" (click)="nameTrigger.openMenu()"></i>
-
-                          <i *ngSwitchCase="'addLine1'" class="icon-search2" matTooltip="Search"
-                            matTooltipClass="accent-tooltip" (click)="addLine1Trigger.openMenu()"></i>
-
-                          <i *ngSwitchCase="'city'" class="icon-search2" matTooltip="Search"
-                            matTooltipClass="accent-tooltip" (click)="cityTrigger.openMenu()"></i>
-
-                          <i *ngSwitchCase="'stateName'" class="icon-search2" matTooltip="Search"
-                            matTooltipClass="accent-tooltip" (click)="stateNameTrigger.openMenu()"></i>
-
-                          <i *ngSwitchCase="'countryName'" class="icon-search2" matTooltip="Search"
-                            matTooltipClass="accent-tooltip" (click)="countryNameTrigger.openMenu()"></i>
-
-                          <i *ngSwitchCase="'pincode'" class="icon-search2" matTooltip="Search"
-                            matTooltipClass="accent-tooltip" (click)="pincodeTrigger.openMenu()"></i>
-                        </span>
-
-                        <!--  œ… All mat-menu filter blocks remain EXACTLY the same -->
-                        <!-- (No logic removed here  €“ only header variable name changed) -->
-
-                      </th>
-                    </tr>
-                  </ng-template>
-
-                  <!-- ================= BODY ================= -->
-                  <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
-
-                    <tr>
-                      <td *ngFor="let col of bodyCols" style="width:200px" [ngSwitch]="col.field" [ngClass]="{
+                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  fxLayoutGap="0px grid">
+                  <div fxFlex="100%">
+                    <p-table #dt [columns]="cols" [value]="employerInstutionList" [scrollable]="true" scrollHeight=""
+                      [reorderableColumns]="true" [paginator]="true" [rows]="itemperpage" [resizableColumns]="true"
+                      >
+                      <!-- ================= COLGROUP ================= -->
+                      <ng-template pTemplate="colgroup" let-colGroupCols>
+                        <colgroup>
+                        @for (col of colGroupCols; track col) {
+                          <col style="width:200px" />
+                        }
+                      </colgroup>
+                    </ng-template>
+                    <!-- ================= HEADER ================= -->
+                    <ng-template pTemplate="header" let-headerCols>
+                      <tr>
+                        @for (col of headerCols; track col) {
+                          <th pReorderableColumn pResizableColumn>
+                            <span [pSortableColumn]="col.field">
+                              <div class="thname">{{ col.header }}</div>
+                              @if (col.field !== 'action') {
+                                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                                  ariaLabelDesc="Activate to sort in descending order"
+                                  ariaLabelAsc="Activate to sort in ascending order">
+                                </p-sortIcon>
+                              }
+                            </span>
+                            <!-- ðŸ” SEARCH ICONS -->
+                            <span class="ico-fieldsearch">
+                              @if (col.field === 'name') {
+                                <i class="icon-search2" matTooltip="Search"
+                                matTooltipClass="accent-tooltip" (click)="nameTrigger.openMenu()"></i>
+                              }
+                              @if (col.field === 'addLine1') {
+                                <i class="icon-search2" matTooltip="Search"
+                                matTooltipClass="accent-tooltip" (click)="addLine1Trigger.openMenu()"></i>
+                              }
+                              @if (col.field === 'city') {
+                                <i class="icon-search2" matTooltip="Search"
+                                matTooltipClass="accent-tooltip" (click)="cityTrigger.openMenu()"></i>
+                              }
+                              @if (col.field === 'stateName') {
+                                <i class="icon-search2" matTooltip="Search"
+                                matTooltipClass="accent-tooltip" (click)="stateNameTrigger.openMenu()"></i>
+                              }
+                              @if (col.field === 'countryName') {
+                                <i class="icon-search2" matTooltip="Search"
+                                matTooltipClass="accent-tooltip" (click)="countryNameTrigger.openMenu()"></i>
+                              }
+                              @if (col.field === 'pincode') {
+                                <i class="icon-search2" matTooltip="Search"
+                                matTooltipClass="accent-tooltip" (click)="pincodeTrigger.openMenu()"></i>
+                              }
+                            </span>
+                            <!--  œ… All mat-menu filter blocks remain EXACTLY the same -->
+                            <!-- (No logic removed here  €“ only header variable name changed) -->
+                          </th>
+                        }
+                      </tr>
+                    </ng-template>
+                    <!-- ================= BODY ================= -->
+                    <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-bodyCols="columns">
+                      <tr>
+                        @for (col of bodyCols; track col) {
+<td style="width:200px" [ngClass]="{
             'text-cap': col.field === 'active',
             'desg-bg': col.field === 'action'
           }">
-
-                        <div *ngSwitchCase="'name'">{{ rowData.name || 'N/A' }}</div>
-                        <div *ngSwitchCase="'addLine1'">{{ rowData.addLine1 || 'N/A' }}</div>
-                        <div *ngSwitchCase="'city'">{{ rowData.city || 'N/A' }}</div>
-                        <div *ngSwitchCase="'stateName'">{{ rowData.stateName || 'N/A' }}</div>
-                        <div *ngSwitchCase="'countryName'">{{ rowData.countryName || 'N/A' }}</div>
-                        <div *ngSwitchCase="'pincode'">{{ rowData.pincode || 'N/A' }}</div>
-
-                        <!--  œ… Conditional fields -->
-                        <div *ngIf="authService.empInsProf === common.SCRN_EMPLOYER_CREATION">
-                          <div *ngSwitchCase="'frApprovedDate'">{{ rowData.frApprovedDate || 'N/A' }}</div>
-                          <div *ngSwitchCase="'frApprovedBy'">{{ rowData.frApprovedBy || 'N/A' }}</div>
-                          <div *ngSwitchCase="'Remarks'">{{ rowData.Remarks || 'N/A' }}</div>
-                        </div>
-
-                        <!-- ACTIVE -->
-                        <div *ngSwitchCase="'active'" class="tbl-icon">
-                          <span *ngIf="rowData.active" class="istrue">
-                            <i class="material-icons" matTooltip="Active" matTooltipClass="accent-tooltip">thumb_up</i>
-                          </span>
-                          <span *ngIf="!rowData.active" class="isfalse">
-                            <i class="material-icons" matTooltip="In-Active"
-                              matTooltipClass="accent-tooltip">thumb_down</i>
-                          </span>
-                        </div>
-
-                        <!-- ACTION -->
-                        <div *ngIf="col.field === 'action'" fxLayout="row" class="desg-icon">
-                          <div fxFlex="100%" fxLayoutGap="10px">
-
-                            <mat-icon>
-                              <i class="material-icons-outlined" matTooltip="View" matTooltipClass="accent-tooltip"
-                                (click)="viewDetail(rowData.id, rowData.addressId)">
-                                remove_red_eye
-                              </i>
-                            </mat-icon>
-
-                            <mat-icon>
-                              <i class="material-icons-outlined" matTooltip="Edit" matTooltipClass="accent-tooltip"
-                                (click)="getEmployerInsutionByEmpID(rowData.id, rowData.addressId)"
-                                [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
-                                edit
-                              </i>
-                            </mat-icon>
-
-                            <mat-icon>
-                              <i class="material-icons-outlined" matTooltip="Delete" matTooltipClass="accent-tooltip"
-                                class="page-btn disabled" (click)="openDialog(rowData)">
-                                delete
-                              </i>
-                            </mat-icon>
-
-                          </div>
-                        </div>
-
-                      </td>
-                    </tr>
-
-                  </ng-template>
-
-                </p-table>
+                            @if (col.field === 'name') {
+                              <div>{{ rowData.name || 'N/A' }}</div>
+                            }
+                            @if (col.field === 'addLine1') {
+                              <div>{{ rowData.addLine1 || 'N/A' }}</div>
+                            }
+                            @if (col.field === 'city') {
+                              <div>{{ rowData.city || 'N/A' }}</div>
+                            }
+                            @if (col.field === 'stateName') {
+                              <div>{{ rowData.stateName || 'N/A' }}</div>
+                            }
+                            @if (col.field === 'countryName') {
+                              <div>{{ rowData.countryName || 'N/A' }}</div>
+                            }
+                            @if (col.field === 'pincode') {
+                              <div>{{ rowData.pincode || 'N/A' }}</div>
+                            }
+                            <!--  œ… Conditional fields -->
+                            @if (authService.empInsProf === common.SCRN_EMPLOYER_CREATION) {
+                              <div>
+                                @if (col.field === 'frApprovedDate') {
+                                  <div>{{ rowData.frApprovedDate || 'N/A' }}</div>
+                                }
+                                @if (col.field === 'frApprovedBy') {
+                                  <div>{{ rowData.frApprovedBy || 'N/A' }}</div>
+                                }
+                                @if (col.field === 'Remarks') {
+                                  <div>{{ rowData.Remarks || 'N/A' }}</div>
+                                }
+                              </div>
+                            }
+                            <!-- ACTIVE -->
+                            @if (col.field === 'active') {
+                              <div class="tbl-icon">
+                                @if (rowData.active) {
+                                  <span class="istrue">
+                                    <i class="material-icons" matTooltip="Active" matTooltipClass="accent-tooltip">thumb_up</i>
+                                  </span>
+                                }
+                                @if (!rowData.active) {
+                                  <span class="isfalse">
+                                    <i class="material-icons" matTooltip="In-Active"
+                                    matTooltipClass="accent-tooltip">thumb_down</i>
+                                  </span>
+                                }
+                              </div>
+                            }
+                            <!-- ACTION -->
+                            @if (col.field === 'action') {
+                              <div fxLayout="row" class="desg-icon">
+                                <div fxFlex="100%" fxLayoutGap="10px">
+                                  <mat-icon>
+                                    <i class="material-icons-outlined" matTooltip="View" matTooltipClass="accent-tooltip"
+                                      (click)="viewDetail(rowData.id, rowData.addressId)">
+                                      remove_red_eye
+                                    </i>
+                                  </mat-icon>
+                                  <mat-icon>
+                                    <i class="material-icons-outlined" matTooltip="Edit" matTooltipClass="accent-tooltip"
+                                      (click)="getEmployerInsutionByEmpID(rowData.id, rowData.addressId)"
+                                      [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                                      edit
+                                    </i>
+                                  </mat-icon>
+                                  <mat-icon>
+                                    <i class="material-icons-outlined" matTooltip="Delete" matTooltipClass="accent-tooltip"
+                                      class="page-btn disabled" (click)="openDialog(rowData)">
+                                      delete
+                                    </i>
+                                  </mat-icon>
+                                </div>
+                              </div>
+                            }
+                          </td>
+                        }
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
               </div>
-            </div>
-            <div class="cus-paginator" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-              fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid"
-              [ngClass]="{'empty-record': employerInstutionList.length == 0}">
-              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="start center">
-                Showing {{ dt.totalRecords
-                < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+              <div class="cus-paginator" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid"
+                [ngClass]="{'empty-record': employerInstutionList.length == 0}">
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center">
+                  Showing {{ dt.totalRecords
+                  < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
                   <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s) |
-                    &nbsp;<a (click)="showall()">Show All</a>
-              </div>
-              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                fxLayoutAlign.xs="start center">
+                  &nbsp;<a (click)="showall()">Show All</a>
+                </div>
+                <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                  fxLayoutAlign.xs="start center">
                 <a [ngClass]="dt.first===0?'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                           navigateNxtPrevPage(dt.first + dt.rows,dt.rows)">
-                  <i class="icon-control-start mr-5"></i></a>
-                <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
-                    <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
-                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value,dt.rows)" />
-                  </span></span>
-
-                <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords,dt.rows) }}</span>
+                    <i class="icon-control-start mr-5"></i></a>
+                    <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                      <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                        [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value,dt.rows)" />
+                      </span></span>
+                      <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords,dt.rows) }}</span>
                 <a [ngClass]="(dt.rows + dt.first)>=dt.totalRecords?'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                                     navigateNxtPrevPage(dt.first + dt.rows,dt.rows)"><i
-                    class="icon-control-end ml-5"></i></a>
-              </div>
+                      class="icon-control-end ml-5"></i></a>
+                    </div>
+                  </div>
+                </div>
+              }
             </div>
-          </div>
-        </div>
-        <div class="content-area" *ngIf='showBulkUpload'>
-          <app-bulk-export-import [empIns]="empIns" (backEvent)="navigateURL()" [verSt]="verSt" [isFake]="false">
-          </app-bulk-export-import>
-        </div>
-      </mat-card-content>
-    </mat-card>
+            @if (showBulkUpload) {
+              <div class="content-area">
+                <app-bulk-export-import [empIns]="empIns" (backEvent)="navigateURL()" [verSt]="verSt" [isFake]="false">
+                </app-bulk-export-import>
+              </div>
+            }
+          </mat-card-content>
+        </mat-card>
 
 
-  </div>
-</div>
+      </div>
+    </div>

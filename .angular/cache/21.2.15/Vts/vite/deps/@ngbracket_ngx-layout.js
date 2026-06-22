@@ -12,32 +12,6 @@ import {
   StyleDirective
 } from "./chunk-3YWGU5XD.js";
 import {
-  DefaultFlexAlignDirective,
-  DefaultFlexDirective,
-  DefaultFlexOffsetDirective,
-  DefaultFlexOrderDirective,
-  DefaultLayoutAlignDirective,
-  DefaultLayoutDirective,
-  DefaultLayoutGapDirective,
-  FlexAlignDirective,
-  FlexAlignStyleBuilder,
-  FlexDirective,
-  FlexFillDirective,
-  FlexFillStyleBuilder,
-  FlexModule,
-  FlexOffsetDirective,
-  FlexOffsetStyleBuilder,
-  FlexOrderDirective,
-  FlexOrderStyleBuilder,
-  FlexStyleBuilder,
-  LayoutAlignDirective,
-  LayoutAlignStyleBuilder,
-  LayoutDirective,
-  LayoutGapDirective,
-  LayoutGapStyleBuilder,
-  LayoutStyleBuilder
-} from "./chunk-BBSGGPN6.js";
-import {
   DefaultGridAlignColumnsDirective,
   DefaultGridAlignDirective,
   DefaultGridAlignRowsDirective,
@@ -73,6 +47,32 @@ import {
   GridRowsDirective,
   GridRowsStyleBuilder
 } from "./chunk-RT3KOSR4.js";
+import {
+  DefaultFlexAlignDirective,
+  DefaultFlexDirective,
+  DefaultFlexOffsetDirective,
+  DefaultFlexOrderDirective,
+  DefaultLayoutAlignDirective,
+  DefaultLayoutDirective,
+  DefaultLayoutGapDirective,
+  FlexAlignDirective,
+  FlexAlignStyleBuilder,
+  FlexDirective,
+  FlexFillDirective,
+  FlexFillStyleBuilder,
+  FlexModule,
+  FlexOffsetDirective,
+  FlexOffsetStyleBuilder,
+  FlexOrderDirective,
+  FlexOrderStyleBuilder,
+  FlexStyleBuilder,
+  LayoutAlignDirective,
+  LayoutAlignStyleBuilder,
+  LayoutDirective,
+  LayoutGapDirective,
+  LayoutGapStyleBuilder,
+  LayoutStyleBuilder
+} from "./chunk-BBSGGPN6.js";
 import {
   BREAKPOINT,
   BREAKPOINTS,
@@ -113,13 +113,13 @@ import "./chunk-MLK434PF.js";
 import "./chunk-UILBFXOF.js";
 import "./chunk-6AHOBRIJ.js";
 import "./chunk-N4DOILP3.js";
-import "./chunk-3P6NZDVG.js";
 import "./chunk-ILEVSUJ3.js";
-import "./chunk-Y6BXVQXT.js";
+import "./chunk-3P6NZDVG.js";
 import {
   isPlatformServer
 } from "./chunk-SMKKFHGX.js";
 import "./chunk-HX53TNYB.js";
+import "./chunk-Y6BXVQXT.js";
 import {
   Inject,
   NgModule,

@@ -19,272 +19,308 @@
               <span fxFlex></span>
               <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
                 fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                <div class="tbl-commonsearch" *ngIf="!showGrid">
-                  <mat-form-field fxFlex="100%">
-                    <mat-label></mat-label>
-                    <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                    <input #global matInput size="50" placeholder="Search..." autocomplete="off"
-                      (input)="dt?.filterGlobal($event.target.value, 'contains')" />
-                    <button mat-button *ngIf="global.value" matSuffix mat-icon-button aria-label="Clear"
-                      (click)="global.value = '';dt?.filterGlobal($event.target.value, 'contains')"></button>
-                  </mat-form-field>
+                @if (!showGrid) {
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input #global matInput size="50" placeholder="Search..." autocomplete="off"
+                        (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                        @if (global.value) {
+                          <button mat-button matSuffix mat-icon-button aria-label="Clear"
+                          (click)="global.value = '';dt?.filterGlobal($event.target.value, 'contains')"></button>
+                        }
+                      </mat-form-field>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
-          </div>
-        </mat-card-header>
-      </div>
-      <mat-card-content>
-        <div fxLayout="row wrap" *ngIf="!showGrid">
-          <div fxFlex="100%">
-           <p-table
-  #dt
-  [columns]="filedname"
-  [value]="clientAgreementStatusList"
-  [resizableColumns]="true"
-  [reorderableColumns]="true"
-  [scrollable]="true"
-  scrollHeight=""
-  [paginator]="true"
-  [rows]="itemperpage"
-  frozenWidth="100px"
-  [frozenColumns]="frozenCols">
-
-  <!-- ================= COLGROUP ================= -->
-  <ng-template pTemplate="colgroup" let-colGroupCols>
-    <colgroup>
-      <col *ngFor="let col of colGroupCols" style="width:150px" />
-    </colgroup>
-  </ng-template>
-
-  <!-- ================= HEADER ================= -->
-  <ng-template pTemplate="header" let-headerCols>
-    <tr>
-      <th *ngFor="let col of headerCols"
-          [ngSwitch]="col.field"
-          pReorderableColumn
-          pResizableColumn
-          matTooltip="{{ col.header }}"
-          matTooltipClass="accent-tooltip">
-
-        <span [pSortableColumn]="col.field">
-          <div class="thname">{{ col.header }}</div>
-          <p-sortIcon
-            *ngIf="col.field !== 'action'"
-            [field]="col.field"
-            ariaLabel="Activate to sort"
-            ariaLabelDesc="Activate to sort in descending order"
-            ariaLabelAsc="Activate to sort in ascending order">
-          </p-sortIcon>
-        </span>
-
-        <!-- SEARCH ICONS -->
-        <span class="ico-fieldsearch">
-          <i *ngSwitchCase="'clientName'" class="icon-search2"
-             (click)="clientNameCtrlTrigger.openMenu()"></i>
-          <i *ngSwitchCase="'reason'" class="icon-search2"
-             (click)="reasonCtrlTrigger.openMenu()"></i>
-          <i *ngSwitchCase="'agreementAvailable'" class="icon-search2"
-             (click)="agreementAvailableCtrlTrigger.openMenu()"></i>
-          <i *ngSwitchCase="'created'" class="icon-search2"
-             (click)="createdDateCtrlTrigger.openMenu()"></i>
-          <i *ngSwitchCase="'requestedByFirstName'" class="icon-search2"
-             (click)="requestByCtrlTrigger.openMenu()"></i>
-          <i *ngSwitchCase="'approvalFlag'" class="icon-search2"
-             (click)="statusCtrlTrigger.openMenu()"></i>
-        </span>
-
-        <!--  œ… all dropdown filter mat-menu blocks remain unchanged -->
-
-      </th>
-    </tr>
-  </ng-template>
-
-  <!-- ================= BODY ================= -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-bodyCols="columns">
-
-    <tr>
-      <td *ngFor="let col of bodyCols"
-          [ngSwitch]="col.field"
-          [ngClass]="{ 'desg-bg': col.field === 'action' }">
-
-        <!-- NON-STATUS FIELDS -->
-        <div *ngIf="col.field !== 'approvalFlag'">
-
-          <div *ngSwitchCase="'clientName'">{{ rowData.clientName }}</div>
-          <div *ngSwitchCase="'agreementAvailable'">{{ rowData.agreementAvailable }}</div>
-          <div *ngSwitchCase="'requestedByFirstName'">
-            {{ rowData.requestedByFirstName || 'N/A' }}
-          </div>
-          <div *ngSwitchCase="'reason'">
-            {{ rowData.reason || 'N/A' }}
-          </div>
-          <div *ngSwitchCase="'created'">
-            {{ commonService.getTimezoneOffset(rowData.created,false)
-               | date:'dd/MM/yyyy hh:mm:ss a' }}
-          </div>
-
-          <!-- ACTION COLUMN -->
-          <div *ngIf="col.field === 'action'" fxLayout="row" class="desg-icon">
-            <div fxFlex="100%" fxLayoutGap="10px">
-
-              <mat-icon *ngIf="rowData.approvalFlag === 'Pending'"
-                        matTooltip="Edit"
-                        matTooltipClass="accent-tooltip"
-                        [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
-                <i class="material-icons-outlined"
-                   (click)="getClientAgreementApprovalByID(rowData)">
-                  edit
-                </i>
-              </mat-icon>
-
-              <mat-icon *ngIf="rowData.approvalFlag === 'APPROVED'"
-                        matTooltip="View"
-                        matTooltipClass="accent-tooltip"
-                        [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
-                <i class="material-icons-outlined"
-                   (click)="getClientAgreementApprovalByID(rowData)">
-                  remove_red_eye
-                </i>
-              </mat-icon>
-
-            </div>
-          </div>
-
+          </mat-card-header>
         </div>
-
-        <!-- STATUS COLUMN -->
-        <div *ngIf="col.field === 'approvalFlag'">
-          <div *ngIf="rowData.approvalFlag === 'Pending'" class="status pending">
-            {{ rowData.approvalFlag }}
-          </div>
-          <div *ngIf="rowData.approvalFlag === 'APPROVED'" class="status approved">
-            {{ rowData.approvalFlag }}
-          </div>
-        </div>
-
-      </td>
-    </tr>
-
-  </ng-template>
-
-</p-table>
-            <div [ngClass]="{'empty-record': clientAgreementStatusList?.length == 0}" fxLayout="row wrap"
-              fxLayoutGap="0px grid" class="cus-paginator" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
-              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords>
+        <mat-card-content>
+          @if (!showGrid) {
+            <div fxLayout="row wrap">
+              <div fxFlex="100%">
+                <p-table
+                  #dt
+                  [columns]="filedname"
+                  [value]="clientAgreementStatusList"
+                  [resizableColumns]="true"
+                  [reorderableColumns]="true"
+                  [scrollable]="true"
+                  scrollHeight=""
+                  [paginator]="true"
+                  [rows]="itemperpage">
+                  <!-- ================= COLGROUP ================= -->
+                  <ng-template pTemplate="colgroup" let-colGroupCols>
+                    <colgroup>
+                    @for (col of colGroupCols; track col) {
+                      <col style="width:150px" />
+                    }
+                  </colgroup>
+                </ng-template>
+                <!-- ================= HEADER ================= -->
+                <ng-template pTemplate="header" let-headerCols>
+                  <tr>
+                    @for (col of headerCols; track col) {
+                      <th
+                        pReorderableColumn
+                        pResizableColumn
+                        matTooltip="{{ col.header }}"
+                        matTooltipClass="accent-tooltip">
+                        <span [pSortableColumn]="col.field">
+                          <div class="thname">{{ col.header }}</div>
+                          @if (col.field !== 'action') {
+                            <p-sortIcon
+                              [field]="col.field"
+                              ariaLabel="Activate to sort"
+                              ariaLabelDesc="Activate to sort in descending order"
+                              ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                          }
+                        </span>
+                        <!-- SEARCH ICONS -->
+                        <span class="ico-fieldsearch">
+                          @if (col.field === 'clientName') {
+                            <i class="icon-search2"
+                            (click)="clientNameCtrlTrigger.openMenu()"></i>
+                          }
+                          @if (col.field === 'reason') {
+                            <i class="icon-search2"
+                            (click)="reasonCtrlTrigger.openMenu()"></i>
+                          }
+                          @if (col.field === 'agreementAvailable') {
+                            <i class="icon-search2"
+                            (click)="agreementAvailableCtrlTrigger.openMenu()"></i>
+                          }
+                          @if (col.field === 'created') {
+                            <i class="icon-search2"
+                            (click)="createdDateCtrlTrigger.openMenu()"></i>
+                          }
+                          @if (col.field === 'requestedByFirstName') {
+                            <i class="icon-search2"
+                            (click)="requestByCtrlTrigger.openMenu()"></i>
+                          }
+                          @if (col.field === 'approvalFlag') {
+                            <i class="icon-search2"
+                            (click)="statusCtrlTrigger.openMenu()"></i>
+                          }
+                        </span>
+                        <!--  œ… all dropdown filter mat-menu blocks remain unchanged -->
+                      </th>
+                    }
+                  </tr>
+                </ng-template>
+                <!-- ================= BODY ================= -->
+                <ng-template
+                  pTemplate="body"
+                  let-rowData
+                  let-bodyCols="columns">
+                  <tr>
+                    @for (col of bodyCols; track col) {
+                      <td
+                        [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                        <!-- NON-STATUS FIELDS -->
+                        @if (col.field !== 'approvalFlag') {
+                          <div>
+                            @if (col.field === 'clientName') {
+                              <div>{{ rowData.clientName }}</div>
+                            }
+                            @if (col.field === 'agreementAvailable') {
+                              <div>{{ rowData.agreementAvailable }}</div>
+                            }
+                            @if (col.field === 'requestedByFirstName') {
+                              <div>
+                                {{ rowData.requestedByFirstName || 'N/A' }}
+                              </div>
+                            }
+                            @if (col.field === 'reason') {
+                              <div>
+                                {{ rowData.reason || 'N/A' }}
+                              </div>
+                            }
+                            @if (col.field === 'created') {
+                              <div>
+                                {{ commonService.getTimezoneOffset(rowData.created,false)
+                                | date:'dd/MM/yyyy hh:mm:ss a' }}
+                              </div>
+                            }
+                            <!-- ACTION COLUMN -->
+                            @if (col.field === 'action') {
+                              <div fxLayout="row" class="desg-icon">
+                                <div fxFlex="100%" fxLayoutGap="10px">
+                                  @if (rowData.approvalFlag === 'Pending') {
+                                    <mat-icon
+                                      matTooltip="Edit"
+                                      matTooltipClass="accent-tooltip"
+                                      [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                                      <i class="material-icons-outlined"
+                                        (click)="getClientAgreementApprovalByID(rowData)">
+                                        edit
+                                      </i>
+                                    </mat-icon>
+                                  }
+                                  @if (rowData.approvalFlag === 'APPROVED') {
+                                    <mat-icon
+                                      matTooltip="View"
+                                      matTooltipClass="accent-tooltip"
+                                      [ngClass]="screenAuth.editFlag === false ? 'page-btn disabled' : ''">
+                                      <i class="material-icons-outlined"
+                                        (click)="getClientAgreementApprovalByID(rowData)">
+                                        remove_red_eye
+                                      </i>
+                                    </mat-icon>
+                                  }
+                                </div>
+                              </div>
+                            }
+                          </div>
+                        }
+                        <!-- STATUS COLUMN -->
+                        @if (col.field === 'approvalFlag') {
+                          <div>
+                            @if (rowData.approvalFlag === 'Pending') {
+                              <div class="status pending">
+                                {{ rowData.approvalFlag }}
+                              </div>
+                            }
+                            @if (rowData.approvalFlag === 'APPROVED') {
+                              <div class="status approved">
+                                {{ rowData.approvalFlag }}
+                              </div>
+                            }
+                          </div>
+                        }
+                      </td>
+                    }
+                  </tr>
+                </ng-template>
+              </p-table>
+              <div [ngClass]="{'empty-record': clientAgreementStatusList?.length == 0}" fxLayout="row wrap"
+                fxLayoutGap="0px grid" class="cus-paginator" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid">
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords>
                   0
                   ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{
-                    dt.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a> </div>
-              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                fxLayoutAlign.xs="start center">
+                  dt.totalRecords }} record(s) | &nbsp;<a (click)="showall()">Show All</a> </div>
+                  <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                  <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                    fxLayoutAlign.xs="start center">
                 <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
                 dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                 navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"> <i class="icon-control-start mr-5"></i></a>
-                <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to
-                  Page<span class="input-num">
-                    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
-                      [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
-                  </span></span> <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                      <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to
+                        Page<span class="input-num">
+                        <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                          [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                          </span></span> <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
                 <a [ngClass]=" dt.rows + dt.first >= dt.totalRecords? 'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                 navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"> <i class="icon-control-end ml-5"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="showGrid">
-          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
-            fxLayout.xs="column" fxLayoutGap="0px grid">
-            <div fxFlex="100%">
-              <div class="client-details">
-                <div  class="client-avatar" fxHide.sm fxHide.xs><i  class="icon-referencecheck"></i></div>  
-                <div class="client-data">
-                  <h3 matTooltip="Client details" matTooltipClass="accent-tooltip">
-                    {{ ClientAgreementApproval?.clientName }}</h3>
-                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
-                    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Agreement Availability:</label><span>{{ ClientAgreementApproval?.agreementAvailable
-                          }}</span></p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Requested Date &
-                          Time:</label><span>{{(commonService.getTimezoneOffset(ClientAgreementApproval?.created, false)
-                          |date:'dd/MM/yyyy hh:mm:ss a')}}</span>
-                      </p>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Status:</label><span>{{ ClientAgreementApproval?.approvalFlag }}</span></p>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Requested By:</label><span>{{ ClientAgreementApproval?.requestedByFirstName }}</span>
-                      </p>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Approved Date &
+                  }
+                  @if (showGrid) {
+                    <div>
+                      <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                        fxLayout.xs="column" fxLayoutGap="0px grid">
+                        <div fxFlex="100%">
+                          <div class="client-details">
+                            <div  class="client-avatar" fxHide.sm fxHide.xs><i  class="icon-referencecheck"></i></div>
+                            <div class="client-data">
+                              <h3 matTooltip="Client details" matTooltipClass="accent-tooltip">
+                              {{ ClientAgreementApproval?.clientName }}</h3>
+                              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                                fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                  <p><label>Agreement Availability:</label><span>{{ ClientAgreementApproval?.agreementAvailable
+                                }}</span></p>
+                              </div>
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                <p><label>Requested Date &
+                                Time:</label><span>{{(commonService.getTimezoneOffset(ClientAgreementApproval?.created, false)
+                              |date:'dd/MM/yyyy hh:mm:ss a')}}</span>
+                            </p>
+                          </div>
+                          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <p><label>Status:</label><span>{{ ClientAgreementApproval?.approvalFlag }}</span></p>
+                          </div>
+                          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <p><label>Requested By:</label><span>{{ ClientAgreementApproval?.requestedByFirstName }}</span>
+                          </p>
+                        </div>
+                        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <p><label>Approved Date &
                           Time:</label><span>{{ ClientAgreementApproval?.approveDate ?
                           (commonService.getTimezoneOffset(ClientAgreementApproval?.approveDate, false)
-                          |date:'dd/MM/yyyy hh:mm:ss a') : 'N/A' }}</span>
+                        |date:'dd/MM/yyyy hh:mm:ss a') : 'N/A' }}</span>
                       </p>
                     </div>
                     <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
                       <p><label>Requester's Document:</label>
-                        <span *ngFor="let document of requestorDocList">
+                      @for (document of requestorDocList; track document) {
+                        <span>
                           <a (click)="downloadDoc(document)" routerLinkActive="active-link">
                             <i class="icon-file-text"></i>
                             {{document.fileName ? document.fileName : '--'}}
                           </a><br />
                         </span>
-                        <span *ngIf='requestorDocList?.length===0||requestorDocList===null'>
+                      }
+                      @if (requestorDocList?.length===0||requestorDocList===null) {
+                        <span>
                           <em>--</em>
                         </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
-                    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Reason for
-                          Non-Availability:</label><span>{{ ClientAgreementApproval?.reason ?
-                          ClientAgreementApproval?.reason : 'N/A'}}</span>
-                      </p>
-                    </div>
-                    <div fxFlex="66.66%" fxFlex.lg="66.66%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p>
-                        <label>Comments:</label><span>{{ ClientAgreementApproval?.approvalComments ?
-                          ClientAgreementApproval?.approvalComments : 'N/A' }}</span>
-                      </p>
-                    </div>
+                      }
+                    </p>
                   </div>
                 </div>
+                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+                  fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                    <p><label>Reason for
+                    Non-Availability:</label><span>{{ ClientAgreementApproval?.reason ?
+                  ClientAgreementApproval?.reason : 'N/A'}}</span>
+                </p>
               </div>
+              <div fxFlex="66.66%" fxFlex.lg="66.66%" fxFlex.md="49.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <p>
+                  <label>Comments:</label><span>{{ ClientAgreementApproval?.approvalComments ?
+                ClientAgreementApproval?.approvalComments : 'N/A' }}</span>
+              </p>
             </div>
           </div>
-          <div *ngIf="ClientAgreementApproval?.approvalFlag ==='Pending'">
-            <form [formGroup]="ClientAgreementForm" id="ngForm" autocomplete="off">
-              <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
-                fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                    <mat-label>Approval Comments</mat-label>
-                    <textarea #msgCount maxlength="1000" formControlName='approvalComments' matInput
-                      placeholder="Approval Comments"></textarea>
-                    <mat-error *ngIf="ClientAgreementForm.get('approvalComments').invalid">
-                      Comments is Required
-                    </mat-error>
-                    <mat-hint class="f-13"> ({{msgCount.value.length}} /1000 max) </mat-hint>
-                  </mat-form-field>
-                </div>
-              </div>
-            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  @if (ClientAgreementApproval?.approvalFlag ==='Pending') {
+    <div>
+      <form [formGroup]="ClientAgreementForm" id="ngForm" autocomplete="off">
+        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column wrap"
+          fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+          <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+              <mat-label>Approval Comments</mat-label>
+              <textarea #msgCount maxlength="1000" formControlName='approvalComments' matInput
+              placeholder="Approval Comments"></textarea>
+              @if (ClientAgreementForm.get('approvalComments').invalid) {
+                <mat-error>
+                  Comments is Required
+                </mat-error>
+              }
+              <mat-hint class="f-13"> ({{msgCount.value.length}} /1000 max) </mat-hint>
+            </mat-form-field>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+      </form>
+    </div>
+  }
+</div>
+}
+</mat-card-content>
+</mat-card>
+</div>
 </div>

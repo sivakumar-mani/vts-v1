@@ -1,968 +1,1085 @@
 ﻿<form [formGroup]="mainForm" autocomplete="off" role="presentation">
-    <div *ngIf="mainForm!=undefined">
-        <div fxLayout="row">
+  @if (mainForm!=undefined) {
+    <div>
+      <div fxLayout="row">
+        <div fxFlex="100%">
+          <app-common-base-info [mainForm]="mainForm" (emitNotappChange)="notApplicable($event)"
+            [formgroupName]="'screeningComponentInfo'" [compBaseDetails]="compBaseDetails"
+          [showNotApplicable]="showNotApplicable"> </app-common-base-info>
+          <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+            [formGroupName]="formgroupName">
             <div fxFlex="100%">
-                <app-common-base-info [mainForm]="mainForm" (emitNotappChange)="notApplicable($event)"
-                    [formgroupName]="'screeningComponentInfo'" [compBaseDetails]="compBaseDetails"
-                    [showNotApplicable]="showNotApplicable"> </app-common-base-info>
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-                    [formGroupName]="formgroupName">
+              @if (userData.applicationId === 3 && this.common.candidateCountryId !== 92) {
+                <div fxflex="100%"
+                  >
+                  <mat-label class="lbl">Do you have the copy of your Current / Last employment
+                  document?</mat-label>
+                  <mat-radio-group formControlName="isDirectAppDocReq" aria-label="Select an option"
+                    fxLayoutGap="20px" (change)="CheckDoc($event)" required>
+                    <mat-radio-button [value]="true" fxLayoutGap="20px">Yes</mat-radio-button>
+                    <mat-radio-button [value]="false" fxLayoutGap="20px">No</mat-radio-button>
+                  </mat-radio-group>
+                  @if (mainForm?.get(formgroupName)?.get('isDirectAppDocReq')?.errors?.required
+                    && mainForm?.get(formgroupName)?.get('isDirectAppDocReq')?.touched) {
+                    <mat-error>
+                      Please Select One Choice
+                    </mat-error>
+                  }
+                </div>
+              }
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                <div fxflex="100%">
+                  <h3 class="sub-header">Address Details</h3>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                fxLayoutGap.xs="0px grid">
+                <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%">
+                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                    <mat-label>Company Name</mat-label>
+                    <input required matInput #Empl placeholder="Company Name"
+                      formControlName="employerName" maxlength="200" (click)="Empl.select()"
+                      [matAutocomplete]="auto1" (focus)="setEmpItems(Empl.value)"
+                      (keyup)="empkeyUpFunction($event,Empl.value)" autocomplete="off"
+                      role="presentation" (input)="setEmpItems(Empl.value);assignvalue(Empl.value);"
+                      (blur)="changeEmployer();Empvalidation($event,Empl.value)" maxlength="200" />
+                      <mat-hint class="note">
+                        <b>Note:</b> Click “Add your Employer/company name” to enter the company not
+                        listed in the drop-down or if the location of your company is new or different.
+                      </mat-hint>
+                      <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displaycempFn">
+                        <cdk-virtual-scroll-viewport class="autocomplete-test-viewport" itemSize="50"
+                          minBufferPx="500" maxBufferPx="750">
+                          <table class="autocomp" cellpadding="0" cellspacing="1">
+                            @if (filterEmpList.length>0) {
+                              <thead>
+                                <tr class="autocomp-disable">
+                                  <th>Company Name | Country | State | District</th>
+                                </tr>
+                              </thead>
+                            }
+                            <tbody>
+                              <tr class="autocomp-record"
+                                *cdkVirtualFor="let option of filterEmpList"
+                                (click)="getmethod(option.empInsId,option.address.addressId,option.empInsAddressId)">
+                                <mat-option [value]="option.name"
+                                  (onSelectionChange)="getmethod(option.empInsId,option.address.addressId,option.empInsAddressId)">
+                                  <td><span
+                                    [innerHTML]="getName(option) | highlight:Empl.value">
+                                  </span></td>
+                                </mat-option>
+                              </tr>
+                              @if (filterEmpList.length===0) {
+                                <tr>
+                                  <mat-option value="">
+                                    <td colspan="4">
+                                      <a (click)="openAddNewMasterData()">Add Your Employer /
+                                      Company name</a>
+                                    </td>
+                                  </mat-option>
+                                </tr>
+                              }
+                            </tbody>
+                          </table>
+                        </cdk-virtual-scroll-viewport>
+                      </mat-autocomplete>
+                      @if (!!mainForm?.get(formgroupName)?.get('employerName')?.errors?.required) {
+                        <mat-error
+                          >
+                          Click “Add your Employer/company name” to enter the company not listed in the
+                        drop-down or if the location of your company is new or different </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                  @if (show) {
+                    <ngx-spinner bdOpacity=0 .9 bdColor="rgba(0,0,0,0)" size="medium" color="#fff"
+                      type="ball-clip-rotate-pulse" [fullScreen]="true">
+                    </ngx-spinner>
+                  }
+                  @if (predata?.length>0) {
+                    <div fxFlex="20%" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%"
+                      fxFlex.xs="100%" Class="mb-25">
+                      <a (click)="openDialogdata()">Pre Data</a>
+                    </div>
+                  }
+                  @if (CFflag === 1) {
+                    <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutGap="20px">
+                      <mat-label class="lbl">Choose</mat-label>
+                      <mat-checkbox (change)="chengeFresherEmp($event);" formControlName="fresherFlag">I am
+                        Fresher
+                      </mat-checkbox>
+                      <mat-checkbox (change)="checkCurrentEmp();" formControlName="currentEmployerFlag">I
+                        currently work here
+                      </mat-checkbox>
+                    </div>
+                  }
+                </div>
+                @if (addressWithoutForm?.addLine1?.length > 0) {
+                  <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid"
+                    fxLayoutGap.xs="0px grid">
                     <div fxFlex="100%">
-                        <div fxflex="100%"
-                            *ngIf="userData.applicationId === 3 && this.common.candidateCountryId !== 92">
-                            <mat-label class="lbl">Do you have the copy of your Current / Last employment
-                                document?</mat-label>
-                                <mat-radio-group formControlName="isDirectAppDocReq" aria-label="Select an option"
-                                    fxLayoutGap="20px" (change)="CheckDoc($event)" required>
-                                    <mat-radio-button [value]="true" fxLayoutGap="20px">Yes</mat-radio-button>
-                                    <mat-radio-button [value]="false" fxLayoutGap="20px">No</mat-radio-button>
-                                </mat-radio-group>
-                                <mat-error *ngIf="mainForm?.get(formgroupName)?.get('isDirectAppDocReq')?.errors?.required
-                                && mainForm?.get(formgroupName)?.get('isDirectAppDocReq')?.touched">
-                                    Please Select One Choice
+                      <h3 class="sub-header">Company Address:</h3>
+                      @if (addressWithoutForm?.addressId ==screeningService.defaultAddressId) {
+                        <address>
+                          Not Provided
+                        </address>
+                      }
+                      @if (addressWithoutForm?.addressId !=screeningService.defaultAddressId) {
+                        <address>
+                          {{addressWithoutForm?.addLine1 ? addressWithoutForm?.addLine1 :
+                          ''}}{{addressWithoutForm?.addLine2 ? (', ' + addressWithoutForm?.addLine2) : ''}}
+                          {{addressWithoutForm?.addLine3 ? (', ' + addressWithoutForm?.addLine3) :
+                          ''}}{{addressWithoutForm?.place ? (', ' + addressWithoutForm?.place) : ''}}
+                          {{addressWithoutForm?.city ? (', ' + addressWithoutForm?.city) :
+                          ''}}{{addressWithoutForm?.district ? (' ' + addressWithoutForm?.district) : ''}}
+                          <br>{{addressWithoutForm?.state ? addressWithoutForm?.state :
+                            ''}}{{addressWithoutForm?.country ? (', ' + addressWithoutForm?.country) : ''}}
+                            {{addressWithoutForm?.postalCode ? (' - ' + addressWithoutForm?.postalCode) : ''}}
+                          </address>
+                        }
+                      </div>
+                    </div>
+                  }
+                  @if (screeningService.IqcByPassFlag != true &&addcontrolflag && ((isFakeEmployee && isSuspectFlag) || (isSuspectFlag && mainForm?.get(formgroupName).get('isVerified').value != null))) {
+                    <div
+                      style="display: flex;flex-direction: column;">
+                      <p class="sub-header1">Client Suspect / Blacklist</p>
+                      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <mat-radio-group required formControlName="isClientSuspectFlag"
+                          style="display: inline-flex; flex-direction: row;" fxLayoutGap="20px">
+                          <mat-radio-button [value]="true">Yes</mat-radio-button>
+                          <mat-radio-button [value]="false">No</mat-radio-button>
+                        </mat-radio-group>
+                        @if (mainForm?.get(formgroupName)?.get('isClientSuspectFlag')?.errors?.required
+                          && mainForm?.get(formgroupName)?.get('isClientSuspectFlag')?.touched) {
+                          <mat-error>
+                            Client Suspect / Blacklist is required
+                          </mat-error>
+                        }
+                      </div>
+                    </div>
+                  }
+                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                    <div fxflex="100%">
+                      <h3 class="sub-header">Employment Details</h3>
+                    </div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                    fxLayoutGap.xs="0px grid">
+                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                      fxFlex.xs="100%">
+                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                        <mat-label>Employee Id</mat-label>
+                        <input matInput formControlName="employeeId" placeholder="Employee Id"
+                          maxlength="60" [required]="applicationId === 3" />
+                          @if (!!mainForm?.get(formgroupName)?.get('employeeId')?.errors?.required) {
+                            <mat-error
+                              >
+                            Employee id is required </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                        fxFlex.xs="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>Designation</mat-label>
+                          <input matInput formControlName="designation" placeholder="Designation"
+                            maxlength="120" [required]="applicationId === 3" />
+                            @if (!!mainForm?.get(formgroupName)?.get('designation')?.errors?.required) {
+                              <mat-error
+                                >
+                              Designation is required </mat-error>
+                            }
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                          fxFlex.xs="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>CTC</mat-label>
+                            <input matInput placeholder="Enter CTC Per Annum in Lacs" formControlName="ctc"
+                              maxlength="150" required />
+                              <mat-hint>Alphabet and Numeric values are supported (Eg.1,00,000 per
+                              annum)</mat-hint>
+                              @if (!!mainForm?.get(formgroupName)?.get('ctc')?.errors?.required) {
+                                <mat-error> CTC
+                                  is required
                                 </mat-error>
+                              }
+                            </mat-form-field>
+                          </div>
                         </div>
-                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
-                            <div fxflex="100%">
-                                <h3 class="sub-header">Address Details</h3>
-                            </div>
-                        </div>
-                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
-                            fxLayoutGap.xs="0px grid">
-                            <div fxFlex="60%" fxFlex.lg="60%" fxFlex.md="60%" fxFlex.sm="100%" fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>Company Name</mat-label>
-                                    <input required matInput #Empl placeholder="Company Name"
-                                        formControlName="employerName" maxlength="200" (click)="Empl.select()"
-                                        [matAutocomplete]="auto1" (focus)="setEmpItems(Empl.value)"
-                                        (keyup)="empkeyUpFunction($event,Empl.value)" autocomplete="off"
-                                        role="presentation" (input)="setEmpItems(Empl.value);assignvalue(Empl.value);"
-                                        (blur)="changeEmployer();Empvalidation($event,Empl.value)" maxlength="200" />
-                                    <mat-hint class="note">
-                                        <b>Note:</b> Click “Add your Employer/company name” to enter the company not
-                                        listed in the drop-down or if the location of your company is new or different.
-                                    </mat-hint>
-
-                                    <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displaycempFn">
-                                        <cdk-virtual-scroll-viewport class="autocomplete-test-viewport" itemSize="50"
-                                            minBufferPx="500" maxBufferPx="750">
-                                            <table class="autocomp" cellpadding="0" cellspacing="1">
-                                                <thead *ngIf="filterEmpList.length>0">
-                                                    <tr class="autocomp-disable">
-                                                        <th>Company Name | Country | State | District</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr class="autocomp-record"
-                                                        *cdkVirtualFor="let option of filterEmpList"
-                                                        (click)="getmethod(option.empInsId,option.address.addressId,option.empInsAddressId)">
-                                                        <mat-option [value]="option.name"
-                                                            (onSelectionChange)="getmethod(option.empInsId,option.address.addressId,option.empInsAddressId)">
-                                                            <td><span
-                                                                    [innerHTML]="getName(option) | highlight:Empl.value">
-                                                                </span></td>
-                                                        </mat-option>
-                                                    </tr>
-                                                    <tr *ngIf="filterEmpList.length===0">
-                                                        <mat-option value="">
-                                                            <td colspan="4">
-                                                                <a (click)="openAddNewMasterData()">Add Your Employer /
-                                                                    Company name</a>
-                                                            </td>
-                                                        </mat-option>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </cdk-virtual-scroll-viewport>
-                                    </mat-autocomplete>
-                                    <mat-error
-                                        *ngIf="!!mainForm?.get(formgroupName)?.get('employerName')?.errors?.required">
-                                        Click “Add your Employer/company name” to enter the company not listed in the
-                                        drop-down or if the location of your company is new or different </mat-error>
-                                </mat-form-field>
-                            </div>
-                            <ngx-spinner bdOpacity=0 .9 bdColor="rgba(0,0,0,0)" size="medium" color="#fff"
-                                type="ball-clip-rotate-pulse" [fullScreen]="true" *ngIf="show">
-
-                            </ngx-spinner>
-                            <div fxFlex="20%" *ngIf="predata?.length>0" fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%"
-                                fxFlex.xs="100%" Class="mb-25">
-                                <a (click)="openDialogdata()">Pre Data</a>
-                            </div>
-                            <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                fxLayoutGap="20px" *ngIf="CFflag === 1">
-                                <mat-label class="lbl">Choose</mat-label>
-                                <mat-checkbox (change)="chengeFresherEmp($event);" formControlName="fresherFlag">I am
-                                    Fresher
-                                </mat-checkbox>
-                                <mat-checkbox (change)="checkCurrentEmp();" formControlName="currentEmployerFlag">I
-                                    currently work here
-                                </mat-checkbox>
-                            </div>
-                        </div>
-                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                            fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid"
-                            fxLayoutGap.xs="0px grid" *ngIf="addressWithoutForm?.addLine1?.length > 0">
-                            <div fxFlex="100%">
-                                <h3 class="sub-header">Company Address:</h3>
-                                <address *ngIf="addressWithoutForm?.addressId ==screeningService.defaultAddressId">
-                                    Not Provided
-                                </address>
-                                <address *ngIf="addressWithoutForm?.addressId !=screeningService.defaultAddressId">
-                                    {{addressWithoutForm?.addLine1 ? addressWithoutForm?.addLine1 :
-                                    ''}}{{addressWithoutForm?.addLine2 ? (', ' + addressWithoutForm?.addLine2) : ''}}
-                                    {{addressWithoutForm?.addLine3 ? (', ' + addressWithoutForm?.addLine3) :
-                                    ''}}{{addressWithoutForm?.place ? (', ' + addressWithoutForm?.place) : ''}}
-                                    {{addressWithoutForm?.city ? (', ' + addressWithoutForm?.city) :
-                                    ''}}{{addressWithoutForm?.district ? (' ' + addressWithoutForm?.district) : ''}}
-                                    <br>{{addressWithoutForm?.state ? addressWithoutForm?.state :
-                                    ''}}{{addressWithoutForm?.country ? (', ' + addressWithoutForm?.country) : ''}}
-                                    {{addressWithoutForm?.postalCode ? (' - ' + addressWithoutForm?.postalCode) : ''}}
-                                </address>
-                            </div>
-                        </div>
-                        <div *ngIf="screeningService.IqcByPassFlag != true &&addcontrolflag && ((isFakeEmployee && isSuspectFlag) || (isSuspectFlag && mainForm?.get(formgroupName).get('isVerified').value != null))"
-                            style="display: flex;flex-direction: column;">
-                            <p class="sub-header1">Client Suspect / Blacklist</p>
-                            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-                                <mat-radio-group required formControlName="isClientSuspectFlag"
-                                    style="display: inline-flex; flex-direction: row;" fxLayoutGap="20px">
-                                    <mat-radio-button [value]="true">Yes</mat-radio-button>
-                                    <mat-radio-button [value]="false">No</mat-radio-button>
-                                </mat-radio-group>
-                                <mat-error *ngIf="mainForm?.get(formgroupName)?.get('isClientSuspectFlag')?.errors?.required
-                                && mainForm?.get(formgroupName)?.get('isClientSuspectFlag')?.touched">
-                                    Client Suspect / Blacklist is required
-                                </mat-error>
-                            </div>
-                        </div>
-                        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
-                            <div fxflex="100%">
-                                <h3 class="sub-header">Employment Details</h3>
-                            </div>
-                        </div>
-
                         <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
-                            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
-                            fxLayoutGap.xs="0px grid">
-                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
-                                fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>Employee Id</mat-label>
-                                    <input matInput formControlName="employeeId" placeholder="Employee Id"
-                                        maxlength="60" [required]="applicationId === 3" />
-                                    <mat-error
-                                        *ngIf="!!mainForm?.get(formgroupName)?.get('employeeId')?.errors?.required">
-                                        Employee id is required </mat-error>
-                                </mat-form-field>
-                            </div>
-                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
-                                fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>Designation</mat-label>
-                                    <input matInput formControlName="designation" placeholder="Designation"
-                                        maxlength="120" [required]="applicationId === 3" />
-                                    <mat-error
-                                        *ngIf="!!mainForm?.get(formgroupName)?.get('designation')?.errors?.required">
-                                        Designation is required </mat-error>
-                                </mat-form-field>
-                            </div>
-                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
-                                fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>CTC</mat-label>
-                                    <input matInput placeholder="Enter CTC Per Annum in Lacs" formControlName="ctc"
-                                        maxlength="150" required />
-                                    <mat-hint>Alphabet and Numeric values are supported (Eg.1,00,000 per
-                                        annum)</mat-hint>
-                                    <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('ctc')?.errors?.required"> CTC
-                                        is required
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
-                        </div>
-
-                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
-                            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
-                            fxLayoutGap.xs="0px grid">
+                          fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                          fxLayoutGap.xs="0px grid">
+                          @if (isTech) {
                             <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                *ngIf="isTech">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>ROC Registration</mat-label>
-                                    <input matInput formControlName="rocRegistration" placeholder="ROC Registration"
-                                        maxlength="100" />
+                              >
+                              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                <mat-label>ROC Registration</mat-label>
+                                <input matInput formControlName="rocRegistration" placeholder="ROC Registration"
+                                  maxlength="100" />
                                 </mat-form-field>
-                            </div>
+                              </div>
+                            }
                             <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
-                                fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>From</mat-label>
-                                    <span *ngIf="userData?.applicationId !==3" matSuffix class="suff-lbtn"
-                                        [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
-                                        matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a
-                                            mat-flat-button
-                                            (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'fromDate')">NA</a></span>
-                                    <input matInput placeholder="From Date" autocomplete="off" role="presentation"
-                                        (focus)="naFlag !== true ? fromdate.open():''" [required]="applicationId === 3"
+                              fxFlex.xs="100%">
+                              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                <mat-label>From</mat-label>
+                                @if (userData?.applicationId !==3) {
+                                  <span matSuffix class="suff-lbtn"
+                                    [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                                    matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a
+                                    mat-flat-button
+                                  (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'fromDate')">NA</a></span>
+                                }
+                                <input matInput placeholder="From Date" autocomplete="off" role="presentation"
+                                  (focus)="naFlag !== true ? fromdate.open():''" [required]="applicationId === 3"
                                         formControlName="fromDate" #fromdate1 (input)="upperValue(fromdate1.value,'fromDate');calcCurrentCompany();fromDate(fromdate1.value,'fromDate');
                   dateCalc('fromDate','toDate');notProvidevalidation(fromdate1.value)" />
-                                    <mat-hint class="f-13" *ngIf="userData.applicationId !==3">(Eg. Joining Date or
-                                        Period, Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or Not
-                                        Provided),01st January 2019 should be typed as 01/JAN/2021.)</mat-hint>
-                                    <mat-hint class="f-13" *ngIf="userData.applicationId ===3">(Eg. Joining Date or
-                                        Period, Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017),01st January 2019
-                                        should be typed as 01/JAN/2021.)</mat-hint>
-                                    <input matInput hidden
-                                        (dateChange)="changeDate($event,'fromDate');calcCurrentCompany();dateCalc('fromDate','toDate')"
-                                        [max]="maxDate" [matDatepicker]="fromdate">
+                                  @if (userData.applicationId !==3) {
+                                    <mat-hint class="f-13">(Eg. Joining Date or
+                                      Period, Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or Not
+                                    Provided),01st January 2019 should be typed as 01/JAN/2021.)</mat-hint>
+                                  }
+                                  @if (userData.applicationId ===3) {
+                                    <mat-hint class="f-13">(Eg. Joining Date or
+                                      Period, Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017),01st January 2019
+                                    should be typed as 01/JAN/2021.)</mat-hint>
+                                  }
+                                  <input matInput hidden
+                                    (dateChange)="changeDate($event,'fromDate');calcCurrentCompany();dateCalc('fromDate','toDate')"
+                                    [max]="maxDate" [matDatepicker]="fromdate">
                                     <mat-datepicker-toggle
-                                        [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
-                                        matSuffix [for]="fromdate"></mat-datepicker-toggle>
+                                      [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                                    matSuffix [for]="fromdate"></mat-datepicker-toggle>
                                     <mat-datepicker #fromdate></mat-datepicker>
-                                    <mat-error
-                                        *ngIf="!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.required"> From
-                                        date is required </mat-error>
-                                    <mat-error
-                                        *ngIf="!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.date?.invalidPattern">
+                                    @if (!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.required) {
+                                      <mat-error
+                                        > From
+                                      date is required </mat-error>
+                                    }
+                                    @if (!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.date?.invalidPattern) {
+                                      <mat-error
+                                        >
                                         {{userData.applicationId === 3 ? "From date is invalid (E.g. Enter date as
                                         (01/JAN/2021 or 01/01/2021 or JAN/2017),01st January 2021 should be typed as
                                         01/JAN/2021." : "From date is invalid (E.g. Enter date as (01/JAN/2021
                                         or 01/01/2021 or JAN/2017 or Not Provided),01st January 2021 should be typed as
-                                        01/JAN/2021."}} </mat-error>
-                                    <mat-error
-                                        *ngIf="!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.date?.overLap">
+                                      01/JAN/2021."}} </mat-error>
+                                    }
+                                    @if (!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.date?.overLap) {
+                                      <mat-error
+                                        >
                                         From date should be lesser than previous from date
-                                    </mat-error>
-                                    <mat-error
-                                        *ngIf="!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.incorrect">
+                                      </mat-error>
+                                    }
+                                    @if (!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.incorrect) {
+                                      <mat-error
+                                        >
                                         {{userData.applicationId === 3 ? "From date is invalid. E.g. Enter date as
                                         (01/JAN/2021 or 01/01/2021 or JAN/2017),01st January 2021 should be typed as
                                         01/JAN/2021." : "From date should be lesser than from Till date" }}
-                                    </mat-error>
-                                    <mat-error
-                                        *ngIf="mainForm?.get(formgroupName)?.get('fromDate')?.errors?.incorrectlimitf">
+                                      </mat-error>
+                                    }
+                                    @if (mainForm?.get(formgroupName)?.get('fromDate')?.errors?.incorrectlimitf) {
+                                      <mat-error
+                                        >
                                         Please Enter Valid From Date
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
-                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
-                                fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                      </mat-error>
+                                    }
+                                  </mat-form-field>
+                                </div>
+                                <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                  fxFlex.xs="100%">
+                                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
                                     <mat-label>To</mat-label>
-                                    <span
-                                        *ngIf="mainForm?.get(formgroupName)?.get('currentEmployerFlag')?.value !== true && userData?.applicationId !==3"
+                                    @if (mainForm?.get(formgroupName)?.get('currentEmployerFlag')?.value !== true && userData?.applicationId !==3) {
+                                      <span
                                         matSuffix class="suff-lbtn"
                                         [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
                                         matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a
-                                            mat-flat-button
-                                            (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'toDate')">NA</a></span>
+                                        mat-flat-button
+                                      (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'toDate')">NA</a></span>
+                                    }
                                     <input matInput placeholder="To Date" autocomplete="off" role="presentation"
-                                        formControlName="toDate"
-                                        (input)="upperValue(todate1.value,'toDate');toDate(todate1.value,'toDate');"
-                                        [readOnly]="todateReadOnly" #todate1
-                                        (keyup)="dateCalc('fromDate','toDate');getDateCal(18,mainForm.get('screeningComponentInfo.compIndex')?.value,mainForm?.get(formgroupName)?.get('fromDate').value, mainForm?.get(formgroupName)?.get('toDate').value);notProvide(todate1.value);"
-                                        [required]="applicationId === 3" (focus)="naFlag !== true ? todate.open():''" />
-                                    <input matInput hidden
+                                      formControlName="toDate"
+                                      (input)="upperValue(todate1.value,'toDate');toDate(todate1.value,'toDate');"
+                                      [readOnly]="todateReadOnly" #todate1
+                                      (keyup)="dateCalc('fromDate','toDate');getDateCal(18,mainForm.get('screeningComponentInfo.compIndex')?.value,mainForm?.get(formgroupName)?.get('fromDate').value, mainForm?.get(formgroupName)?.get('toDate').value);notProvide(todate1.value);"
+                                      [required]="applicationId === 3" (focus)="naFlag !== true ? todate.open():''" />
+                                      <input matInput hidden
                                         (dateChange)="changeDate($event,'toDate');getDateCal(18,mainForm.get('screeningComponentInfo.compIndex')?.value,mainForm?.get(formgroupName)?.get('fromDate').value, mainForm?.get(formgroupName)?.get('toDate').value)"
                                         [readOnly]="todateReadOnly"
                                         [max]="todateReadOnly === true ?maxDate:CFflag==1?maxDate1:CFflag!=1?maxDate: ''"
                                         [matDatepicker]="todate">
-                                    <mat-datepicker-toggle *ngIf="todateReadOnly === false"
-                                        [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
-                                        matSuffix [for]="todate"></mat-datepicker-toggle>
-                                    <mat-datepicker #todate></mat-datepicker>
-                                    <mat-hint class="f-13" *ngIf="userData.applicationId !==3">(Eg. Relieved Date or
-                                        Period, Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017) or Not Provided or
-                                        TILL DATE.).,01st January 2019 should be typed as 01/JAN/2021.)</mat-hint>
-                                    <mat-hint class="f-13" *ngIf="userData.applicationId ===3">(Eg. Relieved Date or
-                                        Period, Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017) or TILL DATE),01st
-                                        January 2019 should be typed as 01/JAN/2021.)</mat-hint>
-                                    <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.required">
-                                        To date is required </mat-error>
-                                    <mat-error
-                                        *ngIf="!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.incorrect && userData.applicationId === 3">
-                                        To date is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or
-                                        TILL DATE),01st January 2021 should be typed as 01/JAN/2021. </mat-error>
-                                    <mat-error
-                                        *ngIf="!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.date?.invalidPattern">
-                                        {{userData.applicationId === 3 ? "To date is invalid (E.g. Enter date as
-                                        (01/JAN/2021 or 01/01/2021 or JAN/2017 or TILL DATE),01st January 2021 should be
-                                        typed as 01/JAN/2021." : "To date is invalid (E.g. Enter date
-                                        as (01/JAN/2021 or 01/01/2021 or JAN/2017 or Not Provided or TILL DATE),01st
-                                        January 2021 should be typed as 01/JAN/2021."}} </mat-error>
-                                    <mat-error
-                                        *ngIf="!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.comparison">
-                                        To date should be greater than from date
-                                    </mat-error>
-                                    <mat-error
-                                        *ngIf="mainForm?.get(formgroupName)?.get('toDate')?.errors?.incorrectlimit">
-                                        Please Enter Valid To Date
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
-                            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
-                                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
-                                fxLayoutGap.xs="0px grid">
-                                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                    *ngIf="(mainForm?.get(formgroupName)?.get('fromDate').value) &&
-            (mainForm?.get(formgroupName)?.get('toDate').value)">
-
-                                    <mat-label>Total Duration</mat-label>
-                                    <br />
-                                    <b>{{common?.getDateCaluculationDiff(mainForm?.get(formgroupName)?.get('fromDate').value,
-                                        mainForm?.get(formgroupName)?.get('toDate').value,
-                                        screeningService?.dob !== null ? screeningService?.dob: '')}}</b>
-                                </div>
-                            </div>
-                            <div fxFlex="56%" fxFlex.lg="56%" fxFlex.md="56%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                class="mb-15" *ngIf="isTech">
-                                <mat-label class="lbl">Are the attached documents genuine?</mat-label>
-                                <mat-radio-group fxLayoutGap="20px" formControlName="genuineDocFlag"
-                                    (change)="changeKeeponHold($event)">
-                                    <mat-radio-button [value]="true">Yes</mat-radio-button>
-                                    <mat-radio-button [value]="false">No</mat-radio-button>
-                                </mat-radio-group>
-                            </div>
-                        </div>
-                        <!-- <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
-            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-            <div *ngIf="anReasonShow" fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
-              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                <mat-label>Not Applicable Reason</mat-label>
-                <mat-select formControlName="npReasonLookupId" placeholder="Select Not Applicable Reason" required>
-                  <mat-option *ngFor="let date of npReasonList" [value]="date.lookUpId"> {{ date.lookUpName }}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('npReasonLookupId')?.errors?.required"> Not applicable reason is
-                  required </mat-error>
-              </mat-form-field>
-            </div>
-            <div *ngIf="otherReasonShow" fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
-              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                <mat-label>Other Reason Remarks</mat-label>
-                <textarea required #remarks matInput formControlName="npRemarks" placeholder="Remarks" maxlength="400" rows="2"></textarea>
-                <mat-hint>({{ remarks.value.length }}/400 Max)</mat-hint>
-                <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('npRemarks')?.errors?.required"> Other reason remarks is
-                  required </mat-error>
-              </mat-form-field>
-            </div>            
-          </div> -->
-
-                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
-                            fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
-                            fxLayoutGap.xs="0px grid">
-                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
-                                fxFlex.xs="100%">
-                                <mat-form-field appearance="outline"maxlength="500" fxFlex="100%">
-                                    <mat-label>Reason for Leaving</mat-label>
-                                    <input matInput placeholder="Reason for Leaving" maxlength="60"
+                                        @if (todateReadOnly === false) {
+                                          <mat-datepicker-toggle
+                                            [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                                          matSuffix [for]="todate"></mat-datepicker-toggle>
+                                        }
+                                        <mat-datepicker #todate></mat-datepicker>
+                                        @if (userData.applicationId !==3) {
+                                          <mat-hint class="f-13">(Eg. Relieved Date or
+                                            Period, Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017) or Not Provided or
+                                          TILL DATE.).,01st January 2019 should be typed as 01/JAN/2021.)</mat-hint>
+                                        }
+                                        @if (userData.applicationId ===3) {
+                                          <mat-hint class="f-13">(Eg. Relieved Date or
+                                            Period, Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017) or TILL DATE),01st
+                                          January 2019 should be typed as 01/JAN/2021.)</mat-hint>
+                                        }
+                                        @if (!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.required) {
+                                          <mat-error>
+                                          To date is required </mat-error>
+                                        }
+                                        @if (!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.incorrect && userData.applicationId === 3) {
+                                          <mat-error
+                                            >
+                                            To date is invalid. E.g. Enter date as (01/JAN/2021 or 01/01/2021 or JAN/2017 or
+                                          TILL DATE),01st January 2021 should be typed as 01/JAN/2021. </mat-error>
+                                        }
+                                        @if (!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.date?.invalidPattern) {
+                                          <mat-error
+                                            >
+                                            {{userData.applicationId === 3 ? "To date is invalid (E.g. Enter date as
+                                            (01/JAN/2021 or 01/01/2021 or JAN/2017 or TILL DATE),01st January 2021 should be
+                                            typed as 01/JAN/2021." : "To date is invalid (E.g. Enter date
+                                            as (01/JAN/2021 or 01/01/2021 or JAN/2017 or Not Provided or TILL DATE),01st
+                                          January 2021 should be typed as 01/JAN/2021."}} </mat-error>
+                                        }
+                                        @if (!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.comparison) {
+                                          <mat-error
+                                            >
+                                            To date should be greater than from date
+                                          </mat-error>
+                                        }
+                                        @if (mainForm?.get(formgroupName)?.get('toDate')?.errors?.incorrectlimit) {
+                                          <mat-error
+                                            >
+                                            Please Enter Valid To Date
+                                          </mat-error>
+                                        }
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                                      fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                                      fxLayoutGap.xs="0px grid">
+                                      @if ((mainForm?.get(formgroupName)?.get('fromDate').value) &&
+                                        (mainForm?.get(formgroupName)?.get('toDate').value)) {
+                                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                          >
+                                          <mat-label>Total Duration</mat-label>
+                                          <br />
+                                          <b>{{common?.getDateCaluculationDiff(mainForm?.get(formgroupName)?.get('fromDate').value,
+                                            mainForm?.get(formgroupName)?.get('toDate').value,
+                                          screeningService?.dob !== null ? screeningService?.dob: '')}}</b>
+                                        </div>
+                                      }
+                                    </div>
+                                    @if (isTech) {
+                                      <div fxFlex="56%" fxFlex.lg="56%" fxFlex.md="56%" fxFlex.sm="100%" fxFlex.xs="100%"
+                                        class="mb-15">
+                                        <mat-label class="lbl">Are the attached documents genuine?</mat-label>
+                                        <mat-radio-group fxLayoutGap="20px" formControlName="genuineDocFlag"
+                                          (change)="changeKeeponHold($event)">
+                                          <mat-radio-button [value]="true">Yes</mat-radio-button>
+                                          <mat-radio-button [value]="false">No</mat-radio-button>
+                                        </mat-radio-group>
+                                      </div>
+                                    }
+                                  </div>
+                                  <!-- <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+                                  fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                  <div *ngIf="anReasonShow" fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                      <mat-label>Not Applicable Reason</mat-label>
+                                      <mat-select formControlName="npReasonLookupId" placeholder="Select Not Applicable Reason" required>
+                                        <mat-option *ngFor="let date of npReasonList" [value]="date.lookUpId"> {{ date.lookUpName }}
+                                        </mat-option>
+                                      </mat-select>
+                                      <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('npReasonLookupId')?.errors?.required"> Not applicable reason is
+                                      required </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                  <div *ngIf="otherReasonShow" fxFlex="33.3%" fxFlex.lg="33.3%" fxFlex.md="33.3%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                      <mat-label>Other Reason Remarks</mat-label>
+                                      <textarea required #remarks matInput formControlName="npRemarks" placeholder="Remarks" maxlength="400" rows="2"></textarea>
+                                      <mat-hint>({{ remarks.value.length }}/400 Max)</mat-hint>
+                                      <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('npRemarks')?.errors?.required"> Other reason remarks is
+                                      required </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                </div> -->
+                                <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                                  fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
+                                  fxLayoutGap.xs="0px grid">
+                                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                    fxFlex.xs="100%">
+                                    <mat-form-field appearance="outline"maxlength="500" fxFlex="100%">
+                                      <mat-label>Reason for Leaving</mat-label>
+                                      <input matInput placeholder="Reason for Leaving" maxlength="60"
                                         formControlName="reasonForLeaving" />
-                                </mat-form-field>
-                            </div>
-                            <div *ngIf="screeningService.ClientCategoryId == 4" fxFlex="33.33%" fxFlex.lg="33.33%"
-                                fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>Gap Reason</mat-label>
-                                    <textarea #gapReason formControlName="gapReason" maxlength="1000" matInput
-                                    placeholder="Gap Reason"> </textarea>
-                                   <mat-hint>({{gapReason.value.length}}/1000 Max)</mat-hint>
-                                    <!-- <input matInput placeholder="GapReason" maxlength="1000"
-                                        formControlName="gapReason" /> -->
-                                    <!-- <mat-error
-                                    *ngIf="!!mainForm?.get(formgroupName)?.get('gapReason')?.errors?.required">
-                                    GapReason is required
-                                </mat-error> -->
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div *ngIf="this.showHRSupFieldsFlag" fxLayout="row wrap" fxLayout.lg="row wrap"
-                            fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
-                            fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
-                                fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>HR Name</mat-label>
-                                    <input matInput placeholder="HR Name" maxlength="60" formControlName="hrName" />
-                                    <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('hrName')?.errors?.required"> HR Name is
-                  required </mat-error> -->
-                                </mat-form-field>
-                            </div>
-                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
-                                fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>HR Contact Number</mat-label>
-                                    <input matInput placeholder="HR Contact Number" maxlength="10"
+                                      </mat-form-field>
+                                    </div>
+                                    @if (screeningService.ClientCategoryId == 4) {
+                                      <div fxFlex="33.33%" fxFlex.lg="33.33%"
+                                        fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                          <mat-label>Gap Reason</mat-label>
+                                          <textarea #gapReason formControlName="gapReason" maxlength="1000" matInput
+                                          placeholder="Gap Reason"> </textarea>
+                                          <mat-hint>({{gapReason.value.length}}/1000 Max)</mat-hint>
+                                          <!-- <input matInput placeholder="GapReason" maxlength="1000"
+                                          formControlName="gapReason" /> -->
+                                          <!-- <mat-error
+                                          *ngIf="!!mainForm?.get(formgroupName)?.get('gapReason')?.errors?.required">
+                                          GapReason is required
+                                        </mat-error> -->
+                                      </mat-form-field>
+                                    </div>
+                                  }
+                                </div>
+                                @if (this.showHRSupFieldsFlag) {
+                                  <div fxLayout="row wrap" fxLayout.lg="row wrap"
+                                    fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+                                    fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                      fxFlex.xs="100%">
+                                      <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                        <mat-label>HR Name</mat-label>
+                                        <input matInput placeholder="HR Name" maxlength="60" formControlName="hrName" />
+                                        <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('hrName')?.errors?.required"> HR Name is
+                                      required </mat-error> -->
+                                    </mat-form-field>
+                                  </div>
+                                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                    fxFlex.xs="100%">
+                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                      <mat-label>HR Contact Number</mat-label>
+                                      <input matInput placeholder="HR Contact Number" maxlength="10"
                                         formControlName="hrContactNo" appNumberOnly [PhoneNumber]="false" minlength="10"
                                         maxlength="10" />
-                                    <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('hrContactNo')?.errors?.required"> HR Contact Number is
-                  required </mat-error>
-                  <mat-error *ngIf="!!mainForm.get(formgroupName + '.hrContactNo')?.errors?.pattern"> Please enter
-                    valid Contact Number. </mat-error>
-                    <mat-error *ngIf="!!mainForm.get(formgroupName + '.hrContactNo')?.errors?.minlength"> Please enter
-                      valid Contact Number. 
-                    </mat-error>-->
-                                </mat-form-field>
-                            </div>
-                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
-                                fxFlex.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>HR Email</mat-label>
-                                    <input matInput placeholder="HR Email" maxlength="60" formControlName="hrEmail" />
-                                    <mat-error *ngIf="!!mainForm.get(formgroupName + '.hrEmail')?.errors?.pattern">
+                                        <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('hrContactNo')?.errors?.required"> HR Contact Number is
+                                      required </mat-error>
+                                      <mat-error *ngIf="!!mainForm.get(formgroupName + '.hrContactNo')?.errors?.pattern"> Please enter
+                                      valid Contact Number. </mat-error>
+                                      <mat-error *ngIf="!!mainForm.get(formgroupName + '.hrContactNo')?.errors?.minlength"> Please enter
+                                        valid Contact Number.
+                                      </mat-error>-->
+                                    </mat-form-field>
+                                  </div>
+                                  <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%"
+                                    fxFlex.xs="100%">
+                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                      <mat-label>HR Email</mat-label>
+                                      <input matInput placeholder="HR Email" maxlength="60" formControlName="hrEmail" />
+                                      @if (!!mainForm.get(formgroupName + '.hrEmail')?.errors?.pattern) {
+                                        <mat-error>
                                         Please enter valid email. </mat-error>
-                                    <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('hrEmail')?.errors?.required"> HR Email is
-                  required </mat-error>
+                                      }
+                                      <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('hrEmail')?.errors?.required"> HR Email is
+                                    required </mat-error>
                   <mat-error *ngIf="!!mainForm.get(formgroupName + '.hrEmail')?.errors?.pattern ||
                                !!mainForm.get(formgroupName + '.hrEmail')?.errors?.email"> Please enter
-                    valid email. </mat-error> -->
+                                    valid email. </mat-error> -->
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                            }
+                            @if (this.showHRSupFieldsFlag) {
+                              <div fxLayout="row wrap" fxLayout.lg="row wrap"
+                                fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+                                fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                                <!-- <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                  <mat-label>HR Designation</mat-label>
+                                  <input matInput placeholder="HR Designation" maxlength="60" formControlName="hrDesignation" />
                                 </mat-form-field>
-                            </div>
-
-                        </div>
-                        <div *ngIf="this.showHRSupFieldsFlag" fxLayout="row wrap" fxLayout.lg="row wrap"
-                            fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
-                            fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                            <!-- <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                <mat-label>HR Designation</mat-label>
-                <input matInput placeholder="HR Designation" maxlength="60" formControlName="hrDesignation" />
-              </mat-form-field>
-            </div> -->
-                            <div formGroupName="supervisorDet" fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%"
+                              </div> -->
+                              <div formGroupName="supervisorDet" fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%"
                                 fxFlex.sm="100%" fxFlex.xs="100%">
                                 <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>Supervisor Name</mat-label>
-                                    <input matInput placeholder="Supervisor Name" maxlength="60"
-                                        formControlName="supervisorName" />
+                                  <mat-label>Supervisor Name</mat-label>
+                                  <input matInput placeholder="Supervisor Name" maxlength="60"
+                                    formControlName="supervisorName" />
                                     <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName+'.supervisorDet')?.get('supervisorName')?.errors?.required"> Supervisor Name is
-                  required </mat-error> -->
+                                  required </mat-error> -->
                                 </mat-form-field>
-                            </div>
-                            <div [formGroup]="Supervisor" fxFlzex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%"
+                              </div>
+                              <div [formGroup]="Supervisor" fxFlzex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%"
                                 fxFlex.sm="100%" fxFlex.xs="100%">
                                 <div formGroupName="supervisorContactNo">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Supervisor Contact Number</mat-label>
-                                        <span *ngIf="userData?.applicationId ===3" matSuffix class="suff-lbtn"
-                                            [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
-                                            matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a
-                                                mat-flat-button
-                                                (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'supervisorDet.supervisorContactNo.contactData')">NA</a></span>
-                                        <input matInput placeholder="Supervisor Contact Number"
-                                            (input)="upperValue(conValue.value,'contactNo');notprovidedco(conValue.value)"
-                                            formControlName="contactData" #conValue />
-                                        <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName+'.supervisorDet.supervisorContactNo')?.get('contactData')?.errors?.required"> Supervisor Contact Number is
-                      required </mat-error>
-                      <mat-error *ngIf="!!mainForm.get(formgroupName + '.supervisorDet.supervisorContactNo')?.get('contactData')?.errors?.pattern"> Please enter
-                        valid Contact Number. </mat-error>
-                      <mat-error *ngIf="!!mainForm.get(formgroupName + '.supervisorDet.supervisorContactNo')?.get('contactData')?.errors?.minlength"> Please enter
-                        valid Contact Number. </mat-error> -->
-                                    </mat-form-field>
+                                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                    <mat-label>Supervisor Contact Number</mat-label>
+                                    @if (userData?.applicationId ===3) {
+                                      <span matSuffix class="suff-lbtn"
+                                        [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                                        matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a
+                                        mat-flat-button
+                                      (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'supervisorDet.supervisorContactNo.contactData')">NA</a></span>
+                                    }
+                                    <input matInput placeholder="Supervisor Contact Number"
+                                      (input)="upperValue(conValue.value,'contactNo');notprovidedco(conValue.value)"
+                                      formControlName="contactData" #conValue />
+                                      <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName+'.supervisorDet.supervisorContactNo')?.get('contactData')?.errors?.required"> Supervisor Contact Number is
+                                    required </mat-error>
+                                    <mat-error *ngIf="!!mainForm.get(formgroupName + '.supervisorDet.supervisorContactNo')?.get('contactData')?.errors?.pattern"> Please enter
+                                    valid Contact Number. </mat-error>
+                                    <mat-error *ngIf="!!mainForm.get(formgroupName + '.supervisorDet.supervisorContactNo')?.get('contactData')?.errors?.minlength"> Please enter
+                                    valid Contact Number. </mat-error> -->
+                                  </mat-form-field>
                                 </div>
-                            </div>
-                            <div [formGroup]="Supervisor" fxFlzex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%"
+                              </div>
+                              <div [formGroup]="Supervisor" fxFlzex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%"
                                 fxFlex.sm="100%" fxFlex.xs="100%">
                                 <div formGroupName="supervisorEmail">
-                                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                        <mat-label>Supervisor Email</mat-label>
-                                        <span *ngIf="userData?.applicationId ===3" matSuffix class="suff-lbtn"
-                                            [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
-                                            matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a
-                                                mat-flat-button
-                                                (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'supervisorDet.supervisorEmail.contactData')">NA</a></span>
-                                        <input matInput placeholder="Supervisor Email"
-                                            (input)="upperValue(emailValue.value,'contactEmail');notprovidedmail(emailValue.value)"
-                                            maxlength="60" formControlName="contactData" #emailValue />
-                                        <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName+'.supervisorDet.supervisorEmail')?.get('contactData')?.errors?.pattern"> Please enter
-                      valid email. </mat-error> -->
-                                        <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName+'.supervisorDet.supervisorEmail')?.get('contactData')?.errors?.required">
-                    Supervisor Email is required </mat-error>
+                                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                    <mat-label>Supervisor Email</mat-label>
+                                    @if (userData?.applicationId ===3) {
+                                      <span matSuffix class="suff-lbtn"
+                                        [ngClass]="mainForm?.get(formgroupName)?.disabled?'page-btn disabled': 'page-btn'"
+                                        matTooltip="Click here if not available" matTooltipClass="accent-tooltip"><a
+                                        mat-flat-button
+                                      (click)="naFlag= true;common.setNotProvide(mainForm?.get(formgroupName),'supervisorDet.supervisorEmail.contactData')">NA</a></span>
+                                    }
+                                    <input matInput placeholder="Supervisor Email"
+                                      (input)="upperValue(emailValue.value,'contactEmail');notprovidedmail(emailValue.value)"
+                                      maxlength="60" formControlName="contactData" #emailValue />
+                                      <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName+'.supervisorDet.supervisorEmail')?.get('contactData')?.errors?.pattern"> Please enter
+                                    valid email. </mat-error> -->
+                                    <!-- <mat-error *ngIf="!!mainForm?.get(formgroupName+'.supervisorDet.supervisorEmail')?.get('contactData')?.errors?.required">
+                                  Supervisor Email is required </mat-error>
                     <mat-error *ngIf="!!mainForm?.get(formgroupName+'.supervisorDet.supervisorEmail')?.get('contactData')?.errors?.pattern ||
                                                    !!mainForm.get(formgroupName+'.supervisorDet.supervisorEmail')?.get('contactData')?.errors?.email"> Please enter
-                      valid email. </mat-error> -->
-                                    </mat-form-field>
-                                </div>
-
+                                  valid email. </mat-error> -->
+                                </mat-form-field>
+                              </div>
                             </div>
-                        </div>
-                        <div *ngIf="this.showHRSupFieldsFlag" fxLayout="row wrap" fxLayout.lg="row wrap"
+                          </div>
+                        }
+                        @if (this.showHRSupFieldsFlag) {
+                          <div fxLayout="row wrap" fxLayout.lg="row wrap"
                             fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
                             fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
                             <div formGroupName="supervisorDet" fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%"
-                                fxFlex.sm="100%" fxFle nx.xs="100%">
-                                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>Supervisor Designation</mat-label>
-                                    <input matInput placeholder="Supervisor Designation" maxlength="60"
-                                        formControlName="supervisorDesignation" />
+                              fxFlex.sm="100%" fxFle nx.xs="100%">
+                              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                                <mat-label>Supervisor Designation</mat-label>
+                                <input matInput placeholder="Supervisor Designation" maxlength="60"
+                                  formControlName="supervisorDesignation" />
                                 </mat-form-field>
-                            </div>
-                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFle
+                              </div>
+                              <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFle
                                 nx.xs="100%">
                                 <app-auto-complete [selectProperties]='countryControls'>
                                 </app-auto-complete>
-                            </div>
-                            <div formGroupName="supervisorDet" fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%"
+                              </div>
+                              <div formGroupName="supervisorDet" fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%"
                                 fxFlex.sm="100%" fxFlex.xs="100%">
                                 <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                    <mat-label>City</mat-label>
-                                    <input matInput placeholder="City" maxlength="60" formControlName="city" />
+                                  <mat-label>City</mat-label>
+                                  <input matInput placeholder="City" maxlength="60" formControlName="city" />
                                 </mat-form-field>
+                              </div>
                             </div>
+                          }
+                          @if (this.showHRSupFieldsFlag) {
+                            <div fxLayout="row wrap" fxLayout.lg="row wrap"
+                              fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
+                              fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                            </div>
+                          }
+                          <!-- <div *ngIf="this.showHRSupFieldsFlag" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
+                          <div fxflex="100%">
+                            <h3 class="sub-header">Supervisor Address Details</h3>
+                          </div>
                         </div>
-                        <div *ngIf="this.showHRSupFieldsFlag" fxLayout="row wrap" fxLayout.lg="row wrap"
-                            fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px grid"
-                            fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-
-                        </div>
-                        <!-- <div *ngIf="this.showHRSupFieldsFlag" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column">
-            <div fxflex="100%">
-              <h3 class="sub-header">Supervisor Address Details</h3>
-            </div>
-          </div>
-          <div *ngIf="this.showHRSupFieldsFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-            fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-            <div fxFlex="100%">
-              <app-address [addressList]="supaddress" [addressformgrp]="mainForm?.get(formgroupName+'.supervisorDet')"></app-address>
-            </div>
-          </div> -->
-                        <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                        <div *ngIf="this.showHRSupFieldsFlag" fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                          fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                          <div fxFlex="100%">
+                            <app-address [addressList]="supaddress" [addressformgrp]="mainForm?.get(formgroupName+'.supervisorDet')"></app-address>
+                          </div>
+                        </div> -->
+                        @if (userData.applicationId===3 && CFflag ===1) {
+                          <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
                             fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid"
-                            fxLayoutGap.xs="0px grid" *ngIf="userData.applicationId===3 && CFflag ===1">
+                            fxLayoutGap.xs="0px grid">
                             <!-- <div fxFlex="33%">
-              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                <mat-label>Official Name</mat-label>
-                <input matInput formControlName="officialName" placeholder="Official Name" maxlength="60" required />
-                <mat-hint>Name should be as per ID proof</mat-hint>
-                <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('officialName')?.errors?.required"> Official Name is
-                  required </mat-error>
-              </mat-form-field>
-            </div> -->
-                            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
-                                class="mb-20">
-                                <mat-label class="lbl">Keep on Hold</mat-label>
-                                <mat-radio-group formControlName="holdFlag" aria-label="Select an option"
-                                    fxLayoutGap="20px" (change)="changeKeeponHold($event)" required>
-                                    <mat-radio-button [value]="true" fxLayoutGap="20px">Yes</mat-radio-button>
-                                    <mat-radio-button [value]="false" fxLayoutGap="20px">No</mat-radio-button>
-                                </mat-radio-group>
-                                <mat-error *ngIf="mainForm?.get(formgroupName)?.get('holdFlag')?.errors?.required && 
-                                mainForm?.get(formgroupName)?.get('holdFlag')?.touched">
-                                    Keep on hold required
-                                </mat-error>
-                            </div>
+                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                              <mat-label>Official Name</mat-label>
+                              <input matInput formControlName="officialName" placeholder="Official Name" maxlength="60" required />
+                              <mat-hint>Name should be as per ID proof</mat-hint>
+                              <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('officialName')?.errors?.required"> Official Name is
+                              required </mat-error>
+                            </mat-form-field>
+                          </div> -->
+                          <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                            class="mb-20">
+                            <mat-label class="lbl">Keep on Hold</mat-label>
+                            <mat-radio-group formControlName="holdFlag" aria-label="Select an option"
+                              fxLayoutGap="20px" (change)="changeKeeponHold($event)" required>
+                              <mat-radio-button [value]="true" fxLayoutGap="20px">Yes</mat-radio-button>
+                              <mat-radio-button [value]="false" fxLayoutGap="20px">No</mat-radio-button>
+                            </mat-radio-group>
+                            @if (mainForm?.get(formgroupName)?.get('holdFlag')?.errors?.required &&
+                              mainForm?.get(formgroupName)?.get('holdFlag')?.touched) {
+                              <mat-error>
+                                Keep on hold required
+                              </mat-error>
+                            }
+                          </div>
                         </div>
+                      }
+                      @if (userData.applicationId===3 && CFflag ===1 ) {
                         <div fxLayout="row" fxLayoutGap="20px" class="mb-10"
-                            *ngIf="userData.applicationId===3 && CFflag ===1 ">
-                            <div fxFlex="100%">
-                                <span class="text-sm text-dull"><b>Note: </b> Select "Yes" to hold this employment
-                                    verification process until you join with
-                                    {{common.clientName}} or select "No"- if you have
-                                    already joined with {{common.clientName}}</span>
-                            </div>
+                          >
+                          <div fxFlex="100%">
+                            <span class="text-sm text-dull"><b>Note: </b> Select "Yes" to hold this employment
+                            verification process until you join with
+                            {{common.clientName}} or select "No"- if you have
+                          already joined with {{common.clientName}}</span>
                         </div>
-                        <div fxLayout="row" fxLayoutGap="20px" class="mb-10">
-                            <div fxFlex="100%">
-                                <app-custom-fields [mainForm]="mainForm"
-                                    [formArrName]="'componentCustomFields'"></app-custom-fields>
-                            </div>
-                        </div>
-                        <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" class="mt-10">
-            <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%">
-              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                    <mat-label>From</mat-label>
-                    <input matInput [matDatepicker]="emphr" placeholder="From Date" autocomplete="off"
-                      role="presentation" formControlName="fromDate" required />
-                    <mat-datepicker-toggle matSuffix [for]="emphr"></mat-datepicker-toggle>
-                    <mat-datepicker #emphr></mat-datepicker>
-                    <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.required"> From date is
-                      required </mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-                  <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                    <mat-label>To</mat-label>
-                    <input required matInput [matDatepicker]="emphr1" placeholder="To Date" autocomplete="off"
-                      role="presentation" formControlName="toDate"
-                      [min]="mainForm?.get(formgroupName)?.get('fromDate').value" />
-                    <mat-datepicker-toggle matSuffix [for]="emphr1"></mat-datepicker-toggle>
-                    <mat-datepicker #emphr1></mat-datepicker>
-                    <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.required"> To date is
-                      required </mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-            <div fxFlex="53%" fxFlex.lg="53%" fxFlex.md="53%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="isTech">
-              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                  <mat-label>Gap Justification Remarks</mat-label>
-                  <textarea #gap matInput formControlName="remarks" placeholder="Remarks" maxlength="400"
-                    rows="4"></textarea>
-                  <mat-hint>({{ gap.value.length }}/400 Max)</mat-hint>
-                </mat-form-field>
-              </div>
-            </div>
-          </div> -->
+                      </div>
+                    }
+                    <div fxLayout="row" fxLayoutGap="20px" class="mb-10">
+                      <div fxFlex="100%">
+                        <app-custom-fields [mainForm]="mainForm"
+                        [formArrName]="'componentCustomFields'"></app-custom-fields>
+                      </div>
                     </div>
-                </div>
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
-                    *ngIf="(mainForm?.get('miscQuestion')?.value?.length ===0 || !mainForm?.get('miscQuestion')) && userData.applicationId !== 3"
-                    Class="mb-20">
-                    <div fxFlex="100%">
+                    <!-- <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" class="mt-10">
+                    <div fxFlex="22%" fxFlex.lg="22%" fxFlex.md="22%" fxFlex.sm="100%" fxFlex.xs="100%">
+                      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                        <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>From</mat-label>
+                            <input matInput [matDatepicker]="emphr" placeholder="From Date" autocomplete="off"
+                              role="presentation" formControlName="fromDate" required />
+                              <mat-datepicker-toggle matSuffix [for]="emphr"></mat-datepicker-toggle>
+                              <mat-datepicker #emphr></mat-datepicker>
+                              <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('fromDate')?.errors?.required"> From date is
+                              required </mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                          fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                              <mat-label>To</mat-label>
+                              <input required matInput [matDatepicker]="emphr1" placeholder="To Date" autocomplete="off"
+                                role="presentation" formControlName="toDate"
+                                [min]="mainForm?.get(formgroupName)?.get('fromDate').value" />
+                                <mat-datepicker-toggle matSuffix [for]="emphr1"></mat-datepicker-toggle>
+                                <mat-datepicker #emphr1></mat-datepicker>
+                                <mat-error *ngIf="!!mainForm?.get(formgroupName)?.get('toDate')?.errors?.required"> To date is
+                                required </mat-error>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <div fxFlex="53%" fxFlex.lg="53%" fxFlex.md="53%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="isTech">
+                          <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                              <mat-label>Gap Justification Remarks</mat-label>
+                              <textarea #gap matInput formControlName="remarks" placeholder="Remarks" maxlength="400"
+                              rows="4"></textarea>
+                              <mat-hint>({{ gap.value.length }}/400 Max)</mat-hint>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div> -->
+                    </div>
+                  </div>
+                  @if ((mainForm?.get('miscQuestion')?.value?.length ===0 || !mainForm?.get('miscQuestion')) && userData.applicationId !== 3) {
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+                      Class="mb-20">
+                      <div fxFlex="100%">
                         <a class="text-sm mb-15" (click)="createMisc()"
-                            [ngClass]="!!mainForm?.get(formgroupName)?.get('designation')?.disabled?'page-btn disabled':''">
-                            <i class="icon-plus-circle mr-5"></i> Click here to add miscellaneous fields</a>
-                    </div>
-                </div>
-                <div *ngIf="mainForm?.get('miscQuestion')&& userData.applicationId !== 3">
-                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
-                        fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                        <div fxFlex="100%">
-                            <app-ques-ans [mainForm]="mainForm" [formArrName]="'miscQuestion'" [miscHint]="miscHint"
-                                [miscType]="'textarea'"></app-ques-ans>
+                          [ngClass]="!!mainForm?.get(formgroupName)?.get('designation')?.disabled?'page-btn disabled':''">
+                          <i class="icon-plus-circle mr-5"></i> Click here to add miscellaneous fields</a>
                         </div>
-                    </div>
-                </div>
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid" *ngIf="!fileBtn">
-                    <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
-                        [formGroupName]="'screeningComponentInfo'">
-                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      </div>
+                    }
+                    @if (mainForm?.get('miscQuestion')&& userData.applicationId !== 3) {
+                      <div>
+                        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column"
+                          fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                          <div fxFlex="100%">
+                            <app-ques-ans [mainForm]="mainForm" [formArrName]="'miscQuestion'" [miscHint]="miscHint"
+                            [miscType]="'textarea'"></app-ques-ans>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                    @if (!fileBtn) {
+                      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                        fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fLayoutGap.xs="0px grid">
+                        <div fxFlex="67%" fxFlex.lg="67%" fxFlex.md="67%" fxFlex.sm="100%" fxFlex.xs="100%"
+                          [formGroupName]="'screeningComponentInfo'">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
                             <mat-label>Remarks</mat-label>
                             <textarea #remark formControlName="remark" maxlength="1000" matInput
-                                placeholder="Remarks"> </textarea>
+                            placeholder="Remarks"> </textarea>
                             <mat-hint>({{remark.value.length}}/1000 Max)</mat-hint>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
-                        [formGroupName]="'screeningComponentInfo'" *ngIf="!hiddenInsuff ">
-                        <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise
+                          </mat-form-field>
+                        </div>
+                        @if (!hiddenInsuff ) {
+                          <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33%" fxFlex.sm="100%" fxFlex.xs="100%"
+                            [formGroupName]="'screeningComponentInfo'">
+                            <mat-checkbox (change)="showInsuff()" formControlName="insuffRaisedFlag">Raise
                             Insufficiency</mat-checkbox>
-                    </div>
-                </div>
-
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
-                    *ngIf="mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0">
-                    <div fxFlex="100%">
-                        <div class="alert alert-info" role="alert">
+                          </div>
+                        }
+                      </div>
+                    }
+                    @if (mainForm.get('screeningComponentInfo.insuffRemark')?.value.length>0) {
+                      <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                        fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid"
+                        >
+                        <div fxFlex="100%">
+                          <div class="alert alert-info" role="alert">
                             <h4>Insufficiency Clearance Remarks: </h4>
-                            <span
-                                *ngFor="let insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; let count = count; let i= index">
+                            @for (insuffRemark of mainForm.get('screeningComponentInfo.insuffRemark')?.value; track insuffRemark; let count = $count; let i = $index) {
+                              <span
+                                >
                                 {{count>1? i+1 :''}} {{insuffRemark}}<br> </span>
+                              }
+                            </div>
+                          </div>
                         </div>
+                      }
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-            fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" *ngIf="showInSuff">
-            <div fxFlex="100%">
-                <app-common-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm"
-                    [compBaseDetails]="mainForm.get('screeningComponentInfo').value"
-                    [formgroupName]="'screeningInsufficiency'">
-                </app-common-raise-insufficiency>
-            </div>
-        </div>
-        <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" *ngIf="disableFlag !== true">
-            <div fxFlex="100%">
-                <app-client-app-document-upload [fileBtn]="fileBtn" [mainForm]="mainForm"
-                    [formgroupName]="'screeningComponentInfo'" [dupScreeningDoc]="screeningComponent.componentDocument"
-                    [validationFlag]="nFlag !== true && (userData.applicationId === 3 && mainForm?.get(formgroupName)?.get('fresherFlag').value !== true) ? true : false"
-                    [docHint]="mainForm?.get(formgroupName)?.get('currentEmployerFlag')?.value === true?'Please upload all or available documents such as relieving letter or experience or service letter, offer letter and resignation acceptance mail':'Please upload all or available documents such as relieving, experience or service letter'">
-                </app-client-app-document-upload>
-            </div>
-        </div>
-        <div *ngIf="userData.applicationId === 3 && this.directAppAddressFlag === true&&mainForm.get('compRef.fresherFlag')?.value !==true"
-            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-            <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                <h3 class="sub-header">Stay Residential Address During Employment
-                    {{mainForm.get('screeningComponentInfo.compIndex')?.value}} </h3>
-            </div>
-
-        </div>
-        <div [formGroup]="addressForm"
-            *ngIf="userData.applicationId === 3&&mainForm!=undefined&&mainForm.get('compRef.fresherFlag')?.value !==true && this.directAppAddressFlag === true"
-            fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-            fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-            <div fxflex="33.33%">
-                <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                    <mat-label>Address Type</mat-label>
-                    <mat-select placeholder="Address Type" formControlName="addressTypeLookupId" required
-                        (selectionChange)="addtypeChange(addressForm?.get('addressTypeLookupId').value)">
-                        <mat-option *ngFor="let priority of dropdown" [value]="priority.lookUpId">
-                            {{priority.lookUpName}} </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="!!addressForm?.get('addressTypeLookupId')?.errors?.required"> Address type is
-                        required </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div fxFlex="20%" formControlName="checkPermanentAddress"
-                *ngIf="sameCurrentadd===true &&disableFlag !== true &&this.directAppAddressFlag === true && userData.applicationId ===3&&mainForm.get('compRef.fresherFlag')?.value !==true "
-                fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%" Class="mb-25">
-                <mat-label class="lbl">As Same Address</mat-label>
-                <!-- [disabled]="checkBoxdis!=true " -->
-                <mat-checkbox (change)="chengeAddress($event)">Permanent Address Same As Current Address?
-                </mat-checkbox>
-            </div>
-        </div>
-
-        <div *ngIf="userData.applicationId === 3 && this.directAppAddressFlag === true" fxLayout="row wrap"
-            fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px"
-            fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-
-            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-
-                <div *ngIf="mainForm.get('compRef.fresherFlag')?.value !==true">
-                    <app-address [addressList]="periodofStayadd" [addressformgrp]="addressForm"> </app-address>
-                </div>
-                <div xLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-                    fxLayoutGap="20px" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid" *ngIf="disableFlag !== true">
-                    <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
-                        fxLayoutAlign="end center">
-                        <mat-label>&nbsp;</mat-label>
-                        <div class="in-box" fxLayoutGap="8px">
-
-
-                            <button class="btn_inside_com" (click)="addUpdateAddress()" mat-icon-button
+                  </div>
+                  @if (showInSuff) {
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                      fxLayoutGap="0px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="100%">
+                        <app-common-raise-insufficiency [docdata]="docdata" [docList]="docList" [mainForm]="mainForm"
+                          [compBaseDetails]="mainForm.get('screeningComponentInfo').value"
+                          [formgroupName]="'screeningInsufficiency'">
+                        </app-common-raise-insufficiency>
+                      </div>
+                    </div>
+                  }
+                  @if (disableFlag !== true) {
+                    <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="100%">
+                        <app-client-app-document-upload [fileBtn]="fileBtn" [mainForm]="mainForm"
+                          [formgroupName]="'screeningComponentInfo'" [dupScreeningDoc]="screeningComponent.componentDocument"
+                          [validationFlag]="nFlag !== true && (userData.applicationId === 3 && mainForm?.get(formgroupName)?.get('fresherFlag').value !== true) ? true : false"
+                          [docHint]="mainForm?.get(formgroupName)?.get('currentEmployerFlag')?.value === true?'Please upload all or available documents such as relieving letter or experience or service letter, offer letter and resignation acceptance mail':'Please upload all or available documents such as relieving, experience or service letter'">
+                        </app-client-app-document-upload>
+                      </div>
+                    </div>
+                  }
+                  @if (userData.applicationId === 3 && this.directAppAddressFlag === true&&mainForm.get('compRef.fresherFlag')?.value !==true) {
+                    <div
+                      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <h3 class="sub-header">Stay Residential Address During Employment
+                        {{mainForm.get('screeningComponentInfo.compIndex')?.value}} </h3>
+                      </div>
+                    </div>
+                  }
+                  @if (userData.applicationId === 3&&mainForm!=undefined&&mainForm.get('compRef.fresherFlag')?.value !==true && this.directAppAddressFlag === true) {
+                    <div [formGroup]="addressForm"
+                      fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                      fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxflex="33.33%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>Address Type</mat-label>
+                          <mat-select placeholder="Address Type" formControlName="addressTypeLookupId" required
+                            (selectionChange)="addtypeChange(addressForm?.get('addressTypeLookupId').value)">
+                            @for (priority of dropdown; track priority) {
+                              <mat-option [value]="priority.lookUpId">
+                              {{priority.lookUpName}} </mat-option>
+                            }
+                          </mat-select>
+                          @if (!!addressForm?.get('addressTypeLookupId')?.errors?.required) {
+                            <mat-error> Address type is
+                            required </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                      @if (sameCurrentadd===true &&disableFlag !== true &&this.directAppAddressFlag === true && userData.applicationId ===3&&mainForm.get('compRef.fresherFlag')?.value !==true ) {
+                        <div fxFlex="20%" formControlName="checkPermanentAddress"
+                          fxFlex.lg="20%" fxFlex.md="20%" fxFlex.sm="100%" fxFlex.xs="100%" Class="mb-25">
+                          <mat-label class="lbl">As Same Address</mat-label>
+                          <!-- [disabled]="checkBoxdis!=true " -->
+                          <mat-checkbox (change)="chengeAddress($event)">Permanent Address Same As Current Address?
+                          </mat-checkbox>
+                        </div>
+                      }
+                    </div>
+                  }
+                  @if (userData.applicationId === 3 && this.directAppAddressFlag === true) {
+                    <div fxLayout="row wrap"
+                      fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px"
+                      fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        @if (mainForm.get('compRef.fresherFlag')?.value !==true) {
+                          <div>
+                            <app-address [addressList]="periodofStayadd" [addressformgrp]="addressForm"> </app-address>
+                          </div>
+                        }
+                        @if (disableFlag !== true) {
+                          <div xLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                            fxLayoutGap="20px" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%"
+                              fxLayoutAlign="end center">
+                              <mat-label>&nbsp;</mat-label>
+                              <div class="in-box" fxLayoutGap="8px">
+                                <button class="btn_inside_com" (click)="addUpdateAddress()" mat-icon-button
                                 matTooltip="Add Address" matTooltipClass="accent-tooltip">Add Address</button>
-
-                            <button class="btn_inside_com" (click)="reserAddressForm()" mat-icon-button
+                                <button class="btn_inside_com" (click)="reserAddressForm()" mat-icon-button
                                 matTooltip="Reset" matTooltipClass="accent-tooltip">Reset</button>
-
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                  @if (userData.applicationId === 3 && this.directAppAddressFlag === true && disableFlag !== true) {
+                    <div
+                      fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                      fxLayoutGap="20px grid">
+                      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <p-table
+                          columns]="displayedColumns"  #dt
+                          [value]="mainForm?.get('periodOfStayAddress')?.value"
+                          [scrollable]="true"
+                          scrollHeight=""
+                          [paginator]="true"
+                          [rows]="itemperpage"
+                          [resizableColumns]="true"
+                          [reorderableColumns]="true"
+                          columnResizeMode="expand"
+                          frozenWidth="150px"
+                          [autoLayout]="true"
+                          [style]="{'width':'100%','overflow':'auto!important'}">
+                          <!-- ========== COLGROUP ========== -->
+                          <ng-template pTemplate="colgroup" let-colGroupCols>
+                            <colgroup>
+                            @for (col of colGroupCols; track col) {
+                              <col style="min-width:200px" />
+                            }
+                          </colgroup>
+                        </ng-template>
+                        <!-- ========== HEADER ========== -->
+                        <ng-template pTemplate="header" let-headerCols>
+                          <tr>
+                            @for (col of headerCols; track col) {
+                              <th
+                                pReorderableColumn
+                                pResizableColumn>
+                                <span [pSortableColumn]="col.field">
+                                  <div class="thname">{{ col.header }}</div>
+                                  @if (col.field !== 'action' && col.field !== 'sNo') {
+                                    <p-sortIcon
+                                      [field]="col.field"
+                                      ariaLabel="Activate to sort"
+                                      ariaLabelDesc="Activate to sort in descending order"
+                                      matTooltip="Sorting"
+                                      matTooltipClass="accent-tooltip"
+                                      ariaLabelAsc="Activate to sort in ascending order">
+                                    </p-sortIcon>
+                                  }
+                                </span>
+                              </th>
+                            }
+                          </tr>
+                        </ng-template>
+                        <!-- ========== BODY ========== -->
+                        <ng-template
+                          pTemplate="body"
+                          let-rowData
+                          let-i="rowIndex"
+                          let-bodyCols="columns">
+                          <tr>
+                            @for (col of bodyCols; track col) {
+                              <td
+                                [ngClass]="{ 'desg-bg': col.field === 'action' }">
+                                <!-- ACTION -->
+                                @if (col.field === 'action') {
+                                  <div fxLayout="row" class="desg-icon">
+                                    <div fxFlex="100%" fxLayoutGap="10px">
+                                      <mat-icon (click)="editAddress(rowData, i)">
+                                        <i
+                                          matTooltip="Edit"
+                                          matTooltipClass="accent-tooltip"
+                                          class="material-icons-outlined">
+                                          edit
+                                        </i>
+                                      </mat-icon>
+                                      <mat-icon
+                                        matTooltip="Delete"
+                                        matTooltipClass="accent-tooltip"
+                                        (click)="deleteperiodofStayAdd(rowData.address.addressId, i)">
+                                        <i class="material-icons-outlined">delete</i>
+                                      </mat-icon>
+                                    </div>
+                                  </div>
+                                }
+                                <!-- DATA -->
+                                @if (col.field === 'address') {
+                                  <div>
+                                    {{ rowData?.address?.addLine1 }},
+                                    {{ rowData?.address?.addLine2 }},
+                                    {{ rowData?.address?.addLine3 }}
+                                  </div>
+                                }
+                                @if (col.field === 'country') {
+                                  <div>{{ rowData?.address?.country }}</div>
+                                }
+                                @if (col.field === 'state') {
+                                  <div>{{ rowData?.address?.state }}</div>
+                                }
+                                @if (col.field === 'district') {
+                                  <div>{{ rowData?.address?.district }}</div>
+                                }
+                                @if (col.field === 'city') {
+                                  <div>{{ rowData?.address?.city }}</div>
+                                }
+                                @if (col.field === 'place') {
+                                  <div>{{ rowData?.address?.place }}</div>
+                                }
+                                @if (col.field === 'postalCode') {
+                                  <div>{{ rowData?.address?.postalCode }}</div>
+                                }
+                                @if (col.field === 'periodOfStay') {
+                                  <div>
+                                    {{ rowData?.address?.addressPos[0]?.periodOfStay }} -
+                                    {{ rowData?.address?.addressPos[0]?.periodOfStayTo }}
+                                  </div>
+                                }
+                              </td>
+                            }
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                      <div fxLayout="row wrap" fxLayoutGap="10px grid" class="cus-paginator" fxLayoutGap="0px grid"
+                        fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid"
+                        [ngClass]="{'empty-record': mainForm.get('periodOfStayAddress')?.value?.length == 0}">
+                        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                          fxLayoutAlign="start center">
+                          Showing {{ dt.totalRecords
+                          < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                          <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }}
+                          record(s) | &nbsp;<a (click)="showall()">Show All</a>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div *ngIf="userData.applicationId === 3 && this.directAppAddressFlag === true && disableFlag !== true"
-            fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-            fxLayoutGap="20px grid">
-            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-              
-                <p-table
-columns]="displayedColumns"  #dt
-  [value]="mainForm?.get('periodOfStayAddress')?.value"
-  [scrollable]="true"
-  scrollHeight=""
-  [paginator]="true"
-  [rows]="itemperpage"
-  [resizableColumns]="true"
-  [reorderableColumns]="true"
-  columnResizeMode="expand"
-  frozenWidth="150px"
-  [autoLayout]="true"
-  [style]="{'width':'100%','overflow':'auto!important'}">
-
-  <!-- ========== COLGROUP ========== -->
-  <ng-template pTemplate="colgroup" let-colGroupCols>
-    <colgroup>
-      <col *ngFor="let col of colGroupCols" style="min-width:200px" />
-    </colgroup>
-  </ng-template>
-
-  <!-- ========== HEADER ========== -->
-  <ng-template pTemplate="header" let-headerCols>
-    <tr>
-      <th *ngFor="let col of headerCols"
-          [ngSwitch]="col.field"
-          pReorderableColumn
-          pResizableColumn>
-        <span [pSortableColumn]="col.field">
-          <div class="thname">{{ col.header }}</div>
-          <p-sortIcon
-            *ngIf="col.field !== 'action' && col.field !== 'sNo'"
-            [field]="col.field"
-            ariaLabel="Activate to sort"
-            ariaLabelDesc="Activate to sort in descending order"
-            matTooltip="Sorting"
-            matTooltipClass="accent-tooltip"
-            ariaLabelAsc="Activate to sort in ascending order">
-          </p-sortIcon>
-        </span>
-      </th>
-    </tr>
-  </ng-template>
-
-  <!-- ========== BODY ========== -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-i="rowIndex"
-    let-bodyCols="columns">
-
-    <tr>
-      <td *ngFor="let col of bodyCols"
-          [ngSwitch]="col.field"
-          [ngClass]="{ 'desg-bg': col.field === 'action' }">
-
-        <!-- ACTION -->
-        <div *ngSwitchCase="'action'" fxLayout="row" class="desg-icon">
-          <div fxFlex="100%" fxLayoutGap="10px">
-            <mat-icon (click)="editAddress(rowData, i)">
-              <i
-                matTooltip="Edit"
-                matTooltipClass="accent-tooltip"
-                class="material-icons-outlined">
-                edit
-              </i>
-            </mat-icon>
-
-            <mat-icon
-              matTooltip="Delete"
-              matTooltipClass="accent-tooltip"
-              (click)="deleteperiodofStayAdd(rowData.address.addressId, i)">
-              <i class="material-icons-outlined">delete</i>
-            </mat-icon>
-          </div>
-        </div>
-
-        <!-- DATA -->
-        <div *ngSwitchCase="'address'">
-          {{ rowData?.address?.addLine1 }},
-          {{ rowData?.address?.addLine2 }},
-          {{ rowData?.address?.addLine3 }}
-        </div>
-
-        <div *ngSwitchCase="'country'">{{ rowData?.address?.country }}</div>
-        <div *ngSwitchCase="'state'">{{ rowData?.address?.state }}</div>
-        <div *ngSwitchCase="'district'">{{ rowData?.address?.district }}</div>
-        <div *ngSwitchCase="'city'">{{ rowData?.address?.city }}</div>
-        <div *ngSwitchCase="'place'">{{ rowData?.address?.place }}</div>
-        <div *ngSwitchCase="'postalCode'">{{ rowData?.address?.postalCode }}</div>
-
-        <div *ngSwitchCase="'periodOfStay'">
-          {{ rowData?.address?.addressPos[0]?.periodOfStay }} -
-          {{ rowData?.address?.addressPos[0]?.periodOfStayTo }}
-        </div>
-
-      </td>
-    </tr>
-
-  </ng-template>
-
-</p-table>
-
-                <div fxLayout="row wrap" fxLayoutGap="10px grid" class="cus-paginator" fxLayoutGap="0px grid"
-                    fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid"
-                    [ngClass]="{'empty-record': mainForm.get('periodOfStayAddress')?.value?.length == 0}">
-                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                        fxLayoutAlign="start center">
-                        Showing {{ dt.totalRecords
-                        < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first
-                            <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }}
-                                record(s) | &nbsp;<a (click)="showall()">Show All</a>
-                    </div>
-                    <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                        fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                        fxLayoutAlign.xs="start center">
+                        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                          fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                          fxLayoutAlign.xs="start center">
                         <a [ngClass]="dt.first===0?'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                                             navigateNxtPrevPage(dt.first + dt.rows,dt.rows)">
                             <i class="icon-control-start mr-5"></i></a>
-                        <span class="gotopagbg mr-2 ml-2 " fxHide.sm fxHide.xs>Go to Page<span class="input-num">
-                                <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5"
-                                    appNumberOnly min="1" [NumberOnly]="false"
-                                    (keyup.enter)="navigatePage(pageNo.value,dt.rows)"
-                                    [ngModelOptions]="{standalone: true}" />
-                            </span></span>
-                        <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords,dt.rows) }}</span>
+                            <span class="gotopagbg mr-2 ml-2 " fxHide.sm fxHide.xs>Go to Page<span class="input-num">
+                              <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5"
+                                appNumberOnly min="1" [NumberOnly]="false"
+                                (keyup.enter)="navigatePage(pageNo.value,dt.rows)"
+                                [ngModelOptions]="{standalone: true}" />
+                              </span></span>
+                              <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords,dt.rows) }}</span>
                         <a [ngClass]="(dt.rows + dt.first)>=dt.totalRecords?'page-btn disabled': 'page-btn'" (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                                                 navigateNxtPrevPage(dt.first + dt.rows,dt.rows)"><i
-                                class="icon-control-end ml-5"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+                              class="icon-control-end ml-5"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </form>
 
-<ng-template #keeponHold>
-    <div class="confirm-pop">
-        <h1 mat-dialog-title>Hold - Last/Current Employment</h1>
-        <h4 mat-dialog-title>Do you want to keep this Employment on hold status? Please provide date of initiation
-        </h4>
-        <mat-dialog-content>
+              <ng-template #keeponHold>
+                <div class="confirm-pop">
+                  <h1 mat-dialog-title>Hold - Last/Current Employment</h1>
+                  <h4 mat-dialog-title>Do you want to keep this Employment on hold status? Please provide date of initiation
+                  </h4>
+                  <mat-dialog-content>
 
-            <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
-                fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-                <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                        <mat-label>Date of Initiation</mat-label>
-                        <input matInput [matDatepicker]="picker" name="dateofinitiation"
+                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column"
+                      fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
+                      <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                          <mat-label>Date of Initiation</mat-label>
+                          <input matInput [matDatepicker]="picker" name="dateofinitiation"
                             [formControl]="dateofinitiation" placeholder="Date of Initiation" maxlength="60"
                             [min]="mininitiationdate" (focus)="picker.open()" (click)="picker.open()" />
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                        <mat-error *ngIf="dateofinitiation?.errors?.required">Date of Initiation is required</mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-        </mat-dialog-content>
-        <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
-            <button (click)="keeponHoldYes()" color="accent" class="mat-flat-button mat-accent">Yes,Continue</button>
-            <!-- <button mat-stroked-button [mat-dialog-close]="true" (click)="keeponHoldNo()">No</button> -->
-        </mat-dialog-actions>
-    </div>
-</ng-template>
-<!-- {{mainForm.value|json}} -->
-<ng-template #OverLabPopUp>
-    <mat-dialog-content>
-        <div fxLayout="row">
-            <div fxFlex="100%">
-                <div fxLayout="row">
-                    <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
-                            src="assets/images/alert-warning.gif"></div>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="center center">
-                    <div fxFlex="100%" class="text-center">
-                        <h3 class="m-0">{{ Message}} !</h3>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            @if (dateofinitiation?.errors?.required) {
+                              <mat-error>Date of Initiation is required</mat-error>
+                            }
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </mat-dialog-content>
+                    <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="center center">
+                      <button (click)="keeponHoldYes()" color="accent" class="mat-flat-button mat-accent">Yes,Continue</button>
+                      <!-- <button mat-stroked-button [mat-dialog-close]="true" (click)="keeponHoldNo()">No</button> -->
+                    </mat-dialog-actions>
+                  </div>
+                </ng-template>
+                <!-- {{mainForm.value|json}} -->
+                <ng-template #OverLabPopUp>
+                  <mat-dialog-content>
+                    <div fxLayout="row">
+                      <div fxFlex="100%">
+                        <div fxLayout="row">
+                          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                          src="assets/images/alert-warning.gif"></div>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                          <div fxFlex="100%" class="text-center">
+                            <h3 class="m-0">{{ Message}} !</h3>
 
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </mat-dialog-content>
+                  </mat-dialog-content>
 
-    <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
-        <button mat-flat-button color="warn" (click)="dialog.closeAll()">OK</button>
+                  <mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="8px">
+                    <button mat-flat-button color="warn" (click)="dialog.closeAll()">OK</button>
 
-    </mat-dialog-actions>
-</ng-template>
-<ng-template #FakeEmp>
-    <mat-dialog-content>
-        <div fxLayout="row">
-            <div fxFlex="100%">
-                <div fxLayout="row">
-                    <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
-                            src="assets/images/alert-warning.gif"></div>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="center center">
-                    <div fxFlex="100%" class="text-center">
-                        <h3 class="m-0">The entered company name is not found in our database, please click "Okay" to
-                            add your company details, or click "Cancel" to try again.
-                        </h3>
+                  </mat-dialog-actions>
+                </ng-template>
+                <ng-template #FakeEmp>
+                  <mat-dialog-content>
+                    <div fxLayout="row">
+                      <div fxFlex="100%">
+                        <div fxLayout="row">
+                          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img
+                          src="assets/images/alert-warning.gif"></div>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                          <div fxFlex="100%" class="text-center">
+                            <h3 class="m-0">The entered company name is not found in our database, please click "Okay" to
+                              add your company details, or click "Cancel" to try again.
+                            </h3>
 
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </mat-dialog-content>
+                  </mat-dialog-content>
 
-    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
-        <button mat-flat-button (click)="dialog.closeAll();validatetype('okay')">Okay</button>
-        <button mat-flat-button color="warn" (click)="dialog.closeAll();validatetype('cancel')">Cancel</button>
-    </mat-dialog-actions>
-</ng-template>
+                  <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+                    <button mat-flat-button (click)="dialog.closeAll();validatetype('okay')">Okay</button>
+                    <button mat-flat-button color="warn" (click)="dialog.closeAll();validatetype('cancel')">Cancel</button>
+                  </mat-dialog-actions>
+                </ng-template>

@@ -43,6 +43,7 @@ export class VendorUserComponent implements OnInit {
   stateFilterlist: any[] = [];
   breadcrumbFlags = new BreadcrumbFlags();
   displayedColumns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'userName', header: 'User Name' },
     { field: 'firstName', header: 'First Name' },
     { field: 'lastName', header: 'Last Name' },

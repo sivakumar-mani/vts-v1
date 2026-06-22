@@ -1,215 +1,221 @@
 ﻿<app-breadcrumb [btnAdd]="breadcrumbFlags.btnAdd" [btnSave]="breadcrumbFlags.btnSave"
-    [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset"
-    [btnResetTbl]="breadcrumbFlags.btnResetTbl" (eventAdd)="addinsuffdoc()" [routePath]='routePath'
-    [btnAddDisabled]="!screenAuth.addFlag" (eventBack)="closeForm()" (eventSave)="saveInsuffDoc()"
-    [toolTip]="breadcrumbFlags.toolTip" (eventReset)="resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
+  [btnBack]="breadcrumbFlags.btnBack" [btnReset]="breadcrumbFlags.btnReset"
+  [btnResetTbl]="breadcrumbFlags.btnResetTbl" (eventAdd)="addinsuffdoc()" [routePath]='routePath'
+  [btnAddDisabled]="!screenAuth.addFlag" (eventBack)="closeForm()" (eventSave)="saveInsuffDoc()"
+[toolTip]="breadcrumbFlags.toolTip" (eventReset)="resetForm()" (eventResetTbl)="resetTable()"></app-breadcrumb>
 <mat-card>
-    <div fxLayout="row">
-        <mat-card-header fxFlex="100%">
-            <div fxFlex="100%">
-                <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
-                    fxLayoutGap="10px">
-                    <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
-                        fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
-                        <mat-card-title>
-                            <h1 class="header-title">Insufficiency Document</h1>
-                        </mat-card-title>
-                    </div>
-                    <span fxFlex></span>
-                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
-                        fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                        <div class="tbl-commonsearch" *ngIf="!showFlag">
-                            <mat-form-field fxFlex="100%">
-                                <mat-label></mat-label>
-                                <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                                <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
-                                    autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
-                            </mat-form-field>
-                        </div>
-                    </div>
+  <div fxLayout="row">
+    <mat-card-header fxFlex="100%">
+      <div fxFlex="100%">
+        <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column"
+          fxLayoutGap="10px">
+          <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%"
+            fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+            <mat-card-title>
+              <h1 class="header-title">Insufficiency Document</h1>
+            </mat-card-title>
+          </div>
+          <span fxFlex></span>
+          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs
+            fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+            @if (!showFlag) {
+              <div class="tbl-commonsearch">
+                <mat-form-field fxFlex="100%">
+                  <mat-label></mat-label>
+                  <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                  <input #global matInput placeholder="Search here..." type="text" pInputText size="50"
+                    autocomplete="off" (input)="dt?.filterGlobal($event.target.value, 'contains')" />
+                  </mat-form-field>
                 </div>
+              }
             </div>
-        </mat-card-header>
+          </div>
+        </div>
+      </mat-card-header>
     </div>
     <mat-card-content>
-        <div class="content-area">
-            <form *ngIf="showFlag" id="ngForm" autocomplete="off" [formGroup]="insufficiencyForm">
-                <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
-                    fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
-
-                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%">
-                        <app-auto-complete [selectProperties]='componentControls'></app-auto-complete>
+      <div class="content-area">
+        @if (showFlag) {
+          <form id="ngForm" autocomplete="off" [formGroup]="insufficiencyForm">
+            <div fxLayout="row wrap" fxLayout.lg="row" fxLayout.md="row wrap" fxLayout.sm="row wrap"
+              fxLayout.xs="column" fxLayoutGap="20px grid" fxLayoutGap.sm="20px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%">
+                <app-auto-complete [selectProperties]='componentControls'></app-auto-complete>
+              </div>
+            </div>
+            @for (item of getformgroup(); track item; let i = $index; let first = $first; let last = $last) {
+              <div formArrayName="description"
+                >
+                <div class="row wrap" [formGroupName]="i" fxLayoutGap="20px grid">
+                  <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="40%" fxFlex.xs="100%">
+                    <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                      <mat-label>DocumentType Name</mat-label>
+                      <input matInput #ques type="text" placeholder="DocumentType Name"
+                        formControlName="description" (change)="checkValidDocumentType()" maxlength="320"
+                        autocomplete="off" role="presentation" required>
+                        @if (item.get('description').invalid) {
+                          <mat-error>
+                            DocumentType Name is required
+                          </mat-error>
+                        }
+                        @if (insufficiencyForm?.get('description')?.errors?.incorrect) {
+                          <mat-error>
+                          DocumentType Name is already exist. </mat-error>
+                        }
+                      </mat-form-field>
                     </div>
-                </div>
-                <div formArrayName="description"
-                    *ngFor="let item of getformgroup(); let i = index; let first = first; let last= last">
-                    <div class="row wrap" [formGroupName]="i" fxLayoutGap="20px grid">
-                        <div fxFlex="40%" fxFlex.lg="40%" fxFlex.md="40%" fxFlex.sm="40%" fxFlex.xs="100%">
-                            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-                                <mat-label>DocumentType Name</mat-label>
-                                <input matInput #ques type="text" placeholder="DocumentType Name"
-                                    formControlName="description" (change)="checkValidDocumentType()" maxlength="320"
-                                    autocomplete="off" role="presentation" required>
-                                <mat-error *ngIf="item.get('description').invalid">
-                                    DocumentType Name is required
-                                </mat-error>
-                                <mat-error *ngIf="insufficiencyForm?.get('description')?.errors?.incorrect">
-                                    DocumentType Name is already exist. </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="10%" fxFlex.xs="100%">
-                            <mat-label class="lbl">Is Active</mat-label>
-                            <mat-checkbox formControlName="active">Active</mat-checkbox>
-                        </div>
-                        <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="15%" fxFlex.xs="100%"
-                            *ngIf="insufficiencyForm.disabled === false">
-                            <mat-label>&nbsp;</mat-label>
-                            <div class="adrem text-left" fxLayoutGap="8px">
-                                <button type="button" mat-button color="primary" matTooltip="Add"
-                                    matTooltipClass="accent-tooltip" (click)="addControl(i)" *ngIf="last && !isEdit"> <i
-                                        class="icon-plus-circle"></i> </button>
-                                <button type="button" mat-button color="warn" matTooltip="Remove"
-                                    matTooltipClass="accent-tooltip" (click)="removeControl(i)"
-                                    *ngIf="!(first && last)"> <i class="icon-x-circle"></i> </button>
-                            </div>
-                        </div>
+                    <div fxFlex="10%" fxFlex.lg="10%" fxFlex.md="10%" fxFlex.sm="10%" fxFlex.xs="100%">
+                      <mat-label class="lbl">Is Active</mat-label>
+                      <mat-checkbox formControlName="active">Active</mat-checkbox>
                     </div>
-                </div>
-            </form>
-            <div fxLayout="row" *ngIf="!showFlag">
+                    @if (insufficiencyForm.disabled === false) {
+                      <div fxFlex="15%" fxFlex.lg="15%" fxFlex.md="15%" fxFlex.sm="15%" fxFlex.xs="100%"
+                        >
+                        <mat-label>&nbsp;</mat-label>
+                        <div class="adrem text-left" fxLayoutGap="8px">
+                          @if (last && !isEdit) {
+                            <button type="button" mat-button color="primary" matTooltip="Add"
+                              matTooltipClass="accent-tooltip" (click)="addControl(i)"> <i
+                            class="icon-plus-circle"></i> </button>
+                          }
+                          @if (!(first && last)) {
+                            <button type="button" mat-button color="warn" matTooltip="Remove"
+                              matTooltipClass="accent-tooltip" (click)="removeControl(i)"
+                              > <i class="icon-x-circle"></i> </button>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </form>
+            }
+            @if (!showFlag) {
+              <div fxLayout="row">
                 <div fxFlex="100%">
-                    <p-table #dt [columns]="displayedColumns" [value]="insufficiencydocumentList" [scrollable]="true"
-                        [rows]="itemperpage" [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true"
-                        dataKey="logginId">
-
-                        <!-- COLGROUP -->
-                        <ng-template pTemplate="colgroup" let-colgroupCols>
-                            <colgroup>
-                                <col style="width:50px" />
-                                <col style="width:120px" />
-                                <col *ngFor="let col of colgroupCols" style="min-width:200px" />
-                            </colgroup>
-                        </ng-template>
-
-                        <!-- HEADER -->
-                        <ng-template pTemplate="header" let-headerCols>
-                            <tr>
-                                <th></th>
-                                <th>Action</th>
-
-                                <th *ngFor="let col of headerCols" [ngSwitch]="col.field" pResizableColumn
-                                    pReorderableColumn>
-
-                                    <div class="thname">{{ col.header }}</div>
-
-                                    <span [pSortableColumn]="col.field">
-                                        <p-sortIcon [field]="col.field"></p-sortIcon>
-                                    </span>
-
-                                    <span class="ico-fieldsearch">
-                                        <i *ngSwitchCase="'clientName'" class="icon-search2" matTooltip="Search"
-                                            (click)="clientNameCtrlTrigger.openMenu()"></i>
-
-                                        <i *ngSwitchCase="'componetName'" class="icon-search2" matTooltip="Search"
-                                            (click)="componetNameCtrlTrigger.openMenu()"></i>
-                                    </span>
-
-                                </th>
-                            </tr>
-                        </ng-template>
-
-                        <!-- BODY -->
-                        <ng-template pTemplate="body" let-rowData let-bodyCols="columns" let-expanded="expanded">
-
-                            <tr>
-                                <td>
-                                    <a href="#" [pRowToggler]="rowData">
-                                        <i [ngClass]="expanded ? 'icon-chevron-down':'icon-chevron-right'"></i>
-                                    </a>
-                                </td>
-
-                                <td>
-                                    <!-- action icons unchanged -->
-                                </td>
-
-                                <td *ngFor="let col of bodyCols">
-                                    {{ rowData[col.field] }}
-                                </td>
-                            </tr>
-
-                        </ng-template>
-
-                        <!-- ROW EXPANSION -->
-                        <ng-template pTemplate="rowexpansion" let-moduleRowData let-expandCols="columns">
-
-                            <tr>
-                                <td [attr.colspan]="4">
-
-                                    <!-- SUB TABLE -->
-                                    <p-table #sub [columns]="descriptionColumns" [value]="moduleRowData.description"
-                                        [paginator]="true" [rows]="10">
-
-                                        <ng-template pTemplate="header" let-subHeaderCols>
-                            <tr>
-                                <th>Action</th>
-                                <th *ngFor="let col of subHeaderCols">
-                                    {{ col.header }}
-                                </th>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="body" let-screenRowData let-subBodyCols="columns">
-
-                            <tr>
-                                <td>
-                                    <!-- sub actions -->
-                                </td>
-
-                                <td *ngFor="let col of subBodyCols">
-                                    {{ screenRowData[col.field] }}
-                                </td>
-                            </tr>
-
-                        </ng-template>
-
-                    </p-table>
-
-                    </td>
+                  <p-table #dt [columns]="displayedColumns" [value]="insufficiencydocumentList" [scrollable]="true"
+                    [rows]="itemperpage" [resizableColumns]="true" [reorderableColumns]="true" [paginator]="true"
+                    dataKey="logginId">
+                    <!-- COLGROUP -->
+                    <ng-template pTemplate="colgroup" let-colgroupCols>
+                      <colgroup>
+                      <col style="width:50px" />
+                      <col style="width:120px" />
+                      @for (col of colgroupCols; track col) {
+                        <col style="min-width:200px" />
+                      }
+                    </colgroup>
+                  </ng-template>
+                  <!-- HEADER -->
+                  <ng-template pTemplate="header" let-headerCols>
+                    <tr>
+                      <th></th>
+                      <th>Action</th>
+                      @for (col of headerCols; track col) {
+                        <th pResizableColumn
+                          pReorderableColumn>
+                          <div class="thname">{{ col.header }}</div>
+                          <span [pSortableColumn]="col.field">
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                          </span>
+                          <span class="ico-fieldsearch">
+                            @if (col.field === 'clientName') {
+                              <i class="icon-search2" matTooltip="Search"
+                              (click)="clientNameCtrlTrigger.openMenu()"></i>
+                            }
+                            @if (col.field === 'componetName') {
+                              <i class="icon-search2" matTooltip="Search"
+                              (click)="componetNameCtrlTrigger.openMenu()"></i>
+                            }
+                          </span>
+                        </th>
+                      }
                     </tr>
-
-                    </ng-template>
-
-                    </p-table>
-                    <div [ngClass]="{'empty-record': insufficiencydocumentList.length == 0}" class="cus-paginator"
-                        fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
-                        fxLayoutGap.xs="20px grid">
-                        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                            fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{
-                                dt.totalRecords> 0
-                                ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of
-                                    {{ dt.totalRecords }} record(s) |&nbsp; <a (click)="showall()">Show All</a> </div>
-                        <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                        <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                            fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                            fxLayoutAlign.xs="start center"> <a
+                  </ng-template>
+                  <!-- BODY -->
+                  <ng-template pTemplate="body" let-rowData let-bodyCols="columns" let-expanded="expanded">
+                    <tr>
+                      <td>
+                        <a href="#" [pRowToggler]="rowData">
+                          <i [ngClass]="expanded ? 'icon-chevron-down':'icon-chevron-right'"></i>
+                        </a>
+                      </td>
+                      <td>
+                        <!-- action icons unchanged -->
+                      </td>
+                      @for (col of bodyCols; track col) {
+                        <td>
+                          {{ rowData[col.field] }}
+                        </td>
+                      }
+                    </tr>
+                  </ng-template>
+                  <!-- ROW EXPANSION -->
+                  <ng-template pTemplate="rowexpansion" let-moduleRowData let-expandCols="columns">
+                    <tr>
+                      <td [attr.colspan]="4">
+                        <!-- SUB TABLE -->
+                        <p-table #sub [columns]="descriptionColumns" [value]="moduleRowData.description"
+                          [paginator]="true" [rows]="10">
+                          <ng-template pTemplate="header" let-subHeaderCols>
+                            <tr>
+                              <th>Action</th>
+                              @for (col of subHeaderCols; track col) {
+                                <th>
+                                  {{ col.header }}
+                                </th>
+                              }
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body" let-screenRowData let-subBodyCols="columns">
+                            <tr>
+                              <td>
+                                <!-- sub actions -->
+                              </td>
+                              @for (col of subBodyCols; track col) {
+                                <td>
+                                  {{ screenRowData[col.field] }}
+                                </td>
+                              }
+                            </tr>
+                          </ng-template>
+                        </p-table>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+                <div [ngClass]="{'empty-record': insufficiencydocumentList.length == 0}" class="cus-paginator"
+                  fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                  fxLayoutGap.xs="20px grid">
+                  <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                    fxLayoutAlign="start center"> Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{
+                    dt.totalRecords> 0
+                    ? dt.rows + dt.first <= dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of
+                    {{ dt.totalRecords }} record(s) |&nbsp; <a (click)="showall()">Show All</a> </div>
+                    <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                      fxLayoutAlign.xs="start center"> <a
                                 [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
                                     dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                                     navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"> <i
-                                    class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2"
-                                fxHide.xs>Go to
-                                Page<span class="input-num">
-                                    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5"
-                                        appNumberOnly [NumberOnly]="false"
-                                        (keyup.enter)="navigatePage(pageNo.value, dt.rows, true)" />
-                                </span></span> <span class="mr-2" fxHide.xs> of
-                                {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
-                                [ngClass]=" dt.rows + dt.first >= dt.totalRecords? 'page-btn disabled': 'page-btn'"
+                    class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2"
+                    fxHide.xs>Go to
+                    Page<span class="input-num">
+                    <input type="number" min="1" #pageNo [(ngModel)]="currentPage" maxlength="5"
+                      appNumberOnly [NumberOnly]="false"
+                      (keyup.enter)="navigatePage(pageNo.value, dt.rows, true)" />
+                    </span></span> <span class="mr-2" fxHide.xs> of
+                  {{ getTotalPages(dt.totalRecords, dt.rows) }}</span> <a
+                  [ngClass]=" dt.rows + dt.first >= dt.totalRecords? 'page-btn disabled': 'page-btn'"
                                 (click)="dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                                     navigateNxtPrevPage(dt.first + dt.rows, dt.rows)"><i
-                                    class="icon-control-end ml-5"></i></a> </div>
-                    </div>
-                </div>
+                class="icon-control-end ml-5"></i></a> </div>
+              </div>
             </div>
-        </div>
+          </div>
+        }
+      </div>
     </mat-card-content>
-</mat-card>
+  </mat-card>

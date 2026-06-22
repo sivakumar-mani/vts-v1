@@ -1,6 +1,6 @@
 <app-breadcrumb [routePath]='routePath'
-[btnReset]="btnReset"
-(eventReset)="onReset()"
+  [btnReset]="btnReset"
+  (eventReset)="onReset()"
   [btnSave]="btnSave" [toolTip]="toolTip"
   (eventSave)="validateUploadFile(true)">
 </app-breadcrumb>
@@ -26,7 +26,7 @@
       <form [formGroup]="bulkFormGroup" id="ngForm" (keydown.enter)="$event.preventDefault()">
         <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column"
           fxLayoutGap="20px grid" fxLayoutGap.sm="0px grid" fxLayoutGap.xs="0px grid">
-  
+
           <div fxFlex="30%" fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%">
             <mat-form-field fxFlex="100%" appearance="outline">
               <mat-label>Site Name</mat-label>
@@ -34,656 +34,726 @@
                 #compInput (focus)="siteItems(compInput.value)" (keyup)="siteKeyupFunction($event, compInput.value)"
                 (input)="siteItems(compInput.value)" (click)="compInput.select()"  />
 
-              <mat-error *ngIf="bulkFormGroup?.get('siteNo')?.errors?.incorrect"> Site Name is not valid
-              </mat-error>
-              <mat-autocomplete #autoComponent="matAutocomplete" [displayWith]="displaySiteFn">
-                <mat-option [value]="comp.siteId" *ngFor="let comp of sitefilterlist" class="autocom-option autocom-tr"
-                  (onSelectionChange)="onOptionToggle($event)">
-                  <span [innerHTML]="comp.siteNoWithsiteName | highlight: compInput.value"></span>
-                </mat-option>
-                <mat-option *ngIf="sitefilterlist.length == 0">
-                  <div class="no-record"><span>No Data Found</span></div>
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </div>
-  
-          <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33" fxFlex.sm="50%" fxFlex.xs="100%">
-            <mat-form-field appearance="outline" fxFlex="100%">
-              <mat-label>No. of Candidates</mat-label>
-  
-              <input formControlName="noOfCandidate" isFocused="true" maxlength="2" appNumberOnly [NumberOnly]="false"
-                autocomplete="off" role="presentation" matInput placeholder="No. of Candidates" required  (input)="updateCandidateRows()"/>
-  
-              <mat-error *ngIf="bulkFormGroup?.get('noOfCandidate')?.errors?.required">
-                No. of Candidates is required
-              </mat-error>
-  
-              <mat-error *ngIf="bulkFormGroup?.get('noOfCandidate')?.errors?.min">
-                Min-1
-              </mat-error>
-  
-            </mat-form-field>
-          </div>
-  
-         
-  
+                @if (bulkFormGroup?.get('siteNo')?.errors?.incorrect) {
+                  <mat-error> Site Name is not valid
+                  </mat-error>
+                }
+                <mat-autocomplete #autoComponent="matAutocomplete" [displayWith]="displaySiteFn">
+                  @for (comp of sitefilterlist; track comp) {
+                    <mat-option [value]="comp.siteId" class="autocom-option autocom-tr"
+                      (onSelectionChange)="onOptionToggle($event)">
+                      <span [innerHTML]="comp.siteNoWithsiteName | highlight: compInput.value"></span>
+                    </mat-option>
+                  }
+                  @if (sitefilterlist.length == 0) {
+                    <mat-option>
+                      <div class="no-record"><span>No Data Found</span></div>
+                    </mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
 
-  
-               <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33" fxFlex.sm="50%" fxFlex.xs="100%">
-  
+            <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33" fxFlex.sm="50%" fxFlex.xs="100%">
+              <mat-form-field appearance="outline" fxFlex="100%">
+                <mat-label>No. of Candidates</mat-label>
+
+                <input formControlName="noOfCandidate" isFocused="true" maxlength="2" appNumberOnly [NumberOnly]="false"
+                  autocomplete="off" role="presentation" matInput placeholder="No. of Candidates" required  (input)="updateCandidateRows()"/>
+
+                  @if (bulkFormGroup?.get('noOfCandidate')?.errors?.required) {
+                    <mat-error>
+                      No. of Candidates is required
+                    </mat-error>
+                  }
+
+                  @if (bulkFormGroup?.get('noOfCandidate')?.errors?.min) {
+                    <mat-error>
+                      Min-1
+                    </mat-error>
+                  }
+
+                </mat-form-field>
+              </div>
+
+
+
+
+
+              <div fxFlex="33%" fxFlex.lg="33%" fxFlex.md="33" fxFlex.sm="50%" fxFlex.xs="100%">
+
                 <mat-form-field appearance="outline" fxFlex="100%">
-  
+
                   <mat-label>Received Date & Time</mat-label>
-  
+
                   <input matInput formControlName="receivedDateTime" [max]="currentDate" [owlDateTimeTrigger]="dateTime"
                     [owlDateTime]="dateTime" placeholder="Received Date & Time" matTooltipClass="accent-tooltip" [disabled]="true"
                     [matTooltip]="bulkFormGroup?.get('receivedDateTime')?.value | date : 'dd/MM/yyyy hh:mm a'" required />
-  
-                  <button matSuffix mat-icon-button [owlDateTimeTrigger]="dateTime" type="button">
-  
-                    <mat-icon>calendar_today</mat-icon>
-  
-                  </button>
-  
-                  <owl-date-time #dateTime [pickerMode]="'popup'">
-                  </owl-date-time>
-  
-                  <mat-error *ngIf="bulkFormGroup?.get('receivedDateTime')?.errors?.required">
-                    Received Date & Time is required
-                  </mat-error>
-  
-                </mat-form-field>
-  
+
+                    <button matSuffix mat-icon-button [owlDateTimeTrigger]="dateTime" type="button">
+
+                      <mat-icon>calendar_today</mat-icon>
+
+                    </button>
+
+                    <owl-date-time #dateTime [pickerMode]="'popup'">
+                    </owl-date-time>
+
+                    @if (bulkFormGroup?.get('receivedDateTime')?.errors?.required) {
+                      <mat-error>
+                        Received Date & Time is required
+                      </mat-error>
+                    }
+
+                  </mat-form-field>
+
+                </div>
+
+
+
+
+
+
               </div>
-  
-         
-  
-  
-  
-  
-        </div>
-        <!-- <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
-          fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
-          <div fxFlex="100%">
-            <mat-label class="lbl">Upload Document</mat-label>
-            <mat-label class="mat-hint-upload">Acceptable file Formats : xlsx, xls </mat-label>
-            <mat-label class="mat-hint-upload"><span class="red text-semi-bold">Note:&nbsp;</span>Reference number
+              <!-- <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="row wrap" fxLayout.xs="column"
+              fxLayoutGap="20px grid" fxLayoutGap.xs="0px grid">
+              <div fxFlex="100%">
+                <mat-label class="lbl">Upload Document</mat-label>
+                <mat-label class="mat-hint-upload">Acceptable file Formats : xlsx, xls </mat-label>
+                <mat-label class="mat-hint-upload"><span class="red text-semi-bold">Note:&nbsp;</span>Reference number
               will be generate based on the client creation settings.</mat-label>
-  
-            <div class="file-upload">
-              <i class="material-icons">cloud_upload</i>
-              <span>Browse here...</span>
-              <input type="file" (click)="fileInput.value = null" #fileInput (change)="openUploadDoc($event)" />
-            </div>
-            <div class="file-names mt-10" *ngIf="clientBulkUploadDoc?.name">
-              <div class="file-upload-files"> <a routerLinkActive="active-link">{{clientBulkUploadDoc?.name}}</a>
+
+              <div class="file-upload">
+                <i class="material-icons">cloud_upload</i>
+                <span>Browse here...</span>
+                <input type="file" (click)="fileInput.value = null" #fileInput (change)="openUploadDoc($event)" />
+              </div>
+              <div class="file-names mt-10" *ngIf="clientBulkUploadDoc?.name">
+                <div class="file-upload-files"> <a routerLinkActive="active-link">{{clientBulkUploadDoc?.name}}</a>
                 <button type="button" class="close" aria-label="Close" (click)="removeDocument()">
                   <span aria-hidden="true">&times;</span> </button>
+                </div>
               </div>
             </div>
-          </div>
-        </div> -->
-      </form>
-    </mat-card-content>
-  </div>
-  <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-    fxLayoutGap="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px" class="row pt-10" *ngIf="isExcelValid">
-    <div fxFlex="80%">
-
+          </div> -->
+        </form>
+      </mat-card-content>
     </div>
-    <div fxFlex="20%">
-      <mat-checkbox [(ngModel)]="isApplyAll" (change)="onApplyAllChange($event)">Apply to all Package</mat-checkbox>
-    </div>
-  </div>
+    @if (isExcelValid) {
+      <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+        fxLayoutGap="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px" class="row pt-10">
+        <div fxFlex="80%">
+        </div>
+        <div fxFlex="20%">
+          <mat-checkbox [(ngModel)]="isApplyAll" (change)="onApplyAllChange($event)">Apply to all Package</mat-checkbox>
+        </div>
+      </div>
+    }
 
-  <div fxLayout="row">
-      <div fxFlex="100%"  *ngIf="showGrid && bulkInvitationList.length > 0">
-   <p-table
-  #dt
-  [columns]="bulkClientCaseColumns"
-  [value]="bulkInvitationList"
-  [resizableColumns]="true"
-  [reorderableColumns]="true"
-  [scrollable]="true"
-  scrollDirection="both"
-  scrollHeight="400px"
-  scrollWidth="2500px"
-  [paginator]="true"
-  [rows]="10"
-  class="tree-tbl"
-  columnResizeMode="expand">
-
-  <!-- ================= COLGROUP ================= -->
-  <ng-template pTemplate="colgroup" let-columns>
-    <colgroup>
-      <col *ngFor="let col of columns"
+    <div fxLayout="row">
+      @if (showGrid && bulkInvitationList.length > 0) {
+        <div fxFlex="100%" >
+          <p-table
+            #dt
+            [columns]="bulkClientCaseColumns"
+            [value]="bulkInvitationList"
+            [resizableColumns]="true"
+            [reorderableColumns]="true"
+            [scrollable]="true"
+            scrollDirection="both"
+            scrollHeight="400px"
+            scrollWidth="2500px"
+            [paginator]="true"
+            [rows]="10"
+            class="tree-tbl"
+            columnResizeMode="expand">
+            <!-- ================= COLGROUP ================= -->
+            <ng-template pTemplate="colgroup" let-columns>
+              <colgroup>
+              @for (col of columns; track col) {
+                <col
         [style.width]="
           col.field === 'sno'      ? '60px'  :
           col.field === 'age'      ? '60px'  :
           col.field === 'document' ? '400px' : '200px'">
-    </colgroup>
-  </ng-template>
-
-  <!-- ================= HEADER ================= -->
-  <ng-template pTemplate="header" let-columns>
-    <tr>
-      <th *ngFor="let col of columns"
+              }
+            </colgroup>
+          </ng-template>
+          <!-- ================= HEADER ================= -->
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              @for (col of columns; track col) {
+                <th
         [style.width]="
           col.field === 'sno'      ? '60px'  :
           col.field === 'age'      ? '60px'  :
           col.field === 'document' ? '400px' : '200px'">
-        <span><div>{{ col.header }}</div></span>
-      </th>
-    </tr>
-  </ng-template>
-
-  <!-- ================= BODY ================= -->
-  <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
-    <tr>
-      <td *ngFor="let col of columns"
+                  <span><div>{{ col.header }}</div></span>
+                </th>
+              }
+            </tr>
+          </ng-template>
+          <!-- ================= BODY ================= -->
+          <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+              @for (col of columns; track col) {
+                <td
         [style.width]="
           col.field === 'sno'      ? '60px'  :
           col.field === 'age'      ? '60px'  :
           col.field === 'document' ? '300px' : 
             col.field === 'applicantId'      ? '100px'  :
             '200px'">
-
-        <!-- S.No -->
-        <span *ngIf="col.field === 'sno'">{{ index + 1 }}</span>
-
-        <!-- ================= APPLICANT ID ================= -->
-      <!-- <mat-form-field
-  appearance="outline"
-  style="width:100%"
-  *ngIf="col.field === 'applicantId'">
-
-  <input
-    matInput
-    [(ngModel)]="rowData.applicantId">
-
-</mat-form-field> -->
-        <!-- ================= INPUT FIELDS ================= -->
-        <mat-form-field appearance="outline" style="width:100%" *ngIf="isInput(col.field)">
-          <input matInput
-            [(ngModel)]="rowData[col.field]"
-            [placeholder]="col.header"
+                  <!-- S.No -->
+                  @if (col.field === 'sno') {
+                    <span>{{ index + 1 }}</span>
+                  }
+                  <!-- ================= APPLICANT ID ================= -->
+                  <!-- <mat-form-field
+                  appearance="outline"
+                  style="width:100%"
+                  *ngIf="col.field === 'applicantId'">
+                  <input
+                    matInput
+                    [(ngModel)]="rowData.applicantId">
+                  </mat-form-field> -->
+                  <!-- ================= INPUT FIELDS ================= -->
+                  @if (isInput(col.field)) {
+                    <mat-form-field appearance="outline" style="width:100%">
+                      <input matInput
+                        [(ngModel)]="rowData[col.field]"
+                        [placeholder]="col.header"
             [maxlength]="
               col.field === 'firstName' || col.field === 'lastName' ? 100 :
               col.field === 'contactNumber' ? 10 :
               col.field === 'uan'           ? 12 : null"
-            appNumberOnly
-            [NumberOnly]="(col.field === 'contactNumber' || col.field === 'uan') ? false : true"
-             (blur)="onFieldBlur(rowData, col.field)">
-
-        <div class="row-error" *ngIf="submitted && col.field === 'firstName'     && !rowData.firstName">First Name is required</div>
-<div class="row-error" *ngIf="submitted && col.field === 'lastName'      && !rowData.lastName">Last Name is required</div>
-<div class="row-error" *ngIf="submitted && col.field === 'emailId'       && !rowData.emailId">Email is required</div>
-<div class="row-error" *ngIf="submitted && col.field === 'emailId'       && rowData.emailId && !rowData.emailId.includes('@')">Enter valid email</div>
-<div class="row-error" *ngIf="submitted && col.field === 'contactNumber' && !rowData.contactNumber">Contact is required</div>
-<div class="row-error" *ngIf="submitted && col.field === 'packageId' && !rowData.packageId">package is required</div>
-<div class="row-error" *ngIf="submitted && col.field === 'contactNumber' && rowData.contactNumber && !isValidContact(rowData.contactNumber)">Enter valid Mobile number</div>
-<div class="row-error" *ngIf="submitted && col.field === 'emailId' && isDuplicateEmail(rowData)">Email already exists</div>
-<div class="row-error" *ngIf="submitted && col.field === 'uan' && rowData.uan && !isValidUan(rowData.uan)">Enter valid UAN number</div>
-        </mat-form-field>
-
-        <!-- ================= GENDER ================= -->
-        <mat-form-field appearance="outline" style="width:100%" *ngIf="col.field === 'gender'">
-          <mat-select [(ngModel)]="rowData.gender" placeholder="Gender">
-           
-            <mat-option *ngFor="let g of genderDetails" [value]="g.lookUpId">{{ g.lookUpName }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <!-- ================= DOB ================= -->
-        <div style="width:100%" *ngIf="col.field === 'dob'">
-        <mat-form-field appearance="outline" style="width:100%">
-
-  <!-- Visible Input -->
-  <input
-    #dobRef
-    matInput
-    autocomplete="off"
-    placeholder="DD/MM/YYYY"
-    [value]="rowData.dateOfBirth ? (rowData.dateOfBirth | date:'dd/MM/yyyy') : ''"
-    readonly
-    role="presentation"
-    (focus)="dobPicker.open()"
-    (click)="dobPicker.open()"
-    [matTooltip]="rowData.dateOfBirth ? (rowData.dateOfBirth | date:'dd/MM/yyyy') : ''"
-    matTooltipClass="accent-tooltip" />
-
-  <!-- Hidden Datepicker Input -->
-  <input
-    hidden
-    matInput
-    [matDatepicker]="dobPicker"
-    [max]="maxDobDate"
-    (dateChange)="onDobChange($event, rowData)">
-
-  <mat-datepicker-toggle
-    matSuffix
-    [for]="dobPicker">
-  </mat-datepicker-toggle>
-
-  <mat-datepicker #dobPicker></mat-datepicker>
-
-  <mat-hint class="f-13">
-    E.g. Enter date as (01/01/2021)
-  </mat-hint>
-
-  <mat-error *ngIf="submitted && !rowData.dateOfBirth">
-    Date of Birth is required
-  </mat-error>
-
-  <mat-error
-    *ngIf="submitted && rowData.dateOfBirth && !isAgeValid(rowData.dateOfBirth)">
-    Age must be at least 18 years
-  </mat-error>
-
-</mat-form-field>
-        </div>
-
-        
-        <!-- ================= CITIZENSHIP ================= -->
-        <mat-form-field appearance="outline" style="width:100%" *ngIf="col.field === 'citizenship'">
-          <mat-select [(ngModel)]="rowData.citizenship" placeholder="Citizenship">
-            <mat-option *ngFor="let g of countryNameList" [value]="g.countryId">{{ g.country }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <!-- ================= CURRENTLY WORKING ================= -->
-        <mat-form-field appearance="outline" style="width:100%" *ngIf="col.field === 'currentlyWorking'">
-          <mat-select [(ngModel)]="rowData.currentlyWorking" >
-            <mat-option value="Yes">Yes</mat-option>
-            <mat-option value="No">No</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <!-- ================= AGE ================= -->
-        <mat-form-field appearance="outline" style="width:100%" *ngIf="col.field === 'age'">
-          <input matInput type="text" [(ngModel)]="rowData.age" [disabled]="true" placeholder="Age">
-        </mat-form-field>
-
-        <!-- ================= SITE LOCATION ================= -->
-       <!-- SITE -->
-<mat-form-field appearance="outline" style="width:100%" *ngIf="col.field === 'siteLocation'">
-  <mat-select
-    [(ngModel)]="rowData.siteLocation"
-    [disabled]="!!selectedSiteId"
-    placeholder="Site Name / Locations"
-    (selectionChange)="onRowSiteChange($event.value, rowData)">
-    <mat-option *ngFor="let s of sitefilterlist" [value]="s.siteId">
-      {{ s.siteNoWithsiteName }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-
-<!-- PACKAGE -->
-<mat-form-field appearance="outline" style="width:100%" *ngIf="col.field === 'packageId'">
-  <mat-label>Select Package</mat-label>
-  <mat-select
-    [(ngModel)]="rowData.packageId"
-    (selectionChange)="packageName($event.value, rowData)"
-    placeholder="Package">
-    <mat-option value="">Select Package</mat-option>
-    <mat-option *ngFor="let pack of packAndCompList?.package" [value]="pack.packageId">
-      {{ pack.packageName }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-        <!-- ================= PRIORITY ================= -->
-        <mat-form-field appearance="outline" style="width:100%" *ngIf="col.field === 'priorityId'">
-          <mat-label>Select Priority</mat-label>
-          <mat-select [(ngModel)]="rowData.lookUpId" placeholder="Priority">
-            <mat-option value="">Select Priority</mat-option>
-            <mat-option *ngFor="let pack of priortyList" [value]="pack.lookUpId">{{ pack.lookUpName }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <!-- ================= DOCUMENT ================= -->
-        <div style="width:100%" *ngIf="col?.field === 'document'">
-          <div class="upload-trigger" (click)="fileInput.value = ''; fileInput.click()"
-            matTooltip="Click to upload multiple documents">
-            <mat-icon color="primary">cloud_upload</mat-icon>
-            <span class="upload-text">Upload Files</span>
-          </div>
-          <input type="file" #fileInput style="display:none" multiple (change)="onFileSelect($event, rowData)" />
-          <div class="file-container">
-            <div *ngFor="let doc of rowData.componentDocuments; let i = index"
-              class="file-row" fxLayout="row" fxLayoutAlign="space-between center">
-              <span class="file-name" [matTooltip]="doc.fileName">{{ doc.fileName }}</span>
-              <div class="file-actions" fxLayout="row" fxLayoutGap="8px">
-                <button mat-icon-button class="view-btn" (click)="openViewDialog(doc)" matTooltip="View Document">
-                  <mat-icon>visibility</mat-icon>
-                </button>
-                <button mat-icon-button color="warn" (click)="removeFile(i, rowData)" matTooltip="Remove">
-                  <mat-icon>highlight_off</mat-icon>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </td>
-    </tr>
-  </ng-template>
-
-  <!-- ================= EMPTY MESSAGE ================= -->
-  <ng-template pTemplate="emptymessage" let-columns>
-    <tr>
-      <td [attr.colspan]="columns.length">
-        <div class="no-record text-center pt-15">
-          <span>No Record Found</span>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-
-</p-table>
-      <div class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
-        fxLayoutGap.xs="20px grid">
-
-        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-          fxLayoutAlign="start center">
-          Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first <=
-              dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s) </div>
-              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                fxLayoutAlign.xs="start center">
+                        appNumberOnly
+                        [NumberOnly]="(col.field === 'contactNumber' || col.field === 'uan') ? false : true"
+                        (blur)="onFieldBlur(rowData, col.field)">
+                        @if (submitted && col.field === 'firstName'     && !rowData.firstName) {
+                          <div class="row-error">First Name is required</div>
+                        }
+                        @if (submitted && col.field === 'lastName'      && !rowData.lastName) {
+                          <div class="row-error">Last Name is required</div>
+                        }
+                        @if (submitted && col.field === 'emailId'       && !rowData.emailId) {
+                          <div class="row-error">Email is required</div>
+                        }
+                        @if (submitted && col.field === 'emailId'       && rowData.emailId && !rowData.emailId.includes('@')) {
+                          <div class="row-error">Enter valid email</div>
+                        }
+                        @if (submitted && col.field === 'contactNumber' && !rowData.contactNumber) {
+                          <div class="row-error">Contact is required</div>
+                        }
+                        @if (submitted && col.field === 'packageId' && !rowData.packageId) {
+                          <div class="row-error">package is required</div>
+                        }
+                        @if (submitted && col.field === 'contactNumber' && rowData.contactNumber && !isValidContact(rowData.contactNumber)) {
+                          <div class="row-error">Enter valid Mobile number</div>
+                        }
+                        @if (submitted && col.field === 'emailId' && isDuplicateEmail(rowData)) {
+                          <div class="row-error">Email already exists</div>
+                        }
+                        @if (submitted && col.field === 'uan' && rowData.uan && !isValidUan(rowData.uan)) {
+                          <div class="row-error">Enter valid UAN number</div>
+                        }
+                      </mat-form-field>
+                    }
+                    <!-- ================= GENDER ================= -->
+                    @if (col.field === 'gender') {
+                      <mat-form-field appearance="outline" style="width:100%">
+                        <mat-select [(ngModel)]="rowData.gender" placeholder="Gender">
+                          @for (g of genderDetails; track g) {
+                            <mat-option [value]="g.lookUpId">{{ g.lookUpName }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    }
+                    <!-- ================= DOB ================= -->
+                    @if (col.field === 'dob') {
+                      <div style="width:100%">
+                        <mat-form-field appearance="outline" style="width:100%">
+                          <!-- Visible Input -->
+                          <input
+                            #dobRef
+                            matInput
+                            autocomplete="off"
+                            placeholder="DD/MM/YYYY"
+                            [value]="rowData.dateOfBirth ? (rowData.dateOfBirth | date:'dd/MM/yyyy') : ''"
+                            readonly
+                            role="presentation"
+                            (focus)="dobPicker.open()"
+                            (click)="dobPicker.open()"
+                            [matTooltip]="rowData.dateOfBirth ? (rowData.dateOfBirth | date:'dd/MM/yyyy') : ''"
+                            matTooltipClass="accent-tooltip" />
+                            <!-- Hidden Datepicker Input -->
+                            <input
+                              hidden
+                              matInput
+                              [matDatepicker]="dobPicker"
+                              [max]="maxDobDate"
+                              (dateChange)="onDobChange($event, rowData)">
+                              <mat-datepicker-toggle
+                                matSuffix
+                                [for]="dobPicker">
+                              </mat-datepicker-toggle>
+                              <mat-datepicker #dobPicker></mat-datepicker>
+                              <mat-hint class="f-13">
+                                E.g. Enter date as (01/01/2021)
+                              </mat-hint>
+                              @if (submitted && !rowData.dateOfBirth) {
+                                <mat-error>
+                                  Date of Birth is required
+                                </mat-error>
+                              }
+                              @if (submitted && rowData.dateOfBirth && !isAgeValid(rowData.dateOfBirth)) {
+                                <mat-error
+                                  >
+                                  Age must be at least 18 years
+                                </mat-error>
+                              }
+                            </mat-form-field>
+                          </div>
+                        }
+                        <!-- ================= CITIZENSHIP ================= -->
+                        @if (col.field === 'citizenship') {
+                          <mat-form-field appearance="outline" style="width:100%">
+                            <mat-select [(ngModel)]="rowData.citizenship" placeholder="Citizenship">
+                              @for (g of countryNameList; track g) {
+                                <mat-option [value]="g.countryId">{{ g.country }}</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                        <!-- ================= CURRENTLY WORKING ================= -->
+                        @if (col.field === 'currentlyWorking') {
+                          <mat-form-field appearance="outline" style="width:100%">
+                            <mat-select [(ngModel)]="rowData.currentlyWorking" >
+                              <mat-option value="Yes">Yes</mat-option>
+                              <mat-option value="No">No</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                        <!-- ================= AGE ================= -->
+                        @if (col.field === 'age') {
+                          <mat-form-field appearance="outline" style="width:100%">
+                            <input matInput type="text" [(ngModel)]="rowData.age" [disabled]="true" placeholder="Age">
+                          </mat-form-field>
+                        }
+                        <!-- ================= SITE LOCATION ================= -->
+                        <!-- SITE -->
+                        @if (col.field === 'siteLocation') {
+                          <mat-form-field appearance="outline" style="width:100%">
+                            <mat-select
+                              [(ngModel)]="rowData.siteLocation"
+                              [disabled]="!!selectedSiteId"
+                              placeholder="Site Name / Locations"
+                              (selectionChange)="onRowSiteChange($event.value, rowData)">
+                              @for (s of sitefilterlist; track s) {
+                                <mat-option [value]="s.siteId">
+                                  {{ s.siteNoWithsiteName }}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                        <!-- PACKAGE -->
+                        @if (col.field === 'packageId') {
+                          <mat-form-field appearance="outline" style="width:100%">
+                            <mat-label>Select Package</mat-label>
+                            <mat-select
+                              [(ngModel)]="rowData.packageId"
+                              (selectionChange)="packageName($event.value, rowData)"
+                              placeholder="Package">
+                              <mat-option value="">Select Package</mat-option>
+                              @for (pack of packAndCompList?.package; track pack) {
+                                <mat-option [value]="pack.packageId">
+                                  {{ pack.packageName }}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                        <!-- ================= PRIORITY ================= -->
+                        @if (col.field === 'priorityId') {
+                          <mat-form-field appearance="outline" style="width:100%">
+                            <mat-label>Select Priority</mat-label>
+                            <mat-select [(ngModel)]="rowData.lookUpId" placeholder="Priority">
+                              <mat-option value="">Select Priority</mat-option>
+                              @for (pack of priortyList; track pack) {
+                                <mat-option [value]="pack.lookUpId">{{ pack.lookUpName }}</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                        <!-- ================= DOCUMENT ================= -->
+                        @if (col?.field === 'document') {
+                          <div style="width:100%">
+                            <div class="upload-trigger" (click)="fileInput.value = ''; fileInput.click()"
+                              matTooltip="Click to upload multiple documents">
+                              <mat-icon color="primary">cloud_upload</mat-icon>
+                              <span class="upload-text">Upload Files</span>
+                            </div>
+                            <input type="file" #fileInput style="display:none" multiple (change)="onFileSelect($event, rowData)" />
+                            <div class="file-container">
+                              @for (doc of rowData.componentDocuments; track doc; let i = $index) {
+                                <div
+                                  class="file-row" fxLayout="row" fxLayoutAlign="space-between center">
+                                  <span class="file-name" [matTooltip]="doc.fileName">{{ doc.fileName }}</span>
+                                  <div class="file-actions" fxLayout="row" fxLayoutGap="8px">
+                                    <button mat-icon-button class="view-btn" (click)="openViewDialog(doc)" matTooltip="View Document">
+                                      <mat-icon>visibility</mat-icon>
+                                    </button>
+                                    <button mat-icon-button color="warn" (click)="removeFile(i, rowData)" matTooltip="Remove">
+                                      <mat-icon>highlight_off</mat-icon>
+                                    </button>
+                                  </div>
+                                </div>
+                              }
+                            </div>
+                          </div>
+                        }
+                      </td>
+                    }
+                  </tr>
+                </ng-template>
+                <!-- ================= EMPTY MESSAGE ================= -->
+                <ng-template pTemplate="emptymessage" let-columns>
+                  <tr>
+                    <td [attr.colspan]="columns.length">
+                      <div class="no-record text-center pt-15">
+                        <span>No Record Found</span>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <div class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                fxLayoutGap.xs="20px grid">
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="start center">
+                  Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first <=
+                dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s) </div>
+                <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                  fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                  fxLayoutAlign.xs="start center">
                 <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
                       dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                       navigateNxtPrevPage(dt.first + dt.rows, dt.rows)">
-                  <i class="icon-control-start mr-5"></i></a>
-                <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
-                    <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                    <i class="icon-control-start mr-5"></i></a>
+                    <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                      <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
                       [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" /> </span></span>
-                <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                      <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
                 <a [ngClass]="
                       dt.rows + dt.first >= dt.totalRecords
                         ? 'page-btn disabled' : 'page-btn'" (click)="
                       dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                       navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
                     "><i class="icon-control-end ml-5"></i></a>
-              </div>
-        </div>
-      </div>
-    </div>
-
-    <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-      fxLayoutGap="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px" class="row pt-10" *ngIf="isInvitationSent">
-      <div fxFlex="70%">
-
-      </div>
-      <div fxFlex="30%">
-        <mat-checkbox [(ngModel)]="isAllowExistInvitation"> Include Already Invitation sent to Candidate</mat-checkbox>
-      </div>
-    </div>
-    <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
-      fxLayoutGap="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px" class="row pt-20"
-      *ngIf="!isExcelValid && docErrorList.length > 0">
-      <div fxFlex="100%">
-        <p-table #dt [columns]="displayedImportCol" [value]="docErrorList" [resizableColumns]="true"
-          [reorderableColumns]="true" [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="10"
-          [scrollable]="true" columnResizeMode="expand">
-          <ng-template pTemplate="colgroup" let-columns>
-            <colgroup>
-              <col *ngFor="let col of columns" [style.width]="col.field ==='sNo' ? '80px' : '150px'" />
-            </colgroup>
-          </ng-template>
-          <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th *ngFor="let col of columns" [ngSwitch]="col.field" pReorderableColumn pResizableColumn
-                [ngClass]="{ 'text-center': col.field === 'Action' }">
-                <span [pSortableColumn]="col.field">
-                  <div matTooltip="{{col.header}}" matTooltipClass="accent-tooltip" class="thname"> {{col.header}}
-                  </div>
-                  <p-sortIcon *ngIf="col.field !== 'actions'" [field]="col.field" matTooltip="Sort"
-                    matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
-                    ariaLabelDesc="Activate to sort in descending order"
-                    ariaLabelAsc="Activate to sort in ascending order">
-                  </p-sortIcon>
-                </span>
-              </th>
-            </tr>
-          </ng-template>
-
-          <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
-            <tr [ngStyle]="{'background-color': rowData.isInvitationSent ? '#fbfb99' : 'transparent'}">
-              <td *ngFor="let col of columns">
-                <div *ngIf="col.field ==='detail'">
-                  <button mat-icon-button class="in-btn" matTooltip="View Error Details"
-                    matTooltipClass="accent-tooltip" (click)="openEdetails(rowData[col.field])"> <i
-                      class="icon-eyeline"></i></button>
-                  <span [ngClass]="rowData['status']==='Failure'?'red':'green'">
-                    {{ rowData[col.field] }}</span>
-                </div>
-                <div *ngIf="col.field !=='detail'">
-                  <span [ngClass]="rowData['status']==='Failure'?'red':'green'">
-                    {{ rowData[col.field] }}</span>
-                </div>
-              </td>
-            </tr>
-          </ng-template>
-          <ng-template #history let-index="rowIndex">
-            <h1 mat-dialog-title>Bulk Invitation Error Details</h1>
-            <mat-dialog-content>
-              <div fxLayout="row" class="ansqn">
-                <div fxFlex="100%" fxLayoutAlign="start start">
-                  <p>
-                    <label>Error :</label>
-                    <span class="red">{{viewError}}</span>
-                  </p>
-                </div>
-              </div>
-            </mat-dialog-content>
-            <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end center">
-              <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
-            </mat-dialog-actions>
-          </ng-template>
-          <ng-template pTemplate="emptymessage" let-columns *ngIf="docErrorList.length == 0">
-            <tr>
-              <td [attr.colspan]="columns.length">
-                <div fxLayout="row">
-                  <div fxFlex="100%" class="pt-15">
-                    <div class="no-record text-center">
-                      <span>No Record Found</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-        <div class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
-          fxLayoutGap.xs="20px grid">
+                }
+              </div>
 
-          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-            fxLayoutAlign="start center">
-            Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first <=
-                dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s) </div>
-                <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-                <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                  fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                  fxLayoutAlign.xs="start center">
+              @if (isInvitationSent) {
+                <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  fxLayoutGap="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px" class="row pt-10">
+                  <div fxFlex="70%">
+                  </div>
+                  <div fxFlex="30%">
+                    <mat-checkbox [(ngModel)]="isAllowExistInvitation"> Include Already Invitation sent to Candidate</mat-checkbox>
+                  </div>
+                </div>
+              }
+              @if (!isExcelValid && docErrorList.length > 0) {
+                <div fxLayout="row" fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column"
+                  fxLayoutGap="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="10px" class="row pt-20"
+                  >
+                  <div fxFlex="100%">
+                    <p-table #dt [columns]="displayedImportCol" [value]="docErrorList" [resizableColumns]="true"
+                      [reorderableColumns]="true" [scrollable]="true" scrollHeight="" [paginator]="true" [rows]="10"
+                      [scrollable]="true" columnResizeMode="expand">
+                      <ng-template pTemplate="colgroup" let-columns>
+                        <colgroup>
+                        @for (col of columns; track col) {
+                          <col [style.width]="col.field ==='sNo' ? '80px' : '150px'" />
+                        }
+                      </colgroup>
+                    </ng-template>
+                    <ng-template pTemplate="header" let-columns>
+                      <tr>
+                        @for (col of columns; track col) {
+                          <th pReorderableColumn pResizableColumn
+                            [ngClass]="{ 'text-center': col.field === 'Action' }">
+                            <span [pSortableColumn]="col.field">
+                              <div matTooltip="{{col.header}}" matTooltipClass="accent-tooltip" class="thname"> {{col.header}}
+                              </div>
+                              @if (col.field !== 'actions') {
+                                <p-sortIcon [field]="col.field" matTooltip="Sort"
+                                  matTooltipClass="accent-tooltip" ariaLabel="Activate to sort"
+                                  ariaLabelDesc="Activate to sort in descending order"
+                                  ariaLabelAsc="Activate to sort in ascending order">
+                                </p-sortIcon>
+                              }
+                            </span>
+                          </th>
+                        }
+                      </tr>
+                    </ng-template>
+                    <ng-template let-index="rowIndex" pTemplate="body" let-rowData let-columns="columns">
+                      <tr [ngStyle]="{'background-color': rowData.isInvitationSent ? '#fbfb99' : 'transparent'}">
+                        @for (col of columns; track col) {
+                          <td>
+                            @if (col.field ==='detail') {
+                              <div>
+                                <button mat-icon-button class="in-btn" matTooltip="View Error Details"
+                                  matTooltipClass="accent-tooltip" (click)="openEdetails(rowData[col.field])"> <i
+                                class="icon-eyeline"></i></button>
+                                <span [ngClass]="rowData['status']==='Failure'?'red':'green'">
+                                {{ rowData[col.field] }}</span>
+                              </div>
+                            }
+                            @if (col.field !=='detail') {
+                              <div>
+                                <span [ngClass]="rowData['status']==='Failure'?'red':'green'">
+                                {{ rowData[col.field] }}</span>
+                              </div>
+                            }
+                          </td>
+                        }
+                      </tr>
+                    </ng-template>
+                    <ng-template #history let-index="rowIndex">
+                      <h1 mat-dialog-title>Bulk Invitation Error Details</h1>
+                      <mat-dialog-content>
+                        <div fxLayout="row" class="ansqn">
+                          <div fxFlex="100%" fxLayoutAlign="start start">
+                            <p>
+                              <label>Error :</label>
+                              <span class="red">{{viewError}}</span>
+                            </p>
+                          </div>
+                        </div>
+                      </mat-dialog-content>
+                      <mat-dialog-actions fxLayoutGap="8px" fxLayoutAlign="end center">
+                        <button mat-flat-button color="warn" (click)="dialog.closeAll()">Close</button>
+                      </mat-dialog-actions>
+                    </ng-template>
+                    @if (docErrorList.length == 0; as columns) {
+                      <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                          <td [attr.colspan]="columns.length">
+                            <div fxLayout="row">
+                              <div fxFlex="100%" class="pt-15">
+                                <div class="no-record text-center">
+                                  <span>No Record Found</span>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    }
+                  </p-table>
+                  <div class="cus-paginator" fxLayout="row wrap" fxLayoutGap="0px grid" fxLayoutGap.sm="20px grid"
+                    fxLayoutGap.xs="20px grid">
+                    <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutAlign="start center">
+                      Showing {{ dt.totalRecords < 1 ? 0 : dt.first + 1 }} - {{ dt.totalRecords> 0 ? dt.rows + dt.first <=
+                    dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }} of {{ dt.totalRecords }} record(s) </div>
+                    <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                    <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                      fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                      fxLayoutAlign.xs="start center">
                   <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
                       dt.onPageChange({ first: dt.first - dt.rows, rows: dt.rows });
                       navigateNxtPrevPage(dt.first + dt.rows, dt.rows)">
-                    <i class="icon-control-start mr-5"></i></a>
-                  <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
-                      <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
-                        [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" /> </span></span>
-                  <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                        <i class="icon-control-start mr-5"></i></a>
+                        <span class="gotopagbg mr-2 ml-2" fxHide.xs>Go to Page<span class="input-num">
+                          <input type="number" #pageNo [(ngModel)]="currentPage" maxlength="5" appNumberOnly
+                          [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" /> </span></span>
+                          <span class="mr-2" fxHide.xs> of {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
                   <a [ngClass]="
                       dt.rows + dt.first >= dt.totalRecords
                         ? 'page-btn disabled' : 'page-btn'" (click)="
                       dt.onPageChange({ first: dt.first + dt.rows, rows: dt.rows });
                       navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
                     "><i class="icon-control-end ml-5"></i></a>
-                </div>
-          </div>
-        </div>
-      </div>
-</mat-card>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </mat-card>
 
-<ng-template #previewTemplate let-data>
+                <ng-template #previewTemplate let-data>
 
-  <h2 mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
-    <span>{{ data.fileName }}</span>
-    <button mat-icon-button mat-dialog-close>
-      <mat-icon>close</mat-icon>
-    </button>
-  </h2>
+                  <h2 mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+                    <span>{{ data.fileName }}</span>
+                    <button mat-icon-button mat-dialog-close>
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </h2>
 
-  <mat-dialog-content style="height: calc(90vh - 100px); overflow: auto;">
+                  <mat-dialog-content style="height: calc(90vh - 100px); overflow: auto;">
 
-    <!-- Image -->
-    <ng-container *ngIf="data.isImage">
-      <img [src]="data.safeUrl" style="max-width:100%; max-height:100%; display:block; margin:auto;" />
-    </ng-container>
+                    <!-- Image -->
+                    @if (data.isImage) {
+                      <img [src]="data.safeUrl" style="max-width:100%; max-height:100%; display:block; margin:auto;" />
+                    }
 
-    <!-- PDF -->
-    <ng-container *ngIf="data.isPdf">
-      <iframe [src]="data.safeUrl" width="100%" height="100%" style="border:none;"></iframe>
-    </ng-container>
+                    <!-- PDF -->
+                    @if (data.isPdf) {
+                      <iframe [src]="data.safeUrl" width="100%" height="100%" style="border:none;"></iframe>
+                    }
 
-    <!-- Other file types -->
-    <ng-container *ngIf="!data.isImage && !data.isPdf">
-      <div fxLayout="column" fxLayoutAlign="center center" style="height:100%;">
-        <mat-icon style="font-size:64px; color:gray;">insert_drive_file</mat-icon>
-        <p>Preview not available for this file type.</p>
-        <a [href]="data.fileUrl" [download]="data.fileName" mat-flat-button color="primary">
-          Download File
-        </a>
-      </div>
-    </ng-container>
+                    <!-- Other file types -->
+                    @if (!data.isImage && !data.isPdf) {
+                      <div fxLayout="column" fxLayoutAlign="center center" style="height:100%;">
+                        <mat-icon style="font-size:64px; color:gray;">insert_drive_file</mat-icon>
+                        <p>Preview not available for this file type.</p>
+                        <a [href]="data.fileUrl" [download]="data.fileName" mat-flat-button color="primary">
+                          Download File
+                        </a>
+                      </div>
+                    }
 
-  </mat-dialog-content>
+                  </mat-dialog-content>
 
-</ng-template>
-
-
-
-<ng-template #uploadConfirm>
-  <mat-dialog-content>
-    <div fxLayout="row">
-      <div fxFlex="100%">
-        <div fxLayout="row">
-          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
-          </div>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="center center">
-          <div fxFlex="100%" class="text-center">
-            <h3 class="m-0">Confirmation !</h3>
-            <p class="text-sm">Are you sure want to update this records ?</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </mat-dialog-content>
-
-  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
-    <button mat-flat-button color="accent" (click)="validateUploadFile(true)">Yes, update it</button>
-    <button mat-flat-button color="warn" (click)="dialog.closeAll()">Cancel</button>
-  </mat-dialog-actions>
-
-</ng-template>
+                </ng-template>
 
 
 
-<ng-template #getTemplate>
-  <mat-dialog-content>
-    <div fxLayout="column" fxLayoutAlign="center center" style="padding: 16px;">
+                <ng-template #uploadConfirm>
+                  <mat-dialog-content>
+                    <div fxLayout="row">
+                      <div fxFlex="100%">
+                        <div fxLayout="row">
+                          <div fxFlex="100%" fxLayoutAlign="center center" class="mb-15"> <img src="assets/images/alert-warning.gif">
+                          </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                          <div fxFlex="100%" class="text-center">
+                            <h3 class="m-0">Confirmation !</h3>
+                            <p class="text-sm">Are you sure want to update this records ?</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-dialog-content>
 
-      <!-- Success Icon & Title -->
-      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px" style="width:100%; margin-bottom: 12px;">
-        <img src="assets/images/success-icon.png" width="40" height="40"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" alt="success" />
+                  <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <button mat-flat-button color="accent" (click)="validateUploadFile(true)">Yes, update it</button>
+                    <button mat-flat-button color="warn" (click)="dialog.closeAll()">Cancel</button>
+                  </mat-dialog-actions>
+
+                </ng-template>
+
+
+
+                <ng-template #getTemplate>
+                  <mat-dialog-content>
+                    <div fxLayout="column" fxLayoutAlign="center center" style="padding: 16px;">
+
+                      <!-- Success Icon & Title -->
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px" style="width:100%; margin-bottom: 12px;">
+                        <img src="assets/images/success-icon.png" width="40" height="40"
+                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" alt="success" />
         <span style="display:none; width:40px; height:40px; border-radius:50%; background:#4CAF50;
           align-items:center; justify-content:center;">
-          <mat-icon style="color:white;">check</mat-icon>
-        </span>
-        <h2 style="margin:0; font-weight:600; color:#222;">Cases Created Successfully</h2>
-      </div>
-      <mat-divider style="margin-bottom: 14px;"></mat-divider>
-      <!-- Description -->
-      <p style="width:100%; color:#555; font-size:14px; margin-bottom: 16px;">
-        Thank you for your submission. The cases have been successfully created in the system,
-        and the acknowledgment has been sent to the registered email ID(s).
-      </p>
+                            <mat-icon style="color:white;">check</mat-icon>
+                          </span>
+                          <h2 style="margin:0; font-weight:600; color:#222;">Cases Created Successfully</h2>
+                        </div>
+                        <mat-divider style="margin-bottom: 14px;"></mat-divider>
+                        <!-- Description -->
+                        <p style="width:100%; color:#555; font-size:14px; margin-bottom: 16px;">
+                          Thank you for your submission. The cases have been successfully created in the system,
+                          and the acknowledgment has been sent to the registered email ID(s).
+                        </p>
 
-      <!-- Grid -->
-      <div style="width:100%;">
-        <p-table #invitetab [columns]="tabledetailsColumnsheaders" [value]="dataList" [scrollable]="true"
-          scrollHeight="300px" [paginator]="dataList.length > 10" [rows]="10" [resizableColumns]="true">
+                        <!-- Grid -->
+                        <div style="width:100%;">
+                          <p-table #invitetab [columns]="tabledetailsColumnsheaders" [value]="dataList" [scrollable]="true"
+                            scrollHeight="300px" [paginator]="dataList.length > 10" [rows]="10" [resizableColumns]="true">
 
-          <ng-template pTemplate="colgroup" let-columns>
-            <colgroup>
-              <col *ngFor="let col of columns" [style.width]="col.field === 'candidateName' ? '180px' : 
+                            <ng-template pTemplate="colgroup" let-columns>
+                              <colgroup>
+                              @for (col of columns; track col) {
+<col [style.width]="col.field === 'candidateName' ? '180px' : 
                                col.field === 'caseRefNo' ? '180px' : '130px'" />
-            </colgroup>
-          </ng-template>
+                              }
+                            </colgroup>
+                          </ng-template>
 
-          <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th *ngFor="let col of columns" matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip"
-                style="background:#3d3c3c; font-weight:600;">
-                {{ col.header }}
-              </th>
-            </tr>
-          </ng-template>
+                          <ng-template pTemplate="header" let-columns>
+                            <tr>
+                              @for (col of columns; track col) {
+                                <th matTooltip="{{ col.header }}" matTooltipClass="accent-tooltip"
+                                  style="background:#3d3c3c; font-weight:600;">
+                                  {{ col.header }}
+                                </th>
+                              }
+                            </tr>
+                          </ng-template>
 
-          <ng-template pTemplate="body" let-rowData let-columns="columns" let-index="rowIndex">
-            <tr>
-              <td *ngFor="let col of columns">
+                          <ng-template pTemplate="body" let-rowData let-columns="columns" let-index="rowIndex">
+                            <tr>
+                              @for (col of columns; track col) {
+                                <td>
+                                  <!-- S.No -->
+                                  @if (col.field === 'sNo') {
+                                    <div>
+                                      {{ index + 1 }}
+                                    </div>
+                                  }
+                                  <!-- Reference Number as blue link -->
+                                  @if (col.field === 'caseRefNo') {
+                                    <div>
+                                      <span style="color:#1565C0; font-weight:500; cursor:pointer;">
+                                        {{ rowData[col.field] !== null && rowData[col.field] !== undefined ? rowData[col.field] : '-' }}
+                                      </span>
+                                    </div>
+                                  }
+                                  <!-- Default fields -->
+                                  @if (col.field !== 'sNo' && col.field !== 'caseRefNo') {
+                                    <div>
+                                      {{ rowData[col.field] !== null && rowData[col.field] !== undefined ? rowData[col.field] : '-' }}
+                                    </div>
+                                  }
+                                </td>
+                              }
+                            </tr>
+                          </ng-template>
 
-                <!-- S.No -->
-                <div *ngIf="col.field === 'sNo'">
-                  {{ index + 1 }}
-                </div>
+                          <!-- Empty state -->
+                          <ng-template pTemplate="emptymessage">
+                            <tr>
+                              <td
+                                [attr.colspan]="tabledetailsColumnsheaders && tabledetailsColumnsheaders.length ? tabledetailsColumnsheaders.length : 1"
+                                class="text-center" style="padding:16px;">
+                                No records found.
+                              </td>
+                            </tr>
+                          </ng-template>
 
-                <!-- Reference Number as blue link -->
-                <div *ngIf="col.field === 'caseRefNo'">
-                  <span style="color:#1565C0; font-weight:500; cursor:pointer;">
-                    {{ rowData[col.field] !== null && rowData[col.field] !== undefined ? rowData[col.field] : '-' }}
-                  </span>
-                </div>
+                        </p-table>
+                      </div>
 
-                <!-- Default fields -->
-                <div *ngIf="col.field !== 'sNo' && col.field !== 'caseRefNo'">
-                  {{ rowData[col.field] !== null && rowData[col.field] !== undefined ? rowData[col.field] : '-' }}
-                </div>
+                      <!-- Total Count -->
+                      <div style="width:100%; margin-top:8px; font-size:13px; color:#555;">
+                        Total: {{ dataList.length }}
+                      </div>
 
-              </td>
-            </tr>
-          </ng-template>
+                    </div>
+                  </mat-dialog-content>
 
-          <!-- Empty state -->
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td
-                [attr.colspan]="tabledetailsColumnsheaders && tabledetailsColumnsheaders.length ? tabledetailsColumnsheaders.length : 1"
-                class="text-center" style="padding:16px;">
-                No records found.
-              </td>
-            </tr>
-          </ng-template>
-
-        </p-table>
-      </div>
-
-      <!-- Total Count -->
-      <div style="width:100%; margin-top:8px; font-size:13px; color:#555;">
-        Total: {{ dataList.length }}
-      </div>
-
-    </div>
-  </mat-dialog-content>
-
-  <mat-dialog-actions fxLayoutAlign="center center" style="padding-bottom:16px;">
-    <button mat-flat-button color="primary" style="min-width:120px; border-radius:6px;" (click)="closeDialog()">
-      Close
-    </button>
-  </mat-dialog-actions>
-</ng-template>
+                  <mat-dialog-actions fxLayoutAlign="center center" style="padding-bottom:16px;">
+                    <button mat-flat-button color="primary" style="min-width:120px; border-radius:6px;" (click)="closeDialog()">
+                      Close
+                    </button>
+                  </mat-dialog-actions>
+                </ng-template>

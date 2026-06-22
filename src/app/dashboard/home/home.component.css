@@ -31,171 +31,49 @@ h1.welcome {
 .homeSide .mat-expansion-panel-spacing {
   margin: 0 0;
 }
-.dashboard-tabs {
-  align-items: center;
-  border-bottom: 1px solid #d8e2ea;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 6px 0 18px;
-  padding: 0 0 8px;
-}
-.dashboard-tab {
-  background: #fff;
-  border: 1px solid #cfd8df;
-  border-radius: 6px 6px 0 0;
-  color: #334155;
-  cursor: pointer;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 38px;
-  min-width: 132px;
-  padding: 0 18px;
-  position: relative;
-  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
-}
-.dashboard-tab:hover {
-  background: #eef7fc;
-  border-color: #8dbbd7;
-  color: #0A5D96;
-}
-.dashboard-tab.active {
-  background: #0A5D96;
-  border-color: #0A5D96;
-  box-shadow: 0 4px 10px rgba(10, 93, 150, 0.22);
-  color: #fff;
-}
-/* .dashboard-tab.active::after {
-  background: #ffffff;
-  bottom: -9px;
-  content: "";
-  height: 3px;
-  left: 0;
-  position: absolute;
-  right: 0;
-} */
-.dashboard-section-toggle {
-  display: none;
-}
-@media (max-width: 767px) {
-  .dashboard-tabs {
-    gap: 6px;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 10px;
-  }
-  .dashboard-tab {
-    flex: 0 0 auto;
-    min-width: 118px;
-  }
-}
 /* Dashboard icons Starts */
 .DbBg {
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 14px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
 }
 .DbBg .list {
-  flex: 0 0 calc(16.666% - 12px) !important;
-  max-width: calc(16.666% - 12px) !important;
-  min-width: 0;
-  padding: 0 !important;
-  border: 0 !important;
+  padding: 15px !important;
+  border-right: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
 }
 .DbBg .list:hover {
+  box-shadow: 1px 1px 20px 4px rgba(1, 1, 1, .1);
   z-index: 1;
 }
 .DbBg .list:nth-child(5n+5) {
-  border-right: 0 !important;
+  border-right: none medium;
 }
 .DbBg .list:nth-last-child(-n + 5):nth-child(5n + 1), .DbBg .list:nth-last-child(-n + 5):nth-child(5n + 1) ~ .list {
-  border-bottom: 0 !important;
+  border-bottom: none medium;
 }
 .DbBg .list a {
-  background: #fff;
-  border: 1px solid #e6e6e6;
-  border-radius: 10px;
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.22);
-  color: #000;
   width: 100%;
-  min-height: 108px;
-  padding: 14px 14px 12px;
   cursor: pointer;
-  display: block;
-  position: relative;
-  transition: box-shadow 160ms ease, transform 160ms ease;
-}
-.DbBg .list a:hover {
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.28);
-  transform: translateY(-1px);
-}
-.DbBg .list a > div[fxLayout="row"] {
-  align-items: flex-start !important;
-  height: 100%;
-}
-.DbBg .list a > div[fxLayout="row"] > div:first-child {
-  flex: 0 0 44px !important;
-  max-width: 44px !important;
-}
-.DbBg .list a > div[fxLayout="row"] > div:last-child {
-  flex: 1 1 auto !important;
-  max-width: none !important;
-  min-width: 0;
 }
 .DbBg .list i {
-  color: #35b957;
-  font-size: 36px;
-  line-height: 1;
+  font-size: 50px;
 }
 .DbBg .list .count {
-  color: #000;
-  font-size: 34px;
+  color: #353537;
+  font-size: 18px;
   font-weight: 500;
   display: block;
-  line-height: 1;
-  text-align: right;
+  text-align: center;
 }
 .DbBg .list .name {
-  color: #000;
-  font-size: 15px;
-  font-weight: 400;
-  text-transform: none;
+  color: #8a8b8d;
+  font-size: 11px;
+  text-transform: uppercase;
   display: block;
   text-align: center;
-  line-height: 1.2;
-  position: absolute;
-  right: 10px;
-  bottom: 14px;
-  left: 10px;
-}
-@media (max-width: 1368px) {
-  .DbBg .list {
-    flex-basis: calc(25% - 11px) !important;
-    max-width: calc(25% - 11px) !important;
-  }
-}
-@media (max-width: 991px) {
-  .DbBg .list {
-    flex-basis: calc(33.333% - 10px) !important;
-    max-width: calc(33.333% - 10px) !important;
-  }
-}
-@media (max-width: 767px) {
-  .DbBg .list {
-    flex-basis: calc(50% - 7px) !important;
-    max-width: calc(50% - 7px) !important;
-  }
-}
-@media (max-width: 480px) {
-  .DbBg .list {
-    flex-basis: 100% !important;
-    max-width: 100% !important;
-  }
+  line-height: 1.3;
 }
 /* Dashboard icons Ends */
 .BlueGrad {

@@ -70,6 +70,7 @@ export class SystemNotificationsComponent implements OnInit {
   emailTemplateList: any[] = [];
   editorText = '';
   columns = [
+    { field: 'action', header: 'Action', value: true, disabled: true },
     { field: 'emailGroup', header: 'Email Group' },
     { field: 'emailCategory', header: 'Email Category' },
     { field: 'templateName', header: 'Template Name' },

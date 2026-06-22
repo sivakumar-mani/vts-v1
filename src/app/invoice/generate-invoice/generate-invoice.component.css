@@ -98,7 +98,7 @@ table.invoice {
     border: 1px solid #6e91aa;
     border-collapse: collapse;
     margin: 50px 0 10px 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, "Georgia", sans-serif;
 }
 table.invoice th {
     border: 1px solid #6e91aa;

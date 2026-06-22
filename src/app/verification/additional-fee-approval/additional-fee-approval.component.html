@@ -1,5 +1,5 @@
 ﻿<app-breadcrumb [btnBack]="btnBack" (eventBack)="backToTable()" [btnApprove]="!btnApprove"
-   [btnApproveDisabled]="!(selectedData.length > 0) && !screenAuth.approveFlag" (eventApprove)="submitForm('Approved')"
+  [btnApproveDisabled]="!(selectedData.length > 0) && !screenAuth.approveFlag" (eventApprove)="submitForm('Approved')"
   (eventReject)="submitForm('Reject')" [btnReject]="!btnReject" (eventHold)="submitForm('On Hold')" [btnHold]="!btnHold"
   [routePath]='routePath' [btnHoldDisabled]="!(selectedData.length > 0)" [btnResetTbl]="!btnResetTbl"
   [btnRejectDisabled]="!(selectedData.length > 0)" (eventResetTbl)="tblReset()">
@@ -10,88 +10,91 @@
       <mat-card>
         <div fxLayout="row">
           <mat-card-header fxFlex="100%">
-              <div fxFlex="100%">
-                  <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="10px">
-                        <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%" fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
-                          <mat-card-title>
-                            <h1 class="header-title">Additional Fee Approval</h1>
-                          </mat-card-title>
-                        </div>
-                        <span fxFlex></span>
-                        <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
-                          <div class="tbl-commonsearch">
-                              <mat-form-field fxFlex="100%">
-                              <mat-label></mat-label>
-                              <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
-                              <input #global matInput placeholder="Search here..." type="text" pInputText size="50" autocomplete="off" (input)="filterGlobal($event.target.value)" />
-                              </mat-form-field>
-                          </div>
-                        </div>
+            <div fxFlex="100%">
+              <div fxLayout="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.sm="row" fxLayout.xs="column" fxLayoutGap="10px">
+                <div fxFlex="70%" fxFlex.lg="70%" fxFlex.md="70%" fxFlex.sm="70%" fxFlex.xs="100%" fxLayoutAlign="start center" fxLayoutAlign.sm="start center" fxLayoutAlign.xs="start center">
+                  <mat-card-title>
+                    <h1 class="header-title">Additional Fee Approval</h1>
+                  </mat-card-title>
+                </div>
+                <span fxFlex></span>
+                <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="30%" fxFlex.xs="100%" fxHide.xs fxLayoutAlign="end center" fxLayoutAlign.sm="end center">
+                  <div class="tbl-commonsearch">
+                    <mat-form-field fxFlex="100%">
+                      <mat-label></mat-label>
+                      <mat-icon matPrefix><i class="icon-search1"></i></mat-icon>
+                      <input #global matInput placeholder="Search here..." type="text" pInputText size="50" autocomplete="off" (input)="filterGlobal($event.target.value)" />
+                    </mat-form-field>
                   </div>
+                </div>
               </div>
+            </div>
           </mat-card-header>
-      </div> 
+        </div>
 
-        <mat-card-content *ngIf="!isGridPage" > <!--      -->
-          <div fxLayout="row" fxLayoutGap="20px">
-            <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-              <div class="client-details">
-                <div class="client-avatar"  fxHide.sm fxHide.xs><i class="icon-referencecheck"></i></div> 
-                <div class="client-data">
-                  <h3 matTooltip="Client details" matTooltipClass="accent-tooltip"></h3>
-                  <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="10px grid" fxLayoutGap.xs="10px grid">
+        @if (!isGridPage) {
+          <mat-card-content > <!--      -->
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxFlex="100%" fxFlex.lg="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+                <div class="client-details">
+                  <div class="client-avatar"  fxHide.sm fxHide.xs><i class="icon-referencecheck"></i></div>
+                  <div class="client-data">
+                    <h3 matTooltip="Client details" matTooltipClass="accent-tooltip"></h3>
+                    <div fxLayout="row wrap" fxLayout.lg="row wrap" fxLayout.md="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="0px grid" fxLayoutGap.sm="10px grid" fxLayoutGap.xs="10px grid">
                       <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
                         <p><label>Client Reference No.:</label><span>AC-125-223</span></p>
                       </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Candidate Name:</label><span>Suriya</span></p>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Received Date:</label><span>12/07/2019</span></p>
-                    </div>
-                  <!-- </div>
-                  <div fxLayout="row" fxLayoutGap="20px"> -->
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Status:</label><span>Approved</span></p>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Servivce:</label><span>EMPLOYMENT(HR)</span></p>
-                    </div>
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Approved Date:</label><span>12/10/2019</span></p>
-                    </div> 
-                    <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
-                      <p><label>Approved Comments:</label><span>Tested</span></p>
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <p><label>Candidate Name:</label><span>Suriya</span></p>
+                      </div>
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <p><label>Received Date:</label><span>12/07/2019</span></p>
+                      </div>
+                    <!-- </div>
+                    <div fxLayout="row" fxLayoutGap="20px"> -->
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <p><label>Status:</label><span>Approved</span></p>
+                      </div>
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <p><label>Servivce:</label><span>EMPLOYMENT(HR)</span></p>
+                      </div>
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <p><label>Approved Date:</label><span>12/10/2019</span></p>
+                      </div>
+                      <div fxFlex="33.33%" fxFlex.lg="33.33%" fxFlex.md="33.33%" fxFlex.sm="100%" fxFlex.xs="100%">
+                        <p><label>Approved Comments:</label><span>Tested</span></p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- <div fxLayout="row" fxLayoutGap="20px">
-          <div fxFlex="50%">
-            <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-              <mat-label>Approval Comments</mat-label>
-              <textarea #msgCount maxlength="200" formControlName='comments' required matInput
+            <!-- <div fxLayout="row" fxLayoutGap="20px">
+            <div fxFlex="50%">
+              <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                <mat-label>Approval Comments</mat-label>
+                <textarea #msgCount maxlength="200" formControlName='comments' required matInput
                 placeholder="Approval Comments"></textarea>
-              <mat-error>Comments is Required</mat-error>
-              <mat-hint class="f-13"> ({{msgCount.value.length}} /200 max) </mat-hint>
-            </mat-form-field>
-          </div>
-        </div> -->
-
+                <mat-error>Comments is Required</mat-error>
+                <mat-hint class="f-13"> ({{msgCount.value.length}} /200 max) </mat-hint>
+              </mat-form-field>
+            </div>
+          </div> -->
         </mat-card-content>
-        <!-- <div *ngFor="let s of selectedData">{{s|json}}selectedData</div> -->
-        <div fxLayout="row" *ngIf="isGridPage">
+      }
+      <!-- <div *ngFor="let s of selectedData">{{s|json}}selectedData</div> -->
+      @if (isGridPage) {
+        <div fxLayout="row">
           <div fxFlex="100%">
             <p-table #dt [columns]="cols" [value]="feeApprovalData" [(selection)]="selectedData" [scrollable]="true"
               scrollHeight="" [paginator]="true" [rows]="itemperpage" [resizableColumns]="true" [reorderableColumns]="true"
               columnResizeMode="expand" (selectionChange)="onSelectionChange($event)">
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                  <col style='width : 50px' />
-                  <col *ngFor="let col of columns">
+                <col style='width : 50px' />
+                @for (col of columns; track col) {
+                  <col>
+                  }
                 </colgroup>
               </ng-template>
               <ng-template pTemplate="header" let-columns>
@@ -100,286 +103,354 @@
                     <p-tableHeaderCheckbox #headerCheckBox></p-tableHeaderCheckbox>
                     <!-- <p-header>Select All</p-header> -->
                   </th>
-                  <th *ngFor="let col of columns" [ngSwitch]="col.field" pReorderableColumn pResizableColumn
-                    matTooltipClass="accent-tooltip" matTooltip="{{col.header}}">
-                    <span>
-                      <div class="thname"> {{col.header}} </div>
-                      <p-sortIcon ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
-                        matTooltip="Sorting" matTooltipClass="accent-tooltip" [pSortableColumn]="col.field"
-                        ariaLabelAsc="Activate to sort in ascending order">
-                      </p-sortIcon>
-                    </span>
-                    <span class="ico-fieldsearch">
-                      <i *ngSwitchCase="'firstName'" class="icon-search2" matTooltip="Search"
-                        matTooltipClass="accent-tooltip" (click)="firstNameTrigger.openMenu()"></i>
-                      <i *ngSwitchCase="'clientRefNo'" class="icon-search2" matTooltip="Search"
-                        matTooltipClass="accent-tooltip" (click)="clientRefNoTrigger.openMenu()"></i>
-                      <i *ngSwitchCase="'componentName'" class="icon-search2" matTooltip="Search"
-                        matTooltipClass="accent-tooltip" (click)="componentNameTrigger.openMenu()"></i>
-                      <i *ngSwitchCase="'fees'" class="icon-search2" matTooltip="Search"
-                        matTooltipClass="accent-tooltip" (click)="feesTrigger.openMenu()"></i>
-                      <i *ngSwitchCase="'comments'" class="icon-search2" matTooltip="Search"
-                        matTooltipClass="accent-tooltip" (click)="commentsTrigger.openMenu()"></i>
-                      <i *ngSwitchCase="'feesStatus'" class="icon-search2" matTooltip="Search"
-                        matTooltipClass="accent-tooltip" (click)="feesStatusTrigger.openMenu()"></i>
-                    </span>
-                    <span *ngSwitchCase="'firstName'">
-                      <div matTooltip="Candidate Name" matTooltipClass="accent-tooltip"
-                        #firstNameTrigger="matMenuTrigger" [matMenuTriggerFor]="firstNameCtrl" fxLayout="row"
-                        fxLayoutAlign="space-between center" class="txtborder-bot">
-                      </div>
-                      <mat-menu #firstNameCtrl class="pos-top">
-                        <div fxLayout="row">
-                          <div fxFlex="100%" class="p-10 tbl-fillddl">
-                            <mat-form-field (click)="$event.stopPropagation()">
-                              <input type="text" #firstNameCtl matInput [matAutocomplete]="autofirstName"
-                                placeholder="Candidate Name" autocomplete="off" role="presentation"
-                                (click)="firstNameCtl.select()" [formControl]="firstNameFormCtrl"
-                                (change)="dt.filter($event.target.value,col.field,'contains')"
-                                (blur)="dt.filter($event.target.value,col.field,'contains')"
-                                (focusin)="dt.filter($event.target.value,col.field,'contains')"
-                                (keyup)="dt.filter($event.target.value,col.field,'contains')" />
-                            </mat-form-field>
-                            <mat-autocomplete #autofirstName="matAutocomplete">
-                              <mat-option (onSelectionChange)="firstNameTrigger.closeMenu()"
-                                *ngFor="let option of firstNameFilteredOptions | async" [value]="option">
-                                <span [innerHTML]="option"></span>
-                              </mat-option>
-                            </mat-autocomplete>
+                  @for (col of columns; track col) {
+                    <th pReorderableColumn pResizableColumn
+                      matTooltipClass="accent-tooltip" matTooltip="{{col.header}}">
+                      <span>
+                        <div class="thname"> {{col.header}} </div>
+                        <p-sortIcon ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                          matTooltip="Sorting" matTooltipClass="accent-tooltip" [pSortableColumn]="col.field"
+                          ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                      </span>
+                      <span class="ico-fieldsearch">
+                        @if (col.field === 'firstName') {
+                          <i class="icon-search2" matTooltip="Search"
+                          matTooltipClass="accent-tooltip" (click)="firstNameTrigger.openMenu()"></i>
+                        }
+                        @if (col.field === 'clientRefNo') {
+                          <i class="icon-search2" matTooltip="Search"
+                          matTooltipClass="accent-tooltip" (click)="clientRefNoTrigger.openMenu()"></i>
+                        }
+                        @if (col.field === 'componentName') {
+                          <i class="icon-search2" matTooltip="Search"
+                          matTooltipClass="accent-tooltip" (click)="componentNameTrigger.openMenu()"></i>
+                        }
+                        @if (col.field === 'fees') {
+                          <i class="icon-search2" matTooltip="Search"
+                          matTooltipClass="accent-tooltip" (click)="feesTrigger.openMenu()"></i>
+                        }
+                        @if (col.field === 'comments') {
+                          <i class="icon-search2" matTooltip="Search"
+                          matTooltipClass="accent-tooltip" (click)="commentsTrigger.openMenu()"></i>
+                        }
+                        @if (col.field === 'feesStatus') {
+                          <i class="icon-search2" matTooltip="Search"
+                          matTooltipClass="accent-tooltip" (click)="feesStatusTrigger.openMenu()"></i>
+                        }
+                      </span>
+                      @if (col.field === 'firstName') {
+                        <span>
+                          <div matTooltip="Candidate Name" matTooltipClass="accent-tooltip"
+                            #firstNameTrigger="matMenuTrigger" [matMenuTriggerFor]="firstNameCtrl" fxLayout="row"
+                            fxLayoutAlign="space-between center" class="txtborder-bot">
                           </div>
-                        </div>
-                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
-                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                            <a class="text-sm">Cancel</a>
-                            <a *ngIf="firstNameCtl.value"
-                              (click)="dt.filter('', col.field, 'contains');firstNameFormCtrl.setValue('')"
-                              class="text-sm">Reset</a>
-                          </div>
-                        </div>
-                      </mat-menu>
-                    </span>
-                    <span *ngSwitchCase="'clientRefNo'">
-                      <div matTooltip="Client Reference Number" matTooltipClass="accent-tooltip"
-                        #clientRefNoTrigger="matMenuTrigger" [matMenuTriggerFor]="clientRefNoCtrl" fxLayout="row"
-                        fxLayoutAlign="space-between center" class="txtborder-bot">
-                      </div>
-                      <mat-menu #clientRefNoCtrl class="pos-top">
-                        <div fxLayout="row">
-                          <div fxFlex="100%" class="p-10 tbl-fillddl">
-                            <mat-form-field (click)="$event.stopPropagation()">
-                              <input type="text" #clientRefNoCtl matInput [matAutocomplete]="autoclientRefNo"
-                                placeholder="Client Reference Number" autocomplete="off" role="presentation"
-                                (click)="clientRefNoCtl.select()" [formControl]="clientRefNoFormCtrl"
-                                (change)="dt.filter($event.target.value,col.field,'contains')"
-                                (blur)="dt.filter($event.target.value,col.field,'contains')"
-                                (focusin)="dt.filter($event.target.value,col.field,'contains')"
-                                (keyup)="dt.filter($event.target.value,col.field,'contains')" />
-                            </mat-form-field>
-                            <mat-autocomplete #autoclientRefNo="matAutocomplete">
-                              <mat-option (onSelectionChange)="clientRefNoTrigger.closeMenu()"
-                                *ngFor="let option of clientRefNoFilteredOptions | async" [value]="option">
-                                <span [innerHTML]="option"></span>
-                              </mat-option>
-                            </mat-autocomplete>
-                          </div>
-                        </div>
-                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
-                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                            <a class="text-sm">Cancel</a>
-                            <a *ngIf="clientRefNoCtl.value"
-                              (click)="dt.filter('', col.field, 'contains');clientRefNoFormCtrl.setValue('')"
-                              class="text-sm">Reset</a>
-                          </div>
-                        </div>
-                      </mat-menu>
-                    </span>
-                    <span *ngSwitchCase="'componentName'">
-                      <div matTooltip="Component Name" matTooltipClass="accent-tooltip"
-                        #componentNameTrigger="matMenuTrigger" [matMenuTriggerFor]="componentNameCtrl" fxLayout="row"
-                        fxLayoutAlign="space-between center" class="txtborder-bot">
-                      </div>
-                      <mat-menu #componentNameCtrl class="pos-top">
-                        <div fxLayout="row">
-                          <div fxFlex="100%" class="p-10 tbl-fillddl">
-                            <mat-form-field (click)="$event.stopPropagation()">
-                              <input type="text" #componentNameCtl matInput [matAutocomplete]="autocomponentName"
-                                placeholder="Component Name" autocomplete="off" role="presentation"
-                                (click)="componentNameCtl.select()" [formControl]="componentNameFormCtrl"
-                                (change)="dt.filter($event.target.value,col.field,'contains')"
-                                (blur)="dt.filter($event.target.value,col.field,'contains')"
-                                (focusin)="dt.filter($event.target.value,col.field,'contains')"
-                                (keyup)="dt.filter($event.target.value,col.field,'contains')" />
-                            </mat-form-field>
-                            <mat-autocomplete #autocomponentName="matAutocomplete">
-                              <mat-option (onSelectionChange)="componentNameTrigger.closeMenu()"
-                                *ngFor="let option of componentNameFilteredOptions | async" [value]="option">
-                                <span [innerHTML]="option"></span>
-                              </mat-option>
-                            </mat-autocomplete>
-                          </div>
-                        </div>
-                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
-                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                            <a class="text-sm">Cancel</a>
-                            <a *ngIf="componentNameCtl.value"
-                              (click)="dt.filter('', col.field, 'contains');componentNameFormCtrl.setValue('')"
-                              class="text-sm">Reset</a>
-                          </div>
-                        </div>
-                      </mat-menu>
-                    </span>
-                    <span *ngSwitchCase="'fees'">
-                      <div matTooltip="Fees" matTooltipClass="accent-tooltip" #feesTrigger="matMenuTrigger"
-                        [matMenuTriggerFor]="feesCtrl" fxLayout="row" fxLayoutAlign="space-between center"
-                        class="txtborder-bot">
-                      </div>
-                      <mat-menu #feesCtrl class="pos-top">
-                        <div fxLayout="row">
-                          <div fxFlex="100%" class="p-10 tbl-fillddl">
-                            <mat-form-field (click)="$event.stopPropagation()">
-                              <input type="text" #feesCtl matInput [matAutocomplete]="autofees" placeholder="Fees"
-                                autocomplete="off" role="presentation" (click)="feesCtl.select()"
-                                [formControl]="feesFormCtrl"
-                                (change)="dt.filter($event.target.value,col.field,'contains')"
-                                (blur)="dt.filter($event.target.value,col.field,'contains')"
-                                (focusin)="dt.filter($event.target.value,col.field,'contains')"
-                                (keyup)="dt.filter($event.target.value,col.field,'contains')" />
-                            </mat-form-field>
-                            <mat-autocomplete #autofees="matAutocomplete">
-                              <mat-option (onSelectionChange)="feesTrigger.closeMenu()"
-                                *ngFor="let option of feesFilteredOptions | async" [value]="option">
-                                <span [innerHTML]="option"></span>
-                              </mat-option>
-                            </mat-autocomplete>
-                          </div>
-                        </div>
-                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
-                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                            <a class="text-sm">Cancel</a>
-                            <a *ngIf="feesCtl.value"
-                              (click)="dt.filter('', col.field, 'contains');feesFormCtrl.setValue('')"
-                              class="text-sm">Reset</a>
-                          </div>
-                        </div>
-                      </mat-menu>
-                    </span>
-                    <span *ngSwitchCase="'comments'">
-                      <div matTooltip="Comments" matTooltipClass="accent-tooltip" #commentsTrigger="matMenuTrigger"
-                        [matMenuTriggerFor]="commentsCtrl" fxLayout="row" fxLayoutAlign="space-between center"
-                        class="txtborder-bot">
-                      </div>
-                      <mat-menu #commentsCtrl class="pos-top">
-                        <div fxLayout="row">
-                          <div fxFlex="100%" class="p-10 tbl-fillddl">
-                            <mat-form-field (click)="$event.stopPropagation()">
-                              <input type="text" #commentsCtl matInput [matAutocomplete]="autocomments"
-                                placeholder="Comments" autocomplete="off" role="presentation"
-                                (click)="commentsCtl.select()" [formControl]="commentsFormCtrl"
-                                (change)="dt.filter($event.target.value,col.field,'contains')"
-                                (blur)="dt.filter($event.target.value,col.field,'contains')"
-                                (focusin)="dt.filter($event.target.value,col.field,'contains')"
-                                (keyup)="dt.filter($event.target.value,col.field,'contains')" />
-                            </mat-form-field>
-                            <mat-autocomplete #autocomments="matAutocomplete">
-                              <mat-option (onSelectionChange)="commentsTrigger.closeMenu()"
-                                *ngFor="let option of commentsFilteredOptions | async" [value]="option">
-                                <span [innerHTML]="option"></span>
-                              </mat-option>
-                            </mat-autocomplete>
-                          </div>
-                        </div>
-                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
-                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                            <a class="text-sm">Cancel</a>
-                            <a *ngIf="commentsCtl.value"
-                              (click)="dt.filter('', col.field, 'contains');commentsFormCtrl.setValue('')"
-                              class="text-sm">Reset</a>
-                          </div>
-                        </div>
-                      </mat-menu>
-                    </span>
-                    <span *ngSwitchCase="'feesStatus'">
-                      <div matTooltip="Status" matTooltipClass="accent-tooltip" #feesStatusTrigger="matMenuTrigger"
-                        [matMenuTriggerFor]="feesStatusCtrl" fxLayout="row" fxLayoutAlign="space-between center"
-                        class="txtborder-bot">
-                      </div>
-                      <mat-menu #feesStatusCtrl class="pos-top">
-                        <div fxLayout="row">
-                          <div fxFlex="100%" class="p-10 tbl-fillddl">
-                            <mat-form-field (click)="$event.stopPropagation()">
-                              <input type="text" #feesStatusCtl matInput [matAutocomplete]="autofeesStatus"
-                                placeholder="Status" autocomplete="off" role="presentation"
-                                (click)="feesStatusCtl.select()" [formControl]="feesStatusFormCtrl"
-                                (change)="dt.filter($event.target.value,col.field,'contains')"
-                                (blur)="dt.filter($event.target.value,col.field,'contains')"
-                                (focusin)="dt.filter($event.target.value,col.field,'contains')"
-                                (keyup)="dt.filter($event.target.value,col.field,'contains')" />
-                            </mat-form-field>
-                            <mat-autocomplete #autofeesStatus="matAutocomplete">
-                              <mat-option (onSelectionChange)="feesStatusTrigger.closeMenu()"
-                                *ngFor="let option of feesStatusFilteredOptions | async" [value]="option">
-                                <span [innerHTML]="option"></span>
-                              </mat-option>
-                            </mat-autocomplete>
-                          </div>
-                        </div>
-                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
-                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
-                            <a class="text-sm">Cancel</a>
-                            <a *ngIf="feesStatusCtl.value"
-                              (click)="dt.filter('', col.field, 'contains');feesStatusFormCtrl.setValue('')"
-                              class="text-sm">Reset</a>
-                          </div>
-                        </div>
-                      </mat-menu>
-                    </span>
-                  </th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-rowData let-index let-columns="columns">
-                <tr>
-                  <td>
-                    <p-tableCheckbox [value]="rowData" [disabled]="isRowDisabled(rowData)"></p-tableCheckbox>
-                  </td>
-                  <td *ngFor="let col of columns" [ngSwitch]='col.field'>
-                    <div *ngSwitchCase="'firstName'" matTooltip="{{rowData.firstName ? rowData.firstName : 'N/A'}}"
-                      matTooltipClass="accent-tooltip">{{rowData.firstName}}</div>
-                    <div *ngSwitchCase="'clientRefNo'"
-                      matTooltip="{{rowData.clientRefNo ? rowData.clientRefNo : 'N/A'}}"
-                      matTooltipClass="accent-tooltip">{{rowData.clientRefNo ? rowData.clientRefNo : 'N/A'}}</div>
-                    <div *ngSwitchCase="'componentName'"
-                      matTooltip="{{rowData.componentName ? rowData.componentName : 'N/A'}}"
-                      matTooltipClass="accent-tooltip">{{rowData.componentName ? rowData.componentName : 'N/A'}}</div>
-                    <div *ngSwitchCase="'fees'" matTooltip="{{rowData.fees ? rowData.fees : 'N/A'}}"
-                      matTooltipClass="accent-tooltip">{{rowData.fees ? rowData.fees : 'N/A'}}</div>
-                    <div *ngSwitchCase="'comments'"
-                      matTooltip="{{rowData.remarks[0] + (rowData.remarks[1] ? (' , ' + rowData.remarks[1]) : '')}}"
-                      matTooltipClass="accent-tooltip">
-                      {{rowData.remarks[0]}} <span *ngIf="rowData.remarks.length > 1">,</span> {{rowData.remarks[1]}}
-                    </div>
-                    <div *ngSwitchCase="'requestDate'" matTooltip="{{rowData.requestDate ? (rowData.requestDate | date: 'dd/MM/yyyy h:mm a') : 'N/A'}}"
-                    matTooltipClass="accent-tooltip">{{rowData.requestDate ? (rowData.requestDate | date: "dd/MM/yyyy h:mm a") : 'N/A'}}</div>
-                    <div *ngSwitchCase="'feesStatus'" [ngClass]="rowData.feesStatus.length === 0 ? 'status pending' : (rowData.feesStatus[0] === 'Approved' ? 'status approved' :
+                          <mat-menu #firstNameCtrl class="pos-top">
+                            <div fxLayout="row">
+                              <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                <mat-form-field (click)="$event.stopPropagation()">
+                                  <input type="text" #firstNameCtl matInput [matAutocomplete]="autofirstName"
+                                    placeholder="Candidate Name" autocomplete="off" role="presentation"
+                                    (click)="firstNameCtl.select()" [formControl]="firstNameFormCtrl"
+                                    (change)="dt.filter($event.target.value,col.field,'contains')"
+                                    (blur)="dt.filter($event.target.value,col.field,'contains')"
+                                    (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                                    (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                                  </mat-form-field>
+                                  <mat-autocomplete #autofirstName="matAutocomplete">
+                                    @for (option of firstNameFilteredOptions | async; track option) {
+                                      <mat-option (onSelectionChange)="firstNameTrigger.closeMenu()"
+                                        [value]="option">
+                                        <span [innerHTML]="option"></span>
+                                      </mat-option>
+                                    }
+                                  </mat-autocomplete>
+                                </div>
+                              </div>
+                              <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                                <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                  <a class="text-sm">Cancel</a>
+                                  @if (firstNameCtl.value) {
+                                    <a
+                                      (click)="dt.filter('', col.field, 'contains');firstNameFormCtrl.setValue('')"
+                                    class="text-sm">Reset</a>
+                                  }
+                                </div>
+                              </div>
+                            </mat-menu>
+                          </span>
+                        }
+                        @if (col.field === 'clientRefNo') {
+                          <span>
+                            <div matTooltip="Client Reference Number" matTooltipClass="accent-tooltip"
+                              #clientRefNoTrigger="matMenuTrigger" [matMenuTriggerFor]="clientRefNoCtrl" fxLayout="row"
+                              fxLayoutAlign="space-between center" class="txtborder-bot">
+                            </div>
+                            <mat-menu #clientRefNoCtrl class="pos-top">
+                              <div fxLayout="row">
+                                <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                  <mat-form-field (click)="$event.stopPropagation()">
+                                    <input type="text" #clientRefNoCtl matInput [matAutocomplete]="autoclientRefNo"
+                                      placeholder="Client Reference Number" autocomplete="off" role="presentation"
+                                      (click)="clientRefNoCtl.select()" [formControl]="clientRefNoFormCtrl"
+                                      (change)="dt.filter($event.target.value,col.field,'contains')"
+                                      (blur)="dt.filter($event.target.value,col.field,'contains')"
+                                      (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                                      (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                                    </mat-form-field>
+                                    <mat-autocomplete #autoclientRefNo="matAutocomplete">
+                                      @for (option of clientRefNoFilteredOptions | async; track option) {
+                                        <mat-option (onSelectionChange)="clientRefNoTrigger.closeMenu()"
+                                          [value]="option">
+                                          <span [innerHTML]="option"></span>
+                                        </mat-option>
+                                      }
+                                    </mat-autocomplete>
+                                  </div>
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                                  <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                    <a class="text-sm">Cancel</a>
+                                    @if (clientRefNoCtl.value) {
+                                      <a
+                                        (click)="dt.filter('', col.field, 'contains');clientRefNoFormCtrl.setValue('')"
+                                      class="text-sm">Reset</a>
+                                    }
+                                  </div>
+                                </div>
+                              </mat-menu>
+                            </span>
+                          }
+                          @if (col.field === 'componentName') {
+                            <span>
+                              <div matTooltip="Component Name" matTooltipClass="accent-tooltip"
+                                #componentNameTrigger="matMenuTrigger" [matMenuTriggerFor]="componentNameCtrl" fxLayout="row"
+                                fxLayoutAlign="space-between center" class="txtborder-bot">
+                              </div>
+                              <mat-menu #componentNameCtrl class="pos-top">
+                                <div fxLayout="row">
+                                  <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                    <mat-form-field (click)="$event.stopPropagation()">
+                                      <input type="text" #componentNameCtl matInput [matAutocomplete]="autocomponentName"
+                                        placeholder="Component Name" autocomplete="off" role="presentation"
+                                        (click)="componentNameCtl.select()" [formControl]="componentNameFormCtrl"
+                                        (change)="dt.filter($event.target.value,col.field,'contains')"
+                                        (blur)="dt.filter($event.target.value,col.field,'contains')"
+                                        (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                                        (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                                      </mat-form-field>
+                                      <mat-autocomplete #autocomponentName="matAutocomplete">
+                                        @for (option of componentNameFilteredOptions | async; track option) {
+                                          <mat-option (onSelectionChange)="componentNameTrigger.closeMenu()"
+                                            [value]="option">
+                                            <span [innerHTML]="option"></span>
+                                          </mat-option>
+                                        }
+                                      </mat-autocomplete>
+                                    </div>
+                                  </div>
+                                  <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                                    <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                      <a class="text-sm">Cancel</a>
+                                      @if (componentNameCtl.value) {
+                                        <a
+                                          (click)="dt.filter('', col.field, 'contains');componentNameFormCtrl.setValue('')"
+                                        class="text-sm">Reset</a>
+                                      }
+                                    </div>
+                                  </div>
+                                </mat-menu>
+                              </span>
+                            }
+                            @if (col.field === 'fees') {
+                              <span>
+                                <div matTooltip="Fees" matTooltipClass="accent-tooltip" #feesTrigger="matMenuTrigger"
+                                  [matMenuTriggerFor]="feesCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                                  class="txtborder-bot">
+                                </div>
+                                <mat-menu #feesCtrl class="pos-top">
+                                  <div fxLayout="row">
+                                    <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                      <mat-form-field (click)="$event.stopPropagation()">
+                                        <input type="text" #feesCtl matInput [matAutocomplete]="autofees" placeholder="Fees"
+                                          autocomplete="off" role="presentation" (click)="feesCtl.select()"
+                                          [formControl]="feesFormCtrl"
+                                          (change)="dt.filter($event.target.value,col.field,'contains')"
+                                          (blur)="dt.filter($event.target.value,col.field,'contains')"
+                                          (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                                          (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                                        </mat-form-field>
+                                        <mat-autocomplete #autofees="matAutocomplete">
+                                          @for (option of feesFilteredOptions | async; track option) {
+                                            <mat-option (onSelectionChange)="feesTrigger.closeMenu()"
+                                              [value]="option">
+                                              <span [innerHTML]="option"></span>
+                                            </mat-option>
+                                          }
+                                        </mat-autocomplete>
+                                      </div>
+                                    </div>
+                                    <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                                      <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                        <a class="text-sm">Cancel</a>
+                                        @if (feesCtl.value) {
+                                          <a
+                                            (click)="dt.filter('', col.field, 'contains');feesFormCtrl.setValue('')"
+                                          class="text-sm">Reset</a>
+                                        }
+                                      </div>
+                                    </div>
+                                  </mat-menu>
+                                </span>
+                              }
+                              @if (col.field === 'comments') {
+                                <span>
+                                  <div matTooltip="Comments" matTooltipClass="accent-tooltip" #commentsTrigger="matMenuTrigger"
+                                    [matMenuTriggerFor]="commentsCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                                    class="txtborder-bot">
+                                  </div>
+                                  <mat-menu #commentsCtrl class="pos-top">
+                                    <div fxLayout="row">
+                                      <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                        <mat-form-field (click)="$event.stopPropagation()">
+                                          <input type="text" #commentsCtl matInput [matAutocomplete]="autocomments"
+                                            placeholder="Comments" autocomplete="off" role="presentation"
+                                            (click)="commentsCtl.select()" [formControl]="commentsFormCtrl"
+                                            (change)="dt.filter($event.target.value,col.field,'contains')"
+                                            (blur)="dt.filter($event.target.value,col.field,'contains')"
+                                            (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                                            (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                                          </mat-form-field>
+                                          <mat-autocomplete #autocomments="matAutocomplete">
+                                            @for (option of commentsFilteredOptions | async; track option) {
+                                              <mat-option (onSelectionChange)="commentsTrigger.closeMenu()"
+                                                [value]="option">
+                                                <span [innerHTML]="option"></span>
+                                              </mat-option>
+                                            }
+                                          </mat-autocomplete>
+                                        </div>
+                                      </div>
+                                      <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                                        <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                          <a class="text-sm">Cancel</a>
+                                          @if (commentsCtl.value) {
+                                            <a
+                                              (click)="dt.filter('', col.field, 'contains');commentsFormCtrl.setValue('')"
+                                            class="text-sm">Reset</a>
+                                          }
+                                        </div>
+                                      </div>
+                                    </mat-menu>
+                                  </span>
+                                }
+                                @if (col.field === 'feesStatus') {
+                                  <span>
+                                    <div matTooltip="Status" matTooltipClass="accent-tooltip" #feesStatusTrigger="matMenuTrigger"
+                                      [matMenuTriggerFor]="feesStatusCtrl" fxLayout="row" fxLayoutAlign="space-between center"
+                                      class="txtborder-bot">
+                                    </div>
+                                    <mat-menu #feesStatusCtrl class="pos-top">
+                                      <div fxLayout="row">
+                                        <div fxFlex="100%" class="p-10 tbl-fillddl">
+                                          <mat-form-field (click)="$event.stopPropagation()">
+                                            <input type="text" #feesStatusCtl matInput [matAutocomplete]="autofeesStatus"
+                                              placeholder="Status" autocomplete="off" role="presentation"
+                                              (click)="feesStatusCtl.select()" [formControl]="feesStatusFormCtrl"
+                                              (change)="dt.filter($event.target.value,col.field,'contains')"
+                                              (blur)="dt.filter($event.target.value,col.field,'contains')"
+                                              (focusin)="dt.filter($event.target.value,col.field,'contains')"
+                                              (keyup)="dt.filter($event.target.value,col.field,'contains')" />
+                                            </mat-form-field>
+                                            <mat-autocomplete #autofeesStatus="matAutocomplete">
+                                              @for (option of feesStatusFilteredOptions | async; track option) {
+                                                <mat-option (onSelectionChange)="feesStatusTrigger.closeMenu()"
+                                                  [value]="option">
+                                                  <span [innerHTML]="option"></span>
+                                                </mat-option>
+                                              }
+                                            </mat-autocomplete>
+                                          </div>
+                                        </div>
+                                        <div fxLayout="row" fxLayoutGap="8px" fxLaypoutAlign="end end" class="p-10">
+                                          <div fxFlex="100%" class="text-right" fxLayoutGap="15px">
+                                            <a class="text-sm">Cancel</a>
+                                            @if (feesStatusCtl.value) {
+                                              <a
+                                                (click)="dt.filter('', col.field, 'contains');feesStatusFormCtrl.setValue('')"
+                                              class="text-sm">Reset</a>
+                                            }
+                                          </div>
+                                        </div>
+                                      </mat-menu>
+                                    </span>
+                                  }
+                                </th>
+                              }
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body" let-rowData let-index let-columns="columns">
+                            <tr>
+                              <td>
+                                <p-tableCheckbox [value]="rowData" [disabled]="isRowDisabled(rowData)"></p-tableCheckbox>
+                              </td>
+                              @for (col of columns; track col) {
+                                <td>
+                                  @if (col.field === 'firstName') {
+                                    <div matTooltip="{{rowData.firstName ? rowData.firstName : 'N/A'}}"
+                                    matTooltipClass="accent-tooltip">{{rowData.firstName}}</div>
+                                  }
+                                  @if (col.field === 'clientRefNo') {
+                                    <div
+                                      matTooltip="{{rowData.clientRefNo ? rowData.clientRefNo : 'N/A'}}"
+                                    matTooltipClass="accent-tooltip">{{rowData.clientRefNo ? rowData.clientRefNo : 'N/A'}}</div>
+                                  }
+                                  @if (col.field === 'componentName') {
+                                    <div
+                                      matTooltip="{{rowData.componentName ? rowData.componentName : 'N/A'}}"
+                                    matTooltipClass="accent-tooltip">{{rowData.componentName ? rowData.componentName : 'N/A'}}</div>
+                                  }
+                                  @if (col.field === 'fees') {
+                                    <div matTooltip="{{rowData.fees ? rowData.fees : 'N/A'}}"
+                                    matTooltipClass="accent-tooltip">{{rowData.fees ? rowData.fees : 'N/A'}}</div>
+                                  }
+                                  @if (col.field === 'comments') {
+                                    <div
+                                      matTooltip="{{rowData.remarks[0] + (rowData.remarks[1] ? (' , ' + rowData.remarks[1]) : '')}}"
+                                      matTooltipClass="accent-tooltip">
+                                      {{rowData.remarks[0]}} @if (rowData.remarks.length > 1) {
+                                      <span>,</span>
+                                      } {{rowData.remarks[1]}}
+                                    </div>
+                                  }
+                                  @if (col.field === 'requestDate') {
+                                    <div matTooltip="{{rowData.requestDate ? (rowData.requestDate | date: 'dd/MM/yyyy h:mm a') : 'N/A'}}"
+                                    matTooltipClass="accent-tooltip">{{rowData.requestDate ? (rowData.requestDate | date: "dd/MM/yyyy h:mm a") : 'N/A'}}</div>
+                                  }
+                                  @if (col.field === 'feesStatus') {
+<div [ngClass]="rowData.feesStatus.length === 0 ? 'status pending' : (rowData.feesStatus[0] === 'Approved' ? 'status approved' :
                        (rowData.feesStatus[0] === 'Reject' ? 'status rejected' : 'status received'))">
-                      {{rowData.feesStatus.length === 0 ? 'Pending' : rowData.feesStatus[0]}}</div>
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
-            <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid"   fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid" 
-              [ngClass]="{'empty-record': feeApprovalData?.length == 0}">
-              <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="start center">
-                Showing {{ dt.totalRecords
+                                    {{rowData.feesStatus.length === 0 ? 'Pending' : rowData.feesStatus[0]}}</div>
+                                  }
+                                </td>
+                              }
+                            </tr>
+                          </ng-template>
+                        </p-table>
+                        <div fxLayout="row wrap" class="cus-paginator" fxLayoutGap="0px grid"   fxLayoutGap.sm="20px grid" fxLayoutGap.xs="20px grid"
+                          [ngClass]="{'empty-record': feeApprovalData?.length == 0}">
+                          <div fxFlex="30%" fxFlex.lg="30%" fxFlex.md="30%" fxFlex.sm="100%" fxFlex.xs="100%"
+                            fxLayoutAlign="start center">
+                            Showing {{ dt.totalRecords
                             < 1 ? 0 : dt.first + 1 }} -
-                {{ dt.totalRecords> 0 ? dt.rows + dt.first
-                                <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }}
-                of
-                {{ dt.totalRecords }} record(s) |&nbsp;<a (click)="showall()">Show All</a> </div>
-              <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
-              <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
-                fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
-                fxLayoutAlign.xs="start center">
+                            {{ dt.totalRecords> 0 ? dt.rows + dt.first
+                            <=dt.totalRecords ? dt.rows + dt.first : dt.totalRecords : 0 }}
+                            of
+                            {{ dt.totalRecords }} record(s) |&nbsp;<a (click)="showall()">Show All</a> </div>
+                            <span fxFlex fxHide.md fxHide.sm fxHide.xs></span>
+                            <div fxFlex="50%" fxFlex.lg="50%" fxFlex.md="70%" fxFlex.sm="100%" fxFlex.xs="100%"
+                              fxLayoutAlign="end center" fxLayoutAlign.md="end center" fxLayoutAlign.sm="start center"
+                              fxLayoutAlign.xs="start center">
                 <a [ngClass]="dt.first === 0 ? 'page-btn disabled' : 'page-btn'" (click)="
                             dt.onPageChange({
                               first: dt.first - dt.rows,
@@ -387,11 +458,11 @@
                             });
                             navigateNxtPrevPage(dt.first + dt.rows, dt.rows)
                           "> <i class="icon-control-start mr-5"></i></a> <span class="gotopagbg mr-2 ml-2"
-                  fxHide.xs>Go to Page<span class="input-num">
-                    <input type="number" min="1" #pageNo [formControl]="page" [(ngModel)]="currentPage" maxlength="5"
-                      appNumberOnly [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
-                  </span></span> <span class="mr-2" fxHide.xs> of
-                  {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
+                                fxHide.xs>Go to Page<span class="input-num">
+                                <input type="number" min="1" #pageNo [formControl]="page" [(ngModel)]="currentPage" maxlength="5"
+                                  appNumberOnly [NumberOnly]="false" (keyup.enter)="navigatePage(pageNo.value, dt.rows)" />
+                                </span></span> <span class="mr-2" fxHide.xs> of
+                              {{ getTotalPages(dt.totalRecords, dt.rows) }}</span>
                 <a [ngClass]="
                             dt.rows + dt.first >= dt.totalRecords
                               ? 'page-btn disabled'
@@ -403,40 +474,41 @@
                             });
                             navigateNxtPrevPage(dt.first + dt.rows, d.rows)
                           "><i class="icon-control-end ml-5"></i></a> </div>
-            </div>
-          </div>
-        </div>
-      </mat-card>
-    </div>
-  </div>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      </mat-card>
+                    </div>
+                  </div>
 
 
 
-  <ng-template #confirmation>
-    <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip" (click)="close()">
-      <i class="material-icons">clear</i>
-    </button>
-    <h1 mat-dialog-title>Additional Fee Approval</h1>
-    <mat-dialog-content>
-      <div fxLayout="row">
-        <div fxFlex="100%">
-          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
-            <mat-label>{{type === 'Approved' ? 'Approve' : type}} Comments</mat-label>
-            <textarea #msgCount maxlength="5000" formControlName='comments' required matInput
-              placeholder="{{type === 'Approved' ? 'Approve' : type}} Comments"></textarea>
-            <mat-error>{{type === 'Approved' ? 'Approve' : type}} Comments is Required</mat-error>
-            <mat-hint class="f-13"> ({{msgCount.value.length}} /5000 max) </mat-hint>
-          </mat-form-field>
-        </div>
-      </div>
-    </mat-dialog-content>
-    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
-      <button mat-flat-button color="warn" (click)="submit(type)">
-        {{type === 'Approved' ? 'Approve' : type}}
-      </button>
-    </mat-dialog-actions>
-  </ng-template>
+                  <ng-template #confirmation>
+                    <button class="close" mat-icon-button matTooltip="Close" matTooltipClass="accent-tooltip" (click)="close()">
+                      <i class="material-icons">clear</i>
+                    </button>
+                    <h1 mat-dialog-title>Additional Fee Approval</h1>
+                    <mat-dialog-content>
+                      <div fxLayout="row">
+                        <div fxFlex="100%">
+                          <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+                            <mat-label>{{type === 'Approved' ? 'Approve' : type}} Comments</mat-label>
+                            <textarea #msgCount maxlength="5000" formControlName='comments' required matInput
+                            placeholder="{{type === 'Approved' ? 'Approve' : type}} Comments"></textarea>
+                            <mat-error>{{type === 'Approved' ? 'Approve' : type}} Comments is Required</mat-error>
+                            <mat-hint class="f-13"> ({{msgCount.value.length}} /5000 max) </mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </mat-dialog-content>
+                    <mat-dialog-actions fxLayoutAlign="end end" fxLayoutGap="8px">
+                      <button mat-flat-button color="warn" (click)="submit(type)">
+                        {{type === 'Approved' ? 'Approve' : type}}
+                      </button>
+                    </mat-dialog-actions>
+                  </ng-template>
 
 
 
-</form>
+                </form>
