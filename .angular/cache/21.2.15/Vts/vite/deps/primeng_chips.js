@@ -2,17 +2,17 @@ import {
   TimesCircleIcon
 } from "./chunk-M7UZWECE.js";
 import {
+  InputTextModule
+} from "./chunk-5L4ASDK4.js";
+import {
   TimesIcon
 } from "./chunk-EKRNUWYO.js";
-import "./chunk-E5SLSWPV.js";
 import {
   AutoFocus,
   AutoFocusModule
 } from "./chunk-RX2OFS5A.js";
+import "./chunk-E5SLSWPV.js";
 import "./chunk-47BQQJB4.js";
-import {
-  InputTextModule
-} from "./chunk-5L4ASDK4.js";
 import {
   PrimeNGConfig,
   PrimeTemplate,

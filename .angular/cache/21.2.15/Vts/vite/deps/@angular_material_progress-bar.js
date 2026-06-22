@@ -7,9 +7,9 @@ import {
   BidiModule
 } from "./chunk-ILEVSUJ3.js";
 import "./chunk-SLKWJJ6A.js";
+import "./chunk-Y6BXVQXT.js";
 import "./chunk-SMKKFHGX.js";
 import "./chunk-HX53TNYB.js";
-import "./chunk-Y6BXVQXT.js";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
